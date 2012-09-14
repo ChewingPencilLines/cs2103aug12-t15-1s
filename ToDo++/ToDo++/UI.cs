@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
-namespace ToDo__
+namespace ToDo
 {
-    public partial class Form1 : Form
+    public partial class UI : Form
     {
         private Processing processingClass;
 
-        public Form1()
+        public UI()
         {
             InitializeComponent();
             processingClass = new Processing();
@@ -36,7 +36,7 @@ namespace ToDo__
             box.SelectionLength = 0; // clear
         }
 
-        //Append the RTB
+        //Append the Output Window
         void DisplayCommand(string userInput)
         {
             SetFormat(outputText, Color.Blue,"Username: ");
@@ -46,12 +46,7 @@ namespace ToDo__
             SetFormat(outputText, Color.Black, processingClass.returnOutput(userInput));
             SetFormat(outputText, Color.Red, "\n");
             inputText.Text = "";
-        }
-
-        //Go Button Clicked
-        private void button1_Click(object sender, EventArgs e)
-        {
-            DisplayCommand(inputText.Text);
+            outputText.ScrollToCaret();
         }
 
         //Press Enter
@@ -63,30 +58,36 @@ namespace ToDo__
             }
         }
 
-        //Minimize to Tray with over-ride for short cut
-        private void minimiseToTray(bool shortCutPressed)
+        //Go Button Clicked
+        private void Go_Click(object sender, EventArgs e)
         {
-            notifyIcon1.BalloonTipTitle = "Minimize to Tray App";
-            notifyIcon1.BalloonTipText = "You have successfully minimized your form.";
+            DisplayCommand(inputText.Text);
+        }
+
+        //Minimize to Tray with over-ride for short cut
+        private void MinimiseToTray(bool shortCutPressed)
+        {
+            notifyIcon.BalloonTipTitle = "Minimize to Tray App";
+            notifyIcon.BalloonTipText = "You have successfully minimized your app.";
 
             if (FormWindowState.Minimized == this.WindowState || shortCutPressed==true)
             {
-                notifyIcon1.Visible = true;
-                notifyIcon1.ShowBalloonTip(500);
+                notifyIcon.Visible = true;
+                notifyIcon.ShowBalloonTip(500);
                 this.Hide();
             }
             else if (FormWindowState.Normal == this.WindowState)
             {
-                notifyIcon1.Visible = false;
+                notifyIcon.Visible = false;
             }
         }
 
         //Double click the tray icon and it pops back up (Need a way to have a shortcut invoke the app again)
-        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             this.Show();
             this.WindowState = FormWindowState.Normal;
-            minimiseToTray(false);
+            MinimiseToTray(false);
         }
 
         //Pressing ALT+Q Will Minimize the app to the tray
@@ -95,7 +96,7 @@ namespace ToDo__
             if (keyData == (Keys.Alt | Keys.Q))
             {
                 System.Diagnostics.Trace.WriteLine("Pressed");
-                minimiseToTray(true);
+                MinimiseToTray(true);
                 return true;
             }
 
@@ -117,5 +118,6 @@ namespace ToDo__
         {
             Exit();
         }
+
     }
 }
