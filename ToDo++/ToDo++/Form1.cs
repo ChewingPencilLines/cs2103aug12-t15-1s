@@ -13,13 +13,17 @@ namespace ToDo__
 {
     public partial class Form1 : Form
     {
+        private Processing processingClass;
+
         public Form1()
         {
             InitializeComponent();
+            processingClass = new Processing();
+            inputText.Focus();
         }
 
         //Set Formatting for your Text
-        void AppendText(RichTextBox box, Color color, string text)
+        private void SetFormat(RichTextBox box, Color color, string text)
         {
             int start = box.TextLength;
             box.AppendText(text);
@@ -33,15 +37,18 @@ namespace ToDo__
         }
 
         //Append the RTB
-        void DisplayCommand(string text)
+        void DisplayCommand(string userInput)
         {
-            AppendText(outputText, Color.Red, "ToDo++: ");
-            AppendText(outputText, Color.Black, text);
-            AppendText(outputText, Color.Red, "\n");
+            SetFormat(outputText, Color.Blue,"Username: ");
+            SetFormat(outputText, Color.Black,userInput);
+            SetFormat(outputText, Color.Red, "\n");
+            SetFormat(outputText, Color.Red, "ToDo++: ");
+            SetFormat(outputText, Color.Black, processingClass.returnOutput(userInput));
+            SetFormat(outputText, Color.Red, "\n");
             inputText.Text = "";
         }
 
-        //Button Clicked
+        //Go Button Clicked
         private void button1_Click(object sender, EventArgs e)
         {
             DisplayCommand(inputText.Text);
@@ -56,7 +63,7 @@ namespace ToDo__
             }
         }
 
-        //Minise to Tray with ovverride for shortcutkey
+        //Minimize to Tray with over-ride for short cut
         private void minimiseToTray(bool shortCutPressed)
         {
             notifyIcon1.BalloonTipTitle = "Minimize to Tray App";
@@ -72,12 +79,6 @@ namespace ToDo__
             {
                 notifyIcon1.Visible = false;
             }
-        }
-
-        //When we hit minimize, it goes to tray, you can choose to remove this
-        private void frmMain_Resize(object sender, EventArgs e)
-        {
-            //minimiseToTray(false);
         }
 
         //Double click the tray icon and it pops back up (Need a way to have a shortcut invoke the app again)
@@ -97,14 +98,24 @@ namespace ToDo__
                 minimiseToTray(true);
                 return true;
             }
+
+            if (keyData == (Keys.Control | Keys.Q))
+            {
+                Exit();
+                return true;
+            }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        //Paramters to load when Form Opens.
-        private void Form1_Load(object sender, EventArgs e)
+        //Exit Command. Choose to Popup options before exiting
+        public static void Exit()
         {
-
+            Application.Exit();
         }
 
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Exit();
+        }
     }
 }
