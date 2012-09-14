@@ -10,3 +10,6 @@ C:\Users\Raaj\Desktop\ToDo++\ToDo++\obj\Debug\ToDo++.pdb
 C:\Users\Raaj\Desktop\ProjectCS2103\ToDo++\ToDo++\bin\Debug\ToDo++.exe.config
 C:\Users\Raaj\Desktop\ProjectCS2103\ToDo++\ToDo++\obj\Debug\ToDo++.exe
 C:\Users\Raaj\Desktop\ProjectCS2103\ToDo++\ToDo++\obj\Debug\ToDo++.pdb
+C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\bin\Debug\ToDo++.exe.config
+C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\obj\Debug\ToDo++.exe
+C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\obj\Debug\ToDo++.pdb
