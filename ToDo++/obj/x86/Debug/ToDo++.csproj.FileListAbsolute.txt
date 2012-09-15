@@ -1,5 +1,0 @@
-C:\Users\JIANGQIANPAN\Desktop\ToDo++\ToDo++\bin\Debug\ToDo++.exe
-C:\Users\JIANGQIANPAN\Desktop\ToDo++\ToDo++\bin\Debug\ToDo++.pdb
-C:\Users\JIANGQIANPAN\Desktop\ToDo++\ToDo++\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\JIANGQIANPAN\Desktop\ToDo++\ToDo++\obj\x86\Debug\ToDo++.exe
-C:\Users\JIANGQIANPAN\Desktop\ToDo++\ToDo++\obj\x86\Debug\ToDo++.pdb
