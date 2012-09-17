@@ -56,11 +56,11 @@
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="ToDo.TimeTask">
+  <Class Name="ToDo.EventTask">
     <Position X="5.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAgACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>TimeTask.cs</FileName>
+      <FileName>EventTask.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ToDo.DeadlineTask">
