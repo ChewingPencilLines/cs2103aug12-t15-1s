@@ -11,11 +11,10 @@ C:\Users\Raaj\Desktop\ProjectCS2103\ToDo++\ToDo++\bin\Debug\ToDo++.exe.config
 C:\Users\Raaj\Desktop\ProjectCS2103\ToDo++\ToDo++\obj\Debug\ToDo++.exe
 C:\Users\Raaj\Desktop\ProjectCS2103\ToDo++\ToDo++\obj\Debug\ToDo++.pdb
 C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\bin\Debug\ToDo++.exe.config
-C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\obj\Debug\ToDo++.exe
-C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\obj\Debug\ToDo++.pdb
 C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\bin\Debug\ToDo++.exe
 C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\bin\Debug\ToDo++.pdb
-C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\obj\Debug\ToDo++.csprojResolveAssemblyReference.cache
+C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\obj\Debug\ToDo.UI.resources
 C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\obj\Debug\ToDo.Properties.Resources.resources
 C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\obj\Debug\ToDo++.csproj.GenerateResource.Cache
-C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\obj\Debug\ToDo.UI.resources
+C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\obj\Debug\ToDo++.exe
+C:\Users\Raaj\Desktop\School Work\CS2103\Local Repo for CS2103 Project\ToDo++\ToDo++\obj\Debug\ToDo++.pdb
