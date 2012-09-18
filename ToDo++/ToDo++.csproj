@@ -47,6 +47,7 @@
     <Compile Include="CalendarSystem.cs" />
     <Compile Include="DeadlineTask.cs" />
     <Compile Include="FloatingTask.cs" />
+    <Compile Include="Operation.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskList.cs" />
     <Compile Include="TaskType.cs" />

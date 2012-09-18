@@ -10,16 +10,5 @@ namespace ToDo
     {
         protected TaskType taskID;
         protected string taskName;
-
-        public TaskType TaskType
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
     }
 }
