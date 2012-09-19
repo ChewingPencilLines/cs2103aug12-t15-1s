@@ -13,13 +13,11 @@ namespace ToDo
 {
     public partial class UI : Form
     {
-        private Processing processingClass;
 
         public UI()
         {
             InitializeComponent();
-            processingClass = new Processing();
-            inputText.Focus();
+            textBox_input.Focus();
         }
 
         //Set Formatting for your Text
@@ -39,14 +37,14 @@ namespace ToDo
         //Append the Output Window
         void DisplayCommand(string userInput)
         {
-            SetFormat(outputText, Color.Blue,"Username: ");
-            SetFormat(outputText, Color.Black,userInput);
-            SetFormat(outputText, Color.Red, "\n");
-            SetFormat(outputText, Color.Red, "ToDo++: ");
-            SetFormat(outputText, Color.Black, processingClass.returnOutput(userInput));
-            SetFormat(outputText, Color.Red, "\n");
-            inputText.Text = "";
-            outputText.ScrollToCaret();
+            SetFormat(richTextBox_output, Color.Blue,"Username: ");
+            SetFormat(richTextBox_output, Color.Black,userInput);
+            SetFormat(richTextBox_output, Color.Red, "\n");
+            SetFormat(richTextBox_output, Color.Red, "ToDo++: ");
+            SetFormat(richTextBox_output, Color.Black, "aa");
+            SetFormat(richTextBox_output, Color.Red, "\n");
+            textBox_input.Text = "";
+            richTextBox_output.ScrollToCaret();
         }
 
         //Press Enter
@@ -54,31 +52,31 @@ namespace ToDo
         {
             if (e.KeyChar == (char)13)
             {
-                DisplayCommand(inputText.Text);
+                DisplayCommand(textBox_input.Text);
             }
         }
 
         //Go Button Clicked
-        private void Go_Click(object sender, EventArgs e)
+        private void button_go_Click(object sender, EventArgs e)
         {
-            DisplayCommand(inputText.Text);
+            DisplayCommand(textBox_input.Text);
         }
 
         //Minimize to Tray with over-ride for short cut
         private void MinimiseToTray(bool shortCutPressed)
         {
-            notifyIcon.BalloonTipTitle = "Minimize to Tray App";
-            notifyIcon.BalloonTipText = "You have successfully minimized your app.";
+            notifyIcon_taskBar.BalloonTipTitle = "Minimize to Tray App";
+            notifyIcon_taskBar.BalloonTipText = "You have successfully minimized your app.";
 
             if (FormWindowState.Minimized == this.WindowState || shortCutPressed==true)
             {
-                notifyIcon.Visible = true;
-                notifyIcon.ShowBalloonTip(500);
+                notifyIcon_taskBar.Visible = true;
+                notifyIcon_taskBar.ShowBalloonTip(500);
                 this.Hide();
             }
             else if (FormWindowState.Normal == this.WindowState)
             {
-                notifyIcon.Visible = false;
+                notifyIcon_taskBar.Visible = false;
             }
         }
 

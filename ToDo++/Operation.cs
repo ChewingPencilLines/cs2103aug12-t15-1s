@@ -8,7 +8,8 @@ namespace ToDo
     public class Operation
     {
         private OperationType operationType;
-        private Task task;
+        private Task oldTask;
+        private Task newTask;
     }
 
     public enum OperationType
