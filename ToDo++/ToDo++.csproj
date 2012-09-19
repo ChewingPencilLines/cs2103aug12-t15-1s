@@ -58,7 +58,6 @@
     <Compile Include="UI.Designer.cs">
       <DependentUpon>UI.cs</DependentUpon>
     </Compile>
-    <Compile Include="Processing.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="UI.resx">

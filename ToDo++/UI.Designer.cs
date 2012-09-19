@@ -43,10 +43,10 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.outputText = new System.Windows.Forms.RichTextBox();
-            this.inputText = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.richTextBox_output = new System.Windows.Forms.RichTextBox();
+            this.textBox_input = new System.Windows.Forms.TextBox();
+            this.button_go = new System.Windows.Forms.Button();
+            this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,7 +60,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(284, 24);
-            this.menuStrip1.TabIndex = 0;
+            this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // toDoToolStripMenuItem
@@ -146,48 +146,48 @@
             this.helpToolStripMenuItem1.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem1.Text = "&Help";
             // 
-            // outputText
+            // richTextBox_output
             // 
-            this.outputText.Location = new System.Drawing.Point(12, 27);
-            this.outputText.Name = "outputText";
-            this.outputText.ReadOnly = true;
-            this.outputText.Size = new System.Drawing.Size(260, 191);
-            this.outputText.TabIndex = 1;
-            this.outputText.Text = "";
+            this.richTextBox_output.Location = new System.Drawing.Point(12, 29);
+            this.richTextBox_output.Name = "richTextBox_output";
+            this.richTextBox_output.ReadOnly = true;
+            this.richTextBox_output.Size = new System.Drawing.Size(260, 191);
+            this.richTextBox_output.TabIndex = 2;
+            this.richTextBox_output.Text = "";
             // 
-            // inputText
+            // textBox_input
             // 
-            this.inputText.Location = new System.Drawing.Point(13, 230);
-            this.inputText.Name = "inputText";
-            this.inputText.Size = new System.Drawing.Size(195, 20);
-            this.inputText.TabIndex = 2;
-            this.inputText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputText_KeyPress);
+            this.textBox_input.Location = new System.Drawing.Point(13, 230);
+            this.textBox_input.Name = "textBox_input";
+            this.textBox_input.Size = new System.Drawing.Size(195, 20);
+            this.textBox_input.TabIndex = 0;
+            this.textBox_input.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputText_KeyPress);
             // 
-            // button1
+            // button_go
             // 
-            this.button1.Location = new System.Drawing.Point(214, 230);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(58, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Go";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Go_Click);
+            this.button_go.Location = new System.Drawing.Point(214, 230);
+            this.button_go.Name = "button_go";
+            this.button_go.Size = new System.Drawing.Size(58, 23);
+            this.button_go.TabIndex = 1;
+            this.button_go.Text = "Go";
+            this.button_go.UseVisualStyleBackColor = true;
+            this.button_go.Click += new System.EventHandler(this.button_go_Click);
             // 
-            // notifyIcon
+            // notifyIcon_taskBar
             // 
-            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-            this.notifyIcon.Text = "notifyIcon";
-            this.notifyIcon.Visible = true;
-            this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
+            this.notifyIcon_taskBar.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon_taskBar.Icon")));
+            this.notifyIcon_taskBar.Text = "notifyIcon";
+            this.notifyIcon_taskBar.Visible = true;
+            this.notifyIcon_taskBar.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
             // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.inputText);
-            this.Controls.Add(this.outputText);
+            this.Controls.Add(this.button_go);
+            this.Controls.Add(this.textBox_input);
+            this.Controls.Add(this.richTextBox_output);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -205,10 +205,10 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toDoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.RichTextBox outputText;
-        private System.Windows.Forms.TextBox inputText;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.RichTextBox richTextBox_output;
+        private System.Windows.Forms.TextBox textBox_input;
+        private System.Windows.Forms.Button button_go;
+        private System.Windows.Forms.NotifyIcon notifyIcon_taskBar;
         private System.Windows.Forms.ToolStripMenuItem openRecentToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem exportToToolStripMenuItem;
