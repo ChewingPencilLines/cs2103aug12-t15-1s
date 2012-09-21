@@ -8,9 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ToDo__
+namespace ToDo
 {
-
     class Logic
     {
         string[] commandStack;
