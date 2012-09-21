@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDo;
 
@@ -68,8 +68,12 @@ namespace StringParserTest
         public void Simple_FindIndexOfDelimitersTest()
         {
             string input = "\'add\'";
-            int[,] expected = new int[,] { { 0, 4 } };
-            CollectionAssert.AreEqual(expected , StringParser.FindIndexOfDelimiters(input));
+            List<int[]> expected = new List<int[]> { new int[2] { 0, 4 } };
+            // Flatten before comparing. Product limitation of visual studio compiler / unit tester.
+            CollectionAssert.AreEqual(
+                expected.SelectMany(x => x).ToList(),
+                StringParser.FindIndexOfDelimiters(input).SelectMany(x => x).ToList()
+                );
         }
 
         [TestMethod]
@@ -77,16 +81,20 @@ namespace StringParserTest
         {
             // index         0123 4567890 12345 6
             string input = "\'add\' hii! \"date\"";
-            int[,] expected = new int[,] { { 0, 4 }, { 11, 16 } };
-            CollectionAssert.AreEqual(expected, StringParser.FindIndexOfDelimiters(input));
+            List<int[]> expected = new List<int[]> { new int[2] { 0, 4 }, new int [2] { 11, 16 } };
+            CollectionAssert.AreEqual(
+                expected.SelectMany(x => x).ToList(),
+                StringParser.FindIndexOfDelimiters(input).SelectMany(x => x).ToList()
+                );
         }
 
         [TestMethod]
         public void Null_FindIndexOfDelimitersTest()
         {
             string input = "\"add\'";
-            int[,] expected = new int[,] { { -1, -1 } };
+            List<int[]> expected = new List<int[]>();
             CollectionAssert.AreEqual(expected, StringParser.FindIndexOfDelimiters(input));
+            Assert.IsTrue(StringParser.FindIndexOfDelimiters(input).Count == 0);
         }
          
     }

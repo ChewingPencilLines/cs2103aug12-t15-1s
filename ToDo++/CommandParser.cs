@@ -12,7 +12,7 @@ namespace ToDo
         {
             CommandType command = CommandType.INVALID;
             // Search for delimiters
-            int [,] indexOfDelimiters = StringParser.FindIndexOfDelimiters(input);
+            List<int[]> indexOfDelimiters = StringParser.FindIndexOfDelimiters(input);
             // Split string input into words
             List<string> inputWords = StringParser.SplitStringIntoWords(input);
             // Search for command keyword            

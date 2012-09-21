@@ -11,8 +11,6 @@ namespace ToDo
     enum CommandType { ADD, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, INVALID };
     public static class StringParser
     {
-        const int START_PARAM = 0;
-        const int END_PARAM = 1;
         static char[] unaryDelimiters = { '\'', '\"' };
         static char[,] binaryDelimiters = { { '[', ']' }, { '(', ')' }, { '{', '}' } };
         static List<List<string>> commandKeywords = new List<List<string>>()
@@ -31,24 +29,22 @@ namespace ToDo
         static string timeKeywords;
 
 
-        internal static int[,] FindIndexOfDelimiters(string input)
+        internal static List<int[]> FindIndexOfDelimiters(string input)
         {
-            int[,] indexOfDelimiters = new int[,] { { -1, -1 } };
+            List<int[]> indexOfDelimiters = new List<int[]>();
             // Split unarys first
-            int matchCount = 0;
             int startIndex = 0, endIndex = -1;
             for (int i = 0; i < unaryDelimiters.Length; i++)
             {
                 endIndex = -1;
                 do
                 {
-                    startIndex = input.IndexOf(unaryDelimiters[i], endIndex+1);
-                    endIndex = input.IndexOf(unaryDelimiters[i], startIndex+1);
+                    startIndex = input.IndexOf(unaryDelimiters[i], endIndex + 1);
+                    endIndex = input.IndexOf(unaryDelimiters[i], startIndex + 1);
                     if (startIndex >= 0 && endIndex > 0)
                     {
-                        indexOfDelimiters[matchCount, START_PARAM] = startIndex;
-                        indexOfDelimiters[matchCount, END_PARAM] = endIndex;
-                        matchCount++;
+                        int[] index = new int[2] { startIndex, endIndex };
+                        indexOfDelimiters.Add(index);
                     }
                     else break;
                 } while (true);
