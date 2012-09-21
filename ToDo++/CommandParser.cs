@@ -16,8 +16,9 @@ namespace ToDo
             string [] inputWords = StringParser.SplitStringIntoWords(input);
             // Search for command keyword
             int? indexOfCommand = StringParser.SearchForCommandKeyword(inputWords);
+            if (indexOfCommand == null || indexOfCommand < 0) return null; // failed, either no match or multiple matches
             // Split command from string
-            CommandType command = StringParser.SplitCommandFromString(ref inputWords, indexOfCommand);
+            CommandType command = StringParser.SplitCommandFromSentence(ref inputWords, (int)indexOfCommand);
             // Search for dates/times
             DateTime [] taskTime = StringParser.SearchForDateTime(input);
             return new Operation();

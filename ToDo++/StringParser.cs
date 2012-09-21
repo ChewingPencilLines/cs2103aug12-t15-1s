@@ -68,12 +68,12 @@ namespace ToDo
             else throw new Exception("Fatal logic error!");
         }
 
-        internal static DateTime[] SearchForDateTime(string input)
+        internal static CommandType SplitCommandFromSentence(ref string[] words, int index)
         {
-            throw new NotImplementedException();
+            words.
         }
 
-        internal static CommandType SplitCommandFromString(ref string[] words, int? index)
+        internal static DateTime[] SearchForDateTime(string input)
         {
             throw new NotImplementedException();
         }
