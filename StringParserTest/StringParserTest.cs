@@ -9,44 +9,62 @@ namespace StringParserTest
     public class StringParserTest
     {
         CommandType command = CommandType.INVALID;
-        int indexOfCommand = -1;
+        int indexOfCommandKeyword = -1;
+        List<string> testWords = new List<string>();
+
         [TestMethod]
         public void Simple_SearchForCommandTest_Add()
         {
-            List<string> testWords = new List<string>();
+            testWords.Clear();
             testWords.Add("adda");
             testWords.Add("bbbb");
             testWords.Add("add");
             testWords.Add("date");
-            Assert.AreEqual(1, StringParser.SearchForCommandKeyword(testWords,ref command, ref indexOfCommand));
-            Assert.AreEqual(2, indexOfCommand);
+            Assert.AreEqual(1, StringParser.SearchForCommandKeyword(testWords,ref command, ref indexOfCommandKeyword));
+            Assert.AreEqual(2, indexOfCommandKeyword);
             Assert.AreEqual(CommandType.ADD, command);
         }
-        /*
+
         [TestMethod]
         public void Simple_SearchForCommandTest_Modify()
         {
-            string[] testWords = { "stuff", "modify", "date", "time" };
-            // index of the command keyword "modify" is 1
-            Assert.AreEqual(1, StringParser.SearchForCommandKeyword(testWords));
-        }
-
-        [TestMethod]
-        public void Null_SearchForCommandTest_Add()
-        {
-            string[] testWords = { "rubbish", "morerubbish", "dontadd", "stuff" };
-            // index of the command keyword "add" is 2
-            Assert.AreEqual(null, StringParser.SearchForCommandKeyword(testWords));
+            testWords.Clear();
+            testWords.Add("stuff");
+            testWords.Add("modify");
+            testWords.Add("more stuff?!");
+            testWords.Add("date");
+            Assert.AreEqual(1, StringParser.SearchForCommandKeyword(testWords, ref command, ref indexOfCommandKeyword));
+            Assert.AreEqual(1, indexOfCommandKeyword);
+            Assert.AreEqual(CommandType.MODIFY, command);
         }        
 
         [TestMethod]
-        public void MultipleCommandSearchTest()
+        public void Null_SearchForCommandTest()
         {
-            string[] testWords = { "deadline", "modify", "add", "stuff" };
-            // index of the command keyword "modify" is 1
-            Assert.AreEqual(-2, StringParser.SearchForCommandKeyword(testWords));
+            testWords.Clear();
+            testWords.Add("stuff");
+            testWords.Add("rubbish");
+            testWords.Add("addify");
+            testWords.Add("date");
+            Assert.AreEqual(0, StringParser.SearchForCommandKeyword(testWords, ref command, ref indexOfCommandKeyword));
+            Assert.AreEqual(-1, indexOfCommandKeyword);
+            Assert.AreEqual(CommandType.INVALID, command);
         }
 
+        [TestMethod]
+        public void MultipleMatch_SearchForCommandTest()
+        {
+            testWords.Clear();
+            testWords.Add("add");
+            testWords.Add("rubbish");
+            testWords.Add("addify");
+            testWords.Add("modify");
+            Assert.AreEqual(2, StringParser.SearchForCommandKeyword(testWords, ref command, ref indexOfCommandKeyword));
+            Assert.AreEqual(0, indexOfCommandKeyword);
+            Assert.AreEqual(CommandType.ADD, command);
+        }
+
+        /*
         [TestMethod]
         public void SplitCommandTest()
         {

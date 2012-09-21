@@ -48,6 +48,7 @@ namespace ToDo
             CommandType commandType = 0;
             foreach(string word in words)
             {
+                commandType = 0;
                 foreach (List<String> specificCommandKeywords in commandKeywords)
                 {
                     foreach (string matchingCommand in specificCommandKeywords)
@@ -57,7 +58,9 @@ namespace ToDo
                             if (matchCount == 0)
                             {
                                 indexOfCommand = index;
-                                command = commandType;
+                                if (command > CommandType.INVALID)
+                                    throw new Exception("Fatal error: Logic flow error!");
+                                else command = commandType;
                             }
                             matchCount++;
                         }
