@@ -55,7 +55,7 @@ namespace StringParserTest
         public void MultipleMatch_SearchForCommandTest()
         {
             testWords.Clear();
-            testWords.Add("add");
+            testWords.Add("Add");
             testWords.Add("rubbish");
             testWords.Add("addify");
             testWords.Add("modify");
@@ -64,15 +64,30 @@ namespace StringParserTest
             Assert.AreEqual(CommandType.ADD, command);
         }
 
-        /*
         [TestMethod]
-        public void SplitCommandTest()
+        public void Simple_FindIndexOfDelimitersTest()
         {
-            string[] testWords = { "aaa", "bbb", "add", "january" };
-            string[] expectedResult = { "aaa", "bbb", "january" };
-            // index of the command keyword "modify" is 1
-            Assert.AreEqual(CommandType.ADD, StringParser.SplitCommandFromSentence(ref testWords,2));
-            Assert.AreEqual(testWords,expectedResult);
-        }*/
+            string input = "\'add\'";
+            int[,] expected = new int[,] { { 0, 4 } };
+            CollectionAssert.AreEqual(expected , StringParser.FindIndexOfDelimiters(input));
+        }
+
+        [TestMethod]
+        public void Multiple_FindIndexOfDelimitersTest()
+        {
+            // index         0123 4567890 12345 6
+            string input = "\'add\' hii! \"date\"";
+            int[,] expected = new int[,] { { 0, 4 }, { 11, 16 } };
+            CollectionAssert.AreEqual(expected, StringParser.FindIndexOfDelimiters(input));
+        }
+
+        [TestMethod]
+        public void Null_FindIndexOfDelimitersTest()
+        {
+            string input = "\"add\'";
+            int[,] expected = new int[,] { { -1, -1 } };
+            CollectionAssert.AreEqual(expected, StringParser.FindIndexOfDelimiters(input));
+        }
+         
     }
 }

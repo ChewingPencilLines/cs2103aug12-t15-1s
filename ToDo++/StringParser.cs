@@ -10,11 +10,14 @@ namespace ToDo
 {
     enum CommandType { ADD, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, INVALID };
     public static class StringParser
-    {        
-        static string[] unaryDelimiters = { "\"", "'" };
-        static string[,] binaryDelimiters = { { "<", ">" }, { "(", ")" }, { "<", ">" } };
+    {
+        const int START_PARAM = 0;
+        const int END_PARAM = 1;
+        static char[] unaryDelimiters = { '\'', '\"' };
+        static char[,] binaryDelimiters = { { '[', ']' }, { '(', ')' }, { '{', '}' } };
         static List<List<string>> commandKeywords = new List<List<string>>()
         {
+            //@todo: can possibly add commandType to zero-index so that order is not important
             new List<String> { "add" },
             new List<String> { "display" },
             new List<String> { "sort" },
@@ -27,9 +30,31 @@ namespace ToDo
         static string dayKeywords;
         static string timeKeywords;
 
-        internal static int? [,] FindIndexOfDelimiters(string input)
+
+        internal static int[,] FindIndexOfDelimiters(string input)
         {
-            return new int? [,] { { null, null } };
+            int[,] indexOfDelimiters = new int[,] { { -1, -1 } };
+            // Split unarys first
+            int matchCount = 0;
+            int startIndex = 0, endIndex = -1;
+            for (int i = 0; i < unaryDelimiters.Length; i++)
+            {
+                endIndex = -1;
+                do
+                {
+                    startIndex = input.IndexOf(unaryDelimiters[i], endIndex+1);
+                    endIndex = input.IndexOf(unaryDelimiters[i], startIndex+1);
+                    if (startIndex >= 0 && endIndex > 0)
+                    {
+                        indexOfDelimiters[matchCount, START_PARAM] = startIndex;
+                        indexOfDelimiters[matchCount, END_PARAM] = endIndex;
+                        matchCount++;
+                    }
+                    else break;
+                } while (true);
+
+            }
+            return indexOfDelimiters;
         }
 
         /// <summary>
@@ -37,23 +62,23 @@ namespace ToDo
         /// Upon a succesful first match, the operation updates the command and indexOfCommand input parameters by reference.
         /// Returns the number of matches at the end of search.
         /// </summary>
-        /// <param name="words">Input array of words</param>
+        /// <param name="inputWords">Input array of words</param>
         /// <param name="command">Command type to be updated by reference on first match</param>
         /// <param name="indexOfCommand">Index of command to be updated by reference on first match</param>
         /// <returns>Number of matches</returns>
-        internal static int SearchForCommandKeyword(List<string> words, ref CommandType command, ref int indexOfCommand)
+        internal static int SearchForCommandKeyword(List<string> inputWords, ref CommandType command, ref int indexOfCommand)
         {
-            int index = 0;         
+            int index = 0;
             int matchCount = 0;
             CommandType commandType = 0;
-            foreach(string word in words)
+            foreach (string word in inputWords)
             {
                 commandType = 0;
-                foreach (List<String> specificCommandKeywords in commandKeywords)
+                foreach (List<String> specificCommandTypeKeywords in commandKeywords)
                 {
-                    foreach (string matchingCommand in specificCommandKeywords)
+                    foreach (string possibleCommandKeyword in specificCommandTypeKeywords)
                     {
-                        if (word == matchingCommand)
+                        if (word.ToLower() == possibleCommandKeyword)
                         {
                             if (matchCount == 0)
                             {
@@ -72,9 +97,8 @@ namespace ToDo
             return matchCount;
         }
 
-        internal static void SplitCommandFromSentence(ref List<string> words, int index)
+        internal static void RemoveWordFromSentence_ByIndex(ref List<string> words, int index)
         {
-            string command = words.ElementAt(index);
             words.RemoveAt(index);
         }
 
