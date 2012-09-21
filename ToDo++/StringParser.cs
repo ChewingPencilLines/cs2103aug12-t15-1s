@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace ToDo
 {
-    enum CommandType { ADD, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO };
+    enum CommandType { ADD, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, INVALID };
     public static class StringParser
     {        
         static string[] unaryDelimiters = { "\"", "'" };
@@ -33,44 +33,46 @@ namespace ToDo
         }
 
         /// <summary>
-        /// Operation search an array of strings against the list of command words.
-        /// If exactly one command word is found, it returns the positive index of the position in the input array
-        /// where it was found. If more than one matching words are found, it returns the negative of the total number
-        /// of matching words. If no matches were found, it returns a null-value.
+        /// Operation search an input list of strings against the list of command words.
+        /// Upon a succesful first match, the operation updates the command and indexOfCommand input parameters by reference.
+        /// Returns the number of matches at the end of search.
         /// </summary>
         /// <param name="words">Input array of words</param>
-        /// <returns>Null if no matching results, index of word if one match, negative of total matches if more than one match</returns>
-        internal static int? SearchForCommandKeyword(string [] words)
+        /// <param name="command">Command type to be updated by reference on first match</param>
+        /// <param name="indexOfCommand">Index of command to be updated by reference on first match</param>
+        /// <returns>Number of matches</returns>
+        internal static int SearchForCommandKeyword(List<string> words, ref CommandType command, ref int indexOfCommand)
         {
+            int index = 0;         
             int matchCount = 0;
-            int matchingIndex = -1;
-            for(int i = 0; i < words.Length; i++)
+            CommandType commandType = 0;
+            foreach(string word in words)
             {
                 foreach (List<String> specificCommandKeywords in commandKeywords)
                 {
                     foreach (string matchingCommand in specificCommandKeywords)
                     {
-                        if (words[i] == matchingCommand)
+                        if (word == matchingCommand)
                         {
-                            if (matchCount == 0) matchingIndex = i;                            
+                            if (matchCount == 0)
+                            {
+                                indexOfCommand = index;
+                                command = commandType;
+                            }
                             matchCount++;
                         }
                     }
-
+                    commandType++;
                 }
+                index++;
             }
-            if (matchCount == 0)
-                return null;
-            else if (matchCount == 1)
-                return matchingIndex;
-            else if (matchCount > 1)
-                return matchCount * -1;
-            else throw new Exception("Fatal logic error!");
+            return matchCount;
         }
 
-        internal static CommandType SplitCommandFromSentence(ref string[] words, int index)
+        internal static void SplitCommandFromSentence(ref List<string> words, int index)
         {
-            words.
+            string command = words.ElementAt(index);
+            words.RemoveAt(index);
         }
 
         internal static DateTime[] SearchForDateTime(string input)
@@ -78,7 +80,7 @@ namespace ToDo
             throw new NotImplementedException();
         }
 
-        internal static string[] SplitStringIntoWords(string input)
+        internal static List<string> SplitStringIntoWords(string input)
         {
             throw new NotImplementedException();
         }
