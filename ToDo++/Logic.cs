@@ -1,6 +1,6 @@
 ﻿/**
- * Alice Jiang
- * api for logic and CRUD part.
+ * @Alice Jiang
+ * Logic part
  **/
 
 using System;
@@ -11,13 +11,13 @@ using System.Text;
 namespace ToDo__
 {
 
-    class Interface
+    class Logic
     {
         string[] commandStack;
         int top;
         string[] Instruction;
 
-        public Interface()
+        public Logic()
         {
             //initialize
             commandStack = new string[100];

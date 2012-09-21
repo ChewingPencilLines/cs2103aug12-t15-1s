@@ -10,7 +10,7 @@ namespace ToDo__
         static void Main(string[] args)
         {
             //for test
-            Interface a =new Interface();
+            Logic a =new Logic();
         }
     }
 }
