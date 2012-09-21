@@ -75,17 +75,30 @@ namespace StringParserTest
                 StringParser.FindIndexOfDelimiters(input).SelectMany(x => x).ToList()
                 );
         }
-
+        
         [TestMethod]
         public void Multiple_FindIndexOfDelimitersTest()
         {
             // index         0123 4567890 12345 6
             string input = "\'add\' hii! \"date\"";
-            List<int[]> expected = new List<int[]> { new int[2] { 0, 4 }, new int [2] { 11, 16 } };
-            CollectionAssert.AreEqual(
-                expected.SelectMany(x => x).ToList(),
-                StringParser.FindIndexOfDelimiters(input).SelectMany(x => x).ToList()
-                );
+            List<int[]> expected = new List<int[]> { 
+                new int[2] { 0, 4 },
+                new int[2] { 11, 16 }
+            };
+            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindIndexOfDelimiters(input)));
+        }
+
+        [TestMethod]
+        public void Complex_FindIndexOfDelimitersTest()
+        {
+            // index         012345 67890123 45678 9012
+            string input = "\'a{d}d\' h[ii! \"date\"";
+            List<int[]> expected = new List<int[]> {
+                new int[2] { 0, 6 },
+                new int[2] { 2, 4 },
+                new int[2] { 14, 19 },
+            };
+            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindIndexOfDelimiters(input)));
         }
 
         [TestMethod]
@@ -93,8 +106,28 @@ namespace StringParserTest
         {
             string input = "\"add\'";
             List<int[]> expected = new List<int[]>();
-            CollectionAssert.AreEqual(expected, StringParser.FindIndexOfDelimiters(input));
+            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindIndexOfDelimiters(input)));
             Assert.IsTrue(StringParser.FindIndexOfDelimiters(input).Count == 0);
+        }
+
+        // Returns true if the two lists contains (any order) the same exact int arrays.
+        private bool ListOfIntegerArraysAreEquivalent(List<int[]> first, List<int[]> second)
+        {
+            bool foundArray = false;
+            foreach (int[] arrayFirst in first)
+            {
+                foreach (int[] arraySecond in second) 
+                {
+                    if (arrayFirst.SequenceEqual(arraySecond))
+                    {
+                        foundArray = true;
+                        break;
+                    }            
+
+                }
+                if (foundArray == false) return false;
+            }
+            return true;
         }
          
     }
