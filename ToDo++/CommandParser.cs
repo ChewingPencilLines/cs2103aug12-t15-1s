@@ -20,6 +20,7 @@ namespace ToDo
             List<string> inputWords;
             int positionOfCommandKeyword = -1;
             
+            // Get position of delimiters so we can treat those substrings as a single word.
             positionsOfDelimiters = StringParser.FindPositionOfDelimiters(input);
             SortIndexes(ref positionsOfDelimiters);
             RemoveBadIndexes(ref positionsOfDelimiters);

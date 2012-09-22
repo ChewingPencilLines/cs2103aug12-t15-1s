@@ -17,6 +17,9 @@ namespace ToDo
         static List<List<string>> commandKeywords = new List<List<string>>()
         {
             //@todo: can possibly add commandType to zero-index so that order is not important
+            //i.e.: Zeroth index represents the type of command and the following indexes are the possible
+            // command strings that represent keywords to execute the command.
+            // OR fill commandKeywords during initialization based on enum as index.
             new List<String> { "add" },
             new List<String> { "display" },
             new List<String> { "sort" },
@@ -30,6 +33,12 @@ namespace ToDo
         static string timeKeywords;
 
 
+        /// <summary>
+        /// This method searches the input string against the set delimiters'
+        /// and return the positions of the delimiters as a list of integer pairs.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>List containing all matching sets of delimiters as integer pairs</returns>
         internal static List<int[]> FindPositionOfDelimiters(string input)
         {
             List<int[]> indexOfDelimiters = new List<int[]>();
@@ -56,7 +65,7 @@ namespace ToDo
 
         //@todo: change to return commandType makes more sense. have matchCount as a ref param.
         /// <summary>
-        /// Operation search an input list of strings against the list of command words.
+        /// This operation searches an input list of strings against the set list of command words.
         /// Upon a succesful first match, the operation updates the command and indexOfCommand input parameters by reference.
         /// Returns the number of matches at the end of search.
         /// </summary>
@@ -107,7 +116,25 @@ namespace ToDo
 
         internal static List<string> SplitStringIntoWords(string input, List<int[]> indexOfDelimiters)
         {
-            throw new NotImplementedException();
+            List<string> words = new List<string>();             
+            // Generate the absolute substrings based on delimiters first, removing them from the input string.
+            int processedIndex = 0;
+            foreach(int[] substringIndex in indexOfDelimiters)
+            {                
+                int count = substringIndex[END_INDEX] - substringIndex[START_INDEX] + 1;
+                int startIndex = substringIndex[START_INDEX];
+                string subStr = input.Substring(processedIndex, startIndex - processedIndex);
+
+                // Add words leading up to the delimiting character
+                words.AddRange(subStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());
+                // Get substring without the delimiter characters
+                string absoluteSubstr = input.Substring(startIndex + 1, count - 2);
+                words.Add(absoluteSubstr);
+                processedIndex = substringIndex[END_INDEX] + 1;
+            }
+            string remainingStr = input.Substring(processedIndex);
+            words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());            
+            return words;
         }
     }
 }
