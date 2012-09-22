@@ -10,7 +10,7 @@ namespace ToDo
         static void Main(string[] args)
         {
             //for test
-            Logic a =new Logic();
+            Logic a = new Logic();
         }
     }
 }
