@@ -58,18 +58,18 @@ namespace ToDo
 
         internal void SortIndexes(ref List<int[]> indexOfDelimiters)
         {
-            Comparison<int[]> comparison = new Comparison<int[]>(CompareBasedOnFirstIndex);
+            Comparison<int[]> comparison = new Comparison<int[]>(CompareBasedOnZerothIndex);
             indexOfDelimiters.Sort(comparison);
         }
 
 
         /// <summary>
-        /// This method is a safe comparator to sort a container of int[] based on their zeroth index only.
+        /// This method is a comparator to safely sort a container of int[] based on their zeroth index only.
         /// </summary>
         /// <param name="x">First object to compare</param>
         /// <param name="y">Second object to compare</param>
         /// <returns>int: -1 if x less y, 0 if x equals y, 1 if x more y</returns>
-        private static int CompareBasedOnFirstIndex(int[] x, int[] y)
+        private static int CompareBasedOnZerothIndex(int[] x, int[] y)
         {
             if (x == null || x.Count() < 1)
             {

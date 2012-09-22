@@ -116,7 +116,8 @@ namespace ToDo
 
         internal static List<string> SplitStringIntoWords(string input, List<int[]> indexOfDelimiters)
         {
-            List<string> words = new List<string>();             
+            List<string> words = new List<string>();
+             
             // Generate the absolute substrings based on delimiters first, removing them from the input string.
             int processedIndex = 0;
             foreach(int[] substringIndex in indexOfDelimiters)
@@ -127,11 +128,15 @@ namespace ToDo
 
                 // Add words leading up to the delimiting character
                 words.AddRange(subStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());
-                // Get substring without the delimiter characters
+                // Get absolute substring without the delimiter characters and add to return list
                 string absoluteSubstr = input.Substring(startIndex + 1, count - 2);
                 words.Add(absoluteSubstr);
+
+                // Update processed index state
                 processedIndex = substringIndex[END_INDEX] + 1;
             }
+
+            // Add remaining words
             string remainingStr = input.Substring(processedIndex);
             words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());            
             return words;
