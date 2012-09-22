@@ -110,6 +110,42 @@ namespace StringParserTest
             Assert.IsTrue(StringParser.FindPositionOfDelimiters(input).Count == 0);
         }
 
+        [TestMethod]
+        public void SplitStringIntoWordsTest()
+        {
+            // index        01234567890123456789012
+            string input = "add {modify car} tonight";
+            List<int[]> delimiters = new List<int[]> {
+                new int[2] { 4, 15 }
+            };
+            List<string> expected = new List<string> {
+                "add",
+                "modify car",
+                "tonight"
+            };
+            CollectionAssert.AreEquivalent(expected,StringParser.SplitStringIntoWords(input,delimiters));
+            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoWords(input, delimiters));
+        }
+
+        [TestMethod]
+        public void Multiple_SplitStringIntoWordsTest()
+        {
+            // index        0123456789012345 678901234567 89012345678
+            string input = "add {modify car}\"tonight 8pm\" deadline";
+            List<int[]> delimiters = new List<int[]> {
+                new int[2] { 4, 15 },
+                new int[2] { 16, 28 }
+            };
+            List<string> expected = new List<string> {
+                "add",
+                "modify car",
+                "tonight 8pm",
+                "deadline"
+            };
+            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoWords(input, delimiters));
+            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoWords(input, delimiters));
+        }
+
         // Returns true if the two lists contains (any order) the same exact int arrays.
         private bool ListOfIntegerArraysAreEquivalent(List<int[]> first, List<int[]> second)
         {
