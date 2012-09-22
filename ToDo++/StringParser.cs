@@ -11,6 +11,8 @@ namespace ToDo
     enum CommandType { ADD, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, INVALID };
     public static class StringParser
     {
+        const int START_INDEX = 0;
+        const int END_INDEX = 1;
         static char[,] binaryDelimiters = { { '\'', '\'' }, { '\"', '\"' } , { '[', ']' }, { '(', ')' }, { '{', '}' } };
         static List<List<string>> commandKeywords = new List<List<string>>()
         {
@@ -28,7 +30,7 @@ namespace ToDo
         static string timeKeywords;
 
 
-        internal static List<int[]> FindIndexOfDelimiters(string input)
+        internal static List<int[]> FindPositionOfDelimiters(string input)
         {
             List<int[]> indexOfDelimiters = new List<int[]>();
             int startIndex = 0, endIndex = -1;
@@ -38,8 +40,8 @@ namespace ToDo
                 endIndex = -1;
                 do
                 {
-                    startIndex = input.IndexOf(binaryDelimiters[i,0], endIndex + 1);
-                    endIndex = input.IndexOf(binaryDelimiters[i,1], startIndex + 1);
+                    startIndex = input.IndexOf(binaryDelimiters[i,START_INDEX], endIndex + 1);
+                    endIndex = input.IndexOf(binaryDelimiters[i,END_INDEX], startIndex + 1);
                     if (startIndex >= 0 && endIndex > 0)
                     {
                         int[] index = new int[2] { startIndex, endIndex };
@@ -52,6 +54,7 @@ namespace ToDo
             return indexOfDelimiters;
         }
 
+        //@todo: change to return commandType makes more sense. have matchCount as a ref param.
         /// <summary>
         /// Operation search an input list of strings against the list of command words.
         /// Upon a succesful first match, the operation updates the command and indexOfCommand input parameters by reference.
@@ -102,7 +105,7 @@ namespace ToDo
             throw new NotImplementedException();
         }
 
-        internal static List<string> SplitStringIntoWords(string input)
+        internal static List<string> SplitStringIntoWords(string input, List<int[]> indexOfDelimiters)
         {
             throw new NotImplementedException();
         }

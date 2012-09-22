@@ -72,7 +72,7 @@ namespace StringParserTest
             // Flatten before comparing. Product limitation of visual studio compiler / unit tester.
             CollectionAssert.AreEqual(
                 expected.SelectMany(x => x).ToList(),
-                StringParser.FindIndexOfDelimiters(input).SelectMany(x => x).ToList()
+                StringParser.FindPositionOfDelimiters(input).SelectMany(x => x).ToList()
                 );
         }
         
@@ -85,7 +85,7 @@ namespace StringParserTest
                 new int[2] { 0, 4 },
                 new int[2] { 11, 16 }
             };
-            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindIndexOfDelimiters(input)));
+            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindPositionOfDelimiters(input)));
         }
 
         [TestMethod]
@@ -98,7 +98,7 @@ namespace StringParserTest
                 new int[2] { 2, 4 },
                 new int[2] { 14, 19 },
             };
-            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindIndexOfDelimiters(input)));
+            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindPositionOfDelimiters(input)));
         }
 
         [TestMethod]
@@ -106,8 +106,8 @@ namespace StringParserTest
         {
             string input = "\"add\'";
             List<int[]> expected = new List<int[]>();
-            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindIndexOfDelimiters(input)));
-            Assert.IsTrue(StringParser.FindIndexOfDelimiters(input).Count == 0);
+            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindPositionOfDelimiters(input)));
+            Assert.IsTrue(StringParser.FindPositionOfDelimiters(input).Count == 0);
         }
 
         // Returns true if the two lists contains (any order) the same exact int arrays.
@@ -122,8 +122,7 @@ namespace StringParserTest
                     {
                         foundArray = true;
                         break;
-                    }            
-
+                    }
                 }
                 if (foundArray == false) return false;
             }
