@@ -13,15 +13,29 @@ namespace ToDo
         {
             string command;
             command = GetCommand();
+            Operation OP = DecomposeCommand(command);
+            ExecuteCommand(OP);
+        }
+
+        public string ExecuteCommand(Operation OP)
+        {
+            string result = "";
+            //@todo: pass op to crud part and get result;
+            return result;
+        }
+
+        public Operation DecomposeCommand(string command)
+        {
             if (!command.Equals(null))
             {
                 CommandStack.Push(command);
                 CommandParser CP = new CommandParser();
-                Operation OP = CP.ParseOperation(command);
+                return CP.ParseOperation(command);
             }
-            
+            return null;
         }
 
+        //get command from direct CLI input/GUI input
         public string GetCommand()
         {
             string command = ReadCommand();
@@ -32,7 +46,7 @@ namespace ToDo
             return command;
         }
 
-        //seperate console part for test
+        //CLI part for test
         public string ReadCommand()
         {
             string command;
