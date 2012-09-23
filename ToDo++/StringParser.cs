@@ -17,8 +17,8 @@ namespace ToDo
         const int END_INDEX = 1;
         static char[,] delimitingCharacters = { { '\'', '\'' }, { '\"', '\"' }, { '[', ']' }, { '(', ')' }, { '{', '}' } };
         static List<List<string>> commandKeywords;
-        static List<string> monthKeywords;
         static Dictionary<string, List<string>> dayKeywords;
+        static List<string> monthKeywords;        
         static List<string> timeSpecificKeywords;
         static List<string> timeGeneralKeywords;
 
@@ -57,19 +57,20 @@ namespace ToDo
             dayKeywords.Add("Sunday", new List<string> { "sun", "sunday", "weekend" });
             timeSpecificKeywords = new List<string> { "noon", "midnight" };
             timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" };
+            //todo: preposition keywords? i.e. next, following, this, from, to, "-", until, by.
         }
 
         internal static bool IsValidTime(string thetime)
         {
-            // checks the input for 00:00 to 23:59 or 0000 to 2359, with or without hours
+            // checks the input for 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
             Regex time_24HourFormat =
-                new Regex(@"(?i)^(((0|1)?[0-9])|2[0-3]):?[0-5][0-9]\s?(h(ou)?rs?)?$");
+                new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?$");
             // military and standard with the use of AM and PM (optional and insensitive)
-            Regex time_AllFormat =
-                new Regex(@"^(?:(?:0?[0-9]|1[0-2]):[0-5][0-9]\s?(?:(?:[Aa]|[Pp])[Mm])?|(?:1[3-9]|2[0-3]):[0-5][0-9])$");
+            Regex time_12HourFormat =
+                new Regex(@"(?i)\b(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<context>am|pm)\b");
 
-            return (time_24HourFormat.IsMatch(thetime));
-        } 
+            return (time_24HourFormat.IsMatch(thetime)||time_12HourFormat.IsMatch(thetime));
+        }
 
         /// <summary>
         /// This method searches the input string against the set delimiters'
