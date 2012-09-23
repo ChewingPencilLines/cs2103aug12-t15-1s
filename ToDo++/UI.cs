@@ -17,7 +17,6 @@ namespace ToDo
         public UI()
         {
             InitializeComponent();
-            textBox_input.Focus();
         }
 
         //Set Formatting for your Text
@@ -48,7 +47,7 @@ namespace ToDo
         }
 
         //Press Enter
-        private void inputText_KeyPress(object sender, KeyPressEventArgs e)
+        private void textBox_input_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)13)
             {
@@ -65,8 +64,9 @@ namespace ToDo
         //Minimize to Tray with over-ride for short cut
         private void MinimiseToTray(bool shortCutPressed)
         {
-            notifyIcon_taskBar.BalloonTipTitle = "Minimize to Tray App";
-            notifyIcon_taskBar.BalloonTipText = "You have successfully minimized your app.";
+            // @ivan > @raaj: Make it display only once?
+            notifyIcon_taskBar.BalloonTipTitle = "ToDo++ is still running!";
+            notifyIcon_taskBar.BalloonTipText = "Restore ToDo++ by double clicking here.";
 
             if (FormWindowState.Minimized == this.WindowState || shortCutPressed==true)
             {
@@ -107,6 +107,7 @@ namespace ToDo
         }
 
         //Exit Command. Choose to Popup options before exiting
+        // @ivan > @raaj: what for?
         public static void Exit()
         {
             Application.Exit();

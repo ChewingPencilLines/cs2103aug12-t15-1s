@@ -161,7 +161,7 @@
             this.textBox_input.Name = "textBox_input";
             this.textBox_input.Size = new System.Drawing.Size(195, 20);
             this.textBox_input.TabIndex = 0;
-            this.textBox_input.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputText_KeyPress);
+            this.textBox_input.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
             // 
             // button_go
             // 
