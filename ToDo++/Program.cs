@@ -9,8 +9,10 @@ namespace ToDo
     {
         static void Main(string[] args)
         {
+            string command;
+            command = Console.ReadLine();
             //for test
-            Logic a = new Logic();
+            Logic a = new Logic(command);
         }
     }
 }
