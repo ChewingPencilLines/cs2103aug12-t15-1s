@@ -1,0 +1,5 @@
+syntax: glob
+bin\**
+obj\**
+ToDo++.v11.suo
+TestResults\**
