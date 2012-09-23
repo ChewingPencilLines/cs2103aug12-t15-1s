@@ -13,17 +13,29 @@ namespace StringParserTest
         List<string> testWords = new List<string>();
 
         [TestMethod]
-        public void IsValidTimeTest()
+        public void IsValidTimeTest_24HourFormat()
         {
-            Assert.IsTrue(StringParser.IsValidTime("5:00"));
-            Assert.IsTrue(StringParser.IsValidTime("5:01"));
+            Assert.IsTrue(StringParser.IsValidTime("5:00"));            
             Assert.IsTrue(StringParser.IsValidTime("05:23"));
             Assert.IsTrue(StringParser.IsValidTime("15:59"));
             Assert.IsTrue(StringParser.IsValidTime("2359hr"));
             Assert.IsTrue(StringParser.IsValidTime("1200hrs"));
             Assert.IsTrue(StringParser.IsValidTime("2200 hours"));
             Assert.IsTrue(StringParser.IsValidTime("1234 HOURS"));
+            Assert.IsFalse(StringParser.IsValidTime("500hours"));
+            Assert.IsFalse(StringParser.IsValidTime("500"));
             Assert.IsFalse(StringParser.IsValidTime("2400 hr")); // only up to 2359 is valid.
+        }
+
+        [TestMethod]
+        public void IsValidTimeTest_12HourFormat()
+        {
+            Assert.IsTrue(StringParser.IsValidTime("12am"));
+            Assert.IsTrue(StringParser.IsValidTime("12 pm"));
+            Assert.IsTrue(StringParser.IsValidTime("5:23 am"));
+            Assert.IsTrue(StringParser.IsValidTime("5:30 pm"));
+            Assert.IsTrue(StringParser.IsValidTime("11.59pm"));
+            Assert.IsFalse(StringParser.IsValidTime("13.01pm")); // only up to 1159am/pm is valid.
         }
 
         [TestMethod]
