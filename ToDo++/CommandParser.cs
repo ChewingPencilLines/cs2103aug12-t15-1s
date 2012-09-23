@@ -33,7 +33,7 @@ namespace ToDo
             StringParser.RemoveWordFromSentence_ByIndex(ref inputWords, positionOfCommandKeyword);
 
             // Search for dates/times
-            DateTime[] taskTime = StringParser.SearchForDateTime(input);
+            DateTime[] taskTime = StringParser.SearchForDateTime(inputWords);
             return new Operation();
         }
 
@@ -61,7 +61,7 @@ namespace ToDo
             Comparison<int[]> comparison = new Comparison<int[]>(CompareBasedOnZerothIndex);
             indexOfDelimiters.Sort(comparison);
         }
-
+        
 
         /// <summary>
         /// This method is a comparator to safely sort a container of int[] based on their zeroth index only.
