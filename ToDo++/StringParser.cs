@@ -3,35 +3,73 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 [assembly: InternalsVisibleTo("ParsingLogicUnitTest")]
 
 namespace ToDo
 {
-    enum CommandType { ADD, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, INVALID };
+    // enum is used as a list index. do not modify numbering!
+    enum CommandType { ADD = 0, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, INVALID };
     public static class StringParser
     {
         const int START_INDEX = 0;
         const int END_INDEX = 1;
-        static char[,] binaryDelimiters = { { '\'', '\'' }, { '\"', '\"' } , { '[', ']' }, { '(', ')' }, { '{', '}' } };
-        static List<List<string>> commandKeywords = new List<List<string>>()
-        {
-            //@todo: can possibly add commandType to zero-index so that order is not important
-            //i.e.: Zeroth index represents the type of command and the following indexes are the possible
-            // command strings that represent keywords to execute the command.
-            // OR fill commandKeywords during initialization based on enum as index.
-            new List<String> { "add" },
-            new List<String> { "display" },
-            new List<String> { "sort" },
-            new List<String> { "search" },
-            new List<String> { "modify" },
-            new List<String> { "undo" },
-            new List<String> { "redo" },
-        };
-        static string monthKeywords;
-        static string dayKeywords;
-        static string timeKeywords;
+        static char[,] delimitingCharacters = { { '\'', '\'' }, { '\"', '\"' }, { '[', ']' }, { '(', ')' }, { '{', '}' } };
+        static List<List<string>> commandKeywords;
+        static List<string> monthKeywords;
+        static Dictionary<string, List<string>> dayKeywords;
+        static List<string> timeSpecificKeywords;
+        static List<string> timeGeneralKeywords;
 
+        static StringParser()
+        {
+            InitializeDefaultKeywords();
+        }
+
+        private static void InitializeDefaultKeywords()
+        {
+            InitializeCommandKeywords();
+            InitializeDateTimeKeywords();
+        }
+
+        private static void InitializeCommandKeywords()
+        {
+            commandKeywords = new List<List<string>>();
+            commandKeywords.Insert((int)CommandType.ADD, new List<String> { "add" });
+            commandKeywords.Insert((int)CommandType.DISPLAY, new List<String> { "display" });
+            commandKeywords.Insert((int)CommandType.SORT, new List<String> { "sort" });
+            commandKeywords.Insert((int)CommandType.SEARCH, new List<String> { "search" });
+            commandKeywords.Insert((int)CommandType.MODIFY, new List<String> { "modify" });
+            commandKeywords.Insert((int)CommandType.UNDO, new List<String> { "undo" });
+            commandKeywords.Insert((int)CommandType.REDO, new List<String> { "redo" });
+        }
+
+        private static void InitializeDateTimeKeywords()
+        {
+            dayKeywords = new Dictionary<string, List<string>>();
+            dayKeywords.Add("Monday", new List<string> { "mon", "monday" });
+            dayKeywords.Add("Tuesday", new List<string> { "tue", "tues", "tuesday" });
+            dayKeywords.Add("Wednesday", new List<string> { "wed", "wednesday" });
+            dayKeywords.Add("Thursday", new List<string> { "thur", "thurs", "thursday" });
+            dayKeywords.Add("Friday", new List<string> { "fri", "friday" });
+            dayKeywords.Add("Saturday", new List<string> { "sat", "saturday"});
+            dayKeywords.Add("Sunday", new List<string> { "sun", "sunday", "weekend" });
+            timeSpecificKeywords = new List<string> { "noon", "midnight" };
+            timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" };
+        }
+
+        internal static bool IsValidTime(string thetime)
+        {
+            // checks the input for 00:00 to 23:59 or 0000 to 2359, with or without hours
+            Regex time_24HourFormat =
+                new Regex(@"(?i)^(((0|1)?[0-9])|2[0-3]):?[0-5][0-9]\s?(h(ou)?rs?)?$");
+            // military and standard with the use of AM and PM (optional and insensitive)
+            Regex time_AllFormat =
+                new Regex(@"^(?:(?:0?[0-9]|1[0-2]):[0-5][0-9]\s?(?:(?:[Aa]|[Pp])[Mm])?|(?:1[3-9]|2[0-3]):[0-5][0-9])$");
+
+            return (time_24HourFormat.IsMatch(thetime));
+        } 
 
         /// <summary>
         /// This method searches the input string against the set delimiters'
@@ -43,14 +81,14 @@ namespace ToDo
         {
             List<int[]> indexOfDelimiters = new List<int[]>();
             int startIndex = 0, endIndex = -1;
-            for (int i = 0; i < binaryDelimiters.GetLength(0); i++)
+            for (int i = 0; i < delimitingCharacters.GetLength(0); i++)
             {
                 startIndex = 0;
                 endIndex = -1;
                 do
                 {
-                    startIndex = input.IndexOf(binaryDelimiters[i,START_INDEX], endIndex + 1);
-                    endIndex = input.IndexOf(binaryDelimiters[i,END_INDEX], startIndex + 1);
+                    startIndex = input.IndexOf(delimitingCharacters[i, START_INDEX], endIndex + 1);
+                    endIndex = input.IndexOf(delimitingCharacters[i, END_INDEX], startIndex + 1);
                     if (startIndex >= 0 && endIndex > 0)
                     {
                         int[] index = new int[2] { startIndex, endIndex };
@@ -109,7 +147,7 @@ namespace ToDo
             words.RemoveAt(index);
         }
 
-        internal static DateTime[] SearchForDateTime(string input)
+        internal static DateTime[] SearchForDateTime(List<string> input)
         {
             throw new NotImplementedException();
         }
@@ -117,11 +155,11 @@ namespace ToDo
         internal static List<string> SplitStringIntoWords(string input, List<int[]> indexOfDelimiters)
         {
             List<string> words = new List<string>();
-             
+
             // Generate the absolute substrings based on delimiters first, removing them from the input string.
             int processedIndex = 0;
-            foreach(int[] substringIndex in indexOfDelimiters)
-            {                
+            foreach (int[] substringIndex in indexOfDelimiters)
+            {
                 int count = substringIndex[END_INDEX] - substringIndex[START_INDEX] + 1;
                 int startIndex = substringIndex[START_INDEX];
                 string subStr = input.Substring(processedIndex, startIndex - processedIndex);
@@ -138,7 +176,7 @@ namespace ToDo
 
             // Add remaining words
             string remainingStr = input.Substring(processedIndex);
-            words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());            
+            words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());
             return words;
         }
     }
