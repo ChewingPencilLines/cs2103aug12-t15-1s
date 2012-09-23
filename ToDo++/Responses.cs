@@ -5,7 +5,10 @@ using System.Text;
 
 namespace ToDo
 {
-    class FloatingTask : Task
+    public enum Responses
     {
+        ADD_SUCCESS,
+
+        ERROR
     }
 }

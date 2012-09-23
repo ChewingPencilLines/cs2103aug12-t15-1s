@@ -5,8 +5,12 @@ using System.Text;
 
 namespace ToDo
 {
-    class TaskList:List<Task>
+    public class TaskList : List<Task>
     {
+        public TaskList()
+        {
+
+        }
     }
 
     class TaskListDelegate

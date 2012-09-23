@@ -1,85 +1,134 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Comment CommentText="TaskList is basically a List but we can add in more specific functionality or ovverride some functions">
-    <Position X="0.5" Y="1.636" Height="0.75" Width="1.617" />
+    <Position X="0.5" Y="2.886" Height="0.75" Width="1.617" />
   </Comment>
   <Comment CommentText="Abstract Task Class and various Task Types">
-    <Position X="2.417" Y="1.737" Height="0.573" Width="1.7" />
+    <Position X="2.417" Y="2.987" Height="0.573" Width="1.7" />
   </Comment>
   <Comment CommentText="Task types with their specific attributes inherit from Task">
-    <Position X="4.625" Y="1.625" Height="0.75" Width="1.7" />
+    <Position X="4.625" Y="2.875" Height="0.75" Width="1.7" />
   </Comment>
   <Comment CommentText="Operation Class specifies an instance of a Task and the operation that needs to be performed with it">
-    <Position X="6.656" Y="1.615" Height="0.75" Width="1.7" />
+    <Position X="6.656" Y="2.865" Height="0.75" Width="1.7" />
   </Comment>
   <Class Name="ToDo.Task">
-    <Position X="2.5" Y="4.25" Width="1.5" />
+    <Position X="2.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
       <FileName>Task.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ToDo.EventTask">
-    <Position X="4.75" Y="2.5" Width="1.5" />
+    <Position X="4.75" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAgACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>EventTask.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ToDo.DeadlineTask">
-    <Position X="4.75" Y="4.25" Width="1.5" />
+    <Position X="4.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>DeadlineTask.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ToDo.FloatingTask" Collapsed="true">
-    <Position X="4.75" Y="5.75" Width="1.5" />
-    <InheritanceLine Type="ToDo.Task" FixedToPoint="true">
-      <Path>
-        <Point X="3.25" Y="5.546" />
-        <Point X="3.25" Y="6.125" />
-        <Point X="4.75" Y="6.125" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>FloatingTask.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="ToDo.TaskList" Collapsed="true">
-    <Position X="0.5" Y="2.5" Width="1.5" />
+    <Position X="0.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>TaskList.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ToDo.TaskListDelegate" Collapsed="true">
-    <Position X="0.5" Y="3.25" Width="1.5" />
+    <Position X="0.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>TaskList.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ToDo.Operation">
-    <Position X="6.75" Y="2.5" Width="1.5" />
+    <Position X="6.75" Y="3.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAIAAAQACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AABAQAAAQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Operation.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Enum Name="ToDo.TaskType">
-    <Position X="2.5" Y="2.5" Width="1.5" />
+  <Class Name="ToDo.OperationAdd">
+    <Position X="9" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAQAEAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>TaskType.cs</FileName>
+      <HashCode>AAAAQAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ToDo.OperationDisplay" Collapsed="true">
+    <Position X="9" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ToDo.OperationDelete">
+    <Position X="9" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Operation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ToDo.OperationUpdate">
+    <Position X="9" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAYAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ToDo.OperationUndoRedo">
+    <Position X="9" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ToDo.CRUD">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAACIAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CRUD.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ToDo.FloatingTask" Collapsed="true">
+    <Position X="4.75" Y="7" Width="1.5" />
+    <InheritanceLine Type="ToDo.Task" FixedToPoint="true">
+      <Path>
+        <Point X="3.25" Y="6.796" />
+        <Point X="3.25" Y="7.375" />
+        <Point X="4.75" Y="7.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Task.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="ToDo.OperationType">
+    <Position X="6.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAICAAAAAECAgQAgBAICAAAAEAAAEAAAAAAAAAAAE=</HashCode>
+      <FileName>Operation.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="ToDo.OperationType">
-    <Position X="6.75" Y="4" Width="1.5" />
+  <Enum Name="ToDo.Responses">
+    <Position X="7.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAICAAAAAEAAAQAgBAICAAAAEAAAEAAAAAABAAQAE=</HashCode>
-      <FileName>Operation.cs</FileName>
+      <HashCode>AAAAAAABAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Responses.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ToDo.TaskType">
+    <Position X="2.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAEAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Task.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

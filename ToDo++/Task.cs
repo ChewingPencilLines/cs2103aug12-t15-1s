@@ -6,9 +6,30 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    abstract class Task
+    public enum TaskType
+    {
+        TimedTask,
+        DeadlineTask,
+        FloatingTask,
+    }
+
+    public abstract class Task
     {
         protected TaskType taskID;
         protected string taskName;
+    }
+
+    public class FloatingTask : Task
+    {
+        public FloatingTask()
+        {
+
+        }
+
+        public FloatingTask(string setTaskName)
+        {
+            taskID = TaskType.FloatingTask;
+            taskName = setTaskName;
+        }
     }
 }
