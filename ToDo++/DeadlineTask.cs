@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ToDo
 {
-    class DeadlineTask : Task
+    public class DeadlineTask : Task
     {
         private DateTime endTime;
     }
