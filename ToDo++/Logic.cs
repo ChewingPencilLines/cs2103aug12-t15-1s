@@ -9,10 +9,9 @@ namespace ToDo
     {
         private Stack<string> CommandStack = new Stack<string>();
 
-        public Logic()
+        public Logic(string command)
         {
-            string command;
-            command = GetCommand();
+            command = GetCommand(command);
             Operation OP = DecomposeCommand(command);
             ExecuteCommand(OP);
         }
@@ -36,21 +35,12 @@ namespace ToDo
         }
 
         //get command from direct CLI input/GUI input
-        public string GetCommand()
+        public string GetCommand(string command)
         {
-            string command = ReadCommand();
             if (!command.Equals(null) & command.Length == 0)
             {
                 return null;
             }
-            return command;
-        }
-
-        //CLI part for test
-        public string ReadCommand()
-        {
-            string command;
-            command = Console.ReadLine();
             return command;
         }
 
