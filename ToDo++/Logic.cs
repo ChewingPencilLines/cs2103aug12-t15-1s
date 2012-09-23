@@ -9,39 +9,56 @@ namespace ToDo
     {
         private Stack<string> CommandStack = new Stack<string>();
 
-        public Logic(string command)
+        public Logic()
         {
-            command = GetCommand(command);
-            Operation OP = DecomposeCommand(command);
-            ExecuteCommand(OP);
+
         }
 
-        public string ExecuteCommand(Operation OP)
+        public string ProcessCommand(string input)
+        {
+            string command = GetCommand(input);
+            Operation op = DecomposeCommand(command);
+            return ExecuteCommand(op);
+        }
+
+        private string ExecuteCommand(Operation OP)
         {
             string result = "";
-            //@todo: pass op to crud part and get result;
-            return result;
+            if (OP.Equals(null))
+            {
+                return null;
+            }
+            else
+            {
+                //@todo: pass op to crud part and get result;
+                return result;
+            }
         }
 
-        public Operation DecomposeCommand(string command)
+        private Operation DecomposeCommand(string command)
         {
-            if (!command.Equals(null))
+            if (command.Equals(null))
             {
-                CommandStack.Push(command);
+                return null;
+            }
+            else
+            {
                 CommandParser CP = new CommandParser();
                 return CP.ParseOperation(command);
             }
-            return null;
         }
 
-        //get command from direct CLI input/GUI input
-        public string GetCommand(string command)
+        private string GetCommand(string command)
         {
             if (!command.Equals(null) & command.Length == 0)
             {
                 return null;
             }
-            return command;
+            else
+            {
+                CommandStack.Push(command);
+                return command;
+            }
         }
 
     }
