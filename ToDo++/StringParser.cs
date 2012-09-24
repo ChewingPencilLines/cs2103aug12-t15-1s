@@ -100,7 +100,7 @@ namespace ToDo
                 {
                     startIndex = input.IndexOf(delimitingCharacters[i, START_INDEX], endIndex + 1);
                     endIndex = input.IndexOf(delimitingCharacters[i, END_INDEX], startIndex + 1);
-                    if (startIndex >= 0 && endIndex > 0)
+                    if (startIndex >= 0 && endIndex > startIndex)
                     {
                         int[] index = new int[2] { startIndex, endIndex };
                         indexOfDelimiters.Add(index);
