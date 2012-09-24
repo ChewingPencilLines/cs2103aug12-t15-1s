@@ -17,24 +17,32 @@ namespace ToDo
         {
             CommandType command = CommandType.INVALID;
             List<int[]> positionsOfDelimiters;
-            List<string> inputWords;
+            List<string> inputWords = null;
+            string nonabsoluteString = null;
             int positionOfCommandKeyword = -1;
             
             // Get position of delimiters so we can treat those substrings as a single word.
-            positionsOfDelimiters = StringParser.FindPositionOfDelimiters(input);
-            SortIndexes(ref positionsOfDelimiters);
-            RemoveBadIndexes(ref positionsOfDelimiters);
+            positionsOfDelimiters = GetPositionsOfDelimiters(input);
 
-            inputWords = StringParser.SplitStringIntoWords(input, positionsOfDelimiters);
+            inputWords = StringParser.SplitStringIntoWords(input, ref nonabsoluteString, positionsOfDelimiters);
 
             // Search for command keyword            
             int matchCount = StringParser.SearchForCommandKeyword(inputWords, ref command, ref positionOfCommandKeyword);
             if (positionOfCommandKeyword < 0) return null; // failed, either no match or multiple matches
-            StringParser.RemoveWordFromSentence_ByIndex(ref inputWords, positionOfCommandKeyword);
+            inputWords = StringParser.RemoveWordFromSentence_ByIndex(inputWords, positionOfCommandKeyword);
 
-            // Search for dates/times
-            DateTime[] taskTime = StringParser.SearchForDateTime(inputWords);
+            // Search for dates/times            
+            List<DateTime> taskTime = StringParser.SearchForDateTime(inputWords);
             return new Operation();
+        }
+
+        private List<int[]> GetPositionsOfDelimiters(string input)
+        {
+            List<int[]> positionsOfDelimiters;
+            positionsOfDelimiters = StringParser.FindPositionOfDelimiters(input);
+            SortIndexes(ref positionsOfDelimiters);
+            RemoveBadIndexes(ref positionsOfDelimiters);
+            return positionsOfDelimiters;
         }
 
         /// <summary>

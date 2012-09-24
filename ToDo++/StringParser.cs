@@ -21,6 +21,8 @@ namespace ToDo
         static List<string> monthKeywords;        
         static List<string> timeSpecificKeywords;
         static List<string> timeGeneralKeywords;
+        static List<string> timePostpositionKeywords;
+        static List<string> prepositionKeywords;
 
         static StringParser()
         {
@@ -55,9 +57,11 @@ namespace ToDo
             dayKeywords.Add("Friday", new List<string> { "fri", "friday" });
             dayKeywords.Add("Saturday", new List<string> { "sat", "saturday"});
             dayKeywords.Add("Sunday", new List<string> { "sun", "sunday", "weekend" });
-            timeSpecificKeywords = new List<string> { "noon", "midnight" };
+            timeSpecificKeywords = new List<string> { "noon", "midnight" };            
             timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" };
+            timePostpositionKeywords = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
             //todo: preposition keywords? i.e. next, following, this, from, to, "-", until, by.
+            prepositionKeywords = new List<string> { "by", "at", "next", "following", "this", "from", "to", "-" };
         }
 
         internal static bool IsValidTime(string thetime)
@@ -70,6 +74,12 @@ namespace ToDo
                 new Regex(@"(?i)\b(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<context>am|pm)\b");
 
             return (time_24HourFormat.IsMatch(thetime)||time_12HourFormat.IsMatch(thetime));
+        }
+
+        internal static bool IsValidDay(string theday)
+        {
+
+            return true;
         }
 
         /// <summary>
@@ -143,22 +153,87 @@ namespace ToDo
             return matchCount;
         }
 
-        internal static void RemoveWordFromSentence_ByIndex(ref List<string> words, int index)
+        internal static List<string> RemoveWordFromSentence_ByIndex(List<string> words, int index)
         {
             words.RemoveAt(index);
+            return words;
         }
 
-        internal static DateTime[] SearchForDateTime(List<string> input)
+        internal static List<DateTime> SearchForDateTime(List<string> input)
         {
-            throw new NotImplementedException();
+            input = MergeTimeWords(input);
+            SearchForTime();
+            SearchForDays();
+            SearchForDates();
+            SearchForContext();
+            return null;
         }
 
-        internal static List<string> SplitStringIntoWords(string input, List<int[]> indexOfDelimiters)
+        private static List<string> MergeTimeWords(List<string> input)
+        {
+            List<string> output = new List<string>();
+            int position = 0;
+            foreach (string word in input)
+            {
+                foreach (string keyword in timePostpositionKeywords)
+                {                    
+                    if (word.ToLower() == keyword)
+                    {
+                        MergeWord_IfValidTime(ref output, input, position);
+                    }
+                    else output.Add(word);
+                }
+                position++;
+            }
+            return output;
+        }
+
+        private static void MergeWord_IfValidTime(ref List<string> output, List<string> input, int position)
+        {
+            string backHalf = input.ElementAt(position);
+            string frontHalf;
+            if(position == 0)
+            {
+                output.Add(backHalf);
+                return;
+            }
+            else
+            {
+                frontHalf = input.ElementAt(position-1);
+            }
+            string mergedWord = String.Concat(frontHalf, backHalf);
+            if (IsValidTime(mergedWord))
+            {
+                output.RemoveAt(output.Count);
+                output.Add(mergedWord);
+            }
+            else
+            {
+                output.Add(backHalf);
+            }
+            return;
+        }
+
+        /// <summary>
+        /// This method parses a string of words into a list of strings, each containing a word.
+        /// By inputting a list of integer pairs to mark delimiting characters, multiple words can be taken as a single absolute substring (word).        
+        /// An output string passed by ref is required, which will contain the input string without any words bounded by delimiters, if any.
+        /// If there are no delimiters, the ref output is exactly the same as the input.
+        /// </summary>
+        /// <param name="input">The string of words to be split.</param>
+        /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings.</param>
+        /// <param name="output">The original string without words bounded by delimiters.</param>
+        /// <returns>The individual words as a list of strings.</returns>
+        internal static List<string> SplitStringIntoWords(string input, ref string output, List<int[]> indexOfDelimiters = null)
         {
             List<string> words = new List<string>();
+
+            int processedIndex = 0, removedCount = 0;
+            output = input;
+
+            if (indexOfDelimiters == null)
+                return input.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList();
             
-            // TODO: We should only use the first set of delimiters and remove the absolute string from input!            
-            int processedIndex = 0;
             foreach (int[] substringIndex in indexOfDelimiters)
             {
                 int count = substringIndex[END_INDEX] - substringIndex[START_INDEX] + 1;
@@ -167,18 +242,25 @@ namespace ToDo
 
                 // Add words leading up to the delimiting character
                 words.AddRange(subStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());
+
                 // Get absolute substring without the delimiter characters and add to return list
                 string absoluteSubstr = input.Substring(startIndex + 1, count - 2);
-                words.Add(absoluteSubstr);
+                words.Add("\" " + absoluteSubstr); // " marks an absolute string
 
-                // Update processed index state
+                // Remove absolute string from output
+                output = output.Remove(startIndex - removedCount, count);
+
+                // Update processed index state and count of removed characters
                 processedIndex = substringIndex[END_INDEX] + 1;
+                removedCount += count;
             }
 
             // Add remaining words
             string remainingStr = input.Substring(processedIndex);
             words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());
+
             return words;
         }
+  
     }
 }
