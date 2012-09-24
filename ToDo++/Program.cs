@@ -11,8 +11,9 @@ namespace ToDo
         {
             string command;
             command = Console.ReadLine();
-            //for test
-            Logic a = new Logic(command);
+            Logic a = new Logic();
+            string feedback;
+            feedback = a.ProcessCommand(command);
         }
     }
 }
