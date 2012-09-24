@@ -64,8 +64,8 @@ namespace ToDo
         {
             // checks the input for 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
             Regex time_24HourFormat =
-                new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?$");
-            // military and standard with the use of AM and PM (optional and insensitive)
+                new Regex(@"(?i)\b(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?\b");
+            // military and standard with the use of AM and PM (optional and case insensitive)
             Regex time_12HourFormat =
                 new Regex(@"(?i)\b(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<context>am|pm)\b");
 
@@ -156,8 +156,8 @@ namespace ToDo
         internal static List<string> SplitStringIntoWords(string input, List<int[]> indexOfDelimiters)
         {
             List<string> words = new List<string>();
-
-            // Generate the absolute substrings based on delimiters first, removing them from the input string.
+            
+            // TODO: We should only use the first set of delimiters and remove the absolute string from input!            
             int processedIndex = 0;
             foreach (int[] substringIndex in indexOfDelimiters)
             {
