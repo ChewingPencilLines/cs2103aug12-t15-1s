@@ -146,11 +146,14 @@ namespace StringParserTest
             };
             List<string> expected = new List<string> {
                 "add",
-                "modify car",
+                "\" modify car",
                 "tonight"
             };
-            CollectionAssert.AreEquivalent(expected,StringParser.SplitStringIntoWords(input,delimiters));
-            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoWords(input, delimiters));
+            string expectedOutput = "add  tonight";
+            string output = null;
+            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoWords(input, ref output, delimiters));
+            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoWords(input, ref output, delimiters));
+            Assert.AreEqual(expectedOutput, output);
         }
 
         [TestMethod]
@@ -164,12 +167,46 @@ namespace StringParserTest
             };
             List<string> expected = new List<string> {
                 "add",
-                "modify car",
-                "tonight 8pm",
+                "\" modify car",
+                "\" tonight 8pm",
                 "deadline"
             };
-            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoWords(input, delimiters));
-            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoWords(input, delimiters));
+            string expectedOutput = "add  deadline";
+            string output = null;
+            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoWords(input, ref output, delimiters));
+            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoWords(input, ref output, delimiters));
+            Assert.AreEqual(expectedOutput, output);
+        }
+
+        [TestMethod]
+        public void Null_SplitStringIntoWordsTest()
+        {
+            // index        0123456789012345 678901234567 89012345678
+            string input = "add fix car tonight";           
+            List<string> expected = new List<string> {
+                "add",
+                "fix",
+                "car",
+                "tonight"
+            };
+            string expectedOutput = "add fix car tonight";
+            string output = null;
+            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoWords(input, ref output));
+            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoWords(input, ref output));
+            Assert.AreEqual(expectedOutput, output);
+        }
+
+        [TestMethod]
+        public void MergeTimeWordsTest()
+        {
+            testWords.Clear();
+            testWords.Add("Add");
+            testWords.Add("task");
+            testWords.Add("at");
+            testWords.Add("5");
+            testWords.Add("pm");
+
+
         }
 
         // Returns true if the two lists contains (any order) the same exact int arrays.
