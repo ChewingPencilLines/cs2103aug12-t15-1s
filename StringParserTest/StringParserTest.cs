@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDo;
 
 namespace StringParserTest
 {
+    // @ivan: This class contains of unit tests for methods in the StringParser class for use during development.
+    // The testing approach here is white box unit testing; Any change in implementation may break a unit test.
+    // Comment out / clean up this page and use black box tests once the class is complete.
     [TestClass]
     public class StringParserTest
     {
@@ -205,8 +210,29 @@ namespace StringParserTest
             testWords.Add("at");
             testWords.Add("5");
             testWords.Add("pm");
+            List<string> expected = new List<string>{
+                "Add",
+                "task",
+                "at",
+                "5pm"
+            };
+            List<string> output= StringParser.MergeTimeWords(testWords);
+            CollectionAssert.AreEqual(expected, output);
+        }
 
-
+        [TestMethod]
+        public void SearchForDaysTest()
+        {
+            testWords.Clear();
+            testWords.Add("Add");
+            testWords.Add("task");
+            testWords.Add("monday");
+            testWords.Add("5");
+            testWords.Add("pm");
+            List<Tuple<int,DayOfWeek>> expected = new List<Tuple<int,DayOfWeek>>();
+            expected.Add(new Tuple<int, DayOfWeek>(2, DayOfWeek.Monday));
+            List<Tuple<int,DayOfWeek>> output = StringParser.SearchForDays(testWords);            
+            CollectionAssert.AreEqual(expected, output);
         }
 
         // Returns true if the two lists contains (any order) the same exact int arrays.
