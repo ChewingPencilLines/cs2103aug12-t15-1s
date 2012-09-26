@@ -11,13 +11,14 @@ namespace ToDo
 {
     // enum is used as a list index. do not modify numbering!
     enum CommandType { ADD = 0, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, INVALID };
+    
     public static class StringParser
     {
         const int START_INDEX = 0;
         const int END_INDEX = 1;
         static char[,] delimitingCharacters = { { '\'', '\'' }, { '\"', '\"' }, { '[', ']' }, { '(', ')' }, { '{', '}' } };
         static List<List<string>> commandKeywords;
-        static Dictionary<string, List<string>> dayKeywords;
+        static Dictionary<string, DayOfWeek> dayKeywords;
         static List<string> monthKeywords;        
         static List<string> timeSpecificKeywords;
         static List<string> timeGeneralKeywords;
@@ -37,6 +38,7 @@ namespace ToDo
 
         private static void InitializeCommandKeywords()
         {
+            // todo: change to dictionary? has a constant look up time. should be faster
             commandKeywords = new List<List<string>>();
             commandKeywords.Insert((int)CommandType.ADD, new List<String> { "add" });
             commandKeywords.Insert((int)CommandType.DISPLAY, new List<String> { "display" });
@@ -49,14 +51,24 @@ namespace ToDo
 
         private static void InitializeDateTimeKeywords()
         {
-            dayKeywords = new Dictionary<string, List<string>>();
-            dayKeywords.Add("Monday", new List<string> { "mon", "monday" });
-            dayKeywords.Add("Tuesday", new List<string> { "tue", "tues", "tuesday" });
-            dayKeywords.Add("Wednesday", new List<string> { "wed", "wednesday" });
-            dayKeywords.Add("Thursday", new List<string> { "thur", "thurs", "thursday" });
-            dayKeywords.Add("Friday", new List<string> { "fri", "friday" });
-            dayKeywords.Add("Saturday", new List<string> { "sat", "saturday"});
-            dayKeywords.Add("Sunday", new List<string> { "sun", "sunday", "weekend" });
+            dayKeywords = new Dictionary<string, DayOfWeek>();
+            dayKeywords.Add("mon", DayOfWeek.Monday);
+            dayKeywords.Add("monday", DayOfWeek.Monday);
+            dayKeywords.Add("tue", DayOfWeek.Tuesday);
+            dayKeywords.Add("tues", DayOfWeek.Tuesday);
+            dayKeywords.Add("tuesday", DayOfWeek.Tuesday);
+            dayKeywords.Add("wed", DayOfWeek.Wednesday);
+            dayKeywords.Add("wednesday", DayOfWeek.Wednesday);
+            dayKeywords.Add("thur", DayOfWeek.Thursday);
+            dayKeywords.Add("thurs", DayOfWeek.Thursday);
+            dayKeywords.Add("thursday", DayOfWeek.Thursday);
+            dayKeywords.Add("fri", DayOfWeek.Friday);
+            dayKeywords.Add("friday", DayOfWeek.Friday);
+            dayKeywords.Add("sat", DayOfWeek.Saturday);
+            dayKeywords.Add("saturday", DayOfWeek.Saturday);
+            dayKeywords.Add("sun", DayOfWeek.Sunday);
+            dayKeywords.Add("sunday", DayOfWeek.Sunday);
+            dayKeywords.Add("weekend", DayOfWeek.Sunday);
             timeSpecificKeywords = new List<string> { "noon", "midnight" };            
             timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" };
             timePostpositionKeywords = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
@@ -78,7 +90,6 @@ namespace ToDo
 
         internal static bool IsValidDay(string theday)
         {
-
             return true;
         }
 
@@ -162,56 +173,85 @@ namespace ToDo
         internal static List<DateTime> SearchForDateTime(List<string> input)
         {
             input = MergeTimeWords(input);
-            SearchForTime();
-            SearchForDays();
-            SearchForDates();
-            SearchForContext();
+            SearchForTime(input);
+            SearchForDays(input);
+            SearchForDates(input);
+            SearchForContext(input);
             return null;
         }
 
-        private static List<string> MergeTimeWords(List<string> input)
+        internal static List<Tuple<int, DayOfWeek>> SearchForDays(List<string> input)
+        {
+            List<Tuple<int, DayOfWeek>> dayWords = new List<Tuple<int, DayOfWeek>>();
+            DayOfWeek day;
+            int index = 0;
+            foreach (string word in input)
+            {
+                if (dayKeywords.ContainsKey(word))
+                {
+                    dayKeywords.TryGetValue(word, out day);
+                    Tuple<int, DayOfWeek> indexDayPair = new Tuple<int, DayOfWeek>(index, day);
+                    dayWords.Add(indexDayPair);
+                }
+                index++;
+            }
+            return dayWords;
+        }
+
+        private static void SearchForTime(List<string> input)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void SearchForDates(List<string> input)
+        {            
+            throw new NotImplementedException();
+        }
+
+        private static void SearchForContext(List<string> input)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static List<string> MergeTimeWords(List<string> input)
         {
             List<string> output = new List<string>();
             int position = 0;
+            bool wordAdded = false;
             foreach (string word in input)
             {
                 foreach (string keyword in timePostpositionKeywords)
                 {                    
                     if (word.ToLower() == keyword)
                     {
-                        MergeWord_IfValidTime(ref output, input, position);
-                    }
-                    else output.Add(word);
+                        wordAdded = MergeWord_IfValidTime(ref output, input, position);
+                        if (wordAdded) break;
+                    }                    
                 }
+                if(!wordAdded) output.Add(word);
+                wordAdded = false;
                 position++;
             }
             return output;
         }
 
-        private static void MergeWord_IfValidTime(ref List<string> output, List<string> input, int position)
+        private static bool MergeWord_IfValidTime(ref List<string> output, List<string> input, int position)
         {
             string backHalf = input.ElementAt(position);
             string frontHalf;
             if(position == 0)
             {
-                output.Add(backHalf);
-                return;
+                return false;
             }
-            else
-            {
-                frontHalf = input.ElementAt(position-1);
-            }
+            frontHalf = input.ElementAt(position-1);
             string mergedWord = String.Concat(frontHalf, backHalf);
             if (IsValidTime(mergedWord))
             {
-                output.RemoveAt(output.Count);
+                output.RemoveAt(output.Count-1);
                 output.Add(mergedWord);
+                return true;
             }
-            else
-            {
-                output.Add(backHalf);
-            }
-            return;
+            else return false;
         }
 
         /// <summary>
