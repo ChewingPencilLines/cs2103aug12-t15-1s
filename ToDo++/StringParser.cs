@@ -25,6 +25,13 @@ namespace ToDo
         static List<string> timePostpositionKeywords;
         static List<string> prepositionKeywords;
 
+        // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
+        static Regex time_24HourFormat =
+            new Regex(@"(?i)\b(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?\b");
+        // matches the above but with AM and PM (case insensitive). colon/dot is optional.
+        static Regex time_12HourFormat =
+            new Regex(@"(?i)\b(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<context>am|pm)\b");
+
         static StringParser()
         {
             InitializeDefaultKeywords();
@@ -78,13 +85,6 @@ namespace ToDo
 
         internal static bool IsValidTime(string thetime)
         {
-            // checks the input for 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
-            Regex time_24HourFormat =
-                new Regex(@"(?i)\b(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?\b");
-            // military and standard with the use of AM and PM (optional and case insensitive)
-            Regex time_12HourFormat =
-                new Regex(@"(?i)\b(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<context>am|pm)\b");
-
             return (time_24HourFormat.IsMatch(thetime)||time_12HourFormat.IsMatch(thetime));
         }
 
@@ -130,8 +130,8 @@ namespace ToDo
         /// Returns the number of matches at the end of search.
         /// </summary>
         /// <param name="inputWords">Input array of words</param>
-        /// <param name="command">Command type to be updated by reference on first match</param>
-        /// <param name="indexOfCommand">Index of command to be updated by reference on first match</param>
+        /// <param name="command">Command type to be returned by reference on first match</param>
+        /// <param name="indexOfCommand">Index of command to be returned by reference on first match</param>
         /// <returns>Number of matches</returns>
         internal static int SearchForCommandKeyword(List<string> inputWords, ref CommandType command, ref int indexOfCommand)
         {
@@ -170,14 +170,40 @@ namespace ToDo
             return words;
         }
 
+        // todo: after completion, take into account efficiency.
+        // return object should be able to respresent signifance of each DateTime
+        // use a TaskTime object?
         internal static List<DateTime> SearchForDateTime(List<string> input)
         {
+            // add task friday 5 pm 28 sept 2012
+            // => add task friday 5pm 28 sept 2012
+            // => add task friday 5pm "28 sept 2012" (date is a single string in the list)
+            // days has <index 0, DayOfWeek.Friday>.
+            // dates has <index 2, 28/09/2012 as DateTime>.
+            // time has <index 1, 17 hours in TimeSpan>.            
+            List<Tuple<int, DayOfWeek>> days;
+            List<Tuple<int, DateTime>> dates;
+            List<Tuple<int, TimeSpan>> times;
             input = MergeTimeWords(input);
-            SearchForTime(input);
-            SearchForDays(input);
+            input = MergeDateWords(input);
+            days = SearchForDays(input);
             SearchForDates(input);
+            SearchForTime(input);
+            // Merge date and times (and days)? Use their indexes. (initial and end for each DateTime)
+            // MergeDateTimes();
             SearchForContext(input);
             return null;
+        }
+
+        private static List<string> MergeDateWords(List<string> input)
+        {
+            // using regex:
+            // find month words
+            // check if word before or after match a date type (i.e. 26th, 26 etc)
+            // check if word after is year (if word after is not date i.e. jan 2013, 26th jan 2013)
+            // check if word 2 index after is year (if word after is date i.e. jan 26th 2013)
+            // merge if it is (into 26th jan etc)
+            throw new NotImplementedException();
         }
 
         internal static List<Tuple<int, DayOfWeek>> SearchForDays(List<string> input)
@@ -200,19 +226,31 @@ namespace ToDo
 
         private static void SearchForTime(List<string> input)
         {
+            // use a combined regex to get hour, minute, second via tags and return a TimeSpan.
             throw new NotImplementedException();
         }
 
         private static void SearchForDates(List<string> input)
         {            
+            // use a combined regex, to return DateTime using month and date and year tags
             throw new NotImplementedException();
         }
 
+        // use lists of index to derive user intention, with consideration of prepositionKeywords.
         private static void SearchForContext(List<string> input)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// This method checks all words within an input list of words for valid times and returns a list of words
+        /// where all times are merged as a single word.
+        /// For example, if there is a valid time such as i.e. 5 pm, it combines "5" and "pm" in the returned list of words as "5pm".
+        /// </summary>
+        /// <param name="output"></param>
+        /// <param name="input"></param>
+        /// <param name="position"></param>
+        /// <returns></returns>
         internal static List<string> MergeTimeWords(List<string> input)
         {
             List<string> output = new List<string>();
@@ -254,6 +292,7 @@ namespace ToDo
             else return false;
         }
 
+        //todo: ref string output no longer neccesary!
         /// <summary>
         /// This method parses a string of words into a list of strings, each containing a word.
         /// By inputting a list of integer pairs to mark delimiting characters, multiple words can be taken as a single absolute substring (word).        
