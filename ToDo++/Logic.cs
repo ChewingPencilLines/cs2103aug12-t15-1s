@@ -16,7 +16,7 @@ namespace ToDo
 
         public string ProcessCommand(string input)
         {
-            string command = GetCommand(input);
+            string command = ValidateCommand(input);
             Operation op = DecomposeCommand(command);
             return ExecuteCommand(op);
         }
@@ -48,7 +48,7 @@ namespace ToDo
             }
         }
 
-        private string GetCommand(string command)
+        private string ValidateCommand(string command)
         {
             if (!command.Equals(null) & command.Length == 0)
             {
