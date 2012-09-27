@@ -26,6 +26,11 @@ namespace ToDo
     {
         private OperationType operationType;
 
+        public Operation()
+        {
+
+        }
+
         public void SetOperationType(OperationType opType)
         {
             operationType=opType;
