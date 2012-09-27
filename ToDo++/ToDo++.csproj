@@ -45,12 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CRUD.cs" />
-    <Compile Include="DeadlineTask.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="Responses.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskList.cs" />
-    <Compile Include="EventTask.cs" />
     <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>
