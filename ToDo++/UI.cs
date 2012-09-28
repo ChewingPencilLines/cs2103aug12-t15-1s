@@ -23,6 +23,8 @@ namespace ToDo
             PrepareSystemTray();
         }
 
+        #region MinimizeMaximizeSystemTrayHotKey
+
         private void PrepareSystemTray()
         {
             ghk = new Hotkeys.GlobalHotkey(Constants.ALT, Keys.Q, this);
@@ -36,6 +38,43 @@ namespace ToDo
                 MinimiseMaximiseTray();
             base.WndProc(ref m);
         }
+
+        //Calling this Minimises or Maximizes the application into system tray depending on state
+        private void MinimiseMaximiseTray()
+        {
+            notifyIcon_taskBar.BalloonTipTitle = "ToDo++";
+            notifyIcon_taskBar.BalloonTipText = "Hit Alt+Q to bring it up";
+
+            //If Window is Open
+            if (FormWindowState.Normal == this.WindowState && notifyIcon_taskBar.Visible == false)
+            {
+                this.Hide();
+                notifyIcon_taskBar.Visible = true;
+                notifyIcon_taskBar.ShowBalloonTip(500);
+            }
+            //If Window is in tray
+            else
+            {
+                notifyIcon_taskBar.Visible = false;
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+            }
+        }
+
+        //Double click the tray icon and it pops back up
+        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            MinimiseMaximiseTray();
+        }
+
+        //Deregisters the hot-keys when the application closes
+        private void UI_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!ghk.Unregiser())
+                MessageBox.Show("Hotkeys failed to unregister!");
+        }
+
+        #endregion
 
         //Set Formatting for your Text
         private void SetFormat(RichTextBox box, Color color, string text)
@@ -70,34 +109,7 @@ namespace ToDo
             DisplayCommand(textBox_input.Text);
         }
 
-        private void MinimiseMaximiseTray()
-        {
-            notifyIcon_taskBar.BalloonTipTitle = "ToDo++";
-            notifyIcon_taskBar.BalloonTipText = "Hit Alt+Q to bring it up";
-
-            //If Window is Open
-            if (FormWindowState.Normal == this.WindowState && notifyIcon_taskBar.Visible == false)
-            {
-                this.Hide();
-                notifyIcon_taskBar.Visible = true;
-                notifyIcon_taskBar.ShowBalloonTip(500);
-            }
-            //If Window is in tray
-            else
-            {
-                notifyIcon_taskBar.Visible = false;
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-            }
-        }
-
-        //Double click the tray icon and it pops back up
-        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            MinimiseMaximiseTray();
-        }
-
-        //Pressing ALT+Q Will Minimize the app to the tray
+        //You can add keyboard commands here
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.Q))
@@ -119,12 +131,7 @@ namespace ToDo
             Exit();
         }
 
-        private void UI_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!ghk.Unregiser())
-                MessageBox.Show("Hotkeys failed to unregister!");
-        }
-
+        //Enter Pressed while inputbox is in focus
         private void textBox_input_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)13)
@@ -133,6 +140,7 @@ namespace ToDo
             }
         }
 
+        //Open up settings page
         private void settingsClicked(object sender, EventArgs e)
         {
             Settings settingsForm = new Settings();

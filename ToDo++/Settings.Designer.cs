@@ -39,6 +39,7 @@
             this.listOfCommands = new System.Windows.Forms.ListBox();
             this.commandPreview = new System.Windows.Forms.Label();
             this.CommandTree = new System.Windows.Forms.TreeView();
+            this.removeButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -87,6 +88,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.removeButton);
             this.tabPage3.Controls.Add(this.commandDescription);
             this.tabPage3.Controls.Add(this.addUserCommandButton);
             this.tabPage3.Controls.Add(this.userCommand);
@@ -112,7 +114,7 @@
             // 
             // addUserCommandButton
             // 
-            this.addUserCommandButton.Location = new System.Drawing.Point(388, 184);
+            this.addUserCommandButton.Location = new System.Drawing.Point(333, 184);
             this.addUserCommandButton.Name = "addUserCommandButton";
             this.addUserCommandButton.Size = new System.Drawing.Size(42, 23);
             this.addUserCommandButton.TabIndex = 4;
@@ -124,7 +126,7 @@
             // 
             this.userCommand.Location = new System.Drawing.Point(264, 186);
             this.userCommand.Name = "userCommand";
-            this.userCommand.Size = new System.Drawing.Size(118, 20);
+            this.userCommand.Size = new System.Drawing.Size(63, 20);
             this.userCommand.TabIndex = 3;
             // 
             // listOfCommands
@@ -134,7 +136,6 @@
             this.listOfCommands.Name = "listOfCommands";
             this.listOfCommands.Size = new System.Drawing.Size(120, 173);
             this.listOfCommands.TabIndex = 2;
-            //this.listOfCommands.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // commandPreview
             // 
@@ -153,6 +154,16 @@
             this.CommandTree.Size = new System.Drawing.Size(121, 200);
             this.CommandTree.TabIndex = 0;
             this.CommandTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.CommandTree_AfterSelect);
+            // 
+            // removeButton
+            // 
+            this.removeButton.Location = new System.Drawing.Point(378, 184);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(55, 23);
+            this.removeButton.TabIndex = 6;
+            this.removeButton.Text = "Remove";
+            this.removeButton.UseVisualStyleBackColor = true;
+            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
             // 
             // Settings
             // 
@@ -183,6 +194,7 @@
         private System.Windows.Forms.Label commandDescription;
         private System.Windows.Forms.Button addUserCommandButton;
         private System.Windows.Forms.TextBox userCommand;
+        private System.Windows.Forms.Button removeButton;
 
     }
 }

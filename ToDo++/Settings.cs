@@ -102,6 +102,12 @@ namespace ToDo
             UpdateListOfCommands();
         }
 
+        private void removeButton_Click(object sender, EventArgs e)
+        {
+            settingsManager.RemoveCommand(listOfCommands.SelectedItem.ToString(), currentCommand);
+            UpdateListOfCommands();
+        }
+
         #endregion
 
         #region FontTab
@@ -135,6 +141,8 @@ namespace ToDo
         }
 
         #endregion
+
+
 
 
 
