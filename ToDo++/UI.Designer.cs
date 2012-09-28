@@ -59,7 +59,7 @@
             this.helpToolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(284, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(403, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -139,6 +139,7 @@
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.helpToolStripMenuItem.Text = "&Settings";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.settingsClicked);
             // 
             // helpToolStripMenuItem1
             // 
@@ -151,7 +152,7 @@
             this.richTextBox_output.Location = new System.Drawing.Point(12, 29);
             this.richTextBox_output.Name = "richTextBox_output";
             this.richTextBox_output.ReadOnly = true;
-            this.richTextBox_output.Size = new System.Drawing.Size(260, 191);
+            this.richTextBox_output.Size = new System.Drawing.Size(379, 191);
             this.richTextBox_output.TabIndex = 2;
             this.richTextBox_output.Text = "";
             // 
@@ -159,13 +160,13 @@
             // 
             this.textBox_input.Location = new System.Drawing.Point(13, 230);
             this.textBox_input.Name = "textBox_input";
-            this.textBox_input.Size = new System.Drawing.Size(195, 20);
+            this.textBox_input.Size = new System.Drawing.Size(314, 20);
             this.textBox_input.TabIndex = 0;
             this.textBox_input.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
             // 
             // button_go
             // 
-            this.button_go.Location = new System.Drawing.Point(214, 230);
+            this.button_go.Location = new System.Drawing.Point(333, 227);
             this.button_go.Name = "button_go";
             this.button_go.Size = new System.Drawing.Size(58, 23);
             this.button_go.TabIndex = 1;
@@ -184,7 +185,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(403, 262);
             this.Controls.Add(this.button_go);
             this.Controls.Add(this.textBox_input);
             this.Controls.Add(this.richTextBox_output);
