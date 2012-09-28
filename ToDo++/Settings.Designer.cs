@@ -134,7 +134,7 @@
             this.listOfCommands.Name = "listOfCommands";
             this.listOfCommands.Size = new System.Drawing.Size(120, 173);
             this.listOfCommands.TabIndex = 2;
-            this.listOfCommands.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            //this.listOfCommands.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // commandPreview
             // 
