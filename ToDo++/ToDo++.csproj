@@ -47,6 +47,11 @@
     <Compile Include="CRUD.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="Responses.cs" />
+    <Compile Include="Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings.Designer.cs" />
+    <Compile Include="SettingsManager.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskList.cs" />
     <Compile Include="UI.cs">
@@ -57,6 +62,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Settings.resx" />
     <EmbeddedResource Include="UI.resx">
       <DependentUpon>UI.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,6 +92,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HotkeyLib\HotkeyLib.csproj">
+      <Project>{09823da8-c587-4363-95f1-cd99f4d0a678}</Project>
+      <Name>HotkeyLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

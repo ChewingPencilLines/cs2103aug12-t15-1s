@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    abstract class Task
+    public abstract class Task
     {
         protected string taskname;
 

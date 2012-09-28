@@ -8,15 +8,33 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Hotkeys;
 
 namespace ToDo
 {
     public partial class UI : Form
     {
 
+        private Hotkeys.GlobalHotkey ghk;
+
         public UI()
         {
             InitializeComponent();
+            PrepareSystemTray();
+        }
+
+        private void PrepareSystemTray()
+        {
+            ghk = new Hotkeys.GlobalHotkey(Constants.ALT, Keys.Q, this);
+            ghk.Register();
+            notifyIcon_taskBar.Visible = false;
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == Hotkeys.Constants.WM_HOTKEY_MSG_ID)
+                MinimiseMaximiseTray();
+            base.WndProc(ref m);
         }
 
         //Set Formatting for your Text
@@ -36,8 +54,8 @@ namespace ToDo
         //Append the Output Window
         void DisplayCommand(string userInput)
         {
-            SetFormat(richTextBox_output, Color.Blue,"Username: ");
-            SetFormat(richTextBox_output, Color.Black,userInput);
+            SetFormat(richTextBox_output, Color.Blue, "Username: ");
+            SetFormat(richTextBox_output, Color.Black, userInput);
             SetFormat(richTextBox_output, Color.Red, "\n");
             SetFormat(richTextBox_output, Color.Red, "ToDo++: ");
             SetFormat(richTextBox_output, Color.Black, "aa");
@@ -46,58 +64,42 @@ namespace ToDo
             richTextBox_output.ScrollToCaret();
         }
 
-        //Press Enter
-        private void textBox_input_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)13)
-            {
-                DisplayCommand(textBox_input.Text);
-            }
-        }
-
         //Go Button Clicked
         private void button_go_Click(object sender, EventArgs e)
         {
             DisplayCommand(textBox_input.Text);
         }
 
-        //Minimize to Tray with over-ride for short cut
-        private void MinimiseToTray(bool shortCutPressed)
+        private void MinimiseMaximiseTray()
         {
-            // @ivan > @raaj: Make it display only once?
-            notifyIcon_taskBar.BalloonTipTitle = "ToDo++ is still running!";
-            notifyIcon_taskBar.BalloonTipText = "Restore ToDo++ by double clicking here.";
+            notifyIcon_taskBar.BalloonTipTitle = "ToDo++";
+            notifyIcon_taskBar.BalloonTipText = "Hit Alt+Q to bring it up";
 
-            if (FormWindowState.Minimized == this.WindowState || shortCutPressed==true)
+            //If Window is Open
+            if (FormWindowState.Normal == this.WindowState && notifyIcon_taskBar.Visible == false)
             {
+                this.Hide();
                 notifyIcon_taskBar.Visible = true;
                 notifyIcon_taskBar.ShowBalloonTip(500);
-                this.Hide();
             }
-            else if (FormWindowState.Normal == this.WindowState)
+            //If Window is in tray
+            else
             {
                 notifyIcon_taskBar.Visible = false;
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
             }
         }
 
-        //Double click the tray icon and it pops back up (Need a way to have a shortcut invoke the app again)
+        //Double click the tray icon and it pops back up
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
-            MinimiseToTray(false);
+            MinimiseMaximiseTray();
         }
 
         //Pressing ALT+Q Will Minimize the app to the tray
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == (Keys.Alt | Keys.Q))
-            {
-                System.Diagnostics.Trace.WriteLine("Pressed");
-                MinimiseToTray(true);
-                return true;
-            }
-
             if (keyData == (Keys.Control | Keys.Q))
             {
                 Exit();
@@ -107,7 +109,6 @@ namespace ToDo
         }
 
         //Exit Command. Choose to Popup options before exiting
-        // @ivan > @raaj: what for?
         public static void Exit()
         {
             Application.Exit();
@@ -116,6 +117,26 @@ namespace ToDo
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Exit();
+        }
+
+        private void UI_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!ghk.Unregiser())
+                MessageBox.Show("Hotkeys failed to unregister!");
+        }
+
+        private void textBox_input_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                DisplayCommand(textBox_input.Text);
+            }
+        }
+
+        private void settingsClicked(object sender, EventArgs e)
+        {
+            Settings settingsForm = new Settings();
+            settingsForm.Show();
         }
 
     }
