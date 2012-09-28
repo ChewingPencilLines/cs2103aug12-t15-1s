@@ -45,7 +45,7 @@ namespace ToDo
             CommandTree.Nodes.Add(treeNode);
         }
 
-       private void CommandTree_AfterSelect(object sender, TreeViewEventArgs e)
+        private void CommandTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
             try
             {
@@ -62,45 +62,45 @@ namespace ToDo
             }
         }
 
-       private void UpdateDescriptionCommand()
-       {
-           string description="NONE";
+        private void UpdateDescriptionCommand()
+        {
+            string description = "NONE";
 
-           switch (currentCommand)
-           {
-               case Commands.ADD:
-                   description = "Add Command\nDescription";
-                   break;
-               case Commands.DELETE:
-                   description = "Delete Command\nDescription";
-                   break;
-               case Commands.UPDATE:
-                   description = "Update Command\nDescription";
-                   break;
-               case Commands.UNDO:
-                   description = "Undo Command\nDescription";
-                   break;
-               case Commands.REDO:
-                   description = "Redo Command\nDescription";
-                   break;
-           }
+            switch (currentCommand)
+            {
+                case Commands.ADD:
+                    description = "Add Command\nDescription";
+                    break;
+                case Commands.DELETE:
+                    description = "Delete Command\nDescription";
+                    break;
+                case Commands.UPDATE:
+                    description = "Update Command\nDescription";
+                    break;
+                case Commands.UNDO:
+                    description = "Undo Command\nDescription";
+                    break;
+                case Commands.REDO:
+                    description = "Redo Command\nDescription";
+                    break;
+            }
 
-           commandDescription.Text = description;
-       }
+            commandDescription.Text = description;
+        }
 
-       private void UpdateListOfCommands()
-       {
-           listOfCommands.Items.Clear();
-           List<string> currentCommandList = settingsManager.GetCommand(currentCommand);
-           foreach (string item in currentCommandList)
-               listOfCommands.Items.Add(item);
-       }
+        private void UpdateListOfCommands()
+        {
+            listOfCommands.Items.Clear();
+            List<string> currentCommandList = settingsManager.GetCommand(currentCommand);
+            foreach (string item in currentCommandList)
+                listOfCommands.Items.Add(item);
+        }
 
-       private void addUserCommandButton_Click(object sender, EventArgs e)
-       {
-           settingsManager.AddCommand(userCommand.Text, currentCommand);
-           UpdateListOfCommands();
-       }
+        private void addUserCommandButton_Click(object sender, EventArgs e)
+        {
+            settingsManager.AddCommand(userCommand.Text, currentCommand);
+            UpdateListOfCommands();
+        }
 
         #endregion
 
