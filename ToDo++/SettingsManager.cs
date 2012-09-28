@@ -76,8 +76,7 @@ namespace ToDo
         public SettingsManager()
         {
             commandList = new CommandList();
-
-            SetUpCommands();
+            OpenFile("TEST.xml");
         }
 
         public void AddCommand(string newCommand, Commands commandType)
@@ -100,6 +99,32 @@ namespace ToDo
                     commandList.redoList.Add(newCommand);
                     break;
             }
+
+            WriteToFile("TEST.xml");
+        }
+
+        public void RemoveCommand(string commandToRemove, Commands commandType)
+        {
+            switch (commandType)
+            {
+                case Commands.ADD:
+                    commandList.addList.Remove(commandToRemove);
+                    break;
+                case Commands.DELETE:
+                    commandList.deleteList.Remove(commandToRemove);
+                    break;
+                case Commands.UPDATE:
+                    commandList.updateList.Remove(commandToRemove);
+                    break;
+                case Commands.UNDO:
+                    commandList.undoList.Remove(commandToRemove);
+                    break;
+                case Commands.REDO:
+                    commandList.redoList.Remove(commandToRemove);
+                    break;
+            }
+
+            WriteToFile("TEST.xml");
         }
 
         public List<string> GetCommand(Commands commandType)
@@ -127,6 +152,7 @@ namespace ToDo
             return getCommands;
         }
 
+        //Just a Test Function
         public void SetUpCommands()
         {
             AddCommand("+", Commands.ADD);
@@ -154,34 +180,25 @@ namespace ToDo
             return Commands.NONE;
         }
 
-        public string WriteToFile()
+        public void WriteToFile(string fileName)
         {
-            try
-            {
-                System.Xml.Serialization.XmlSerializer writer =
-                new System.Xml.Serialization.XmlSerializer(typeof(CommandList));
+            System.Xml.Serialization.XmlSerializer writer =
+            new System.Xml.Serialization.XmlSerializer(typeof(CommandList));
 
-                System.IO.StreamWriter file = new System.IO.StreamWriter(
-                    @"C:\Users\Raaj\Desktop\AA.xml");
-                writer.Serialize(file, commandList);
-                file.Close();
-            }
-            catch (Exception e)
-            {
-                return e.Message;
-            }
-            return "ok";
+            System.IO.StreamWriter file = new System.IO.StreamWriter(
+                fileName);
+            writer.Serialize(file, commandList);
+            file.Close();
         }
 
-        public void OpenFile()
+        public void OpenFile(string fileName)
         {
             System.Xml.Serialization.XmlSerializer writer =
             new System.Xml.Serialization.XmlSerializer(typeof(CommandList));
 
             System.IO.StreamReader file = new System.IO.StreamReader(
-                @"C:\Users\Raaj\Desktop\AA.xml");
-            //writer.Deserialize(file, commandList);
-            
+                fileName);
+            commandList = (CommandList)writer.Deserialize(file);
 
             file.Close();
         }
