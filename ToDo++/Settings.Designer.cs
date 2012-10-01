@@ -30,17 +30,25 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.minimisedCheckbox = new System.Windows.Forms.CheckBox();
+            this.loadOnStartupCheckbox = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.FontTree = new System.Windows.Forms.TreeView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.removeButton = new System.Windows.Forms.Button();
             this.commandDescription = new System.Windows.Forms.Label();
             this.addUserCommandButton = new System.Windows.Forms.Button();
             this.userCommand = new System.Windows.Forms.TextBox();
             this.listOfCommands = new System.Windows.Forms.ListBox();
             this.commandPreview = new System.Windows.Forms.Label();
             this.CommandTree = new System.Windows.Forms.TreeView();
-            this.removeButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.SuspendLayout();
@@ -58,6 +66,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox2);
+            this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -65,6 +75,60 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Personal Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Location = new System.Drawing.Point(6, 6);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(427, 42);
+            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "User";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(77, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Welcome User";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.minimisedCheckbox);
+            this.groupBox1.Controls.Add(this.loadOnStartupCheckbox);
+            this.groupBox1.Location = new System.Drawing.Point(6, 54);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(424, 152);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Settings";
+            // 
+            // minimisedCheckbox
+            // 
+            this.minimisedCheckbox.AutoSize = true;
+            this.minimisedCheckbox.Location = new System.Drawing.Point(6, 19);
+            this.minimisedCheckbox.Name = "minimisedCheckbox";
+            this.minimisedCheckbox.Size = new System.Drawing.Size(95, 17);
+            this.minimisedCheckbox.TabIndex = 0;
+            this.minimisedCheckbox.Text = "Start Minimzed";
+            this.minimisedCheckbox.UseVisualStyleBackColor = true;
+            this.minimisedCheckbox.CheckedChanged += new System.EventHandler(this.loadOnStartupCheckbox_CheckedChanged);
+            this.minimisedCheckbox.CheckStateChanged += new System.EventHandler(this.minimisedCheckbox_CheckStateChanged);
+            // 
+            // loadOnStartupCheckbox
+            // 
+            this.loadOnStartupCheckbox.AutoSize = true;
+            this.loadOnStartupCheckbox.Location = new System.Drawing.Point(6, 42);
+            this.loadOnStartupCheckbox.Name = "loadOnStartupCheckbox";
+            this.loadOnStartupCheckbox.Size = new System.Drawing.Size(102, 17);
+            this.loadOnStartupCheckbox.TabIndex = 1;
+            this.loadOnStartupCheckbox.Text = "Load on Startup";
+            this.loadOnStartupCheckbox.UseVisualStyleBackColor = true;
+            this.loadOnStartupCheckbox.CheckedChanged += new System.EventHandler(this.loadOnStartupCheckbox_CheckedChanged);
+            this.loadOnStartupCheckbox.CheckStateChanged += new System.EventHandler(this.loadOnStartupCheckbox_CheckStateChanged);
             // 
             // tabPage2
             // 
@@ -102,6 +166,16 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "FlexiCommands";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // removeButton
+            // 
+            this.removeButton.Location = new System.Drawing.Point(378, 184);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(55, 23);
+            this.removeButton.TabIndex = 6;
+            this.removeButton.Text = "Remove";
+            this.removeButton.UseVisualStyleBackColor = true;
+            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
             // 
             // commandDescription
             // 
@@ -155,16 +229,6 @@
             this.CommandTree.TabIndex = 0;
             this.CommandTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.CommandTree_AfterSelect);
             // 
-            // removeButton
-            // 
-            this.removeButton.Location = new System.Drawing.Point(378, 184);
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(55, 23);
-            this.removeButton.TabIndex = 6;
-            this.removeButton.Text = "Remove";
-            this.removeButton.UseVisualStyleBackColor = true;
-            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
-            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -174,6 +238,11 @@
             this.Name = "Settings";
             this.Text = "Settings";
             this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
@@ -195,6 +264,11 @@
         private System.Windows.Forms.Button addUserCommandButton;
         private System.Windows.Forms.TextBox userCommand;
         private System.Windows.Forms.Button removeButton;
+        private System.Windows.Forms.CheckBox loadOnStartupCheckbox;
+        private System.Windows.Forms.CheckBox minimisedCheckbox;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox1;
 
     }
 }

@@ -12,6 +12,7 @@ namespace ToDo
 {
     public partial class Settings : Form
     {
+        bool firstLoad = true;
         private Commands currentCommand;
         private SettingsManager settingsManager;
 
@@ -21,7 +22,43 @@ namespace ToDo
             this.ShowIcon = false;
             settingsManager = new SettingsManager();
             LoadCommandTab();
+            LoadSettingsTab();
+            firstLoad = false;
         }
+
+        #region SettingsTab
+
+        private void LoadSettingsTab()
+        {
+            minimisedCheckbox.Checked = settingsManager.GetStartMinimizedStatus();
+            loadOnStartupCheckbox.Checked = settingsManager.GetLoadOnStartupStatus();
+        }
+
+        private void minimisedCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(firstLoad==false)
+                settingsManager.ToggleStartMinimized(minimisedCheckbox.Checked);
+        }
+
+        private void loadOnStartupCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(firstLoad==false)
+                settingsManager.ToggleLoadOnStartup(loadOnStartupCheckbox.Checked);
+        }
+
+        private void minimisedCheckbox_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (firstLoad == false)
+                settingsManager.ToggleStartMinimized(minimisedCheckbox.Checked);
+        }
+
+        private void loadOnStartupCheckbox_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (firstLoad == false)
+                settingsManager.ToggleLoadOnStartup(loadOnStartupCheckbox.Checked);
+        }
+
+        #endregion
 
         #region CommandTab
 
@@ -141,6 +178,16 @@ namespace ToDo
         }
 
         #endregion
+
+
+
+
+
+
+
+
+
+
 
 
 
