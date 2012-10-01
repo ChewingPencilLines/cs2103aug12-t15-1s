@@ -16,11 +16,11 @@ namespace ToDo
         private Commands currentCommand;
         private SettingsManager settingsManager;
 
-        public Settings()
+        public Settings(SettingsManager setSettingsManager)
         {
             InitializeComponent();
             this.ShowIcon = false;
-            settingsManager = new SettingsManager();
+            settingsManager = setSettingsManager;
             LoadCommandTab();
             LoadSettingsTab();
             firstLoad = false;

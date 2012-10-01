@@ -113,12 +113,14 @@
             this.startMinimizedToolStripMenuItem.Name = "startMinimizedToolStripMenuItem";
             this.startMinimizedToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.startMinimizedToolStripMenuItem.Text = "Start Minimized";
+            this.startMinimizedToolStripMenuItem.Click += new System.EventHandler(this.startMinimizedToolStripMenuItem_Click);
             // 
             // loadOnStartupToolStripMenuItem
             // 
             this.loadOnStartupToolStripMenuItem.Name = "loadOnStartupToolStripMenuItem";
             this.loadOnStartupToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.loadOnStartupToolStripMenuItem.Text = "Load on Startup";
+            this.loadOnStartupToolStripMenuItem.Click += new System.EventHandler(this.loadOnStartupToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
