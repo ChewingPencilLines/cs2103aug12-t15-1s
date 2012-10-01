@@ -33,6 +33,8 @@ namespace ToDo
 
             // Search for dates/times            
             List<DateTime> taskTime = StringParser.SearchForDateTime(inputWords);
+
+            //SearchForContext(List<index,DateTime>, List<index,PositionalOperators>);
             return new Operation();
         }
 
@@ -69,7 +71,12 @@ namespace ToDo
             Comparison<int[]> comparison = new Comparison<int[]>(CompareBasedOnZerothIndex);
             indexOfDelimiters.Sort(comparison);
         }
-        
+
+        // use lists of index to derive user intention, with consideration of prepositionKeywords.
+        private static void SearchForContext()
+        {
+            throw new NotImplementedException();
+        }              
 
         /// <summary>
         /// This method is a comparator to safely sort a container of int[] based on their zeroth index only.
