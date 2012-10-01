@@ -16,12 +16,58 @@ namespace ToDo
     {
 
         private Hotkeys.GlobalHotkey ghk;
+        SettingsManager mainSettingsManager;
 
         public UI()
         {
             InitializeComponent();
             PrepareSystemTray();
+            PrepareSettingsManager();
         }
+
+        #region PrepareSettingsManager
+        
+        public void PrepareSettingsManager()
+        {
+            mainSettingsManager = new SettingsManager();
+            SetSettingsInUI();
+        }
+
+        public void SetSettingsInUI()
+        {
+            loadOnStartupToolStripMenuItem.Checked = mainSettingsManager.GetLoadOnStartupStatus();
+            startMinimizedToolStripMenuItem.Checked = mainSettingsManager.GetStartMinimizedStatus();
+        }
+
+        private void invertMinimizedToolStrip()
+        {
+            if (startMinimizedToolStripMenuItem.Checked == true)
+                startMinimizedToolStripMenuItem.Checked = false;
+            else
+                startMinimizedToolStripMenuItem.Checked = true;
+        }
+
+        private void invertStartupToolStrip()
+        {
+            if (loadOnStartupToolStripMenuItem.Checked == true)
+                loadOnStartupToolStripMenuItem.Checked = false;
+            else
+                loadOnStartupToolStripMenuItem.Checked = true;
+        }
+
+        private void startMinimizedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            invertMinimizedToolStrip();
+            mainSettingsManager.ToggleStartMinimized(startMinimizedToolStripMenuItem.Checked);
+        }
+
+        private void loadOnStartupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            invertStartupToolStrip();
+            mainSettingsManager.ToggleLoadOnStartup(loadOnStartupToolStripMenuItem.Checked);
+        }
+
+        #endregion
 
         #region MinimizeMaximizeSystemTrayHotKey
 
@@ -76,6 +122,8 @@ namespace ToDo
 
         #endregion
 
+        #region TextBoxInputFormatting
+
         //Set Formatting for your Text
         private void SetFormat(RichTextBox box, Color color, string text)
         {
@@ -109,6 +157,17 @@ namespace ToDo
             DisplayCommand(textBox_input.Text);
         }
 
+        //Enter Pressed while inputbox is in focus
+        private void textBox_input_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                DisplayCommand(textBox_input.Text);
+            }
+        }
+
+        #endregion
+
         //You can add keyboard commands here
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -131,19 +190,10 @@ namespace ToDo
             Exit();
         }
 
-        //Enter Pressed while inputbox is in focus
-        private void textBox_input_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)13)
-            {
-                DisplayCommand(textBox_input.Text);
-            }
-        }
-
         //Open up settings page
         private void settingsClicked(object sender, EventArgs e)
         {
-            Settings settingsForm = new Settings();
+            Settings settingsForm = new Settings(mainSettingsManager);
             settingsForm.Show();
         }
 
