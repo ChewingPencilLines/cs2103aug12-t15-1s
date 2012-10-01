@@ -7,16 +7,21 @@ using System.Xml;
 
 namespace ToDo
 {
-    public class CommandList
+    public class SettingsList
     {
+        public bool loadOnStartup;
+        public bool startMinimized;
+
         public List<string> addList;
         public List<string> deleteList;
         public List<string> updateList;
         public List<string> undoList;
         public List<string> redoList;
 
-        public CommandList()
+        public SettingsList()
         {
+            loadOnStartup = true;
+            startMinimized = true;
             addList = new List<string>();
             deleteList = new List<string>();
             updateList = new List<string>();
@@ -29,7 +34,7 @@ namespace ToDo
 
     public class SettingsManager
     {
-        private CommandList commandList;
+        private SettingsList settingsList;
 
         #region CommandEnumManager
 
@@ -75,28 +80,68 @@ namespace ToDo
 
         public SettingsManager()
         {
-            commandList = new CommandList();
+            settingsList = new SettingsList();
+
+            /* Used for Writing test data to xml before running*/
+            //SetUpCommands();
+            //WriteToFile("TEST.xml");
+
             OpenFile("TEST.xml");
         }
+
+        #region StartupMinimizedStatus
+
+
+        public void ToggleLoadOnStartup(bool checkedStatus)
+        {
+            if (checkedStatus)
+                settingsList.loadOnStartup = true;
+            else
+                settingsList.loadOnStartup = false;
+
+            WriteToFile("TEST.xml");
+        }
+
+        public void ToggleStartMinimized(bool checkedStatus)
+        {
+            if (checkedStatus)
+                settingsList.startMinimized = true;
+            else
+                settingsList.startMinimized = false;
+
+            WriteToFile("TEST.xml");
+        }
+
+        public bool GetLoadOnStartupStatus()
+        {
+            return settingsList.loadOnStartup;
+        }
+
+        public bool GetStartMinimizedStatus()
+        {
+            return settingsList.startMinimized;
+        }
+
+#endregion
 
         public void AddCommand(string newCommand, Commands commandType)
         {
             switch (commandType)
             {
                 case Commands.ADD:
-                    commandList.addList.Add(newCommand);
+                    settingsList.addList.Add(newCommand);
                     break;
                 case Commands.DELETE:
-                    commandList.deleteList.Add(newCommand);
+                    settingsList.deleteList.Add(newCommand);
                     break;
                 case Commands.UPDATE:
-                    commandList.updateList.Add(newCommand);
+                    settingsList.updateList.Add(newCommand);
                     break;
                 case Commands.UNDO:
-                    commandList.undoList.Add(newCommand);
+                    settingsList.undoList.Add(newCommand);
                     break;
                 case Commands.REDO:
-                    commandList.redoList.Add(newCommand);
+                    settingsList.redoList.Add(newCommand);
                     break;
             }
 
@@ -108,19 +153,19 @@ namespace ToDo
             switch (commandType)
             {
                 case Commands.ADD:
-                    commandList.addList.Remove(commandToRemove);
+                    settingsList.addList.Remove(commandToRemove);
                     break;
                 case Commands.DELETE:
-                    commandList.deleteList.Remove(commandToRemove);
+                    settingsList.deleteList.Remove(commandToRemove);
                     break;
                 case Commands.UPDATE:
-                    commandList.updateList.Remove(commandToRemove);
+                    settingsList.updateList.Remove(commandToRemove);
                     break;
                 case Commands.UNDO:
-                    commandList.undoList.Remove(commandToRemove);
+                    settingsList.undoList.Remove(commandToRemove);
                     break;
                 case Commands.REDO:
-                    commandList.redoList.Remove(commandToRemove);
+                    settingsList.redoList.Remove(commandToRemove);
                     break;
             }
 
@@ -133,19 +178,19 @@ namespace ToDo
             switch (commandType)
             {
                 case Commands.ADD:
-                    getCommands = commandList.addList;
+                    getCommands = settingsList.addList;
                     break;
                 case Commands.DELETE:
-                    getCommands = commandList.deleteList;
+                    getCommands = settingsList.deleteList;
                     break;
                 case Commands.UPDATE:
-                    getCommands = commandList.updateList;
+                    getCommands = settingsList.updateList;
                     break;
                 case Commands.UNDO:
-                    getCommands = commandList.undoList;
+                    getCommands = settingsList.undoList;
                     break;
                 case Commands.REDO:
-                    getCommands = commandList.redoList;
+                    getCommands = settingsList.redoList;
                     break;
             }
 
@@ -155,25 +200,27 @@ namespace ToDo
         //Just a Test Function
         public void SetUpCommands()
         {
+            ToggleLoadOnStartup(true);
+            ToggleStartMinimized(true);
             AddCommand("+", Commands.ADD);
             AddCommand("-", Commands.DELETE);
         }
 
         public Commands CheckIfCommandExists(string userCommand)
         {
-            foreach (string compare in commandList.addList)
+            foreach (string compare in settingsList.addList)
                 if (userCommand == compare)
                     return Commands.ADD;
-            foreach (string compare in commandList.deleteList)
+            foreach (string compare in settingsList.deleteList)
                 if (userCommand == compare)
                     return Commands.DELETE;
-            foreach (string compare in commandList.updateList)
+            foreach (string compare in settingsList.updateList)
                 if (userCommand == compare)
                     return Commands.UPDATE;
-            foreach (string compare in commandList.undoList)
+            foreach (string compare in settingsList.undoList)
                 if (userCommand == compare)
                     return Commands.UNDO;
-            foreach (string compare in commandList.redoList)
+            foreach (string compare in settingsList.redoList)
                 if (userCommand == compare)
                     return Commands.REDO;
 
@@ -183,22 +230,22 @@ namespace ToDo
         public void WriteToFile(string fileName)
         {
             System.Xml.Serialization.XmlSerializer writer =
-            new System.Xml.Serialization.XmlSerializer(typeof(CommandList));
+            new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
 
             System.IO.StreamWriter file = new System.IO.StreamWriter(
                 fileName);
-            writer.Serialize(file, commandList);
+            writer.Serialize(file, settingsList);
             file.Close();
         }
 
         public void OpenFile(string fileName)
         {
             System.Xml.Serialization.XmlSerializer writer =
-            new System.Xml.Serialization.XmlSerializer(typeof(CommandList));
+            new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
 
             System.IO.StreamReader file = new System.IO.StreamReader(
                 fileName);
-            commandList = (CommandList)writer.Deserialize(file);
+            settingsList = (SettingsList)writer.Deserialize(file);
 
             file.Close();
         }
