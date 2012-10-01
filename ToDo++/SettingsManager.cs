@@ -233,7 +233,7 @@ namespace ToDo
             new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
 
             System.IO.StreamWriter file = new System.IO.StreamWriter(
-                fileName,true);
+                fileName);
             writer.Serialize(file, settingsList);
             file.Close();
         }
@@ -244,7 +244,7 @@ namespace ToDo
             new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
 
             System.IO.StreamReader file = new System.IO.StreamReader(
-                fileName,true);
+                fileName);
             settingsList = (SettingsList)writer.Deserialize(file);
 
             file.Close();
