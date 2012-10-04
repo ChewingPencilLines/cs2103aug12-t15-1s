@@ -88,10 +88,10 @@ namespace ToDo
             return (time_24HourFormat.IsMatch(thetime)||time_12HourFormat.IsMatch(thetime));
         }
 
-        internal static bool IsValidDay(string theday)
+       /* internal static bool IsValidDay(string theday)
         {
             return true;
-        }
+        }*/
 
         /// <summary>
         /// This method searches the input string against the set delimiters'
@@ -191,19 +191,8 @@ namespace ToDo
             SearchForTime(input);
             // Merge date and times (and days)? Use their indexes. (initial and end for each DateTime)
             // MergeDateTimes();
-            SearchForContext(input);
+            // SearchForContext(input);
             return null;
-        }
-
-        private static List<string> MergeDateWords(List<string> input)
-        {
-            // using regex:
-            // find month words
-            // check if word before or after match a date type (i.e. 26th, 26 etc)
-            // check if word after is year (if word after is not date i.e. jan 2013, 26th jan 2013)
-            // check if word 2 index after is year (if word after is date i.e. jan 26th 2013)
-            // merge if it is (into 26th jan etc)
-            throw new NotImplementedException();
         }
 
         internal static List<Tuple<int, DayOfWeek>> SearchForDays(List<string> input)
@@ -233,12 +222,6 @@ namespace ToDo
         private static void SearchForDates(List<string> input)
         {            
             // use a combined regex, to return DateTime using month and date and year tags
-            throw new NotImplementedException();
-        }
-
-        // use lists of index to derive user intention, with consideration of prepositionKeywords.
-        private static void SearchForContext(List<string> input)
-        {
             throw new NotImplementedException();
         }
 
@@ -290,6 +273,17 @@ namespace ToDo
                 return true;
             }
             else return false;
+        }
+
+        private static List<string> MergeDateWords(List<string> input)
+        {
+            // using regex:
+            // find month words
+            // check if word before or after match a date type (i.e. 26th, 26 etc)
+            // check if word after is year (if word after is not date i.e. jan 2013, 26th jan 2013)
+            // check if word 2 index after is year (if word after is date i.e. jan 26th 2013)
+            // merge if it is (into 26th jan etc)
+            throw new NotImplementedException();
         }
 
         //todo: ref string output no longer neccesary!
