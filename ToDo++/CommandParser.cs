@@ -22,6 +22,12 @@ namespace ToDo
             return null;
         }
 
+        // use lists of index to derive user intention, with consideration of prepositionKeywords.
+        private static void SearchForContext()
+        {
+            throw new NotImplementedException();
+        }  
+
         private List<int[]> GetPositionsOfDelimiters(string input)
         {
             List<int[]> positionsOfDelimiters;
@@ -55,12 +61,7 @@ namespace ToDo
             Comparison<int[]> comparison = new Comparison<int[]>(CompareBasedOnZerothIndex);
             indexOfDelimiters.Sort(comparison);
         }
-
-        // use lists of index to derive user intention, with consideration of prepositionKeywords.
-        private static void SearchForContext()
-        {
-            throw new NotImplementedException();
-        }              
+            
 
         /// <summary>
         /// This method is a comparator to safely sort a container of int[] based on their zeroth index only.
