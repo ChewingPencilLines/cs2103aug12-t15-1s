@@ -8,7 +8,7 @@ namespace ToDo
 {
     class Token
     {
-        enum TokenType { COMMAND, DATETIME, DAY, KEYWORD };
+        enum TokenType { COMMAND, DATETIME, DAY, CONTEXT, DATA };
         private int position;
         internal int Position
         {
@@ -78,14 +78,14 @@ namespace ToDo
         }
     }
 
-    class TokenKeyword : Token
+    class TokenContext : Token
     {
         string keyword;
         internal string Value
         {
             get { return keyword; }
         }
-        internal TokenKeyword(int position, string raw)
+        internal TokenContext(int position, string raw)
             : base(position)
         {
             keyword = raw;
