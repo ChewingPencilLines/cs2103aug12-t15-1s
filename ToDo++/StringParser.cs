@@ -11,18 +11,19 @@ namespace ToDo
 {
     // enum is used as a list index. do not modify numbering!
     enum CommandType { ADD = 0, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, INVALID };
-    
+    enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING }
     public static class StringParser
     {
         const int START_INDEX = 0;
         const int END_INDEX = 1;
         static char[,] delimitingCharacters = { { '\'', '\'' }, { '\"', '\"' }, { '[', ']' }, { '(', ')' }, { '{', '}' } };
         static List<List<string>> commandKeywords;
+        static Dictionary<string, ContextType> contextKeywords;
         static Dictionary<string, DayOfWeek> dayKeywords;
-        static List<string> timeSpecificKeywords;
+        static List<string> timeSpecificKeywords;        
         static List<string> timeGeneralKeywords;
         static List<string> timeSuffixes;
-        static List<string> contextKeywords;
+        
 
         // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
         static Regex time_24HourFormat =
@@ -40,6 +41,7 @@ namespace ToDo
         {
             InitializeCommandKeywords();
             InitializeDateTimeKeywords();
+            InitializeContextKeywords();
         }
 
         private static void InitializeCommandKeywords()
@@ -76,12 +78,25 @@ namespace ToDo
             dayKeywords.Add("sunday", DayOfWeek.Sunday);
             dayKeywords.Add("weekend", DayOfWeek.Sunday);
             // NYI
-            timeSpecificKeywords = new List<string> { "noon", "midnight" };            
-            timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" };
+            timeSpecificKeywords = new List<string> { "noon", "midnight" };        // special case    
+            timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" }; // todo?
             // ===
-            timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
-            contextKeywords = new List<string> { "by", "at", "next", "following", "this", "from", "to", "-" };
+            timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };            
         }
+
+        private static void InitializeContextKeywords()
+        {
+            contextKeywords = new Dictionary<string, ContextType>();
+            contextKeywords.Add("by", ContextType.DEADLINE);
+            contextKeywords.Add("on", ContextType.STARTTIME);
+            contextKeywords.Add("from", ContextType.STARTTIME);
+            contextKeywords.Add("to", ContextType.ENDTIME);
+            contextKeywords.Add("-", ContextType.ENDTIME);
+            contextKeywords.Add("this", ContextType.CURRENT);
+            contextKeywords.Add("next", ContextType.NEXT);
+            contextKeywords.Add("following", ContextType.FOLLOWING);
+        }
+
 
         internal static bool IsValidTime(string thetime)
         {
@@ -251,23 +266,45 @@ namespace ToDo
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
             tokens.AddRange(GenerateTimeTokens(input));
-            tokens.AddRange(GenerateKeywordTokens(input));
-            tokens.AddRange(GenerateParameterTokens(input));
+            tokens.AddRange(GenerateContextTokens(input));
+            // must be done last. all non-hits are taken to be literals
+            tokens.AddRange(GenerateLiteralTokens(input, tokens));
+            // SORT()!
             return tokens;
         }
 
-        private static List<Token> GenerateParameterTokens(List<string> input)
+        private static List<Token> GenerateContextTokens(List<string> input)
         {
             return new List<Token>();
             throw new NotImplementedException();
         }
 
-        private static List<Token> GenerateKeywordTokens(List<string> input)
+        private static List<Token> GenerateLiteralTokens(List<string> input, List<Token> parsedTokens)
         {
-            return new List<Token>();
+            List<Token> tokens = new List<Token>();
+            foreach (Token token in parsedTokens)
+            {
+                input[token.Position] = null;
+            }
+            int index = 0;
+            string literal = "";
+            foreach (string remainingWord in input)
+            {
+                if (remainingWord != null)
+                    literal = literal + remainingWord + " ";
+                else if (literal != "")
+                {
+                    literal.Trim();
+                    TokenLiteral literalToken = new TokenLiteral(index-1, literal);
+                    tokens.Add(literalToken);
+                    literal = "";
+                }
+                index++;
+            }
+            return tokens;
             throw new NotImplementedException();
         }
-
+        
         /// <summary>
         /// This operation searches an input list of strings against the set list of command words and returns as list of tokens
         /// corresponding to the matched command keywords.
