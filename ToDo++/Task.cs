@@ -14,8 +14,6 @@ namespace ToDo
         {
             
         }
-
-        abstract public void ExecuteTask();
     }
 
     public class FloatingTask : Task
@@ -26,11 +24,6 @@ namespace ToDo
         public FloatingTask(string TaskName)
         {
             taskname = TaskName;
-        }
-
-        public override void ExecuteTask()
-        {
-
         }
     }
 
@@ -47,10 +40,6 @@ namespace ToDo
             endtime = EndTime;
         }
 
-        public override void ExecuteTask()
-        {
-
-        }
     }
 
     public class TimedTask : Task
@@ -68,9 +57,5 @@ namespace ToDo
             endtime = EndTime;
         }
 
-        public override void ExecuteTask()
-        {
-
-        }
     }
 }
