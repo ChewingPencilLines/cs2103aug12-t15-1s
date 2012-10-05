@@ -12,6 +12,13 @@ namespace CommandParserTest
         CommandParser testParser = new CommandParser();
 
         [TestMethod]
+        public void OperationParseTest()
+        {
+            testParser.ParseOperation("add task 9 pm");
+            return;
+        }
+
+        [TestMethod]
         public void IndexSortTest()
         {
             List<int[]> testIndexes = new List<int[]>();

@@ -21,15 +21,15 @@ namespace ToDo
         static Dictionary<string, DayOfWeek> dayKeywords;
         static List<string> timeSpecificKeywords;
         static List<string> timeGeneralKeywords;
-        static List<string> timePostpositionKeywords;
-        static List<string> prepositionKeywords;
+        static List<string> timeSuffixes;
+        static List<string> contextKeywords;
 
         // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
         static Regex time_24HourFormat =
             new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?$");
         // matches the above but with AM and PM (case insensitive). colon/dot is optional.
         static Regex time_12HourFormat =
-            new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<context>am|pm)$");
+            new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<format>am|pm)$");
 
         static StringParser()
         {
@@ -75,21 +75,17 @@ namespace ToDo
             dayKeywords.Add("sun", DayOfWeek.Sunday);
             dayKeywords.Add("sunday", DayOfWeek.Sunday);
             dayKeywords.Add("weekend", DayOfWeek.Sunday);
+            // NYI
             timeSpecificKeywords = new List<string> { "noon", "midnight" };            
             timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" };
-            timePostpositionKeywords = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
-            //todo: preposition keywords? i.e. next, following, this, from, to, "-", until, by.
-            prepositionKeywords = new List<string> { "by", "at", "next", "following", "this", "from", "to", "-" };
+            // ===
+            timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
+            contextKeywords = new List<string> { "by", "at", "next", "following", "this", "from", "to", "-" };
         }
 
         internal static bool IsValidTime(string thetime)
         {
             return (time_24HourFormat.IsMatch(thetime)||time_12HourFormat.IsMatch(thetime));
-        }
-
-        internal static bool IsValidDay(string theday)
-        {
-            return true;
         }
 
         /// <summary>
@@ -121,39 +117,27 @@ namespace ToDo
             }
             return indexOfDelimiters;
         }
-
-        internal static List<string> RemoveWordFromSentence_ByIndex(List<string> words, int index)
-        {
-            words.RemoveAt(index);
-            return words;
-        }
-
-        //todo: ref string output no longer neccesary!
+    
         /// <summary>
-        /// This method parses a string of words into a list of strings, each containing a word.
-        /// By inputting a list of integer pairs to mark delimiting characters, multiple words can be taken as a single absolute substring (word).        
-        /// An output string passed by ref is required, which will contain the input string without any words bounded by delimiters, if any.
-        /// If there are no delimiters, the ref output is exactly the same as the input.
+        /// This method parses a string of words into a list of tokens, each containing a token representing the meaning of each word or substring.
+        /// By inputting a list of integer pairs to mark delimiting characters, multiple words can be taken as a single absolute substring (word).  
         /// </summary>
-        /// <param name="input">The string of words to be split.</param>
+        /// <param name="input">The string of words to be parsed.</param>
         /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings.</param>
-        /// <param name="output">The original string without words bounded by delimiters.</param>
-        /// <returns>The individual words as a list of strings.</returns>
-        internal static List<Token> SplitStringIntoTokens(string input, List<int[]> indexOfDelimiters = null)
+        /// <returns>The list of tokens.</returns>
+        internal static List<Token> ParseStringIntoTokens(string input, List<int[]> indexOfDelimiters = null)
         {
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
             return GenerateTokens(words);
         }
-        private static List<Token> GenerateTokens(List<string> input)
-        {
-            List<Token> tokens = new List<Token>();
-            tokens.AddRange(GenerateCommandTokens(input));
-            tokens.AddRange(GenerateDayTokens(input));
-            tokens.AddRange(GenerateDateTokens(input));
-            tokens.AddRange(GenerateTimeTokens(input));
-            return tokens;
-        }
 
+        /// <summary>
+        /// This method splits a string and returns a list of substrings, each containing either a word delimited by a space,
+        /// or a substring delimited by positions in the parameter indexOfDelimiters
+        /// </summary>
+        /// <param name="input">The string of words to be split.</param>
+        /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings.</param>
+        /// <returns></returns>
         private static List<string> SplitStringIntoSubstrings(string input, List<int[]> indexOfDelimiters)
         {
             List<string> words = new List<string>();
@@ -206,6 +190,7 @@ namespace ToDo
             // check if word after is year (if word after is not date i.e. jan 2013, 26th jan 2013)
             // check if word 2 index after is year (if word after is date i.e. jan 26th 2013)
             // merge if it is (into 26th jan etc)
+            return input;
             throw new NotImplementedException();
         }
         
@@ -218,14 +203,14 @@ namespace ToDo
         /// <param name="input"></param>
         /// <param name="position"></param>
         /// <returns></returns>
-        internal static List<string> MergeTimeWords(List<string> input)
+        private static List<string> MergeTimeWords(List<string> input)
         {
             List<string> output = new List<string>();
             int position = 0;
             bool wordAdded = false;
             foreach (string word in input)
             {
-                foreach (string keyword in timePostpositionKeywords)
+                foreach (string keyword in timeSuffixes)
                 {                    
                     if (word.ToLower() == keyword)
                     {
@@ -257,6 +242,30 @@ namespace ToDo
                 return true;
             }
             else return false;
+        }
+
+        private static List<Token> GenerateTokens(List<string> input)
+        {
+            List<Token> tokens = new List<Token>();
+            tokens.AddRange(GenerateCommandTokens(input));
+            tokens.AddRange(GenerateDayTokens(input));
+            tokens.AddRange(GenerateDateTokens(input));
+            tokens.AddRange(GenerateTimeTokens(input));
+            tokens.AddRange(GenerateKeywordTokens(input));
+            tokens.AddRange(GenerateParameterTokens(input));
+            return tokens;
+        }
+
+        private static List<Token> GenerateParameterTokens(List<string> input)
+        {
+            return new List<Token>();
+            throw new NotImplementedException();
+        }
+
+        private static List<Token> GenerateKeywordTokens(List<string> input)
+        {
+            return new List<Token>();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -314,16 +323,27 @@ namespace ToDo
         {
             List<Token> timeTokens = new List<Token>();
             Match match;
-            int index = 0;
+            int index = 0, hours = 0, minutes = 0, seconds = 0;
+            bool Format_12Hour = false;
             foreach (string word in input)
             {
                 match = time_12HourFormat.Match(word);
                 if (!match.Success) match = time_24HourFormat.Match(word);
+                else Format_12Hour = true;
                 if (match.Success)
                 {
-                    int hours = Int32.Parse(match.Groups["hours"].Value);
-                    int minutes = Int32.Parse(match.Groups["minutes"].Value);
-                    int seconds = 0;
+                    string strHours = match.Groups["hours"].Value;
+                    string strMinutes = match.Groups["minutes"].Value;
+                    if (strHours.Length != 0)
+                    {
+                        hours = Int32.Parse(strHours);
+                        if (Format_12Hour && match.Groups["format"].Value.ToLower() == "pm")
+                        {
+                            hours += 12;
+                        }
+                    }
+                    if (strMinutes.Length != 0)
+                        minutes = Int32.Parse(strMinutes);
                     TimeSpan time = new TimeSpan(hours, minutes, seconds);
                     TokenTime timeToken = new TokenTime(index, time);
                     timeTokens.Add(timeToken);
@@ -335,6 +355,7 @@ namespace ToDo
 
         private static List<Token> GenerateDateTokens(List<string> input)
         {
+            return new List<Token>();
             throw new NotImplementedException();
         }
         
