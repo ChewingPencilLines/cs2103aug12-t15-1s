@@ -19,7 +19,6 @@ namespace ToDo
         static char[,] delimitingCharacters = { { '\'', '\'' }, { '\"', '\"' }, { '[', ']' }, { '(', ')' }, { '{', '}' } };
         static List<List<string>> commandKeywords;
         static Dictionary<string, DayOfWeek> dayKeywords;
-        static List<string> monthKeywords;        
         static List<string> timeSpecificKeywords;
         static List<string> timeGeneralKeywords;
         static List<string> timePostpositionKeywords;
@@ -123,123 +122,12 @@ namespace ToDo
             return indexOfDelimiters;
         }
 
-        //@todo: change to return commandType makes more sense. have matchCount as a ref param.
-        /// <summary>
-        /// This operation searches an input list of strings against the set list of command words.
-        /// Upon a succesful first match, the operation updates the command and indexOfCommand input parameters by reference.
-        /// Returns the number of matches at the end of search.
-        /// </summary>
-        /// <param name="inputWords">Input array of words</param>
-        /// <param name="command">Command type to be returned by reference on first match</param>
-        /// <param name="indexOfCommand">Index of command to be returned by reference on first match</param>
-        /// <returns>Number of matches</returns>
-        internal static int SearchForCommandKeyword(List<string> inputWords, ref CommandType command, ref int indexOfCommand)
-        {
-            int index = 0;
-            int matchCount = 0;
-            CommandType commandType = 0;
-            foreach (string word in inputWords)
-            {
-                commandType = 0;
-                foreach (List<String> specificCommandTypeKeywords in commandKeywords)
-                {
-                    foreach (string possibleCommandKeyword in specificCommandTypeKeywords)
-                    {
-                        if (word.ToLower() == possibleCommandKeyword)
-                        {
-                            if (matchCount == 0)
-                            {
-                                indexOfCommand = index;
-                                if (command > CommandType.INVALID)
-                                    throw new Exception("Fatal error: Logic flow error!");
-                                else command = commandType;
-                            }
-                            matchCount++;
-                        }
-                    }
-                    commandType++;
-                }
-                index++;
-            }
-            return matchCount;
-        }
-
         internal static List<string> RemoveWordFromSentence_ByIndex(List<string> words, int index)
         {
             words.RemoveAt(index);
             return words;
         }
 
-        // todo: after completion, take into account efficiency.
-        // return object should be able to respresent signifance of each DateTime
-        // use a TaskTime object?
-        internal static List<DateTime> SearchForDateTime(List<string> input)
-        {
-            // add task friday 5 pm 28 sept 2012
-            // => add task friday 5pm 28 sept 2012
-            // => add task friday 5pm "28 sept 2012" (date is a single string in the list)
-            // days has <index 0, DayOfWeek.Friday>.
-            // dates has <index 2, 28/09/2012 as DateTime>.
-            // time has <index 1, 17 hours in TimeSpan>.            
-            List<Tuple<int, DayOfWeek>> days;
-            List<Tuple<int, DateTime>> dates;
-            List<Tuple<int, TimeSpan>> times;            
-            days = SearchForDays(input);
-            dates = SearchForDates(input);
-            times = SearchForTime(input);
-            // Merge date and times (and days)? Use their indexes. (initial and end for each DateTime)
-            // MergeDateTimes();
-            return null;
-        }
-        
-        internal static List<Tuple<int, DayOfWeek>> SearchForDays(List<string> input)
-        {
-            List<Tuple<int, DayOfWeek>> dayWords = new List<Tuple<int, DayOfWeek>>();
-            DayOfWeek day;
-            int index = 0;
-            foreach (string word in input)
-            {
-                if (dayKeywords.ContainsKey(word))
-                {
-                    dayKeywords.TryGetValue(word, out day);
-                    Tuple<int, DayOfWeek> indexDayPair = new Tuple<int, DayOfWeek>(index, day);
-                    dayWords.Add(indexDayPair);
-                }
-                index++;
-            }
-            return dayWords;
-        }
-
-        // use a combined regex to get hour, minute, second via tags and return a TimeSpan.
-        private static List<Tuple<int, TimeSpan>> SearchForTime(List<string> input)
-        {
-            List<Tuple<int, TimeSpan>> listOfFoundTimes = new List<Tuple<int, TimeSpan>>();
-            Match match;
-            int index = 0;
-            foreach (string word in input)
-            {                
-                match = time_12HourFormat.Match(word);
-                if (!match.Success) match = time_24HourFormat.Match(word);
-                if (match.Success)
-                {                    
-                    int hours = Int32.Parse(match.Groups["hours"].Value);
-                    int minutes = Int32.Parse(match.Groups["minutes"].Value);
-                    int seconds = 0;
-                    TimeSpan time = new TimeSpan(hours,minutes,seconds);
-                    Tuple<int, TimeSpan> positionAndTime = new Tuple<int, TimeSpan>(index, time);
-                    listOfFoundTimes.Add(positionAndTime);
-                }
-                index++;
-            }
-            return listOfFoundTimes;
-        }
-
-        private static List<Tuple<int, DateTime>> SearchForDates(List<string> input)
-        {            
-            // use a combined regex, to return DateTime using month and date and year tags
-            throw new NotImplementedException();
-        }
-        
         //todo: ref string output no longer neccesary!
         /// <summary>
         /// This method parses a string of words into a list of strings, each containing a word.
@@ -251,12 +139,26 @@ namespace ToDo
         /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings.</param>
         /// <param name="output">The original string without words bounded by delimiters.</param>
         /// <returns>The individual words as a list of strings.</returns>
-        internal static List<string> SplitStringIntoWords(string input, ref string output, List<int[]> indexOfDelimiters = null)
+        internal static List<Token> SplitStringIntoTokens(string input, List<int[]> indexOfDelimiters = null)
+        {
+            List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
+            return GenerateTokens(words);
+        }
+        private static List<Token> GenerateTokens(List<string> input)
+        {
+            List<Token> tokens = new List<Token>();
+            tokens.AddRange(GenerateCommandTokens(input));
+            tokens.AddRange(GenerateDayTokens(input));
+            tokens.AddRange(GenerateDateTokens(input));
+            tokens.AddRange(GenerateTimeTokens(input));
+            return tokens;
+        }
+
+        private static List<string> SplitStringIntoSubstrings(string input, List<int[]> indexOfDelimiters)
         {
             List<string> words = new List<string>();
 
             int processedIndex = 0, removedCount = 0;
-            output = input;
 
             if (indexOfDelimiters == null)
                 return input.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -273,9 +175,6 @@ namespace ToDo
                 // Get absolute substring without the delimiter characters and add to return list
                 string absoluteSubstr = input.Substring(startIndex + 1, count - 2);
                 words.Add("\" " + absoluteSubstr); // " marks an absolute string
-
-                // Remove absolute string from output
-                output = output.Remove(startIndex - removedCount, count);
 
                 // Update processed index state and count of removed characters
                 processedIndex = substringIndex[END_INDEX] + 1;
@@ -309,8 +208,7 @@ namespace ToDo
             // merge if it is (into 26th jan etc)
             throw new NotImplementedException();
         }
-
-
+        
         /// <summary>
         /// This method checks all words within an input list of words for valid times and returns a list of words
         /// where all times are merged as a single word.
@@ -360,5 +258,85 @@ namespace ToDo
             }
             else return false;
         }
+
+        /// <summary>
+        /// This operation searches an input list of strings against the set list of command words and returns as list of tokens
+        /// corresponding to the matched command keywords.
+        /// </summary>
+        /// <param name="inputWords">Input array of words</param>
+        /// <returns>List of command tokens</returns>
+        private static List<Token> GenerateCommandTokens(List<string> inputWords)
+        {
+            int index = 0;
+            CommandType commandType = 0;
+            List<Token> tokens = new List<Token>();
+            foreach (string word in inputWords)
+            {
+                commandType = 0;
+                foreach (List<String> specificCommandTypeKeywords in commandKeywords)
+                {
+                    foreach (string possibleCommandKeyword in specificCommandTypeKeywords)
+                    {
+                        if (word.ToLower() == possibleCommandKeyword)
+                        {
+                            System.Diagnostics.Debug.Assert(!(commandType > CommandType.INVALID), "Fatal error: Logic flow error!");
+                            TokenCommand commandToken = new TokenCommand(index, commandType);
+                            tokens.Add(commandToken);
+                        }
+                    }
+                    commandType++;
+                }
+                index++;
+            }
+            return tokens;
+        }
+
+        private static List<Token> GenerateDayTokens(List<string> input)
+        {
+            List<Token> dayTokens = new List<Token>();
+            DayOfWeek day;
+            int index = 0;
+            foreach (string word in input)
+            {
+                if (dayKeywords.ContainsKey(word))
+                {
+                    dayKeywords.TryGetValue(word, out day);
+                    TokenDay dayToken = new TokenDay(index, day);
+                    dayTokens.Add(dayToken);
+                }
+                index++;
+            }
+            return dayTokens;
+        }
+
+        // uses a combined regex to get hour, minute, second via tags and return a TimeSpan.
+        private static List<Token> GenerateTimeTokens(List<string> input)
+        {
+            List<Token> timeTokens = new List<Token>();
+            Match match;
+            int index = 0;
+            foreach (string word in input)
+            {
+                match = time_12HourFormat.Match(word);
+                if (!match.Success) match = time_24HourFormat.Match(word);
+                if (match.Success)
+                {
+                    int hours = Int32.Parse(match.Groups["hours"].Value);
+                    int minutes = Int32.Parse(match.Groups["minutes"].Value);
+                    int seconds = 0;
+                    TimeSpan time = new TimeSpan(hours, minutes, seconds);
+                    TokenTime timeToken = new TokenTime(index, time);
+                    timeTokens.Add(timeToken);
+                }
+                index++;
+            }
+            return timeTokens;
+        }
+
+        private static List<Token> GenerateDateTokens(List<string> input)
+        {
+            throw new NotImplementedException();
+        }
+        
     }
 }

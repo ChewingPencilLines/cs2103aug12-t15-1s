@@ -7,6 +7,8 @@ using ToDo;
 
 namespace StringParserTest
 {
+    /***************** UPDATE: 5 OCT 2012. UNIT TEST DEPRECATED.*****************/
+    
     // @ivan: This class contains of unit tests for methods in the StringParser class for use during development.
     // The testing approach here is white box unit testing; Any change in implementation may break a unit test.
     // Comment out / clean up this page and use black box tests once the class is complete.
@@ -42,7 +44,7 @@ namespace StringParserTest
             Assert.IsTrue(StringParser.IsValidTime("11.59pm"));
             Assert.IsFalse(StringParser.IsValidTime("13.01pm")); // only up to 1159am/pm is valid.
         }
-
+        
         [TestMethod]
         public void Simple_SearchForCommandTest_Add()
         {
@@ -67,7 +69,7 @@ namespace StringParserTest
             Assert.AreEqual(1, StringParser.SearchForCommandKeyword(testWords, ref command, ref indexOfCommandKeyword));
             Assert.AreEqual(1, indexOfCommandKeyword);
             Assert.AreEqual(CommandType.MODIFY, command);
-        }        
+        }       
 
         [TestMethod]
         public void Null_SearchForCommandTest()
@@ -156,8 +158,8 @@ namespace StringParserTest
             };
             string expectedOutput = "add  tonight";
             string output = null;
-            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoWords(input, ref output, delimiters));
-            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoWords(input, ref output, delimiters));
+            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoTokens(input, delimiters));
+            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoTokens(input, delimiters));
             Assert.AreEqual(expectedOutput, output);
         }
 
@@ -178,8 +180,8 @@ namespace StringParserTest
             };
             string expectedOutput = "add  deadline";
             string output = null;
-            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoWords(input, ref output, delimiters));
-            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoWords(input, ref output, delimiters));
+            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoTokens(input, delimiters));
+            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoTokens(input, delimiters));
             Assert.AreEqual(expectedOutput, output);
         }
 
@@ -196,8 +198,8 @@ namespace StringParserTest
             };
             string expectedOutput = "add fix car tonight";
             string output = null;
-            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoWords(input, ref output));
-            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoWords(input, ref output));
+            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoTokens(input));
+            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoTokens(input));
             Assert.AreEqual(expectedOutput, output);
         }
 
@@ -220,7 +222,7 @@ namespace StringParserTest
             CollectionAssert.AreEqual(expected, output);
         }
 
-        [TestMethod]
+    /*    [TestMethod]
         public void SearchForDaysTest()
         {
             testWords.Clear();
@@ -231,9 +233,9 @@ namespace StringParserTest
             testWords.Add("pm");
             List<Tuple<int,DayOfWeek>> expected = new List<Tuple<int,DayOfWeek>>();
             expected.Add(new Tuple<int, DayOfWeek>(2, DayOfWeek.Monday));
-            List<Tuple<int,DayOfWeek>> output = StringParser.SearchForDays(testWords);            
+            List<Tuple<int,DayOfWeek>> output = StringParser.GenerateDayTokens(testWords);            
             CollectionAssert.AreEqual(expected, output);
-        }
+        }*/
 
         // Returns true if the two lists contains (any order) the same exact int arrays.
         private bool ListOfIntegerArraysAreEquivalent(List<int[]> first, List<int[]> second)
