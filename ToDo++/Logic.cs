@@ -7,8 +7,6 @@ namespace ToDo
 {
     class Logic
     {
-        private Stack<string> CommandStack = new Stack<string>();
-
         public Logic()
         {
             OperationHandler operationHandler = new OperationHandler();
@@ -16,9 +14,14 @@ namespace ToDo
 
         public string ProcessCommand(string input)
         {
-            string command = ValidateCommand(input);
-            Operation operation = DecomposeCommand(command);
+            //string command = ValidateCommand(input);
+            Operation operation = ParseCommand(input);
             return ExecuteCommand(operation);
+        }
+
+        public bool UpdateSettings()
+        {
+            throw new NotImplementedException();
         }
 
         private string ExecuteCommand(Operation operation)
@@ -33,7 +36,7 @@ namespace ToDo
             }
         }
 
-        private Operation DecomposeCommand(string command)
+        private Operation ParseCommand(string command)
         {
             if (command.Equals(null))
             {
@@ -46,6 +49,7 @@ namespace ToDo
             }
         }
 
+        /*
         private string ValidateCommand(string command)
         {
             if (!command.Equals(null) & command.Length == 0)
@@ -57,7 +61,6 @@ namespace ToDo
                 CommandStack.Push(command);
                 return command;
             }
-        }
-
+        } */
     }
 }

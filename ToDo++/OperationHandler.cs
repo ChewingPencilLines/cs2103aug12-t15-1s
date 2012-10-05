@@ -7,8 +7,7 @@ namespace ToDo
 {
     class OperationHandler
     {
-        public string result;
-
+        private Stack<string> CommandStack = new Stack<string>();
         public OperationHandler()
         {
 
@@ -17,6 +16,7 @@ namespace ToDo
         internal static string ExecuteOperation(Operation operation)
         {
             throw new NotImplementedException();
+            
         }
     }
 }
