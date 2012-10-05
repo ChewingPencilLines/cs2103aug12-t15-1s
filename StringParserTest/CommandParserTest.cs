@@ -14,7 +14,7 @@ namespace CommandParserTest
         [TestMethod]
         public void OperationParseTest()
         {
-            testParser.ParseOperation("add task 9 pm");
+            testParser.ParseOperation("task do stuff add 9 pm");
             return;
         }
 
