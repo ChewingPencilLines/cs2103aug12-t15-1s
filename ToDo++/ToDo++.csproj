@@ -59,6 +59,7 @@
     <Compile Include="StringParser.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskList.cs" />
+    <Compile Include="Token.cs" />
     <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>

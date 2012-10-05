@@ -14,7 +14,15 @@ namespace ToDo
         const int END_INDEX = 1;
 
         public Operation ParseOperation(string input)
-        {
+        {            
+            // Get position of delimiters so we can treat those substrings as a single word.
+            List<int[]> positionsOfDelimiters = GetPositionsOfDelimiters(input);
+            List<Token> token = StringParser.SplitStringIntoTokens(input, positionsOfDelimiters);
+
+
+            return null;
+
+            /*
             CommandType command = CommandType.INVALID;
             List<int[]> positionsOfDelimiters;
             List<string> inputWords = null;
@@ -24,7 +32,7 @@ namespace ToDo
             // Get position of delimiters so we can treat those substrings as a single word.
             positionsOfDelimiters = GetPositionsOfDelimiters(input);
 
-            inputWords = StringParser.SplitStringIntoWords(input, ref nonabsoluteString, positionsOfDelimiters);
+            inputWords = StringParser.SplitStringIntoTokens(input, ref nonabsoluteString, positionsOfDelimiters);
 
             // Search for command keyword            
             int matchCount = StringParser.SearchForCommandKeyword(inputWords, ref command, ref positionOfCommandKeyword);
@@ -32,10 +40,10 @@ namespace ToDo
             inputWords = StringParser.RemoveWordFromSentence_ByIndex(inputWords, positionOfCommandKeyword);
 
             // Search for dates/times            
-            List<DateTime> taskTime = StringParser.SearchForDateTime(inputWords);
+            List<DateTime> taskTime = StringParser.GenerateTokens(inputWords);
 
             //SearchForContext(List<index,DateTime>, List<index,PositionalOperators>);
-            return null;
+            return null;*/
         }
 
         private List<int[]> GetPositionsOfDelimiters(string input)
