@@ -294,7 +294,7 @@ namespace ToDo
                     literal = literal + remainingWord + " ";
                 else if (literal != "")
                 {
-                    literal.Trim();
+                    literal = literal.Trim();
                     TokenLiteral literalToken = new TokenLiteral(index-1, literal);
                     tokens.Add(literalToken);
                     literal = "";
