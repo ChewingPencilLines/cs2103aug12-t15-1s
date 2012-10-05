@@ -23,15 +23,14 @@ namespace ToDo
 
         private string ExecuteCommand(Operation OP)
         {
-            string result = "";
             if (OP.Equals(null))
             {
                 return null;
             }
             else
             {
-                //@todo: pass op to crud part and get result;
-                return result;
+                Execute exe = new Execute(OP);
+                return exe.result;
             }
         }
 
