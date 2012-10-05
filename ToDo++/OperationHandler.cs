@@ -8,13 +8,13 @@ using System.Xml.Serialization;
 
 namespace ToDo
 {
-    public class CRUD
+    public class OperationHandler
     {
         private TaskList taskList;
         private Stack<Operation> undoStack;
         private Stack<Operation> redoStack;
 
-        public CRUD()
+        public OperationHandler()
         {
             taskList = new TaskList();
             undoStack = new Stack<Operation>();

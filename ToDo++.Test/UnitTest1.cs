@@ -13,7 +13,7 @@ namespace ToDo
         [TestMethod]
         public void TestMethodOpExecute()
         {
-           CRUD crudClass = new CRUD();
+           OperationHandler crudClass = new OperationHandler();
 
            Task newTask = new FloatingTask("buy milk");
            Operation newOperation = new OperationAdd(newTask,OperationType.ADD_FLOATING);
@@ -28,7 +28,7 @@ namespace ToDo
         [TestMethod]
         public void TestMethodOpExecute2()
         {
-            CRUD crudClass = new CRUD();
+            OperationHandler crudClass = new OperationHandler();
 
             Task newTask = new FloatingTask("buy milk");
             Operation newOperation = new OperationAdd(newTask, OperationType.ADD_FLOATING);
