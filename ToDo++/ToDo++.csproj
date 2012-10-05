@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Execute.cs" />
+    <Compile Include="OperationHandler.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="CommandParser.cs" />
     <Compile Include="Operation.cs" />
