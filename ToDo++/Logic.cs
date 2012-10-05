@@ -11,26 +11,25 @@ namespace ToDo
 
         public Logic()
         {
-
+            OperationHandler operationHandler = new OperationHandler();
         }
 
         public string ProcessCommand(string input)
         {
             string command = ValidateCommand(input);
-            Operation op = DecomposeCommand(command);
-            return ExecuteCommand(op);
+            Operation operation = DecomposeCommand(command);
+            return ExecuteCommand(operation);
         }
 
-        private string ExecuteCommand(Operation OP)
+        private string ExecuteCommand(Operation operation)
         {
-            if (OP.Equals(null))
+            if (operation.Equals(null))
             {
                 return null;
             }
             else
             {
-                Execute exe = new Execute(OP);
-                return exe.result;
+                return OperationHandler.ExecuteOperation(operation);
             }
         }
 

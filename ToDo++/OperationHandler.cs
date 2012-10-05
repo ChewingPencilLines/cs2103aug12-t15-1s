@@ -5,19 +5,18 @@ using System.Text;
 
 namespace ToDo
 {
-    class Execute
+    class OperationHandler
     {
         public string result;
 
-        public Execute()
+        public OperationHandler()
         {
 
         }
-
-        public Execute(Operation op)
+        
+        internal static string ExecuteOperation(Operation operation)
         {
-          
+            throw new NotImplementedException();
         }
-
     }
 }
