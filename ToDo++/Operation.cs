@@ -7,6 +7,7 @@ namespace ToDo
 {
     public enum OperationType
     {
+        // @ivan to @alice don't need so many types? one of each only.
         ADD_FLOATING,
         ADD_EVENT,
         ADD_DEADLINE,
