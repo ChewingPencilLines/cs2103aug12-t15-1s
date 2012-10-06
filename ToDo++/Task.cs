@@ -14,63 +14,48 @@ namespace ToDo
         {
             
         }
-
-        abstract public void ExecuteTask();
     }
 
-    public class FloatingTask : Task
+    public class TaskFloating : Task
     {
-        public FloatingTask() : this(null)
+        public TaskFloating() : this(null)
         { }
 
-        public FloatingTask(string TaskName)
+        public TaskFloating(string TaskName)
         {
             taskname = TaskName;
         }
-
-        public override void ExecuteTask()
-        {
-
-        }
     }
 
-    public class DeadlineTask : Task
+    public class TaskDeadline : Task
     {
         private DateTime endtime;
 
-        public DeadlineTask() : this(null, DateTime.Now)
+        public TaskDeadline() : this(null, DateTime.Now)
         { }
 
-        public DeadlineTask(string TaskName, DateTime EndTime)
+        public TaskDeadline(string TaskName, DateTime EndTime)
         {
             taskname = TaskName;
             endtime = EndTime;
         }
 
-        public override void ExecuteTask()
-        {
-
-        }
     }
 
-    public class TimedTask : Task
+    public class TaskTimed : Task
     {
         private DateTime endtime;
         private DateTime starttime;
 
-        public TimedTask() : this(null, DateTime.Now, DateTime.Now)
+        public TaskTimed() : this(null, DateTime.Now, DateTime.Now)
         { }
 
-        public TimedTask(string TaskName, DateTime StartTime, DateTime EndTime)
+        public TaskTimed(string TaskName, DateTime StartTime, DateTime EndTime)
         {
             taskname = TaskName;
             starttime = StartTime;
             endtime = EndTime;
         }
 
-        public override void ExecuteTask()
-        {
-
-        }
     }
 }
