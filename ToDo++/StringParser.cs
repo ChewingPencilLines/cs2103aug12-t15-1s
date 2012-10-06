@@ -75,30 +75,34 @@ namespace ToDo
 
         static Regex date_numericFormat =
             new Regex(@"\b
+                        # Day and Month
                         (?:
-                        # DD/MM
-                        (?:
-                        (?<day>(0?[1-9]|[12][0-9]|3[01]))?
-                        (?<separator>[-/.])
-                        (?<month>(0[1-9]|1[012]))
-                        )
+                            # DD/MM
+                            (?:
+                            (?<day>(0?[1-9]|[12][0-9]|3[01]))?
+                            (?<separator>[-/.])
+                            (?<month>(0[1-9]|1[012]))
+                            )
                         |
-                        # MM/DD
-                        (?:
-                        (?<month>(0[1-9]|1[012]))
-                        (\(separator))
-                        (?<day>(0?[1-9]|[12][0-9]|3[01]))
+                            # MM/DD
+                            (?:
+                            (?<month>(0[1-9]|1[012]))
+                            (\separator)
+                            (?<day>(0?[1-9]|[12][0-9]|3[01]))
+                            )
                         )
-                        )
-                        # (YY)YY
+                        # Year => YY or YYYY
                         # if day not captured, force year
                         (?(day)
-                        (\(separator))
-                        (?<year>(\d\d)?\d\d))?
-                        |
-                        (?:
-                        (\(separator))
-                        (?<year>\d\d\d\d))
+                            (?:
+                            (\separator)
+                            (?<year>(\d\d)?\d\d)
+                            )?
+                            |
+                            (?:
+                            (\separator)
+                            (?<year>\d\d\d\d)
+                            )
                         )
                         \b"
                     , RegexOptions.IgnorePatternWhitespace);
