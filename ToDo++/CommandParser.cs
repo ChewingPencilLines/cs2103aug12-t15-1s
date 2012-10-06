@@ -30,6 +30,8 @@ namespace ToDo
             TimeSpan startTime, endTime;
             DateTime startDate, endDate;
             DayOfWeek startDay, endDay;
+            string taskName;
+
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
             currentSpecifier = ContextType.CURRENT;
@@ -67,7 +69,7 @@ namespace ToDo
                             endTime = ((TokenTime)token).Value;
                             break;
                         default:
-                            Debug.Assert(false,"Fell through switch statement in GenerateOperation, TokenTime case!");
+                            Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenTime case!");
                             break;
                     }
                 }
@@ -108,15 +110,18 @@ namespace ToDo
                             endDate = ((TokenDate)token).Value;
                             break;
                         default:
-                            Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");
+                            Debug.Assert(false,"Fell through switch statement in GenerateOperation, TokenDay case!");
                             break;
                     } 
                 }
                 else if (token is TokenLiteral)
                 {
-
+                    taskName = ((TokenLiteral)token).Value;
                 }
-                else { }
+                else
+                {
+                    throw new Exception("Token type not matched!");
+                }
 
                 // Generate operation based on values, and whether they have been used.
             }            

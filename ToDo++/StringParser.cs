@@ -498,7 +498,7 @@ namespace ToDo
                     {
                         if (word.ToLower() == possibleCommandKeyword)
                         {
-                            System.Diagnostics.Debug.Assert(!(commandType > CommandType.INVALID), "Fatal error: Logic flow error!");
+                            System.Diagnostics.Debug.Assert(!(commandType > CommandType.INVALID), "Fatal error: Logic flow error in GenerateCommandTokens!");
                             TokenCommand commandToken = new TokenCommand(index, commandType);
                             tokens.Add(commandToken);
                         }
