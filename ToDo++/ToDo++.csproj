@@ -98,6 +98,10 @@
     <Content Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomControls\CustomControls.csproj">
+      <Project>{83F3D322-DB71-48C5-9E0F-FF8FBBA124F9}</Project>
+      <Name>CustomControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HotkeyLib\HotkeyLib.csproj">
       <Project>{09823da8-c587-4363-95f1-cd99f4d0a678}</Project>
       <Name>HotkeyLib</Name>
