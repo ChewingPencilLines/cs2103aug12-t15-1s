@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace ToDo
 {
@@ -21,8 +22,12 @@ namespace ToDo
             InitializeComponent();
             this.ShowIcon = false;
             settingsManager = setSettingsManager;
+            DisableApplyButton();
+
             LoadCommandTab();
             LoadSettingsTab();
+            LoadFontTab();
+
             firstLoad = false;
         }
 
@@ -34,44 +39,46 @@ namespace ToDo
             loadOnStartupCheckbox.Checked = settingsManager.GetLoadOnStartupStatus();
         }
 
-        private void minimisedCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if(firstLoad==false)
-                settingsManager.ToggleStartMinimized(minimisedCheckbox.Checked);
-        }
-
-        private void loadOnStartupCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if(firstLoad==false)
-                settingsManager.ToggleLoadOnStartup(loadOnStartupCheckbox.Checked);
-        }
-
         private void minimisedCheckbox_CheckStateChanged(object sender, EventArgs e)
         {
-            if (firstLoad == false)
-                settingsManager.ToggleStartMinimized(minimisedCheckbox.Checked);
+            if(firstLoad==false)
+            EnableApplyButton();
         }
 
         private void loadOnStartupCheckbox_CheckStateChanged(object sender, EventArgs e)
         {
             if (firstLoad == false)
-                settingsManager.ToggleLoadOnStartup(loadOnStartupCheckbox.Checked);
+            EnableApplyButton();
         }
 
         #endregion
 
         #region CommandTab
 
+        private SettingsManager tempSettingsManager;
+
+        private void SetUpTempSettingsManager()
+        {
+            tempSettingsManager = settingsManager.CloneObj();
+        }
+
         private void LoadCommandTab()
         {
+            SetUpTempSettingsManager();
             CommandList();
+            SelectFirstNode();
+        }
+
+        private void SelectFirstNode()
+        {
+            TreeNodeCollection nodes = CommandTree.Nodes;
+            CommandTree.SelectedNode = nodes[0];
         }
 
         private void CommandList()
         {
             TreeNode treeNode = new TreeNode("ADD");
             CommandTree.Nodes.Add(treeNode);
-            CommandTree.SelectedNode = treeNode;
             treeNode = new TreeNode("DELETE");
             CommandTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("UPDATE");
@@ -128,26 +135,41 @@ namespace ToDo
         private void UpdateListOfCommands()
         {
             listOfCommands.Items.Clear();
-            List<string> currentCommandList = settingsManager.GetCommand(currentCommand);
+            List<string> currentCommandList = tempSettingsManager.GetCommand(currentCommand);
             foreach (string item in currentCommandList)
                 listOfCommands.Items.Add(item);
         }
 
         private void addUserCommandButton_Click(object sender, EventArgs e)
         {
-            settingsManager.AddCommand(userCommand.Text, currentCommand);
+            EnableApplyButton();
+            tempSettingsManager.AddCommand(userCommand.Text, currentCommand);
             UpdateListOfCommands();
+            ClearInputField();
         }
 
         private void removeButton_Click(object sender, EventArgs e)
         {
-            settingsManager.RemoveCommand(listOfCommands.SelectedItem.ToString(), currentCommand);
+            EnableApplyButton();
+            tempSettingsManager.RemoveCommand(listOfCommands.SelectedItem.ToString(), currentCommand);
             UpdateListOfCommands();
+            ClearInputField();
+        }
+
+        private void ClearInputField()
+        {
+            userCommand.Text = "";
         }
 
         #endregion
 
         #region FontTab
+
+        private void LoadFontTab()
+        {
+            FontList();
+            LoadFonts();
+        }
 
         private void FontList()
         {
@@ -159,25 +181,73 @@ namespace ToDo
             FontTree.Nodes.Add(treeNode);
         }
 
-        private void FontTree_MouseClick(object sender, MouseEventArgs e)
+        private void LoadFonts()
         {
-            //TreeNode node = FontTree.SelectedNode;
-            //if (node.Text == "System Output")
-            //{
-            //    MessageBox.Show(string.Format("You selected: {0}", node.Text));
-            //}
+            //Font fntText;
+            //fntText = new Font("Times New Roman", 8, GraphicsUnit.Point);
+
+
+
         }
 
-        private void FontTree_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void FontTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            TreeNode node = FontTree.SelectedNode;
-            if (node.Text == "Command Output")
-            {
-                MessageBox.Show(string.Format("You selected: {0}", node.Text));
-            }
+
         }
 
         #endregion
+
+        #region GlobalButtons
+
+        private void EnableApplyButton()
+        {
+            applyButton.Enabled = true;
+        }
+
+        private void DisableApplyButton()
+        {
+            applyButton.Enabled = false;
+        }
+
+        private void SetSettings()
+        {
+            #region ApplyChangesToSettingsTab
+
+            if (firstLoad == false)
+                settingsManager.ToggleStartMinimized(minimisedCheckbox.Checked);
+            if (firstLoad == false)
+                settingsManager.ToggleLoadOnStartup(loadOnStartupCheckbox.Checked);
+
+            #endregion
+
+            #region ApplyChangesToCommands
+
+            settingsManager.CopyUpdatedCommandsFrom(tempSettingsManager);
+            settingsManager.WriteToFile();
+
+            #endregion
+        }
+
+        private void applyButton_Click(object sender, EventArgs e)
+        {
+            SetSettings();
+            DisableApplyButton();
+        }
+
+        #endregion
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            SetSettings();
+            this.Close();
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
 
 
 

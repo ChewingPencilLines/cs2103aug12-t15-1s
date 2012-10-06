@@ -44,9 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandParser.cs" />
-    <Compile Include="OperationHandler.cs" />
-    <Compile Include="Logic.cs" />
+    <Compile Include="CRUD.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="Responses.cs" />
     <Compile Include="Settings.cs">
@@ -56,10 +54,8 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsManager.cs" />
-    <Compile Include="StringParser.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskList.cs" />
-    <Compile Include="Token.cs" />
     <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +98,10 @@
     <Content Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomControls\CustomControls.csproj">
+      <Project>{83F3D322-DB71-48C5-9E0F-FF8FBBA124F9}</Project>
+      <Name>CustomControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HotkeyLib\HotkeyLib.csproj">
       <Project>{09823da8-c587-4363-95f1-cd99f4d0a678}</Project>
       <Name>HotkeyLib</Name>
