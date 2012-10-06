@@ -18,13 +18,19 @@ namespace ToDo
             // Get position of delimiters so we can treat those substrings as a single word.
             List<int[]> positionsOfDelimiters = GetPositionsOfDelimiters(input);
             List<Token> tokens = StringParser.ParseStringIntoTokens(input, positionsOfDelimiters);
-            
-            return null;
+            return GenerateOperation(tokens);            
         }
 
-        // use lists of index to derive user intention, with consideration of prepositionKeywords.
-        private static void SearchForContext()
+        private static Operation GenerateOperation(List<Token> tokens)
         {
+            CommandType commandType = new CommandType();
+            foreach (Token token in tokens)
+            {
+                if (token is TokenCommand)
+                {
+
+                }
+            }
             throw new NotImplementedException();
         }  
 
@@ -43,7 +49,7 @@ namespace ToDo
         /// </summary>
         /// <param name="indexOfDelimiters"></param>
         /// <returns></returns>
-        internal void RemoveBadIndexes(ref List<int[]> indexOfDelimiters)
+        private void RemoveBadIndexes(ref List<int[]> indexOfDelimiters)
         {
             int previousEndIndex = -1;
             List<int[]> indexesToRemove = new List<int[]>();
@@ -56,7 +62,7 @@ namespace ToDo
             indexOfDelimiters.RemoveAll(x => indexesToRemove.Contains(x));
         }
 
-        internal void SortIndexes(ref List<int[]> indexOfDelimiters)
+        private void SortIndexes(ref List<int[]> indexOfDelimiters)
         {
             Comparison<int[]> comparison = new Comparison<int[]>(CompareBasedOnZerothIndex);
             indexOfDelimiters.Sort(comparison);
