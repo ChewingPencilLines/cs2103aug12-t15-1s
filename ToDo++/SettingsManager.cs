@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace ToDo
 {
@@ -27,6 +29,17 @@ namespace ToDo
             customKeywords_UPDATE = new List<string>();
             customKeywords_UNDO = new List<string>();
             customKeywords_REDO = new List<string>();
+        }
+
+        public void ClearAll()
+        {
+            loadOnStartup = false;
+            startMinimized = false;
+            customKeywords_ADD.Clear();
+            customKeywords_DELETE.Clear();
+            customKeywords_REDO.Clear();
+            customKeywords_UNDO.Clear();
+            customKeywords_UPDATE.Clear();
         }
     }
 
@@ -91,15 +104,7 @@ namespace ToDo
             OpenFile();
         }
 
-        public SettingsManager(SettingsManager passedSettingsManager)
-        {
-            fileName = "TEST.xml";
-            settingsList = new SettingsList();
-            Clone(passedSettingsManager);
-        }
-
         #region StartupMinimizedStatus
-
 
         public void ToggleLoadOnStartup(bool checkedStatus)
         {
@@ -255,10 +260,8 @@ namespace ToDo
             file.Close();
         }
 
-        public void Clone(SettingsManager passedSettingsManager)
+        public void CopyUpdatedCommandsFrom(SettingsManager passedSettingsManager)
         {
-            this.settingsList.loadOnStartup = passedSettingsManager.settingsList.loadOnStartup;
-            this.settingsList.startMinimized = passedSettingsManager.settingsList.startMinimized;
             this.settingsList.customKeywords_ADD = passedSettingsManager.settingsList.customKeywords_ADD;
             this.settingsList.customKeywords_DELETE = passedSettingsManager.settingsList.customKeywords_DELETE;
             this.settingsList.customKeywords_REDO = passedSettingsManager.settingsList.customKeywords_REDO;
@@ -266,14 +269,26 @@ namespace ToDo
             this.settingsList.customKeywords_UPDATE = passedSettingsManager.settingsList.customKeywords_UPDATE;
         }
 
-        public void CopyUpdatedCommandsFrom(SettingsManager passedSettingsManager)
+        public SettingsManager CloneObj()
         {
-            passedSettingsManager.settingsList.customKeywords_ADD = this.settingsList.customKeywords_ADD;
-            passedSettingsManager.settingsList.customKeywords_DELETE = this.settingsList.customKeywords_DELETE;
-            passedSettingsManager.settingsList.customKeywords_REDO = this.settingsList.customKeywords_REDO;
-            passedSettingsManager.settingsList.customKeywords_UNDO = this.settingsList.customKeywords_UNDO;
-            passedSettingsManager.settingsList.customKeywords_UPDATE = this.settingsList.customKeywords_UPDATE;
-        }
+            SettingsManager p = new SettingsManager();
+            p.settingsList.ClearAll();
 
+            p.settingsList.loadOnStartup = this.settingsList.loadOnStartup;
+            p.settingsList.startMinimized = this.settingsList.startMinimized;
+
+            foreach (string item in this.settingsList.customKeywords_ADD)
+                p.settingsList.customKeywords_ADD.Add(item);
+            foreach (string item in this.settingsList.customKeywords_DELETE)
+                p.settingsList.customKeywords_DELETE.Add(item);
+            foreach (string item in this.settingsList.customKeywords_REDO)
+                p.settingsList.customKeywords_REDO.Add(item);
+            foreach (string item in this.settingsList.customKeywords_UNDO)
+                p.settingsList.customKeywords_UNDO.Add(item);
+            foreach (string item in this.settingsList.customKeywords_UPDATE)
+                p.settingsList.customKeywords_UPDATE.Add(item);
+
+            return p;
+        }
     }
 }
