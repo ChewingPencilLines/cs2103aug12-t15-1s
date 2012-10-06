@@ -31,6 +31,15 @@ namespace ToDo
         {
             mainSettingsManager = new SettingsManager();
             SetSettingsInUI();
+            MinimiseToTrayWhenChecked();
+        }
+
+        public void MinimiseToTrayWhenChecked()
+        {
+            if (mainSettingsManager.GetStartMinimizedStatus() == true)
+            {
+                MinimiseMaximiseTray();
+            }
         }
 
         public void SetSettingsInUI()
@@ -67,6 +76,11 @@ namespace ToDo
             mainSettingsManager.ToggleLoadOnStartup(loadOnStartupToolStripMenuItem.Checked);
         }
 
+        private void toDoToolStripMenuItem_MouseEnter(object sender, EventArgs e)
+        {
+            SetSettingsInUI();
+        }
+
         #endregion
 
         #region MinimizeMaximizeSystemTrayHotKey
@@ -92,7 +106,7 @@ namespace ToDo
             notifyIcon_taskBar.BalloonTipText = "Hit Alt+Q to bring it up";
 
             //If Window is Open
-            if (FormWindowState.Normal == this.WindowState && notifyIcon_taskBar.Visible == false)
+            if (notifyIcon_taskBar.Visible == false)
             {
                 this.Hide();
                 notifyIcon_taskBar.Visible = true;
@@ -125,8 +139,9 @@ namespace ToDo
         #region TextBoxInputFormatting
 
         //Set Formatting for your Text
-        private void SetFormat(RichTextBox box, Color color, string text)
+        private void SetFormat(Color color, string text)
         {
+            RichTextBox box = richTextBox_output;
             int start = box.TextLength;
             box.AppendText(text);
             int end = box.TextLength;
@@ -141,12 +156,12 @@ namespace ToDo
         //Append the Output Window
         void DisplayCommand(string userInput)
         {
-            SetFormat(richTextBox_output, Color.Blue, "Username: ");
-            SetFormat(richTextBox_output, Color.Black, userInput);
-            SetFormat(richTextBox_output, Color.Red, "\n");
-            SetFormat(richTextBox_output, Color.Red, "ToDo++: ");
-            SetFormat(richTextBox_output, Color.Black, "aa");
-            SetFormat(richTextBox_output, Color.Red, "\n");
+            SetFormat(Color.Blue, "Username: ");
+            SetFormat(Color.Black, userInput);
+            SetFormat(Color.Red, "\n");
+            SetFormat(Color.Red, "ToDo++: ");
+            SetFormat(Color.Black, "aa");
+            SetFormat(Color.Red, "\n");
             textBox_input.Text = "";
             richTextBox_output.ScrollToCaret();
         }
@@ -191,11 +206,13 @@ namespace ToDo
         }
 
         //Open up settings page
-        private void settingsClicked(object sender, EventArgs e)
+        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Settings settingsForm = new Settings(mainSettingsManager);
-            settingsForm.Show();
+            settingsForm.ShowDialog();
         }
+
+
 
     }
 }

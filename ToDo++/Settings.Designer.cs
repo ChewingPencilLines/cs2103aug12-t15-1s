@@ -36,6 +36,8 @@
             this.minimisedCheckbox = new System.Windows.Forms.CheckBox();
             this.loadOnStartupCheckbox = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.cgFontCombo1 = new FontControl.CGFontCombo();
+            this.colorComboBox1 = new ColorComboTestApp.ColorComboBox();
             this.FontTree = new System.Windows.Forms.TreeView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.removeButton = new System.Windows.Forms.Button();
@@ -45,6 +47,9 @@
             this.listOfCommands = new System.Windows.Forms.ListBox();
             this.commandPreview = new System.Windows.Forms.Label();
             this.CommandTree = new System.Windows.Forms.TreeView();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.applyButton = new System.Windows.Forms.Button();
+            this.okButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -61,7 +66,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(444, 238);
+            this.tabControl1.Size = new System.Drawing.Size(444, 208);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -71,7 +76,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(436, 212);
+            this.tabPage1.Size = new System.Drawing.Size(436, 182);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Personal Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -101,7 +106,7 @@
             this.groupBox1.Controls.Add(this.loadOnStartupCheckbox);
             this.groupBox1.Location = new System.Drawing.Point(6, 54);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(424, 152);
+            this.groupBox1.Size = new System.Drawing.Size(424, 123);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
@@ -115,7 +120,6 @@
             this.minimisedCheckbox.TabIndex = 0;
             this.minimisedCheckbox.Text = "Start Minimzed";
             this.minimisedCheckbox.UseVisualStyleBackColor = true;
-            this.minimisedCheckbox.CheckedChanged += new System.EventHandler(this.loadOnStartupCheckbox_CheckedChanged);
             this.minimisedCheckbox.CheckStateChanged += new System.EventHandler(this.minimisedCheckbox_CheckStateChanged);
             // 
             // loadOnStartupCheckbox
@@ -127,28 +131,47 @@
             this.loadOnStartupCheckbox.TabIndex = 1;
             this.loadOnStartupCheckbox.Text = "Load on Startup";
             this.loadOnStartupCheckbox.UseVisualStyleBackColor = true;
-            this.loadOnStartupCheckbox.CheckedChanged += new System.EventHandler(this.loadOnStartupCheckbox_CheckedChanged);
-            this.loadOnStartupCheckbox.CheckStateChanged += new System.EventHandler(this.loadOnStartupCheckbox_CheckStateChanged);
+            this.loadOnStartupCheckbox.CheckedChanged += new System.EventHandler(this.loadOnStartupCheckbox_CheckStateChanged);
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.cgFontCombo1);
+            this.tabPage2.Controls.Add(this.colorComboBox1);
             this.tabPage2.Controls.Add(this.FontTree);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(436, 212);
+            this.tabPage2.Size = new System.Drawing.Size(436, 182);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Fonts";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // cgFontCombo1
+            // 
+            this.cgFontCombo1.BackColor = System.Drawing.SystemColors.Window;
+            this.cgFontCombo1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.cgFontCombo1.Location = new System.Drawing.Point(242, 37);
+            this.cgFontCombo1.Name = "cgFontCombo1";
+            this.cgFontCombo1.Size = new System.Drawing.Size(75, 23);
+            this.cgFontCombo1.TabIndex = 2;
+            this.cgFontCombo1.Text = "cgFontCombo1";
+            // 
+            // colorComboBox1
+            // 
+            this.colorComboBox1.Extended = false;
+            this.colorComboBox1.Location = new System.Drawing.Point(133, 37);
+            this.colorComboBox1.Name = "colorComboBox1";
+            this.colorComboBox1.SelectedColor = System.Drawing.Color.Black;
+            this.colorComboBox1.Size = new System.Drawing.Size(103, 23);
+            this.colorComboBox1.TabIndex = 1;
             // 
             // FontTree
             // 
             this.FontTree.Location = new System.Drawing.Point(6, 6);
             this.FontTree.Name = "FontTree";
-            this.FontTree.Size = new System.Drawing.Size(121, 200);
+            this.FontTree.Size = new System.Drawing.Size(121, 174);
             this.FontTree.TabIndex = 0;
-            this.FontTree.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FontTree_MouseClick);
-            this.FontTree.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.FontTree_MouseDoubleClick);
+            this.FontTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.FontTree_AfterSelect);
             // 
             // tabPage3
             // 
@@ -162,14 +185,14 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(436, 212);
+            this.tabPage3.Size = new System.Drawing.Size(436, 182);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "FlexiCommands";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // removeButton
             // 
-            this.removeButton.Location = new System.Drawing.Point(378, 184);
+            this.removeButton.Location = new System.Drawing.Point(378, 157);
             this.removeButton.Name = "removeButton";
             this.removeButton.Size = new System.Drawing.Size(55, 23);
             this.removeButton.TabIndex = 6;
@@ -188,7 +211,7 @@
             // 
             // addUserCommandButton
             // 
-            this.addUserCommandButton.Location = new System.Drawing.Point(333, 184);
+            this.addUserCommandButton.Location = new System.Drawing.Point(333, 157);
             this.addUserCommandButton.Name = "addUserCommandButton";
             this.addUserCommandButton.Size = new System.Drawing.Size(42, 23);
             this.addUserCommandButton.TabIndex = 4;
@@ -198,7 +221,7 @@
             // 
             // userCommand
             // 
-            this.userCommand.Location = new System.Drawing.Point(264, 186);
+            this.userCommand.Location = new System.Drawing.Point(264, 160);
             this.userCommand.Name = "userCommand";
             this.userCommand.Size = new System.Drawing.Size(63, 20);
             this.userCommand.TabIndex = 3;
@@ -208,7 +231,7 @@
             this.listOfCommands.FormattingEnabled = true;
             this.listOfCommands.Location = new System.Drawing.Point(138, 33);
             this.listOfCommands.Name = "listOfCommands";
-            this.listOfCommands.Size = new System.Drawing.Size(120, 173);
+            this.listOfCommands.Size = new System.Drawing.Size(120, 147);
             this.listOfCommands.TabIndex = 2;
             // 
             // commandPreview
@@ -225,15 +248,48 @@
             // 
             this.CommandTree.Location = new System.Drawing.Point(6, 6);
             this.CommandTree.Name = "CommandTree";
-            this.CommandTree.Size = new System.Drawing.Size(121, 200);
+            this.CommandTree.Size = new System.Drawing.Size(121, 174);
             this.CommandTree.TabIndex = 0;
             this.CommandTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.CommandTree_AfterSelect);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Location = new System.Drawing.Point(381, 227);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 3;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
+            // applyButton
+            // 
+            this.applyButton.Location = new System.Drawing.Point(300, 227);
+            this.applyButton.Name = "applyButton";
+            this.applyButton.Size = new System.Drawing.Size(75, 23);
+            this.applyButton.TabIndex = 4;
+            this.applyButton.Text = "Apply";
+            this.applyButton.UseVisualStyleBackColor = true;
+            this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
+            // 
+            // okButton
+            // 
+            this.okButton.Location = new System.Drawing.Point(219, 227);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 23);
+            this.okButton.TabIndex = 5;
+            this.okButton.Text = "Ok";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(468, 262);
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.applyButton);
+            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.tabControl1);
             this.Name = "Settings";
             this.Text = "Settings";
@@ -269,6 +325,11 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
+        private ColorComboTestApp.ColorComboBox colorComboBox1;
+        private FontControl.CGFontCombo cgFontCombo1;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Button applyButton;
+        private System.Windows.Forms.Button okButton;
 
     }
 }
