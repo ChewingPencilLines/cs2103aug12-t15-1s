@@ -57,9 +57,14 @@ namespace ToDo
 
         private SettingsManager tempSettingsManager;
 
+        private void SetUpTempSettingsManager()
+        {
+            tempSettingsManager = settingsManager.CloneObj();
+        }
+
         private void LoadCommandTab()
         {
-            tempSettingsManager = new SettingsManager(settingsManager);
+            SetUpTempSettingsManager();
             CommandList();
             SelectFirstNode();
         }
