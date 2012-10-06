@@ -13,10 +13,10 @@ namespace ToDo
         [TestMethod]
         public void TestMethodOpExecute()
         {
-           CRUD crudClass = new CRUD();
+           OperationHandler crudClass = new OperationHandler();
 
-           Task newTask = new FloatingTask("buy milk");
-           Operation newOperation = new OperationAdd(newTask,OperationType.ADD_FLOATING);
+           Task newTask = new TaskFloating("buy milk");
+           Operation newOperation = new OperationAdd(newTask);
 
            Responses actualResponse=crudClass.ExecuteOperation(newOperation);
            Responses expectedResponse = Responses.ADD_SUCCESS;
@@ -28,10 +28,10 @@ namespace ToDo
         [TestMethod]
         public void TestMethodOpExecute2()
         {
-            CRUD crudClass = new CRUD();
+            OperationHandler crudClass = new OperationHandler();
 
-            Task newTask = new FloatingTask("buy milk");
-            Operation newOperation = new OperationAdd(newTask, OperationType.ADD_FLOATING);
+            Task newTask = new TaskFloating("buy milk");
+            Operation newOperation = new OperationAdd(newTask);
 
             string actualResponse = crudClass.ExecuteOperation2(newOperation);
             string expectedResponse = "ok";
