@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace ToDo
 {
@@ -9,11 +10,12 @@ namespace ToDo
     {
         static void Main(string[] args)
         {
-            string command;
-            command = Console.ReadLine();
-            Logic a = new Logic();
-            string feedback;
-            feedback = a.ProcessCommand(command);
+            string command, feedback;
+            Logic AI = new Logic();
+
+            command = Console.ReadLine();       
+            feedback = AI.ProcessCommand(command);
+            Console.WriteLine(feedback);
         }
     }
 }

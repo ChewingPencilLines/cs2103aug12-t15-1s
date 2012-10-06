@@ -27,10 +27,10 @@ namespace ToDo
 
         // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
         static Regex time_24HourFormat =
-            new Regex(@"(?i)\b(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?\b");
+            new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?$");
         // matches the above but with AM and PM (case insensitive). colon/dot is optional.
         static Regex time_12HourFormat =
-            new Regex(@"(?i)\b(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<context>am|pm)\b");
+            new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<context>am|pm)$");
 
         static StringParser()
         {
@@ -183,29 +183,15 @@ namespace ToDo
             // time has <index 1, 17 hours in TimeSpan>.            
             List<Tuple<int, DayOfWeek>> days;
             List<Tuple<int, DateTime>> dates;
-            List<Tuple<int, TimeSpan>> times;
-            input = MergeTimeWords(input);
-            input = MergeDateWords(input);
+            List<Tuple<int, TimeSpan>> times;            
             days = SearchForDays(input);
-            SearchForDates(input);
-            SearchForTime(input);
+            dates = SearchForDates(input);
+            times = SearchForTime(input);
             // Merge date and times (and days)? Use their indexes. (initial and end for each DateTime)
             // MergeDateTimes();
-            SearchForContext(input);
             return null;
         }
-
-        private static List<string> MergeDateWords(List<string> input)
-        {
-            // using regex:
-            // find month words
-            // check if word before or after match a date type (i.e. 26th, 26 etc)
-            // check if word after is year (if word after is not date i.e. jan 2013, 26th jan 2013)
-            // check if word 2 index after is year (if word after is date i.e. jan 26th 2013)
-            // merge if it is (into 26th jan etc)
-            throw new NotImplementedException();
-        }
-
+        
         internal static List<Tuple<int, DayOfWeek>> SearchForDays(List<string> input)
         {
             List<Tuple<int, DayOfWeek>> dayWords = new List<Tuple<int, DayOfWeek>>();
@@ -224,23 +210,106 @@ namespace ToDo
             return dayWords;
         }
 
-        private static void SearchForTime(List<string> input)
+        // use a combined regex to get hour, minute, second via tags and return a TimeSpan.
+        private static List<Tuple<int, TimeSpan>> SearchForTime(List<string> input)
         {
-            // use a combined regex to get hour, minute, second via tags and return a TimeSpan.
-            throw new NotImplementedException();
+            List<Tuple<int, TimeSpan>> listOfFoundTimes = new List<Tuple<int, TimeSpan>>();
+            Match match;
+            int index = 0;
+            foreach (string word in input)
+            {                
+                match = time_12HourFormat.Match(word);
+                if (!match.Success) match = time_24HourFormat.Match(word);
+                if (match.Success)
+                {                    
+                    int hours = Int32.Parse(match.Groups["hours"].Value);
+                    int minutes = Int32.Parse(match.Groups["minutes"].Value);
+                    int seconds = 0;
+                    TimeSpan time = new TimeSpan(hours,minutes,seconds);
+                    Tuple<int, TimeSpan> positionAndTime = new Tuple<int, TimeSpan>(index, time);
+                    listOfFoundTimes.Add(positionAndTime);
+                }
+                index++;
+            }
+            return listOfFoundTimes;
         }
 
-        private static void SearchForDates(List<string> input)
+        private static List<Tuple<int, DateTime>> SearchForDates(List<string> input)
         {            
             // use a combined regex, to return DateTime using month and date and year tags
             throw new NotImplementedException();
         }
-
-        // use lists of index to derive user intention, with consideration of prepositionKeywords.
-        private static void SearchForContext(List<string> input)
+        
+        //todo: ref string output no longer neccesary!
+        /// <summary>
+        /// This method parses a string of words into a list of strings, each containing a word.
+        /// By inputting a list of integer pairs to mark delimiting characters, multiple words can be taken as a single absolute substring (word).        
+        /// An output string passed by ref is required, which will contain the input string without any words bounded by delimiters, if any.
+        /// If there are no delimiters, the ref output is exactly the same as the input.
+        /// </summary>
+        /// <param name="input">The string of words to be split.</param>
+        /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings.</param>
+        /// <param name="output">The original string without words bounded by delimiters.</param>
+        /// <returns>The individual words as a list of strings.</returns>
+        internal static List<string> SplitStringIntoWords(string input, ref string output, List<int[]> indexOfDelimiters = null)
         {
+            List<string> words = new List<string>();
+
+            int processedIndex = 0, removedCount = 0;
+            output = input;
+
+            if (indexOfDelimiters == null)
+                return input.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            foreach (int[] substringIndex in indexOfDelimiters)
+            {
+                int count = substringIndex[END_INDEX] - substringIndex[START_INDEX] + 1;
+                int startIndex = substringIndex[START_INDEX];
+                string subStr = input.Substring(processedIndex, startIndex - processedIndex);
+
+                // Add words leading up to the delimiting character
+                words.AddRange(subStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());
+
+                // Get absolute substring without the delimiter characters and add to return list
+                string absoluteSubstr = input.Substring(startIndex + 1, count - 2);
+                words.Add("\" " + absoluteSubstr); // " marks an absolute string
+
+                // Remove absolute string from output
+                output = output.Remove(startIndex - removedCount, count);
+
+                // Update processed index state and count of removed characters
+                processedIndex = substringIndex[END_INDEX] + 1;
+                removedCount += count;
+            }
+
+            // Add remaining words
+            string remainingStr = input.Substring(processedIndex);
+            words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());
+            words = MergeDateAndTimeWords(words);
+            return words;
+        }
+
+        private static List<string> MergeDateAndTimeWords(List<string> input)
+        {
+            // add task friday 5 pm 28 sept 2012
+            // => add task friday 5pm 28 sept 2012
+            // => add task friday 5pm "28 sept 2012" (date is a single string in the list)
+            input = MergeTimeWords(input);
+            input = MergeDateWords(input);
+            return input;
+        }
+
+        private static List<string> MergeDateWords(List<string> input)
+        {
+            // using regex:
+            // find month words
+            // check if word before or after match a date type (i.e. 26th, 26 etc)
+            // check if word after is year (if word after is not date i.e. jan 2013, 26th jan 2013)
+            // check if word 2 index after is year (if word after is date i.e. jan 26th 2013)
+            // merge if it is (into 26th jan etc)
             throw new NotImplementedException();
         }
+
 
         /// <summary>
         /// This method checks all words within an input list of words for valid times and returns a list of words
@@ -291,55 +360,5 @@ namespace ToDo
             }
             else return false;
         }
-
-        //todo: ref string output no longer neccesary!
-        /// <summary>
-        /// This method parses a string of words into a list of strings, each containing a word.
-        /// By inputting a list of integer pairs to mark delimiting characters, multiple words can be taken as a single absolute substring (word).        
-        /// An output string passed by ref is required, which will contain the input string without any words bounded by delimiters, if any.
-        /// If there are no delimiters, the ref output is exactly the same as the input.
-        /// </summary>
-        /// <param name="input">The string of words to be split.</param>
-        /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings.</param>
-        /// <param name="output">The original string without words bounded by delimiters.</param>
-        /// <returns>The individual words as a list of strings.</returns>
-        internal static List<string> SplitStringIntoWords(string input, ref string output, List<int[]> indexOfDelimiters = null)
-        {
-            List<string> words = new List<string>();
-
-            int processedIndex = 0, removedCount = 0;
-            output = input;
-
-            if (indexOfDelimiters == null)
-                return input.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList();
-            
-            foreach (int[] substringIndex in indexOfDelimiters)
-            {
-                int count = substringIndex[END_INDEX] - substringIndex[START_INDEX] + 1;
-                int startIndex = substringIndex[START_INDEX];
-                string subStr = input.Substring(processedIndex, startIndex - processedIndex);
-
-                // Add words leading up to the delimiting character
-                words.AddRange(subStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());
-
-                // Get absolute substring without the delimiter characters and add to return list
-                string absoluteSubstr = input.Substring(startIndex + 1, count - 2);
-                words.Add("\" " + absoluteSubstr); // " marks an absolute string
-
-                // Remove absolute string from output
-                output = output.Remove(startIndex - removedCount, count);
-
-                // Update processed index state and count of removed characters
-                processedIndex = substringIndex[END_INDEX] + 1;
-                removedCount += count;
-            }
-
-            // Add remaining words
-            string remainingStr = input.Substring(processedIndex);
-            words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());
-
-            return words;
-        }
-  
     }
 }
