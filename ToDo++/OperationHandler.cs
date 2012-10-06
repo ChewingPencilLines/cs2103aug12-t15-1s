@@ -66,7 +66,7 @@ namespace ToDo
             // use reflection to get all derived types
             var knownTypes = Assembly.GetExecutingAssembly().GetTypes().Where(
                 t => typeof(TaskList).IsAssignableFrom(t) || typeof(
-                FloatingTask).IsAssignableFrom(t) || typeof(DeadlineTask).IsAssignableFrom(t)).ToArray();
+                TaskFloating).IsAssignableFrom(t) || typeof(TaskDeadline).IsAssignableFrom(t)).ToArray();
 
             // prepare to serialize a car object
             XmlSerializer writer = new XmlSerializer(typeof(TaskList), knownTypes);

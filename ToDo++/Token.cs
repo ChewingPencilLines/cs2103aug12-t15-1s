@@ -38,11 +38,11 @@ namespace ToDo
             get { return commandType; }
         }
 
-        internal TokenCommand(int position, CommandType raw)
+        internal TokenCommand(int position, CommandType val)
             : base(position)
         {
             type = TokenType.COMMAND;
-            commandType = raw;
+            commandType = val;
         }
     }
 
@@ -53,11 +53,11 @@ namespace ToDo
         {
             get { return dateTime; }
         }
-        internal TokenDate(int position, DateTime raw)
+        internal TokenDate(int position, DateTime val)
             : base(position)
         {
             type = TokenType.DATE;
-            dateTime = raw;
+            dateTime = val;
         }
     }
 
@@ -68,11 +68,11 @@ namespace ToDo
         {
             get { return time; }
         }
-        internal TokenTime(int position, TimeSpan raw)
+        internal TokenTime(int position, TimeSpan val)
             : base(position)
         {
             type = TokenType.TIME;
-            time = raw;
+            time = val;
         }
     }
 
@@ -83,26 +83,26 @@ namespace ToDo
         {
             get { return dayOfWeek; }
         }
-        internal TokenDay(int position, DayOfWeek raw)
+        internal TokenDay(int position, DayOfWeek val)
             : base(position)
         {
             type = TokenType.DAY;
-            dayOfWeek = raw;
+            dayOfWeek = val;
         }
     }
 
     class TokenContext : Token
     {
-        string keyword;
-        internal string Value
+        ContextType contextType;
+        internal ContextType Value
         {
-            get { return keyword; }
+            get { return contextType; }
         }
-        internal TokenContext(int position, string raw)
+        internal TokenContext(int position, ContextType val)
             : base(position)
         {
             type = TokenType.CONTEXT;
-            keyword = raw;
+            contextType = val;
         }
     }
 
@@ -113,11 +113,11 @@ namespace ToDo
         {
             get { return literal; }
         }
-        internal TokenLiteral(int position, string raw)
+        internal TokenLiteral(int position, string val)
             : base(position)
         {
             type = TokenType.LITERAL;
-            literal = raw;
+            literal = val;
         }
     }
 }
