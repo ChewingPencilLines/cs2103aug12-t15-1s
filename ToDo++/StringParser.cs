@@ -75,20 +75,29 @@ namespace ToDo
 
         static Regex date_numericFormat =
             new Regex(@"\b
+                        (
                         # DD/MM
                         (
-                        ((?<day>(0?[1-9]|[12][0-9]|3[01]))
-                        ?([-/.])
-                        (?<month>(0[1-9]|1[012])))
+                        ((?<day>(0?[1-9]|[12][0-9]|3[01]))?
+                        (?:[-/.])
+                        (?<month>(0[1-9]|1[012]))
+                        )
                         |
                         # MM/DD
-                        ((?<month>(0[1-9]|1[012]))
-                        ?([-/.])
+                        (?:
+                        (?<month>(0[1-9]|1[012]))
+                        (?:[-/.])
                         (?<day>(0?[1-9]|[12][0-9]|3[01]))
                         )
                         # (YY)YY
-                        ?([-/.])
-                        (?<year>(?:(\d\d)?)\d\d)
+                        # if day captured but not month force year (NYI, WIP)
+                        (?(day)
+                        ((?:[-/.])
+                        (?<year>(\d\d)?\d\d))?
+                        |
+                        ((?:[-/.])
+                        (?<year>(\d\d)?\d\d))
+                        )
                         \b"
                     , RegexOptions.IgnorePatternWhitespace);
 
