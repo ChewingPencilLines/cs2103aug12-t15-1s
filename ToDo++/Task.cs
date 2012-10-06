@@ -20,6 +20,9 @@ namespace ToDo
 
     public class FloatingTask : Task
     {
+        public FloatingTask() : this(null)
+        { }
+
         public FloatingTask(string TaskName)
         {
             taskname = TaskName;
@@ -34,6 +37,9 @@ namespace ToDo
     public class DeadlineTask : Task
     {
         private DateTime endtime;
+
+        public DeadlineTask() : this(null, DateTime.Now)
+        { }
 
         public DeadlineTask(string TaskName, DateTime EndTime)
         {
@@ -52,7 +58,10 @@ namespace ToDo
         private DateTime endtime;
         private DateTime starttime;
 
-        public TimedTask(string TaskName,DateTime StartTime, DateTime EndTime)
+        public TimedTask() : this(null, DateTime.Now, DateTime.Now)
+        { }
+
+        public TimedTask(string TaskName, DateTime StartTime, DateTime EndTime)
         {
             taskname = TaskName;
             starttime = StartTime;

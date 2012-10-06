@@ -63,12 +63,21 @@ namespace ToDo
     class OperationDisplay:Operation
     {
         //Think of Variables
+        public OperationDisplay()
+        {  }
+
         public override Task GetTask() { return null;}
     }
 
     class OperationDelete:Operation
     {
         int index;
+
+        public OperationDelete(int DeleteIndex)
+        {
+            index = DeleteIndex;
+        }
+
         public override Task GetTask() { return null; }
     }
 
@@ -77,12 +86,21 @@ namespace ToDo
         private Task newTask;
         private Task oldTask;
 
+        public OperationUpdate(Task Previous, Task Revised)
+        {
+            oldTask = Previous;
+            newTask = Revised;
+        }
+
         public override Task GetTask() { return null; }
     }
 
     class OperationUndoRedo:Operation
     {
         //Variables not needed for now
+        public OperationUndoRedo()
+        { }
+
         public override Task GetTask() { return null; }
     }
 
