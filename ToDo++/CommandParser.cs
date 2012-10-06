@@ -48,7 +48,7 @@ namespace ToDo
                 }
                 else if (token is TokenCommand)
                 {
-                    if (commandType == CommandType.INVALID)
+                    if (commandType != CommandType.INVALID)
                         WarnUserOfMultipleCommands();
                     else
                         commandType = ((TokenCommand)token).Value;
@@ -89,14 +89,28 @@ namespace ToDo
                             endDate = GetDateFromDay(currentSpecifier, endDay);
                             break;
                         default:
-                            Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case2!");
+                            Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");
                             break;
-                    }
-                    
+                    }                    
                 }
                 else if (token is TokenDate)
                 {
-
+                    switch (currentMode)
+                    {
+                        case ContextType.STARTTIME:
+                            startDate = ((TokenDate)token).Value;
+                            // @ivan-todo: WarnUser if already determined startDate
+                            break;
+                        case ContextType.ENDTIME:
+                            endDate = ((TokenDate)token).Value;
+                            break;
+                        case ContextType.DEADLINE:
+                            endDate = ((TokenDate)token).Value;
+                            break;
+                        default:
+                            Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");
+                            break;
+                    } 
                 }
                 else if (token is TokenLiteral)
                 {
@@ -131,7 +145,7 @@ namespace ToDo
                     daysToAdd += 14;
                     break;
                 default:
-                    Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case1!");
+                    Debug.Assert(false, "Fell through switch statement in GetDateFromDay!");
                     break;
             }
             tempDate.AddDays(daysToAdd);
