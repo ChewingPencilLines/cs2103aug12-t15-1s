@@ -33,7 +33,7 @@ namespace ToDo
         static Regex time_12HourFormat =
             new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<format>am|pm)$");
 
-        /* All date regexes only check for dates within the 21st and 22nd centuries.
+        /* All date regexes only check for dates within the 21st century.
          * They do not return the leading 2 numbers for year, leading zeroes for month and day
          * and the possible suffixes for days in match values. These are optional.
          * The relevent groups are tagged as <day>, <month> and <year>.
@@ -48,16 +48,16 @@ namespace ToDo
         // for numeric date words unless otherwise indicated in the settings.
         // matches dd-mm-yyyy, d-m-yyyy, dd-mm-yy or d-m-yy
         static Regex date_numericDMYFormat =
-            new Regex(@"\b(?<day>(0?[1-9]|[12][0-9]|3[01]))?([-/.])(?<month>(0[1-9]|1[012]))\2(?<year>(?:(2[01])?)\d\d)\b");
+            new Regex(@"\b(?<day>(0?[1-9]|[12][0-9]|3[01]))?([-/.])(?<month>(0[1-9]|1[012]))\2(?<year>(?:(20)?)\d\d)\b");
 
 
         // matches mm-dd-yyyy, m-d-yyyy, mm-dd-yy, m-d-yy
         static Regex date_numericMDYFormat =
-            new Regex(@"\b(?<month>(0?[1-9]|1[012]))([-/.])(?<day>(0[1-9]|[12][0-9]|3[01]))\2(?<year>(?:(2[01])?)\d\d)\b");
+            new Regex(@"\b(?<month>(0?[1-9]|1[012]))([-/.])(?<day>(0[1-9]|[12][0-9]|3[01]))\2(?<year>(?:(20)?)\d\d)\b");
 
         // matches yyyy-mm-dd, yyyy-m-d, yy-mm-dd, yy-m-d
         static Regex date_numericYMDFormat =
-            new Regex(@"\b(?<year>(?:(2[01])?)\d\d)([-/.])(?<month>(0?[1-9]|1[012]))\2(?<day>(0[1-9]|[12][0-9]|3[01]))\b");
+            new Regex(@"\b(?<year>(?:(20)?)\d\d)([-/.])(?<month>(0?[1-9]|1[012]))\2(?<day>(0[1-9]|[12][0-9]|3[01]))\b");
 
         // This is the default format that will be checked for first
         // for alphabetic date words unless otherwise indicated in the settings.
@@ -161,6 +161,8 @@ namespace ToDo
         }
 
         
+        // Note that the following methods do not validate that the dates do actually exist.
+        // i.e. does not check for erroneous dates such as 31st feb
         internal static bool IsValidDMYAlphabeticDate(string theDate)
         {
             return date_alphabeticDMYFormat.IsMatch(theDate);
