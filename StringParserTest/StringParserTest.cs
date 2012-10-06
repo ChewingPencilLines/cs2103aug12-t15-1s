@@ -44,6 +44,41 @@ namespace StringParserTest
             Assert.IsTrue(StringParser.IsValidTime("11.59pm"));
             Assert.IsFalse(StringParser.IsValidTime("13.01pm")); // only up to 1159am/pm is valid.
         }
+
+        [TestMethod]
+        public void IsValidDMYAlphabeticDate()
+        {
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("1st jan 2012"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("2nd january 13"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("3rd feb 2012"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("4th february 12"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("1 mar 2014"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("2 march 12"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("3 apr 2012"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("8 april 15"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("9 may 2012"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("10th jun 12"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("11st june 2016"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("12nd jul 12"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("13rd july 2012"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("14th aug 12"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("11 august 2012"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("12 sep 12"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("13 sept 2012"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("14 september 12"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("19 oct 2012"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("20th october 23"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("21st nov 2055"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("22nd november 12"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("23rd dec 2012"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("24th december 12"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("30th may 12"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("31st jan 2023"));
+            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("dec 12"));
+            Assert.IsFalse(StringParser.IsValidDMYAlphabeticDate("dec 23 12"));
+            Assert.IsFalse(StringParser.IsValidDMYAlphabeticDate("nov 23"));
+            Assert.IsFalse(StringParser.IsValidDMYAlphabeticDate("nov 9777"));
+        }
         
         [TestMethod]
         public void Simple_SearchForCommandTest_Add()
