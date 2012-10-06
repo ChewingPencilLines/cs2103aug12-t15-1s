@@ -5,43 +5,13 @@ using System.Text;
 
 namespace ToDo
 {
-    public enum OperationType
-    {
-        // @ivan to @alice don't need so many types? one of each only.
-        ADD_FLOATING,
-        ADD_EVENT,
-        ADD_DEADLINE,
-        DISPLAY_ALL,
-        DISPLAY_TIME,
-        DISPLAY_NAME,
-        DISPLAY_TYPE,
-        UPDATE_NAME,
-        UPDATE_TIME,
-        DELETE_TASK,
-        DELETE_DATE,
-        UNDO,
-        REDO,
-    }
-
     public abstract class Operation
     {
-        private OperationType operationType;
-
         public Operation()
         {
 
         }
-
-        public void SetOperationType(OperationType opType)
-        {
-            operationType=opType;
-        }
-
-        public OperationType GetOperationType()
-        {
-            return operationType;
-        }
-
+        
         public abstract Task GetTask();
     }
 
@@ -49,9 +19,8 @@ namespace ToDo
     {
         private Task newTask;
 
-        public OperationAdd(Task setTask,OperationType setOpType)
+        public OperationAdd(Task setTask)
         {
-            SetOperationType(setOpType);
             newTask = setTask;
         }
 
@@ -61,10 +30,10 @@ namespace ToDo
         }
     }
 
-    class OperationDisplay:Operation
+    class OperationSearch:Operation
     {
         //Think of Variables
-        public OperationDisplay()
+        public OperationSearch()
         {  }
 
         public override Task GetTask() { return null;}
@@ -82,12 +51,12 @@ namespace ToDo
         public override Task GetTask() { return null; }
     }
 
-    class OperationUpdate:Operation
+    class OperationModify:Operation
     {
         private Task newTask;
         private Task oldTask;
 
-        public OperationUpdate(Task Previous, Task Revised)
+        public OperationModify(Task Previous, Task Revised)
         {
             oldTask = Previous;
             newTask = Revised;
@@ -96,10 +65,10 @@ namespace ToDo
         public override Task GetTask() { return null; }
     }
 
-    class OperationUndoRedo:Operation
+    class OperationUndo:Operation
     {
         //Variables not needed for now
-        public OperationUndoRedo()
+        public OperationUndo()
         { }
 
         public override Task GetTask() { return null; }

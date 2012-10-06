@@ -13,10 +13,11 @@ namespace StringParserTest
     // The testing approach here is white box unit testing; Any change in implementation may break a unit test.
     // Comment out / clean up this page and use black box tests once the class is complete.
 
-    /*
-    [TestClass]
+    
+    [TestClass]    
     public class StringParserTest
     {
+        /*
         CommandType command = CommandType.INVALID;
         int indexOfCommandKeyword = -1;
         List<string> testWords = new List<string>();
@@ -291,7 +292,7 @@ namespace StringParserTest
                 if (foundArray == false) return false;
             }
             return true;
-        }
+        }*/
          
-    }*/
+    }
 }

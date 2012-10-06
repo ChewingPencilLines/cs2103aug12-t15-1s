@@ -8,17 +8,26 @@ namespace ToDo
 {
     class Token
     {
-        enum TokenType { COMMAND, DATE, TIME, DAY, CONTEXT, LITERAL };
+        public enum TokenType { COMMAND, DATE, TIME, DAY, CONTEXT, LITERAL };
+
         private int position;
-        internal int Position
-        {
-            get { return position; }           
-        }
+        protected TokenType type;
 
         internal Token(int position)
         {
             this.position = position;
         }
+
+        internal TokenType Type
+        {
+            get { return type; }
+        } 
+           
+        internal int Position
+        {
+            get { return position; }           
+        }
+
     }
 
     class TokenCommand : Token
@@ -32,6 +41,7 @@ namespace ToDo
         internal TokenCommand(int position, CommandType raw)
             : base(position)
         {
+            type = TokenType.COMMAND;
             commandType = raw;
         }
     }
@@ -46,6 +56,7 @@ namespace ToDo
         internal TokenDate(int position, DateTime raw)
             : base(position)
         {
+            type = TokenType.DATE;
             dateTime = raw;
         }
     }
@@ -60,6 +71,7 @@ namespace ToDo
         internal TokenTime(int position, TimeSpan raw)
             : base(position)
         {
+            type = TokenType.TIME;
             time = raw;
         }
     }
@@ -74,6 +86,7 @@ namespace ToDo
         internal TokenDay(int position, DayOfWeek raw)
             : base(position)
         {
+            type = TokenType.DAY;
             dayOfWeek = raw;
         }
     }
@@ -88,6 +101,7 @@ namespace ToDo
         internal TokenContext(int position, string raw)
             : base(position)
         {
+            type = TokenType.CONTEXT;
             keyword = raw;
         }
     }
@@ -102,6 +116,7 @@ namespace ToDo
         internal TokenLiteral(int position, string raw)
             : base(position)
         {
+            type = TokenType.LITERAL;
             literal = raw;
         }
     }
