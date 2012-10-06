@@ -12,6 +12,8 @@ namespace StringParserTest
     // @ivan: This class contains of unit tests for methods in the StringParser class for use during development.
     // The testing approach here is white box unit testing; Any change in implementation may break a unit test.
     // Comment out / clean up this page and use black box tests once the class is complete.
+
+    /*
     [TestClass]
     public class StringParserTest
     {
@@ -257,7 +259,7 @@ namespace StringParserTest
             CollectionAssert.AreEqual(expected, output);
         }
 
-    /*    [TestMethod]
+      [TestMethod]
         public void SearchForDaysTest()
         {
             testWords.Clear();
@@ -270,7 +272,7 @@ namespace StringParserTest
             expected.Add(new Tuple<int, DayOfWeek>(2, DayOfWeek.Monday));
             List<Tuple<int,DayOfWeek>> output = StringParser.GenerateDayTokens(testWords);            
             CollectionAssert.AreEqual(expected, output);
-        }*/
+        }
 
         // Returns true if the two lists contains (any order) the same exact int arrays.
         private bool ListOfIntegerArraysAreEquivalent(List<int[]> first, List<int[]> second)
@@ -291,5 +293,5 @@ namespace StringParserTest
             return true;
         }
          
-    }
+    }*/
 }

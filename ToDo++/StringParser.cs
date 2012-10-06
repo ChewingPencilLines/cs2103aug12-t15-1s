@@ -71,32 +71,34 @@ namespace ToDo
         // matchess yyyy mm dd
         static Regex date_alphabeticYMDFormat =
             new Regex(@"\b(?<year>(?:(20)?)\d\d)\s(?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?))\s(?<day>(([123]?[1])|([12]?[2])|([12]?[3])|([12]?[4-9])|([123][0])))");
-
+         
 
         static Regex date_numericFormat =
             new Regex(@"\b
-                        (
+                        (?:
                         # DD/MM
-                        (
-                        ((?<day>(0?[1-9]|[12][0-9]|3[01]))?
-                        (?:[-/.])
+                        (?:
+                        (?<day>(0?[1-9]|[12][0-9]|3[01]))?
+                        (?<separator>[-/.])
                         (?<month>(0[1-9]|1[012]))
                         )
                         |
                         # MM/DD
                         (?:
                         (?<month>(0[1-9]|1[012]))
-                        (?:[-/.])
+                        (\(separator))
                         (?<day>(0?[1-9]|[12][0-9]|3[01]))
                         )
+                        )
                         # (YY)YY
-                        # if day captured but not month force year (NYI, WIP)
+                        # if day not captured, force year
                         (?(day)
-                        ((?:[-/.])
+                        (\(separator))
                         (?<year>(\d\d)?\d\d))?
                         |
-                        ((?:[-/.])
-                        (?<year>(\d\d)?\d\d))
+                        (?:
+                        (\(separator))
+                        (?<year>\d\d\d\d))
                         )
                         \b"
                     , RegexOptions.IgnorePatternWhitespace);
