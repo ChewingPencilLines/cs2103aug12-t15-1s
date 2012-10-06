@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 [assembly: InternalsVisibleTo("ParsingLogicUnitTest")]
 
@@ -23,14 +24,144 @@ namespace ToDo
 
         private static Operation GenerateOperation(List<Token> tokens)
         {
-            CommandType commandType = new CommandType();
+            CommandType commandType = new CommandType();            
+            ContextType currentMode = new ContextType();
+            ContextType currentSpecifier = new ContextType();
+            TimeSpan startTime, endTime;
+            DateTime startDate, endDate;
+            DayOfWeek startDay, endDay;
+            commandType = CommandType.INVALID;
+            currentMode = ContextType.STARTTIME;
+            currentSpecifier = ContextType.CURRENT;
+
             foreach (Token token in tokens)
             {
-                if (token is TokenCommand)
+                if (token is TokenContext)
+                {
+                    TokenContext curToken = (TokenContext)token;
+                    if (curToken.Value == ContextType.CURRENT ||
+                        curToken.Value == ContextType.NEXT ||
+                        curToken.Value == ContextType.FOLLOWING
+                       )
+                        currentSpecifier = curToken.Value;
+                    else currentMode = curToken.Value;
+                }
+                else if (token is TokenCommand)
+                {
+                    if (commandType == CommandType.INVALID)
+                        WarnUserOfMultipleCommands();
+                    else
+                        commandType = ((TokenCommand)token).Value;
+                }
+                else if (token is TokenTime)
+                {
+                    switch (currentMode)
+                    {
+                        case ContextType.STARTTIME:
+                            startTime = ((TokenTime)token).Value;
+                    	    break;
+                        case ContextType.ENDTIME:
+                            endTime = ((TokenTime)token).Value;
+                    	    break;
+                        case ContextType.DEADLINE:
+                            endTime = ((TokenTime)token).Value;
+                            break;
+                        default:
+                            Debug.Assert(false,"Fell through switch statement in GenerateOperation, TokenTime case!");
+                            break;
+                    }
+                }
+                else if (token is TokenDay)
+                {                                        
+                    switch (currentMode)
+                    {
+                        case ContextType.STARTTIME:
+                            startDay = ((TokenDay)token).Value;
+                            // @ivan-todo: WarnUser if already determined startDate and startDay conflicts
+                            startDate = GetDateFromDay(currentSpecifier, startDay);
+                            break;
+                        case ContextType.ENDTIME:
+                            endDay = ((TokenDay)token).Value;
+                            endDate = GetDateFromDay(currentSpecifier, endDay);
+                            break;
+                        case ContextType.DEADLINE:
+                            endDay = ((TokenDay)token).Value;
+                            endDate = GetDateFromDay(currentSpecifier, endDay);
+                            break;
+                        default:
+                            Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case2!");
+                            break;
+                    }
+                    
+                }
+                else if (token is TokenDate)
                 {
 
                 }
+                else if (token is TokenLiteral)
+                {
+
+                }
+                else { }
+
+                // Generate operation based on values, and whether they have been used.
+            }            
+            return new OperationAdd(new TaskFloating());
+        }
+
+        /// <summary>
+        /// This method accepts a day of the week and returns the corresponding date depending on what the preposition is.
+        /// </summary>
+        /// <param name="preposition">The prefix specifying how many weeks to add to the next found day.</param>
+        /// <param name="desiredDay">The required day.</param>
+        /// <returns>Date on which the <var>preposition</var> <var>desiredDay</var> is found.</returns>
+        private static DateTime GetDateFromDay(ContextType preposition, DayOfWeek desiredDay)
+        {
+            DateTime startDate;
+            DateTime tempDate = DateTime.Today;
+            int daysToAdd = GetDaysToAdd(DateTime.Today.DayOfWeek, desiredDay);
+            switch (preposition)
+            {
+                case ContextType.CURRENT:
+                    break;
+                case ContextType.NEXT:
+                    daysToAdd += 7;
+                    break;
+                case ContextType.FOLLOWING:
+                    daysToAdd += 14;
+                    break;
+                default:
+                    Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case1!");
+                    break;
             }
+            tempDate.AddDays(daysToAdd);
+            startDate = tempDate;
+            return startDate;
+        }
+
+        /// <summary>
+        /// Calculates the number of days to add to the given day of
+        /// the week in order to return the next occurrence of the
+        /// desired day of the week.
+        /// </summary>
+        /// <param name="current">The starting day of the week.</param>
+        /// <param name="desired">The desired day of the week.</param>
+        /// <returns>
+        ///		The number of days to add to <var>current</var> day of week
+        ///		in order to achieve the next <var>desired</var> day of week.
+        /// </returns>
+        private static int GetDaysToAdd(DayOfWeek current, DayOfWeek desired )
+        {
+            // f( c, d ) = [7 - (c - d)] mod 7
+            //   where 0 <= c < 7 and 0 <= d < 7
+
+            int c = (int)current;
+            int d = (int)desired;
+            return (7 - c + d) % 7;
+        }
+
+        private static void WarnUserOfMultipleCommands()
+        {
             throw new NotImplementedException();
         }  
 
