@@ -44,12 +44,22 @@
     <Compile Include="CGCategoryAttribute.cs" />
     <Compile Include="CGDescriptionAttribute.cs" />
     <Compile Include="CGResource.cs" />
-    <Compile Include="ColorComboBox.cs" />
+    <Compile Include="ColorComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ColorComboBox.designer.cs">
       <DependentUpon>ColorComboBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="FontControl.cs" />
+    <Compile Include="FontControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimeDateControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TimeDateControl.Designer.cs">
+      <DependentUpon>TimeDateControl.cs</DependentUpon>
+    </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +68,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ColorComboBox.resx">
       <DependentUpon>ColorComboBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TimeDateControl.resx">
+      <DependentUpon>TimeDateControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -44,7 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CRUD.cs" />
+    <None Include="CRUD.cs" />
+    <Compile Include="CommandOutput.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Operation.cs" />
     <Compile Include="Responses.cs" />
     <Compile Include="Settings.cs">
@@ -96,6 +99,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\tempImage.png" />
+    <Content Include="tempImage.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CustomControls\CustomControls.csproj">

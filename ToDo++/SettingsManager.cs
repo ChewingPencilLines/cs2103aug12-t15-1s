@@ -14,6 +14,8 @@ namespace ToDo
         public bool loadOnStartup;
         public bool startMinimized;
 
+        public int textSize;
+
         public List<string> customKeywords_ADD;
         public List<string> customKeywords_DELETE;
         public List<string> customKeywords_UPDATE;
@@ -24,6 +26,7 @@ namespace ToDo
         {
             loadOnStartup = true;
             startMinimized = true;
+            textSize = 1;
             customKeywords_ADD = new List<string>();
             customKeywords_DELETE = new List<string>();
             customKeywords_UPDATE = new List<string>();
@@ -35,6 +38,7 @@ namespace ToDo
         {
             loadOnStartup = false;
             startMinimized = false;
+            textSize = 1;
             customKeywords_ADD.Clear();
             customKeywords_DELETE.Clear();
             customKeywords_REDO.Clear();
@@ -99,9 +103,41 @@ namespace ToDo
 
             /* Used for Writing test data to xml before running*/
             //SetUpCommands();
-            //WriteToFile("TEST.xml");
+            //WriteToFile();
 
             OpenFile();
+        }
+
+        //Just a Test Function
+        public void SetUpCommands()
+        {
+            ToggleLoadOnStartup(true);
+            ToggleStartMinimized(true);
+            AddCommand("+", Commands.ADD);
+            AddCommand("-", Commands.DELETE);
+            SetTextSize(12);
+        }
+
+        public void SetTextSize(int size)
+        {
+            settingsList.textSize = size;
+        }
+
+        public int GetTextSize()
+        {
+            return settingsList.textSize;
+        }
+
+        public void IncreaseTextSize()
+        {
+            settingsList.textSize++;
+            WriteToFile();
+        }
+
+        public void DecreaseTextSize()
+        {
+            settingsList.textSize--;
+            WriteToFile();
         }
 
         #region StartupMinimizedStatus
@@ -137,6 +173,8 @@ namespace ToDo
         }
 
 #endregion
+
+        #region CommandModifications
 
         public void AddCommand(string newCommand, Commands commandType)
         {
@@ -207,15 +245,6 @@ namespace ToDo
             return getCommands;
         }
 
-        //Just a Test Function
-        public void SetUpCommands()
-        {
-            ToggleLoadOnStartup(true);
-            ToggleStartMinimized(true);
-            AddCommand("+", Commands.ADD);
-            AddCommand("-", Commands.DELETE);
-        }
-
         public Commands CheckIfCommandExists(string userCommand)
         {
             foreach (string compare in settingsList.customKeywords_ADD)
@@ -236,6 +265,10 @@ namespace ToDo
 
             return Commands.NONE;
         }
+
+        #endregion
+
+        #region FileOperations
 
         public void WriteToFile()
         {
@@ -260,6 +293,8 @@ namespace ToDo
             file.Close();
         }
 
+        #endregion
+
         public void CopyUpdatedCommandsFrom(SettingsManager passedSettingsManager)
         {
             this.settingsList.customKeywords_ADD = passedSettingsManager.settingsList.customKeywords_ADD;
@@ -276,6 +311,8 @@ namespace ToDo
 
             p.settingsList.loadOnStartup = this.settingsList.loadOnStartup;
             p.settingsList.startMinimized = this.settingsList.startMinimized;
+
+            p.settingsList.textSize = this.settingsList.textSize;
 
             foreach (string item in this.settingsList.customKeywords_ADD)
                 p.settingsList.customKeywords_ADD.Add(item);

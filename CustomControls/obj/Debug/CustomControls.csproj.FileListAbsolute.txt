@@ -5,3 +5,5 @@ C:\Users\Raaj\Desktop\School Work\CS2103\FINAL REPO\CustomControls\obj\Debug\Cus
 C:\Users\Raaj\Desktop\School Work\CS2103\FINAL REPO\CustomControls\obj\Debug\CustomControls.dll
 C:\Users\Raaj\Desktop\School Work\CS2103\FINAL REPO\CustomControls\obj\Debug\CustomControls.pdb
 C:\Users\Raaj\Desktop\School Work\CS2103\FINAL REPO\CustomControls\obj\Debug\CG.Core.Resource.CGResource.resources
+C:\Users\Raaj\Desktop\School Work\CS2103\FINAL REPO\CustomControls\obj\Debug\CustomControls.TimeDateControl.resources
+C:\Users\Raaj\Desktop\School Work\CS2103\FINAL REPO\CustomControls\obj\Debug\CustomControls.csprojResolveAssemblyReference.cache
