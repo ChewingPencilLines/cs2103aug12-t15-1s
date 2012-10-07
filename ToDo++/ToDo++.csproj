@@ -47,6 +47,8 @@
     <Compile Include="CommandOutput.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CommandParser.cs" />
+    <Compile Include="Logic.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="OperationHandler.cs" />
     <Compile Include="Responses.cs" />
@@ -57,8 +59,10 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsManager.cs" />
+    <Compile Include="StringParser.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskList.cs" />
+    <Compile Include="Token.cs" />
     <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>
