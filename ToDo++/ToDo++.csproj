@@ -44,11 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CRUD.cs" />
     <Compile Include="CommandOutput.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Operation.cs" />
+    <Compile Include="OperationHandler.cs" />
     <Compile Include="Responses.cs" />
     <Compile Include="Settings.cs">
       <SubType>Form</SubType>
