@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandOutput.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CommandParser.cs" />
     <Compile Include="OperationHandler.cs" />
     <Compile Include="Logic.cs" />
@@ -100,6 +103,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <Content Include="Resources\tempImage.png" />
+    <Content Include="tempImage.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HotkeyLib\HotkeyLib.csproj">
