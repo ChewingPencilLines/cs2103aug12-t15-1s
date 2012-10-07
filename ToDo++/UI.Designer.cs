@@ -53,11 +53,16 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.richTextBox_output = new System.Windows.Forms.RichTextBox();
             this.textBox_input = new System.Windows.Forms.TextBox();
             this.button_go = new System.Windows.Forms.Button();
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.decreaseSizeButton = new System.Windows.Forms.Button();
+            this.increaseSizeButton = new System.Windows.Forms.Button();
+            this.richTextBox_output = new ToDo.CommandOutput();
+            this.timeDateControl1 = new CustomControls.TimeDateControl();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -227,7 +232,7 @@
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.preferencesToolStripMenuItem.Text = "Preferences..";
             this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.preferencesToolStripMenuItem_Click);
             // 
@@ -236,15 +241,6 @@
             this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
             this.helpToolStripMenuItem1.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem1.Text = "&Help";
-            // 
-            // richTextBox_output
-            // 
-            this.richTextBox_output.Location = new System.Drawing.Point(12, 29);
-            this.richTextBox_output.Name = "richTextBox_output";
-            this.richTextBox_output.ReadOnly = true;
-            this.richTextBox_output.Size = new System.Drawing.Size(379, 191);
-            this.richTextBox_output.TabIndex = 2;
-            this.richTextBox_output.Text = "";
             // 
             // textBox_input
             // 
@@ -271,14 +267,66 @@
             this.notifyIcon_taskBar.Visible = true;
             this.notifyIcon_taskBar.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.ErrorImage")));
+            this.pictureBox1.Image = global::ToDo.Properties.Resources.tempImage;
+            this.pictureBox1.Location = new System.Drawing.Point(13, 27);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(378, 29);
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
+            // 
+            // decreaseSizeButton
+            // 
+            this.decreaseSizeButton.BackColor = System.Drawing.Color.Transparent;
+            this.decreaseSizeButton.Location = new System.Drawing.Point(329, 29);
+            this.decreaseSizeButton.Name = "decreaseSizeButton";
+            this.decreaseSizeButton.Size = new System.Drawing.Size(28, 23);
+            this.decreaseSizeButton.TabIndex = 5;
+            this.decreaseSizeButton.Text = "A-";
+            this.decreaseSizeButton.UseVisualStyleBackColor = false;
+            this.decreaseSizeButton.Click += new System.EventHandler(this.decreaseSizeButton_Click);
+            // 
+            // increaseSizeButton
+            // 
+            this.increaseSizeButton.BackColor = System.Drawing.Color.Transparent;
+            this.increaseSizeButton.Location = new System.Drawing.Point(359, 29);
+            this.increaseSizeButton.Name = "increaseSizeButton";
+            this.increaseSizeButton.Size = new System.Drawing.Size(28, 23);
+            this.increaseSizeButton.TabIndex = 6;
+            this.increaseSizeButton.Text = "A+";
+            this.increaseSizeButton.UseVisualStyleBackColor = false;
+            this.increaseSizeButton.Click += new System.EventHandler(this.increaseSizeButton_Click);
+            // 
+            // richTextBox_output
+            // 
+            this.richTextBox_output.Location = new System.Drawing.Point(13, 62);
+            this.richTextBox_output.Name = "richTextBox_output";
+            this.richTextBox_output.ReadOnly = true;
+            this.richTextBox_output.Size = new System.Drawing.Size(378, 162);
+            this.richTextBox_output.TabIndex = 7;
+            this.richTextBox_output.Text = "";
+            // 
+            // timeDateControl1
+            // 
+            this.timeDateControl1.Location = new System.Drawing.Point(139, 29);
+            this.timeDateControl1.Name = "timeDateControl1";
+            this.timeDateControl1.Size = new System.Drawing.Size(150, 24);
+            this.timeDateControl1.TabIndex = 8;
+            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(403, 262);
+            this.Controls.Add(this.timeDateControl1);
+            this.Controls.Add(this.richTextBox_output);
+            this.Controls.Add(this.increaseSizeButton);
+            this.Controls.Add(this.decreaseSizeButton);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button_go);
             this.Controls.Add(this.textBox_input);
-            this.Controls.Add(this.richTextBox_output);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -286,6 +334,7 @@
             this.Text = "ToDo++";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -296,7 +345,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toDoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.RichTextBox richTextBox_output;
         private System.Windows.Forms.TextBox textBox_input;
         private System.Windows.Forms.Button button_go;
         private System.Windows.Forms.NotifyIcon notifyIcon_taskBar;
@@ -320,6 +368,11 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button decreaseSizeButton;
+        private System.Windows.Forms.Button increaseSizeButton;
+        private CommandOutput richTextBox_output;
+        private CustomControls.TimeDateControl timeDateControl1;
     }
 }
 

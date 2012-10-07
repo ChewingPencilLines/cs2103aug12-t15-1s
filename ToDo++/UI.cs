@@ -46,6 +46,19 @@ namespace ToDo
         {
             loadOnStartupToolStripMenuItem.Checked = mainSettingsManager.GetLoadOnStartupStatus();
             startMinimizedToolStripMenuItem.Checked = mainSettingsManager.GetStartMinimizedStatus();
+            richTextBox_output.SetOutputSize(mainSettingsManager.GetTextSize());
+        }
+
+        public void IncreaseSizeOfOutput()
+        {
+            mainSettingsManager.IncreaseTextSize();
+            richTextBox_output.SetOutputSize(mainSettingsManager.GetTextSize());
+        }
+
+        public void DecreaseSizeOfOutput()
+        {
+            mainSettingsManager.DecreaseTextSize();
+            richTextBox_output.SetOutputSize(mainSettingsManager.GetTextSize());
         }
 
         private void invertMinimizedToolStrip()
@@ -138,38 +151,17 @@ namespace ToDo
 
         #region TextBoxInputFormatting
 
-        //Set Formatting for your Text
-        private void SetFormat(Color color, string text)
+        private void ProcessText()
         {
-            RichTextBox box = richTextBox_output;
-            int start = box.TextLength;
-            box.AppendText(text);
-            int end = box.TextLength;
-
-            // Textbox may transform chars, so (end-start) != text.Length
-            box.Select(start, end - start + 1);
-            box.SelectionColor = color;
-            // could set box.SelectionBackColor, box.SelectionFont, etc...
-            box.SelectionLength = 0; // clear
-        }
-
-        //Append the Output Window
-        void DisplayCommand(string userInput)
-        {
-            SetFormat(Color.Blue, "Username: ");
-            SetFormat(Color.Black, userInput);
-            SetFormat(Color.Red, "\n");
-            SetFormat(Color.Red, "ToDo++: ");
-            SetFormat(Color.Black, "aa");
-            SetFormat(Color.Red, "\n");
-            textBox_input.Text = "";
-            richTextBox_output.ScrollToCaret();
+            richTextBox_output.DisplayCommand(textBox_input.Text);
+            richTextBox_output.SetOutputSize(mainSettingsManager.GetTextSize());
+            textBox_input.Clear();
         }
 
         //Go Button Clicked
         private void button_go_Click(object sender, EventArgs e)
         {
-            DisplayCommand(textBox_input.Text);
+            ProcessText();
         }
 
         //Enter Pressed while inputbox is in focus
@@ -177,7 +169,7 @@ namespace ToDo
         {
             if (e.KeyChar == (char)13)
             {
-                DisplayCommand(textBox_input.Text);
+                ProcessText();
             }
         }
 
@@ -210,6 +202,16 @@ namespace ToDo
         {
             Settings settingsForm = new Settings(mainSettingsManager);
             settingsForm.ShowDialog();
+        }
+
+        private void increaseSizeButton_Click(object sender, EventArgs e)
+        {
+            IncreaseSizeOfOutput();
+        }
+
+        private void decreaseSizeButton_Click(object sender, EventArgs e)
+        {
+            DecreaseSizeOfOutput();
         }
 
 
