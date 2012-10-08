@@ -119,9 +119,13 @@ namespace ToDo
             return date_alphabeticFormat.IsMatch(theDate);
         }
 
-        internal static void CheckAlphabeticDateDayMonthYearTags(string theDate)
+        internal static void CheckAlphabeticDateDayMonthYearTags(string input, ref string theMatch, ref string day, ref string month, ref string year)
         {
-            Match match = date_alphabeticFormat.Match();
+            Match match = date_alphabeticFormat.Match(input.ToLower());
+            theMatch = match.Value;
+            day = match.Groups["day"].Value;
+            month = match.Groups["month"].Value;
+            year = match.Groups["year"].Value;
         }
 
         public static List<string> MergeDateWords(List<string> input)
@@ -262,7 +266,6 @@ namespace ToDo
             }
         }
         }
-
 
     public class Token
     {
