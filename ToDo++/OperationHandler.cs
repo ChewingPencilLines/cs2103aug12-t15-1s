@@ -46,7 +46,7 @@ namespace ToDo
         {
             try
             {
-                Task taskToDelete = operation.GetTask();
+              //  Task taskToDelete = operation.GetTask();
                 taskList.RemoveAt(operation.index);
 
                 xml.WriteXML(taskList);
