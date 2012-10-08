@@ -25,6 +25,11 @@ namespace ToDo
         //Need to take in an instance of Operation to execute
         public Responses ExecuteOperation(Operation operation)
         {
+            return Responses.ERROR;
+        }
+
+        public Responses ExecuteOperationAdd(OperationAdd operation)
+        {
             try
             {
                 Task taskToAdd = operation.GetTask();
@@ -34,7 +39,7 @@ namespace ToDo
 
                 return Responses.ADD_SUCCESS;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
                 return Responses.ERROR;
