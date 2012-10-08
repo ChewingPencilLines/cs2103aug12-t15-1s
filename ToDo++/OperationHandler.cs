@@ -3,18 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
-using System.Reflection;
-using System.Xml.Serialization;
+
 
 namespace ToDo
 {
     public class OperationHandler
     {
         private TaskList taskList;
+        private Stack<Operation> undoStack;
+        private Stack<Operation> redoStack;
+        private XML xml;
         
         public OperationHandler()
         {
-             
+            taskList = new TaskList();
+            undoStack = new Stack<Operation>();
+            redoStack = new Stack<Operation>();
+            xml = new XML();
         }
 
         //Need to take in an instance of Operation to execute
@@ -24,8 +29,8 @@ namespace ToDo
             {
                 Task taskToAdd = operation.GetTask();
                 taskList.Add(taskToAdd);
-               
-                WriteXML();
+
+                xml.WriteXML(taskList);
 
                 return Responses.ADD_SUCCESS;
             }
@@ -37,25 +42,26 @@ namespace ToDo
 
         }
 
-        public void WriteXML()
+        public Responses ExecuteOperationdDelete(OperationDelete operation)
         {
+            try
+            {
+                Task taskToDelete = operation.GetTask();
+                taskList.RemoveAt(operation.index);
 
-            // use reflection to get all derived types
-            var knownTypes = Assembly.GetExecutingAssembly().GetTypes().Where(
-                t => typeof(TaskList).IsAssignableFrom(t) || typeof(
-                TaskFloating).IsAssignableFrom(t) || typeof(TaskDeadline).IsAssignableFrom(t)).ToArray();
+                xml.WriteXML(taskList);
 
-            // prepare to serialize a car object
-            XmlSerializer writer = new XmlSerializer(typeof(TaskList), knownTypes);
+                return Responses.DELETE_SUCCESS;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+                return Responses.ERROR;
+            }
 
-            //System.Xml.Serialization.XmlSerializer writer =
-            //    new System.Xml.Serialization.XmlSerializer(typeof(TaskList));
-
-            System.IO.StreamWriter file = new System.IO.StreamWriter(
-                @"C:\Users\Raaj\Desktop\SerializationOverview.xml");
-            writer.Serialize(file, taskList);
-            file.Close();
         }
+
+       
     }
 
 }

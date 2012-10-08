@@ -30,7 +30,7 @@ namespace ToDo
         }
     }
 
-    class OperationSearch:Operation
+    public class OperationSearch:Operation
     {
         //Think of Variables
         public OperationSearch()
@@ -39,9 +39,9 @@ namespace ToDo
         public override Task GetTask() { return null;}
     }
 
-    class OperationDelete:Operation
+    public class OperationDelete:Operation
     {
-        int index;
+        public int index;
 
         public OperationDelete(int DeleteIndex)
         {
@@ -51,7 +51,7 @@ namespace ToDo
         public override Task GetTask() { return null; }
     }
 
-    class OperationModify:Operation
+    public class OperationModify:Operation
     {
         private Task newTask;
         private Task oldTask;
@@ -65,7 +65,7 @@ namespace ToDo
         public override Task GetTask() { return null; }
     }
 
-    class OperationUndo:Operation
+    public class OperationUndo:Operation
     {
         //Variables not needed for now
         public OperationUndo()
