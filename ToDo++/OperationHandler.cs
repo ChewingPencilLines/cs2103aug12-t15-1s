@@ -11,14 +11,10 @@ namespace ToDo
     public class OperationHandler
     {
         private TaskList taskList;
-        private Stack<Operation> undoStack;
-        private Stack<Operation> redoStack;
-
+        
         public OperationHandler()
         {
-            taskList = new TaskList();
-            undoStack = new Stack<Operation>();
-            redoStack = new Stack<Operation>();
+             
         }
 
         //Need to take in an instance of Operation to execute
@@ -28,7 +24,7 @@ namespace ToDo
             {
                 Task taskToAdd = operation.GetTask();
                 taskList.Add(taskToAdd);
-                undoStack.Push(operation);
+               
                 WriteXML();
 
                 return Responses.ADD_SUCCESS;
@@ -37,25 +33,6 @@ namespace ToDo
             {
                 Debug.WriteLine(e.ToString());
                 return Responses.ERROR;
-            }
-
-        }
-
-        public string ExecuteOperation2(Operation operation)
-        {
-            try
-            {
-                Task taskToAdd = operation.GetTask();
-                taskList.Add(taskToAdd);
-                undoStack.Push(operation);
-                WriteXML();
-
-                return "ok";
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.ToString());
-                return e.ToString();
             }
 
         }
