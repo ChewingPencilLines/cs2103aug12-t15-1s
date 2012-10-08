@@ -61,6 +61,25 @@ namespace ToDo
 
         }
 
+        public Responses ExecuteOperationdModify(OperationModify operation)
+        {
+            try
+            {
+                Task taskRevised = operation.GetTask();
+                taskList[operation.oldTaskindex] = taskRevised;
+
+                xml.WriteXML(taskList);
+
+                return Responses.MODIFY_SUCCESS;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+                return Responses.ERROR;
+            }
+
+        }
+
        
     }
 

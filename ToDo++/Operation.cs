@@ -53,16 +53,19 @@ namespace ToDo
 
     public class OperationModify:Operation
     {
+        public int oldTaskindex;
         private Task newTask;
-        private Task oldTask;
 
-        public OperationModify(Task Previous, Task Revised)
+        public OperationModify(int Previous, Task Revised)
         {
-            oldTask = Previous;
+            oldTaskindex = Previous;
             newTask = Revised;
         }
 
-        public override Task GetTask() { return null; }
+        public override Task GetTask() 
+        {
+            return newTask;
+        }
     }
 
     public class OperationUndo:Operation

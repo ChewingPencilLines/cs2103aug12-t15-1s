@@ -11,6 +11,8 @@ namespace ToDo
 
         DELETE_SUCCESS,
 
+        MODIFY_SUCCESS,
+
         ERROR
     }
 }
