@@ -119,13 +119,19 @@ namespace ToDo
             return date_alphabeticFormat.IsMatch(theDate);
         }
 
-        internal static void CheckAlphabeticDateDayMonthYearTags(string input, ref string theMatch, ref string day, ref string month, ref string year)
+        internal static bool IsValidDate(string theDate)
         {
-            Match match = date_alphabeticFormat.Match(input.ToLower());
-            theMatch = match.Value;
-            day = match.Groups["day"].Value;
-            month = match.Groups["month"].Value;
-            year = match.Groups["year"].Value;
+            return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate);
+        }
+
+        internal static Match GetMatch(string theWord)
+        {
+            Match theMatch = date_numericFormat.Match(theWord.ToLower());
+            if (theMatch == Match.Empty)
+            {
+                theMatch = date_alphabeticFormat.Match(theWord.ToLower());
+            }
+            return theMatch;
         }
 
         internal static void GetMatchTagValues(Match match, ref string day, ref string month, ref string year)
@@ -135,48 +141,29 @@ namespace ToDo
             year = match.Groups["year"].Value;
         }
 
-        public static List<string> MergeDateWords(List<string> input)
+        // This method convert the day, month and year strings into their equivalent integers.
+        // If the day and year strings are empty, they will be converted to zeroes.
+        internal static void ConvertMatchTagValuesToInts(string dayString, string monthString, string yearString, ref int dayInt, ref int monthInt, ref int yearInt)
         {
-            List<string> output = new List<string>();
-            int position = 0, skipWords = 0;
-            bool isWordAdded = false;
-            // check for all full or partial dates in alphabetic date formats
-            foreach (string word in input)
-            {
-                if (skipWords > 0)
-                {
-                    skipWords--;
-                    position++;
-                    continue;
-                }
-                foreach (string keyword in monthKeywords)
-                {
-                    if (word.ToLower() == keyword)
-                    {
-                        isWordAdded = MergeWord_IfValidAlphabeticDate(ref output, input, position, ref skipWords);
-                        if (isWordAdded) break;
-                    }
-                }
-                if (!isWordAdded) output.Add(word);
-                isWordAdded = false;
-                position++;
-            }
-            // dates in numeric date formats and dates that are only specified by day with suffixes i.e. "15th"
-            // need not be checked for and merged since they are already whole words on their own.
-            return output;
+            dayString = RemoveSuffixesIfRequired(dayString);
+            monthString = ConvertToNumericMonthIfRequired(monthString);
+            int.TryParse(dayString, out dayInt);
+            int.TryParse(monthString, out monthInt);
+            int.TryParse(yearString, out yearInt);
         }
 
         /* Note that "12 may 2012 2012" will produce merged word "12 may 2012"
          * and "12 may 23 2012" will produce the merged word "12 may 23".
          */
 
-        public static bool MergeWord_IfValidAlphabeticDate(ref List<string> output, List<string> input, int position, ref int numberOfWords)
+        internal static bool MergeWord_IfValidAlphabeticDate(ref List<string> output, List<string> input, int position, ref int numberOfWords)
         {
             string month = input.ElementAt(position);
             string mergedWord = month;
             bool isWordUsed = false;
             int i = 1;
-            if ((position > 0) && (IsValidAlphabeticDate(input[position - 1] + " " + mergedWord.ToLower())))
+            if ((position > 0) &&
+                (IsValidAlphabeticDate(input[position - 1] + " " + mergedWord.ToLower())))
             {
                 mergedWord = input[position - 1] + " " + mergedWord;
                 isWordUsed = true;
@@ -184,69 +171,31 @@ namespace ToDo
             while (position + i < input.Count)
             {
                 if (IsValidAlphabeticDate(mergedWord.ToLower() + " " + input[position + i]))
+                {
                     mergedWord = mergedWord + " " + input[position + i];
+                }
                 else break;
                 i++;
             }
             if (mergedWord == month)
+            {
                 return false;
+            }
             if (isWordUsed == true)
+            {
                 output.RemoveAt(output.Count - 1);
+            }
             output.Add(mergedWord);
             numberOfWords = i - 1;
             return true;
         }
 
-        public static List<Token> GenerateDateTokens(List<string> input)
+        internal static string ConvertToNumericMonthIfRequired(string month)
         {
-            string dayString = String.Empty;
-            string monthString = String.Empty;
-            string yearString = String.Empty;
-            int day, month, year;
-            int index = 0;
-            DateTime dateTime;
-            bool isSpecific = true;
-            List<Token> dateTokens = new List<Token>();
-            foreach (string word in input)
+            if (Char.IsDigit(month[0]))
             {
-                if (IsValidNumericDate(word.ToLower()) || IsValidAlphabeticDate(word.ToLower()))
-                {
-                    Match theMatch = date_numericFormat.Match(word.ToLower());
-                    if (theMatch == Match.Empty)
-                        theMatch = date_alphabeticFormat.Match(word.ToLower());
-                    GetMatchTagValues(theMatch, ref dayString, ref monthString, ref yearString);
-                    dayString = RemoveSuffixesIfRequired(dayString);
-                    monthString = ConvertToNumericMonthIfRequired(monthString);
-                    int.TryParse(dayString, out day);
-                    int.TryParse(monthString, out month);
-                    int.TryParse(yearString, out year);
-                    if (day == 0)
-                    {
-                        isSpecific = false;
-                        day = 1;
-                    } 
-                    if (year == 0)
-                    {
-                        dateTime = new DateTime(DateTime.Today.Year, month, day);
-                        if (DateTime.Compare(dateTime, DateTime.Today) < 0)
-                            dateTime = new DateTime(DateTime.Today.AddYears(1).Year, month, day);
-                    }
-                    else
-                    {
-                        dateTime = new DateTime(year, month, day);
-                    }
-                    TokenDate dateToken = new TokenDate(index, dateTime, isSpecific);
-                    dateTokens.Add(dateToken);
-                }
-                index++;
-                isSpecific = true;
+                return month;
             }
-            return dateTokens;
-        }
-
-        public static string ConvertToNumericMonthIfRequired(string month)
-        {
-            if (Char.IsDigit(month.Last())) return month;
             switch (month.ToLower())
             {
                 case "jan":
@@ -290,12 +239,123 @@ namespace ToDo
             }
         }
 
-        public static string RemoveSuffixesIfRequired(string day)
+        internal static string RemoveSuffixesIfRequired(string day)
         {
-            if (day == String.Empty) return day;
-            if(!Char.IsDigit(day.Last()))
-                day = day.Remove(day.Length-2, 2);
+            if (day == String.Empty)
+            {
+                return day;
+            }
+            // remove appended suffixes
+            if (!Char.IsDigit(day.Last()))
+            {
+                day = day.Remove(day.Length - 2, 2);
+            }
             return day;
+        }
+
+        internal static bool ValidateDate(DateTime theDate)
+        {
+
+            return true;
+        }
+
+        public static List<string> MergeDateWords(List<string> input)
+        {
+            List<string> output = new List<string>();
+            int position = 0, skipWords = 0;
+            bool isWordAdded = false;
+            // check for all full or partial dates in alphabetic date formats
+            foreach (string word in input)
+            {
+                if (skipWords > 0)
+                {
+                    skipWords--;
+                    position++;
+                    continue;
+                }
+                foreach (string keyword in monthKeywords)
+                {
+                    if (word.ToLower() == keyword)
+                    {
+                        isWordAdded = MergeWord_IfValidAlphabeticDate(ref output, input, position, ref skipWords);
+                        if (isWordAdded) break;
+                    }
+                }
+                if (!isWordAdded) output.Add(word);
+                isWordAdded = false;
+                position++;
+            }
+            // dates in numeric date formats and dates that are only specified by day with suffixes i.e. "15th"
+            // need not be checked for and merged since they are already whole words on their own.
+            return output;
+        }
+            
+        public static List<TokenDate> GenerateDateTokens(List<string> input)
+        {
+            string dayString = String.Empty;
+            string monthString = String.Empty;
+            string yearString = String.Empty;
+            int day = 0;
+            int month = 0;
+            int year = 0;
+            int index = 0;
+            bool isSpecific = true;
+            List<TokenDate> dateTokens = new List<TokenDate>();
+            foreach (string word in input)
+            {
+                if (IsValidDate(word.ToLower()))
+                {
+                    DateTime dateTime;
+                    Match match = GetMatch(word.ToLower());
+                    GetMatchTagValues(match, ref dayString, ref monthString, ref yearString);
+                    ConvertMatchTagValuesToInts(dayString, monthString, yearString, ref day, ref month, ref year);
+                    // no day input
+                    if (day == 0)
+                    {
+                        isSpecific = false;
+                        day = 1;
+                    }
+                    // no year input
+                    if (year == 0)
+                    {
+                        try
+                        {
+                            dateTime = new DateTime(DateTime.Today.Year, month, day);
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            continue;
+                        }
+                        if (DateTime.Compare(dateTime, DateTime.Today) < 0)
+                        {
+                            try
+                            {
+                                dateTime = new DateTime(DateTime.Today.AddYears(1).Year, month, day);
+                            }
+                            catch (ArgumentOutOfRangeException)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            dateTime = new DateTime(year, month, day);
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            continue;
+                        }
+                    }
+                    TokenDate dateToken = new TokenDate(index, dateTime, isSpecific);
+                    dateTokens.Add(dateToken);
+                }
+                index++;
+                isSpecific = true;
+            }
+            return dateTokens;
         }
     }
 
