@@ -154,5 +154,20 @@ namespace StringParserTest
             List<string> input3 = new List<string>() { "add", "use", "kuishinbo", "3rd", "anniversary", "buffet", "voucher", "by", "9 jan 2013" };
             List<string> input4 = new List<string>() { "add", "complete", "project", "by", "january 2013" };
         }
+
+        [TestMethod]
+        public void CheckAlphabeticDateDayMonthYearTags()
+        {
+            string input1 = "23rd January 2012";
+            string theMatch = "";
+            string day = "";
+            string month = "";
+            string year = "";
+            StringParser.CheckAlphabeticDateDayMonthYearTags(input1, ref theMatch, ref day, ref month, ref year);
+            Assert.AreEqual("23 jan 2012", theMatch);
+            Assert.AreEqual("23", day);
+            Assert.AreEqual("jan", month);
+            Assert.AreEqual("2012", year);
+        }
     }
 }
