@@ -114,9 +114,9 @@ namespace StringParserTest
         [TestMethod]
         public void MergeWord_IfValidAlphabeticDate()
         {
-            List<string> input1 = new List<string>() { "add", "buy", "new", "dog", "by", "22nd", "dec", "2012" };
+            List<string> input1 = new List<string>() { "add", "buy", "new", "dog", "by", "22nd", "dec", "12" };
             List<string> output1 = new List<string>() { "add", "buy", "new", "dog", "by", "22nd" };
-            List<string> expectedOutput1 = new List<string>() { "add", "buy", "new", "dog", "by", "22nd dec 2012" };
+            List<string> expectedOutput1 = new List<string>() { "add", "buy", "new", "dog", "by", "22nd dec 12" };
             int position1 = 6, skipWords = 0; // "dec" is the 6th
             Assert.IsTrue(StringParser.MergeWord_IfValidAlphabeticDate(ref output1, input1, position1, ref skipWords));
             Assert.AreEqual(1, skipWords);
@@ -143,30 +143,55 @@ namespace StringParserTest
         public void GenerateDateTokens()
         {
             List<string> input1 = new List<string>() { "add", "submit", "lucky", "draw", "entry", "from", "21st Dec 2012", "to", "30th Jan 2013" };
-            TokenDate dateToken1a = new TokenDate(6, DateTime.Parse("2012-12-21"), true);
-            TokenDate dateToken1b = new TokenDate(8, DateTime.Parse("2013-1-30"), true);
             List<Token> output1 = new List<Token>();
-            List<Token> expectedOutput1 = new List<Token>() { dateToken1a, dateToken1b };
+            TokenDate expectedDateToken1a = new TokenDate(6, DateTime.Parse("2012-12-21"), true);
+            TokenDate expectedDateToken1b = new TokenDate(8, DateTime.Parse("2013-1-30"), true);
+            List<Token> expectedOutput1 = new List<Token>() { expectedDateToken1a, expectedDateToken1b };
             output1 = StringParser.GenerateDateTokens(input1);
             Assert.AreEqual(expectedOutput1.Count, output1.Count);
-            CollectionAssert.AreEqual(expectedOutput1, output1);
             List<string> input2 = new List<string>() { "add", "30th Dec 2013", "jenna's", "birthday" };
+            List<Token> output2 = new List<Token>();
+            TokenDate expectedDateToken2a = new TokenDate(1, DateTime.Parse("2013-12-30"), true);
+            List<Token> expectedOutput2 = new List<Token>() { expectedDateToken2a };
+            output2 = StringParser.GenerateDateTokens(input2);
+            Assert.AreEqual(expectedOutput2.Count, output2.Count);
             List<string> input3 = new List<string>() { "add", "use", "kuishinbo", "3rd", "anniversary", "buffet", "voucher", "by", "9 jan 2013" };
+            List<Token> output3 = new List<Token>();
+            TokenDate expectedDateToken3a = new TokenDate(1, DateTime.Parse("2013-1-9"), true);
+            List<Token> expectedOutput3 = new List<Token>() { expectedDateToken3a };
+            output3 = StringParser.GenerateDateTokens(input3);
+            Assert.AreEqual(expectedOutput3.Count, output3.Count);
             List<string> input4 = new List<string>() { "add", "complete", "project", "by", "january 2013" };
+            List<Token> output4 = new List<Token>();
+            TokenDate expectedDateToken4a = new TokenDate(1, DateTime.Parse("2013-1-1"), false);
+            List<Token> expectedOutput4 = new List<Token>() { expectedDateToken4a };
+            output4 = StringParser.GenerateDateTokens(input4);
+            Assert.AreEqual(expectedOutput4.Count, output4.Count);
+        }
+
+        [TestMethod]
+        public void RemoveSuffixesIfRequired()
+        {
+            string day = StringParser.RemoveSuffixesIfRequired("23rd");
+            Assert.AreEqual("23", day);
+            day = StringParser.RemoveSuffixesIfRequired("11th");
+            Assert.AreEqual("11", day);
+            day = StringParser.RemoveSuffixesIfRequired("1st");
+            Assert.AreEqual("1", day);
         }
 
         [TestMethod]
         public void CheckAlphabeticDateDayMonthYearTags()
         {
-            string input1 = "23rd January 2012";
+            string input1 = "21st Dec 2012";
             string theMatch = "";
             string day = "";
             string month = "";
             string year = "";
             StringParser.CheckAlphabeticDateDayMonthYearTags(input1, ref theMatch, ref day, ref month, ref year);
-            Assert.AreEqual("23 jan 2012", theMatch);
-            Assert.AreEqual("23", day);
-            Assert.AreEqual("jan", month);
+            Assert.AreEqual("21st dec 2012", theMatch);
+            Assert.AreEqual("21st", day);
+            Assert.AreEqual("dec", month);
             Assert.AreEqual("2012", year);
         }
     }

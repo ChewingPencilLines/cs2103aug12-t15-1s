@@ -13,10 +13,10 @@ using System.Text.RegularExpressions;
 
 namespace ToDo
 {
-    enum NumericDateType { YMD, DMY, MDY };    
+    enum NumericDateType { YMD, DMY, MDY };
 
     public static class StringParser
-    {   
+    {
         static List<string> monthKeywords;
         static List<string> suffixedDayOfMonthKeywords;
 
@@ -41,7 +41,7 @@ namespace ToDo
                                                  "nov", "november",
                                                  "dec", "december" };
         }
-        
+
         private static void InitializeSuffixedDayOfMonthKeywords()
         {
             suffixedDayOfMonthKeywords = new List<string>() { "1st", "2nd", "3rd",
@@ -84,7 +84,7 @@ namespace ToDo
                         ))
                         $"
             , RegexOptions.IgnorePatternWhitespace);
-        
+
         // checks day-month-year and month-day-year format; the formal takes precedence if the input matches both
         // note that inputs such as "15th" will not result in a match; need to recheck later
         static Regex date_alphabeticFormat =
@@ -123,6 +123,13 @@ namespace ToDo
         {
             Match match = date_alphabeticFormat.Match(input.ToLower());
             theMatch = match.Value;
+            day = match.Groups["day"].Value;
+            month = match.Groups["month"].Value;
+            year = match.Groups["year"].Value;
+        }
+
+        internal static void GetMatchTagValues(Match match, ref string day, ref string month, ref string year)
+        {
             day = match.Groups["day"].Value;
             month = match.Groups["month"].Value;
             year = match.Groups["year"].Value;
@@ -169,7 +176,7 @@ namespace ToDo
             string mergedWord = month;
             bool isWordUsed = false;
             int i = 1;
-            if((position > 0) && (IsValidAlphabeticDate(input[position - 1] + " " + mergedWord.ToLower())))
+            if ((position > 0) && (IsValidAlphabeticDate(input[position - 1] + " " + mergedWord.ToLower())))
             {
                 mergedWord = input[position - 1] + " " + mergedWord;
                 isWordUsed = true;
@@ -192,8 +199,11 @@ namespace ToDo
 
         public static List<Token> GenerateDateTokens(List<string> input)
         {
-            int day, year, month, index = 0;
-            string monthString;
+            string dayString = String.Empty;
+            string monthString = String.Empty;
+            string yearString = String.Empty;
+            int day, month, year;
+            int index = 0;
             DateTime dateTime;
             bool isSpecific = true;
             List<Token> dateTokens = new List<Token>();
@@ -201,19 +211,20 @@ namespace ToDo
             {
                 if (IsValidNumericDate(word.ToLower()) || IsValidAlphabeticDate(word.ToLower()))
                 {
-                    Match match = date_numericFormat.Match(word);
-                    int.TryParse(match.Groups["day"].Value, out day);
-                    monthString = match.Groups["month"].Value;
-                    int.TryParse(match.Groups["year"].Value, out year);
+                    Match theMatch = date_numericFormat.Match(word.ToLower());
+                    if (theMatch == Match.Empty)
+                        theMatch = date_alphabeticFormat.Match(word.ToLower());
+                    GetMatchTagValues(theMatch, ref dayString, ref monthString, ref yearString);
+                    dayString = RemoveSuffixesIfRequired(dayString);
+                    monthString = ConvertToNumericMonthIfRequired(monthString);
+                    int.TryParse(dayString, out day);
+                    int.TryParse(monthString, out month);
+                    int.TryParse(yearString, out year);
                     if (day == 0)
                     {
                         isSpecific = false;
                         day = 1;
-                    }
-                    
-                    if (!Char.IsDigit(monthString[0]))
-                        monthString = convertToNumericMonth(monthString);
-                    int.TryParse(monthString, out month);
+                    } 
                     if (year == 0)
                     {
                         dateTime = new DateTime(DateTime.Today.Year, month, day);
@@ -233,39 +244,60 @@ namespace ToDo
             return dateTokens;
         }
 
-        public static string convertToNumericMonth(string month)
+        public static string ConvertToNumericMonthIfRequired(string month)
         {
+            if (Char.IsDigit(month.Last())) return month;
             switch (month.ToLower())
             {
                 case "jan":
+                case "january":
                     return "1";
                 case "feb":
+                case "february":
                     return "2";
                 case "mar":
+                case "march":
                     return "3";
                 case "apr":
+                case "april":
                     return "4";
                 case "may":
                     return "5";
                 case "jun":
+                case "june":
                     return "6";
                 case "jul":
+                case "july":
                     return "7";
                 case "aug":
+                case "august":
                     return "8";
                 case "sep":
+                case "sept":
+                case "september":
                     return "9";
                 case "oct":
+                case "october":
                     return "10";
                 case "nov":
+                case "november":
                     return "11";
                 case "dec":
+                case "december":
                     return "12";
                 default:
                     throw new Exception("Unrecognized month");
             }
         }
+
+        public static string RemoveSuffixesIfRequired(string day)
+        {
+            if (day == String.Empty) return day;
+            if(!Char.IsDigit(day.Last()))
+                day = day.Remove(day.Length-2, 2);
+            return day;
         }
+    }
 
     public class Token
     {
