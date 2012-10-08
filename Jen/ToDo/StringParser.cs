@@ -253,12 +253,6 @@ namespace ToDo
             return day;
         }
 
-        internal static bool ValidateDate(DateTime theDate)
-        {
-
-            return true;
-        }
-
         public static List<string> MergeDateWords(List<string> input)
         {
             List<string> output = new List<string>();
