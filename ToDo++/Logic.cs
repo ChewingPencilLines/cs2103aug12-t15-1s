@@ -8,8 +8,7 @@ namespace ToDo
     class Logic
     {
         OperationHandler operationHandler; 
-        private Stack<Operation> undoStack;
-        private Stack<Operation> redoStack;
+       
 
         public Logic()
         {
@@ -20,7 +19,6 @@ namespace ToDo
         {
             //string command = ValidateCommand(input);
             Operation operation = ParseCommand(input);
-            undoStack.Push(operation);
             return ExecuteCommand(operation);
         }
 

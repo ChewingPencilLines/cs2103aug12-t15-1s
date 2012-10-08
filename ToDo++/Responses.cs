@@ -9,6 +9,8 @@ namespace ToDo
     {
         ADD_SUCCESS,
 
+        DELETE_SUCCESS,
+
         ERROR
     }
 }
