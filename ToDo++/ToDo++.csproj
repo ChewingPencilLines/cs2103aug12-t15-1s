@@ -44,33 +44,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CRUD.cs" />
-    <Compile Include="CommandOutput.cs">
+    <Compile Include="UI\OutputBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Operation.cs" />
-    <Compile Include="Responses.cs" />
-    <Compile Include="Settings.cs">
+    <Compile Include="Settings\Settings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Settings.Designer.cs">
+    <Compile Include="Settings\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingsManager.cs" />
-    <Compile Include="Task.cs" />
-    <Compile Include="TaskList.cs" />
-    <Compile Include="UI.cs">
+    <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="UI\UI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI.Designer.cs">
+    <Compile Include="UI\UI.Designer.cs">
       <DependentUpon>UI.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Settings.resx">
+    <EmbeddedResource Include="Settings\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI.resx">
+    <EmbeddedResource Include="UI\UI.resx">
       <DependentUpon>UI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -83,7 +78,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="TaskClassDiagram.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -95,12 +89,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Resources\App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
+    <Content Include="Resources\icon.ico" />
     <None Include="Resources\tempImage.png" />
-    <Content Include="tempImage.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CustomControls\CustomControls.csproj">

@@ -11,7 +11,7 @@ using System.IO;
 
 namespace ToDo
 {
-    class CommandOutput: RichTextBox
+    class OutputBox: RichTextBox
     {
         //Set Formatting for your Text
         public void SetFormat(Color color, string text, int size)

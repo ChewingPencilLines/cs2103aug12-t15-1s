@@ -59,7 +59,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.decreaseSizeButton = new System.Windows.Forms.Button();
             this.increaseSizeButton = new System.Windows.Forms.Button();
-            this.richTextBox_output = new ToDo.CommandOutput();
+            this.richTextBox_output = new ToDo.OutputBox();
             this.timeDateControl1 = new CustomControls.TimeDateControl();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -371,7 +371,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button decreaseSizeButton;
         private System.Windows.Forms.Button increaseSizeButton;
-        private CommandOutput richTextBox_output;
+        private OutputBox richTextBox_output;
         private CustomControls.TimeDateControl timeDateControl1;
     }
 }

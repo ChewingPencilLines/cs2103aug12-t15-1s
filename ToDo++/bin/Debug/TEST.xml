@@ -5,6 +5,7 @@
   <textSize>11</textSize>
   <customKeywords_ADD>
     <string>+</string>
+    <string>++</string>
   </customKeywords_ADD>
   <customKeywords_DELETE>
     <string>-</string>
