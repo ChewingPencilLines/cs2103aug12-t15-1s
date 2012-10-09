@@ -12,7 +12,7 @@ namespace ToDo
 
         public Logic()
         {
-            operationHandler = new OperationHandler();
+            //operationHandler = new OperationHandler();
         }
 
         public string ProcessCommand(string input)

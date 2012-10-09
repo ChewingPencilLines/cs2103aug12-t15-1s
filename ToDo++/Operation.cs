@@ -11,8 +11,8 @@ namespace ToDo
         {
 
         }
-        
-        public abstract Task GetTask();
+
+        abstract public Task GetTask();
     }
 
     public class OperationAdd:Operation

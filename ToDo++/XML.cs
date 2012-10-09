@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace ToDo
 {
-    class XML
+    public class XML
     {
         public XML()
         {   }
