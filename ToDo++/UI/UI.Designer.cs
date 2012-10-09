@@ -35,10 +35,10 @@
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.decreaseSizeButton = new System.Windows.Forms.Button();
             this.increaseSizeButton = new System.Windows.Forms.Button();
-            this.timeDateControl1 = new CustomControls.TimeDateControl();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip = new ToDo.Menu();
-            this.richTextBox_output = new ToDo.OutputBox();
+            this.timeDateControl1 = new CustomControls.TimeDateControl();
+            this.outputBox = new ToDo.OutputBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -89,14 +89,6 @@
             this.increaseSizeButton.UseVisualStyleBackColor = false;
             this.increaseSizeButton.Click += new System.EventHandler(this.increaseSizeButton_Click);
             // 
-            // timeDateControl1
-            // 
-            this.timeDateControl1.BackColor = System.Drawing.Color.Transparent;
-            this.timeDateControl1.Location = new System.Drawing.Point(139, 29);
-            this.timeDateControl1.Name = "timeDateControl1";
-            this.timeDateControl1.Size = new System.Drawing.Size(150, 24);
-            this.timeDateControl1.TabIndex = 8;
-            // 
             // pictureBox1
             // 
             this.pictureBox1.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.ErrorImage")));
@@ -114,14 +106,22 @@
             this.menuStrip.Size = new System.Drawing.Size(403, 24);
             this.menuStrip.TabIndex = 9;
             // 
-            // richTextBox_output
+            // timeDateControl1
             // 
-            this.richTextBox_output.Location = new System.Drawing.Point(13, 62);
-            this.richTextBox_output.Name = "richTextBox_output";
-            this.richTextBox_output.ReadOnly = true;
-            this.richTextBox_output.Size = new System.Drawing.Size(378, 162);
-            this.richTextBox_output.TabIndex = 7;
-            this.richTextBox_output.Text = "";
+            this.timeDateControl1.BackColor = System.Drawing.Color.Transparent;
+            this.timeDateControl1.Location = new System.Drawing.Point(161, 35);
+            this.timeDateControl1.Name = "timeDateControl1";
+            this.timeDateControl1.Size = new System.Drawing.Size(150, 17);
+            this.timeDateControl1.TabIndex = 8;
+            // 
+            // outputBox
+            // 
+            this.outputBox.Location = new System.Drawing.Point(13, 62);
+            this.outputBox.Name = "outputBox";
+            this.outputBox.ReadOnly = true;
+            this.outputBox.Size = new System.Drawing.Size(378, 162);
+            this.outputBox.TabIndex = 7;
+            this.outputBox.Text = "";
             // 
             // UI
             // 
@@ -130,7 +130,7 @@
             this.ClientSize = new System.Drawing.Size(403, 262);
             this.Controls.Add(this.menuStrip);
             this.Controls.Add(this.timeDateControl1);
-            this.Controls.Add(this.richTextBox_output);
+            this.Controls.Add(this.outputBox);
             this.Controls.Add(this.increaseSizeButton);
             this.Controls.Add(this.decreaseSizeButton);
             this.Controls.Add(this.pictureBox1);
@@ -153,7 +153,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button decreaseSizeButton;
         private System.Windows.Forms.Button increaseSizeButton;
-        private OutputBox richTextBox_output;
+        private OutputBox outputBox;
         private CustomControls.TimeDateControl timeDateControl1;
         private Menu menuStrip;
     }

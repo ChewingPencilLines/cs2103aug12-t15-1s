@@ -13,6 +13,41 @@ namespace ToDo
 {
     class OutputBox: RichTextBox
     {
+        private SettingsManager settingsManager;
+
+        public void SetSettingsManager(SettingsManager passedSettingsManager) { settingsManager = passedSettingsManager; }
+
+        public void LoadSettingsIntoOutput()
+        {
+            this.SetOutputSize(settingsManager.GetTextSize());
+        }
+
+        #region TextSizeControl
+
+        public void SetOutputSize(int size)
+        {
+            this.SelectAll();
+            var family = this.SelectedText.ToString();
+            this.SelectionFont = new Font(family, size);
+            this.DeselectAll();
+        }
+
+        public void DecreaseSizeOfOutput()
+        {
+            settingsManager.DecreaseTextSize();
+            this.SetOutputSize(settingsManager.GetTextSize());
+        }
+
+        public void IncreaseSizeOfOutput()
+        {
+            settingsManager.IncreaseTextSize();
+            this.SetOutputSize(settingsManager.GetTextSize());
+        }
+
+        #endregion
+
+        #region FormattingControl
+
         //Set Formatting for your Text
         public void SetFormat(Color color, string text, int size)
         {
@@ -21,13 +56,13 @@ namespace ToDo
             box.AppendText(text);
             int end = box.TextLength;
 
-            // Textbox may transform chars, so (end-start) != text.Length
             box.Select(start, end - start + 1);
             box.SelectionColor = color;
             box.SelectionFont = new Font("Tahoma", size);
-            // could set box.SelectionBackColor, box.SelectionFont, etc...
-            box.SelectionLength = 0; // clear
+            box.SelectionLength = 0;
         }
+
+        #endregion
 
         //Append the Output Window
         public void DisplayCommand(string userInput)
@@ -41,13 +76,5 @@ namespace ToDo
             this.ScrollToCaret();
         }
 
-        public void SetOutputSize(int size)
-        {
-            this.SelectAll();
-            var family = this.SelectedText.ToString();
-            //var style = this.SelectionFont.Style;
-            this.SelectionFont = new Font(family, size);
-            this.DeselectAll();
-        }
     }
 }

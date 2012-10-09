@@ -24,61 +24,8 @@ namespace ToDo
             PrepareSystemTray();                //Loads Code to place App in System Tray
             PrepareSettingsManager();           //Loads initial Settings of App and applies the settings
             PrepareMenu();                      //Loads the menu strip
+            PrepareOutputBox();                 //Loads Output Box
         }
-
-        #region PrepareMenu
-
-        public void PrepareMenu()
-        {
-            menuStrip.SetSettingsManager(mainSettingsManager);
-            menuStrip.LoadSettingsIntoMenu();
-        }
-
-        #endregion
-
-        #region PrepareSettingsManager
-
-        public void PrepareSettingsManager()
-        {
-            mainSettingsManager = new SettingsManager();
-            SetSettingsInUI();
-            MinimiseToTrayWhenChecked();
-        }
-
-        public void SetSettingsInUI()
-        {
-            richTextBox_output.SetOutputSize(mainSettingsManager.GetTextSize());
-        }
-
-        public void MinimiseToTrayWhenChecked()
-        {
-            if (mainSettingsManager.GetStartMinimizedStatus() == true)
-            {
-                MinimiseMaximiseTray();
-            }
-        }
-
-
-
-        public void IncreaseSizeOfOutput()
-        {
-            mainSettingsManager.IncreaseTextSize();
-            richTextBox_output.SetOutputSize(mainSettingsManager.GetTextSize());
-        }
-
-        public void DecreaseSizeOfOutput()
-        {
-            mainSettingsManager.DecreaseTextSize();
-            richTextBox_output.SetOutputSize(mainSettingsManager.GetTextSize());
-        }
-
-
-        private void toDoToolStripMenuItem_MouseEnter(object sender, EventArgs e)
-        {
-            SetSettingsInUI();
-        }
-
-        #endregion
 
         #region MinimizeMaximizeSystemTrayHotKey
 
@@ -96,7 +43,7 @@ namespace ToDo
             base.WndProc(ref m);
         }
 
-        //Calling this Minimises or Maximizes the application into system tray depending on state
+        //Calling this Minimizes or Maximizes the application into system tray depending on state
         private void MinimiseMaximiseTray()
         {
             notifyIcon_taskBar.BalloonTipTitle = "ToDo++";
@@ -124,7 +71,7 @@ namespace ToDo
             MinimiseMaximiseTray();
         }
 
-        //Deregisters the hot-keys when the application closes
+        //De registers the hot-keys when the application closes
         private void UI_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!ghk.Unregiser())
@@ -133,12 +80,51 @@ namespace ToDo
 
         #endregion
 
-        #region TextBoxInputFormatting
+        #region PrepareSettingsManager
+
+        public void PrepareSettingsManager()
+        {
+            mainSettingsManager = new SettingsManager();
+            MinimiseToTrayWhenChecked();
+        }
+
+        //Checks if App needs to be minimized to tray initially
+        public void MinimiseToTrayWhenChecked()
+        {
+            if (mainSettingsManager.GetStartMinimizedStatus() == true)
+            {
+                MinimiseMaximiseTray();
+            }
+        }
+
+        #endregion
+
+        #region PrepareMenu
+
+        public void PrepareMenu()
+        {
+            menuStrip.SetSettingsManager(mainSettingsManager);
+            menuStrip.LoadSettingsIntoMenu();
+        }
+
+        #endregion
+
+        #region PrepareOutputBox
+
+        public void PrepareOutputBox()
+        {
+            outputBox.SetSettingsManager(mainSettingsManager);
+            outputBox.LoadSettingsIntoOutput();
+        }
+
+        #endregion
+
+        #region TextInput
 
         private void ProcessText()
         {
-            richTextBox_output.DisplayCommand(textBox_input.Text);
-            richTextBox_output.SetOutputSize(mainSettingsManager.GetTextSize());
+            outputBox.DisplayCommand(textBox_input.Text);
+            outputBox.SetOutputSize(mainSettingsManager.GetTextSize());
             textBox_input.Clear();
         }
 
@@ -159,7 +145,8 @@ namespace ToDo
 
         #endregion
 
-        //You can add keyboard commands here
+        #region KeyboardCommands
+
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.Q))
@@ -170,32 +157,22 @@ namespace ToDo
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        #endregion
+
         //Exit Command. Choose to Popup options before exiting
         public static void Exit()
         {
             Application.Exit();
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Exit();
-        }
-
-        //Open up settings page
-        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Settings settingsForm = new Settings(mainSettingsManager);
-            settingsForm.ShowDialog();
-        }
-
         private void increaseSizeButton_Click(object sender, EventArgs e)
         {
-            IncreaseSizeOfOutput();
+            outputBox.IncreaseSizeOfOutput();
         }
 
         private void decreaseSizeButton_Click(object sender, EventArgs e)
         {
-            DecreaseSizeOfOutput();
+            outputBox.DecreaseSizeOfOutput();
         }
 
 

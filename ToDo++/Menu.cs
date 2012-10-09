@@ -23,12 +23,16 @@ namespace ToDo
             startMinimizedToolStripMenuItem.Checked = settingsManager.GetStartMinimizedStatus();
         }
 
+        #region MenuEventHandlers
+
+        //Preferences Option
         private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Settings settingsForm = new Settings(settingsManager);
             settingsForm.ShowDialog();
         }
 
+        //Click Start Minimized
         private void startMinimizedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             invertMinimizedToolStrip();
@@ -66,6 +70,8 @@ namespace ToDo
         {
             Application.Exit();
         }
+
+        #endregion
 
 
     }
