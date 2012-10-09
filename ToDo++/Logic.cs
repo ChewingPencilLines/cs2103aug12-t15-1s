@@ -7,11 +7,12 @@ namespace ToDo
 {
     class Logic
     {
-        OperationHandler operationHandler;
+        OperationHandler operationHandler; 
+       
 
         public Logic()
         {
-            operationHandler = new OperationHandler();
+            //operationHandler = new OperationHandler();
         }
 
         public string ProcessCommand(string input)
