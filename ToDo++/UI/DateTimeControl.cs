@@ -8,11 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CustomControls
+namespace ToDo
 {
-    public partial class TimeDateControl : UserControl
+    public partial class DateTimeControl : UserControl
     {
-        
+        public DateTimeControl()
+        {
+            InitializeComponent();
+            SetDate();
+            Clock();
+            TransparentControl();
+        }
+
         #region Transparency
 
         public void TransparentControl()
@@ -52,14 +59,6 @@ namespace CustomControls
         
         private Timer timer;
 
-        public TimeDateControl()
-        {
-            InitializeComponent();
-            SetDate();
-            Clock();
-            TransparentControl();
-        }
-
         public void Clock()
         {
             timer = new Timer();
@@ -70,14 +69,14 @@ namespace CustomControls
 
         void Timer_Tick(object sender, EventArgs e)
         {
-            timeLabel.BackColor = Color.Transparent;
-            timeLabel.Text = DateTime.Now.ToLongTimeString();
+            time.BackColor = Color.Transparent;
+            time.Text = DateTime.Now.ToLongTimeString();
         }
 
         private void SetDate()
         {
             DateTime dt = DateTime.Now;
-            dateObject.Text = dt.ToShortDateString();
+            date.Text = dt.ToShortDateString();
         }
     }
 }
