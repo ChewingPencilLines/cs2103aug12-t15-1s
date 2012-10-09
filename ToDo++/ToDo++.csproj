@@ -71,6 +71,10 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="UI\TimeDateControl.cs" />
+    <Compile Include="UI\TimeDateControl.Designer.cs">
+      <DependentUpon>TimeDateControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\UI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,6 +89,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Settings\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\TimeDateControl.resx">
+      <DependentUpon>TimeDateControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\UI.resx">
       <DependentUpon>UI.cs</DependentUpon>
