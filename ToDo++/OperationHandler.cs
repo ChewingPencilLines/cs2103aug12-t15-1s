@@ -7,12 +7,12 @@ using System.Diagnostics;
 
 namespace ToDo
 {
-    public class OperationHandler
+    public abstract class OperationHandler
     {
-        private TaskList taskList;
-        private Stack<Operation> undoStack;
-        private Stack<Operation> redoStack;
-        private XML xml;
+        protected TaskList taskList;
+        protected Stack<Operation> undoStack;
+        protected Stack<Operation> redoStack;
+        protected XML xml;
         
         public OperationHandler()
         {
@@ -23,12 +23,15 @@ namespace ToDo
         }
 
         //Need to take in an instance of Operation to execute
-        public Responses ExecuteOperation(Operation operation)
+        abstract public Responses ExecuteOperation(Operation operation)
         {
             return Responses.ERROR;
         }
+    }
 
-        public Responses ExecuteOperationAdd(OperationAdd operation)
+    public class ExecuteAdd:OperationHandler
+    {
+        public override Responses ExecuteOperation(OperationAdd operation)
         {
             try
             {
@@ -46,8 +49,10 @@ namespace ToDo
             }
 
         }
-
-        public Responses ExecuteOperationdDelete(OperationDelete operation)
+    }
+    public class ExecuteDelete : OperationHandler
+    {
+        public override Responses ExecuteOperation(OperationDelete operation)
         {
             try
             {
@@ -65,8 +70,11 @@ namespace ToDo
             }
 
         }
+    }
 
-        public Responses ExecuteOperationdModify(OperationModify operation)
+    public class ExecuteModify : OperationHandler
+    {
+        public override Responses ExecuteOperation(OperationModify operation)
         {
             try
             {
