@@ -35,6 +35,7 @@
             // dateObject
             // 
             this.dateObject.AutoSize = true;
+            this.dateObject.BackColor = System.Drawing.Color.Transparent;
             this.dateObject.Location = new System.Drawing.Point(3, 0);
             this.dateObject.Name = "dateObject";
             this.dateObject.Size = new System.Drawing.Size(59, 13);
@@ -44,6 +45,7 @@
             // timeLabel
             // 
             this.timeLabel.AutoSize = true;
+            this.timeLabel.BackColor = System.Drawing.Color.Transparent;
             this.timeLabel.Location = new System.Drawing.Point(68, 0);
             this.timeLabel.Name = "timeLabel";
             this.timeLabel.Size = new System.Drawing.Size(52, 13);
@@ -58,7 +60,7 @@
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.dateObject);
             this.Name = "TimeDateControl";
-            this.Size = new System.Drawing.Size(150, 33);
+            this.Size = new System.Drawing.Size(150, 24);
             this.ResumeLayout(false);
             this.PerformLayout();
 
