@@ -2,7 +2,7 @@
 <SettingsList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <loadOnStartup>true</loadOnStartup>
   <startMinimized>false</startMinimized>
-  <textSize>11</textSize>
+  <textSize>8</textSize>
   <customKeywords_ADD>
     <string>+</string>
   </customKeywords_ADD>

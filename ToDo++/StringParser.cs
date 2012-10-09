@@ -21,10 +21,10 @@ namespace ToDo
         static Dictionary<string, ContextType> contextKeywords;
         static Dictionary<string, DayOfWeek> dayKeywords;
         static List<string> monthKeywords;
-        static List<string> timeSpecificKeywords;        
+        static List<string> timeSpecificKeywords;
         static List<string> timeGeneralKeywords;
         static List<string> timeSuffixes;
-        
+
 
         // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
         static Regex time_24HourFormat =
@@ -49,7 +49,7 @@ namespace ToDo
         // matches dd-mm-yyyy, d-m-yyyy, dd-mm-yy or d-m-yy
         static Regex date_numericDMYFormat =
             new Regex(@"\b(?<day>(0?[1-9]|[12][0-9]|3[01]))?([-/.])(?<month>(0[1-9]|1[012]))\2(?<year>(?:(20)?)\d\d)\b");
-        
+
         // matches mm-dd-yyyy, m-d-yyyy, mm-dd-yy, m-d-yy
         static Regex date_numericMDYFormat =
             new Regex(@"\b(?<month>(0?[1-9]|1[012]))([-/.])(?<day>(0[1-9]|[12][0-9]|3[01]))\2(?<year>(?:(20)?)\d\d)\b");
@@ -71,18 +71,17 @@ namespace ToDo
         // matchess yyyy mm dd
         static Regex date_alphabeticYMDFormat =
             new Regex(@"\b(?<year>(?:(20)?)\d\d)\s(?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?))\s(?<day>(([123]?[1])|([12]?[2])|([12]?[3])|([12]?[4-9])|([123][0])))");
-         
 
+        
         static Regex date_numericFormat =
             new Regex(@"\b
                         # Day and Month
                         (?:
                             # DD/MM
                             (?:
-                            (?<day>(0?[1-9]|[12][0-9]|3[01]))?
-                            (?<separator>[-/.])
+                            ((?<day>(0?[1-9]|[12][0-9]|3[01]))(?<separator>[-/.]))?                            
                             (?<month>(0[1-9]|1[012]))
-                            )
+                           )
                         |
                             # MM/DD
                             (?:
@@ -106,6 +105,11 @@ namespace ToDo
                         )
                         \b"
                     , RegexOptions.IgnorePatternWhitespace);
+
+        internal static bool IsValidNumericDate(string theDate)
+        {
+            return date_numericFormat.IsMatch(theDate);
+        }
 
         static StringParser()
         {
@@ -156,7 +160,7 @@ namespace ToDo
             timeSpecificKeywords = new List<string> { "noon", "midnight" };        // special case    
             timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" }; // todo?
             // ===
-            timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };            
+            timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
         }
 
         private static void InitializeMonthKeywords()
@@ -191,10 +195,10 @@ namespace ToDo
 
         internal static bool IsValidTime(string theTime)
         {
-            return (time_24HourFormat.IsMatch(theTime)||time_12HourFormat.IsMatch(theTime));
+            return (time_24HourFormat.IsMatch(theTime) || time_12HourFormat.IsMatch(theTime));
         }
 
-        
+
         // Note that the following methods do not validate that the dates do actually exist.
         // i.e. does not check for erroneous dates such as 31st feb
         internal static bool IsValidDMYAlphabeticDate(string theDate)
@@ -241,7 +245,7 @@ namespace ToDo
             }
             return indexOfDelimiters;
         }
-    
+
         /// <summary>
         /// This method parses a string of words into a list of tokens, each containing a token representing the meaning of each word or substring.
         /// By inputting a list of integer pairs to mark delimiting characters, multiple words can be taken as a single absolute substring (word).  
@@ -331,8 +335,8 @@ namespace ToDo
             // need not be checked for and merged since they are already whole words on their own.
             return output;
         }
-        
-        
+
+
         /// <summary>
         /// This method checks all words within an input list of words for valid times and returns a list of words
         /// where all times are merged as a single word.
@@ -350,14 +354,14 @@ namespace ToDo
             foreach (string word in input)
             {
                 foreach (string keyword in timeSuffixes)
-                {                    
+                {
                     if (word.ToLower() == keyword)
                     {
                         wordAdded = MergeWord_IfValidTime(ref output, input, position);
                         if (wordAdded) break;
-                    }                    
+                    }
                 }
-                if(!wordAdded) output.Add(word);
+                if (!wordAdded) output.Add(word);
                 wordAdded = false;
                 position++;
             }
@@ -368,22 +372,22 @@ namespace ToDo
         {
             string backHalf = input.ElementAt(position);
             string frontHalf;
-            if(position == 0)
+            if (position == 0)
             {
                 return false;
             }
-            frontHalf = input.ElementAt(position-1);
+            frontHalf = input.ElementAt(position - 1);
             string mergedWord = String.Concat(frontHalf, backHalf);
             if (IsValidTime(mergedWord))
             {
-                output.RemoveAt(output.Count-1);
+                output.RemoveAt(output.Count - 1);
                 output.Add(mergedWord);
                 return true;
             }
             else return false;
         }
 
-        
+
         private static bool MergeWord_IfValidAlphabeticDate(ref List<string> output, List<string> input, int position)
         {
             if (position == 0)
@@ -431,7 +435,7 @@ namespace ToDo
             }
             else return false;
         }
-        
+
 
         private static List<Token> GenerateTokens(List<string> input)
         {
@@ -469,7 +473,7 @@ namespace ToDo
                 else if (literal != "")
                 {
                     literal = literal.Trim();
-                    TokenLiteral literalToken = new TokenLiteral(index-1, literal);
+                    TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
                     tokens.Add(literalToken);
                     literal = "";
                 }
@@ -477,7 +481,7 @@ namespace ToDo
             }
             return tokens;
         }
-        
+
         /// <summary>
         /// This operation searches an input list of strings against the set list of command words and returns as list of tokens
         /// corresponding to the matched command keywords.
@@ -568,6 +572,6 @@ namespace ToDo
             return new List<Token>();
             throw new NotImplementedException();
         }
-        
+
     }
 }
