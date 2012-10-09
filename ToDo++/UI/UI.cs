@@ -21,17 +21,33 @@ namespace ToDo
         public UI()
         {
             InitializeComponent();
-            PrepareSystemTray();
-            PrepareSettingsManager();
+            PrepareSystemTray();                //Loads Code to place App in System Tray
+            PrepareSettingsManager();           //Loads initial Settings of App and applies the settings
+            PrepareMenu();                      //Loads the menu strip
         }
 
+        #region PrepareMenu
+
+        public void PrepareMenu()
+        {
+            menuStrip.SetSettingsManager(mainSettingsManager);
+            menuStrip.LoadSettingsIntoMenu();
+        }
+
+        #endregion
+
         #region PrepareSettingsManager
-        
+
         public void PrepareSettingsManager()
         {
             mainSettingsManager = new SettingsManager();
             SetSettingsInUI();
             MinimiseToTrayWhenChecked();
+        }
+
+        public void SetSettingsInUI()
+        {
+            richTextBox_output.SetOutputSize(mainSettingsManager.GetTextSize());
         }
 
         public void MinimiseToTrayWhenChecked()
@@ -42,12 +58,7 @@ namespace ToDo
             }
         }
 
-        public void SetSettingsInUI()
-        {
-            loadOnStartupToolStripMenuItem.Checked = mainSettingsManager.GetLoadOnStartupStatus();
-            startMinimizedToolStripMenuItem.Checked = mainSettingsManager.GetStartMinimizedStatus();
-            richTextBox_output.SetOutputSize(mainSettingsManager.GetTextSize());
-        }
+
 
         public void IncreaseSizeOfOutput()
         {
@@ -61,33 +72,6 @@ namespace ToDo
             richTextBox_output.SetOutputSize(mainSettingsManager.GetTextSize());
         }
 
-        private void invertMinimizedToolStrip()
-        {
-            if (startMinimizedToolStripMenuItem.Checked == true)
-                startMinimizedToolStripMenuItem.Checked = false;
-            else
-                startMinimizedToolStripMenuItem.Checked = true;
-        }
-
-        private void invertStartupToolStrip()
-        {
-            if (loadOnStartupToolStripMenuItem.Checked == true)
-                loadOnStartupToolStripMenuItem.Checked = false;
-            else
-                loadOnStartupToolStripMenuItem.Checked = true;
-        }
-
-        private void startMinimizedToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            invertMinimizedToolStrip();
-            mainSettingsManager.ToggleStartMinimized(startMinimizedToolStripMenuItem.Checked);
-        }
-
-        private void loadOnStartupToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            invertStartupToolStrip();
-            mainSettingsManager.ToggleLoadOnStartup(loadOnStartupToolStripMenuItem.Checked);
-        }
 
         private void toDoToolStripMenuItem_MouseEnter(object sender, EventArgs e)
         {
