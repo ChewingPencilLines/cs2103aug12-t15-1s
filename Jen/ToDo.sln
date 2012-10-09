@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo", "ToDo\ToDo.csproj", "{6038FBC4-3B66-4034-9243-2F23084AEC5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParsingLogicUnitTest", "ParsingLogicUnitTest\ParsingLogicUnitTest.csproj", "{4461BCD8-AD69-41BA-89CE-C42173B9194D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6038FBC4-3B66-4034-9243-2F23084AEC5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6038FBC4-3B66-4034-9243-2F23084AEC5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6038FBC4-3B66-4034-9243-2F23084AEC5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6038FBC4-3B66-4034-9243-2F23084AEC5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4461BCD8-AD69-41BA-89CE-C42173B9194D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4461BCD8-AD69-41BA-89CE-C42173B9194D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4461BCD8-AD69-41BA-89CE-C42173B9194D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4461BCD8-AD69-41BA-89CE-C42173B9194D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

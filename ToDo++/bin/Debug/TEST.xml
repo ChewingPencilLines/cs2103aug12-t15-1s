@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SettingsList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <loadOnStartup>true</loadOnStartup>
+  <startMinimized>false</startMinimized>
+  <textSize>10</textSize>
+  <customKeywords_ADD>
+    <string>+</string>
+    <string>++</string>
+  </customKeywords_ADD>
+  <customKeywords_DELETE>
+    <string>-</string>
+  </customKeywords_DELETE>
+  <customKeywords_UPDATE />
+  <customKeywords_UNDO />
+  <customKeywords_REDO />
+</SettingsList>
