@@ -17,6 +17,33 @@ namespace StringParserTest
     [TestClass]    
     public class StringParserTest
     {
+        
+        [TestMethod]
+        // note: this test method does not test if the day-month-year format takes precedence
+        public void IsValidNumericDate()
+        {
+            Assert.IsTrue(StringParser.IsValidNumericDate("20/1/2012")); // dmy
+            Assert.IsTrue(StringParser.IsValidNumericDate("20-11-2016")); // dmy
+            Assert.IsTrue(StringParser.IsValidNumericDate("20-11-16")); // dmy
+            Assert.IsTrue(StringParser.IsValidNumericDate("2.1.2100")); // dmy or mdy
+            Assert.IsTrue(StringParser.IsValidNumericDate("11/23/2012")); // mdy
+            Assert.IsTrue(StringParser.IsValidNumericDate("11.23.2999")); // mdy
+            Assert.IsTrue(StringParser.IsValidNumericDate("11/2012")); // my
+            Assert.IsTrue(StringParser.IsValidNumericDate("15/12")); // dm or md (my??)
+            Assert.IsTrue(StringParser.IsValidNumericDate("23/12")); // dm
+            Assert.IsFalse(StringParser.IsValidNumericDate("12/")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("23")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("11")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("23/23/2012")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("31/2022")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("4/55/2022")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("31/11-2222")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("23.1-2112")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("2-1/2012")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("23.1.212")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("0.0.0000")); // invalid
+        }
+
         /*
         CommandType command = CommandType.INVALID;
         int indexOfCommandKeyword = -1;
