@@ -3,7 +3,12 @@
     partial class Settings
     {
         /// <summary>
-        /// Required designer variable.
+        /// Req
+        /// 
+        /// 
+        /// 
+        /// 
+        /// red designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
