@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ToDo
 {
-    public enum Responses
+    public enum Result
     {
         ADD_SUCCESS,
 

@@ -8,9 +8,9 @@ using System.Xml.Serialization;
 
 namespace ToDo
 {
-    public class XML
+    public class Storage
     {
-        public XML()
+        public Storage()
         {   }
 
         public void WriteXML(TaskList taskList)

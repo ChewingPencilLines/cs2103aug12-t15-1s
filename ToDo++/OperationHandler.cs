@@ -12,26 +12,23 @@ namespace ToDo
         protected TaskList taskList;
         protected Stack<Operation> undoStack;
         protected Stack<Operation> redoStack;
-        protected XML xml;
+        protected Storage xml;
         
         public OperationHandler()
         {
             taskList = new TaskList();
             undoStack = new Stack<Operation>();
             redoStack = new Stack<Operation>();
-            xml = new XML();
+            xml = new Storage();
         }
 
         //Need to take in an instance of Operation to execute
-        abstract public Responses ExecuteOperation(Operation operation)
-        {
-            return Responses.ERROR;
-        }
+        public abstract Result ExecuteOperation(Operation operation);
     }
 
     public class ExecuteAdd:OperationHandler
     {
-        public override Responses ExecuteOperation(OperationAdd operation)
+        public override Result ExecuteOperation(Operation operation)
         {
             try
             {
@@ -40,33 +37,33 @@ namespace ToDo
 
                 xml.WriteXML(taskList);
 
-                return Responses.ADD_SUCCESS;
+                return Result.ADD_SUCCESS;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return Responses.ERROR;
+                return Result.ERROR;
             }
 
         }
     }
     public class ExecuteDelete : OperationHandler
     {
-        public override Responses ExecuteOperation(OperationDelete operation)
+        public override Result ExecuteOperation(Operation operation)
         {
             try
             {
               //  Task taskToDelete = operation.GetTask();
-                taskList.RemoveAt(operation.index);
+                taskList.RemoveAt(((OperationDelete)operation).index);
 
                 xml.WriteXML(taskList);
 
-                return Responses.DELETE_SUCCESS;
+                return Result.DELETE_SUCCESS;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return Responses.ERROR;
+                return Result.ERROR;
             }
 
         }
@@ -74,21 +71,21 @@ namespace ToDo
 
     public class ExecuteModify : OperationHandler
     {
-        public override Responses ExecuteOperation(OperationModify operation)
+        public override Result ExecuteOperation(Operation operation)
         {
             try
             {
                 Task taskRevised = operation.GetTask();
-                taskList[operation.oldTaskindex] = taskRevised;
+                taskList[((OperationModify)operation).oldTaskindex] = taskRevised;
 
                 xml.WriteXML(taskList);
 
-                return Responses.MODIFY_SUCCESS;
+                return Result.MODIFY_SUCCESS;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return Responses.ERROR;
+                return Result.ERROR;
             }
 
         }
