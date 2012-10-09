@@ -48,7 +48,7 @@ namespace ToDo
             index = DeleteIndex;
         }
 
-       // public override Task GetTask() { return null; }
+        public override Task GetTask() { return null; }
     }
 
     public class OperationModify:Operation
