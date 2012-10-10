@@ -37,8 +37,8 @@
             this.increaseSizeButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip = new ToDo.Menu();
-            this.timeDateControl1 = new CustomControls.TimeDateControl();
             this.outputBox = new ToDo.OutputBox();
+            this.dateTimeControl1 = new ToDo.DateTimeControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,14 +106,6 @@
             this.menuStrip.Size = new System.Drawing.Size(403, 24);
             this.menuStrip.TabIndex = 9;
             // 
-            // timeDateControl1
-            // 
-            this.timeDateControl1.BackColor = System.Drawing.Color.Transparent;
-            this.timeDateControl1.Location = new System.Drawing.Point(161, 35);
-            this.timeDateControl1.Name = "timeDateControl1";
-            this.timeDateControl1.Size = new System.Drawing.Size(150, 17);
-            this.timeDateControl1.TabIndex = 8;
-            // 
             // outputBox
             // 
             this.outputBox.Location = new System.Drawing.Point(13, 62);
@@ -123,13 +115,21 @@
             this.outputBox.TabIndex = 7;
             this.outputBox.Text = "";
             // 
+            // dateTimeControl1
+            // 
+            this.dateTimeControl1.BackColor = System.Drawing.Color.Transparent;
+            this.dateTimeControl1.Location = new System.Drawing.Point(147, 22);
+            this.dateTimeControl1.Name = "dateTimeControl1";
+            this.dateTimeControl1.Size = new System.Drawing.Size(150, 36);
+            this.dateTimeControl1.TabIndex = 10;
+            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(403, 262);
+            this.Controls.Add(this.dateTimeControl1);
             this.Controls.Add(this.menuStrip);
-            this.Controls.Add(this.timeDateControl1);
             this.Controls.Add(this.outputBox);
             this.Controls.Add(this.increaseSizeButton);
             this.Controls.Add(this.decreaseSizeButton);
@@ -154,8 +154,8 @@
         private System.Windows.Forms.Button decreaseSizeButton;
         private System.Windows.Forms.Button increaseSizeButton;
         private OutputBox outputBox;
-        private CustomControls.TimeDateControl timeDateControl1;
         private Menu menuStrip;
+        private DateTimeControl dateTimeControl1;
     }
 }
 
