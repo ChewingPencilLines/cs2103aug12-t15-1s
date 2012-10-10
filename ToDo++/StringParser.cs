@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 [assembly: InternalsVisibleTo("ParsingLogicUnitTest")]
 
@@ -443,44 +444,28 @@ namespace ToDo
             tokens.AddRange(GenerateCommandTokens(input));
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
-            tokens.AddRange(GenerateTimeTokens(input));
-            tokens.AddRange(GenerateContextTokens(input));
+            tokens.AddRange(GenerateTimeTokens(input));            
+            // must be done after generating day/date/time tokens.
+            tokens.AddRange(GenerateContextTokens(input, tokens));
             // must be done last. all non-hits are taken to be literals
             tokens.AddRange(GenerateLiteralTokens(input, tokens));
-            // SORT()!
+            tokens.Sort(CompareByPosition);
             return tokens;
         }
 
-        private static List<Token> GenerateContextTokens(List<string> input)
+        private static int CompareByPosition(Token x, Token y)
         {
-            return new List<Token>();
-            throw new NotImplementedException();
-        }
-
-        private static List<Token> GenerateLiteralTokens(List<string> input, List<Token> parsedTokens)
-        {
-            List<Token> tokens = new List<Token>();
-            foreach (Token token in parsedTokens)
+            int xPosition = x.Position;
+            int yPosition = y.Position;
+            if (xPosition < yPosition) return -1;
+            else if (xPosition > yPosition) return 1;
+            else
             {
-                input[token.Position] = null;
+                Debug.Assert(false, "Two tokens with same position!");
+                return 0;
             }
-            int index = 0;
-            string literal = "";
-            foreach (string remainingWord in input)
-            {
-                if (remainingWord != null)
-                    literal = literal + remainingWord + " ";
-                else if (literal != "")
-                {
-                    literal = literal.Trim();
-                    TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
-                    tokens.Add(literalToken);
-                    literal = "";
-                }
-                index++;
-            }
-            return tokens;
         }
+              
 
         /// <summary>
         /// This operation searches an input list of strings against the set list of command words and returns as list of tokens
@@ -571,6 +556,60 @@ namespace ToDo
         {
             return new List<Token>();
             throw new NotImplementedException();
+        }
+
+        private static List<TokenContext> GenerateContextTokens(List<string> input, List<Token> parsedTokens)
+        {
+            int index = 0;
+            ContextType context;
+            List<TokenContext> tokens = new List<TokenContext>();
+            foreach (string word in input)
+            {
+                if (contextKeywords.TryGetValue(word, out context))
+                {
+                    object nextToken = GetTokenAtPosition(parsedTokens, index + 1);
+                    if (nextToken is TokenDate || nextToken is TokenDay || nextToken is TokenTime)
+                    {
+                        TokenContext newToken = new TokenContext(index, context);
+                        tokens.Add(newToken);
+                    }
+                }
+            }
+            return tokens;
+        }
+        
+        private static List<Token> GenerateLiteralTokens(List<string> input, List<Token> parsedTokens)
+        {
+            List<Token> tokens = new List<Token>();
+            foreach (Token token in parsedTokens)
+            {
+                input[token.Position] = null;
+            }
+            int index = 0;
+            string literal = "";
+            foreach (string remainingWord in input)
+            {
+                if (remainingWord != null)
+                    literal = literal + remainingWord + " ";
+                else if (literal != "")
+                {
+                    literal = literal.Trim();
+                    TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
+                    tokens.Add(literalToken);
+                    literal = "";
+                }
+                index++;
+            }
+            return tokens;
+        }
+
+        private static object GetTokenAtPosition(List<Token> tokens, int p)
+        {
+            foreach (Token token in tokens)
+            {
+                if (token.Position == p) return token;
+            }
+            return null;
         }
 
     }
