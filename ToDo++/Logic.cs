@@ -9,10 +9,9 @@ namespace ToDo
     {
         OperationHandler operationHandler; 
        
-
         public Logic()
         {
-            //operationHandler = new OperationHandler();
+            operationHandler = new OperationHandler();
         }
 
         public string ProcessCommand(string input)
@@ -35,7 +34,8 @@ namespace ToDo
             }
             else
             {
-                Result response = operationHandler.ExecuteOperation(operation);
+                Result response;
+                response = operationHandler.Execute(operation);
                 return null;
             }
         }
