@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandParser.cs" />
+    <Compile Include="Executor.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="Menu.cs">
       <SubType>UserControl</SubType>
@@ -71,7 +72,9 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings\SettingsManager.cs" />
-    <Compile Include="UI\TimeDateControl.cs" />
+    <Compile Include="UI\TimeDateControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UI\TimeDateControl.Designer.cs">
       <DependentUpon>TimeDateControl.cs</DependentUpon>
     </Compile>

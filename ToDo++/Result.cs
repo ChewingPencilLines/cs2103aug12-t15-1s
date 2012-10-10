@@ -13,6 +13,8 @@ namespace ToDo
 
         MODIFY_SUCCESS,
 
+        UNDO_SUCCESS,
+
         ERROR
     }
 }
