@@ -55,6 +55,11 @@ namespace ToDo
                 ExecuteUndo execute = new ExecuteUndo();
                 return execute.ExecuteOperation(operation);
             }
+            else if (operation is OperationSearch)
+            {
+                undoStack.Pop();
+                return Result.ERROR;
+            }
             else
                 return Result.ERROR;
         }
