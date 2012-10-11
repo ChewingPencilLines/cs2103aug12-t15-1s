@@ -24,12 +24,13 @@ namespace ToDo
 
         private static Operation GenerateOperation(List<Token> tokens)
         {
+            Operation newOperation;            
             CommandType commandType = new CommandType();            
             ContextType currentMode = new ContextType();
             ContextType currentSpecifier = new ContextType();
-            TimeSpan startTime, endTime;
-            DateTime startDate, endDate;
-            DayOfWeek startDay, endDay;
+            TimeSpan? startTime = null, endTime = null;
+            DateTime? startDate = null, endDate = null;
+            DayOfWeek? startDay = null, endDay = null;
             string taskName;
 
             commandType = CommandType.INVALID;
@@ -80,15 +81,15 @@ namespace ToDo
                         case ContextType.STARTTIME:
                             startDay = ((TokenDay)token).Value;
                             // @ivan-todo: WarnUser if already determined startDate and startDay conflicts
-                            startDate = GetDateFromDay(currentSpecifier, startDay);
+                            startDate = GetDateFromDay(currentSpecifier, (DayOfWeek)startDay);
                             break;
                         case ContextType.ENDTIME:
                             endDay = ((TokenDay)token).Value;
-                            endDate = GetDateFromDay(currentSpecifier, endDay);
+                            endDate = GetDateFromDay(currentSpecifier, (DayOfWeek)endDay);
                             break;
                         case ContextType.DEADLINE:
                             endDay = ((TokenDay)token).Value;
-                            endDate = GetDateFromDay(currentSpecifier, endDay);
+                            endDate = GetDateFromDay(currentSpecifier, (DayOfWeek)endDay);
                             break;
                         default:
                             Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");
@@ -124,7 +125,7 @@ namespace ToDo
                 }
 
                 // Generate operation based on values, and whether they have been used.
-            }            
+            }
             return new OperationAdd(new TaskFloating());
         }
 
