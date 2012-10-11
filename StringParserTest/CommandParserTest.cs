@@ -9,13 +9,13 @@ namespace CommandParserTest
     [TestClass]
     public class CommandParserTest
     {
-        //CommandParser testParser = new CommandParser();
+        CommandParser testParser = new CommandParser();
 
         [TestMethod]
         public void OperationParseTest()
         {
-            //testParser.ParseOperation("task do stuff add 9 pm");
-            //return;
+            testParser.ParseOperation("task do stuff add by 9 pm");
+            return;
         }
 
         /*

@@ -662,6 +662,7 @@ namespace ToDo
                         tokens.Add(newToken);
                     }
                 }
+                index++;
             }
             return tokens;
         }
