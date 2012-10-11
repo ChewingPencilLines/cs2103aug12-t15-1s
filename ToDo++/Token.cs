@@ -49,15 +49,20 @@ namespace ToDo
     class TokenDate : Token
     {
         DateTime dateTime;
+        bool specific;
         internal DateTime Value
         {
             get { return dateTime; }
         }
-        internal TokenDate(int position, DateTime val)
+        internal bool IsSpecific
+        {
+            get { return specific; }
+        }
+        internal TokenDate(int position, DateTime date, Boolean specific_flag)
             : base(position)
         {
-            type = TokenType.DATE;
-            dateTime = val;
+            dateTime = date;
+            specific = specific_flag;
         }
     }
 

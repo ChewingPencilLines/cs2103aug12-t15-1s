@@ -12,7 +12,8 @@ namespace ToDo
 {
     // enum is used as a list index. do not modify numbering!
     enum CommandType { ADD = 0, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, INVALID };
-    enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING }
+    enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
+    enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
     public static class StringParser
     {
         const int START_INDEX = 0;
@@ -21,106 +22,79 @@ namespace ToDo
         static List<List<string>> commandKeywords;
         static Dictionary<string, ContextType> contextKeywords;
         static Dictionary<string, DayOfWeek> dayKeywords;
-        static List<string> monthKeywords;
+        static Dictionary<string, Month> monthKeywords;
         static List<string> timeSpecificKeywords;
         static List<string> timeGeneralKeywords;
         static List<string> timeSuffixes;
 
-
+        #region REGULAR EXPRESSIONS
         // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
         static Regex time_24HourFormat =
             new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?$");
         // matches the above but with AM and PM (case insensitive). colon/dot is optional.
         static Regex time_12HourFormat =
             new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<format>am|pm)$");
-
-        /* All date regexes only check for dates within the 21st century.
-         * They do not return the leading 2 numbers for year, leading zeroes for month and day
-         * and the possible suffixes for days in match values. These are optional.
-         * The relevent groups are tagged as <day>, <month> and <year>.
-         * The day input is actually optional in the DMY formats
-         * so as to detect partial date inputs such as "06/13" or "June 2012".
-         * Note that only the default numeric date format will be checked for!
-         */
-
-        // The following numeric date regexes do check for consistent separation by hyphens, forward slashes or periods.
-
-        // This is the default format that will be checked for
-        // for numeric date words unless otherwise indicated in the settings.
-        // matches dd-mm-yyyy, d-m-yyyy, dd-mm-yy or d-m-yy
-        static Regex date_numericDMYFormat =
-            new Regex(@"\b(?<day>(0?[1-9]|[12][0-9]|3[01]))?([-/.])(?<month>(0[1-9]|1[012]))\2(?<year>(?:(20)?)\d\d)\b");
-
-        // matches mm-dd-yyyy, m-d-yyyy, mm-dd-yy, m-d-yy
-        static Regex date_numericMDYFormat =
-            new Regex(@"\b(?<month>(0?[1-9]|1[012]))([-/.])(?<day>(0[1-9]|[12][0-9]|3[01]))\2(?<year>(?:(20)?)\d\d)\b");
-
-        // matches yyyy-mm-dd, yyyy-m-d, yy-mm-dd, yy-m-d
-        static Regex date_numericYMDFormat =
-            new Regex(@"\b(?<year>(?:(20)?)\d\d)([-/.])(?<month>(0?[1-9]|1[012]))\2(?<day>(0[1-9]|[12][0-9]|3[01]))\b");
-
-        // This is the default format that will be checked for first
-        // for alphabetic date words unless otherwise indicated in the settings.
-        // matches dd mmm yyyy or dd(st/nd/rd/th) mmm yyyy
-        static Regex date_alphabeticDMYFormat =
-            new Regex(@"\b(?<day>(([123]?[1](?:st)?)|([12]?[2](?:nd)?)|([12]?[3](?:rd)?)|([12]?[4-9](?:th)?)|([123][0](?:th)?)))?\s(?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?))\s(?<year>(?:(20)?)\d\d)\b");
-
-        // matchess mmm dd yyyy
-        static Regex date_alphabeticMDYFormat =
-            new Regex(@"\b(?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?))\s(?<day>(([123]?[1])|([12]?[2])|([12]?[3])|([12]?[4-9])|([123][0])))\s(?<year>(?:(20)?)\d\d)\b");
-
-        // matchess yyyy mm dd
-        static Regex date_alphabeticYMDFormat =
-            new Regex(@"\b(?<year>(?:(20)?)\d\d)\s(?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?))\s(?<day>(([123]?[1])|([12]?[2])|([12]?[3])|([12]?[4-9])|([123][0])))");
-
-        
+        // checks day-month-year and month-day-year format; the formal takes precedence if the input matches both
         static Regex date_numericFormat =
-            new Regex(@"\b
-                        # Day and Month
+            new Regex(@"^
                         (?:
-                            # DD/MM
-                            (?:
-                            ((?<day>(0?[1-9]|[12][0-9]|3[01]))(?<separator>[-/.]))?                            
-                            (?<month>(0[1-9]|1[012]))
-                           )
+                        (
+                        # DD/MM
+                        (?:
+                        ((?<day>(0?[1-9]|[12][0-9]|3[01]))
+                        (?<separator>[-/.]))?
+                        (?<month>(0?[1-9]|1[012]))
+                        )
                         |
-                            # MM/DD
-                            (?:
-                            (?<month>(0[1-9]|1[012]))
-                            (\separator)
-                            (?<day>(0?[1-9]|[12][0-9]|3[01]))
-                            )
+                        # MM/DD
+                        (?:
+                        (?<month>(0?[1-9]|1[012]))
+                        (?<separator>[-/.])
+                        (?<day>(0?[1-9]|[12][0-9]|3[01]))
                         )
-                        # Year => YY or YYYY
-                        # if day not captured, force year
-                        (?(day)
-                            (?:
-                            (\separator)
-                            (?<year>(\d\d)?\d\d)
-                            )?
-                            |
-                            (?:
-                            (\separator)
-                            (?<year>\d\d\d\d)
-                            )
                         )
-                        \b"
-                    , RegexOptions.IgnorePatternWhitespace);
+                        # (YY)YY
+                        (?:(?(day)((\<separator>(?<year>(\d\d)?\d\d))?)
+                        |([-/.](?<year>\d\d\d\d))
+                        )
+                        ))
+                        $"
+            , RegexOptions.IgnorePatternWhitespace);
 
-        internal static bool IsValidNumericDate(string theDate)
-        {
-            return date_numericFormat.IsMatch(theDate);
-        }
+        // checks day-month-year and month-day-year format; the formal takes precedence if the input matches both
+        // note that inputs such as "15th" will not result in a match; need to recheck later
+        static Regex date_alphabeticFormat =
+            new Regex(@"^
+                        (
+                        # DD/MM
+                        (?:
+                        ((?<day>(([23]?1(?:st)?)|(2?2(?:nd)?)|(2?3(?:rd)?)|([12]?[4-9](?:th)?)|([123]0(?:th)?)|(1[123](?:th)?)))\s)?
+                        (?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?))
+                        )
+                        |
+                        # MM/DD
+                        (?:
+                        (?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?))
+                        \s
+                        (?<day>(([23]?1(?:st)?)|(2?2(?:nd)?)|(2?3(?:rd)?)|([12]?[4-9](?:th)?)|([123][0](?:th)?)|(1[123](?:th)?)))
+                        ))
+                        # (YY)YY
+                        (?:(?(day)(\s(?<year>(\d\d)?\d\d))?|(\s(?<year>\d\d\d\d))))$"
+            , RegexOptions.IgnorePatternWhitespace);
+        #endregion
 
         static StringParser()
         {
             InitializeDefaultKeywords();
         }
 
+        #region Initialization
+
         private static void InitializeDefaultKeywords()
         {
             InitializeCommandKeywords();
             InitializeDateTimeKeywords();
+            InitializeMonthKeywords();
             InitializeContextKeywords();
         }
 
@@ -166,18 +140,28 @@ namespace ToDo
 
         private static void InitializeMonthKeywords()
         {
-            monthKeywords = new List<string>() { "jan", "january",
-                                                  "feb", "february",
-                                                  "mar", "march",
-                                                  "apr", "april",
-                                                  "may",
-                                                  "jun", "june",
-                                                  "jul", "july",
-                                                  "aug", "august",
-                                                  "sep", "sept", "september",
-                                                  "oct", "october",
-                                                  "nov", "november",
-                                                  "dec", "december" };
+            monthKeywords = new Dictionary<string, Month>();
+            monthKeywords.Add("jan", Month.JAN);
+            monthKeywords.Add("january", Month.JAN);
+            monthKeywords.Add("feb", Month.FEB);
+            monthKeywords.Add("february", Month.FEB);
+            monthKeywords.Add("mar", Month.MAR);
+            monthKeywords.Add("march", Month.MAR);
+            monthKeywords.Add("may", Month.MAY);
+            monthKeywords.Add("jun", Month.JUN);
+            monthKeywords.Add("june", Month.JUN);
+            monthKeywords.Add("jul", Month.JUL);
+            monthKeywords.Add("july", Month.JUL);
+            monthKeywords.Add("aug", Month.AUG);
+            monthKeywords.Add("august", Month.AUG);
+            monthKeywords.Add("sep", Month.SEP);
+            monthKeywords.Add("sept", Month.SEP);
+            monthKeywords.Add("september", Month.SEP);
+            monthKeywords.Add("oct", Month.OCT);
+            monthKeywords.Add("october", Month.OCT);
+            monthKeywords.Add("november", Month.NOV);
+            monthKeywords.Add("dec", Month.DEC);
+            monthKeywords.Add("december", Month.DEC);
         }
 
         private static void InitializeContextKeywords()
@@ -193,29 +177,31 @@ namespace ToDo
             contextKeywords.Add("following", ContextType.FOLLOWING);
         }
 
+        #endregion
 
+        #region Regex Matching Methods
         internal static bool IsValidTime(string theTime)
         {
             return (time_24HourFormat.IsMatch(theTime) || time_12HourFormat.IsMatch(theTime));
         }
 
-
         // Note that the following methods do not validate that the dates do actually exist.
-        // i.e. does not check for erroneous dates such as 31st feb
-        internal static bool IsValidDMYAlphabeticDate(string theDate)
+        // i.e. does not check for erroneous non-existent dates such as 31st feb
+        internal static bool IsValidNumericDate(string theDate)
         {
-            return date_alphabeticDMYFormat.IsMatch(theDate);
+            return date_numericFormat.IsMatch(theDate);
         }
 
-        internal static bool IsValidMDYAlphabeticDate(string theDate)
+        internal static bool IsValidAlphabeticDate(string theDate)
         {
-            return date_alphabeticMDYFormat.IsMatch(theDate);
+            return date_alphabeticFormat.IsMatch(theDate);
         }
 
-        internal static bool IsValidYMDAlphabeticDate(string theDate)
+        internal static bool IsValidDate(string theDate)
         {
-            return date_alphabeticYMDFormat.IsMatch(theDate);
+            return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate);
         }
+        #endregion
 
         /// <summary>
         /// This method searches the input string against the set delimiters'
@@ -246,7 +232,7 @@ namespace ToDo
             }
             return indexOfDelimiters;
         }
-
+        
         /// <summary>
         /// This method parses a string of words into a list of tokens, each containing a token representing the meaning of each word or substring.
         /// By inputting a list of integer pairs to mark delimiting characters, multiple words can be taken as a single absolute substring (word).  
@@ -260,6 +246,7 @@ namespace ToDo
             return GenerateTokens(words);
         }
 
+        #region String Splitting and Merging Methods
         /// <summary>
         /// This method splits a string and returns a list of substrings, each containing either a word delimited by a space,
         /// or a substring delimited by positions in the parameter indexOfDelimiters
@@ -307,36 +294,9 @@ namespace ToDo
             // => add task friday 5pm 28 sept 2012
             // => add task friday 5pm "28 sept 2012" (date is a single string in the list)
             input = MergeTimeWords(input);
-            // input = MergeDateWords(input);
+            input = MergeDateWords(input);
             return input;
-        }
-
-        private static List<string> MergeDateWords(List<string> input)
-        {
-            List<string> output = new List<string>();
-            int position = 0;
-            bool wordAdded = false;
-            // check for all full or partial month-year dates in alphabetic date formats
-            foreach (string word in input)
-            {
-                foreach (string keyword in monthKeywords)
-                {
-                    if (word.ToLower() == keyword)
-                    {
-                        wordAdded = MergeWord_IfValidAlphabeticDate(ref output, input, position);
-                        if (wordAdded) break;
-                    }
-                }
-                if (!wordAdded) output.Add(word);
-                wordAdded = false;
-                position++;
-            }
-
-            // dates in numeric date formats and dates that are only specified by day with suffixes i.e. "15th"
-            // need not be checked for and merged since they are already whole words on their own.
-            return output;
-        }
-
+        }        
 
         /// <summary>
         /// This method checks all words within an input list of words for valid times and returns a list of words
@@ -388,55 +348,77 @@ namespace ToDo
             else return false;
         }
 
-
-        private static bool MergeWord_IfValidAlphabeticDate(ref List<string> output, List<string> input, int position)
+        internal static List<string> MergeDateWords(List<string> input)
         {
-            if (position == 0)
+            List<string> output = new List<string>();
+            int position = 0, skipWords = 0;
+            bool isWordAdded = false;
+            // check for all full or partial dates in alphabetic date formats
+            foreach (string word in input)
+            {
+                if (skipWords > 0)
+                {
+                    skipWords--;
+                    position++;
+                    continue;
+                }
+                if (monthKeywords.ContainsKey(word.ToLower()))
+                {
+                        isWordAdded = MergeWord_IfValidAlphabeticDate(ref output, input, position, ref skipWords);
+                        if (isWordAdded) break;
+                }
+                if (!isWordAdded) output.Add(word);
+                isWordAdded = false;
+                position++;
+            }
+            // dates in numeric date formats and dates that are only specified by day with suffixes i.e. "15th"
+            // need not be checked for and merged since they are already whole words on their own.
+            return output;
+        }
+
+        /* Note that "12 may 2012 2012" will produce merged word "12 may 2012"
+        * and "12 may 23 2012" will produce the merged word "12 may 23".
+        */
+
+        internal static bool MergeWord_IfValidAlphabeticDate(ref List<string> output, List<string> input, int position, ref int numberOfWords)
+        {
+            string month = input.ElementAt(position);
+            string mergedWord = month;
+            bool isWordUsed = false;
+            int i = 1;
+            // Backward check
+            if ((position > 0) &&
+                (IsValidAlphabeticDate(input[position - 1] + " " + mergedWord.ToLower())))
+            {
+                mergedWord = input[position - 1] + " " + mergedWord;
+                isWordUsed = true;
+            }
+            // Forward check
+            while (position + i < input.Count)
+            {
+                if (IsValidAlphabeticDate(mergedWord.ToLower() + " " + input[position + i]))
+                {
+                    mergedWord = mergedWord + " " + input[position + i];
+                }
+                else break;
+                i++;
+            }
+            if (mergedWord == month)
             {
                 return false;
             }
-            string month = input.ElementAt(position);
-
-            // checks default dmy format first
-            string day = input.ElementAt(position - 1);
-            string year = input.ElementAt(position + 1);
-            string mergedWord = String.Concat(day, month, year);
-            if (IsValidDMYAlphabeticDate(mergedWord))
-            {
-                // if the merged word is still valid as a dmy date format even without the day component
-                if (IsValidDMYAlphabeticDate(String.Concat(month, year)))
-                {
-                    mergedWord = String.Concat(month, year);
-                }
-                output.RemoveAt(output.Count - 1);
-                output.Add(mergedWord);
-                return true;
-            }
-
-            // checks mdy format next
-            day = input.ElementAt(position + 1);
-            year = input.ElementAt(position + 2);
-            mergedWord = String.Concat(day, month, year);
-            if (IsValidMDYAlphabeticDate(mergedWord))
+            if (isWordUsed == true)
             {
                 output.RemoveAt(output.Count - 1);
-                output.Add(mergedWord);
-                return true;
             }
-
-            // checks ymd format next
-            day = input.ElementAt(position + 1);
-            year = input.ElementAt(position - 2);
-            mergedWord = String.Concat(day, month, year);
-            if (IsValidMDYAlphabeticDate(mergedWord))
-            {
-                output.RemoveAt(output.Count - 1);
-                output.Add(mergedWord);
-                return true;
-            }
-            else return false;
+            output.Add(mergedWord);
+            numberOfWords = i - 1;
+            return true;
         }
+        #endregion
 
+        // Move to new TokenGenerator class?
+        #region Token Generation Methods 
 
         private static List<Token> GenerateTokens(List<string> input)
         {
@@ -444,7 +426,7 @@ namespace ToDo
             tokens.AddRange(GenerateCommandTokens(input));
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
-            tokens.AddRange(GenerateTimeTokens(input));            
+            tokens.AddRange(GenerateTimeTokens(input));
             // must be done after generating day/date/time tokens.
             tokens.AddRange(GenerateContextTokens(input, tokens));
             // must be done last. all non-hits are taken to be literals
@@ -452,20 +434,6 @@ namespace ToDo
             tokens.Sort(CompareByPosition);
             return tokens;
         }
-
-        private static int CompareByPosition(Token x, Token y)
-        {
-            int xPosition = x.Position;
-            int yPosition = y.Position;
-            if (xPosition < yPosition) return -1;
-            else if (xPosition > yPosition) return 1;
-            else
-            {
-                Debug.Assert(false, "Two tokens with same position!");
-                return 0;
-            }
-        }
-              
 
         /// <summary>
         /// This operation searches an input list of strings against the set list of command words and returns as list of tokens
@@ -517,6 +485,132 @@ namespace ToDo
             return dayTokens;
         }
 
+        internal static List<Token> GenerateDateTokens(List<string> input)
+        {
+            string dayString = String.Empty;
+            string monthString = String.Empty;
+            string yearString = String.Empty;
+            int day = 0;
+            int month = 0;
+            int year = 0;
+            int index = 0;
+            bool isSpecific = true;
+            List<Token> dateTokens = new List<Token>();
+            foreach (string word in input)
+            {
+                if (IsValidDate(word.ToLower()))
+                {
+                    DateTime dateTime;
+                    Match match = GetDateMatch(word.ToLower());
+                    GetMatchTagValues(match, ref dayString, ref monthString, ref yearString);
+                    ConvertMatchTagValuesToInts(dayString, monthString, yearString, ref day, ref month, ref year);
+                    // no day input
+                    if (day == 0)
+                    {
+                        isSpecific = false;
+                        day = 1;
+                    }
+                    // no year input
+                    if (year == 0)
+                    {
+                        try
+                        {
+                            dateTime = new DateTime(DateTime.Today.Year, month, day);
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            continue;
+                        }
+                        if (DateTime.Compare(dateTime, DateTime.Today) < 0)
+                        {
+                            try
+                            {
+                                dateTime = new DateTime(DateTime.Today.AddYears(1).Year, month, day);
+                            }
+                            catch (ArgumentOutOfRangeException)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            dateTime = new DateTime(year, month, day);
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            continue;
+                        }
+                    }
+                    TokenDate dateToken = new TokenDate(index, dateTime, isSpecific);
+                    dateTokens.Add(dateToken);
+                }
+                index++;
+                isSpecific = true;
+            }
+            return dateTokens;
+        }
+
+        internal static Match GetDateMatch(string theWord)
+        {
+            Match theMatch = date_numericFormat.Match(theWord.ToLower());
+            if (!theMatch.Success)
+            {
+                theMatch = date_alphabeticFormat.Match(theWord.ToLower());
+            }
+            return theMatch;
+        }
+
+        internal static void GetMatchTagValues(Match match, ref string day, ref string month, ref string year)
+        {
+            day = match.Groups["day"].Value;
+            month = match.Groups["month"].Value;
+            year = match.Groups["year"].Value;
+        }
+        
+        // This method convert the day, month and year strings into their equivalent integers.
+        // If the day and year strings are empty, they will be converted to zeroes.
+        internal static void ConvertMatchTagValuesToInts(string dayString, string monthString, string yearString, ref int dayInt, ref int monthInt, ref int yearInt)
+        {
+            dayString = RemoveSuffixesIfRequired(dayString);            
+            int.TryParse(dayString, out dayInt);
+            monthInt = ConvertToNumericMonth(monthString);
+            int.TryParse(yearString, out yearInt);
+        }
+
+        internal static int ConvertToNumericMonth(string month)
+        {
+            Month monthType;
+            int monthInt = 0;
+            bool success;
+            if (Char.IsDigit(month[0]))
+            {
+                success = int.TryParse(month, out monthInt);
+            }
+            else if (monthKeywords.TryGetValue(month, out monthType))
+            {
+                monthInt = (int)monthType;
+            }
+            else Debug.Assert(false, "Conversion to numeric month failed! There should always be a valid month matched.");
+            return monthInt;
+        }
+
+        internal static string RemoveSuffixesIfRequired(string day)
+        {
+            // No day input
+            if (day == String.Empty)
+            {
+                return day;
+            }
+            if (!Char.IsDigit(day.Last()))
+            {
+                day = day.Remove(day.Length - 2, 2);
+            }
+            return day;
+        }
+
         // uses a combined regex to get hour, minute, second via tags and return a TimeSpan.
         private static List<Token> GenerateTimeTokens(List<string> input)
         {
@@ -551,13 +645,7 @@ namespace ToDo
             }
             return timeTokens;
         }
-
-        private static List<Token> GenerateDateTokens(List<string> input)
-        {
-            return new List<Token>();
-            throw new NotImplementedException();
-        }
-
+        
         private static List<TokenContext> GenerateContextTokens(List<string> input, List<Token> parsedTokens)
         {
             int index = 0;
@@ -603,6 +691,8 @@ namespace ToDo
             return tokens;
         }
 
+        #endregion
+
         private static object GetTokenAtPosition(List<Token> tokens, int p)
         {
             foreach (Token token in tokens)
@@ -610,6 +700,19 @@ namespace ToDo
                 if (token.Position == p) return token;
             }
             return null;
+        }
+
+        private static int CompareByPosition(Token x, Token y)
+        {
+            int xPosition = x.Position;
+            int yPosition = y.Position;
+            if (xPosition < yPosition) return -1;
+            else if (xPosition > yPosition) return 1;
+            else
+            {
+                Debug.Assert(false, "Two tokens with same position!");
+                return 0;
+            }
         }
 
     }
