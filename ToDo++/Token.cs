@@ -8,7 +8,7 @@ namespace ToDo
 {
     class Token
     {
-        public enum TokenType { COMMAND, DATE, TIME, DAY, CONTEXT, LITERAL };
+        public enum TokenType { COMMAND, DATE, TIME, DAY, CONTEXT, LITERAL, INDEX };
 
         private int position;
         protected TokenType type;
@@ -33,16 +33,23 @@ namespace ToDo
     class TokenCommand : Token
     {
         CommandType commandType;
+        int taskIndex;
+
         internal CommandType Value
         {
             get { return commandType; }
         }
+        internal int TaskIndex
+        {
+            get { return taskIndex; }
+        }
 
-        internal TokenCommand(int position, CommandType val)
+        internal TokenCommand(int position, CommandType val, int taskIndex = 0)
             : base(position)
         {
             type = TokenType.COMMAND;
             commandType = val;
+            this.taskIndex = taskIndex;
         }
     }
 
@@ -108,6 +115,21 @@ namespace ToDo
         {
             type = TokenType.CONTEXT;
             contextType = val;
+        }
+    }
+
+    class TokenIndex : Token
+    {
+        string index;
+        internal string Value
+        {
+            get { return index; }
+        }
+        internal TokenIndex(int position, string val)
+            : base(position)
+        {
+            type = TokenType.LITERAL;
+            index = val;
         }
     }
 

@@ -24,14 +24,15 @@ namespace ToDo
 
         private static Operation GenerateOperation(List<Token> tokens)
         {
-            Operation newOperation;            
+            Operation newOperation = null;
             CommandType commandType = new CommandType();            
             ContextType currentMode = new ContextType();
             ContextType currentSpecifier = new ContextType();
             TimeSpan? startTime = null, endTime = null;
             DateTime? startDate = null, endDate = null;
             DayOfWeek? startDay = null, endDay = null;
-            string taskName;
+            DateTime? startCombined = null, endCombined = null;
+            string taskName = null;
 
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
@@ -123,10 +124,63 @@ namespace ToDo
                 {
                     throw new Exception("Token type not matched!");
                 }
-
-                // Generate operation based on values, and whether they have been used.
             }
-            return new OperationAdd(new TaskFloating());
+            // Combine Date/Times
+            startCombined = CombineDateAndTime(startTime, startDate);
+            endCombined = CombineDateAndTime(endTime, endDate);
+            // Generate operation based on values, and whether they have been used.
+            Task task;
+            
+            switch (commandType)
+            {                
+                case CommandType.ADD:
+                    task = GenerateNewTask(taskName, startCombined, endCombined);
+                    newOperation = new OperationAdd(task);
+                    break;
+                case CommandType.DELETE:
+                    throw new NotImplementedException();
+                case CommandType.DISPLAY:
+                    //@alice: how to display all??
+                    throw new NotImplementedException();
+                case CommandType.MODIFY:
+                    task = GenerateNewTask(taskName, startCombined, endCombined);
+                    int oldTaskIndex;
+                    if (!Int32.TryParse(taskName, out oldTaskIndex))
+                        throw new Exception("Invalid task name. Modify by name NYI.");
+                    newOperation = new OperationModify(oldTaskIndex, task);
+                    throw new NotImplementedException();
+                case CommandType.SEARCH:
+                    newOperation = new OperationSearch();
+                    throw new NotImplementedException();
+                case CommandType.SORT:
+                    throw new NotImplementedException();
+                case CommandType.REDO:
+                    throw new NotImplementedException();
+                case CommandType.UNDO:
+                    throw new NotImplementedException();
+            }
+            return newOperation;
+        }
+
+        private static DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date)
+        {
+            DateTime? combined = null;
+            DateTime todayDate = DateTime.Now;
+            if (date == null)
+            {
+                TimeSpan currentTime = todayDate.TimeOfDay;
+                date = new DateTime(todayDate.Year, todayDate.Month, todayDate.Day, time.Value.Hours, time.Value.Minutes, time.Value.Seconds);
+                if (currentTime > time)
+                {
+                    ((DateTime)date).AddDays(1);
+                }
+            }
+            return combined;
+        }
+
+        private static Task GenerateNewTask(string taskName, DateTime? startTime, DateTime? endTime)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
