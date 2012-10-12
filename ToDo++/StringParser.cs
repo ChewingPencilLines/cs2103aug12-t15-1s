@@ -569,6 +569,9 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of date tokens</returns>
+        
+        // note: currently, the method just ignores invalid dates such as 30th feb
+        // might wish to change the catch case to flag the invalid date input
         internal static List<TokenDate> GenerateDateTokens(List<string> input)
         {
             string dayString = String.Empty;
