@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ToDo\ToDo.csproj">
-      <Project>{6038fbc4-3b66-4034-9243-2f23084aec5a}</Project>
-      <Name>ToDo</Name>
+    <ProjectReference Include="..\..\ToDo++\ToDo++.csproj">
+      <Project>{d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5}</Project>
+      <Name>ToDo++</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

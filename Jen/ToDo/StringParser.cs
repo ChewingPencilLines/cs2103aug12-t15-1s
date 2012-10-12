@@ -106,6 +106,8 @@ namespace ToDo
                         (?:(?(day)(\s(?<year>(\d\d)?\d\d))?|(\s(?<year>\d\d\d\d))))$"
             , RegexOptions.IgnorePatternWhitespace);
 
+        static Regex date_daysWithSuffixes =
+            new Regex(@"[23]?1(?:st)?|2?2(?:nd)?|2?3(?:rd)?|[12]?[4-9](?:th)?|[123]0(?:th)?|1[123](?:th)?");
 
         // Note that the following methods do not validate that the dates do actually exist.
         // i.e. does not check for erroneous non-existent dates such as 31st feb
@@ -192,6 +194,8 @@ namespace ToDo
 
         internal static string ConvertToNumericMonthIfRequired(string month)
         {
+            if (month == String.Empty)
+                return month;
             if (Char.IsDigit(month[0]))
             {
                 return month;
@@ -305,6 +309,12 @@ namespace ToDo
                     ConvertMatchTagValuesToInts(dayString, monthString, yearString, ref day, ref month, ref year);
                     // no day input
                     if (day == 0)
+                    {
+                        isSpecific = false;
+                        day = 1;
+                    }
+                    // no month input
+                    if (month == 0)
                     {
                         isSpecific = false;
                         day = 1;
