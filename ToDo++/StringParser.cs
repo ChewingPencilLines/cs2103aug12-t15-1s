@@ -81,6 +81,9 @@ namespace ToDo
                         # (YY)YY
                         (?:(?(day)(\s(?<year>(\d\d)?\d\d))?|(\s(?<year>\d\d\d\d))))$"
             , RegexOptions.IgnorePatternWhitespace);
+        
+        static Regex date_daysWithSuffixes =
+             new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
         #endregion
 
         static StringParser()
@@ -200,7 +203,7 @@ namespace ToDo
 
         internal static bool IsValidDate(string theDate)
         {
-            return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate);
+            return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate) || date_daysWithSuffixes.Match(theDate.ToLower()).Success;
         }
         #endregion
 
@@ -238,9 +241,9 @@ namespace ToDo
         /// This method parses a string of words into a list of tokens, each containing a token representing the meaning of each word or substring.
         /// By inputting a list of integer pairs to mark delimiting characters, multiple words can be taken as a single absolute substring (word).  
         /// </summary>
-        /// <param name="input">The string of words to be parsed.</param>
-        /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings.</param>
-        /// <returns>The list of tokens.</returns>
+        /// <param name="input">The string of words to be parsed</param>
+        /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings</param>
+        /// <returns>The list of tokens</returns>
         internal static List<Token> ParseStringIntoTokens(string input, List<int[]> indexOfDelimiters = null)
         {
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
@@ -250,11 +253,11 @@ namespace ToDo
         #region String Splitting and Merging Methods
         /// <summary>
         /// This method splits a string and returns a list of substrings, each containing either a word delimited by a space,
-        /// or a substring delimited by positions in the parameter indexOfDelimiters
+        /// or a substring delimited by positions in the parameter indexOfDelimiters.
         /// </summary>
-        /// <param name="input">The string of words to be split.</param>
-        /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings.</param>
-        /// <returns></returns>
+        /// <param name="input">The string of words to be split</param>
+        /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings</param>
+        /// <returns>List of substrings</returns>
         private static List<string> SplitStringIntoSubstrings(string input, List<int[]> indexOfDelimiters)
         {
             List<string> words = new List<string>();
@@ -315,6 +318,12 @@ namespace ToDo
             return output;
         }
 
+        /// <summary>
+        /// This method detects and merges all the date and time words into a single string
+        /// while keeping the other words separate and unmerged.
+        /// </summary>
+        /// <param name="input">The list of unmerged delimited words</param>
+        /// <returns>List of separate words or time/date phrases</returns>
         private static List<string> MergeDateAndTimeWords(List<string> input)
         {
             // add task friday 5 pm 28 sept 2012
@@ -375,7 +384,7 @@ namespace ToDo
             else return false;
         }
 
-        internal static List<string> MergeDateWords(List<string> input)
+        public static List<string> MergeDateWords(List<string> input)
         {
             List<string> output = new List<string>();
             int position = 0, skipWords = 0;
@@ -392,11 +401,13 @@ namespace ToDo
                 if (monthKeywords.ContainsKey(word.ToLower()))
                 {
                     isWordAdded = MergeWord_IfValidAlphabeticDate(ref output, input, position, ref skipWords);
-                    if (isWordAdded) break;
                 }
-                if (!isWordAdded) output.Add(word);
-                isWordAdded = false;
+                if (!isWordAdded)
+                {
+                    output.Add(word);
+                }
                 position++;
+                isWordAdded = false;
             }
             // dates in numeric date formats and dates that are only specified by day with suffixes i.e. "15th"
             // need not be checked for and merged since they are already whole words on their own.
@@ -513,7 +524,7 @@ namespace ToDo
             return dayTokens;
         }
 
-        internal static List<Token> GenerateDateTokens(List<string> input)
+        internal static List<TokenDate> GenerateDateTokens(List<string> input)
         {
             string dayString = String.Empty;
             string monthString = String.Empty;
@@ -523,13 +534,15 @@ namespace ToDo
             int year = 0;
             int index = 0;
             bool isSpecific = true;
-            List<Token> dateTokens = new List<Token>();
+            List<TokenDate> dateTokens = new List<TokenDate>(); ;
             foreach (string word in input)
             {
+                Match match;
+                DateTime dateTime;
+                bool isMonthGiven = true;
                 if (IsValidDate(word.ToLower()))
                 {
-                    DateTime dateTime;
-                    Match match = GetDateMatch(word.ToLower());
+                    match = GetDateMatch(word.ToLower());
                     GetMatchTagValues(match, ref dayString, ref monthString, ref yearString);
                     ConvertMatchTagValuesToInts(dayString, monthString, yearString, ref day, ref month, ref year);
                     // no day input
@@ -537,6 +550,12 @@ namespace ToDo
                     {
                         isSpecific = false;
                         day = 1;
+                    }
+                    // no month input
+                    if (month == 0)
+                    {
+                        month = DateTime.Today.Month;
+                        isMonthGiven = false;
                     }
                     // no year input
                     if (year == 0)
@@ -547,17 +566,32 @@ namespace ToDo
                         }
                         catch (ArgumentOutOfRangeException)
                         {
-                            continue;
+                            dateTime = new DateTime(1, 1, 1); // can't just continue on to next iteration in case today's date is 15th feb and entry is "30th"
                         }
                         if (DateTime.Compare(dateTime, DateTime.Today) < 0)
                         {
-                            try
+                            if (isMonthGiven == false)
                             {
-                                dateTime = new DateTime(DateTime.Today.AddYears(1).Year, month, day);
+                                isMonthGiven = true;
+                                try
+                                {
+                                    dateTime = new DateTime(DateTime.Today.AddMonths(1).Year, DateTime.Today.AddMonths(1).Month, day);
+                                }
+                                catch (ArgumentOutOfRangeException)
+                                {
+                                    continue;
+                                }
                             }
-                            catch (ArgumentOutOfRangeException)
+                            else
                             {
-                                continue;
+                                try
+                                {
+                                    dateTime = new DateTime(DateTime.Today.AddYears(1).Year, month, day);
+                                }
+                                catch (ArgumentOutOfRangeException)
+                                {
+                                    continue;
+                                }
                             }
                         }
                     }
@@ -583,10 +617,14 @@ namespace ToDo
 
         internal static Match GetDateMatch(string theWord)
         {
-            Match theMatch = date_numericFormat.Match(theWord.ToLower());
+            Match theMatch = date_numericFormat.Match(theWord);
             if (!theMatch.Success)
             {
-                theMatch = date_alphabeticFormat.Match(theWord.ToLower());
+                theMatch = date_alphabeticFormat.Match(theWord);
+            }
+            if (!theMatch.Success)
+            {
+                theMatch = date_daysWithSuffixes.Match(theWord);
             }
             return theMatch;
         }
@@ -613,6 +651,8 @@ namespace ToDo
             Month monthType;
             int monthInt = 0;
             bool success;
+            if (month == String.Empty)
+                return 0;
             if (Char.IsDigit(month[0]))
             {
                 success = int.TryParse(month, out monthInt);
