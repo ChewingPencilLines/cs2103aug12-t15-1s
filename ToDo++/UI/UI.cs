@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Hotkeys;
+using Microsoft.Win32;
 
 namespace ToDo
 {
@@ -86,14 +87,38 @@ namespace ToDo
         {
             mainSettingsManager = new SettingsManager();
             MinimiseToTrayWhenChecked();
+            RegisterLoadOnStartupWhenChecked();
         }
 
         //Checks if App needs to be minimized to tray initially
         public void MinimiseToTrayWhenChecked()
         {
             if (mainSettingsManager.GetStartMinimizedStatus() == true)
-            {
                 MinimiseMaximiseTray();
+        }
+
+        public void RegisterLoadOnStartupWhenChecked()
+        {
+            if (mainSettingsManager.GetLoadOnStartupStatus() == true)
+                RegisterInStartup(true);
+            else
+                RegisterInStartup(false);
+        }
+
+        private void RegisterInStartup(bool isChecked)
+        {
+            if (mainSettingsManager.GetLoadOnStartupStatus() == true)
+            {
+                RegistryKey registryKey = Registry.CurrentUser.OpenSubKey
+                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                if (isChecked)
+                {
+                    registryKey.SetValue("ApplicationName", Application.ExecutablePath);
+                }
+                else
+                {
+                    registryKey.DeleteValue("ApplicationName");
+                }
             }
         }
 

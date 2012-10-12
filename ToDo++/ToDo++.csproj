@@ -46,6 +46,7 @@
   <ItemGroup>
     <None Include="CommandParser.cs" />
     <None Include="Logic.cs" />
+    <Compile Include="Settings\SettingsExceptions.cs" />
     <Compile Include="UI\DateTimeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
