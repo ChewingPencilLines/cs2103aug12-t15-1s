@@ -124,6 +124,9 @@
     <None Include="Resources\App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Cover.png" />
+    <None Include="Resources\Cover1.png" />
+    <None Include="Resources\CoverPhoto.png" />
     <Content Include="Resources\icon.ico" />
     <None Include="Resources\tempImage.png" />
   </ItemGroup>
