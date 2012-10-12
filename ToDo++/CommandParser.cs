@@ -33,6 +33,7 @@ namespace ToDo
             DayOfWeek? startDay = null, endDay = null;
             DateTime? startCombined = null, endCombined = null;
             string taskName = null;
+            int? taskIndex = null;
 
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
@@ -55,7 +56,13 @@ namespace ToDo
                     if (commandType != CommandType.INVALID)
                         WarnUserOfMultipleCommands();
                     else
+                    {
                         commandType = ((TokenCommand)token).Value;
+                        if (commandType == CommandType.DELETE || commandType == CommandType.MODIFY)
+                        {
+                            taskIndex = ((TokenCommand)token).TaskIndex;
+                        }
+                    }
                 }
                 else if (token is TokenTime)
                 {
@@ -144,10 +151,9 @@ namespace ToDo
                     throw new NotImplementedException();
                 case CommandType.MODIFY:
                     task = GenerateNewTask(taskName, startCombined, endCombined);
-                    int oldTaskIndex;
-                    if (!Int32.TryParse(taskName, out oldTaskIndex))
+                    if(taskIndex == null)
                         throw new Exception("Invalid task name. Modify by name NYI.");
-                    newOperation = new OperationModify(oldTaskIndex, task);
+                    else newOperation = new OperationModify((int)taskIndex, task);
                     throw new NotImplementedException();
                 case CommandType.SEARCH:
                     newOperation = new OperationSearch();
