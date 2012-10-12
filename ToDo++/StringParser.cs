@@ -193,7 +193,7 @@ namespace ToDo
         // i.e. does not check for erroneous non-existent dates such as 31st feb
         internal static bool IsValidNumericDate(string theDate)
         {
-            return date_numericFormat.IsMatch(theDate);
+            return date_numericFormat.IsMatch(theDate) || date_daysWithSuffixes.IsMatch(theDate.ToLower());
         }
 
         internal static bool IsValidAlphabeticDate(string theDate)
@@ -203,7 +203,7 @@ namespace ToDo
 
         internal static bool IsValidDate(string theDate)
         {
-            return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate) || date_daysWithSuffixes.Match(theDate.ToLower()).Success;
+            return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate);
         }
         #endregion
 
