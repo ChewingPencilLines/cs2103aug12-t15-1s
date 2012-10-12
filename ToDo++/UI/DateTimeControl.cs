@@ -69,7 +69,7 @@ namespace ToDo
 
         void Timer_Tick(object sender, EventArgs e)
         {
-            time.BackColor = Color.Transparent;
+            //time.BackColor = Color.Transparent;
             time.Text = DateTime.Now.ToLongTimeString();
         }
 

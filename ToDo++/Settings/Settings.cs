@@ -129,7 +129,7 @@ namespace ToDo
             switch (currentCommand)
             {
                 case Commands.ADD:
-                    description = "Add Command\n\nEasily add floating, event or\ndeadline tasks\n";
+                    description = "Add Command\nEasily add floating, event or deadline tasks with extreme ease";
                     break;
                 case Commands.DELETE:
                     description = "Delete Command\nDescription";
@@ -166,10 +166,18 @@ namespace ToDo
 
         private void removeButton_Click(object sender, EventArgs e)
         {
-            EnableApplyButton();
-            tempSettingsManager.RemoveCommand(listOfCommands.SelectedItem.ToString(), currentCommand);
-            UpdateListOfCommands();
-            ClearInputField();
+            try
+            {
+                EnableApplyButton();
+                tempSettingsManager.RemoveCommand(listOfCommands.SelectedItem.ToString(), currentCommand);
+                UpdateListOfCommands();
+                ClearInputField();
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("You have selected nothing to remove");
+            }
+
         }
 
         private void ClearInputField()

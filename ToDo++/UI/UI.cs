@@ -210,7 +210,7 @@ namespace ToDo
         /// </summary>
         private void ProcessText()
         {
-            outputBox.DisplayCommand(textBox_input.Text);
+            outputBox.DisplayCommand(textBox_input.Text,"Buy Milk successfully added!");
             outputBox.SetOutputSize(mainSettingsManager.GetTextSize());
             textBox_input.Clear();
         }

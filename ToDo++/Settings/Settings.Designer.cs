@@ -39,8 +39,8 @@
             this.minimisedCheckbox = new System.Windows.Forms.CheckBox();
             this.loadOnStartupCheckbox = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.removeButton = new System.Windows.Forms.Button();
-            this.commandDescription = new System.Windows.Forms.Label();
             this.addUserCommandButton = new System.Windows.Forms.Button();
             this.userCommand = new System.Windows.Forms.TextBox();
             this.listOfCommands = new System.Windows.Forms.ListBox();
@@ -49,7 +49,7 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.applyButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.commandDescription = new System.Windows.Forms.RichTextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -128,6 +128,16 @@
             this.tabPage3.Text = "FlexiCommands";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.commandDescription);
+            this.groupBox2.Location = new System.Drawing.Point(264, 33);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(166, 118);
+            this.groupBox2.TabIndex = 7;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Description";
+            // 
             // removeButton
             // 
             this.removeButton.Location = new System.Drawing.Point(378, 157);
@@ -137,15 +147,6 @@
             this.removeButton.Text = "Remove";
             this.removeButton.UseVisualStyleBackColor = true;
             this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
-            // 
-            // commandDescription
-            // 
-            this.commandDescription.AutoSize = true;
-            this.commandDescription.Location = new System.Drawing.Point(6, 16);
-            this.commandDescription.Name = "commandDescription";
-            this.commandDescription.Size = new System.Drawing.Size(110, 13);
-            this.commandDescription.TabIndex = 5;
-            this.commandDescription.Text = "Command Description";
             // 
             // addUserCommandButton
             // 
@@ -220,15 +221,15 @@
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
-            // groupBox2
+            // commandDescription
             // 
-            this.groupBox2.Controls.Add(this.commandDescription);
-            this.groupBox2.Location = new System.Drawing.Point(264, 33);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(166, 118);
-            this.groupBox2.TabIndex = 7;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Description";
+            this.commandDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.commandDescription.Enabled = false;
+            this.commandDescription.Location = new System.Drawing.Point(7, 19);
+            this.commandDescription.Name = "commandDescription";
+            this.commandDescription.Size = new System.Drawing.Size(153, 90);
+            this.commandDescription.TabIndex = 8;
+            this.commandDescription.Text = "";
             // 
             // Settings
             // 
@@ -248,7 +249,6 @@
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -261,7 +261,6 @@
         private System.Windows.Forms.TreeView CommandTree;
         private System.Windows.Forms.Label commandPreview;
         private System.Windows.Forms.ListBox listOfCommands;
-        private System.Windows.Forms.Label commandDescription;
         private System.Windows.Forms.Button addUserCommandButton;
         private System.Windows.Forms.TextBox userCommand;
         private System.Windows.Forms.Button removeButton;
@@ -272,6 +271,7 @@
         private System.Windows.Forms.Button applyButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RichTextBox commandDescription;
 
     }
 }
