@@ -172,14 +172,19 @@ namespace ToDo
         {
             DateTime? combined = null;
             DateTime todayDate = DateTime.Now;
-            if (date == null)
+            if (date == null && time != null)
             {
                 TimeSpan currentTime = todayDate.TimeOfDay;
-                date = new DateTime(todayDate.Year, todayDate.Month, todayDate.Day, time.Value.Hours, time.Value.Minutes, time.Value.Seconds);
+                TimeSpan taskTime = (TimeSpan)time;
+                date = new DateTime(todayDate.Year, todayDate.Month, todayDate.Day, taskTime.Hours, taskTime.Minutes, taskTime.Seconds);
                 if (currentTime > time)
                 {
                     ((DateTime)date).AddDays(1);
                 }
+            }
+            else if (time == null && date != null)
+            {
+                combined = date;
             }
             return combined;
         }
