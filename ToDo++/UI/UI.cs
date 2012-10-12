@@ -16,9 +16,18 @@ namespace ToDo
     public partial class UI : Form
     {
 
-        private Hotkeys.GlobalHotkey ghk;
-        SettingsManager mainSettingsManager;
+        // ******************************************************************
+        // Constructors.
+        // ******************************************************************
 
+        #region Constructor
+
+        private Hotkeys.GlobalHotkey ghk;       //Global Hotkey to Minimize to System Tray
+        SettingsManager mainSettingsManager;    //Settings Manager stores all settings data, including Flexi-Commands
+
+        /// <summary>
+        /// Creates a new instance of the Main Program (UI) and loads the various Classes
+        /// </summary>
         public UI()
         {
             InitializeComponent();
@@ -28,7 +37,18 @@ namespace ToDo
             PrepareOutputBox();                 //Loads Output Box
         }
 
-        #region MinimizeMaximizeSystemTrayHotKey
+        #endregion
+
+        // ******************************************************************
+        // Win32 Functions
+        // ******************************************************************
+
+        #region Win32Functions
+
+        /// <summary>
+        /// Code for placing App in System Tray
+        /// </summary>
+        #region SystemTray
 
         private void PrepareSystemTray()
         {
@@ -81,29 +101,10 @@ namespace ToDo
 
         #endregion
 
-        #region PrepareSettingsManager
-
-        public void PrepareSettingsManager()
-        {
-            mainSettingsManager = new SettingsManager();
-            MinimiseToTrayWhenChecked();
-            RegisterLoadOnStartupWhenChecked();
-        }
-
-        //Checks if App needs to be minimized to tray initially
-        public void MinimiseToTrayWhenChecked()
-        {
-            if (mainSettingsManager.GetStartMinimizedStatus() == true)
-                MinimiseMaximiseTray();
-        }
-
-        public void RegisterLoadOnStartupWhenChecked()
-        {
-            if (mainSettingsManager.GetLoadOnStartupStatus() == true)
-                RegisterInStartup(true);
-            else
-                RegisterInStartup(false);
-        }
+        /// <summary>
+        /// Registers the App with the Registry to open on Startup
+        /// </summary>
+        #region RegisterToOpenOnStartup
 
         private void RegisterInStartup(bool isChecked)
         {
@@ -124,8 +125,55 @@ namespace ToDo
 
         #endregion
 
+        #endregion
+
+        // ******************************************************************
+        // Prepare Settings Manager
+        // ******************************************************************
+
+        #region PrepareSettingsManager
+
+        /// <summary>
+        /// Creates an Instance of Settings Manager
+        /// </summary>
+        public void PrepareSettingsManager()
+        {
+            mainSettingsManager = new SettingsManager();
+            MinimiseToTrayWhenChecked();
+            RegisterLoadOnStartupWhenChecked();
+        }
+
+        /// <summary>
+        /// Minimizes App to System tray if true
+        /// </summary>
+        public void MinimiseToTrayWhenChecked()
+        {
+            if (mainSettingsManager.GetStartMinimizedStatus() == true)
+                MinimiseMaximiseTray();
+        }
+
+        /// <summary>
+        /// Sets the Load on Startup Status
+        /// </summary>
+        public void RegisterLoadOnStartupWhenChecked()
+        {
+            if (mainSettingsManager.GetLoadOnStartupStatus() == true)
+                RegisterInStartup(true);
+            else
+                RegisterInStartup(false);
+        }
+
+        #endregion
+
+        // ******************************************************************
+        // Prepare the Menu Bar
+        // ******************************************************************
+
         #region PrepareMenu
 
+        /// <summary>
+        /// Prepare the Menu Bar. Pass an instance of settings manager into it so it can interact with it
+        /// </summary>
         public void PrepareMenu()
         {
             menuStrip.SetSettingsManager(mainSettingsManager);
@@ -134,8 +182,15 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        // Prepare the Menu Bar
+        // ******************************************************************
+
         #region PrepareOutputBox
 
+        /// <summary>
+        /// Prepare the Output Box. Pass an instance of settings manager into it so it can interact with it
+        /// </summary>
         public void PrepareOutputBox()
         {
             outputBox.SetSettingsManager(mainSettingsManager);
@@ -144,8 +199,15 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        // Code for Text Processing goes here
+        // ******************************************************************
+
         #region TextInput
 
+        /// <summary>
+        /// Process Text Operation, Current not in use
+        /// </summary>
         private void ProcessText()
         {
             outputBox.DisplayCommand(textBox_input.Text);
@@ -153,13 +215,17 @@ namespace ToDo
             textBox_input.Clear();
         }
 
-        //Go Button Clicked
+        /// <summary>
+        /// When Go Button Clicked
+        /// </summary>
         private void button_go_Click(object sender, EventArgs e)
         {
             ProcessText();
         }
 
-        //Enter Pressed while inputbox is in focus
+        /// <summary>
+        /// When Enter Button Pressed
+        /// </summary>
         private void textBox_input_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)13)
@@ -170,8 +236,15 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        // Keyboard Commands
+        // ******************************************************************
+
         #region KeyboardCommands
 
+        /// <summary>
+        /// Holds all Shortcut Keys
+        /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.Q))
@@ -184,17 +257,25 @@ namespace ToDo
 
         #endregion
 
-        //Exit Command. Choose to Popup options before exiting
+        /// <summary>
+        /// Exit the Application
+        /// </summary>
         public static void Exit()
         {
             Application.Exit();
         }
 
+        /// <summary>
+        /// Increase size of Text
+        /// </summary>
         private void increaseSizeButton_Click(object sender, EventArgs e)
         {
             outputBox.IncreaseSizeOfOutput();
         }
 
+        /// <summary>
+        /// Decrease size of text
+        /// </summary>
         private void decreaseSizeButton_Click(object sender, EventArgs e)
         {
             outputBox.DecreaseSizeOfOutput();
