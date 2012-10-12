@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Windows.Forms;
 
 namespace ToDo
 {
@@ -24,9 +25,9 @@ namespace ToDo
 
         public SettingsList()
         {
-            loadOnStartup = true;
-            startMinimized = true;
-            textSize = 1;
+            loadOnStartup = false;
+            startMinimized = false;
+            textSize = 12;
             customKeywords_ADD = new List<string>();
             customKeywords_DELETE = new List<string>();
             customKeywords_UPDATE = new List<string>();
@@ -38,7 +39,7 @@ namespace ToDo
         {
             loadOnStartup = false;
             startMinimized = false;
-            textSize = 1;
+            textSize = 12;
             customKeywords_ADD.Clear();
             customKeywords_DELETE.Clear();
             customKeywords_REDO.Clear();
@@ -51,10 +52,21 @@ namespace ToDo
 
     public class SettingsManager
     {
-        string fileName;
+        private string fileName = "Settings.xml";
         private SettingsList settingsList;
 
-        #region CommandEnumManager
+        public SettingsManager()
+        {
+            settingsList = new SettingsList();
+
+            /* Used for Writing test data to xml before running*/
+            //SetUpCommands();
+            //WriteToFile();
+
+            OpenFile();
+        }
+
+        #region CommandFunctions
 
         public Commands StringToCommand(string commandString)
         {
@@ -96,17 +108,7 @@ namespace ToDo
 
         #endregion
 
-        public SettingsManager()
-        {
-            fileName = "TEST.xml";
-            settingsList = new SettingsList();
-
-            /* Used for Writing test data to xml before running*/
-            //SetUpCommands();
-            //WriteToFile();
-
-            OpenFile();
-        }
+        #region TestFunctionToLoadData
 
         //Just a Test Function
         public void SetUpCommands()
@@ -117,6 +119,10 @@ namespace ToDo
             AddCommand("-", Commands.DELETE);
             SetTextSize(12);
         }
+
+        #endregion
+
+        #region TextSize
 
         public void SetTextSize(int size)
         {
@@ -130,15 +136,36 @@ namespace ToDo
 
         public void IncreaseTextSize()
         {
-            settingsList.textSize++;
-            WriteToFile();
+            try
+            {
+                if ((settingsList.textSize + 1) > 14)
+                    throw new TextSizeOutOfRange("Text Size Too Big");
+                settingsList.textSize++;
+                WriteToFile();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         public void DecreaseTextSize()
         {
-            settingsList.textSize--;
-            WriteToFile();
+            try
+            {
+                if ((settingsList.textSize - 1) < 5)
+                    throw new TextSizeOutOfRange("Text Size Too Small");
+                settingsList.textSize--;
+                WriteToFile();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
         }
+
+        #endregion
 
         #region StartupMinimizedStatus
 
@@ -172,30 +199,48 @@ namespace ToDo
             return settingsList.startMinimized;
         }
 
-#endregion
+        #endregion
 
         #region CommandModifications
 
         public void AddCommand(string newCommand, Commands commandType)
         {
-            switch (commandType)
+            try
             {
-                case Commands.ADD:
-                    settingsList.customKeywords_ADD.Add(newCommand);
-                    break;
-                case Commands.DELETE:
-                    settingsList.customKeywords_DELETE.Add(newCommand);
-                    break;
-                case Commands.UPDATE:
-                    settingsList.customKeywords_UPDATE.Add(newCommand);
-                    break;
-                case Commands.UNDO:
-                    settingsList.customKeywords_UNDO.Add(newCommand);
-                    break;
-                case Commands.REDO:
-                    settingsList.customKeywords_REDO.Add(newCommand);
-                    break;
+                switch (commandType)
+                {
+                    case Commands.ADD:
+                        if (settingsList.customKeywords_ADD.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the ADD list already");
+                        settingsList.customKeywords_ADD.Add(newCommand);
+                        break;
+                    case Commands.DELETE:
+                        if (settingsList.customKeywords_DELETE.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the DELETE list already");
+                        settingsList.customKeywords_DELETE.Add(newCommand);
+                        break;
+                    case Commands.UPDATE:
+                        if (settingsList.customKeywords_REDO.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the REDO list already");
+                        settingsList.customKeywords_UPDATE.Add(newCommand);
+                        break;
+                    case Commands.UNDO:
+                        if (settingsList.customKeywords_UNDO.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the UNDO list already");
+                        settingsList.customKeywords_UNDO.Add(newCommand);
+                        break;
+                    case Commands.REDO:
+                        if (settingsList.customKeywords_UPDATE.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the UPDATE list already");
+                        settingsList.customKeywords_REDO.Add(newCommand);
+                        break;
+                }
             }
+            catch (RepeatCommandException e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
         }
 
         public void RemoveCommand(string commandToRemove, Commands commandType)
@@ -272,28 +317,42 @@ namespace ToDo
 
         public void WriteToFile()
         {
+            System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
+
             System.Xml.Serialization.XmlSerializer writer =
             new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
-
-            System.IO.StreamWriter file = new System.IO.StreamWriter(
-                fileName);
             writer.Serialize(file, settingsList);
             file.Close();
         }
 
         public void OpenFile()
         {
-            System.Xml.Serialization.XmlSerializer writer =
-            new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
+            System.IO.StreamReader file;
 
-            System.IO.StreamReader file = new System.IO.StreamReader(
-                fileName);
-            settingsList = (SettingsList)writer.Deserialize(file);
+            try
+            {
+                file = new System.IO.StreamReader(fileName);
+                System.Xml.Serialization.XmlSerializer writer =
+                new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
+                settingsList = (SettingsList)writer.Deserialize(file);
+                file.Close();
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("Settings File Not Found, new file will be created");
+                WriteToFile();
+            }
+            catch (InvalidOperationException)
+            {
+                MessageBox.Show("There was an error with the Settings File, a new file will be created");
+                WriteToFile();
+            }
 
-            file.Close();
         }
 
         #endregion
+
+        #region CloningOperations
 
         public void CopyUpdatedCommandsFrom(SettingsManager passedSettingsManager)
         {
@@ -327,5 +386,7 @@ namespace ToDo
 
             return p;
         }
+
+        #endregion
     }
 }
