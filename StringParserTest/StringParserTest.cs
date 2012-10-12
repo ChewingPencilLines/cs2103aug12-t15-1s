@@ -1,25 +1,24 @@
 ﻿using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDo;
 
 namespace StringParserTest
 {
-    /***************** UPDATE: 5 OCT 2012. UNIT TEST DEPRECATED.*****************/
-    
-    // @ivan: This class contains of unit tests for methods in the StringParser class for use during development.
-    // The testing approach here is white box unit testing; Any change in implementation may break a unit test.
-    // Comment out / clean up this page and use black box tests once the class is complete.
+    // @jenna: This class contains of unit tests for methods in the StringParser class for use during development.
+    // last update on 13 oct; only consisting of test methods for datetime processing
 
-    
-    [TestClass]    
+    [TestClass]
     public class StringParserTest
     {
-        
         [TestMethod]
         // note: this test method does not test if the day-month-year format takes precedence
+        // it should due to the left-to-right property of regexes
         public void IsValidNumericDate()
         {
             Assert.IsTrue(StringParser.IsValidNumericDate("20/1/2012")); // dmy
@@ -31,295 +30,187 @@ namespace StringParserTest
             Assert.IsTrue(StringParser.IsValidNumericDate("11/2012")); // my
             Assert.IsTrue(StringParser.IsValidNumericDate("15/12")); // dm or md (my??)
             Assert.IsTrue(StringParser.IsValidNumericDate("23/12")); // dm
+            Assert.IsTrue(StringParser.IsValidNumericDate("12/23")); // md
+            Assert.IsTrue(StringParser.IsValidNumericDate("1/1/0000")); // dmy or mdy
             Assert.IsFalse(StringParser.IsValidNumericDate("12/")); // invalid
             Assert.IsFalse(StringParser.IsValidNumericDate("23")); // invalid
             Assert.IsFalse(StringParser.IsValidNumericDate("11")); // invalid
             Assert.IsFalse(StringParser.IsValidNumericDate("23/23/2012")); // invalid
             Assert.IsFalse(StringParser.IsValidNumericDate("31/2022")); // invalid
             Assert.IsFalse(StringParser.IsValidNumericDate("4/55/2022")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("4/12/20222")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("2222")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("/1/2012")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("1/1/123")); // invalid
             Assert.IsFalse(StringParser.IsValidNumericDate("31/11-2222")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("11-2.2012")); // invalid
             Assert.IsFalse(StringParser.IsValidNumericDate("23.1-2112")); // invalid
             Assert.IsFalse(StringParser.IsValidNumericDate("2-1/2012")); // invalid
             Assert.IsFalse(StringParser.IsValidNumericDate("23.1.212")); // invalid
-            Assert.IsFalse(StringParser.IsValidNumericDate("0.0.0000")); // invalid
-        }
-
-        /*
-        CommandType command = CommandType.INVALID;
-        int indexOfCommandKeyword = -1;
-        List<string> testWords = new List<string>();
-
-        [TestMethod]
-        public void IsValidTimeTest_24HourFormat()
-        {
-            Assert.IsTrue(StringParser.IsValidTime("5:00"));            
-            Assert.IsTrue(StringParser.IsValidTime("05:23"));
-            Assert.IsTrue(StringParser.IsValidTime("15:59"));
-            Assert.IsTrue(StringParser.IsValidTime("2359hr"));
-            Assert.IsTrue(StringParser.IsValidTime("1200hrs"));
-            Assert.IsTrue(StringParser.IsValidTime("2200 hours"));
-            Assert.IsTrue(StringParser.IsValidTime("1234 HOURS"));
-            Assert.IsFalse(StringParser.IsValidTime("500hours"));
-            Assert.IsFalse(StringParser.IsValidTime("500"));
-            Assert.IsFalse(StringParser.IsValidTime("2400 hr")); // only up to 2359 is valid.
+            Assert.IsFalse(StringParser.IsValidNumericDate("2.0.0000")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("0.2.0000")); // invalid
+            Assert.IsFalse(StringParser.IsValidNumericDate("jan 2012")); // invalid
         }
 
         [TestMethod]
-        public void IsValidTimeTest_12HourFormat()
+        // note: this test method does not test if the day-month-year format takes precedence
+        // it should due to the left-to-right property of regexes
+        public void IsValidAlphabeticDate()
         {
-            Assert.IsTrue(StringParser.IsValidTime("12am"));
-            Assert.IsTrue(StringParser.IsValidTime("12 pm"));
-            Assert.IsTrue(StringParser.IsValidTime("5:23 am"));
-            Assert.IsTrue(StringParser.IsValidTime("5:30 pm"));
-            Assert.IsTrue(StringParser.IsValidTime("11.59pm"));
-            Assert.IsFalse(StringParser.IsValidTime("13.01pm")); // only up to 1159am/pm is valid.
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("20 january 2012")); // dmy
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("20 jan 2012")); // dmy
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("20 jan 20")); // dmy
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("sept 2012")); // my
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("12 september")); // dm
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("12th apr")); // dm
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("23 feb 1022")); // dmy
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("23rd oct 1022")); // dmy
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("1st nov 1022")); // dmy
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("feb 23 1112")); // mdy
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("jul 22nd 1112")); // mdy
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("aug 30th")); // md
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("30th dec 2013")); // dmy
+            Assert.IsTrue(StringParser.IsValidAlphabeticDate("february 22 12")); // mdy
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("2w oct 1022")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("122 oct 1022")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("23th oct 1022")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("0 jul 12")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("12nd dec 2012")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("23rd may 012")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("11st july 12")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("2013")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("12")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("8 novem 12")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("23 mar-23")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("feuary 0 12")); // invalid
+            Assert.IsFalse(StringParser.IsValidAlphabeticDate("feuary 22 12")); // invalid
         }
 
         [TestMethod]
-        public void IsValidDMYAlphabeticDate()
+        public void MergeDateWords()
         {
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("1st jan 2012"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("2nd january 13"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("3rd feb 2012"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("4th february 12"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("1 mar 2014"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("2 march 12"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("3 apr 2012"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("8 april 15"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("9 may 2012"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("10th jun 12"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("11st june 2016"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("12nd jul 12"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("13rd july 2012"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("14th aug 12"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("11 august 2012"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("12 sep 12"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("13 sept 2012"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("14 september 12"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("19 oct 2012"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("20th october 23"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("21st nov 2055"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("22nd november 12"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("23rd dec 2012"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("24th december 12"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("30th may 12"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("31st jan 2023"));
-            Assert.IsTrue(StringParser.IsValidDMYAlphabeticDate("dec 12"));
-            Assert.IsFalse(StringParser.IsValidDMYAlphabeticDate("dec 23 12"));
-            Assert.IsFalse(StringParser.IsValidDMYAlphabeticDate("nov 23"));
-            Assert.IsFalse(StringParser.IsValidDMYAlphabeticDate("nov 9777"));
-        }
-        
-        [TestMethod]
-        public void Simple_SearchForCommandTest_Add()
-        {
-            testWords.Clear();
-            testWords.Add("adda");
-            testWords.Add("bbbb");
-            testWords.Add("add");
-            testWords.Add("date");
-            Assert.AreEqual(1, StringParser.SearchForCommandKeyword(testWords,ref command, ref indexOfCommandKeyword));
-            Assert.AreEqual(2, indexOfCommandKeyword);
-            Assert.AreEqual(CommandType.ADD, command);
+            List<string> input1 = new List<string>() { "add", "submit", "lucky", "draw", "entry", "from", "21st", "Dec", "2012", "to", "30th", "Jan", "2013" };
+            List<string> output1 = new List<string>();
+            List<string> expectedOutput1 = new List<string>() { "add", "submit", "lucky", "draw", "entry", "from", "21st Dec 2012", "to", "30th Jan 2013" };
+            output1 = StringParser.MergeDateWords(input1);
+            CollectionAssert.AreEqual(expectedOutput1, output1);
+            List<string> input2 = new List<string>() { "add", "30th", "Dec", "2013", "jenna's", "birthday" };
+            List<string> output2 = new List<string>();
+            List<string> expectedOutput2 = new List<string>() { "add", "30th Dec 2013", "jenna's", "birthday" };
+            output2 = StringParser.MergeDateWords(input2);
+            CollectionAssert.AreEqual(expectedOutput2, output2);
+            List<string> input3 = new List<string>() { "add", "use", "kuishinbo", "3rd", "anniversary", "buffet", "voucher", "by", "9", "jan", "2013" };
+            List<string> output3 = new List<string>();
+            List<string> expectedOutput3 = new List<string>() { "add", "use", "kuishinbo", "3rd", "anniversary", "buffet", "voucher", "by", "9 jan 2013" };
+            output3 = StringParser.MergeDateWords(input3);
+            CollectionAssert.AreEqual(expectedOutput3, output3);
+            List<string> input4 = new List<string>() { "add", "complete", "project", "by", "january", "2013" };
+            List<string> output4 = new List<string>();
+            List<string> expectedOutput4 = new List<string>() { "add", "complete", "project", "by", "january 2013" };
+            output4 = StringParser.MergeDateWords(input4);
+            CollectionAssert.AreEqual(expectedOutput4, output4);
+            List<string> input5 = new List<string>() { "add", "extended", "family", "dinner", "12/10/12" };
+            List<string> output5 = new List<string>();
+            List<string> expectedOutput5 = new List<string>() { "add", "extended", "family", "dinner", "12/10/12" };
+            output5 = StringParser.MergeDateWords(input5);
+            CollectionAssert.AreEqual(expectedOutput5, output5);
         }
 
         [TestMethod]
-        public void Simple_SearchForCommandTest_Modify()
+        public void MergeWord_IfValidAlphabeticDate()
         {
-            testWords.Clear();
-            testWords.Add("stuff");
-            testWords.Add("modify");
-            testWords.Add("more stuff?!");
-            testWords.Add("date");
-            Assert.AreEqual(1, StringParser.SearchForCommandKeyword(testWords, ref command, ref indexOfCommandKeyword));
-            Assert.AreEqual(1, indexOfCommandKeyword);
-            Assert.AreEqual(CommandType.MODIFY, command);
-        }       
-
-        [TestMethod]
-        public void Null_SearchForCommandTest()
-        {
-            testWords.Clear();
-            testWords.Add("stuff");
-            testWords.Add("rubbish");
-            testWords.Add("addify");
-            testWords.Add("date");
-            Assert.AreEqual(0, StringParser.SearchForCommandKeyword(testWords, ref command, ref indexOfCommandKeyword));
-            Assert.AreEqual(-1, indexOfCommandKeyword);
-            Assert.AreEqual(CommandType.INVALID, command);
+            List<string> input1 = new List<string>() { "add", "buy", "new", "dog", "by", "22nd", "dec", "12" };
+            List<string> output1 = new List<string>() { "add", "buy", "new", "dog", "by", "22nd" };
+            List<string> expectedOutput1 = new List<string>() { "add", "buy", "new", "dog", "by", "22nd dec 12" };
+            int position1 = 6, skipWords = 0; // "dec" is the 6th
+            Assert.IsTrue(StringParser.MergeWord_IfValidAlphabeticDate(ref output1, input1, position1, ref skipWords));
+            Assert.AreEqual(1, skipWords);
+            Assert.AreEqual(expectedOutput1[5], output1[5]);
+            CollectionAssert.AreEqual(expectedOutput1, output1);
+            List<string> input2 = new List<string>() { "add", "complete", "project", "by", "january", "2013", "urgent" };
+            List<string> output2 = new List<string>() { "add", "complete", "project", "by" };
+            List<string> expectedOutput2 = new List<string>() { "add", "complete", "project", "by", "january 2013" };
+            int position2 = 4; // "january" is the 4th
+            Assert.IsTrue(StringParser.MergeWord_IfValidAlphabeticDate(ref output2, input2, position2, ref skipWords));
+            Assert.AreEqual(1, skipWords);
+            Assert.AreEqual(expectedOutput2[4], output2[4]);
+            CollectionAssert.AreEqual(expectedOutput2, output2);
+            List<string> input3 = new List<string>() { "add", "submit", "lucky", "draw", "entry", "from", "21st", "Dec", "2012", "to", "30th", "Dec", "2013" };
+            List<string> output3 = new List<string>() { "add", "submit", "lucky", "draw", "entry", "from", "21st", "Dec", "2012", "to", "30th" };
+            List<string> expectedOutput3 = new List<string>() { "add", "submit", "lucky", "draw", "entry", "from", "21st", "Dec", "2012", "to", "30th Dec 2013" };
+            int position3 = 11; // "dec" is the 11th
+            Assert.IsTrue(StringParser.MergeWord_IfValidAlphabeticDate(ref output3, input3, position3, ref skipWords));
+            Assert.AreEqual(1, skipWords);
+            CollectionAssert.AreEqual(expectedOutput3, output3);
         }
 
         [TestMethod]
-        public void MultipleMatch_SearchForCommandTest()
+        // note: this method does not yet check for the full valid functionality of the GenerateDateTokens method
+        // need to find a way to compare the date tokens one by one and verify that they are equal
+        public void GenerateDateTokens()
         {
-            testWords.Clear();
-            testWords.Add("Add");
-            testWords.Add("rubbish");
-            testWords.Add("addify");
-            testWords.Add("modify");
-            Assert.AreEqual(2, StringParser.SearchForCommandKeyword(testWords, ref command, ref indexOfCommandKeyword));
-            Assert.AreEqual(0, indexOfCommandKeyword);
-            Assert.AreEqual(CommandType.ADD, command);
+            List<string> input1 = new List<string>() { "add", "submit", "lucky", "draw", "entry", "from", "21st Dec 2012", "to", "30th Jan 2013" };
+            List<TokenDate> output1 = new List<TokenDate>();
+            TokenDate expectedDateToken1a = new TokenDate(6, DateTime.Parse("2012-12-21"), true);
+            TokenDate expectedDateToken1b = new TokenDate(8, DateTime.Parse("2013-1-30"), true);
+            List<TokenDate> expectedOutput1 = new List<TokenDate>() { expectedDateToken1a, expectedDateToken1b };
+            output1 = StringParser.GenerateDateTokens(input1);
+            Assert.AreEqual(expectedOutput1.Count, output1.Count);
+            //CollectionAssert.AreEqual(expectedOutput1, output1);
+            List<string> input2 = new List<string>() { "add", "30th Dec 2013", "jenna's", "birthday" };
+            List<TokenDate> output2 = new List<TokenDate>();
+            TokenDate expectedDateToken2a = new TokenDate(1, DateTime.Parse("2013-12-30"), true);
+            List<TokenDate> expectedOutput2 = new List<TokenDate>() { expectedDateToken2a };
+            output2 = StringParser.GenerateDateTokens(input2);
+            Assert.AreEqual(expectedOutput2.Count, output2.Count);
+            //CollectionAssert.AreEqual(expectedOutput2, output2);
+            List<string> input3 = new List<string>() { "add", "use", "kuishinbo", "3rd", "anniversary", "buffet", "voucher", "by", "9 jan 2013" }; // erroneous detection of "3rd" as a date input
+            List<TokenDate> output3 = new List<TokenDate>();
+            TokenDate expectedDateToken3a = new TokenDate(8, DateTime.Parse("2012-11-3"), true);
+            TokenDate expectedDateToken3b = new TokenDate(8, DateTime.Parse("2013-1-9"), true);
+            List<TokenDate> expectedOutput3 = new List<TokenDate>() { expectedDateToken3a, expectedDateToken3b };
+            output3 = StringParser.GenerateDateTokens(input3);
+            Assert.AreEqual(expectedOutput3.Count, output3.Count);
+            //CollectionAssert.AreEqual(expectedOutput3, output3);
+            List<string> input4 = new List<string>() { "add", "complete", "project", "by", "january 2013" };
+            List<TokenDate> output4 = new List<TokenDate>();
+            TokenDate expectedDateToken4a = new TokenDate(4, DateTime.Parse("2013-1-1"), false);
+            List<TokenDate> expectedOutput4 = new List<TokenDate>() { expectedDateToken4a };
+            output4 = StringParser.GenerateDateTokens(input4);
+            Assert.AreEqual(expectedOutput4.Count, output4.Count);
+            //CollectionAssert.AreEqual(expectedOutput4, output4);
+            List<string> input5 = new List<string>() { "add", "chalet", "from", "27th feb", "to", "30th feb" }; // invalid date 30 feb
+            List<TokenDate> output5 = new List<TokenDate>();
+            TokenDate expectedDateToken5a = new TokenDate(3, DateTime.Parse("2012-2-27"), false);
+            List<TokenDate> expectedOutput5 = new List<TokenDate>() { expectedDateToken4a };
+            output5 = StringParser.GenerateDateTokens(input5);
+            Assert.AreEqual(expectedOutput5.Count, output5.Count);
+            //CollectionAssert.AreEqual(expectedOutput5, output5);
+            List<string> input6 = new List<string>() { "add", "moon", "cake", "festival", "15th" }; // note that this test method will fail after 3 days
+            List<TokenDate> output6 = new List<TokenDate>();
+            TokenDate expectedDateToken6a = new TokenDate(4, DateTime.Parse("2012-10-15"), false);
+            List<TokenDate> expectedOutput6 = new List<TokenDate>() { expectedDateToken6a };
+            output6 = StringParser.GenerateDateTokens(input6);
+            Assert.AreEqual(expectedOutput6.Count, output6.Count);
+            //CollectionAssert.AreEqual(expectedOutput6, output6);
+            List<string> input7 = new List<string>() { "add", "i", "am", "going", "to", "make", "pc", "fall", "on", "his", "ass", "1st" };
+            List<TokenDate> output7 = new List<TokenDate>();
+            TokenDate expectedDateToken7a = new TokenDate(11, DateTime.Parse("2012-11-11"), false);
+            List<TokenDate> expectedOutput7 = new List<TokenDate>() { expectedDateToken7a };
+            output7 = StringParser.GenerateDateTokens(input7);
+            Assert.AreEqual(expectedOutput7.Count, output7.Count);
+            //CollectionAssert.AreEqual(expectedOutput7, output7);
         }
 
         [TestMethod]
-        public void Simple_FindIndexOfDelimitersTest()
+        public void RemoveSuffixesIfRequired()
         {
-            string input = "\'add\'";
-            List<int[]> expected = new List<int[]> { new int[2] { 0, 4 } };
-            // Flatten before comparing. Product limitation of visual studio compiler / unit tester.
-            CollectionAssert.AreEqual(
-                expected.SelectMany(x => x).ToList(),
-                StringParser.FindPositionOfDelimiters(input).SelectMany(x => x).ToList()
-                );
+            string day = StringParser.RemoveSuffixesIfRequired("23rd");
+            Assert.AreEqual("23", day);
+            day = StringParser.RemoveSuffixesIfRequired("11th");
+            Assert.AreEqual("11", day);
+            day = StringParser.RemoveSuffixesIfRequired("1st");
+            Assert.AreEqual("1", day);
         }
-        
-        [TestMethod]
-        public void Multiple_FindIndexOfDelimitersTest()
-        {
-            // index         0123 4567890 12345 6
-            string input = "\'add\' hii! \"date\"";
-            List<int[]> expected = new List<int[]> { 
-                new int[2] { 0, 4 },
-                new int[2] { 11, 16 }
-            };
-            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindPositionOfDelimiters(input)));
-        }
-
-        [TestMethod]
-        public void Complex_FindIndexOfDelimitersTest()
-        {
-            // index         012345 67890123 45678 9012
-            string input = "\'a{d}d\' h[ii! \"date\"";
-            List<int[]> expected = new List<int[]> {
-                new int[2] { 0, 6 },
-                new int[2] { 2, 4 },
-                new int[2] { 14, 19 },
-            };
-            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindPositionOfDelimiters(input)));
-        }
-
-        [TestMethod]
-        public void Null_FindIndexOfDelimitersTest()
-        {
-            string input = "\"add\'";
-            List<int[]> expected = new List<int[]>();
-            Assert.IsTrue(ListOfIntegerArraysAreEquivalent(expected, StringParser.FindPositionOfDelimiters(input)));
-            Assert.IsTrue(StringParser.FindPositionOfDelimiters(input).Count == 0);
-        }
-
-        [TestMethod]
-        public void SplitStringIntoWordsTest()
-        {
-            // index        01234567890123456789012
-            string input = "add {modify car} tonight";
-            List<int[]> delimiters = new List<int[]> {
-                new int[2] { 4, 15 }
-            };
-            List<string> expected = new List<string> {
-                "add",
-                "\" modify car",
-                "tonight"
-            };
-            string expectedOutput = "add  tonight";
-            string output = null;
-            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoTokens(input, delimiters));
-            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoTokens(input, delimiters));
-            Assert.AreEqual(expectedOutput, output);
-        }
-
-        [TestMethod]
-        public void Multiple_SplitStringIntoWordsTest()
-        {
-            // index        0123456789012345 678901234567 89012345678
-            string input = "add {modify car}\"tonight 8pm\" deadline";
-            List<int[]> delimiters = new List<int[]> {
-                new int[2] { 4, 15 },
-                new int[2] { 16, 28 }
-            };
-            List<string> expected = new List<string> {
-                "add",
-                "\" modify car",
-                "\" tonight 8pm",
-                "deadline"
-            };
-            string expectedOutput = "add  deadline";
-            string output = null;
-            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoTokens(input, delimiters));
-            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoTokens(input, delimiters));
-            Assert.AreEqual(expectedOutput, output);
-        }
-
-        [TestMethod]
-        public void Null_SplitStringIntoWordsTest()
-        {
-            // index        0123456789012345 678901234567 89012345678
-            string input = "add fix car tonight";           
-            List<string> expected = new List<string> {
-                "add",
-                "fix",
-                "car",
-                "tonight"
-            };
-            string expectedOutput = "add fix car tonight";
-            string output = null;
-            CollectionAssert.AreEquivalent(expected, StringParser.SplitStringIntoTokens(input));
-            CollectionAssert.AreEqual(expected, StringParser.SplitStringIntoTokens(input));
-            Assert.AreEqual(expectedOutput, output);
-        }
-
-        [TestMethod]
-        public void MergeTimeWordsTest()
-        {
-            testWords.Clear();
-            testWords.Add("Add");
-            testWords.Add("task");
-            testWords.Add("at");
-            testWords.Add("5");
-            testWords.Add("pm");
-            List<string> expected = new List<string>{
-                "Add",
-                "task",
-                "at",
-                "5pm"
-            };
-            List<string> output= StringParser.MergeTimeWords(testWords);
-            CollectionAssert.AreEqual(expected, output);
-        }
-
-      [TestMethod]
-        public void SearchForDaysTest()
-        {
-            testWords.Clear();
-            testWords.Add("Add");
-            testWords.Add("task");
-            testWords.Add("monday");
-            testWords.Add("5");
-            testWords.Add("pm");
-            List<Tuple<int,DayOfWeek>> expected = new List<Tuple<int,DayOfWeek>>();
-            expected.Add(new Tuple<int, DayOfWeek>(2, DayOfWeek.Monday));
-            List<Tuple<int,DayOfWeek>> output = StringParser.GenerateDayTokens(testWords);            
-            CollectionAssert.AreEqual(expected, output);
-        }
-
-        // Returns true if the two lists contains (any order) the same exact int arrays.
-        private bool ListOfIntegerArraysAreEquivalent(List<int[]> first, List<int[]> second)
-        {
-            bool foundArray = false;
-            foreach (int[] arrayFirst in first)
-            {
-                foreach (int[] arraySecond in second) 
-                {
-                    if (arrayFirst.SequenceEqual(arraySecond))
-                    {
-                        foundArray = true;
-                        break;
-                    }
-                }
-                if (foundArray == false) return false;
-            }
-            return true;
-        }*/
-         
     }
 }
