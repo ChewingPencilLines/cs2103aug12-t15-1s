@@ -178,10 +178,10 @@ namespace ToDo
             {
                 TimeSpan currentTime = todayDate.TimeOfDay;
                 TimeSpan taskTime = (TimeSpan)time;
-                date = new DateTime(todayDate.Year, todayDate.Month, todayDate.Day, taskTime.Hours, taskTime.Minutes, taskTime.Seconds);
+                combined = new DateTime(todayDate.Year, todayDate.Month, todayDate.Day, taskTime.Hours, taskTime.Minutes, taskTime.Seconds);
                 if (currentTime > time)
                 {
-                    ((DateTime)date).AddDays(1);
+                    combined = ((DateTime)combined).AddDays(1);
                 }
             }
             else if (time == null && date != null)
@@ -195,9 +195,12 @@ namespace ToDo
         {
             if (startTime == null && endTime == null)
                 return new TaskFloating(taskName);
-            else if (startTime == null)
+            else if (startTime == null && endTime != null)
                 return new TaskDeadline(taskName, (DateTime)endTime);
-            else return new TaskTimed(taskName, (DateTime)startTime, (DateTime)endTime);
+            else if (startTime != null && endTime == null)
+                return new TaskTimed(taskName, (DateTime)startTime, (DateTime)startTime); // note: set endTime as what for default?
+            else
+                return new TaskTimed(taskName, (DateTime)startTime, (DateTime)endTime);
         }
 
         /// <summary>

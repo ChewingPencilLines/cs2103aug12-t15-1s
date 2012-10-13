@@ -306,16 +306,20 @@ namespace ToDo
         {
             List<string> output = new List<string>();
             bool merged = false;
-            for (int i = 0; i < words.Count - 1; i++) // don't check last word
+            CommandType commandType;
+            for (int i = 0; i < words.Count; i++) // don't check last word
             {
-                if (commandKeywords.ContainsKey(words[i].ToLower()))
+                if (commandKeywords.TryGetValue(words[i].ToLower(), out commandType) && i != words.Count)
                 {
-                    int convert;
-                    if (Int32.TryParse(words[i + 1], out convert))
+                    if (commandType == CommandType.DELETE || commandType == CommandType.MODIFY)
                     {
-                        output.Add(words[i] + " " + words[i + 1]);
-                        merged = true;
-                    }
+                        int convert;
+                        if (Int32.TryParse(words[i + 1], out convert))
+                        {
+                            output.Add(words[i] + " " + words[i + 1]);
+                            merged = true;
+                        }
+                    }                    
                 }
                 if (merged)
                 {
@@ -538,6 +542,7 @@ namespace ToDo
                         TokenCommand commandToken = new TokenCommand(index, commandType, taskIndex);
                     }
                 }
+                index++;
             }
             return tokens;
         }
@@ -836,7 +841,7 @@ namespace ToDo
 
         private static List<Token> GenerateLiteralTokens(List<string> input, List<Token> parsedTokens)
         {
-            List<Token> tokens = new List<Token>();
+            List<Token> literalTokens = new List<Token>();
             foreach (Token token in parsedTokens)
             {
                 input[token.Position] = null;
@@ -847,16 +852,16 @@ namespace ToDo
             {
                 if (remainingWord != null)
                     literal = literal + remainingWord + " ";
-                else if (literal != "")
+                else if (remainingWord == null && literal != String.Empty)
                 {
                     literal = literal.Trim();
                     TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
-                    tokens.Add(literalToken);
-                    literal = "";
+                    literalTokens.Add(literalToken);
+                    literal = String.Empty;
                 }
                 index++;
             }
-            return tokens;
+            return literalTokens;
         }
 
         #endregion
