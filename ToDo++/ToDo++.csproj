@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandParser.cs" />
-    <Compile Include="Executor.cs" />
+    <Compile Include="OperationExecution.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="OperationHandler.cs" />

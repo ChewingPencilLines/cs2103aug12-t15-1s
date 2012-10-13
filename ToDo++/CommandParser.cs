@@ -145,10 +145,12 @@ namespace ToDo
                     newOperation = new OperationAdd(task);
                     break;
                 case CommandType.DELETE:
-                    throw new NotImplementedException();
+                    Debug.Assert(taskIndex != null, "task index is null!");
+                    newOperation = new OperationDelete((int)taskIndex);
+                    break;
                 case CommandType.DISPLAY:
-                    //@alice: just search without condition can display all, no key word for display now
-                    throw new NotImplementedException();
+                    newOperation = new OperationSearch("");
+                    break;
                 case CommandType.MODIFY:
                     task = GenerateNewTask(taskName, startCombined, endCombined);
                     if(taskIndex == null)
@@ -191,7 +193,11 @@ namespace ToDo
 
         private static Task GenerateNewTask(string taskName, DateTime? startTime, DateTime? endTime)
         {
-            throw new NotImplementedException();
+            if (startTime == null && endTime == null)
+                return new TaskFloating(taskName);
+            else if (startTime == null)
+                return new TaskDeadline(taskName, (DateTime)endTime);
+            else return new TaskTimed(taskName, (DateTime)startTime, (DateTime)endTime);
         }
 
         /// <summary>
@@ -247,7 +253,7 @@ namespace ToDo
 
         private static void WarnUserOfMultipleCommands()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Multiple commands were issued. Functionality NYI.");
         }  
 
         private List<int[]> GetPositionsOfDelimiters(string input)
