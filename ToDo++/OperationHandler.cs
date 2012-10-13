@@ -14,6 +14,13 @@ namespace ToDo
         protected Stack<Operation> undoStack;
        // protected Stack<Operation> redoStack;
         protected Storage xml;
+
+        protected const string Add_Suceess_Message= "Added task successfully.";
+        protected const string Delete_Success_Message ="Deleted task successfully.";
+        protected const string Modify_Success_Message = "Modified task successfully.";
+        protected const string Undo_Success_Message = "Undone task successfully.";
+                  
+        protected const string Wrong_Message = "Command failed";
         
         public OperationHandler()
         {
@@ -25,12 +32,12 @@ namespace ToDo
         }
 
         //Need to take in an instance of Operation to execute
-        public virtual Result ExecuteOperation(Operation operation)
+        public virtual string ExecuteOperation(Operation operation)
         {
-            return Result.ERROR;
+            return Wrong_Message;
         }
 
-        public Result Execute(Operation operation)
+        public string Execute(Operation operation)
         {
             undoStack.Push(operation);
 
@@ -58,10 +65,11 @@ namespace ToDo
             else if (operation is OperationSearch)
             {
                 undoStack.Pop();
-                return Result.ERROR;
+                ExecuteSearch execute = new ExecuteSearch();
+                return execute.ExecuteOperation(operation);
             }
             else
-                return Result.ERROR;
+                return Wrong_Message;
         }
     }
 }

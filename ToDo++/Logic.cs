@@ -33,9 +33,9 @@ namespace ToDo
             }
             else
             {
-                Result response;
+                string response;
                 response = operationHandler.Execute(operation);
-                return TranslateResult(response);
+                return response;
             }
         }
 
@@ -51,7 +51,7 @@ namespace ToDo
                 return CP.ParseOperation(command);
             }
         }
-
+       /*
         private string TranslateResult(Result r)
         {
             string print;
@@ -80,6 +80,7 @@ namespace ToDo
                     break;
             }
             return print;
-        }
+        }*/
     }
+ 
 }

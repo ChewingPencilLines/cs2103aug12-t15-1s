@@ -49,7 +49,6 @@
     <Compile Include="Logic.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="OperationHandler.cs" />
-    <Compile Include="Result.cs" />
     <Compile Include="Settings\SettingsExceptions.cs" />
     <Compile Include="StringParser.cs" />
     <Compile Include="Task.cs" />
