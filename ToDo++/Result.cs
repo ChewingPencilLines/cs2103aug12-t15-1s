@@ -15,6 +15,8 @@ namespace ToDo
 
         UNDO_SUCCESS,
 
+        SEARCH_SUCCESS,
+
         ERROR
     }
 }

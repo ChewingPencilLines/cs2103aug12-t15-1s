@@ -26,9 +26,9 @@ namespace ToDo
             throw new NotImplementedException();
         }
 
-        private string ExecuteCommand(Operation operation)
+        public string ExecuteCommand(Operation operation)
         {
-            if (operation.Equals(null))
+            if (operation == null)
             {
                 return null;
             }
@@ -36,7 +36,7 @@ namespace ToDo
             {
                 Result response;
                 response = operationHandler.Execute(operation);
-                return null;
+                return response.ToString();
             }
         }
 

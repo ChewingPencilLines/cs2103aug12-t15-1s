@@ -10,11 +10,15 @@ using ToDo;
 
 namespace StringParserTest
 {
+    // @jenna: This class contains of unit tests for methods in the StringParser class for use during development.
+    // last update on 13 oct; only consisting of test methods for datetime processing
+
     [TestClass]
     public class StringParserTest
     {
         [TestMethod]
         // note: this test method does not test if the day-month-year format takes precedence
+        // it should due to the left-to-right property of regexes
         public void IsValidNumericDate()
         {
             Assert.IsTrue(StringParser.IsValidNumericDate("20/1/2012")); // dmy
@@ -50,6 +54,7 @@ namespace StringParserTest
 
         [TestMethod]
         // note: this test method does not test if the day-month-year format takes precedence
+        // it should due to the left-to-right property of regexes
         public void IsValidAlphabeticDate()
         {
             Assert.IsTrue(StringParser.IsValidAlphabeticDate("20 january 2012")); // dmy
@@ -125,7 +130,7 @@ namespace StringParserTest
             List<string> input2 = new List<string>() { "add", "complete", "project", "by", "january", "2013", "urgent" };
             List<string> output2 = new List<string>() { "add", "complete", "project", "by" };
             List<string> expectedOutput2 = new List<string>() { "add", "complete", "project", "by", "january 2013" };
-            int position2 = 4; // "dec" is the 6th
+            int position2 = 4; // "january" is the 4th
             Assert.IsTrue(StringParser.MergeWord_IfValidAlphabeticDate(ref output2, input2, position2, ref skipWords));
             Assert.AreEqual(1, skipWords);
             Assert.AreEqual(expectedOutput2[4], output2[4]);
@@ -133,13 +138,15 @@ namespace StringParserTest
             List<string> input3 = new List<string>() { "add", "submit", "lucky", "draw", "entry", "from", "21st", "Dec", "2012", "to", "30th", "Dec", "2013" };
             List<string> output3 = new List<string>() { "add", "submit", "lucky", "draw", "entry", "from", "21st", "Dec", "2012", "to", "30th" };
             List<string> expectedOutput3 = new List<string>() { "add", "submit", "lucky", "draw", "entry", "from", "21st", "Dec", "2012", "to", "30th Dec 2013" };
-            int position3 = 11;
+            int position3 = 11; // "dec" is the 11th
             Assert.IsTrue(StringParser.MergeWord_IfValidAlphabeticDate(ref output3, input3, position3, ref skipWords));
             Assert.AreEqual(1, skipWords);
             CollectionAssert.AreEqual(expectedOutput3, output3);
         }
 
         [TestMethod]
+        // note: this method does not yet check for the full valid functionality of the GenerateDateTokens method
+        // need to find a way to compare the date tokens one by one and verify that they are equal
         public void GenerateDateTokens()
         {
             List<string> input1 = new List<string>() { "add", "submit", "lucky", "draw", "entry", "from", "21st Dec 2012", "to", "30th Jan 2013" };
@@ -157,27 +164,42 @@ namespace StringParserTest
             output2 = StringParser.GenerateDateTokens(input2);
             Assert.AreEqual(expectedOutput2.Count, output2.Count);
             //CollectionAssert.AreEqual(expectedOutput2, output2);
-            List<string> input3 = new List<string>() { "add", "use", "kuishinbo", "3rd", "anniversary", "buffet", "voucher", "by", "9 jan 2013" };
+            List<string> input3 = new List<string>() { "add", "use", "kuishinbo", "3rd", "anniversary", "buffet", "voucher", "by", "9 jan 2013" }; // erroneous detection of "3rd" as a date input
             List<TokenDate> output3 = new List<TokenDate>();
-            TokenDate expectedDateToken3a = new TokenDate(1, DateTime.Parse("2013-1-9"), true);
-            List<TokenDate> expectedOutput3 = new List<TokenDate>() { expectedDateToken3a };
+            TokenDate expectedDateToken3a = new TokenDate(8, DateTime.Parse("2012-11-3"), true);
+            TokenDate expectedDateToken3b = new TokenDate(8, DateTime.Parse("2013-1-9"), true);
+            List<TokenDate> expectedOutput3 = new List<TokenDate>() { expectedDateToken3a, expectedDateToken3b };
             output3 = StringParser.GenerateDateTokens(input3);
             Assert.AreEqual(expectedOutput3.Count, output3.Count);
             //CollectionAssert.AreEqual(expectedOutput3, output3);
             List<string> input4 = new List<string>() { "add", "complete", "project", "by", "january 2013" };
             List<TokenDate> output4 = new List<TokenDate>();
-            TokenDate expectedDateToken4a = new TokenDate(1, DateTime.Parse("2013-1-1"), false);
+            TokenDate expectedDateToken4a = new TokenDate(4, DateTime.Parse("2013-1-1"), false);
             List<TokenDate> expectedOutput4 = new List<TokenDate>() { expectedDateToken4a };
             output4 = StringParser.GenerateDateTokens(input4);
             Assert.AreEqual(expectedOutput4.Count, output4.Count);
             //CollectionAssert.AreEqual(expectedOutput4, output4);
             List<string> input5 = new List<string>() { "add", "chalet", "from", "27th feb", "to", "30th feb" }; // invalid date 30 feb
             List<TokenDate> output5 = new List<TokenDate>();
-            TokenDate expectedDateToken5a = new TokenDate(1, DateTime.Parse("2012-2-27"), false);
+            TokenDate expectedDateToken5a = new TokenDate(3, DateTime.Parse("2012-2-27"), false);
             List<TokenDate> expectedOutput5 = new List<TokenDate>() { expectedDateToken4a };
             output5 = StringParser.GenerateDateTokens(input5);
             Assert.AreEqual(expectedOutput5.Count, output5.Count);
-            //CollectionAssert.AreEqual(expectedOutput4, output4);
+            //CollectionAssert.AreEqual(expectedOutput5, output5);
+            List<string> input6 = new List<string>() { "add", "moon", "cake", "festival", "15th" }; // note that this test method will fail after 3 days
+            List<TokenDate> output6 = new List<TokenDate>();
+            TokenDate expectedDateToken6a = new TokenDate(4, DateTime.Parse("2012-10-15"), false);
+            List<TokenDate> expectedOutput6 = new List<TokenDate>() { expectedDateToken6a };
+            output6 = StringParser.GenerateDateTokens(input6);
+            Assert.AreEqual(expectedOutput6.Count, output6.Count);
+            //CollectionAssert.AreEqual(expectedOutput6, output6);
+            List<string> input7 = new List<string>() { "add", "i", "am", "going", "to", "make", "pc", "fall", "on", "his", "ass", "1st" };
+            List<TokenDate> output7 = new List<TokenDate>();
+            TokenDate expectedDateToken7a = new TokenDate(11, DateTime.Parse("2012-11-11"), false);
+            List<TokenDate> expectedOutput7 = new List<TokenDate>() { expectedDateToken7a };
+            output7 = StringParser.GenerateDateTokens(input7);
+            Assert.AreEqual(expectedOutput7.Count, output7.Count);
+            //CollectionAssert.AreEqual(expectedOutput7, output7);
         }
 
         [TestMethod]

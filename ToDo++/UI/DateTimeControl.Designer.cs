@@ -35,20 +35,22 @@
             // date
             // 
             this.date.AutoSize = true;
+            this.date.BackColor = System.Drawing.Color.Aqua;
             this.date.Location = new System.Drawing.Point(12, 13);
             this.date.Name = "date";
-            this.date.Size = new System.Drawing.Size(35, 13);
+            this.date.Size = new System.Drawing.Size(36, 13);
             this.date.TabIndex = 0;
-            this.date.Text = "label1";
+            this.date.Text = "DATE";
             // 
             // time
             // 
             this.time.AutoSize = true;
+            this.time.BackColor = System.Drawing.Color.Aqua;
             this.time.Location = new System.Drawing.Point(82, 13);
             this.time.Name = "time";
-            this.time.Size = new System.Drawing.Size(35, 13);
+            this.time.Size = new System.Drawing.Size(33, 13);
             this.time.TabIndex = 1;
-            this.time.Text = "label2";
+            this.time.Text = "TIME";
             // 
             // DateTimeControl
             // 
