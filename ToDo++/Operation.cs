@@ -5,12 +5,22 @@ using System.Text;
 
 namespace ToDo
 {
+    // ******************************************************************
+    // Abstract definition for Operation
+    // ******************************************************************
+    #region Abstract definition for Operation
     public abstract class Operation
-    {        
+    {
         abstract public Task GetTask();
     }
+    #endregion
 
-    public class OperationAdd:Operation
+    // ******************************************************************
+    // Definition for five different operation
+    // ******************************************************************
+
+    #region Definition for five different operation
+    public class OperationAdd : Operation
     {
         private Task newTask;
 
@@ -25,57 +35,58 @@ namespace ToDo
         }
     }
 
-    public class OperationSearch:Operation
+    public class OperationSearch : Operation
     {
-        public string search = "" ;
+        public string search = "";
 
         public OperationSearch(string searchCondition)
         {
             search = searchCondition;
         }
 
-        public string GetCondition() { return search;}
+        public string GetCondition() { return search; }
 
         public override Task GetTask() { return null; }
     }
 
-    public class OperationDelete:Operation
+    public class OperationDelete : Operation
     {
         public int index;
 
         public OperationDelete(int DeleteIndex)
         {
-            index = DeleteIndex-1;
+            index = DeleteIndex - 1;
         }
 
         public override Task GetTask() { return null; }
     }
 
-    public class OperationModify:Operation
+    public class OperationModify : Operation
     {
         public int oldTaskindex;
         private Task newTask;
 
         public OperationModify(int Previous, Task Revised)
         {
-            oldTaskindex = Previous-1;
+            oldTaskindex = Previous - 1;
             newTask = Revised;
         }
 
-        public override Task GetTask() 
+        public override Task GetTask()
         {
             return newTask;
         }
     }
 
-    public class OperationUndo:Operation
+    public class OperationUndo : Operation
     {
         //Variables not needed for now
         public OperationUndo()
         { }
 
         public override Task GetTask() { return null; }
-    }
+    } 
+    #endregion
 
 
 }

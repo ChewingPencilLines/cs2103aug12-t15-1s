@@ -8,22 +8,33 @@ using System.Diagnostics;
 
 namespace ToDo
 {
+    // ******************************************************************
+    // Implementation of add execution
+    // ******************************************************************
     public class ExecuteAdd : OperationHandler
     {
         public override string ExecuteOperation(Operation operation)
         {
-             
+            try
+            { 
                 Task taskToAdd = ((OperationAdd)operation).GetTask();
                 Program.taskList.Add(taskToAdd);
 
                 xml.WriteXML(Program.taskList);
 
                 return Add_Suceess_Message;
-             
-
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+                return Wrong_Message;
+            }
         }
     }
-    
+
+    // ******************************************************************
+    // Implementation of delete execution
+    // ******************************************************************
     public class ExecuteDelete : OperationHandler
     {
         public override string ExecuteOperation(Operation operation)
@@ -31,9 +42,9 @@ namespace ToDo
             try
             {
                 int Index= ((OperationDelete)operation).index;
+                Debug.Assert(Index >= 0 && Index < Program.taskList.Count);
                 Task taskToDelete = Program.taskList[Index];
                 pastTask.Push(taskToDelete);
-
                 Program.taskList.RemoveAt(Index);
 
                 xml.WriteXML(Program.taskList);
@@ -45,10 +56,12 @@ namespace ToDo
                 Debug.WriteLine(e.ToString());
                 return Wrong_Message;
             }
-
         }
     }
 
+    // ******************************************************************
+    // Implementation of modify execution
+    // ******************************************************************
     public class ExecuteModify : OperationHandler
     {
         public override string ExecuteOperation(Operation operation)
@@ -56,6 +69,7 @@ namespace ToDo
             try
             {
                 int Index = ((OperationModify)operation).oldTaskindex;
+                Debug.Assert(Index >= 0 && Index < Program.taskList.Count);
                 Task taskToModify = Program.taskList[Index];
                 pastTask.Push(taskToModify);
 
@@ -74,6 +88,9 @@ namespace ToDo
         }
     }
 
+    // ******************************************************************
+    // Implementation of undo execution
+    // ******************************************************************
     public class ExecuteUndo : OperationHandler
     {
         public override string ExecuteOperation(Operation operation)
@@ -90,6 +107,7 @@ namespace ToDo
                 {
                     Task undoTask = undo.GetTask();
                     int index = Program.taskList.IndexOf(undoTask);
+                    Debug.Assert(index >= 0 && index < Program.taskList.Count);
                     OperationDelete undoOperation = new OperationDelete(index);
 
                     ExecuteDelete execute = new ExecuteDelete();
@@ -115,6 +133,7 @@ namespace ToDo
                     Task undoTask = pastTask.Pop();
                     Task redoTask = undo.GetTask();
                     int Index = Program.taskList.IndexOf(redoTask);
+                    Debug.Assert(Index >= 0 && Index < Program.taskList.Count);
                     OperationModify undoOperation = new OperationModify(Index, undoTask);
 
                     ExecuteModify execute = new ExecuteModify();
@@ -136,42 +155,37 @@ namespace ToDo
             }
         }
     }
-    
+
+    // ******************************************************************
+    // Implementation of search execution
+    // ******************************************************************
     public class ExecuteSearch : OperationHandler
     {
         public override string ExecuteOperation(Operation operation)
         {
             try
-            {
-
+            { 
                 string condition = ((OperationSearch)operation).search;
                 string result = "";
 
                 if (condition == "")
                 {
                     foreach (Task task in Program.taskList)
-                    { 
-                        //PrintToUI(task); 
+                    {  
                         if (task is TaskFloating)
                         {
-                            result= string.Concat(result,task.taskname,"\n");
-                           // Console.WriteLine(task.taskname);
+                            result= string.Concat(result,task.taskname,"\n"); 
                         }
                         else if (task is TaskDeadline)
                         {
                             result = string.Concat(result, ((TaskDeadline)task).taskname, 
-                                ((TaskDeadline)task).endtime.ToString(),"\n");
-                          //  Console.Write(((TaskDeadline)task).taskname);
-                           // Console.WriteLine(((TaskDeadline)task).endtime.ToString());
+                                ((TaskDeadline)task).endtime.ToString(),"\n"); 
                         }
                         else if (task is TaskTimed)
                         {
                             result = string.Concat(result, ((TaskDeadline)task).taskname,
                                 ((TaskTimed)task).starttime.ToString(),
                                 ((TaskDeadline)task).endtime.ToString(), "\n");
-                          //  Console.Write(((TaskTimed)task).taskname);
-                          //  Console.WriteLine(((TaskTimed)task).starttime.ToString());
-                          //  Console.WriteLine(((TaskTimed)task).endtime.ToString());
                         }
                     }
                     return result;
