@@ -6,26 +6,38 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
+    // ******************************************************************
+    // Abstract definition for task
+    // ******************************************************************
+
+    #region Abstract definition for task
     public abstract class Task
     {
-        //protected string taskname;
+        // taskname should be public then xml can write this.
         public string taskname;
         public Task()
         {
-            
-        }
-    }
 
+        }
+    } 
+    #endregion
+
+    // ******************************************************************
+    // Definition of three different task types
+    // ******************************************************************
+
+    #region Definition of three different task types
     public class TaskFloating : Task
     {
-        public TaskFloating() : this(null)
+        public TaskFloating()
+            : this(null)
         { }
 
         public TaskFloating(string TaskName)
         {
             taskname = TaskName;
         }
-    }
+    } 
 
     public class TaskDeadline : Task
     {
@@ -58,4 +70,5 @@ namespace ToDo
         }
 
     }
+     #endregion
 }
