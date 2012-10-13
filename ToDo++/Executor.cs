@@ -14,7 +14,7 @@ namespace ToDo
         {
             try
             {
-                Task taskToAdd = operation.GetTask();
+                Task taskToAdd = ((OperationAdd)operation).GetTask();
                 taskList.Add(taskToAdd);
 
                 xml.WriteXML(taskList);
@@ -140,6 +140,36 @@ namespace ToDo
                 Debug.WriteLine(e.ToString());
                 return Result.ERROR;
             }
+        }
+    }
+    
+    public class ExecuteSearch : OperationHandler
+    {
+        public override Result ExecuteOperation(Operation operation)
+        {
+            try
+            {
+
+                string condition = ((OperationSearch)operation).search;
+
+                if (condition == "")
+                {
+                    foreach (Task task in taskList)
+                    {
+                        
+                        //PrintToUI(task);
+                    }
+                    return Result.SEARCH_SUCCESS;
+                }
+
+                return Result.ERROR;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+                return Result.ERROR;
+            }
+
         }
     }
 }

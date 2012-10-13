@@ -147,7 +147,7 @@ namespace ToDo
                 case CommandType.DELETE:
                     throw new NotImplementedException();
                 case CommandType.DISPLAY:
-                    //@alice: how to display all??
+                    //@alice: just search without condition can display all, no key word for display now
                     throw new NotImplementedException();
                 case CommandType.MODIFY:
                     task = GenerateNewTask(taskName, startCombined, endCombined);
@@ -156,7 +156,7 @@ namespace ToDo
                     else newOperation = new OperationModify((int)taskIndex, task);
                     throw new NotImplementedException();
                 case CommandType.SEARCH:
-                    newOperation = new OperationSearch();
+                    newOperation = new OperationSearch("");
                     throw new NotImplementedException();
                 case CommandType.SORT:
                     throw new NotImplementedException();
