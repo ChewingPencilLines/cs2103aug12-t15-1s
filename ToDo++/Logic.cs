@@ -16,7 +16,6 @@ namespace ToDo
 
         public string ProcessCommand(string input)
         {
-            //string command = ValidateCommand(input);
             Operation operation = ParseCommand(input);
             return ExecuteCommand(operation);
         }
@@ -52,19 +51,5 @@ namespace ToDo
                 return CP.ParseOperation(command);
             }
         }
-
-        /*
-        private string ValidateCommand(string command)
-        {
-            if (!command.Equals(null) & command.Length == 0)
-            {
-                return null;
-            }
-            else
-            {
-                CommandStack.Push(command);
-                return command;
-            }
-        } */
     }
 }
