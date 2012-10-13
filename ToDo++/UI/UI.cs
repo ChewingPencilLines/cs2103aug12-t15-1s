@@ -24,6 +24,7 @@ namespace ToDo
 
         private Hotkeys.GlobalHotkey ghk;       //Global Hotkey to Minimize to System Tray
         SettingsManager mainSettingsManager;    //Settings Manager stores all settings data, including Flexi-Commands
+        Logic logic;                            //Instance of Logic that handles Data structure and File Operations
 
         /// <summary>
         /// Creates a new instance of the Main Program (UI) and loads the various Classes
@@ -35,6 +36,7 @@ namespace ToDo
             PrepareSettingsManager();           //Loads initial Settings of App and applies the settings
             PrepareMenu();                      //Loads the menu strip
             PrepareOutputBox();                 //Loads Output Box
+            PrepareLogic();                     //Creates instance of Logic to be used by Text Processing
         }
 
         #endregion
@@ -183,7 +185,7 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Prepare the Menu Bar
+        // Prepare the Output Box
         // ******************************************************************
 
         #region PrepareOutputBox
@@ -200,6 +202,19 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
+        // Code for creating an instance of Logic goes here
+        // ******************************************************************
+
+        #region PrepareLogic
+
+        public void PrepareLogic()
+        {
+            logic = new Logic();
+        }
+
+        #endregion
+
+        // ******************************************************************
         // Code for Text Processing goes here
         // ******************************************************************
 
@@ -210,7 +225,10 @@ namespace ToDo
         /// </summary>
         private void ProcessText()
         {
-            outputBox.DisplayCommand(textBox_input.Text,"Buy Milk successfully added!");
+            string input = textBox_input.Text;
+            string output=logic.ProcessCommand(input);
+
+            outputBox.DisplayCommand(input,output);
             outputBox.SetOutputSize(mainSettingsManager.GetTextSize());
             textBox_input.Clear();
         }

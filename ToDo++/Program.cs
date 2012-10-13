@@ -22,13 +22,13 @@ namespace ToDo
              * this is test for logic function add, 
              * to see the result, uncommend below and commend above
              */
-            /*
-            Logic a = new Logic();
-            Task t=new TaskFloating("alice");
-            OperationAdd b = new OperationAdd(t);
-            string feedback = a.ExecuteCommand(b);
-            Console.WriteLine(feedback);
-            */
+            
+            //Logic a = new Logic();
+            //Task t=new TaskFloating("alice");
+            //OperationAdd b = new OperationAdd(t);
+            //string feedback = a.ExecuteCommand(b);
+            //Console.WriteLine(feedback);
+            //MessageBox.Show(feedback);
             
         }
     }
