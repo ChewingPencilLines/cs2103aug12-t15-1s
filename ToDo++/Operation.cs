@@ -45,7 +45,7 @@ namespace ToDo
 
         public OperationDelete(int DeleteIndex)
         {
-            index = DeleteIndex;
+            index = DeleteIndex-1;
         }
 
         public override Task GetTask() { return null; }
@@ -58,7 +58,7 @@ namespace ToDo
 
         public OperationModify(int Previous, Task Revised)
         {
-            oldTaskindex = Previous;
+            oldTaskindex = Previous-1;
             newTask = Revised;
         }
 

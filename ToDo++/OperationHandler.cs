@@ -9,7 +9,7 @@ namespace ToDo
 {
     public class OperationHandler
     {
-        protected TaskList taskList;
+      //  public TaskList taskList;
         protected Stack<Task> pastTask;
         protected Stack<Operation> undoStack;
        // protected Stack<Operation> redoStack;
@@ -24,7 +24,7 @@ namespace ToDo
         
         public OperationHandler()
         {
-            taskList = new TaskList();
+          //  taskList = new TaskList();
             pastTask = new Stack<Task>();
             undoStack = new Stack<Operation>();
        //     redoStack = new Stack<Operation>();

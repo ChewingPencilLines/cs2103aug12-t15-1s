@@ -208,7 +208,8 @@ namespace ToDo
         #region PrepareLogic
 
         public void PrepareLogic()
-        {
+        {          
+
             logic = new Logic();
         }
 
