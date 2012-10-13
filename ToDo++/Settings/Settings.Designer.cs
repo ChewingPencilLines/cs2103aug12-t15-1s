@@ -40,6 +40,7 @@
             this.loadOnStartupCheckbox = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.commandDescription = new System.Windows.Forms.RichTextBox();
             this.removeButton = new System.Windows.Forms.Button();
             this.addUserCommandButton = new System.Windows.Forms.Button();
             this.userCommand = new System.Windows.Forms.TextBox();
@@ -49,7 +50,6 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.applyButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.commandDescription = new System.Windows.Forms.RichTextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -138,6 +138,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Description";
             // 
+            // commandDescription
+            // 
+            this.commandDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.commandDescription.Location = new System.Drawing.Point(7, 19);
+            this.commandDescription.Name = "commandDescription";
+            this.commandDescription.ReadOnly = true;
+            this.commandDescription.Size = new System.Drawing.Size(153, 90);
+            this.commandDescription.TabIndex = 8;
+            this.commandDescription.Text = "";
+            // 
             // removeButton
             // 
             this.removeButton.Location = new System.Drawing.Point(378, 157);
@@ -220,16 +230,6 @@
             this.okButton.Text = "Ok";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
-            // 
-            // commandDescription
-            // 
-            this.commandDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.commandDescription.Enabled = false;
-            this.commandDescription.Location = new System.Drawing.Point(7, 19);
-            this.commandDescription.Name = "commandDescription";
-            this.commandDescription.Size = new System.Drawing.Size(153, 90);
-            this.commandDescription.TabIndex = 8;
-            this.commandDescription.Text = "";
             // 
             // Settings
             // 
