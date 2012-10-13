@@ -35,18 +35,12 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.minimisedCheckbox = new System.Windows.Forms.CheckBox();
             this.loadOnStartupCheckbox = new System.Windows.Forms.CheckBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.cgFontCombo1 = new FontControl.CGFontCombo();
-            this.colorComboBox1 = new ColorComboTestApp.ColorComboBox();
-            this.FontTree = new System.Windows.Forms.TreeView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.removeButton = new System.Windows.Forms.Button();
-            this.commandDescription = new System.Windows.Forms.Label();
             this.addUserCommandButton = new System.Windows.Forms.Button();
             this.userCommand = new System.Windows.Forms.TextBox();
             this.listOfCommands = new System.Windows.Forms.ListBox();
@@ -55,18 +49,17 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.applyButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            this.commandDescription = new System.Windows.Forms.RichTextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
@@ -76,7 +69,6 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -86,32 +78,13 @@
             this.tabPage1.Text = "Personal Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(6, 6);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(427, 42);
-            this.groupBox2.TabIndex = 3;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "User";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 18);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Welcome User";
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.minimisedCheckbox);
             this.groupBox1.Controls.Add(this.loadOnStartupCheckbox);
-            this.groupBox1.Location = new System.Drawing.Point(6, 54);
+            this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(424, 123);
+            this.groupBox1.Size = new System.Drawing.Size(424, 171);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
@@ -138,50 +111,10 @@
             this.loadOnStartupCheckbox.UseVisualStyleBackColor = true;
             this.loadOnStartupCheckbox.CheckedChanged += new System.EventHandler(this.loadOnStartupCheckbox_CheckStateChanged);
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.cgFontCombo1);
-            this.tabPage2.Controls.Add(this.colorComboBox1);
-            this.tabPage2.Controls.Add(this.FontTree);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(436, 182);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Fonts";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // cgFontCombo1
-            // 
-            this.cgFontCombo1.BackColor = System.Drawing.SystemColors.Window;
-            this.cgFontCombo1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.cgFontCombo1.Location = new System.Drawing.Point(242, 37);
-            this.cgFontCombo1.Name = "cgFontCombo1";
-            this.cgFontCombo1.Size = new System.Drawing.Size(75, 23);
-            this.cgFontCombo1.TabIndex = 2;
-            this.cgFontCombo1.Text = "cgFontCombo1";
-            // 
-            // colorComboBox1
-            // 
-            this.colorComboBox1.Extended = false;
-            this.colorComboBox1.Location = new System.Drawing.Point(133, 37);
-            this.colorComboBox1.Name = "colorComboBox1";
-            this.colorComboBox1.SelectedColor = System.Drawing.Color.Black;
-            this.colorComboBox1.Size = new System.Drawing.Size(103, 23);
-            this.colorComboBox1.TabIndex = 1;
-            // 
-            // FontTree
-            // 
-            this.FontTree.Location = new System.Drawing.Point(6, 6);
-            this.FontTree.Name = "FontTree";
-            this.FontTree.Size = new System.Drawing.Size(121, 174);
-            this.FontTree.TabIndex = 0;
-            this.FontTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.FontTree_AfterSelect);
-            // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.groupBox2);
             this.tabPage3.Controls.Add(this.removeButton);
-            this.tabPage3.Controls.Add(this.commandDescription);
             this.tabPage3.Controls.Add(this.addUserCommandButton);
             this.tabPage3.Controls.Add(this.userCommand);
             this.tabPage3.Controls.Add(this.listOfCommands);
@@ -195,6 +128,16 @@
             this.tabPage3.Text = "FlexiCommands";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.commandDescription);
+            this.groupBox2.Location = new System.Drawing.Point(264, 33);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(166, 118);
+            this.groupBox2.TabIndex = 7;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Description";
+            // 
             // removeButton
             // 
             this.removeButton.Location = new System.Drawing.Point(378, 157);
@@ -204,15 +147,6 @@
             this.removeButton.Text = "Remove";
             this.removeButton.UseVisualStyleBackColor = true;
             this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
-            // 
-            // commandDescription
-            // 
-            this.commandDescription.AutoSize = true;
-            this.commandDescription.Location = new System.Drawing.Point(265, 33);
-            this.commandDescription.Name = "commandDescription";
-            this.commandDescription.Size = new System.Drawing.Size(110, 13);
-            this.commandDescription.TabIndex = 5;
-            this.commandDescription.Text = "Command Description";
             // 
             // addUserCommandButton
             // 
@@ -287,6 +221,16 @@
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
+            // commandDescription
+            // 
+            this.commandDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.commandDescription.Enabled = false;
+            this.commandDescription.Location = new System.Drawing.Point(7, 19);
+            this.commandDescription.Name = "commandDescription";
+            this.commandDescription.Size = new System.Drawing.Size(153, 90);
+            this.commandDescription.TabIndex = 8;
+            this.commandDescription.Text = "";
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -300,13 +244,11 @@
             this.Text = "Settings";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -315,26 +257,21 @@
 
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TreeView FontTree;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TreeView CommandTree;
         private System.Windows.Forms.Label commandPreview;
         private System.Windows.Forms.ListBox listOfCommands;
-        private System.Windows.Forms.Label commandDescription;
         private System.Windows.Forms.Button addUserCommandButton;
         private System.Windows.Forms.TextBox userCommand;
         private System.Windows.Forms.Button removeButton;
         private System.Windows.Forms.CheckBox loadOnStartupCheckbox;
         private System.Windows.Forms.CheckBox minimisedCheckbox;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private ColorComboTestApp.ColorComboBox colorComboBox1;
-        private FontControl.CGFontCombo cgFontCombo1;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button applyButton;
         private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RichTextBox commandDescription;
 
     }
 }

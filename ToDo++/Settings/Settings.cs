@@ -13,60 +13,83 @@ namespace ToDo
 {
     public partial class Settings : Form
     {
-        bool firstLoad = true;
-        private Commands currentCommand;
-        private SettingsManager settingsManager;
+        private SettingsManager settingsManager;        //Main settings manager in use
+        private Commands currentCommand;                //Current Command Selected             
+        private SettingsManager tempSettingsManager;    //A deep copy of settingsManager
 
         public Settings(SettingsManager setSettingsManager)
         {
             InitializeComponent();
             this.ShowIcon = false;
             settingsManager = setSettingsManager;
-            DisableApplyButton();
 
+            DisableApplyButton();
             LoadCommandTab();
             LoadSettingsTab();
-            LoadFontTab();
-
-            firstLoad = false;
         }
 
         #region SettingsTab
 
+        bool firstLoad = true;
         private void LoadSettingsTab()
         {
             minimisedCheckbox.Checked = settingsManager.GetStartMinimizedStatus();
             loadOnStartupCheckbox.Checked = settingsManager.GetLoadOnStartupStatus();
+            firstLoad = false;
         }
 
         private void minimisedCheckbox_CheckStateChanged(object sender, EventArgs e)
         {
-            if(firstLoad==false)
-            EnableApplyButton();
+            if (firstLoad == false)
+                EnableApplyButton();
         }
 
         private void loadOnStartupCheckbox_CheckStateChanged(object sender, EventArgs e)
         {
             if (firstLoad == false)
-            EnableApplyButton();
+                EnableApplyButton();
         }
 
         #endregion
 
-        #region CommandTab
+        #region FontTab
 
-        private SettingsManager tempSettingsManager;
-
-        private void SetUpTempSettingsManager()
+        /*
+        private void LoadFontTab()
         {
-            tempSettingsManager = settingsManager.CloneObj();
+            FontList();
         }
+
+        private void FontList()
+        {
+            TreeNode treeNode = new TreeNode("Command Output");
+            FontTree.Nodes.Add(treeNode);
+            treeNode = new TreeNode("Command Input");
+            FontTree.Nodes.Add(treeNode);
+            treeNode = new TreeNode("Your Input");
+            FontTree.Nodes.Add(treeNode);
+        }
+        
+        private void FontTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
+        */
+
+        #endregion
+
+        #region CommandTab
 
         private void LoadCommandTab()
         {
             SetUpTempSettingsManager();
             CommandList();
             SelectFirstNode();
+        }
+
+        private void SetUpTempSettingsManager()
+        {
+            tempSettingsManager = settingsManager.CloneObj();
         }
 
         private void SelectFirstNode()
@@ -91,19 +114,12 @@ namespace ToDo
 
         private void CommandTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            try
-            {
-                TreeNode treeNode = CommandTree.SelectedNode;
-                commandPreview.Text = treeNode.Text;
-                currentCommand = settingsManager.StringToCommand(treeNode.Text);
+            TreeNode treeNode = CommandTree.SelectedNode;
+            commandPreview.Text = treeNode.Text;
+            currentCommand = settingsManager.StringToCommand(treeNode.Text);
 
-                UpdateDescriptionCommand();
-                UpdateListOfCommands();
-            }
-            catch (Exception m)
-            {
-                MessageBox.Show(m.Message);
-            }
+            UpdateDescriptionCommand();
+            UpdateListOfCommands();
         }
 
         private void UpdateDescriptionCommand()
@@ -113,7 +129,7 @@ namespace ToDo
             switch (currentCommand)
             {
                 case Commands.ADD:
-                    description = "Add Command\nDescription";
+                    description = "Add Command\nEasily add floating, event or deadline tasks with extreme ease";
                     break;
                 case Commands.DELETE:
                     description = "Delete Command\nDescription";
@@ -150,10 +166,18 @@ namespace ToDo
 
         private void removeButton_Click(object sender, EventArgs e)
         {
-            EnableApplyButton();
-            tempSettingsManager.RemoveCommand(listOfCommands.SelectedItem.ToString(), currentCommand);
-            UpdateListOfCommands();
-            ClearInputField();
+            try
+            {
+                EnableApplyButton();
+                tempSettingsManager.RemoveCommand(listOfCommands.SelectedItem.ToString(), currentCommand);
+                UpdateListOfCommands();
+                ClearInputField();
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("You have selected nothing to remove");
+            }
+
         }
 
         private void ClearInputField()
@@ -163,41 +187,7 @@ namespace ToDo
 
         #endregion
 
-        #region FontTab
-
-        private void LoadFontTab()
-        {
-            FontList();
-            LoadFonts();
-        }
-
-        private void FontList()
-        {
-            TreeNode treeNode = new TreeNode("Command Output");
-            FontTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("Command Input");
-            FontTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("Your Input");
-            FontTree.Nodes.Add(treeNode);
-        }
-
-        private void LoadFonts()
-        {
-            //Font fntText;
-            //fntText = new Font("Times New Roman", 8, GraphicsUnit.Point);
-
-
-
-        }
-
-        private void FontTree_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-
-        }
-
-        #endregion
-
-        #region GlobalButtons
+        #region UIButtons
 
         private void EnableApplyButton()
         {
