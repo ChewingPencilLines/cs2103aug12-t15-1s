@@ -10,12 +10,20 @@ using System.Diagnostics;
 
 namespace ToDo
 {
-    // enum is used as a list index. do not modify numbering!
+    // ******************************************************************
+    // Enumerations
+    // ******************************************************************
     enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, INVALID };
     enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
     enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
+
+
     public static class StringParser
     {
+        // ******************************************************************
+        // Static Keyword Declarations
+        // ******************************************************************
+
         const int START_INDEX = 0;
         const int END_INDEX = 1;
         static char[,] delimitingCharacters = { { '\'', '\'' }, { '\"', '\"' }, { '[', ']' }, { '(', ')' }, { '{', '}' } };
@@ -27,7 +35,11 @@ namespace ToDo
         static List<string> timeGeneralKeywords;
         static List<string> timeSuffixes;
 
-        #region REGULAR EXPRESSIONS
+        // ******************************************************************
+        // Regular Expressions
+        // ******************************************************************
+
+        #region Regex For Time & Date Parsing
         // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
         static Regex time_24HourFormat =
             new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?$");
@@ -85,6 +97,10 @@ namespace ToDo
         static Regex date_daysWithSuffixes =
              new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
         #endregion
+
+        // ******************************************************************
+        // Parser & Keyword Initialization
+        // ******************************************************************
 
         static StringParser()
         {
@@ -183,29 +199,11 @@ namespace ToDo
 
         #endregion
 
-        #region Regex Matching Methods
-        internal static bool IsValidTime(string theTime)
-        {
-            return (time_24HourFormat.IsMatch(theTime) || time_12HourFormat.IsMatch(theTime));
-        }
+        // ******************************************************************
+        // Public Methods
+        // ******************************************************************
 
-        // Note that the following methods do not validate that the dates do actually exist.
-        // i.e. does not check for erroneous non-existent dates such as 31st feb
-        internal static bool IsValidNumericDate(string theDate)
-        {
-            return date_numericFormat.IsMatch(theDate) || date_daysWithSuffixes.IsMatch(theDate.ToLower());
-        }
-
-        internal static bool IsValidAlphabeticDate(string theDate)
-        {
-            return date_alphabeticFormat.IsMatch(theDate);
-        }
-
-        internal static bool IsValidDate(string theDate)
-        {
-            return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate);
-        }
-        #endregion
+        #region Public Methods
 
         /// <summary>
         /// This method searches the input string against the set delimiters'
@@ -249,6 +247,11 @@ namespace ToDo
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
             return GenerateTokens(words);
         }
+        #endregion
+
+        // ******************************************************************
+        // String Parsing Algorithms
+        // ******************************************************************
 
         #region String Splitting and Merging Methods
         /// <summary>
@@ -403,7 +406,7 @@ namespace ToDo
         /// </summary>
         /// <param name="input">The list of unmerged delimited words</param>
         /// <returns>List of separate words or merged date phrases</returns>
-        public static List<string> MergeDateWords(List<string> input)
+        private static List<string> MergeDateWords(List<string> input)
         {
             List<string> output = new List<string>();
             int position = 0, skipWords = 0;
@@ -446,7 +449,7 @@ namespace ToDo
         /// <param name="position">The index of the word  in the input list to be checked</param>
         /// <param name="numberOfWords">The number of words behind the indicated word that were merged to form the date</param>
         /// <returns>True if the indicated word is part of a date phrase and false if otherwise</returns>
-        internal static bool MergeWord_IfValidAlphabeticDate(ref List<string> output, List<string> input, int position, ref int numberOfWords)
+        private static bool MergeWord_IfValidAlphabeticDate(ref List<string> output, List<string> input, int position, ref int numberOfWords)
         {
             string month = input.ElementAt(position);
             string mergedWord = month;
@@ -483,7 +486,7 @@ namespace ToDo
         }
         #endregion
 
-        // Move to new TokenGenerator class?
+        // Move to a new TokenGenerator class?
         #region Token Generation Methods
         /// <summary>
         /// This method searches an input list of strings and generates the relevant
@@ -572,7 +575,7 @@ namespace ToDo
         
         // note: currently, the method just ignores invalid dates such as 30th feb
         // might wish to change the catch case to flag the invalid date input
-        internal static List<TokenDate> GenerateDateTokens(List<string> input)
+        private static List<TokenDate> GenerateDateTokens(List<string> input)
         {
             string dayString = String.Empty;
             string monthString = String.Empty;
@@ -669,7 +672,7 @@ namespace ToDo
         /// </summary>
         /// <param name="theWord">The string to be searched/matched</param>
         /// <returns>The match found</returns>
-        internal static Match GetDateMatch(string theWord)
+        private static Match GetDateMatch(string theWord)
         {
             Match theMatch = date_numericFormat.Match(theWord);
             if (!theMatch.Success)
@@ -690,7 +693,7 @@ namespace ToDo
         /// <param name="day">The string value of the retrieved day group</param>
         /// <param name="month">The string value of the retrieved month group</param>
         /// <param name="year">The string value of the retrieved year group</param>
-        internal static void GetMatchTagValues(Match match, ref string day, ref string month, ref string year)
+        private static void GetMatchTagValues(Match match, ref string day, ref string month, ref string year)
         {
             day = match.Groups["day"].Value;
             month = match.Groups["month"].Value;
@@ -707,7 +710,7 @@ namespace ToDo
         /// <param name="dayInt">The output day integer</param>
         /// <param name="monthInt">The output month integer</param>
         /// <param name="yearInt">The output year integer</param>      
-        internal static void ConvertMatchTagValuesToInts(string dayString, string monthString, string yearString, ref int dayInt, ref int monthInt, ref int yearInt)
+        private static void ConvertMatchTagValuesToInts(string dayString, string monthString, string yearString, ref int dayInt, ref int monthInt, ref int yearInt)
         {
             dayString = RemoveSuffixesIfRequired(dayString);
             int.TryParse(dayString, out dayInt);
@@ -723,7 +726,7 @@ namespace ToDo
         /// </summary>
         /// <param name="month">The input month string (can be numeric of alphabetic)</param>
         /// <returns>An integer month index</returns>
-        internal static int ConvertToNumericMonth(string month)
+        private static int ConvertToNumericMonth(string month)
         {
             Month monthType;
             int monthInt = 0;
@@ -749,7 +752,7 @@ namespace ToDo
         /// </summary>
         /// <param name="day">The input day string (may contain suffixes)</param>
         /// <returns>The day string with no suffixes</returns>
-        internal static string RemoveSuffixesIfRequired(string day)
+        private static string RemoveSuffixesIfRequired(string day)
         {
             // No day input
             if (day == String.Empty)
@@ -857,22 +860,12 @@ namespace ToDo
         }
 
         #endregion
-
-        /// <summary>
-        /// This methods takes in a list of tokens and an index and returns the indicated token
-        /// at that indicated position.
-        /// </summary>
-        /// <param name="tokens">The list of input tokens</param>
-        /// <param name="p">The position of the required token</param>
-        /// <returns>The retrieved token</returns>
-        private static object GetTokenAtPosition(List<Token> tokens, int p)
-        {
-            foreach (Token token in tokens)
-            {
-                if (token.Position == p) return token;
-            }
-            return null;
-        }
+        
+        // ******************************************************************
+        // Auxilliary Methods
+        // ******************************************************************
+        
+        #region Comparison Methods
 
         /// <summary>
         /// This methods compares the 2 input tokens by their stored integer positions and
@@ -894,6 +887,45 @@ namespace ToDo
                 Debug.Assert(false, "Two tokens with same position!");
                 return 0;
             }
+        }
+
+        private static bool IsValidTime(string theTime)
+        {
+            return (time_24HourFormat.IsMatch(theTime) || time_12HourFormat.IsMatch(theTime));
+        }
+
+        // Note that the following methods do not validate that the dates do actually exist.
+        // i.e. does not check for erroneous non-existent dates such as 31st feb
+        private static bool IsValidNumericDate(string theDate)
+        {
+            return date_numericFormat.IsMatch(theDate) || date_daysWithSuffixes.IsMatch(theDate.ToLower());
+        }
+
+        private static bool IsValidAlphabeticDate(string theDate)
+        {
+            return date_alphabeticFormat.IsMatch(theDate);
+        }
+
+        private static bool IsValidDate(string theDate)
+        {
+            return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate);
+        }
+        #endregion
+
+        /// <summary>
+        /// This methods takes in a list of tokens and an index and returns the indicated token
+        /// at that indicated position.
+        /// </summary>
+        /// <param name="tokens">The list of input tokens</param>
+        /// <param name="p">The position of the required token</param>
+        /// <returns>The retrieved token</returns>
+        private static object GetTokenAtPosition(List<Token> tokens, int p)
+        {
+            foreach (Token token in tokens)
+            {
+                if (token.Position == p) return token;
+            }
+            return null;
         }
 
     }

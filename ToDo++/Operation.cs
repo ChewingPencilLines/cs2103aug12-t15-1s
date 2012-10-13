@@ -6,12 +6,7 @@ using System.Text;
 namespace ToDo
 {
     public abstract class Operation
-    {
-        public Operation()
-        {
-
-        }
-
+    {        
         abstract public Task GetTask();
     }
 
