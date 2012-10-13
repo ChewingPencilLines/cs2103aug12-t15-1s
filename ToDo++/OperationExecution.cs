@@ -10,7 +10,7 @@ namespace ToDo
 {
     public class ExecuteAdd : OperationHandler
     {
-        public override Result ExecuteOperation(Operation operation)
+        public override string ExecuteOperation(Operation operation)
         {
             try
             {
@@ -19,12 +19,12 @@ namespace ToDo
 
                 xml.WriteXML(taskList);
 
-                return Result.ADD_SUCCESS;
+                return Add_Suceess_Message;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return Result.ERROR;
+                return Wrong_Message;
             }
 
         }
@@ -32,7 +32,7 @@ namespace ToDo
     
     public class ExecuteDelete : OperationHandler
     {
-        public override Result ExecuteOperation(Operation operation)
+        public override string ExecuteOperation(Operation operation)
         {
             try
             {
@@ -44,12 +44,12 @@ namespace ToDo
 
                 xml.WriteXML(taskList);
 
-                return Result.DELETE_SUCCESS;
+                return Delete_Success_Message;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return Result.ERROR;
+                return Wrong_Message;
             }
 
         }
@@ -57,7 +57,7 @@ namespace ToDo
 
     public class ExecuteModify : OperationHandler
     {
-        public override Result ExecuteOperation(Operation operation)
+        public override string ExecuteOperation(Operation operation)
         {
             try
             {
@@ -70,26 +70,26 @@ namespace ToDo
 
                 xml.WriteXML(taskList);
 
-                return Result.MODIFY_SUCCESS;
+                return Modify_Success_Message;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return Result.ERROR;
+                return Wrong_Message;
             }
         }
     }
 
     public class ExecuteUndo : OperationHandler
     {
-        public override Result ExecuteOperation(Operation operation)
+        public override string ExecuteOperation(Operation operation)
         {
             try
             {
                 Operation undo; 
                 undo = undoStack.Pop();
 
-                Result result;
+                string result;
                 bool flag = false;
 
                 if (undo is OperationAdd)
@@ -101,7 +101,7 @@ namespace ToDo
                     ExecuteDelete execute = new ExecuteDelete();
                     result = execute.ExecuteOperation(undoOperation);
 
-                    if (result.Equals(Result.DELETE_SUCCESS))
+                    if (result.Equals(Delete_Success_Message))
                         flag = true;
                     
                 }
@@ -113,7 +113,7 @@ namespace ToDo
                     ExecuteAdd execute = new ExecuteAdd();
                     result = execute.ExecuteOperation(undoOperation);
 
-                    if (result.Equals(Result.ADD_SUCCESS))
+                    if (result.Equals(Add_Suceess_Message))
                         flag = true;
                 }
                 else if (undo is OperationModify)
@@ -126,31 +126,32 @@ namespace ToDo
                     ExecuteModify execute = new ExecuteModify();
                     result = execute.ExecuteOperation(operation);
 
-                    if (result.Equals(Result.MODIFY_SUCCESS))
+                    if (result.Equals(Modify_Success_Message))
                         flag = true;
                 }
 
                 if(flag == true)
-                    return Result.UNDO_SUCCESS;
+                    return  Undo_Success_Message;
                 else
-                    return Result.ERROR;
+                    return  Wrong_Message;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return Result.ERROR;
+                return  Wrong_Message;
             }
         }
     }
     
     public class ExecuteSearch : OperationHandler
     {
-        public override Result ExecuteOperation(Operation operation)
+        public override string ExecuteOperation(Operation operation)
         {
             try
             {
 
                 string condition = ((OperationSearch)operation).search;
+                string result = "";
 
                 if (condition == "")
                 {
@@ -159,29 +160,35 @@ namespace ToDo
                         //PrintToUI(task); 
                         if (task is TaskFloating)
                         {
-                            Console.WriteLine(task.taskname);
+                            result= string.Concat(result,task.taskname,"\n");
+                           // Console.WriteLine(task.taskname);
                         }
                         else if (task is TaskDeadline)
                         {
-                            Console.Write(((TaskDeadline)task).taskname);
-                            Console.WriteLine(((TaskDeadline)task).endtime.ToString());
+                            result = string.Concat(result, ((TaskDeadline)task).taskname, 
+                                ((TaskDeadline)task).endtime.ToString(),"\n");
+                          //  Console.Write(((TaskDeadline)task).taskname);
+                           // Console.WriteLine(((TaskDeadline)task).endtime.ToString());
                         }
                         else if (task is TaskTimed)
                         {
-                            Console.Write(((TaskTimed)task).taskname);
-                            Console.WriteLine(((TaskTimed)task).starttime.ToString());
-                            Console.WriteLine(((TaskTimed)task).endtime.ToString());
+                            result = string.Concat(result, ((TaskDeadline)task).taskname,
+                                ((TaskTimed)task).starttime.ToString(),
+                                ((TaskDeadline)task).endtime.ToString(), "\n");
+                          //  Console.Write(((TaskTimed)task).taskname);
+                          //  Console.WriteLine(((TaskTimed)task).starttime.ToString());
+                          //  Console.WriteLine(((TaskTimed)task).endtime.ToString());
                         }
                     }
-                    return Result.SEARCH_SUCCESS;
+                    return result;
                 }
 
-                return Result.ERROR;
+                return  Wrong_Message;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return Result.ERROR;
+                return  Wrong_Message;
             }
 
         }
