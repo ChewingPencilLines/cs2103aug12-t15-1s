@@ -28,7 +28,7 @@ namespace ToDo
 
         public string ExecuteCommand(Operation operation)
         {
-            if (operation.Equals(null))
+            if (operation == null)
             {
                 return null;
             }
