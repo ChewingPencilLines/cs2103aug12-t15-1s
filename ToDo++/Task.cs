@@ -8,8 +8,8 @@ namespace ToDo
 {
     public abstract class Task
     {
-        protected string taskname;
-
+        //protected string taskname;
+        public string taskname;
         public Task()
         {
             
@@ -29,7 +29,7 @@ namespace ToDo
 
     public class TaskDeadline : Task
     {
-        private DateTime endtime;
+        public DateTime endtime;
 
         public TaskDeadline() : this(null, DateTime.Now)
         { }
@@ -44,8 +44,8 @@ namespace ToDo
 
     public class TaskTimed : Task
     {
-        private DateTime endtime;
-        private DateTime starttime;
+        public DateTime endtime;
+        public DateTime starttime;
 
         public TaskTimed() : this(null, DateTime.Now, DateTime.Now)
         { }

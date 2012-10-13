@@ -36,9 +36,9 @@
             this.decreaseSizeButton = new System.Windows.Forms.Button();
             this.increaseSizeButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.dateTimeControl1 = new ToDo.DateTimeControl();
             this.menuStrip = new ToDo.Menu();
             this.outputBox = new ToDo.OutputBox();
-            this.dateTimeControl1 = new ToDo.DateTimeControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -69,10 +69,13 @@
             // 
             // decreaseSizeButton
             // 
-            this.decreaseSizeButton.BackColor = System.Drawing.Color.Transparent;
-            this.decreaseSizeButton.Location = new System.Drawing.Point(329, 29);
+            this.decreaseSizeButton.BackColor = System.Drawing.Color.Aqua;
+            this.decreaseSizeButton.BackgroundImage = global::ToDo.Properties.Resources.tempImage;
+            this.decreaseSizeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.decreaseSizeButton.Image = global::ToDo.Properties.Resources.tempImage;
+            this.decreaseSizeButton.Location = new System.Drawing.Point(320, 29);
             this.decreaseSizeButton.Name = "decreaseSizeButton";
-            this.decreaseSizeButton.Size = new System.Drawing.Size(28, 23);
+            this.decreaseSizeButton.Size = new System.Drawing.Size(33, 23);
             this.decreaseSizeButton.TabIndex = 5;
             this.decreaseSizeButton.Text = "A-";
             this.decreaseSizeButton.UseVisualStyleBackColor = false;
@@ -80,10 +83,13 @@
             // 
             // increaseSizeButton
             // 
-            this.increaseSizeButton.BackColor = System.Drawing.Color.Transparent;
-            this.increaseSizeButton.Location = new System.Drawing.Point(359, 29);
+            this.increaseSizeButton.BackColor = System.Drawing.Color.Aqua;
+            this.increaseSizeButton.BackgroundImage = global::ToDo.Properties.Resources.tempImage;
+            this.increaseSizeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.increaseSizeButton.Image = global::ToDo.Properties.Resources.tempImage;
+            this.increaseSizeButton.Location = new System.Drawing.Point(355, 29);
             this.increaseSizeButton.Name = "increaseSizeButton";
-            this.increaseSizeButton.Size = new System.Drawing.Size(28, 23);
+            this.increaseSizeButton.Size = new System.Drawing.Size(32, 23);
             this.increaseSizeButton.TabIndex = 6;
             this.increaseSizeButton.Text = "A+";
             this.increaseSizeButton.UseVisualStyleBackColor = false;
@@ -92,12 +98,20 @@
             // pictureBox1
             // 
             this.pictureBox1.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.ErrorImage")));
-            this.pictureBox1.Image = global::ToDo.Properties.Resources.tempImage;
+            this.pictureBox1.Image = global::ToDo.Properties.Resources.CoverPhoto;
             this.pictureBox1.Location = new System.Drawing.Point(13, 27);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(378, 29);
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
+            // 
+            // dateTimeControl1
+            // 
+            this.dateTimeControl1.BackColor = System.Drawing.Color.Transparent;
+            this.dateTimeControl1.Location = new System.Drawing.Point(154, 22);
+            this.dateTimeControl1.Name = "dateTimeControl1";
+            this.dateTimeControl1.Size = new System.Drawing.Size(150, 36);
+            this.dateTimeControl1.TabIndex = 10;
             // 
             // menuStrip
             // 
@@ -114,14 +128,6 @@
             this.outputBox.Size = new System.Drawing.Size(378, 162);
             this.outputBox.TabIndex = 7;
             this.outputBox.Text = "";
-            // 
-            // dateTimeControl1
-            // 
-            this.dateTimeControl1.BackColor = System.Drawing.Color.Transparent;
-            this.dateTimeControl1.Location = new System.Drawing.Point(147, 22);
-            this.dateTimeControl1.Name = "dateTimeControl1";
-            this.dateTimeControl1.Size = new System.Drawing.Size(150, 36);
-            this.dateTimeControl1.TabIndex = 10;
             // 
             // UI
             // 

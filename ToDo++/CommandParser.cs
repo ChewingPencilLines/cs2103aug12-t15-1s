@@ -24,13 +24,16 @@ namespace ToDo
 
         private static Operation GenerateOperation(List<Token> tokens)
         {
+            Operation newOperation = null;
             CommandType commandType = new CommandType();            
             ContextType currentMode = new ContextType();
             ContextType currentSpecifier = new ContextType();
-            TimeSpan startTime, endTime;
-            DateTime startDate, endDate;
-            DayOfWeek startDay, endDay;
-            string taskName;
+            TimeSpan? startTime = null, endTime = null;
+            DateTime? startDate = null, endDate = null;
+            DayOfWeek? startDay = null, endDay = null;
+            DateTime? startCombined = null, endCombined = null;
+            string taskName = null;
+            int? taskIndex = null;
 
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
@@ -53,7 +56,13 @@ namespace ToDo
                     if (commandType != CommandType.INVALID)
                         WarnUserOfMultipleCommands();
                     else
+                    {
                         commandType = ((TokenCommand)token).Value;
+                        if (commandType == CommandType.DELETE || commandType == CommandType.MODIFY)
+                        {
+                            taskIndex = ((TokenCommand)token).TaskIndex;
+                        }
+                    }
                 }
                 else if (token is TokenTime)
                 {
@@ -80,15 +89,15 @@ namespace ToDo
                         case ContextType.STARTTIME:
                             startDay = ((TokenDay)token).Value;
                             // @ivan-todo: WarnUser if already determined startDate and startDay conflicts
-                            startDate = GetDateFromDay(currentSpecifier, startDay);
+                            startDate = GetDateFromDay(currentSpecifier, (DayOfWeek)startDay);
                             break;
                         case ContextType.ENDTIME:
                             endDay = ((TokenDay)token).Value;
-                            endDate = GetDateFromDay(currentSpecifier, endDay);
+                            endDate = GetDateFromDay(currentSpecifier, (DayOfWeek)endDay);
                             break;
                         case ContextType.DEADLINE:
                             endDay = ((TokenDay)token).Value;
-                            endDate = GetDateFromDay(currentSpecifier, endDay);
+                            endDate = GetDateFromDay(currentSpecifier, (DayOfWeek)endDay);
                             break;
                         default:
                             Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");
@@ -122,10 +131,76 @@ namespace ToDo
                 {
                     throw new Exception("Token type not matched!");
                 }
+            }
+            // Combine Date/Times
+            startCombined = CombineDateAndTime(startTime, startDate);
+            endCombined = CombineDateAndTime(endTime, endDate);
+            // Generate operation based on values, and whether they have been used.
+            Task task;
+            
+            switch (commandType)
+            {                
+                case CommandType.ADD:
+                    task = GenerateNewTask(taskName, startCombined, endCombined);
+                    newOperation = new OperationAdd(task);
+                    break;
+                case CommandType.DELETE:
+                    Debug.Assert(taskIndex != null, "task index is null!");
+                    newOperation = new OperationDelete((int)taskIndex);
+                    break;
+                case CommandType.DISPLAY:
+                    newOperation = new OperationSearch("");
+                    break;
+                case CommandType.MODIFY:
+                    task = GenerateNewTask(taskName, startCombined, endCombined);
+                    if(taskIndex == null)
+                        throw new Exception("Invalid task name. Modify by name NYI.");
+                    else newOperation = new OperationModify((int)taskIndex, task);
+                    throw new NotImplementedException();
+                case CommandType.SEARCH:
+                    newOperation = new OperationSearch("");
+                    throw new NotImplementedException();
+                case CommandType.SORT:
+                    throw new NotImplementedException();
+                case CommandType.REDO:
+                    throw new NotImplementedException();
+                case CommandType.UNDO:
+                    throw new NotImplementedException();
+            }
+            return newOperation;
+        }
 
-                // Generate operation based on values, and whether they have been used.
-            }            
-            return new OperationAdd(new TaskFloating());
+        private static DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date)
+        {
+            DateTime? combined = null;
+            DateTime todayDate = DateTime.Now;
+            if (date == null && time != null)
+            {
+                TimeSpan currentTime = todayDate.TimeOfDay;
+                TimeSpan taskTime = (TimeSpan)time;
+                combined = new DateTime(todayDate.Year, todayDate.Month, todayDate.Day, taskTime.Hours, taskTime.Minutes, taskTime.Seconds);
+                if (currentTime > time)
+                {
+                    combined = ((DateTime)combined).AddDays(1);
+                }
+            }
+            else if (time == null && date != null)
+            {
+                combined = date;
+            }
+            return combined;
+        }
+
+        private static Task GenerateNewTask(string taskName, DateTime? startTime, DateTime? endTime)
+        {
+            if (startTime == null && endTime == null)
+                return new TaskFloating(taskName);
+            else if (startTime == null && endTime != null)
+                return new TaskDeadline(taskName, (DateTime)endTime);
+            else if (startTime != null && endTime == null)
+                return new TaskTimed(taskName, (DateTime)startTime, (DateTime)startTime); // note: set endTime as what for default?
+            else
+                return new TaskTimed(taskName, (DateTime)startTime, (DateTime)endTime);
         }
 
         /// <summary>
@@ -181,7 +256,7 @@ namespace ToDo
 
         private static void WarnUserOfMultipleCommands()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Multiple commands were issued. Functionality NYI.");
         }  
 
         private List<int[]> GetPositionsOfDelimiters(string input)

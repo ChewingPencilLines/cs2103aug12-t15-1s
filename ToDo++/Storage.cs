@@ -28,7 +28,7 @@ namespace ToDo
             //    new System.Xml.Serialization.XmlSerializer(typeof(TaskList));
 
             System.IO.StreamWriter file = new System.IO.StreamWriter(
-                @"C:\Users\Raaj\Desktop\SerializationOverview.xml");
+                @"..\..\StorageofTaskList.xml");
             writer.Serialize(file, taskList);
             file.Close();
         }
