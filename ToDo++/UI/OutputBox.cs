@@ -15,8 +15,15 @@ namespace ToDo
     {
         private SettingsManager settingsManager;
 
+        /// <summary>
+        /// Set the settingsManager of the OutputBox Control, so interaction is possible
+        /// </summary>
+        /// <param name="setSettingsManager">Instance of MainSettingsManager passed in by pointer</param>
         public void SetSettingsManager(SettingsManager passedSettingsManager) { settingsManager = passedSettingsManager; }
 
+        /// <summary>
+        /// Currently sets the Text Size of the OutputBox
+        /// </summary>
         public void LoadSettingsIntoOutput()
         {
             this.SetOutputSize(settingsManager.GetTextSize());
@@ -24,6 +31,10 @@ namespace ToDo
 
         #region TextSizeControl
 
+        /// <summary>
+        /// Sets the Text Size of the OutputBox directly
+        /// </summary>
+        /// <param name="size">Size of Text in int</param>
         public void SetOutputSize(int size)
         {
             this.SelectAll();
@@ -32,12 +43,18 @@ namespace ToDo
             this.DeselectAll();
         }
 
+        /// <summary>
+        /// Decrease the Text Size by 1 unit, while modifying the settingsManager
+        /// </summary>
         public void DecreaseSizeOfOutput()
         {
             settingsManager.DecreaseTextSize();
             this.SetOutputSize(settingsManager.GetTextSize());
         }
 
+        /// <summary>
+        /// Increase the Text Size by 1 unit, while modifying the settingsManager
+        /// </summary>
         public void IncreaseSizeOfOutput()
         {
             settingsManager.IncreaseTextSize();
@@ -48,7 +65,9 @@ namespace ToDo
 
         #region FormattingControl
 
-        //Set Formatting for your Text
+        /// <summary>
+        /// Set Formatting of Text to be set into OutputBox
+        /// </summary>
         public void SetFormat(Color color, string text, int size)
         {
             RichTextBox box = this;
@@ -64,7 +83,11 @@ namespace ToDo
 
         #endregion
 
-        //Append the Output Window
+        /// <summary>
+        /// This method displays both ToDo++ output and input with correct formatting
+        /// </summary>
+        /// <param name="userInput">What the User typed in the input box</param>
+        /// <param name="systemOutput">What ToDo++ returns as an output</param>
         public void DisplayCommand(string userInput,string systemOutput)
         {
             SetFormat(Color.Blue, "User: ", 8);
