@@ -21,7 +21,7 @@ namespace ToDo
         #region Constructor
 
         private SettingsManager settingsManager;        //Main instance of settingsManager
-        private Commands currentCommand;                //Current Command Selected             
+        private CommandType currentCommand;                //Current Command Selected             
         private SettingsManager tempSettingsManager;    //A deep copy of settingsManager
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace ToDo
             CommandTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("DELETE");
             CommandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("UPDATE");
+            treeNode = new TreeNode("MODIFY");
             CommandTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("UNDO");
             CommandTree.Nodes.Add(treeNode);
@@ -185,19 +185,19 @@ namespace ToDo
 
             switch (currentCommand)
             {
-                case Commands.ADD:
-                    //description = "Add Command\n\nEasily add floating, event or deadline tasks with extreme ease";
+                case CommandType.ADD:
+                    //description = "Add Command\nDescription";
                     break;
-                case Commands.DELETE:
+                case CommandType.DELETE:
                     //description = "Delete Command\nDescription";
                     break;
-                case Commands.UPDATE:
+                case CommandType.MODIFY:
                     //description = "Update Command\nDescription";
                     break;
-                case Commands.UNDO:
+                case CommandType.UNDO:
                     //description = "Undo Command\nDescription";
                     break;
-                case Commands.REDO:
+                case CommandType.REDO:
                     //description = "Redo Command\nDescription";
                     break;
             }

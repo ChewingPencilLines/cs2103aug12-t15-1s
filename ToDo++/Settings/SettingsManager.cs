@@ -19,7 +19,7 @@ namespace ToDo
 
         public List<string> customKeywords_ADD;
         public List<string> customKeywords_DELETE;
-        public List<string> customKeywords_UPDATE;
+        public List<string> customKeywords_MODIFY;
         public List<string> customKeywords_UNDO;
         public List<string> customKeywords_REDO;
 
@@ -30,7 +30,7 @@ namespace ToDo
             textSize = 12;
             customKeywords_ADD = new List<string>();
             customKeywords_DELETE = new List<string>();
-            customKeywords_UPDATE = new List<string>();
+            customKeywords_MODIFY = new List<string>();
             customKeywords_UNDO = new List<string>();
             customKeywords_REDO = new List<string>();
         }
@@ -44,11 +44,11 @@ namespace ToDo
             customKeywords_DELETE.Clear();
             customKeywords_REDO.Clear();
             customKeywords_UNDO.Clear();
-            customKeywords_UPDATE.Clear();
+            customKeywords_MODIFY.Clear();
         }
     }
 
-    public enum Commands { ADD = 1, DELETE, UPDATE, UNDO, REDO, NONE };
+    //public enum Commands { ADD = 1, DELETE, UPDATE, UNDO, REDO, NONE };
 
     public class SettingsManager
     {
@@ -68,56 +68,42 @@ namespace ToDo
 
         #region CommandFunctions
 
-        public Commands StringToCommand(string commandString)
+        public CommandType StringToCommand(string commandString)
         {
             switch (commandString)
             {
                 case "ADD":
-                    return Commands.ADD;
+                    return CommandType.ADD;
                 case "DELETE":
-                    return Commands.DELETE;
-                case "UPDATE":
-                    return Commands.UPDATE;
+                    return CommandType.DELETE;
+                case "MODIFY":
+                    return CommandType.MODIFY;
                 case "UNDO":
-                    return Commands.UNDO;
+                    return CommandType.UNDO;
                 case "REDO":
-                    return Commands.REDO;
+                    return CommandType.REDO;
             }
 
-            return Commands.NONE;
+            return CommandType.INVALID;
         }
 
-        public string CommandToString(Commands commandInput)
+        public string CommandToString(CommandType commandInput)
         {
             switch (commandInput)
             {
-                case Commands.ADD:
+                case CommandType.ADD:
                     return "ADD";
-                case Commands.DELETE:
+                case CommandType.DELETE:
                     return "DELETE";
-                case Commands.UPDATE:
-                    return "UPDATE";
-                case Commands.UNDO:
+                case CommandType.MODIFY:
+                    return "MODIFY";
+                case CommandType.UNDO:
                     return "UNDO";
-                case Commands.REDO:
+                case CommandType.REDO:
                     return "REDO";
             }
 
-            return "NONE";
-        }
-
-        #endregion
-
-        #region TestFunctionToLoadData
-
-        //Just a Test Function
-        public void SetUpCommands()
-        {
-            ToggleLoadOnStartup(true);
-            ToggleStartMinimized(true);
-            AddCommand("+", Commands.ADD);
-            AddCommand("-", Commands.DELETE);
-            SetTextSize(12);
+            return "INVALID";
         }
 
         #endregion
@@ -203,35 +189,35 @@ namespace ToDo
 
         #region CommandModifications
 
-        public void AddCommand(string newCommand, Commands commandType)
+        public void AddCommand(string newCommand, CommandType commandType)
         {
             try
             {
                 switch (commandType)
                 {
-                    case Commands.ADD:
+                    case CommandType.ADD:
                         if (settingsList.customKeywords_ADD.Contains(newCommand))
                             throw new RepeatCommandException("There is such a command in the ADD list already");
                         settingsList.customKeywords_ADD.Add(newCommand);
                         break;
-                    case Commands.DELETE:
+                    case CommandType.DELETE:
                         if (settingsList.customKeywords_DELETE.Contains(newCommand))
                             throw new RepeatCommandException("There is such a command in the DELETE list already");
                         settingsList.customKeywords_DELETE.Add(newCommand);
                         break;
-                    case Commands.UPDATE:
-                        if (settingsList.customKeywords_REDO.Contains(newCommand))
-                            throw new RepeatCommandException("There is such a command in the REDO list already");
-                        settingsList.customKeywords_UPDATE.Add(newCommand);
+                    case CommandType.MODIFY:
+                        if (settingsList.customKeywords_MODIFY.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the MODIFY list already");
+                        settingsList.customKeywords_MODIFY.Add(newCommand);
                         break;
-                    case Commands.UNDO:
+                    case CommandType.UNDO:
                         if (settingsList.customKeywords_UNDO.Contains(newCommand))
                             throw new RepeatCommandException("There is such a command in the UNDO list already");
                         settingsList.customKeywords_UNDO.Add(newCommand);
                         break;
-                    case Commands.REDO:
-                        if (settingsList.customKeywords_UPDATE.Contains(newCommand))
-                            throw new RepeatCommandException("There is such a command in the UPDATE list already");
+                    case CommandType.REDO:
+                        if (settingsList.customKeywords_REDO.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the REDO list already");
                         settingsList.customKeywords_REDO.Add(newCommand);
                         break;
                 }
@@ -243,46 +229,46 @@ namespace ToDo
 
         }
 
-        public void RemoveCommand(string commandToRemove, Commands commandType)
+        public void RemoveCommand(string commandToRemove, CommandType commandType)
         {
             switch (commandType)
             {
-                case Commands.ADD:
+                case CommandType.ADD:
                     settingsList.customKeywords_ADD.Remove(commandToRemove);
                     break;
-                case Commands.DELETE:
+                case CommandType.DELETE:
                     settingsList.customKeywords_DELETE.Remove(commandToRemove);
                     break;
-                case Commands.UPDATE:
-                    settingsList.customKeywords_UPDATE.Remove(commandToRemove);
+                case CommandType.MODIFY:
+                    settingsList.customKeywords_MODIFY.Remove(commandToRemove);
                     break;
-                case Commands.UNDO:
+                case CommandType.UNDO:
                     settingsList.customKeywords_UNDO.Remove(commandToRemove);
                     break;
-                case Commands.REDO:
+                case CommandType.REDO:
                     settingsList.customKeywords_REDO.Remove(commandToRemove);
                     break;
             }
         }
 
-        public List<string> GetCommand(Commands commandType)
+        public List<string> GetCommand(CommandType commandType)
         {
             List<string> getCommands = new List<string>();
             switch (commandType)
             {
-                case Commands.ADD:
+                case CommandType.ADD:
                     getCommands = settingsList.customKeywords_ADD;
                     break;
-                case Commands.DELETE:
+                case CommandType.DELETE:
                     getCommands = settingsList.customKeywords_DELETE;
                     break;
-                case Commands.UPDATE:
-                    getCommands = settingsList.customKeywords_UPDATE;
+                case CommandType.MODIFY:
+                    getCommands = settingsList.customKeywords_MODIFY;
                     break;
-                case Commands.UNDO:
+                case CommandType.UNDO:
                     getCommands = settingsList.customKeywords_UNDO;
                     break;
-                case Commands.REDO:
+                case CommandType.REDO:
                     getCommands = settingsList.customKeywords_REDO;
                     break;
             }
@@ -290,25 +276,25 @@ namespace ToDo
             return getCommands;
         }
 
-        public Commands CheckIfCommandExists(string userCommand)
+        public CommandType CheckIfCommandExists(string userCommand)
         {
             foreach (string compare in settingsList.customKeywords_ADD)
                 if (userCommand == compare)
-                    return Commands.ADD;
+                    return CommandType.ADD;
             foreach (string compare in settingsList.customKeywords_DELETE)
                 if (userCommand == compare)
-                    return Commands.DELETE;
-            foreach (string compare in settingsList.customKeywords_UPDATE)
+                    return CommandType.DELETE;
+            foreach (string compare in settingsList.customKeywords_MODIFY)
                 if (userCommand == compare)
-                    return Commands.UPDATE;
+                    return CommandType.MODIFY;
             foreach (string compare in settingsList.customKeywords_UNDO)
                 if (userCommand == compare)
-                    return Commands.UNDO;
+                    return CommandType.UNDO;
             foreach (string compare in settingsList.customKeywords_REDO)
                 if (userCommand == compare)
-                    return Commands.REDO;
+                    return CommandType.REDO;
 
-            return Commands.NONE;
+            return CommandType.INVALID;
         }
 
         #endregion
@@ -360,7 +346,7 @@ namespace ToDo
             this.settingsList.customKeywords_DELETE = passedSettingsManager.settingsList.customKeywords_DELETE;
             this.settingsList.customKeywords_REDO = passedSettingsManager.settingsList.customKeywords_REDO;
             this.settingsList.customKeywords_UNDO = passedSettingsManager.settingsList.customKeywords_UNDO;
-            this.settingsList.customKeywords_UPDATE = passedSettingsManager.settingsList.customKeywords_UPDATE;
+            this.settingsList.customKeywords_MODIFY = passedSettingsManager.settingsList.customKeywords_MODIFY;
         }
 
         public SettingsManager CloneObj()
@@ -381,8 +367,8 @@ namespace ToDo
                 p.settingsList.customKeywords_REDO.Add(item);
             foreach (string item in this.settingsList.customKeywords_UNDO)
                 p.settingsList.customKeywords_UNDO.Add(item);
-            foreach (string item in this.settingsList.customKeywords_UPDATE)
-                p.settingsList.customKeywords_UPDATE.Add(item);
+            foreach (string item in this.settingsList.customKeywords_MODIFY)
+                p.settingsList.customKeywords_MODIFY.Add(item);
 
             return p;
         }
