@@ -65,13 +65,13 @@ namespace ToDo
         #endregion
 
         //Append the Output Window
-        public void DisplayCommand(string userInput)
+        public void DisplayCommand(string userInput,string systemOutput)
         {
-            SetFormat(Color.Blue, "Username: ", 8);
+            SetFormat(Color.Blue, "User: ", 8);
             SetFormat(Color.Black, userInput, 8);
             SetFormat(Color.Red, "\n", 8);
             SetFormat(Color.Red, "ToDo++: ", 8);
-            SetFormat(Color.Black, "aa", 8);
+            SetFormat(Color.Black, systemOutput, 8);
             SetFormat(Color.Red, "\n", 8);
             this.ScrollToCaret();
         }

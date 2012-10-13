@@ -47,21 +47,28 @@
     <Compile Include="CommandParser.cs" />
     <Compile Include="Executor.cs" />
     <Compile Include="Logic.cs" />
-    <Compile Include="Menu.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Menu.Designer.cs">
-      <DependentUpon>Menu.cs</DependentUpon>
-    </Compile>
     <Compile Include="Operation.cs" />
     <Compile Include="OperationHandler.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="Settings\SettingsExceptions.cs" />
     <Compile Include="StringParser.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Token.cs" />
+    <Compile Include="UI\DateTimeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\DateTimeControl.Designer.cs">
+      <DependentUpon>DateTimeControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Menu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Menu.Designer.cs">
+      <DependentUpon>Menu.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\OutputBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -87,11 +94,14 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
-    <EmbeddedResource Include="Menu.resx">
-      <DependentUpon>Menu.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Settings\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\DateTimeControl.resx">
+      <DependentUpon>DateTimeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Menu.resx">
+      <DependentUpon>Menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\TimeDateControl.resx">
       <DependentUpon>TimeDateControl.cs</DependentUpon>
@@ -124,6 +134,9 @@
     <None Include="Resources\App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Cover.png" />
+    <Content Include="Resources\Cover1.png" />
+    <Content Include="Resources\CoverPhoto.png" />
     <Content Include="Resources\icon.ico" />
     <None Include="Resources\tempImage.png" />
   </ItemGroup>
