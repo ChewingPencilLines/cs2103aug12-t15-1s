@@ -12,15 +12,9 @@ namespace CommandParserTest
         CommandParser testParser = new CommandParser();
 
         [TestMethod]
-        public void OperationParseTestDeadline()
+        public void OperationParseTestFloating()
         {
-            Operation op1 = testParser.ParseOperation("task do stuff add 5 am");
-            Assert.IsTrue(op1 is OperationAdd);
-            Task task1 = ((OperationAdd)op1).GetTask();
-            Assert.IsTrue(task1.taskname == "task do stuff");
-            Assert.IsTrue(task1 is TaskDeadline);
-            TimeSpan deadline = ((TaskDeadline)task1).endtime.TimeOfDay;
-            Assert.IsTrue((deadline.Equals(new TimeSpan(21, 0, 0))));
+            Operation op1 = testParser.ParseOperation("task do stuff add Oct 15 5 am");
             return;
         }
 

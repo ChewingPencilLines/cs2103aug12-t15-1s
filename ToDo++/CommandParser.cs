@@ -23,8 +23,7 @@ namespace ToDo
         }
 
         private static Operation GenerateOperation(List<Token> tokens)
-        {
-            Operation newOperation = null;
+        {            
             CommandType commandType = new CommandType();            
             ContextType currentMode = new ContextType();
             ContextType currentSpecifier = new ContextType();
@@ -132,14 +131,22 @@ namespace ToDo
                     throw new Exception("Token type not matched!");
                 }
             }
+
             // Combine Date/Times
             startCombined = CombineDateAndTime(startTime, startDate);
             endCombined = CombineDateAndTime(endTime, endDate);
-            // Generate operation based on values, and whether they have been used.
+
+            Operation newOperation = CreateOperation(commandType, startCombined, endCombined, taskName, taskIndex);
+            return newOperation;
+        }
+
+        // Create operation based on derived values, and whether they have been used.
+        private static Operation CreateOperation(CommandType commandType, DateTime? startCombined, DateTime? endCombined, string taskName, int? taskIndex)
+        {
             Task task;
-            
+            Operation newOperation = null;
             switch (commandType)
-            {                
+            {
                 case CommandType.ADD:
                     task = GenerateNewTask(taskName, startCombined, endCombined);
                     newOperation = new OperationAdd(task);
@@ -153,7 +160,7 @@ namespace ToDo
                     break;
                 case CommandType.MODIFY:
                     task = GenerateNewTask(taskName, startCombined, endCombined);
-                    if(taskIndex == null)
+                    if (taskIndex == null)
                         throw new Exception("Invalid task name. Modify by name NYI.");
                     else newOperation = new OperationModify((int)taskIndex, task);
                     throw new NotImplementedException();
@@ -183,6 +190,12 @@ namespace ToDo
                 {
                     combined = ((DateTime)combined).AddDays(1);
                 }
+            }
+            else if (date != null && time != null)
+            {
+                DateTime setDate = (DateTime)date;
+                TimeSpan setTime = (TimeSpan)time;
+                combined = new DateTime(setDate.Year, setDate.Month, setDate.Day, setTime.Hours, setTime.Minutes, setTime.Seconds);
             }
             else if (time == null && date != null)
             {
