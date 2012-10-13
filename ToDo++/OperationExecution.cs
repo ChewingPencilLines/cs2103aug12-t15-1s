@@ -12,20 +12,14 @@ namespace ToDo
     {
         public override string ExecuteOperation(Operation operation)
         {
-            try
-            {
+             
                 Task taskToAdd = ((OperationAdd)operation).GetTask();
-                taskList.Add(taskToAdd);
+                Program.taskList.Add(taskToAdd);
 
-                xml.WriteXML(taskList);
+                xml.WriteXML(Program.taskList);
 
                 return Add_Suceess_Message;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.ToString());
-                return Wrong_Message;
-            }
+             
 
         }
     }
@@ -37,12 +31,12 @@ namespace ToDo
             try
             {
                 int Index= ((OperationDelete)operation).index;
-                Task taskToDelete = taskList[Index];
+                Task taskToDelete = Program.taskList[Index];
                 pastTask.Push(taskToDelete);
 
-                taskList.RemoveAt(Index);
+                Program.taskList.RemoveAt(Index);
 
-                xml.WriteXML(taskList);
+                xml.WriteXML(Program.taskList);
 
                 return Delete_Success_Message;
             }
@@ -62,13 +56,13 @@ namespace ToDo
             try
             {
                 int Index = ((OperationModify)operation).oldTaskindex;
-                Task taskToModify = taskList[Index];
+                Task taskToModify = Program.taskList[Index];
                 pastTask.Push(taskToModify);
 
                 Task taskRevised = operation.GetTask();
-                taskList[((OperationModify)operation).oldTaskindex] = taskRevised;
+                Program.taskList[((OperationModify)operation).oldTaskindex] = taskRevised;
 
-                xml.WriteXML(taskList);
+                xml.WriteXML(Program.taskList);
 
                 return Modify_Success_Message;
             }
@@ -95,7 +89,7 @@ namespace ToDo
                 if (undo is OperationAdd)
                 {
                     Task undoTask = undo.GetTask();
-                    int index = taskList.IndexOf(undoTask);
+                    int index = Program.taskList.IndexOf(undoTask);
                     OperationDelete undoOperation = new OperationDelete(index);
 
                     ExecuteDelete execute = new ExecuteDelete();
@@ -120,7 +114,7 @@ namespace ToDo
                 {
                     Task undoTask = pastTask.Pop();
                     Task redoTask = undo.GetTask();
-                    int Index = taskList.IndexOf(redoTask);
+                    int Index = Program.taskList.IndexOf(redoTask);
                     OperationModify undoOperation = new OperationModify(Index, undoTask);
 
                     ExecuteModify execute = new ExecuteModify();
@@ -155,7 +149,7 @@ namespace ToDo
 
                 if (condition == "")
                 {
-                    foreach (Task task in taskList)
+                    foreach (Task task in Program.taskList)
                     { 
                         //PrintToUI(task); 
                         if (task is TaskFloating)

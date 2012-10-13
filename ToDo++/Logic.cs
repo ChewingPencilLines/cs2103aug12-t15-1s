@@ -7,10 +7,10 @@ namespace ToDo
 {
     class Logic
     {
-        OperationHandler operationHandler; 
-       
+        OperationHandler operationHandler;
+  
         public Logic()
-        {
+        { 
             operationHandler = new OperationHandler();
         }
 
