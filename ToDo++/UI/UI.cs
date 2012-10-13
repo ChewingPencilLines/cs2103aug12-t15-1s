@@ -215,13 +215,13 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Code for Text Processing goes here
+        // Code that interacts with logic and returns an output goes here
         // ******************************************************************
 
         #region TextInput
 
         /// <summary>
-        /// Process Text Operation, Current not in use
+        /// Passes an the user text to Logic, which processes it and returns an output to be displayed
         /// </summary>
         private void ProcessText()
         {
