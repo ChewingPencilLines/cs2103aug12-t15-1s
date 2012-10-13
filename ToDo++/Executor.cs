@@ -155,9 +155,23 @@ namespace ToDo
                 if (condition == "")
                 {
                     foreach (Task task in taskList)
-                    {
-                        
-                        //PrintToUI(task);
+                    { 
+                        //PrintToUI(task); 
+                        if (task is TaskFloating)
+                        {
+                            Console.WriteLine(task.taskname);
+                        }
+                        else if (task is TaskDeadline)
+                        {
+                            Console.Write(((TaskDeadline)task).taskname);
+                            Console.WriteLine(((TaskDeadline)task).endtime.ToString());
+                        }
+                        else if (task is TaskTimed)
+                        {
+                            Console.Write(((TaskTimed)task).taskname);
+                            Console.WriteLine(((TaskTimed)task).starttime.ToString());
+                            Console.WriteLine(((TaskTimed)task).endtime.ToString());
+                        }
                     }
                     return Result.SEARCH_SUCCESS;
                 }
