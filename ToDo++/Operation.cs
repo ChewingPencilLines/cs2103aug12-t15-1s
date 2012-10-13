@@ -32,11 +32,16 @@ namespace ToDo
 
     public class OperationSearch:Operation
     {
-        //Think of Variables
-        public OperationSearch()
-        {  }
+        public string search = "" ;
 
-        public override Task GetTask() { return null;}
+        public OperationSearch(string searchCondition)
+        {
+            search = searchCondition;
+        }
+
+        public string GetCondition() { return search;}
+
+        public override Task GetTask() { return null; }
     }
 
     public class OperationDelete:Operation
