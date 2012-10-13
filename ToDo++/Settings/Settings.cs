@@ -27,6 +27,7 @@ namespace ToDo
         /// <summary>
         /// Creates a new instance of the Settings UI and loads the various Tabs
         /// </summary>
+        /// <param name="setSettingsManager">Instance of MainSettingsManager passed in by pointer</param>
         public Settings(SettingsManager setSettingsManager)
         {
             InitializeComponent();
