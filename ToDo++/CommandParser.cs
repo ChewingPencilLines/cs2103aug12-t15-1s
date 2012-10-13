@@ -133,9 +133,13 @@ namespace ToDo
             }
 
             // Combine Date/Times
-            startCombined = CombineDateAndTime(startTime, startDate);
-            endCombined = CombineDateAndTime(endTime, endDate);
+            startCombined = CombineDateAndTime(startTime, startDate, DateTime.Now);
+            if(startCombined == null)
+                endCombined = CombineDateAndTime(endTime, endDate, DateTime.Now);
+            else
+                endCombined = CombineDateAndTime(endTime, endDate, (DateTime)startCombined);
 
+            
             Operation newOperation = CreateOperation(commandType, startCombined, endCombined, taskName, taskIndex);
             return newOperation;
         }
@@ -177,31 +181,34 @@ namespace ToDo
             return newOperation;
         }
 
-        private static DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date)
+        private static DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)
         {
-            DateTime? combined = null;
-            DateTime todayDate = DateTime.Now;
+            DateTime? combinedDT = null;
+            // Time defined but not date
             if (date == null && time != null)
             {
-                TimeSpan currentTime = todayDate.TimeOfDay;
+                TimeSpan limitTime = limit.TimeOfDay;
                 TimeSpan taskTime = (TimeSpan)time;
-                combined = new DateTime(todayDate.Year, todayDate.Month, todayDate.Day, taskTime.Hours, taskTime.Minutes, taskTime.Seconds);
-                if (currentTime > time)
+                combinedDT = new DateTime(limit.Year, limit.Month, limit.Day, taskTime.Hours, taskTime.Minutes, taskTime.Seconds);
+                if (limitTime > time)
                 {
-                    combined = ((DateTime)combined).AddDays(1);
+                    combinedDT = ((DateTime)combinedDT).AddDays(1);
                 }
             }
+            // Date and Time both defined
             else if (date != null && time != null)
             {
                 DateTime setDate = (DateTime)date;
-                TimeSpan setTime = (TimeSpan)time;
-                combined = new DateTime(setDate.Year, setDate.Month, setDate.Day, setTime.Hours, setTime.Minutes, setTime.Seconds);
+                TimeSpan setTime = (TimeSpan)time;                
+                combinedDT = new DateTime(setDate.Year, setDate.Month, setDate.Day, setTime.Hours, setTime.Minutes, setTime.Seconds);                
             }
+            // Date defined but not time
             else if (time == null && date != null)
             {
-                combined = date;
+                combinedDT = date;
             }
-            return combined;
+            if (limit > combinedDT) throw new Exception("End DateTime set to later then limit or DateTime that is already over was set!");
+            return combinedDT;
         }
 
         private static Task GenerateNewTask(string taskName, DateTime? startTime, DateTime? endTime)

@@ -12,9 +12,16 @@ namespace CommandParserTest
         CommandParser testParser = new CommandParser();
 
         [TestMethod]
-        public void OperationParseTestFloating()
+        public void OperationParseTestTimedSingle()
         {
             Operation op1 = testParser.ParseOperation("task do stuff add Oct 15 5 am");
+            return;
+        }
+
+        [TestMethod]
+        public void OperationParseTestTimedDuo()
+        {
+            Operation op1 = testParser.ParseOperation("task do stuff add Oct 15 5 am to 6am");
             return;
         }
 
