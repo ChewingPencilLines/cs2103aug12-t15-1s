@@ -486,7 +486,7 @@ namespace ToDo
         }
         #endregion
 
-        // Move to new TokenGenerator class?
+        // Move to a new TokenGenerator class?
         #region Token Generation Methods
         /// <summary>
         /// This method searches an input list of strings and generates the relevant
