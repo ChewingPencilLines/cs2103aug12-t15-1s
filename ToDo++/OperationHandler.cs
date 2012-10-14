@@ -18,7 +18,7 @@ namespace ToDo
         // Feedback Strings
         // ******************************************************************
         #region Feedback Strings
-        const string RESPONSE_ADD_SUCCESS = "Added {0} successfully.";
+        const string RESPONSE_ADD_SUCCESS = "Added \"{0}\" successfully.";
         const string RESPONSE_ADD_FAIL = "Failed to add task!";
         const string RESPONSE_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
         const string RESPONSE_MODIFY_SUCCESS = "Modified task successfully.";
@@ -120,15 +120,15 @@ namespace ToDo
                 displayString += (task.taskname);
                 if (task is TaskDeadline)
                 {
-                    displayString += (" by: " + ((TaskDeadline)task).endtime);
+                    displayString += (" BY: " + ((TaskDeadline)task).endtime);
                 }
                 else if (task is TaskEvent)
                 {
                     DateTime startTime = ((TaskEvent)task).starttime;
                     DateTime endTime = ((TaskEvent)task).endtime;
-                    displayString += (" at: " + startTime.ToString());
+                    displayString += (" AT: " + startTime.ToString());
                     if(startTime != endTime && endTime != null)
-                    displayString += (" to: " + endTime.ToString());
+                    displayString += (" TO: " + endTime.ToString());
                 }
                 displayString += "\r\n";
             }
