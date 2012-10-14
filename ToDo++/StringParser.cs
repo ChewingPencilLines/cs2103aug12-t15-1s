@@ -217,6 +217,11 @@ namespace ToDo
             }
         }
 
+        internal static void ResetCommandKeywords()
+        {
+            InitializeCommandKeywords();
+        }
+
         /// <summary>
         /// This method searches the input string against the set delimiters'
         /// and return the positions of the delimiters as a list of integer pairs.
