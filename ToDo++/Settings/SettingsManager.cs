@@ -10,6 +10,12 @@ using System.Windows.Forms;
 
 namespace ToDo
 {
+    // ******************************************************************
+    // Class Containing all Settings Information
+    // ******************************************************************
+
+    #region SettingsList
+
     public class SettingsList
     {
         public bool loadOnStartup;
@@ -48,26 +54,39 @@ namespace ToDo
         }
     }
 
-    //public enum Commands { ADD = 1, DELETE, UPDATE, UNDO, REDO, NONE };
+    #endregion
 
     public class SettingsManager
     {
+        // ******************************************************************
+        //Constructor-Contains instances SettingsList and FileName
+        // ******************************************************************
+
+        #region Constructor
+
         private string fileName = "Settings.xml";
         private SettingsList settingsList;
 
         public SettingsManager()
         {
             settingsList = new SettingsList();
-
-            /* Used for Writing test data to xml before running*/
-            //SetUpCommands();
-            //WriteToFile();
-
             OpenFile();
         }
 
+        #endregion
+
+        // ******************************************************************
+        //Functions to covert CommandType Enum between string and CommandType
+        // ******************************************************************
+
         #region CommandFunctions
 
+        /// <summary>
+        /// This method converts string to a CommandType
+        /// It can be used by other functions if neccessary (Used by Settings Class)
+        /// </summary>
+        /// <param name="commandString">Pass in a string that matches CommandType</param>
+        /// <returns>The CommandType that matches the string passed in</returns>
         public CommandType StringToCommand(string commandString)
         {
             switch (commandString)
@@ -87,6 +106,12 @@ namespace ToDo
             return CommandType.INVALID;
         }
 
+        /// <summary>
+        /// This method converts CommandType to a string
+        /// It can be used by other functions if neccessary
+        /// </summary>
+        /// <param name="commandInput">Pass in a valid CommandType</param>
+        /// <returns>Returns the Command in string format</returns>
         public string CommandToString(CommandType commandInput)
         {
             switch (commandInput)
@@ -108,24 +133,41 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        //Functions that Get/Set/Increase/Decrease Text size of OutputBox
+        // ******************************************************************
+
         #region TextSize
 
+        /// <summary>
+        /// This method sets the Text Size of the OutputBox directly
+        /// </summary>
+        /// <param name="size">Pass in a valid size</param>
         public void SetTextSize(int size)
         {
+            if ((size < 5) || (size > 14))
+                throw new TextSizeOutOfRangeException("Text Size Out of Range");
             settingsList.textSize = size;
         }
 
+        /// <summary>
+        /// Returns the Current OutputBox Text Size
+        /// </summary>
+        /// <returns>An int of the OutputBox Text Size</returns>
         public int GetTextSize()
         {
             return settingsList.textSize;
         }
 
+        /// <summary>
+        /// Function call to increase the text size directly
+        /// </summary>
         public void IncreaseTextSize()
         {
             try
             {
                 if ((settingsList.textSize + 1) > 14)
-                    throw new TextSizeOutOfRange("Text Size Too Big");
+                    throw new TextSizeOutOfRangeException("Text Size Out of Range");
                 settingsList.textSize++;
                 WriteToFile();
             }
@@ -135,12 +177,15 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Function call to decrease the text size directly
+        /// </summary>
         public void DecreaseTextSize()
         {
             try
             {
                 if ((settingsList.textSize - 1) < 5)
-                    throw new TextSizeOutOfRange("Text Size Too Small");
+                    throw new TextSizeOutOfRangeException("Text Size Too Small");
                 settingsList.textSize--;
                 WriteToFile();
             }
@@ -153,8 +198,17 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        //Functions that Set the LoadOnStartup and StartMinimized Statuses
+        // ******************************************************************
+
         #region StartupMinimizedStatus
 
+        /// <summary>
+        /// Directly Sets the LoadOnStartup status
+        /// Directly writes to File
+        /// </summary>
+        /// <param name="checkedStatus">Sets LoadOnStartup to true or false</param>
         public void ToggleLoadOnStartup(bool checkedStatus)
         {
             if (checkedStatus)
@@ -165,6 +219,11 @@ namespace ToDo
             WriteToFile();
         }
 
+        /// <summary>
+        /// Directly Sets the LoadOnStartup status
+        /// Directly writes to File
+        /// </summary>
+        /// <param name="checkedStatus">Sets LoadOnStartup to true or false</param>
         public void ToggleStartMinimized(bool checkedStatus)
         {
             if (checkedStatus)
@@ -175,11 +234,19 @@ namespace ToDo
             WriteToFile();
         }
 
+        /// <summary>
+        /// Returns The LoadOnStartup Status as a bool
+        /// </summary>
+        /// <returns>The LoadOnStartup Status</returns>
         public bool GetLoadOnStartupStatus()
         {
             return settingsList.loadOnStartup;
         }
 
+        /// <summary>
+        /// Returns The GetMinimized Status as a bool
+        /// </summary>
+        /// <returns>The GetMinimized Status</returns>
         public bool GetStartMinimizedStatus()
         {
             return settingsList.startMinimized;
@@ -187,8 +254,18 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        //Functions that Modify the list Of User Commands
+        // ******************************************************************
+
         #region CommandModifications
 
+        /// <summary>
+        /// This method adds a new Command to the list of available commands
+        /// If a command repeats itself, an exception will be thrown
+        /// </summary>
+        /// <param name="newCommand">New Command that is to be added</param>
+        /// <param name="commandString">Specify to which CommandType it is being added to</param>
         public void AddCommand(string newCommand, CommandType commandType)
         {
             try
@@ -229,6 +306,11 @@ namespace ToDo
 
         }
 
+        /// <summary>
+        /// This method removes the specified command
+        /// </summary>
+        /// <param name="commandToRemove">Exact String of the Command to be removed</param>
+        /// <param name="commandString">Specify to which CommandType it is being added to</param>
         public void RemoveCommand(string commandToRemove, CommandType commandType)
         {
             switch (commandType)
@@ -251,6 +333,11 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Returns a list of all added/available user commands
+        /// </summary>
+        /// <param name="commandType">Specify the type of Command you wish to see User Commands of</param>
+        /// <returns>Returns a list of added commands</returns>
         public List<string> GetCommand(CommandType commandType)
         {
             List<string> getCommands = new List<string>();
@@ -276,6 +363,11 @@ namespace ToDo
             return getCommands;
         }
 
+        /// <summary>
+        /// Function to check if a command exists
+        /// </summary>
+        /// <param name="userCommand">specify exact string of command you wish to check</param>
+        /// <returns>Returns the CommandType of that userCommand if userCommand is found</returns>
         public CommandType CheckIfCommandExists(string userCommand)
         {
             foreach (string compare in settingsList.customKeywords_ADD)
@@ -299,8 +391,15 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        //Functions that Open/Write/Create Settings File
+        // ******************************************************************
+
         #region FileOperations
 
+        /// <summary>
+        /// Writes all of SettingsList to an XML File
+        /// </summary>
         public void WriteToFile()
         {
             System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
@@ -311,6 +410,10 @@ namespace ToDo
             file.Close();
         }
 
+        /// <summary>
+        /// Opens the Settings XML File, and loads all data into SettingsList
+        /// Handles Settings File Corruption/Non-Existent errors
+        /// </summary>
         public void OpenFile()
         {
             System.IO.StreamReader file;
@@ -338,8 +441,17 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        //Functions to Copy/Clone SettingsManager objects
+        // ******************************************************************
+
         #region CloningOperations
 
+        /// <summary>
+        /// Updates this object with all commands from the passed instance of SettingsManager
+        /// This is used in Settings Class
+        /// </summary>
+        /// <param name="passedSettingsManager">Updates this object's commands with the instance of SettingsManager passed in</param>
         public void CopyUpdatedCommandsFrom(SettingsManager passedSettingsManager)
         {
             this.settingsList.customKeywords_ADD = passedSettingsManager.settingsList.customKeywords_ADD;
@@ -349,6 +461,10 @@ namespace ToDo
             this.settingsList.customKeywords_MODIFY = passedSettingsManager.settingsList.customKeywords_MODIFY;
         }
 
+        /// <summary>
+        /// Clones an instance of SettingsManager
+        /// </summary>
+        /// <returns>A deep copy of the SettingsManager object to be cloned</returns>
         public SettingsManager CloneObj()
         {
             SettingsManager p = new SettingsManager();
