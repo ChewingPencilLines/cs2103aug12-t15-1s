@@ -394,6 +394,7 @@ namespace ToDo
         /// </summary>
         public void PushCommands()
         {
+            StringParser.ResetCommandKeywords();
             foreach (string userCommand in this.GetCommandList(CommandType.ADD))
                 StringParser.AddUserCommand(userCommand, CommandType.ADD);
             foreach (string userCommand in this.GetCommandList(CommandType.DELETE))
