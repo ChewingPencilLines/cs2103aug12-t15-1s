@@ -211,7 +211,7 @@ namespace ToDo
         private void UpdateListOfCommands()
         {
             listOfCommands.Items.Clear();
-            List<string> currentCommandList = tempSettingsManager.GetCommand(currentCommand);
+            List<string> currentCommandList = tempSettingsManager.GetCommandList(currentCommand);
             foreach (string item in currentCommandList)
                 listOfCommands.Items.Add(item);
         }
@@ -289,6 +289,11 @@ namespace ToDo
             settingsManager.WriteToFile();
 
             #endregion
+
+            #region PushCommandsToStringParser
+            settingsManager.PushCommands();
+
+            #endregion
         }
 
         /// <summary>
@@ -305,7 +310,8 @@ namespace ToDo
         /// </summary>
         private void okButton_Click(object sender, EventArgs e)
         {
-            SetSettings();
+            if(applyButton.Enabled==true)
+                SetSettings();
             this.Close();
         }
 

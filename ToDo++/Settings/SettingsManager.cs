@@ -338,7 +338,7 @@ namespace ToDo
         /// </summary>
         /// <param name="commandType">Specify the type of Command you wish to see User Commands of</param>
         /// <returns>Returns a list of added commands</returns>
-        public List<string> GetCommand(CommandType commandType)
+        public List<string> GetCommandList(CommandType commandType)
         {
             List<string> getCommands = new List<string>();
             switch (commandType)
@@ -387,6 +387,23 @@ namespace ToDo
                     return CommandType.REDO;
 
             return CommandType.INVALID;
+        }
+
+        /// <summary>
+        /// Pushes new set of FlexiCommands into the StringParser
+        /// </summary>
+        public void PushCommands()
+        {
+            foreach (string userCommand in this.GetCommandList(CommandType.ADD))
+                StringParser.AddUserCommand(userCommand, CommandType.ADD);
+            foreach (string userCommand in this.GetCommandList(CommandType.DELETE))
+                StringParser.AddUserCommand(userCommand, CommandType.DELETE);
+            foreach (string userCommand in this.GetCommandList(CommandType.MODIFY))
+                StringParser.AddUserCommand(userCommand, CommandType.MODIFY);
+            foreach (string userCommand in this.GetCommandList(CommandType.UNDO))
+                StringParser.AddUserCommand(userCommand, CommandType.UNDO);
+            foreach (string userCommand in this.GetCommandList(CommandType.REDO))
+                StringParser.AddUserCommand(userCommand, CommandType.REDO);
         }
 
         #endregion

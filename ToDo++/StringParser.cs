@@ -204,6 +204,19 @@ namespace ToDo
 
         #region Public Methods
 
+        internal static void AddUserCommand(string userCommand, CommandType commandType)
+        {
+            try
+            {
+                commandKeywords.Add(userCommand, commandType);
+            }
+            catch (Exception)
+            {
+                //Handle repeat keywords
+                //If the key is already added, dont add ignore! need to do a better implementation
+            }
+        }
+
         /// <summary>
         /// This method searches the input string against the set delimiters'
         /// and return the positions of the delimiters as a list of integer pairs.

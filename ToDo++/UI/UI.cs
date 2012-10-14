@@ -141,6 +141,7 @@ namespace ToDo
         public void PrepareSettingsManager()
         {
             mainSettingsManager = new SettingsManager();
+            mainSettingsManager.PushCommands();
             MinimiseToTrayWhenChecked();
             RegisterLoadOnStartupWhenChecked();
         }
