@@ -26,6 +26,13 @@ namespace CommandParserTest
         }
 
         [TestMethod]
+        public void OperationParseTestDay()
+        {
+            Operation op1 = testParser.ParseOperation("add task do stuff by friday 2pm");
+            return;
+        }
+
+        [TestMethod]
         public void OperationParseTestTimedDuo()
         {
             Operation op1 = testParser.ParseOperation("task do stuff add Oct 15 5 am to 6am");

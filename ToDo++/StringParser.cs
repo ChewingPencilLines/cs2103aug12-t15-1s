@@ -838,6 +838,14 @@ namespace ToDo
             return tokens;
         }
 
+        /// <summary>
+        /// This method compares an input list of strings against a list of parsed Tokens, and returns a list of Tokens
+        /// representing all strings which have not been been parsed as Tokens. The purpose of this method is to assign
+        /// all unparsed strings as LiteralTokens.
+        /// </summary>
+        /// <param name="input">The list of input words</param>
+        /// <param name="parsedTokens">The list of parsedTokens</param>
+        /// <returns>List of context tokens</returns>
         private static List<Token> GenerateLiteralTokens(List<string> input, List<Token> parsedTokens)
         {
             List<Token> literalTokens = new List<Token>();
