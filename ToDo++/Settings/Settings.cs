@@ -222,7 +222,7 @@ namespace ToDo
         private void addUserCommandButton_Click(object sender, EventArgs e)
         {
             EnableApplyButton();
-            tempSettingsManager.AddCommand(userCommand.Text, currentCommand);
+            tempSettingsManager.AddCommand(userCommandInput.Text, currentCommand);
             UpdateListOfCommands();
             ClearInputField();
         }
@@ -248,7 +248,7 @@ namespace ToDo
 
         private void ClearInputField()
         {
-            userCommand.Text = "";
+            userCommandInput.Text = "";
         }
 
         #endregion

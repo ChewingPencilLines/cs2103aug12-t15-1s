@@ -41,9 +41,9 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.commandDescription = new System.Windows.Forms.RichTextBox();
-            this.removeButton = new System.Windows.Forms.Button();
+            this.removeUserCommandButton = new System.Windows.Forms.Button();
             this.addUserCommandButton = new System.Windows.Forms.Button();
-            this.userCommand = new System.Windows.Forms.TextBox();
+            this.userCommandInput = new System.Windows.Forms.TextBox();
             this.listOfCommands = new System.Windows.Forms.ListBox();
             this.commandPreview = new System.Windows.Forms.Label();
             this.CommandTree = new System.Windows.Forms.TreeView();
@@ -114,9 +114,9 @@
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.groupBox2);
-            this.tabPage3.Controls.Add(this.removeButton);
+            this.tabPage3.Controls.Add(this.removeUserCommandButton);
             this.tabPage3.Controls.Add(this.addUserCommandButton);
-            this.tabPage3.Controls.Add(this.userCommand);
+            this.tabPage3.Controls.Add(this.userCommandInput);
             this.tabPage3.Controls.Add(this.listOfCommands);
             this.tabPage3.Controls.Add(this.commandPreview);
             this.tabPage3.Controls.Add(this.CommandTree);
@@ -148,15 +148,15 @@
             this.commandDescription.TabIndex = 8;
             this.commandDescription.Text = "";
             // 
-            // removeButton
+            // removeUserCommandButton
             // 
-            this.removeButton.Location = new System.Drawing.Point(378, 157);
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(55, 23);
-            this.removeButton.TabIndex = 6;
-            this.removeButton.Text = "Remove";
-            this.removeButton.UseVisualStyleBackColor = true;
-            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
+            this.removeUserCommandButton.Location = new System.Drawing.Point(378, 157);
+            this.removeUserCommandButton.Name = "removeUserCommandButton";
+            this.removeUserCommandButton.Size = new System.Drawing.Size(55, 23);
+            this.removeUserCommandButton.TabIndex = 6;
+            this.removeUserCommandButton.Text = "Remove";
+            this.removeUserCommandButton.UseVisualStyleBackColor = true;
+            this.removeUserCommandButton.Click += new System.EventHandler(this.removeButton_Click);
             // 
             // addUserCommandButton
             // 
@@ -168,12 +168,12 @@
             this.addUserCommandButton.UseVisualStyleBackColor = true;
             this.addUserCommandButton.Click += new System.EventHandler(this.addUserCommandButton_Click);
             // 
-            // userCommand
+            // userCommandInput
             // 
-            this.userCommand.Location = new System.Drawing.Point(264, 160);
-            this.userCommand.Name = "userCommand";
-            this.userCommand.Size = new System.Drawing.Size(63, 20);
-            this.userCommand.TabIndex = 3;
+            this.userCommandInput.Location = new System.Drawing.Point(264, 160);
+            this.userCommandInput.Name = "userCommandInput";
+            this.userCommandInput.Size = new System.Drawing.Size(63, 20);
+            this.userCommandInput.TabIndex = 3;
             // 
             // listOfCommands
             // 
@@ -262,8 +262,8 @@
         private System.Windows.Forms.Label commandPreview;
         private System.Windows.Forms.ListBox listOfCommands;
         private System.Windows.Forms.Button addUserCommandButton;
-        private System.Windows.Forms.TextBox userCommand;
-        private System.Windows.Forms.Button removeButton;
+        private System.Windows.Forms.TextBox userCommandInput;
+        private System.Windows.Forms.Button removeUserCommandButton;
         private System.Windows.Forms.CheckBox loadOnStartupCheckbox;
         private System.Windows.Forms.CheckBox minimisedCheckbox;
         private System.Windows.Forms.GroupBox groupBox1;
