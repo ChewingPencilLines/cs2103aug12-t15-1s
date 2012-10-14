@@ -138,7 +138,7 @@ namespace ToDo
         /// <summary>
         /// Creates an Instance of Settings Manager
         /// </summary>
-        public void PrepareSettingsManager()
+        private void PrepareSettingsManager()
         {
             mainSettingsManager = new SettingsManager();
             mainSettingsManager.PushCommands();
@@ -149,7 +149,7 @@ namespace ToDo
         /// <summary>
         /// Minimizes App to System tray if true
         /// </summary>
-        public void MinimiseToTrayWhenChecked()
+        private void MinimiseToTrayWhenChecked()
         {
             if (mainSettingsManager.GetStartMinimizedStatus() == true)
                 MinimiseMaximiseTray();
@@ -158,7 +158,7 @@ namespace ToDo
         /// <summary>
         /// Sets the Load on Startup Status
         /// </summary>
-        public void RegisterLoadOnStartupWhenChecked()
+        private void RegisterLoadOnStartupWhenChecked()
         {
             if (mainSettingsManager.GetLoadOnStartupStatus() == true)
                 RegisterInStartup(true);
@@ -177,7 +177,7 @@ namespace ToDo
         /// <summary>
         /// Prepare the Menu Bar. Pass an instance of settings manager into it so it can interact with it
         /// </summary>
-        public void PrepareMenu()
+        private void PrepareMenu()
         {
             menuStrip.SetSettingsManager(mainSettingsManager);
             menuStrip.LoadSettingsIntoMenu();
@@ -194,7 +194,7 @@ namespace ToDo
         /// <summary>
         /// Prepare the Output Box. Pass an instance of settings manager into it so it can interact with it
         /// </summary>
-        public void PrepareOutputBox()
+        private void PrepareOutputBox()
         {
             outputBox.SetSettingsManager(mainSettingsManager);
             outputBox.LoadSettingsIntoOutput();
@@ -208,7 +208,7 @@ namespace ToDo
 
         #region PrepareLogic
 
-        public void PrepareLogic()
+        private void PrepareLogic()
         {          
 
             logic = new Logic();
@@ -227,12 +227,12 @@ namespace ToDo
         /// </summary>
         private void ProcessText()
         {
-            string input = textBox_input.Text;
+            string input = textInput.Text;
             string output=logic.ProcessCommand(input);
 
             outputBox.DisplayCommand(input,output);
             outputBox.SetOutputSize(mainSettingsManager.GetTextSize());
-            textBox_input.Clear();
+            textInput.Clear();
         }
 
         /// <summary>

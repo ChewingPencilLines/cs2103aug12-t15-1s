@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
-            this.textBox_input = new System.Windows.Forms.TextBox();
-            this.button_go = new System.Windows.Forms.Button();
+            this.textInput = new System.Windows.Forms.TextBox();
+            this.goButton = new System.Windows.Forms.Button();
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.decreaseSizeButton = new System.Windows.Forms.Button();
             this.increaseSizeButton = new System.Windows.Forms.Button();
@@ -42,23 +42,23 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // textBox_input
+            // textInput
             // 
-            this.textBox_input.Location = new System.Drawing.Point(13, 230);
-            this.textBox_input.Name = "textBox_input";
-            this.textBox_input.Size = new System.Drawing.Size(314, 20);
-            this.textBox_input.TabIndex = 0;
-            this.textBox_input.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
+            this.textInput.Location = new System.Drawing.Point(13, 230);
+            this.textInput.Name = "textInput";
+            this.textInput.Size = new System.Drawing.Size(314, 20);
+            this.textInput.TabIndex = 0;
+            this.textInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
             // 
-            // button_go
+            // goButton
             // 
-            this.button_go.Location = new System.Drawing.Point(333, 227);
-            this.button_go.Name = "button_go";
-            this.button_go.Size = new System.Drawing.Size(58, 23);
-            this.button_go.TabIndex = 1;
-            this.button_go.Text = "Go";
-            this.button_go.UseVisualStyleBackColor = true;
-            this.button_go.Click += new System.EventHandler(this.button_go_Click);
+            this.goButton.Location = new System.Drawing.Point(333, 227);
+            this.goButton.Name = "goButton";
+            this.goButton.Size = new System.Drawing.Size(58, 23);
+            this.goButton.TabIndex = 1;
+            this.goButton.Text = "Go";
+            this.goButton.UseVisualStyleBackColor = true;
+            this.goButton.Click += new System.EventHandler(this.button_go_Click);
             // 
             // notifyIcon_taskBar
             // 
@@ -140,8 +140,8 @@
             this.Controls.Add(this.increaseSizeButton);
             this.Controls.Add(this.decreaseSizeButton);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.button_go);
-            this.Controls.Add(this.textBox_input);
+            this.Controls.Add(this.goButton);
+            this.Controls.Add(this.textInput);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "UI";
             this.Text = "ToDo++";
@@ -153,8 +153,8 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox_input;
-        private System.Windows.Forms.Button button_go;
+        private System.Windows.Forms.TextBox textInput;
+        private System.Windows.Forms.Button goButton;
         private System.Windows.Forms.NotifyIcon notifyIcon_taskBar;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button decreaseSizeButton;
