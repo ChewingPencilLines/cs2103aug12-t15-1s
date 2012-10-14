@@ -851,6 +851,14 @@ namespace ToDo
             return tokens;
         }
 
+        /// <summary>
+        /// This method compares an input list of strings against a list of parsed Tokens, and returns a list of Tokens
+        /// representing all strings which have not been been parsed as Tokens. The purpose of this method is to assign
+        /// all unparsed strings as LiteralTokens.
+        /// </summary>
+        /// <param name="input">The list of input words</param>
+        /// <param name="parsedTokens">The list of parsedTokens</param>
+        /// <returns>List of context tokens</returns>
         private static List<Token> GenerateLiteralTokens(List<string> input, List<Token> parsedTokens)
         {
             List<Token> literalTokens = new List<Token>();
@@ -859,23 +867,29 @@ namespace ToDo
                 input[token.Position] = null;
             }
             int index = 0;
-            string literal = "";
+            string literal = String.Empty;
             foreach (string remainingWord in input)
             {
                 if (remainingWord != null)
                     literal = literal + remainingWord + " ";
                 else if (remainingWord == null && literal != String.Empty)
-                {
-                    literal = literal.Trim();
-                    TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
-                    literalTokens.Add(literalToken);
-                    literal = String.Empty;
-                }
+                    AddLiteralToken(ref literal, index, ref literalTokens);  
                 index++;
+            }
+            if (literal != String.Empty)
+            {
+                AddLiteralToken(ref literal, index, ref literalTokens);  
             }
             return literalTokens;
         }
 
+        private static void AddLiteralToken(ref string literal, int index, ref List<Token> literalTokens)
+        {
+            literal = literal.Trim();
+            TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
+            literalTokens.Add(literalToken);
+            literal = String.Empty;
+        }
         #endregion
         
         // ******************************************************************

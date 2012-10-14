@@ -51,24 +51,22 @@ namespace ToDo
             taskname = TaskName;
             endtime = EndTime;
         }
-
     }
 
-    public class TaskTimed : Task
+    public class TaskEvent : Task
     {
         public DateTime endtime;
         public DateTime starttime;
 
-        public TaskTimed() : this(null, DateTime.Now, DateTime.Now)
+        public TaskEvent() : this(null, DateTime.Now, DateTime.Now)
         { }
 
-        public TaskTimed(string TaskName, DateTime StartTime, DateTime EndTime)
+        public TaskEvent(string TaskName, DateTime StartTime, DateTime EndTime)
         {
             taskname = TaskName;
             starttime = StartTime;
             endtime = EndTime;
         }
-
     }
      #endregion
 }

@@ -8,10 +8,12 @@ namespace ToDo
     class Logic
     {
         OperationHandler operationHandler;
+        List<Task> taskList;
   
         public Logic()
         { 
             operationHandler = new OperationHandler();
+            taskList = new List<Task>();
         }
 
         public string ProcessCommand(string input)
@@ -27,16 +29,9 @@ namespace ToDo
 
         public string ExecuteCommand(Operation operation)
         {
-            if (operation == null)
-            {
-                return null;
-            }
-            else
-            {
-                string response;
-                response = operationHandler.Execute(operation);
-                return response;
-            }
+            string response;
+            response = operationHandler.Execute(operation, ref taskList);
+            return response;
         }
 
         private Operation ParseCommand(string command)
@@ -48,39 +43,10 @@ namespace ToDo
             else
             {
                 CommandParser CP = new CommandParser();
-                return CP.ParseOperation(command);
+                Operation derivedOperation = CP.ParseOperation(command);
+                return derivedOperation;
             }
         }
-       /*
-        private string TranslateResult(Result r)
-        {
-            string print;
-            switch (r.ToString())
-            {
-                case "ADD_SUCCESS":
-                    print = "Added task successfully.";
-                    break;
-                case "DELETE_SUCCESS":
-                    print = "Deleted task successfully.";
-                    break;
-                case "MODIFY_SUCCESS":
-                    print = "Modified task successfully.";
-                    break;
-                case "UNDO_SUCCESS":
-                    print = "Undone task successfully.";
-                    break;
-                case "SEARCH_SUCCESS":
-                    print = "The result you search appear above";
-                    break;
-                case "ERROR":
-                    print = "Command failed.";
-                    break;
-                default:
-                    print = "Command failed.";
-                    break;
-            }
-            return print;
-        }*/
     }
  
 }

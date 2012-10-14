@@ -20,14 +20,14 @@ namespace ToDo
                 Task taskToAdd = ((OperationAdd)operation).GetTask();
                 Program.taskList.Add(taskToAdd);
 
-                xml.WriteXML(Program.taskList);
+                storageXML.WriteXML(Program.taskList);
 
-                return Add_Suceess_Message;
+                return RESPONSE_SUCCESS_ADD;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return Wrong_Message;
+                return REPONSE_INVALID_COMMAND;
             }
         }
     }
@@ -47,14 +47,14 @@ namespace ToDo
                 pastTask.Push(taskToDelete);
                 Program.taskList.RemoveAt(Index);
 
-                xml.WriteXML(Program.taskList);
+                storageXML.WriteXML(Program.taskList);
 
-                return Delete_Success_Message;
+                return RESPONSE_SUCCESS_DELETE;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return Wrong_Message;
+                return REPONSE_INVALID_COMMAND;
             }
         }
     }
@@ -76,14 +76,14 @@ namespace ToDo
                 Task taskRevised = operation.GetTask();
                 Program.taskList[((OperationModify)operation).oldTaskindex] = taskRevised;
 
-                xml.WriteXML(Program.taskList);
+                storageXML.WriteXML(Program.taskList);
 
-                return Modify_Success_Message;
+                return RESPONSE_SUCCESS_MODIFY;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return Wrong_Message;
+                return REPONSE_INVALID_COMMAND;
             }
         }
     }
@@ -113,7 +113,7 @@ namespace ToDo
                     ExecuteDelete execute = new ExecuteDelete();
                     result = execute.ExecuteOperation(undoOperation);
 
-                    if (result.Equals(Delete_Success_Message))
+                    if (result.Equals(RESPONSE_SUCCESS_DELETE))
                         flag = true;
                     
                 }
@@ -125,7 +125,7 @@ namespace ToDo
                     ExecuteAdd execute = new ExecuteAdd();
                     result = execute.ExecuteOperation(undoOperation);
 
-                    if (result.Equals(Add_Suceess_Message))
+                    if (result.Equals(RESPONSE_SUCCESS_ADD))
                         flag = true;
                 }
                 else if (undo is OperationModify)
@@ -139,19 +139,19 @@ namespace ToDo
                     ExecuteModify execute = new ExecuteModify();
                     result = execute.ExecuteOperation(operation);
 
-                    if (result.Equals(Modify_Success_Message))
+                    if (result.Equals(RESPONSE_SUCCESS_MODIFY))
                         flag = true;
                 }
 
                 if(flag == true)
-                    return  Undo_Success_Message;
+                    return  RESPONSE_SUCCESS_UNDO;
                 else
-                    return  Wrong_Message;
+                    return  REPONSE_INVALID_COMMAND;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return  Wrong_Message;
+                return  REPONSE_INVALID_COMMAND;
             }
         }
     }
@@ -181,22 +181,22 @@ namespace ToDo
                             result = string.Concat(result, ((TaskDeadline)task).taskname, 
                                 ((TaskDeadline)task).endtime.ToString(),"\n"); 
                         }
-                        else if (task is TaskTimed)
+                        else if (task is TaskEvent)
                         {
                             result = string.Concat(result, ((TaskDeadline)task).taskname,
-                                ((TaskTimed)task).starttime.ToString(),
+                                ((TaskEvent)task).starttime.ToString(),
                                 ((TaskDeadline)task).endtime.ToString(), "\n");
                         }
                     }
                     return result;
                 }
 
-                return  Wrong_Message;
+                return  REPONSE_INVALID_COMMAND;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return  Wrong_Message;
+                return  REPONSE_INVALID_COMMAND;
             }
 
         }

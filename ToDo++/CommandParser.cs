@@ -160,7 +160,7 @@ namespace ToDo
                     newOperation = new OperationDelete((int)taskIndex);
                     break;
                 case CommandType.DISPLAY:
-                    newOperation = new OperationSearch("");
+                    newOperation = new OperationDisplay();
                     break;
                 case CommandType.MODIFY:
                     task = GenerateNewTask(taskName, startCombined, endCombined);
@@ -218,9 +218,9 @@ namespace ToDo
             else if (startTime == null && endTime != null)
                 return new TaskDeadline(taskName, (DateTime)endTime);
             else if (startTime != null && endTime == null)
-                return new TaskTimed(taskName, (DateTime)startTime, (DateTime)startTime); // note: set endTime as what for default?
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime); // note: set endTime as what for default?
             else
-                return new TaskTimed(taskName, (DateTime)startTime, (DateTime)endTime);
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime);
         }
 
         /// <summary>
@@ -232,8 +232,8 @@ namespace ToDo
         private static DateTime GetDateFromDay(ContextType preposition, DayOfWeek desiredDay)
         {
             DateTime startDate;
-            DateTime tempDate = DateTime.Today;
-            int daysToAdd = GetDaysToAdd(DateTime.Today.DayOfWeek, desiredDay);
+            DateTime todayDate = DateTime.Today;
+            int daysToAdd = GetDaysToAdd(todayDate.DayOfWeek, desiredDay);
             switch (preposition)
             {
                 case ContextType.CURRENT:
@@ -248,8 +248,7 @@ namespace ToDo
                     Debug.Assert(false, "Fell through switch statement in GetDateFromDay!");
                     break;
             }
-            tempDate.AddDays(daysToAdd);
-            startDate = tempDate;
+            startDate = todayDate.AddDays(daysToAdd);
             return startDate;
         }
 
