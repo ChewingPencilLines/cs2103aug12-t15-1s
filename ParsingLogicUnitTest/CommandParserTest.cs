@@ -19,6 +19,13 @@ namespace CommandParserTest
         }
 
         [TestMethod]
+        public void OperationParseTestInvalid()
+        {
+            Operation op1 = testParser.ParseOperation("add task do stuff  by 20");
+            return;
+        }
+
+        [TestMethod]
         public void OperationParseTestTimedDuo()
         {
             Operation op1 = testParser.ParseOperation("task do stuff add Oct 15 5 am to 6am");

@@ -11,7 +11,9 @@ namespace ToDo
     public class Storage
     {
         public Storage()
-        {   }
+        {   
+            
+        }
         /*
         public bool WriteXML(Task task)
         {
@@ -36,6 +38,13 @@ namespace ToDo
 
         internal bool AddTask(Task taskToAdd)
         {
+            return true;
+            throw new NotImplementedException();
+        }
+
+        internal bool RemoveTask(Task taskToDelete)
+        {
+            return true;
             throw new NotImplementedException();
         }
     }

@@ -846,23 +846,29 @@ namespace ToDo
                 input[token.Position] = null;
             }
             int index = 0;
-            string literal = "";
+            string literal = String.Empty;
             foreach (string remainingWord in input)
             {
                 if (remainingWord != null)
                     literal = literal + remainingWord + " ";
                 else if (remainingWord == null && literal != String.Empty)
-                {
-                    literal = literal.Trim();
-                    TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
-                    literalTokens.Add(literalToken);
-                    literal = String.Empty;
-                }
+                    AddLiteralToken(ref literal, index, ref literalTokens);  
                 index++;
+            }
+            if (literal != String.Empty)
+            {
+                AddLiteralToken(ref literal, index, ref literalTokens);  
             }
             return literalTokens;
         }
 
+        private static void AddLiteralToken(ref string literal, int index, ref List<Token> literalTokens)
+        {
+            literal = literal.Trim();
+            TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
+            literalTokens.Add(literalToken);
+            literal = String.Empty;
+        }
         #endregion
         
         // ******************************************************************

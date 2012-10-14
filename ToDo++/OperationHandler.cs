@@ -18,11 +18,12 @@ namespace ToDo
         // Feedback Strings
         // ******************************************************************
         #region Feedback Strings
-        const string RESPONSE_SUCCESS_ADD = "Added {0} successfully.";
-        const string RESPONSE_FAIL_ADD = "Failed to add task!";
-        const string RESPONSE_SUCCESS_DELETE = "Deleted task successfully.";
-        const string RESPONSE_SUCCESS_MODIFY = "Modified task successfully.";
-        const string RESPONSE_SUCCESS_UNDO = "Removed task successfully.";
+        const string RESPONSE_ADD_SUCCESS = "Added {0} successfully.";
+        const string RESPONSE_ADD_FAIL = "Failed to add task!";
+        const string RESPONSE_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
+        const string RESPONSE_MODIFY_SUCCESS = "Modified task successfully.";
+        const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
+        const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string REPONSE_INVALID_COMMAND = "Invalid command!"; 
         #endregion
 
@@ -36,20 +37,23 @@ namespace ToDo
         public string Execute(Operation operation, ref List<Task> taskList)
         {
             string response;
+            bool succcessFlag;
             if (operation == null)
             {
                 return REPONSE_INVALID_COMMAND;
             }
             else if (operation is OperationAdd)
             {
-                response = Add(operation, ref taskList);
+                Task taskToAdd = ((OperationAdd)operation).GetTask();
+                if (taskToAdd == null) return RESPONSE_ADD_FAIL;
+                response = Add(taskToAdd, ref taskList, out succcessFlag);
             }
             else if (operation is OperationDelete)
             {
                 int index = ((OperationDelete)operation).Index;
                 Debug.Assert(index >= 0 && index < taskList.Count);
                 Task taskToDelete = lastListedTasks[index];
-                response = Delete(ref taskToDelete, ref taskList);
+                response = Delete(ref taskToDelete, ref taskList, out succcessFlag);
             }
             else if (operation is OperationDisplay)
             {
@@ -74,29 +78,38 @@ namespace ToDo
             return response;
         }
                 
-        private string Add(Operation operation, ref List<Task> taskList)
+        private string Add(Task taskToAdd, ref List<Task> taskList, out bool successFlag)
         {
+            successFlag = false;
             try
             {
-                Task taskToAdd = ((OperationAdd)operation).GetTask();
                 taskList.Add(taskToAdd);
                 if (storageXML.AddTask(taskToAdd))
                 {
-                    TrackOperation(operation);
-                    return String.Format(RESPONSE_SUCCESS_ADD, taskToAdd.taskname);
+                    successFlag = true;
+                    return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.taskname);
                 }
-                else return RESPONSE_FAIL_ADD;
+                else
+                    return RESPONSE_XML_READWRITE_FAIL;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return RESPONSE_FAIL_ADD + "\r\nThe following exception occured: " + e.ToString();
+                return RESPONSE_ADD_FAIL + "\r\nThe following exception occured: " + e.ToString();
             }     
         }
 
-        private string Delete(ref Task taskToDelete, ref List<Task> taskList)
+        private string Delete(ref Task taskToDelete, ref List<Task> taskList, out bool successFlag)
         {
-            throw new NotImplementedException();
+            successFlag = false;
+            taskList.Remove(taskToDelete);
+            if (storageXML.RemoveTask(taskToDelete))
+            {
+                successFlag = true;
+                return String.Format(RESPONSE_DELETE_SUCCESS, taskToDelete.taskname);
+            }
+            else
+                return RESPONSE_XML_READWRITE_FAIL;            
         }
 
         private string DisplayAll(List<Task> taskList)
