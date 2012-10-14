@@ -11,7 +11,6 @@ namespace ToDo
     #region Abstract definition for Operation
     public abstract class Operation
     {
-        abstract public Task GetTask();
     }
     #endregion
 
@@ -29,38 +28,45 @@ namespace ToDo
             newTask = setTask;
         }
 
-        public override Task GetTask()
+        public Task GetTask()
         {
             return newTask;
         }
     }
 
-    public class OperationSearch : Operation
-    {
-        public string search = "";
-
-        public OperationSearch(string searchCondition)
-        {
-            search = searchCondition;
-        }
-
-        public string GetCondition() { return search; }
-
-        public override Task GetTask() { return null; }
-    }
-
     public class OperationDelete : Operation
     {
-        public int index;
+        private int index;
 
-        public OperationDelete(int DeleteIndex)
+        public int Index
         {
-            index = DeleteIndex - 1;
+            get { return index; }
         }
 
-        public override Task GetTask() { return null; }
+        public OperationDelete(int index)
+        {
+            this.index = index - 1;
+        }
     }
 
+    public class OperationDisplay : Operation
+    {
+
+    }
+
+    public class OperationSearch : Operation
+    {
+        private string searchString = "";
+
+        public OperationSearch(string searchString)
+        {
+            this.searchString = searchString;
+        }
+
+        public string GetSearchString() { return searchString; }
+
+    }
+    
     public class OperationModify : Operation
     {
         public int oldTaskindex;
@@ -71,11 +77,6 @@ namespace ToDo
             oldTaskindex = Previous - 1;
             newTask = Revised;
         }
-
-        public override Task GetTask()
-        {
-            return newTask;
-        }
     }
 
     public class OperationUndo : Operation
@@ -84,7 +85,6 @@ namespace ToDo
         public OperationUndo()
         { }
 
-        public override Task GetTask() { return null; }
     } 
     #endregion
 

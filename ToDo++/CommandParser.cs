@@ -218,9 +218,9 @@ namespace ToDo
             else if (startTime == null && endTime != null)
                 return new TaskDeadline(taskName, (DateTime)endTime);
             else if (startTime != null && endTime == null)
-                return new TaskTimed(taskName, (DateTime)startTime, (DateTime)startTime); // note: set endTime as what for default?
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime); // note: set endTime as what for default?
             else
-                return new TaskTimed(taskName, (DateTime)startTime, (DateTime)endTime);
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime);
         }
 
         /// <summary>

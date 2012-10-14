@@ -9,78 +9,123 @@ namespace ToDo
 {
     public class OperationHandler
     {
-      //  public TaskList taskList;
-        protected Stack<Task> pastTask;
-        protected Stack<Operation> undoStack;
-        protected Storage xml;
+        List<Task> lastListedTasks;
+        Stack<Operation> undoStack;
+        Stack<Operation> redoStack;        
+        Storage storageXML;
 
         // ******************************************************************
-        // Define feedback string for operate success and fail
+        // Feedback Strings
         // ******************************************************************
-        #region Define feedback string for operate success and fail
-        protected const string Add_Suceess_Message = "Added task successfully.";
-        protected const string Delete_Success_Message = "Deleted task successfully.";
-        protected const string Modify_Success_Message = "Modified task successfully.";
-        protected const string Undo_Success_Message = "Undone task successfully.";
-        protected const string Wrong_Message = "Command failed"; 
+        #region Feedback Strings
+        const string RESPONSE_SUCCESS_ADD = "Added {0} successfully.";
+        const string RESPONSE_FAIL_ADD = "Failed to add task!";
+        const string RESPONSE_SUCCESS_DELETE = "Deleted task successfully.";
+        const string RESPONSE_SUCCESS_MODIFY = "Modified task successfully.";
+        const string RESPONSE_SUCCESS_UNDO = "Removed task successfully.";
+        const string REPONSE_INVALID_COMMAND = "Invalid command!"; 
         #endregion
 
-        // ******************************************************************
-        // Constructor
-        // ******************************************************************
         public OperationHandler()
         {
-          //  taskList = new TaskList();
-            pastTask = new Stack<Task>();
+            lastListedTasks = new List<Task>();
             undoStack = new Stack<Operation>();
-            xml = new Storage();
+            storageXML = new Storage();
         }
 
-        // ******************************************************************
-        // Abstract method for execution
-        // ******************************************************************
-        //Need to take in an instance of Operation to execute
-        public virtual string ExecuteOperation(Operation operation)
+        public string Execute(Operation operation, ref List<Task> taskList)
         {
-            return Wrong_Message;
-        }
-
-        // ******************************************************************
-        // Judge which instance of Operation should be use and then execute it
-        // ******************************************************************
-        public string Execute(Operation operation)
-        {
-            undoStack.Push(operation);
-
-            if (operation is OperationAdd)
+            string response;
+            if (operation == null)
             {
-                ExecuteAdd execute = new ExecuteAdd();
-                return execute.ExecuteOperation(operation);
+                return REPONSE_INVALID_COMMAND;
+            }
+            else if (operation is OperationAdd)
+            {
+                response = Add(operation, ref taskList);
             }
             else if (operation is OperationDelete)
             {
-                ExecuteDelete execute = new ExecuteDelete();
-                return execute.ExecuteOperation(operation);
+                int index = ((OperationDelete)operation).Index;
+                Debug.Assert(index >= 0 && index < taskList.Count);
+                Task taskToDelete = lastListedTasks[index];
+                response = Delete(ref taskToDelete, ref taskList);
+            }
+            else if (operation is OperationDisplay)
+            {
+                response = DisplayAll(taskList);
             }
             else if (operation is OperationModify)
             {
-                ExecuteModify execute = new ExecuteModify();
-                return execute.ExecuteOperation(operation);
+                throw new NotImplementedException();
             }
             else if (operation is OperationUndo)
             {
-                undoStack.Pop();
-                ExecuteUndo execute = new ExecuteUndo();
-                return execute.ExecuteOperation(operation);
+                throw new NotImplementedException();
             }
             else if (operation is OperationSearch)
             {
-                undoStack.Pop();
-                ExecuteSearch execute = new ExecuteSearch();
-                return execute.ExecuteOperation(operation);
+                throw new NotImplementedException();
             }
             else
-                return Wrong_Message;
+            {
+                return REPONSE_INVALID_COMMAND;
+            }
+            return response;
+        }
+                
+        private string Add(Operation operation, ref List<Task> taskList)
+        {
+            try
+            {
+                Task taskToAdd = ((OperationAdd)operation).GetTask();
+                taskList.Add(taskToAdd);
+                if (storageXML.AddTask(taskToAdd))
+                {
+                    TrackOperation(operation);
+                    return String.Format(RESPONSE_SUCCESS_ADD, taskToAdd.taskname);
+                }
+                else return RESPONSE_FAIL_ADD;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+                return RESPONSE_FAIL_ADD + "\r\nThe following exception occured: " + e.ToString();
+            }     
+        }
+
+        private string Delete(ref Task taskToDelete, ref List<Task> taskList)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string DisplayAll(List<Task> taskList)
+        {
+            string displayString = String.Empty;
+            foreach (Task task in taskList)
+            {
+                displayString += (task.taskname);
+                if (task is TaskDeadline)
+                {
+                    displayString += (" by: " + ((TaskDeadline)task).endtime);
+                }
+                else if (task is TaskEvent)
+                {
+                    DateTime startTime = ((TaskEvent)task).starttime;
+                    DateTime endTime = ((TaskEvent)task).endtime;
+                    displayString += (" at: " + startTime.ToString());
+                    if(startTime != endTime && endTime != null)
+                    displayString += (" to: " + endTime.ToString());
+                }
+                displayString += "\r\n";
+            }
+            return displayString;
+        }
+
+        private void TrackOperation(Operation operation)
+        {
+            undoStack.Push(operation);
+            redoStack.Clear();
         }
     }
 }

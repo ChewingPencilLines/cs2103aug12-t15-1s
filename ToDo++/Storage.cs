@@ -12,17 +12,17 @@ namespace ToDo
     {
         public Storage()
         {   }
-
-        public void WriteXML(TaskList taskList)
+        /*
+        public bool WriteXML(Task task)
         {
 
             // use reflection to get all derived types
             var knownTypes = Assembly.GetExecutingAssembly().GetTypes().Where(
-                t => typeof(TaskList).IsAssignableFrom(t) || typeof(
+                t => typeof(List<Task>).IsAssignableFrom(t) || typeof(
                 TaskFloating).IsAssignableFrom(t) || typeof(TaskDeadline).IsAssignableFrom(t)).ToArray();
 
             // prepare to serialize a car object
-            XmlSerializer writer = new XmlSerializer(typeof(TaskList), knownTypes);
+            XmlSerializer writer = new XmlSerializer(typeof(List<Task>), knownTypes);
 
             //System.Xml.Serialization.XmlSerializer writer =
             //    new System.Xml.Serialization.XmlSerializer(typeof(TaskList));
@@ -31,6 +31,12 @@ namespace ToDo
                 @"..\..\StorageofTaskList.xml");
             writer.Serialize(file, taskList);
             file.Close();
+            return true;
+        }*/
+
+        internal bool AddTask(Task taskToAdd)
+        {
+            throw new NotImplementedException();
         }
     }
 }
