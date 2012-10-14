@@ -37,7 +37,7 @@ namespace ToDo
         public string Execute(Operation operation, ref List<Task> taskList)
         {
             string response;
-            bool succcessFlag;
+            bool successFlag;
             if (operation == null)
             {
                 return REPONSE_INVALID_COMMAND;
@@ -46,14 +46,14 @@ namespace ToDo
             {
                 Task taskToAdd = ((OperationAdd)operation).GetTask();
                 if (taskToAdd == null) return RESPONSE_ADD_FAIL;
-                response = Add(taskToAdd, ref taskList, out succcessFlag);
+                response = Add(taskToAdd, ref taskList, out successFlag);
             }
             else if (operation is OperationDelete)
             {
                 int index = ((OperationDelete)operation).Index;
                 Debug.Assert(index >= 0 && index < taskList.Count);
                 Task taskToDelete = lastListedTasks[index];
-                response = Delete(ref taskToDelete, ref taskList, out succcessFlag);
+                response = Delete(ref taskToDelete, ref taskList, out successFlag);
             }
             else if (operation is OperationDisplay)
             {
