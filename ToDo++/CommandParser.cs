@@ -232,8 +232,8 @@ namespace ToDo
         private static DateTime GetDateFromDay(ContextType preposition, DayOfWeek desiredDay)
         {
             DateTime startDate;
-            DateTime tempDate = DateTime.Today;
-            int daysToAdd = GetDaysToAdd(DateTime.Today.DayOfWeek, desiredDay);
+            DateTime todayDate = DateTime.Today;
+            int daysToAdd = GetDaysToAdd(todayDate.DayOfWeek, desiredDay);
             switch (preposition)
             {
                 case ContextType.CURRENT:
@@ -248,8 +248,7 @@ namespace ToDo
                     Debug.Assert(false, "Fell through switch statement in GetDateFromDay!");
                     break;
             }
-            tempDate.AddDays(daysToAdd);
-            startDate = tempDate;
+            startDate = todayDate.AddDays(daysToAdd);
             return startDate;
         }
 
