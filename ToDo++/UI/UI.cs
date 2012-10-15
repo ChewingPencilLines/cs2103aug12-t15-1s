@@ -32,11 +32,11 @@ namespace ToDo
         public UI()
         {
             InitializeComponent();
-            PrepareSystemTray();                //Loads Code to place App in System Tray
-            PrepareSettings();           //Loads initial Settings of App and applies the settings
-            PrepareMenu();                      //Loads the menu strip
-            PrepareOutputBox();                 //Loads Output Box
-            PrepareLogic();                     //Creates instance of Logic to be used by Text Processing
+            InitializeSystemTray();                //Loads Code to place App in System Tray
+            InitializeSettings();           //Loads initial Settings of App and applies the settings
+            InitializeMenu();                      //Loads the menu strip
+            InitializeOutputBox();                 //Loads Output Box
+            InitializeLogic();                     //Creates instance of Logic to be used by Text Processing
         }
 
         #endregion
@@ -52,7 +52,7 @@ namespace ToDo
         /// </summary>
         #region SystemTray
 
-        private void PrepareSystemTray()
+        private void InitializeSystemTray()
         {
             ghk = new Hotkeys.GlobalHotkey(Constants.ALT, Keys.Q, this);
             ghk.Register();
@@ -138,7 +138,7 @@ namespace ToDo
         /// <summary>
         /// Creates an Instance of Settings Manager
         /// </summary>
-        private void PrepareSettings()
+        private void InitializeSettings()
         {
             settings = new Settings();
             settings.PushCommands();
@@ -177,7 +177,7 @@ namespace ToDo
         /// <summary>
         /// Prepare the Menu Bar. Pass an instance of settings manager into it so it can interact with it
         /// </summary>
-        private void PrepareMenu()
+        private void InitializeMenu()
         {
             menuStrip.SetSettings(settings);
             menuStrip.LoadSettingsIntoMenu();
@@ -194,7 +194,7 @@ namespace ToDo
         /// <summary>
         /// Prepare the Output Box. Pass an instance of settings manager into it so it can interact with it
         /// </summary>
-        private void PrepareOutputBox()
+        private void InitializeOutputBox()
         {
             outputBox.SetSettings(settings);
             outputBox.LoadSettingsIntoOutput();
@@ -208,7 +208,7 @@ namespace ToDo
 
         #region PrepareLogic
 
-        private void PrepareLogic()
+        private void InitializeLogic()
         {          
 
             logic = new Logic();
