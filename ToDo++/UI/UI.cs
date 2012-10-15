@@ -141,7 +141,7 @@ namespace ToDo
         private void InitializeSettings()
         {
             settings = new Settings();
-            settings.PushCommands();
+            settings.AddCommandsToStringParser();
             MinimiseToTrayWhenChecked();
             RegisterLoadOnStartupWhenChecked();
         }
