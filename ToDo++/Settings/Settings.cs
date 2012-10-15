@@ -392,7 +392,7 @@ namespace ToDo
         /// <summary>
         /// Pushes new set of FlexiCommands into the StringParser
         /// </summary>
-        public void PushCommands()
+        public void AddCommandsToStringParser()
         {
             StringParser.ResetCommandKeywords();
             foreach (string userCommand in this.GetCommandList(CommandType.ADD))

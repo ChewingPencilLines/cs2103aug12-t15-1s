@@ -20,9 +20,9 @@ namespace ToDo
 
         #region Constructor
 
-        private Settings settings;        //Main instance of settings
+        private Settings settings;                         //Main instance of settings
         private CommandType currentCommand;                //Current Command Selected             
-        private Settings tempSettings;    //A deep copy of settings
+        private Settings tempSettings;                     //A deep copy of settings
 
         /// <summary>
         /// Creates a new instance of the Settings UI and loads the various Tabs
@@ -291,7 +291,7 @@ namespace ToDo
             #endregion
 
             #region PushCommandsToStringParser
-            settings.PushCommands();
+            settings.AddCommandsToStringParser();
 
             #endregion
         }
