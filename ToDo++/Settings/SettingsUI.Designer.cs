@@ -1,6 +1,6 @@
 ﻿namespace ToDo
 {
-    partial class Settings
+    partial class SettingsUI
     {
         /// <summary>
         /// Req

@@ -23,7 +23,7 @@ namespace ToDo
         #region Constructor
 
         private Hotkeys.GlobalHotkey ghk;       //Global Hotkey to Minimize to System Tray
-        SettingsManager mainSettingsManager;    //Settings Manager stores all settings data, including Flexi-Commands
+        private Settings settings;    //Settings Manager stores all settings data, including Flexi-Commands
         Logic logic;                            //Instance of Logic that handles Data structure and File Operations
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ToDo
         {
             InitializeComponent();
             PrepareSystemTray();                //Loads Code to place App in System Tray
-            PrepareSettingsManager();           //Loads initial Settings of App and applies the settings
+            PrepareSettings();           //Loads initial Settings of App and applies the settings
             PrepareMenu();                      //Loads the menu strip
             PrepareOutputBox();                 //Loads Output Box
             PrepareLogic();                     //Creates instance of Logic to be used by Text Processing
@@ -110,7 +110,7 @@ namespace ToDo
 
         private void RegisterInStartup(bool isChecked)
         {
-            if (mainSettingsManager.GetLoadOnStartupStatus() == true)
+            if (settings.GetLoadOnStartupStatus() == true)
             {
                 RegistryKey registryKey = Registry.CurrentUser.OpenSubKey
                 ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
@@ -133,15 +133,15 @@ namespace ToDo
         // Prepare Settings Manager
         // ******************************************************************
 
-        #region PrepareSettingsManager
+        #region PrepareSettings
 
         /// <summary>
         /// Creates an Instance of Settings Manager
         /// </summary>
-        private void PrepareSettingsManager()
+        private void PrepareSettings()
         {
-            mainSettingsManager = new SettingsManager();
-            mainSettingsManager.PushCommands();
+            settings = new Settings();
+            settings.PushCommands();
             MinimiseToTrayWhenChecked();
             RegisterLoadOnStartupWhenChecked();
         }
@@ -151,7 +151,7 @@ namespace ToDo
         /// </summary>
         private void MinimiseToTrayWhenChecked()
         {
-            if (mainSettingsManager.GetStartMinimizedStatus() == true)
+            if (settings.GetStartMinimizedStatus() == true)
                 MinimiseMaximiseTray();
         }
 
@@ -160,7 +160,7 @@ namespace ToDo
         /// </summary>
         private void RegisterLoadOnStartupWhenChecked()
         {
-            if (mainSettingsManager.GetLoadOnStartupStatus() == true)
+            if (settings.GetLoadOnStartupStatus() == true)
                 RegisterInStartup(true);
             else
                 RegisterInStartup(false);
@@ -179,7 +179,7 @@ namespace ToDo
         /// </summary>
         private void PrepareMenu()
         {
-            menuStrip.SetSettingsManager(mainSettingsManager);
+            menuStrip.SetSettings(settings);
             menuStrip.LoadSettingsIntoMenu();
         }
 
@@ -196,7 +196,7 @@ namespace ToDo
         /// </summary>
         private void PrepareOutputBox()
         {
-            outputBox.SetSettingsManager(mainSettingsManager);
+            outputBox.SetSettings(settings);
             outputBox.LoadSettingsIntoOutput();
         }
 
@@ -231,7 +231,7 @@ namespace ToDo
             string output=logic.ProcessCommand(input);
 
             outputBox.DisplayCommand(input,output);
-            outputBox.SetOutputSize(mainSettingsManager.GetTextSize());
+            outputBox.SetOutputSize(settings.GetTextSize());
             textInput.Clear();
         }
 
