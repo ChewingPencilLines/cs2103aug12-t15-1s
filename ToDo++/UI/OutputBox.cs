@@ -13,20 +13,20 @@ namespace ToDo
 {
     class OutputBox: RichTextBox
     {
-        private SettingsManager settingsManager;
+        private Settings settings;
 
         /// <summary>
-        /// Set the settingsManager of the OutputBox Control, so interaction is possible
+        /// Set the settings of the OutputBox Control, so interaction is possible
         /// </summary>
-        /// <param name="setSettingsManager">Instance of MainSettingsManager passed in by pointer</param>
-        public void SetSettingsManager(SettingsManager passedSettingsManager) { settingsManager = passedSettingsManager; }
+        /// <param name="passedSettings">Instance of settings passed in by pointer</param>
+        public void SetSettings(Settings passedSettings) { settings = passedSettings; }
 
         /// <summary>
         /// Currently sets the Text Size of the OutputBox
         /// </summary>
         public void LoadSettingsIntoOutput()
         {
-            this.SetOutputSize(settingsManager.GetTextSize());
+            this.SetOutputSize(settings.GetTextSize());
         }
 
         #region TextSizeControl
@@ -44,21 +44,21 @@ namespace ToDo
         }
 
         /// <summary>
-        /// Decrease the Text Size by 1 unit, while modifying the settingsManager
+        /// Decrease the Text Size by 1 unit, while modifying the settings
         /// </summary>
         public void DecreaseSizeOfOutput()
         {
-            settingsManager.DecreaseTextSize();
-            this.SetOutputSize(settingsManager.GetTextSize());
+            settings.DecreaseTextSize();
+            this.SetOutputSize(settings.GetTextSize());
         }
 
         /// <summary>
-        /// Increase the Text Size by 1 unit, while modifying the settingsManager
+        /// Increase the Text Size by 1 unit, while modifying the settings
         /// </summary>
         public void IncreaseSizeOfOutput()
         {
-            settingsManager.IncreaseTextSize();
-            this.SetOutputSize(settingsManager.GetTextSize());
+            settings.IncreaseTextSize();
+            this.SetOutputSize(settings.GetTextSize());
         }
 
         #endregion

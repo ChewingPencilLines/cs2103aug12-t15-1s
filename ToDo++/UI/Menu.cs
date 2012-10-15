@@ -12,13 +12,13 @@ namespace ToDo
 {
     public partial class Menu : UserControl
     {
-        private SettingsManager settingsManager;
+        private Settings settings;
 
         /// <summary>
-        /// Set the settingsManager of the Menu Control, so interaction is possible
+        /// Set the settings of the OutputBox Control, so interaction is possible
         /// </summary>
-        /// <param name="setSettingsManager">Instance of MainSettingsManager passed in by pointer</param>
-        public void SetSettingsManager(SettingsManager passedSettingsManager) { settingsManager=passedSettingsManager; }
+        /// <param name="passedSettings">Instance of settings passed in by pointer</param>
+        public void SetSettings(Settings passedSettings) { settings = passedSettings; }
         public Menu() { InitializeComponent(); }
 
         /// <summary>
@@ -26,8 +26,8 @@ namespace ToDo
         /// </summary>
         public void LoadSettingsIntoMenu()
         {
-            loadOnStartupToolStripMenuItem.Checked = settingsManager.GetLoadOnStartupStatus();
-            startMinimizedToolStripMenuItem.Checked = settingsManager.GetStartMinimizedStatus();
+            loadOnStartupToolStripMenuItem.Checked = settings.GetLoadOnStartupStatus();
+            startMinimizedToolStripMenuItem.Checked = settings.GetStartMinimizedStatus();
         }
 
         #region MenuEventHandlers
@@ -37,8 +37,8 @@ namespace ToDo
         /// </summary>
         private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Settings settingsForm = new Settings(settingsManager);
-            settingsForm.ShowDialog();
+            SettingsUI settingsUI = new SettingsUI(settings);
+            settingsUI.ShowDialog();
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ToDo
         private void startMinimizedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             invertMinimizedToolStrip();
-            settingsManager.ToggleStartMinimized(startMinimizedToolStripMenuItem.Checked);
+            settings.ToggleStartMinimized(startMinimizedToolStripMenuItem.Checked);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace ToDo
         private void loadOnStartupToolStripMenuItem_Click(object sender, EventArgs e)
         {
             invertStartupToolStrip();
-            settingsManager.ToggleLoadOnStartup(loadOnStartupToolStripMenuItem.Checked);
+            settings.ToggleLoadOnStartup(loadOnStartupToolStripMenuItem.Checked);
         }
 
         /// <summary>
