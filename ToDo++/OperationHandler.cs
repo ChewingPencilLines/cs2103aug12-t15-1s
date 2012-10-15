@@ -51,8 +51,8 @@ namespace ToDo
             else if (operation is OperationDelete)
             {
                 int index = ((OperationDelete)operation).Index;
-                Debug.Assert(index >= 0 && index < taskList.Count);
-                Task taskToDelete = lastListedTasks[index];
+                Debug.Assert(index > 0 && index < taskList.Count);
+                Task taskToDelete = lastListedTasks[index-1];
                 response = Delete(ref taskToDelete, ref taskList, out successFlag);
             }
             else if (operation is OperationDisplay)
@@ -115,9 +115,10 @@ namespace ToDo
         private string DisplayAll(List<Task> taskList)
         {
             string displayString = String.Empty;
+            int index = 0;
             foreach (Task task in taskList)
-            {
-                displayString += (task.taskname);
+            {                
+                displayString += (index + ". " + task.taskname);
                 if (task is TaskDeadline)
                 {
                     displayString += (" BY: " + ((TaskDeadline)task).endtime);
@@ -131,7 +132,9 @@ namespace ToDo
                     displayString += (" TO: " + endTime.ToString());
                 }
                 displayString += "\r\n";
+                index++;
             }
+            lastListedTasks = new List<Task>(taskList);
             return displayString;
         }
 

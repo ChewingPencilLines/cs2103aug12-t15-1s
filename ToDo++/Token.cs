@@ -19,7 +19,7 @@ namespace ToDo
         }
 
         internal TokenType Type
-        {
+        {            
             get { return type; }
         } 
            
