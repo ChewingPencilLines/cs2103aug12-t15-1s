@@ -43,9 +43,8 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.flexiCommandsControl1 = new ToDo.FlexiCommandsControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.loadOnStartup = new System.Windows.Forms.CheckBox();
-            this.minimisedCheckbox = new System.Windows.Forms.CheckBox();
             this.dateTimeControl1 = new ToDo.DateTimeControl();
+            this.startingOptions1 = new ToDo.StartingOptions();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.customPanelControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -192,8 +191,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.loadOnStartup);
-            this.groupBox1.Controls.Add(this.minimisedCheckbox);
+            this.groupBox1.Controls.Add(this.startingOptions1);
             this.groupBox1.ForeColor = System.Drawing.Color.Aqua;
             this.groupBox1.Location = new System.Drawing.Point(6, 0);
             this.groupBox1.Name = "groupBox1";
@@ -202,31 +200,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Starting Options";
             // 
-            // loadOnStartup
-            // 
-            this.loadOnStartup.AutoSize = true;
-            this.loadOnStartup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.loadOnStartup.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.loadOnStartup.Location = new System.Drawing.Point(8, 37);
-            this.loadOnStartup.Name = "loadOnStartup";
-            this.loadOnStartup.Size = new System.Drawing.Size(101, 17);
-            this.loadOnStartup.TabIndex = 1;
-            this.loadOnStartup.Text = "Load On Startup";
-            this.loadOnStartup.UseVisualStyleBackColor = true;
-            // 
-            // minimisedCheckbox
-            // 
-            this.minimisedCheckbox.AutoSize = true;
-            this.minimisedCheckbox.BackColor = System.Drawing.Color.SteelBlue;
-            this.minimisedCheckbox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.minimisedCheckbox.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.minimisedCheckbox.Location = new System.Drawing.Point(8, 17);
-            this.minimisedCheckbox.Name = "minimisedCheckbox";
-            this.minimisedCheckbox.Size = new System.Drawing.Size(94, 17);
-            this.minimisedCheckbox.TabIndex = 0;
-            this.minimisedCheckbox.Text = "Start Minimized";
-            this.minimisedCheckbox.UseVisualStyleBackColor = false;
-            // 
             // dateTimeControl1
             // 
             this.dateTimeControl1.BackColor = System.Drawing.Color.Transparent;
@@ -234,6 +207,14 @@
             this.dateTimeControl1.Name = "dateTimeControl1";
             this.dateTimeControl1.Size = new System.Drawing.Size(150, 36);
             this.dateTimeControl1.TabIndex = 10;
+            // 
+            // startingOptions1
+            // 
+            this.startingOptions1.BackColor = System.Drawing.Color.Transparent;
+            this.startingOptions1.Location = new System.Drawing.Point(6, 7);
+            this.startingOptions1.Name = "startingOptions1";
+            this.startingOptions1.Size = new System.Drawing.Size(248, 49);
+            this.startingOptions1.TabIndex = 0;
             // 
             // UI
             // 
@@ -258,7 +239,6 @@
             this.tabPage2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -273,14 +253,13 @@
         private CustomPanelControl customPanelControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.CheckBox minimisedCheckbox;
-        private System.Windows.Forms.CheckBox loadOnStartup;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private FlexiCommandsControl flexiCommandsControl1;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.Button preferencesButton;
         private System.Windows.Forms.Button helpButton;
+        private StartingOptions startingOptions1;
     }
 }
 

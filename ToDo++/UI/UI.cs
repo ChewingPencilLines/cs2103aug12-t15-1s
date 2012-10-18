@@ -189,7 +189,7 @@ namespace ToDo
         /// </summary>
         private void RegisterLoadOnStartupWhenChecked()
         {
-            if (Settings.loadOnStartup == true)
+            if (Settings.LoadOnStartup == true)
                 RegisterInStartup(true);
             else
                 RegisterInStartup(false);
