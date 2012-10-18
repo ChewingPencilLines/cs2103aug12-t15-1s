@@ -13,7 +13,7 @@ namespace ToDo
     // ******************************************************************
     // Enumerations
     // ******************************************************************
-    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, INVALID };
+    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, INVALID };
     enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
     enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
@@ -209,7 +209,7 @@ namespace ToDo
             try
             {
                 commandKeywords.Add(userCommand, commandType);
-                
+
             }
             catch (Exception)
             {
@@ -337,7 +337,7 @@ namespace ToDo
                             output.Add(words[i] + " " + words[i + 1]);
                             merged = true;
                         }
-                    }                    
+                    }
                 }
                 if (merged)
                 {
@@ -595,7 +595,7 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of date tokens</returns>
-        
+
         // note: currently, the method just ignores invalid dates such as 30th feb
         // might wish to change the catch case to flag the invalid date input
         private static List<TokenDate> GenerateDateTokens(List<string> input)
@@ -612,7 +612,7 @@ namespace ToDo
             foreach (string word in input)
             {
                 Match match;
-                DateTime dateTime;
+                DateTime dateTime = new DateTime();
                 bool isMonthGiven = true;
                 if (IsValidDate(word.ToLower()))
                 {
@@ -634,51 +634,23 @@ namespace ToDo
                     // no year input
                     if (year == 0)
                     {
-                        try
-                        {
-                            dateTime = new DateTime(DateTime.Today.Year, month, day);
-                        }
-                        catch (ArgumentOutOfRangeException)
-                        {
-                            dateTime = new DateTime(1, 1, 1); // can't just continue on to next iteration in case today's date is 15th feb and entry is "30th"
-                        }
+                        TryParsingDate(ref dateTime, DateTime.Today.Year, month, day, true);
                         if (DateTime.Compare(dateTime, DateTime.Today) < 0)
                         {
                             if (isMonthGiven == false)
                             {
                                 isMonthGiven = true;
-                                try
-                                {
-                                    dateTime = new DateTime(DateTime.Today.AddMonths(1).Year, DateTime.Today.AddMonths(1).Month, day);
-                                }
-                                catch (ArgumentOutOfRangeException)
-                                {
-                                    continue;
-                                }
+                                if (!TryParsingDate(ref dateTime, DateTime.Today.AddMonths(1).Year, DateTime.Today.AddMonths(1).Month, day, false)) continue;
                             }
                             else
                             {
-                                try
-                                {
-                                    dateTime = new DateTime(DateTime.Today.AddYears(1).Year, month, day);
-                                }
-                                catch (ArgumentOutOfRangeException)
-                                {
-                                    continue;
-                                }
+                                if (!TryParsingDate(ref dateTime, DateTime.Today.AddYears(1).Year, month, day, false)) continue;
                             }
                         }
                     }
                     else
                     {
-                        try
-                        {
-                            dateTime = new DateTime(year, month, day);
-                        }
-                        catch (ArgumentOutOfRangeException)
-                        {
-                            continue;
-                        }
+                        if (!TryParsingDate(ref dateTime, year, month, day, false)) continue;
                     }
                     TokenDate dateToken = new TokenDate(index, dateTime, isSpecific);
                     dateTokens.Add(dateToken);
@@ -687,6 +659,25 @@ namespace ToDo
                 isSpecific = true;
             }
             return dateTokens;
+        }
+
+        private static bool TryParsingDate(ref DateTime date, int year, int month, int day, bool ignoreFailure)
+        {
+            try
+            {
+                date = new DateTime(year, month, day);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                if (ignoreFailure)
+                    date = new DateTime(1, 1, 1);
+                else
+                {
+                    //flag
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -814,10 +805,7 @@ namespace ToDo
                     if (strHours.Length != 0)
                     {
                         hours = Int32.Parse(strHours);
-                        if (Format_12Hour && match.Groups["format"].Value.ToLower() == "pm")
-                        {
-                            hours += 12;
-                        }
+                        if (Format_12Hour) ConvertTo24HoursFormat(match.Groups["format"].Value, hours);
                     }
                     if (strMinutes.Length != 0)
                         minutes = Int32.Parse(strMinutes);
@@ -828,6 +816,15 @@ namespace ToDo
                 index++;
             }
             return timeTokens;
+        }
+
+        private static int ConvertTo24HoursFormat(string format, int hours)
+        {
+            if (format.ToLower() == "pm" && hours != 12)
+                hours += 12;
+            if (format.ToLower() == "am" && hours == 12)
+                hours = 24;
+            return hours;
         }
 
         /// <summary>
@@ -879,12 +876,12 @@ namespace ToDo
                 if (remainingWord != null)
                     literal = literal + remainingWord + " ";
                 else if (remainingWord == null && literal != String.Empty)
-                    AddLiteralToken(ref literal, index, ref literalTokens);  
+                    AddLiteralToken(ref literal, index, ref literalTokens);
                 index++;
             }
             if (literal != String.Empty)
             {
-                AddLiteralToken(ref literal, index, ref literalTokens);  
+                AddLiteralToken(ref literal, index, ref literalTokens);
             }
             return literalTokens;
         }
@@ -897,11 +894,11 @@ namespace ToDo
             literal = String.Empty;
         }
         #endregion
-        
+
         // ******************************************************************
         // Auxilliary Methods
         // ******************************************************************
-        
+
         #region Comparison Methods
 
         /// <summary>
