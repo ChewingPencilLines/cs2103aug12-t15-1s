@@ -8,11 +8,15 @@ namespace ToDo
     class Logic
     {
         OperationHandler operationHandler;
+        CommandParser commandParser;
+        StringParser stringParser;
         List<Task> taskList;
   
         public Logic()
         { 
             operationHandler = new OperationHandler();
+            stringParser = new StringParser();
+            commandParser = new CommandParser(ref stringParser); 
             taskList = new List<Task>();
         }
 
@@ -42,8 +46,7 @@ namespace ToDo
             }
             else
             {
-                CommandParser CP = new CommandParser();
-                Operation derivedOperation = CP.ParseOperation(command);
+                Operation derivedOperation = commandParser.ParseOperation(command);
                 return derivedOperation;
             }
         }

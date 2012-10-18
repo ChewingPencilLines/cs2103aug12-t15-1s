@@ -11,22 +11,14 @@ using System.IO;
 
 namespace ToDo
 {
-    class OutputBox: RichTextBox
+    class OutputBox : RichTextBox
     {
-        private Settings settings;
-
-        /// <summary>
-        /// Set the settings of the OutputBox Control, so interaction is possible
-        /// </summary>
-        /// <param name="passedSettings">Instance of settings passed in by pointer</param>
-        public void SetSettings(Settings passedSettings) { settings = passedSettings; }
-
         /// <summary>
         /// Currently sets the Text Size of the OutputBox
         /// </summary>
-        public void LoadSettingsIntoOutput()
+        public void InitializeWithSettings()
         {
-            this.SetOutputSize(settings.GetTextSize());
+            this.SetOutputSize(Settings.textSize);
         }
 
         #region TextSizeControl
@@ -48,8 +40,8 @@ namespace ToDo
         /// </summary>
         public void DecreaseSizeOfOutput()
         {
-            settings.DecreaseTextSize();
-            this.SetOutputSize(settings.GetTextSize());
+            Settings.textSize--;
+            this.SetOutputSize(Settings.textSize);
         }
 
         /// <summary>
@@ -57,8 +49,8 @@ namespace ToDo
         /// </summary>
         public void IncreaseSizeOfOutput()
         {
-            settings.IncreaseTextSize();
-            this.SetOutputSize(settings.GetTextSize());
+            Settings.textSize++;
+            this.SetOutputSize(Settings.textSize);
         }
 
         #endregion
