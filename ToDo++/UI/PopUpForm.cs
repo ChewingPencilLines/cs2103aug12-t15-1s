@@ -15,7 +15,6 @@ namespace ToDo
         public PopUpForm()
         {
             InitializeComponent();
-            titleLabel.Text = "AA";
         }
 
         public string userInput { get { return userInputBox.Text; } set { userInputBox.Text = userInput; } }
@@ -37,6 +36,12 @@ namespace ToDo
         }
 
         #endregion
+
+        public void SetTitle(string title,string subTitle)
+        {
+            titleLabel.Text = title;
+            subtitleLabel.Text = subTitle;
+        }
 
         public bool UserEnteredData()
         {

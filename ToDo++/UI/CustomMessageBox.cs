@@ -13,8 +13,7 @@ namespace ToDo
 
         internal static void Show(string title,string subTitle)
         {
-            popUp.title = title;
-            popUp.subTitle = subTitle;
+            popUp.SetTitle(title, subTitle);
             popUp.userInput = "";
             popUp.ShowDialog();
         }
