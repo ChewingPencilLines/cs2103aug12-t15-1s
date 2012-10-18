@@ -32,4 +32,15 @@ namespace ToDo
         }
 
     }
+
+    public static class AlertBox
+    {
+        private static AlertForm popUp = new AlertForm();
+
+        internal static void Show(string alertText)
+        {
+            popUp.SetAlertText(alertText);
+            popUp.ShowDialog();
+        }
+    }
 }
