@@ -70,7 +70,7 @@ namespace ToDo
             else if (operation is OperationSearch)
             {
                 string searchString = ((OperationSearch)operation).GetSearchString();
-                response = "";
+                response = Search(ref lastListedTasks, taskList, searchString);
             }
             else
             {
@@ -136,7 +136,7 @@ namespace ToDo
             return displayString;
         }
 
-        private string Search(List<Task> taskList, string searchString,ref List<Task> lastListedTasks)
+        private string Search(ref List<Task> lastListedTasks, List<Task> taskList, string searchString)
         {
             string displayString = String.Empty;
             foreach (Task task in taskList)
