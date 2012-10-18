@@ -17,7 +17,7 @@ namespace ToDo
     enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
     enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
-    public static class StringParser
+    public class StringParser
     {
         // ******************************************************************
         // Static Keyword Declarations
@@ -209,6 +209,7 @@ namespace ToDo
             try
             {
                 commandKeywords.Add(userCommand, commandType);
+                
             }
             catch (Exception)
             {

@@ -13,6 +13,12 @@ namespace ToDo
     {
         const int START_INDEX = 0;
         const int END_INDEX = 1;
+        StringParser stringParser;
+
+        public CommandParser(ref StringParser stringParser)
+        {
+            this.stringParser = stringParser;
+        }
 
         public Operation ParseOperation(string input)
         {
