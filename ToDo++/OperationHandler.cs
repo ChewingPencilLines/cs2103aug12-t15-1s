@@ -69,7 +69,8 @@ namespace ToDo
             }
             else if (operation is OperationSearch)
             {
-                throw new NotImplementedException();
+                string searchString = ((OperationSearch)operation).GetSearchString();
+                response = "";
             }
             else
             {
@@ -131,6 +132,33 @@ namespace ToDo
                     displayString += (" TO: " + endTime.ToString());
                 }
                 displayString += "\r\n";
+            }
+            return displayString;
+        }
+
+        private string Search(List<Task> taskList, string searchString,ref List<Task> lastListedTasks)
+        {
+            string displayString = String.Empty;
+            foreach (Task task in taskList)
+            {
+                if (task.taskname.IndexOf(searchString) >= 0)
+                {
+                    lastListedTasks.Add(task);
+                    displayString += (task.taskname);
+                    if (task is TaskDeadline)
+                    {
+                        displayString += (" BY: " + ((TaskDeadline)task).endtime);
+                    }
+                    else if (task is TaskEvent)
+                    {
+                        DateTime startTime = ((TaskEvent)task).starttime;
+                        DateTime endTime = ((TaskEvent)task).endtime;
+                        displayString += (" AT: " + startTime.ToString());
+                        if (startTime != endTime && endTime != null)
+                            displayString += (" TO: " + endTime.ToString());
+                    }
+                    displayString += "\r\n";
+                }
             }
             return displayString;
         }
