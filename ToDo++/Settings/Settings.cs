@@ -97,7 +97,8 @@ namespace ToDo
             }
             catch (FileNotFoundException)
             {
-                MessageBox.Show("Settings File Not Found, new file will be created");
+                AlertBox.Show("Settings File Not Found, new file will be created");
+                //MessageBox.Show("Settings File Not Found, new file will be created");
                 WriteToFile();
             }
             catch (InvalidOperationException)

@@ -18,24 +18,6 @@ namespace ToDo
     {
 
         // ******************************************************************
-        // Switch Between Panels (Preferences and ToDo++)
-        // ******************************************************************
-
-        #region PanelSwitching
-
-        public void SwitchToSettingsPanel()
-        {
-            this.customPanelControl.SelectedIndex = 1;
-        }
-
-        public void SwitchToToDoPanel()
-        {
-            this.customPanelControl.SelectedIndex = 0;
-        }
-
-        #endregion
-
-        // ******************************************************************
         // Constructors.
         // ******************************************************************
 
@@ -216,6 +198,24 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
+        // Switch Between Panels (Preferences and ToDo++)
+        // ******************************************************************
+
+        #region PanelSwitching
+
+        public void SwitchToSettingsPanel()
+        {
+            this.customPanelControl.SelectedIndex = 1;
+        }
+
+        public void SwitchToToDoPanel()
+        {
+            this.customPanelControl.SelectedIndex = 0;
+        }
+
+        #endregion
+
+        // ******************************************************************
         // Prepare the Menu Bar
         // ******************************************************************
 
@@ -226,9 +226,24 @@ namespace ToDo
         /// </summary>
         private void InitializeMenu()
         {
-            menuControl.InitializeMenuControl(this);
-            //menuStrip.SetSettings(settings);
-            //menuStrip.LoadSettingsIntoMenu();
+
+        }
+
+        int selected = 0;
+        private void preferencesButton_Click(object sender, EventArgs e)
+        {
+            if (selected == 0)
+            {
+                preferencesButton.Text = "ToDo";
+                SwitchToSettingsPanel();
+                selected = 1;
+            }
+            else
+            {
+                preferencesButton.Text = "Preferences";
+                SwitchToToDoPanel();
+                selected = 0;
+            }
         }
 
         #endregion
@@ -331,30 +346,6 @@ namespace ToDo
         {
             Application.Exit();
         }
-
-        /// <summary>
-        /// Increase size of Text
-        /// </summary>
-        private void increaseSizeButton_Click(object sender, EventArgs e)
-        {
-            outputBox.IncreaseSizeOfOutput();
-        }
-
-        /// <summary>
-        /// Decrease size of text
-        /// </summary>
-        private void decreaseSizeButton_Click(object sender, EventArgs e)
-        {
-            outputBox.DecreaseSizeOfOutput();
-        }
-
-        private void flexiCommandsControl1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-
-
 
     }
 }
