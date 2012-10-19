@@ -44,6 +44,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StartingOptions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StartingOptions.Designer.cs">
+      <DependentUpon>StartingOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TokenGenerator.cs" />
+    <Compile Include="UI\AlertForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AlertForm.Designer.cs">
+      <DependentUpon>AlertForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CommandParser.cs" />
     <Compile Include="UI\Components\CustomPanelControl.cs">
       <SubType>Component</SubType>
@@ -55,12 +68,6 @@
       <DependentUpon>FlexiCommandsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Logic.cs" />
-    <Compile Include="UI\Components\MenuControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Components\MenuControl.Designer.cs">
-      <DependentUpon>MenuControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Operation.cs" />
     <Compile Include="OperationHandler.cs" />
     <Compile Include="UI\PopUpForm.cs">
@@ -99,8 +106,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
-    <EmbeddedResource Include="UI\Components\MenuControl.resx">
-      <DependentUpon>MenuControl.cs</DependentUpon>
+    <EmbeddedResource Include="StartingOptions.resx">
+      <DependentUpon>StartingOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\AlertForm.resx">
+      <DependentUpon>AlertForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\FlexiCommandsControl.resx">
       <DependentUpon>FlexiCommandsControl.cs</DependentUpon>
@@ -143,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\applications.png" />
+    <None Include="Resources\Alert.png" />
     <Content Include="Resources\Cover.png" />
     <Content Include="Resources\Cover1.png" />
     <Content Include="Resources\CoverPhoto.png" />
@@ -160,9 +171,6 @@
       <Project>{09823da8-c587-4363-95f1-cd99f4d0a678}</Project>
       <Name>HotkeyLib</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

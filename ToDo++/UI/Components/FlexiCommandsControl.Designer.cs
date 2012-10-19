@@ -61,7 +61,7 @@
             "remind"});
             this.addedFlexiCommands.Location = new System.Drawing.Point(7, 10);
             this.addedFlexiCommands.Name = "addedFlexiCommands";
-            this.addedFlexiCommands.Size = new System.Drawing.Size(203, 48);
+            this.addedFlexiCommands.Size = new System.Drawing.Size(251, 48);
             this.addedFlexiCommands.TabIndex = 2;
             // 
             // groupBox1
@@ -70,7 +70,7 @@
             this.groupBox1.Controls.Add(this.addedFlexiCommands);
             this.groupBox1.Location = new System.Drawing.Point(102, 1);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(216, 61);
+            this.groupBox1.Size = new System.Drawing.Size(264, 61);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             // 
@@ -81,7 +81,7 @@
             this.addButton.ForeColor = System.Drawing.Color.SteelBlue;
             this.addButton.Location = new System.Drawing.Point(102, 68);
             this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(104, 23);
+            this.addButton.Size = new System.Drawing.Size(129, 23);
             this.addButton.TabIndex = 4;
             this.addButton.Text = "Add";
             this.addButton.UseVisualStyleBackColor = false;
@@ -92,9 +92,9 @@
             this.removeButton.BackColor = System.Drawing.Color.PowderBlue;
             this.removeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.removeButton.ForeColor = System.Drawing.Color.SteelBlue;
-            this.removeButton.Location = new System.Drawing.Point(212, 68);
+            this.removeButton.Location = new System.Drawing.Point(237, 68);
             this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(106, 23);
+            this.removeButton.Size = new System.Drawing.Size(129, 23);
             this.removeButton.TabIndex = 5;
             this.removeButton.Text = "Remove";
             this.removeButton.UseVisualStyleBackColor = false;
@@ -109,7 +109,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.commandTree);
             this.Name = "FlexiCommandsControl";
-            this.Size = new System.Drawing.Size(321, 111);
+            this.Size = new System.Drawing.Size(369, 111);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 

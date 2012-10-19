@@ -175,8 +175,8 @@ namespace ToDo
                     else newOperation = new OperationModify((int)taskIndex, task);
                     throw new NotImplementedException();
                 case CommandType.SEARCH:
-                    newOperation = new OperationSearch("");
-                    throw new NotImplementedException();
+                    newOperation = new OperationSearch(taskName);
+                    break;
                 case CommandType.SORT:
                     throw new NotImplementedException();
                 case CommandType.REDO:
