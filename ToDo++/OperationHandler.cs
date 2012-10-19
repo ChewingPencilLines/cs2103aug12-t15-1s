@@ -119,7 +119,7 @@ namespace ToDo
             int index = 0;
             foreach (Task task in taskList)
             {                
-                displayString += (index + ". " + task.taskname);
+                displayString += ((index+1) + ". " + task.taskname);
                 if (task is TaskDeadline)
                 {
                     displayString += (" BY: " + ((TaskDeadline)task).endtime);
@@ -133,6 +133,7 @@ namespace ToDo
                     displayString += (" TO: " + endTime.ToString());
                 }
                 displayString += "\r\n";
+                index++;
             }
             return displayString;
         }
