@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ToDo
 {
@@ -10,12 +11,14 @@ namespace ToDo
     // Abstract definition for task
     // ******************************************************************
 
-    #region Abstract definition for task
+    #region Abstract definition for task    
+    
     public abstract class Task
     {
         /*
          * taskname should be public then xml can write this.
          * state is false means the task is undone.
+         * @ivan to @alice: NO. make it a property (encapsulate field). Look @ how i do Tokens.
          */
         public string taskname;
         public bool state;
@@ -31,6 +34,7 @@ namespace ToDo
     // ******************************************************************
 
     #region Definition of three different task types
+    [XmlInclude(typeof(TaskFloating))]
     public class TaskFloating : Task
     {
         public TaskFloating()
@@ -42,8 +46,9 @@ namespace ToDo
             taskname = TaskName;
             state = false;
         }
-    } 
+    }
 
+    [XmlInclude(typeof(TaskDeadline))]
     public class TaskDeadline : Task
     {
         public DateTime endtime;
@@ -59,6 +64,7 @@ namespace ToDo
         }
     }
 
+    [XmlInclude(typeof(TaskEvent))]
     public class TaskEvent : Task
     {
         public DateTime endtime;

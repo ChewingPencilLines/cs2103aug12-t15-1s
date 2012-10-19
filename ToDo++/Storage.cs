@@ -12,24 +12,13 @@ namespace ToDo
 {
     public class Storage
     {
-        XmlWriter taskWriter, settingsWriter;
-        XmlWriterSettings xmlSettings;
+        string taskStorageFile, settingsFile;
 
         public Storage(string taskStorageFile, string settingsFile)
         {
-            //InitializeXMLSettings();
-            //CreateNewTaskFile(taskStorageFile, xmlSettings);
-            //CreateNewSettingsFile(settingsFile, xmlSettings);
+            this.taskStorageFile = taskStorageFile;
+            this.settingsFile = settingsFile;
         }
-        /*
-        private static void InitializeXMLSettings()
-        {
-            // Create an XmlWriterSettings object with the correct options. 
-            xmlSettings = new XmlWriterSettings();
-            xmlSettings.Indent = true;
-            xmlSettings.IndentChars = ("\t");
-            xmlSettings.OmitXmlDeclaration = false;
-        }*/
 
         internal bool CreateNewTaskFile(string filename)
         {
@@ -41,7 +30,7 @@ namespace ToDo
 
                 // Create a new element node.
                 XmlNode newElem = doc.CreateNode("element", "tasks", "");
-                newElem.InnerText = "290";
+                newElem.InnerText = "task1";
 
                 XmlElement root = doc.DocumentElement;
                 root.AppendChild(newElem);
@@ -61,33 +50,27 @@ namespace ToDo
 
         internal bool CreateNewSettingsFile(string filename, XmlWriterSettings settings)
         {
-            try
-            {
-                using (settingsWriter = XmlWriter.Create(filename, settings))
-                {
-                    settingsWriter.WriteStartDocument();
-
-                    return true;
-                }
-            }
-            catch (ArgumentNullException)
-            {
-                CustomMessageBox.Show("Error!", "Settings filename was not set!");
-            }
-            catch (InvalidOperationException)
-            {
-                CustomMessageBox.Show("Error!", "Failed to create settings file.");
-            }
             return false;
         }
-
-
-
-        internal bool AddTask(Task taskToAdd, int id)
+        
+        internal bool AddTask(Task taskToAdd, string id)
         {
-            XPathNavigator navigator;
+            XmlDocument doc = new XmlDocument();
+            XmlTextReader reader = new XmlTextReader(taskStorageFile);
+            reader.WhitespaceHandling = WhitespaceHandling.None;
+            reader.MoveToContent();
+            reader.Read();
+            doc.Load(reader);
+            doc.CreateNode("element", id, "");
+            XmlSerializer xS = new XmlSerializer(taskToAdd.GetType(), "");
+            try
+            {
+             //   xS.Serialize(doc, taskToAdd);
+            } 
+            catch (Exception)
+            {            
+            }
             return true;
-            throw new NotImplementedException();
         }
 
         internal bool RemoveTask(Task taskToDelete)
