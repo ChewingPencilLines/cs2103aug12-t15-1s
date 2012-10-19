@@ -11,22 +11,14 @@ using System.IO;
 
 namespace ToDo
 {
-    class OutputBox: RichTextBox
+    class OutputBox : RichTextBox
     {
-        private SettingsManager settingsManager;
-
-        /// <summary>
-        /// Set the settingsManager of the OutputBox Control, so interaction is possible
-        /// </summary>
-        /// <param name="setSettingsManager">Instance of MainSettingsManager passed in by pointer</param>
-        public void SetSettingsManager(SettingsManager passedSettingsManager) { settingsManager = passedSettingsManager; }
-
         /// <summary>
         /// Currently sets the Text Size of the OutputBox
         /// </summary>
-        public void LoadSettingsIntoOutput()
+        public void InitializeWithSettings()
         {
-            this.SetOutputSize(settingsManager.GetTextSize());
+            this.SetOutputSize(Settings.textSize);
         }
 
         #region TextSizeControl
@@ -44,21 +36,21 @@ namespace ToDo
         }
 
         /// <summary>
-        /// Decrease the Text Size by 1 unit, while modifying the settingsManager
+        /// Decrease the Text Size by 1 unit, while modifying the settings
         /// </summary>
         public void DecreaseSizeOfOutput()
         {
-            settingsManager.DecreaseTextSize();
-            this.SetOutputSize(settingsManager.GetTextSize());
+            Settings.textSize--;
+            this.SetOutputSize(Settings.textSize);
         }
 
         /// <summary>
-        /// Increase the Text Size by 1 unit, while modifying the settingsManager
+        /// Increase the Text Size by 1 unit, while modifying the settings
         /// </summary>
         public void IncreaseSizeOfOutput()
         {
-            settingsManager.IncreaseTextSize();
-            this.SetOutputSize(settingsManager.GetTextSize());
+            Settings.textSize++;
+            this.SetOutputSize(Settings.textSize);
         }
 
         #endregion
