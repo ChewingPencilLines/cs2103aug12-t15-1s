@@ -31,7 +31,7 @@ namespace ToDo
         {
             lastListedTasks = new List<Task>();
             undoStack = new Stack<Operation>();
-            storageXML = new Storage();
+            storageXML = new Storage("tasklist.xml", "settings.xml");
         }
 
         public string Execute(Operation operation, ref List<Task> taskList)
@@ -84,7 +84,7 @@ namespace ToDo
             try
             {
                 taskList.Add(taskToAdd);
-                if (storageXML.AddTask(taskToAdd))
+                if (storageXML.AddTask(taskToAdd, 0))
                 {
                     successFlag = true;
                     return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.taskname);
