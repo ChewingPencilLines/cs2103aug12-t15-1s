@@ -13,8 +13,12 @@ namespace ToDo
     #region Abstract definition for task
     public abstract class Task
     {
-        // taskname should be public then xml can write this.
+        /*
+         * taskname should be public then xml can write this.
+         * state is false means the task is undone.
+         */
         public string taskname;
+        public bool state;
         public Task()
         {
 
@@ -36,6 +40,7 @@ namespace ToDo
         public TaskFloating(string TaskName)
         {
             taskname = TaskName;
+            state = false;
         }
     } 
 
@@ -50,6 +55,7 @@ namespace ToDo
         {
             taskname = TaskName;
             endtime = EndTime;
+            state = false;
         }
     }
 
@@ -66,6 +72,7 @@ namespace ToDo
             taskname = TaskName;
             starttime = StartTime;
             endtime = EndTime;
+            state = false;
         }
     }
      #endregion

@@ -97,7 +97,8 @@ namespace ToDo
             }
             catch (FileNotFoundException)
             {
-                MessageBox.Show("Settings File Not Found, new file will be created");
+                AlertBox.Show("Settings File Not Found, new file will be created");
+                //MessageBox.Show("Settings File Not Found, new file will be created");
                 WriteToFile();
             }
             catch (InvalidOperationException)
@@ -137,8 +138,13 @@ namespace ToDo
             }
         }
 
-        internal static bool loadOnStartup { get { return settingsList.loadOnStartup; } set { settingsList.loadOnStartup = loadOnStartup; WriteToFile(); } }
+        //internal static bool loadOnStartup { get { return settingsList.loadOnStartup; } set { settingsList.loadOnStartup = loadOnStartup; WriteToFile(); } }
         internal static bool startMinimized { get { return settingsList.startMinimized; } set { settingsList.startMinimized = startMinimized; WriteToFile(); } }
+
+        internal static bool LoadOnStartup { get { return settingsList.loadOnStartup; } set { MessageBox.Show(LoadOnStartup.ToString()); settingsList.loadOnStartup = LoadOnStartup; WriteToFile(); } }
+
+
+        
 
         #endregion;
 

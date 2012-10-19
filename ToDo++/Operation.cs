@@ -85,7 +85,24 @@ namespace ToDo
         public OperationUndo()
         { }
 
+    }
+
+    public class OperationDone : Operation
+    {
+        private int index;
+
+        public int Index
+        {
+            get { return index; }
+        }
+
+        public OperationDone(int index)
+        {
+            this.index = index - 1;
+        }
+
     } 
+
     #endregion
 
 
