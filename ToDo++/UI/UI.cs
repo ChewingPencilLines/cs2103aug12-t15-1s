@@ -180,7 +180,7 @@ namespace ToDo
         /// </summary>
         private void MinimiseToTrayWhenChecked()
         {
-            if(Settings.startMinimized==true)
+            if(Settings.GetStartMinimizeStatus()==true)
                 MinimiseMaximiseTray();
         }
 
@@ -189,7 +189,7 @@ namespace ToDo
         /// </summary>
         private void RegisterLoadOnStartupWhenChecked()
         {
-            if (Settings.LoadOnStartup == true)
+            if (Settings.GetLoadOnStartupStatus() == true)
                 RegisterInStartup(true);
             else
                 RegisterInStartup(false);
@@ -293,7 +293,7 @@ namespace ToDo
             string output=logic.ProcessCommand(input);
 
             outputBox.DisplayCommand(input,output);
-            outputBox.SetOutputSize(Settings.textSize);
+            outputBox.SetOutputSize(Settings.GetTextSize());
             textInput.Clear();
         }
 

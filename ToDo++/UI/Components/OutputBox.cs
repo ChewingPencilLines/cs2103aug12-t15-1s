@@ -18,7 +18,7 @@ namespace ToDo
         /// </summary>
         public void InitializeWithSettings()
         {
-            this.SetOutputSize(Settings.textSize);
+            this.SetOutputSize(Settings.GetTextSize());
         }
 
         #region TextSizeControl
@@ -40,8 +40,8 @@ namespace ToDo
         /// </summary>
         public void DecreaseSizeOfOutput()
         {
-            Settings.textSize--;
-            this.SetOutputSize(Settings.textSize);
+            Settings.SetTextSize(Settings.GetTextSize() - 1);
+            this.SetOutputSize(Settings.GetTextSize());
         }
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace ToDo
         /// </summary>
         public void IncreaseSizeOfOutput()
         {
-            Settings.textSize++;
-            this.SetOutputSize(Settings.textSize);
+            Settings.SetTextSize(Settings.GetTextSize() - 1);
+            this.SetOutputSize(Settings.GetTextSize());
         }
 
         #endregion
