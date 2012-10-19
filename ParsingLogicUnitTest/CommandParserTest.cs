@@ -9,40 +9,51 @@ namespace CommandParserTest
     [TestClass]
     public class CommandParserTest
     {
-        CommandParser testParser = new CommandParser();
-
+        StringParser testStrParser;
+        CommandParser testCmdParser;
+        
         [TestMethod]
         public void OperationParseTestTimedSingle()
         {
-            Operation op1 = testParser.ParseOperation("task do stuff add Oct 15 5 am");
+            testStrParser = new StringParser();
+            testCmdParser = new CommandParser(ref testStrParser);
+            Operation op1 = testCmdParser.ParseOperation("task do stuff add Oct 15 5 am");
             return;
         }
 
         [TestMethod]
         public void OperationParseTestInvalid()
         {
-            Operation op1 = testParser.ParseOperation("add task do stuff  by 20");
+            testStrParser = new StringParser();
+            testCmdParser = new CommandParser(ref testStrParser);
+            Operation op1 = testCmdParser.ParseOperation("add task do stuff  by 20");
             return;
         }
 
         [TestMethod]
         public void OperationParseTestDay()
         {
-            Operation op1 = testParser.ParseOperation("add task do stuff by friday 2pm");
+            testStrParser = new StringParser();
+            testCmdParser = new CommandParser(ref testStrParser);
+            Operation op1 = testCmdParser.ParseOperation("add task do stuff by friday 2pm");
             return;
         }
 
         [TestMethod]
         public void OperationParseTestTimedDuo()
         {
-            Operation op1 = testParser.ParseOperation("task do stuff add Oct 15 5 am to 6am");
+            testStrParser = new StringParser();
+            testCmdParser = new CommandParser(ref testStrParser);
+            Operation op1 = testCmdParser.ParseOperation("task do stuff add Oct 15 5 am to 6am");
             return;
         }
 
         [TestMethod]
         public void OperationParseTestDeadline()
         {
-            Operation op1 = testParser.ParseOperation("task do stuff add by 9 pm");
+            testStrParser = new StringParser();
+            testCmdParser = new CommandParser(ref testStrParser);
+            Operation op1 = testCmdParser.ParseOperation("task do stuff add by 9 pm");
             Assert.IsTrue(op1 is OperationAdd);
             Task task1 = ((OperationAdd)op1).GetTask();
             Assert.IsTrue(task1.taskname == "task do stuff");

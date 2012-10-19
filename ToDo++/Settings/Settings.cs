@@ -1,347 +1,281 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
 
 namespace ToDo
 {
-    public partial class Settings : Form
+
+    #region SettingsList
+
+    public class SettingsList
     {
+        public bool loadOnStartup;
+        public bool startMinimized;
 
-        // ******************************************************************
-        // Constructors.
-        // ******************************************************************
+        public int textSize;
 
-        #region Constructor
+        public List<string> customKeywords_ADD;
+        public List<string> customKeywords_DELETE;
+        public List<string> customKeywords_MODIFY;
+        public List<string> customKeywords_UNDO;
+        public List<string> customKeywords_REDO;
 
-        private SettingsManager settingsManager;        //Main instance of settingsManager
-        private CommandType currentCommand;                //Current Command Selected             
-        private SettingsManager tempSettingsManager;    //A deep copy of settingsManager
-
-        /// <summary>
-        /// Creates a new instance of the Settings UI and loads the various Tabs
-        /// </summary>
-        /// <param name="setSettingsManager">Instance of MainSettingsManager passed in by pointer</param>
-        public Settings(SettingsManager setSettingsManager)
+        public SettingsList()
         {
-            InitializeComponent();
-            this.ShowIcon = false;                      //No icon for the Settings User Interface
-            settingsManager = setSettingsManager;       //MainSettingsManager passed by pointer to settingsManager
-
-            DisableApplyButton();                       //Only making changes will enable the Apply Button
-            LoadPersonalSettingsTab();                  //Load Personal Settings Tab (Tab 1)     
-            LoadFlexiCommandTab();                      //Load Flexi Command Tab (Tab 2)              
+            loadOnStartup = false;
+            startMinimized = false;
+            textSize = 9;
+            customKeywords_ADD = new List<string>();
+            customKeywords_DELETE = new List<string>();
+            customKeywords_MODIFY = new List<string>();
+            customKeywords_UNDO = new List<string>();
+            customKeywords_REDO = new List<string>();
         }
 
-        #endregion
-
-        // ******************************************************************
-        // Personal Settings Tab
-        // ******************************************************************
-
-        #region PersonalSettingsTab
-
-        bool firstLoad = true;
-
-        /// <summary>
-        /// Gets and sets status of the checkboxes. Ensures that a check box change won't call CheckStateChanged the first time
-        /// </summary>
-        private void LoadPersonalSettingsTab()
+        public void ClearAll()
         {
-            minimisedCheckbox.Checked = settingsManager.GetStartMinimizedStatus();
-            loadOnStartupCheckbox.Checked = settingsManager.GetLoadOnStartupStatus();
-            firstLoad = false;
+            loadOnStartup = false;
+            startMinimized = false;
+            textSize = 12;
+            customKeywords_ADD.Clear();
+            customKeywords_DELETE.Clear();
+            customKeywords_REDO.Clear();
+            customKeywords_UNDO.Clear();
+            customKeywords_MODIFY.Clear();
         }
+    }
 
-        /// <summary>
-        /// Changing the state of Start Mimized Checkbox enables the apply button
-        /// </summary>
-        private void minimisedCheckbox_CheckStateChanged(object sender, EventArgs e)
-        {
-            if (firstLoad == false)
-                EnableApplyButton();
-        }
+    #endregion
 
-        /// <summary>
-        /// Changing the state of Load on Startup Checkbox enables the apply button
-        /// </summary>
-        private void loadOnStartupCheckbox_CheckStateChanged(object sender, EventArgs e)
-        {
-            if (firstLoad == false)
-                EnableApplyButton();
-        }
-
-        #endregion
-
+    public static class Settings
+    {
         // ******************************************************************
-        // Font Tab (Not implemented yet)
+        // Static Keyword Declarations
         // ******************************************************************
 
-        #region FontTab
+        static string fileName = "Settings.xml";
+        static SettingsList settingsList;
 
-        /// <summary>
-        /// Allows changing of coloring/fonts
-        /// </summary>
-        /*
-        private void LoadFontTab()
+        static Settings()
         {
-            FontList();
+            InitializeSettings();
         }
-
-        private void FontList()
-        {
-            TreeNode treeNode = new TreeNode("Command Output");
-            FontTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("Command Input");
-            FontTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("Your Input");
-            FontTree.Nodes.Add(treeNode);
-        }
-        
-        private void FontTree_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-
-        }
-        */
-
-        #endregion
 
         // ******************************************************************
-        // Flexi Command Tab
+        // Initialization and opening of settings file
         // ******************************************************************
 
-        #region FlexiCommandTab
-
-        /// <summary>
-        /// Loads the Flexi-Command Tab Elements
-        /// </summary>
-        private void LoadFlexiCommandTab()
+        private static void InitializeSettings()
         {
-            SetUpTempSettingsManager();
-            CommandList();
-            SelectFirstNode();
+            settingsList = new SettingsList();
+            OpenFile();
         }
 
-        /// <summary>
-        /// Flexi Command Tab uses a cloned instance of Settings Manager (tempSettingsManager). Only
-        /// when apply is hit. Then those changes are copied over to the actual settings Manager permanently
-        /// </summary>
-        private void SetUpTempSettingsManager()
+        // ******************************************************************
+        // I/O Operations
+        // ******************************************************************
+
+        #region IOFileOperations
+
+        private static void OpenFile()
         {
-            tempSettingsManager = settingsManager.CloneObj();
-        }
+            System.IO.StreamReader file;
 
-        /// <summary>
-        /// Select the ADD Command First
-        /// </summary>
-        private void SelectFirstNode()
-        {
-            TreeNodeCollection nodes = CommandTree.Nodes;
-            CommandTree.SelectedNode = nodes[0];
-        }
-
-        /// <summary>
-        /// Loads all Commands into the Command Tree Element
-        /// </summary>
-        private void CommandList()
-        {
-            TreeNode treeNode = new TreeNode("ADD");
-            CommandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("DELETE");
-            CommandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("MODIFY");
-            CommandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("UNDO");
-            CommandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("REDO");
-            CommandTree.Nodes.Add(treeNode);
-        }
-
-        /// <summary>
-        /// Event handler for once a new command is selected from the Command Tree
-        /// </summary>
-        private void CommandTree_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            TreeNode treeNode = CommandTree.SelectedNode;
-            commandPreview.Text = treeNode.Text;
-            currentCommand = settingsManager.StringToCommand(treeNode.Text);
-
-            UpdateDescriptionCommand();
-            UpdateListOfCommands();
-        }
-
-        /// <summary>
-        /// Updates the Command Description Element (when new Command is selected from Command Tree)
-        /// </summary>
-        private void UpdateDescriptionCommand()
-        {
-            string description = "Command\n\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-
-            switch (currentCommand)
+            try
             {
-                case CommandType.ADD:
-                    //description = "Add Command\nDescription";
-                    break;
-                case CommandType.DELETE:
-                    //description = "Delete Command\nDescription";
-                    break;
-                case CommandType.MODIFY:
-                    //description = "Update Command\nDescription";
-                    break;
-                case CommandType.UNDO:
-                    //description = "Undo Command\nDescription";
-                    break;
-                case CommandType.REDO:
-                    //description = "Redo Command\nDescription";
-                    break;
+                file = new System.IO.StreamReader(fileName);
+                System.Xml.Serialization.XmlSerializer writer =
+                new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
+                settingsList = (SettingsList)writer.Deserialize(file);
+                file.Close();
+            }
+            catch (FileNotFoundException)
+            {
+                AlertBox.Show("Settings File Not Found, new file will be created");
+                //MessageBox.Show("Settings File Not Found, new file will be created");
+                WriteToFile();
+            }
+            catch (InvalidOperationException)
+            {
+                MessageBox.Show("There was an error with the Settings File, a new file will be created");
+                WriteToFile();
             }
 
-            commandDescription.Text = description;
         }
 
-        /// <summary>
-        /// Update the List of added user commands (when new Command is selected from Command Tree)
-        /// </summary>
-        private void UpdateListOfCommands()
+        private static void WriteToFile()
         {
-            listOfCommands.Items.Clear();
-            List<string> currentCommandList = tempSettingsManager.GetCommandList(currentCommand);
-            foreach (string item in currentCommandList)
-                listOfCommands.Items.Add(item);
+            System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
+
+            System.Xml.Serialization.XmlSerializer writer =
+            new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
+            writer.Serialize(file, settingsList);
+            file.Close();
         }
 
-        /// <summary>
-        /// Add Button Hit (Command in Text Box is added to the list of user commands)
-        /// </summary>
-        private void addUserCommandButton_Click(object sender, EventArgs e)
+        #endregion
+
+        // ******************************************************************
+        // Getters/Setters
+        // ******************************************************************
+
+        #region GettersSetters
+        internal static int textSize
         {
-            EnableApplyButton();
-            tempSettingsManager.AddCommand(userCommandInput.Text, currentCommand);
-            UpdateListOfCommands();
-            ClearInputField();
+            get { return settingsList.textSize; }
+            set
+            {
+                if ((textSize < 5) || (textSize > 14))
+                    throw new TextSizeOutOfRangeException("Text Size Out of Range");
+                settingsList.textSize = textSize;
+                WriteToFile();
+            }
         }
 
+        //internal static bool loadOnStartup { get { return settingsList.loadOnStartup; } set { settingsList.loadOnStartup = loadOnStartup; WriteToFile(); } }
+        internal static bool startMinimized { get { return settingsList.startMinimized; } set { settingsList.startMinimized = startMinimized; WriteToFile(); } }
+
+        internal static bool LoadOnStartup { get { return settingsList.loadOnStartup; } set { MessageBox.Show(LoadOnStartup.ToString()); settingsList.loadOnStartup = LoadOnStartup; WriteToFile(); } }
+
+
+        
+
+        #endregion;
+
+        // ******************************************************************
+        // Keyword Operations
+        // ******************************************************************
+
+        #region KeywordOperations
+
         /// <summary>
-        /// Remove Button Hit (Removes selected Command from the list)
+        /// This method adds a new Command to the list of available commands
+        /// If a command repeats itself, an exception will be thrown
         /// </summary>
-        private void removeButton_Click(object sender, EventArgs e)
+        /// <param name="newCommand">New Command that is to be added</param>
+        /// <param name="commandString">Specify to which CommandType it is being added to</param>
+        internal static void AddCommand(string newCommand, CommandType commandType)
         {
             try
             {
-                EnableApplyButton();
-                tempSettingsManager.RemoveCommand(listOfCommands.SelectedItem.ToString(), currentCommand);
-                UpdateListOfCommands();
-                ClearInputField();
+                switch (commandType)
+                {
+                    case CommandType.ADD:
+                        if (settingsList.customKeywords_ADD.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the ADD list already");
+                        settingsList.customKeywords_ADD.Add(newCommand);
+                        break;
+                    case CommandType.DELETE:
+                        if (settingsList.customKeywords_DELETE.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the DELETE list already");
+                        settingsList.customKeywords_DELETE.Add(newCommand);
+                        break;
+                    case CommandType.MODIFY:
+                        if (settingsList.customKeywords_MODIFY.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the MODIFY list already");
+                        settingsList.customKeywords_MODIFY.Add(newCommand);
+                        break;
+                    case CommandType.UNDO:
+                        if (settingsList.customKeywords_UNDO.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the UNDO list already");
+                        settingsList.customKeywords_UNDO.Add(newCommand);
+                        break;
+                    case CommandType.REDO:
+                        if (settingsList.customKeywords_REDO.Contains(newCommand))
+                            throw new RepeatCommandException("There is such a command in the REDO list already");
+                        settingsList.customKeywords_REDO.Add(newCommand);
+                        break;
+                }
             }
-            catch (NullReferenceException)
+            catch (RepeatCommandException e)
             {
-                MessageBox.Show("You have selected nothing to remove");
+                MessageBox.Show(e.Message);
             }
 
         }
 
-        private void ClearInputField()
+        /// <summary>
+        /// This method removes the specified command
+        /// </summary>
+        /// <param name="commandToRemove">Exact String of the Command to be removed</param>
+        /// <param name="commandString">Specify to which CommandType it is being added to</param>
+        internal static void RemoveCommand(string commandToRemove, CommandType commandType)
         {
-            userCommandInput.Text = "";
+            switch (commandType)
+            {
+                case CommandType.ADD:
+                    settingsList.customKeywords_ADD.Remove(commandToRemove);
+                    break;
+                case CommandType.DELETE:
+                    settingsList.customKeywords_DELETE.Remove(commandToRemove);
+                    break;
+                case CommandType.MODIFY:
+                    settingsList.customKeywords_MODIFY.Remove(commandToRemove);
+                    break;
+                case CommandType.UNDO:
+                    settingsList.customKeywords_UNDO.Remove(commandToRemove);
+                    break;
+                case CommandType.REDO:
+                    settingsList.customKeywords_REDO.Remove(commandToRemove);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Returns a list of all added/available user commands
+        /// </summary>
+        /// <param name="commandType">Specify the type of Command you wish to see User Commands of</param>
+        /// <returns>Returns a list of added commands</returns>
+        internal static List<string> GetCommandList(CommandType commandType)
+        {
+            List<string> getCommands = new List<string>();
+            switch (commandType)
+            {
+                case CommandType.ADD:
+                    getCommands = settingsList.customKeywords_ADD;
+                    break;
+                case CommandType.DELETE:
+                    getCommands = settingsList.customKeywords_DELETE;
+                    break;
+                case CommandType.MODIFY:
+                    getCommands = settingsList.customKeywords_MODIFY;
+                    break;
+                case CommandType.UNDO:
+                    getCommands = settingsList.customKeywords_UNDO;
+                    break;
+                case CommandType.REDO:
+                    getCommands = settingsList.customKeywords_REDO;
+                    break;
+            }
+
+            return getCommands;
+        }
+
+        /// <summary>
+        /// Pushes new set of FlexiCommands into the StringParser
+        /// </summary>
+        internal static void AddCommandsToStringParser()
+        {
+            StringParser.ResetCommandKeywords();
+            foreach (string userCommand in GetCommandList(CommandType.ADD))
+                StringParser.AddUserCommand(userCommand, CommandType.ADD);
+            foreach (string userCommand in GetCommandList(CommandType.DELETE))
+                StringParser.AddUserCommand(userCommand, CommandType.DELETE);
+            foreach (string userCommand in GetCommandList(CommandType.MODIFY))
+                StringParser.AddUserCommand(userCommand, CommandType.MODIFY);
+            foreach (string userCommand in GetCommandList(CommandType.UNDO))
+                StringParser.AddUserCommand(userCommand, CommandType.UNDO);
+            foreach (string userCommand in GetCommandList(CommandType.REDO))
+                StringParser.AddUserCommand(userCommand, CommandType.REDO);
         }
 
         #endregion
-
-        // ******************************************************************
-        // Apply, OK and Cancel Button Handlers
-        // ******************************************************************
-
-        #region UIButtons
-
-        private void EnableApplyButton()
-        {
-            applyButton.Enabled = true;
-        }
-
-        private void DisableApplyButton()
-        {
-            applyButton.Enabled = false;
-        }
-
-        /// <summary>
-        /// Sets settingsManager with all the latest changes in the Settings User Interface
-        /// </summary>
-        private void SetSettings()
-        {
-            #region ApplyChangesToSettingsTab
-
-            if (firstLoad == false)
-                settingsManager.ToggleStartMinimized(minimisedCheckbox.Checked);
-            if (firstLoad == false)
-                settingsManager.ToggleLoadOnStartup(loadOnStartupCheckbox.Checked);
-
-            #endregion
-
-            #region ApplyChangesToCommands
-
-            settingsManager.CopyUpdatedCommandsFrom(tempSettingsManager);
-            settingsManager.WriteToFile();
-
-            #endregion
-
-            #region PushCommandsToStringParser
-            settingsManager.PushCommands();
-
-            #endregion
-        }
-
-        /// <summary>
-        /// Apply Button Hit (Sets Settings and Disables the Apply Button)
-        /// </summary>
-        private void applyButton_Click(object sender, EventArgs e)
-        {
-            SetSettings();
-            DisableApplyButton();
-        }
-
-        /// <summary>
-        /// Ok Button Hit (Sets Settings and Closes Settings)
-        /// </summary>
-        private void okButton_Click(object sender, EventArgs e)
-        {
-            if(applyButton.Enabled==true)
-                SetSettings();
-            this.Close();
-        }
-
-        /// <summary>
-        /// Cancel Button Hit (Closes Settings)
-        /// </summary>
-        private void cancelButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }

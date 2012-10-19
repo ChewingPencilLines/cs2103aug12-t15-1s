@@ -13,6 +13,12 @@ namespace ToDo
     {
         const int START_INDEX = 0;
         const int END_INDEX = 1;
+        StringParser stringParser;
+
+        public CommandParser(ref StringParser stringParser)
+        {
+            this.stringParser = stringParser;
+        }
 
         public Operation ParseOperation(string input)
         {
@@ -169,8 +175,8 @@ namespace ToDo
                     else newOperation = new OperationModify((int)taskIndex, task);
                     throw new NotImplementedException();
                 case CommandType.SEARCH:
-                    newOperation = new OperationSearch("");
-                    throw new NotImplementedException();
+                    newOperation = new OperationSearch(taskName);
+                    break;
                 case CommandType.SORT:
                     throw new NotImplementedException();
                 case CommandType.REDO:

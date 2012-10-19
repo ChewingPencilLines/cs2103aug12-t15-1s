@@ -31,7 +31,7 @@ namespace ToDo
         {
             lastListedTasks = new List<Task>();
             undoStack = new Stack<Operation>();
-            storageXML = new Storage();
+            storageXML = new Storage("tasklist.xml", "settings.xml");
         }
 
         public string Execute(Operation operation, ref List<Task> taskList)
@@ -69,7 +69,8 @@ namespace ToDo
             }
             else if (operation is OperationSearch)
             {
-                throw new NotImplementedException();
+                string searchString = ((OperationSearch)operation).GetSearchString();
+                response = Search(ref lastListedTasks, taskList, searchString);
             }
             else
             {
@@ -84,7 +85,7 @@ namespace ToDo
             try
             {
                 taskList.Add(taskToAdd);
-                if (storageXML.AddTask(taskToAdd))
+                if (storageXML.AddTask(taskToAdd, 0))
                 {
                     successFlag = true;
                     return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.taskname);
@@ -132,7 +133,33 @@ namespace ToDo
                     displayString += (" TO: " + endTime.ToString());
                 }
                 displayString += "\r\n";
-                index++;
+            }
+            return displayString;
+        }
+
+        private string Search(ref List<Task> lastListedTasks, List<Task> taskList, string searchString)
+        {
+            string displayString = String.Empty;
+            foreach (Task task in taskList)
+            {
+                if (task.taskname.IndexOf(searchString) >= 0)
+                {
+                    lastListedTasks.Add(task);
+                    displayString += (task.taskname);
+                    if (task is TaskDeadline)
+                    {
+                        displayString += (" BY: " + ((TaskDeadline)task).endtime);
+                    }
+                    else if (task is TaskEvent)
+                    {
+                        DateTime startTime = ((TaskEvent)task).starttime;
+                        DateTime endTime = ((TaskEvent)task).endtime;
+                        displayString += (" AT: " + startTime.ToString());
+                        if (startTime != endTime && endTime != null)
+                            displayString += (" TO: " + endTime.ToString());
+                    }
+                    displayString += "\r\n";
+                }
             }
             lastListedTasks = new List<Task>(taskList);
             return displayString;

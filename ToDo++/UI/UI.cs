@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using Hotkeys;
 using Microsoft.Win32;
+using System.Windows.Forms.VisualStyles;
 
 namespace ToDo
 {
@@ -23,7 +24,6 @@ namespace ToDo
         #region Constructor
 
         private Hotkeys.GlobalHotkey ghk;       //Global Hotkey to Minimize to System Tray
-        SettingsManager mainSettingsManager;    //Settings Manager stores all settings data, including Flexi-Commands
         Logic logic;                            //Instance of Logic that handles Data structure and File Operations
 
         /// <summary>
@@ -32,11 +32,11 @@ namespace ToDo
         public UI()
         {
             InitializeComponent();
-            PrepareSystemTray();                //Loads Code to place App in System Tray
-            PrepareSettingsManager();           //Loads initial Settings of App and applies the settings
-            PrepareMenu();                      //Loads the menu strip
-            PrepareOutputBox();                 //Loads Output Box
-            PrepareLogic();                     //Creates instance of Logic to be used by Text Processing
+            InitializeSystemTray();                //Loads Code to place App in System Tray
+            InitializeSettings();                  //Sets the correct settings to ToDo++ at the start
+            InitializeMenu();                      //Loads the Menu
+            InitializeOutputBox();                 //Loads Output Box
+            InitializeLogic();                     //Creates instance of Logic to be used by Text Processing
         }
 
         #endregion
@@ -52,7 +52,11 @@ namespace ToDo
         /// </summary>
         #region SystemTray
 
-        private void PrepareSystemTray()
+        const int WM_NCHITTEST = 0x0084;
+        const int HTCLIENT = 1;
+        const int HTCAPTION = 2;
+
+        private void InitializeSystemTray()
         {
             ghk = new Hotkeys.GlobalHotkey(Constants.ALT, Keys.Q, this);
             ghk.Register();
@@ -64,6 +68,33 @@ namespace ToDo
             if (m.Msg == Hotkeys.Constants.WM_HOTKEY_MSG_ID)
                 MinimiseMaximiseTray();
             base.WndProc(ref m);
+
+            switch (m.Msg)
+            {
+                case WM_NCHITTEST:
+                    if (m.Result == (IntPtr)HTCLIENT)
+                    {
+                        m.Result = (IntPtr)HTCAPTION;
+                    }
+                    break;
+            }            
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            DrawGripper(e);
+        }
+
+        public void DrawGripper(PaintEventArgs e)
+        {
+            if (VisualStyleRenderer.IsElementDefined(
+                VisualStyleElement.Status.Gripper.Normal))
+            {
+                VisualStyleRenderer renderer = new VisualStyleRenderer(VisualStyleElement.Status.Gripper.Normal);
+                Rectangle rectangle1 = new Rectangle((Width) - 18, (Height) - 20, 20, 20);
+                renderer.DrawBackground(e.Graphics, rectangle1);
+            }
         }
 
         //Calling this Minimizes or Maximizes the application into system tray depending on state
@@ -110,7 +141,7 @@ namespace ToDo
 
         private void RegisterInStartup(bool isChecked)
         {
-            if (mainSettingsManager.GetLoadOnStartupStatus() == true)
+            if (isChecked == true)
             {
                 RegistryKey registryKey = Registry.CurrentUser.OpenSubKey
                 ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
@@ -133,15 +164,13 @@ namespace ToDo
         // Prepare Settings Manager
         // ******************************************************************
 
-        #region PrepareSettingsManager
+        #region PrepareSettings
 
         /// <summary>
         /// Creates an Instance of Settings Manager
         /// </summary>
-        private void PrepareSettingsManager()
+        private void InitializeSettings()
         {
-            mainSettingsManager = new SettingsManager();
-            mainSettingsManager.PushCommands();
             MinimiseToTrayWhenChecked();
             RegisterLoadOnStartupWhenChecked();
         }
@@ -151,7 +180,7 @@ namespace ToDo
         /// </summary>
         private void MinimiseToTrayWhenChecked()
         {
-            if (mainSettingsManager.GetStartMinimizedStatus() == true)
+            if(Settings.startMinimized==true)
                 MinimiseMaximiseTray();
         }
 
@@ -160,10 +189,28 @@ namespace ToDo
         /// </summary>
         private void RegisterLoadOnStartupWhenChecked()
         {
-            if (mainSettingsManager.GetLoadOnStartupStatus() == true)
+            if (Settings.LoadOnStartup == true)
                 RegisterInStartup(true);
             else
                 RegisterInStartup(false);
+        }
+
+        #endregion
+
+        // ******************************************************************
+        // Switch Between Panels (Preferences and ToDo++)
+        // ******************************************************************
+
+        #region PanelSwitching
+
+        public void SwitchToSettingsPanel()
+        {
+            this.customPanelControl.SelectedIndex = 1;
+        }
+
+        public void SwitchToToDoPanel()
+        {
+            this.customPanelControl.SelectedIndex = 0;
         }
 
         #endregion
@@ -177,10 +224,26 @@ namespace ToDo
         /// <summary>
         /// Prepare the Menu Bar. Pass an instance of settings manager into it so it can interact with it
         /// </summary>
-        private void PrepareMenu()
+        private void InitializeMenu()
         {
-            menuStrip.SetSettingsManager(mainSettingsManager);
-            menuStrip.LoadSettingsIntoMenu();
+
+        }
+
+        int selected = 0;
+        private void preferencesButton_Click(object sender, EventArgs e)
+        {
+            if (selected == 0)
+            {
+                preferencesButton.Text = "ToDo";
+                SwitchToSettingsPanel();
+                selected = 1;
+            }
+            else
+            {
+                preferencesButton.Text = "Preferences";
+                SwitchToToDoPanel();
+                selected = 0;
+            }
         }
 
         #endregion
@@ -194,10 +257,9 @@ namespace ToDo
         /// <summary>
         /// Prepare the Output Box. Pass an instance of settings manager into it so it can interact with it
         /// </summary>
-        private void PrepareOutputBox()
+        private void InitializeOutputBox()
         {
-            outputBox.SetSettingsManager(mainSettingsManager);
-            outputBox.LoadSettingsIntoOutput();
+            outputBox.InitializeWithSettings();
         }
 
         #endregion
@@ -208,7 +270,7 @@ namespace ToDo
 
         #region PrepareLogic
 
-        private void PrepareLogic()
+        private void InitializeLogic()
         {          
 
             logic = new Logic();
@@ -231,7 +293,7 @@ namespace ToDo
             string output=logic.ProcessCommand(input);
 
             outputBox.DisplayCommand(input,output);
-            outputBox.SetOutputSize(mainSettingsManager.GetTextSize());
+            outputBox.SetOutputSize(Settings.textSize);
             textInput.Clear();
         }
 
@@ -284,24 +346,6 @@ namespace ToDo
         {
             Application.Exit();
         }
-
-        /// <summary>
-        /// Increase size of Text
-        /// </summary>
-        private void increaseSizeButton_Click(object sender, EventArgs e)
-        {
-            outputBox.IncreaseSizeOfOutput();
-        }
-
-        /// <summary>
-        /// Decrease size of text
-        /// </summary>
-        private void decreaseSizeButton_Click(object sender, EventArgs e)
-        {
-            outputBox.DecreaseSizeOfOutput();
-        }
-
-
 
     }
 }
