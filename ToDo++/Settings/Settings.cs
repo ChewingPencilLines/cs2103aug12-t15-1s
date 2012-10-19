@@ -15,38 +15,44 @@ namespace ToDo
 
     public class SettingsList
     {
-        public bool loadOnStartup;
-        public bool startMinimized;
-        public int textSize;
+        public struct MiscSettings
+        {
+            private bool loadOnStartup;
+            private bool startMinimized;
+            private bool stayOnTop;
+            private int textSize;
 
-        public List<string> customKeywords_ADD;
-        public List<string> customKeywords_DELETE;
-        public List<string> customKeywords_MODIFY;
-        public List<string> customKeywords_UNDO;
-        public List<string> customKeywords_REDO;
+            public bool LoadOnStartup { get { return loadOnStartup; } set { loadOnStartup = value; } }
+            public bool StartMinimized { get { return startMinimized; } set { startMinimized = value; } }
+            public bool StayOnTop { get { return stayOnTop; } set { stayOnTop = value; } }
+            public int TextSize { get { return textSize; } set { textSize = value; } }
+
+            public MiscSettings(bool _loadOnStartup, bool _startMinimized, bool _stayOnTop, int _textSize)
+            {
+                loadOnStartup = _loadOnStartup;
+                startMinimized = _startMinimized;
+                stayOnTop = _stayOnTop;
+                textSize = _textSize;
+            }
+        }
+
+        public MiscSettings misc;
+        public Dictionary<string, CommandType> userCommandKeywords;
+        //public Dictionary<string, ContextType> userContextKeywords;
 
         public SettingsList()
         {
-            loadOnStartup = false;
-            startMinimized = false;
-            textSize = 9;
-            customKeywords_ADD = new List<string>();
-            customKeywords_DELETE = new List<string>();
-            customKeywords_MODIFY = new List<string>();
-            customKeywords_UNDO = new List<string>();
-            customKeywords_REDO = new List<string>();
+            misc = new MiscSettings(false, false, false, 8);
+            userCommandKeywords = new Dictionary<string, CommandType>();
+            //userContextKeywords = new Dictionary<string, ContextType>();
         }
 
-        public void ClearAll()
+        public bool ContainsUserCommand(string userCommand,CommandType commandType)
         {
-            loadOnStartup = false;
-            startMinimized = false;
-            textSize = 12;
-            customKeywords_ADD.Clear();
-            customKeywords_DELETE.Clear();
-            customKeywords_REDO.Clear();
-            customKeywords_UNDO.Clear();
-            customKeywords_MODIFY.Clear();
+            if (userCommandKeywords.ContainsKey(userCommand) && userCommandKeywords.ContainsValue(commandType))
+                return true;
+            else
+                return false;
         }
     }
 
@@ -84,38 +90,38 @@ namespace ToDo
 
         private static void OpenFile()
         {
-            System.IO.StreamReader file;
+            //System.IO.StreamReader file;
 
-            try
-            {
-                file = new System.IO.StreamReader(fileName);
-                System.Xml.Serialization.XmlSerializer writer =
-                new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
-                settingsList = (SettingsList)writer.Deserialize(file);
-                file.Close();
-            }
-            catch (FileNotFoundException)
-            {
-                AlertBox.Show("Settings File Not Found, new file will be created");
-                //MessageBox.Show("Settings File Not Found, new file will be created");
-                WriteToFile();
-            }
-            catch (InvalidOperationException)
-            {
-                MessageBox.Show("There was an error with the Settings File, a new file will be created");
-                WriteToFile();
-            }
+            //try
+            //{
+            //    file = new System.IO.StreamReader(fileName);
+            //    System.Xml.Serialization.XmlSerializer writer =
+            //    new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
+            //    settingsList = (SettingsList)writer.Deserialize(file);
+            //    file.Close();
+            //}
+            //catch (FileNotFoundException)
+            //{
+            //    AlertBox.Show("Settings File Not Found, new file will be created");
+            //    //MessageBox.Show("Settings File Not Found, new file will be created");
+            //    WriteToFile();
+            //}
+            //catch (InvalidOperationException)
+            //{
+            //    MessageBox.Show("There was an error with the Settings File, a new file will be created");
+            //    WriteToFile();
+            //}
 
         }
 
         private static void WriteToFile()
         {
-            System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
+            //System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
 
-            System.Xml.Serialization.XmlSerializer writer =
-            new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
-            writer.Serialize(file, settingsList);
-            file.Close();
+            //System.Xml.Serialization.XmlSerializer writer =
+            //new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
+            //writer.Serialize(file, settingsList);
+            //file.Close();
         }
 
         #endregion
@@ -125,25 +131,15 @@ namespace ToDo
         // ******************************************************************
 
         #region GettersSetters
-        internal static int textSize
-        {
-            get { return settingsList.textSize; }
-            set
-            {
-                if ((textSize < 5) || (textSize > 14))
-                    throw new TextSizeOutOfRangeException("Text Size Out of Range");
-                settingsList.textSize = textSize;
-                WriteToFile();
-            }
-        }
 
-        //internal static bool loadOnStartup { get { return settingsList.loadOnStartup; } set { settingsList.loadOnStartup = loadOnStartup; WriteToFile(); } }
-        internal static bool startMinimized { get { return settingsList.startMinimized; } set { settingsList.startMinimized = startMinimized; WriteToFile(); } }
-
-        internal static bool LoadOnStartup { get { return settingsList.loadOnStartup; } set { MessageBox.Show(LoadOnStartup.ToString()); settingsList.loadOnStartup = LoadOnStartup; WriteToFile(); } }
-
-
-        
+        internal static void SetTextSize(int size) { settingsList.misc.TextSize = size; }
+        internal static int GetTextSize() { return settingsList.misc.TextSize; }
+        internal static void SetLoadOnStartupStatus(bool status) { settingsList.misc.LoadOnStartup = status; }
+        internal static bool GetLoadOnStartupStatus() { return settingsList.misc.LoadOnStartup; }
+        internal static void SetStartMinimized(bool status) { settingsList.misc.StartMinimized = status; }
+        internal static bool GetStartMinimizeStatus() { return settingsList.misc.StartMinimized; }
+        internal static void SetStayOnTop(bool status) { settingsList.misc.StayOnTop = status; }
+        internal static bool GetStayOnTopStatus() { return settingsList.misc.StayOnTop; }
 
         #endregion;
 
@@ -163,34 +159,9 @@ namespace ToDo
         {
             try
             {
-                switch (commandType)
-                {
-                    case CommandType.ADD:
-                        if (settingsList.customKeywords_ADD.Contains(newCommand))
-                            throw new RepeatCommandException("There is such a command in the ADD list already");
-                        settingsList.customKeywords_ADD.Add(newCommand);
-                        break;
-                    case CommandType.DELETE:
-                        if (settingsList.customKeywords_DELETE.Contains(newCommand))
-                            throw new RepeatCommandException("There is such a command in the DELETE list already");
-                        settingsList.customKeywords_DELETE.Add(newCommand);
-                        break;
-                    case CommandType.MODIFY:
-                        if (settingsList.customKeywords_MODIFY.Contains(newCommand))
-                            throw new RepeatCommandException("There is such a command in the MODIFY list already");
-                        settingsList.customKeywords_MODIFY.Add(newCommand);
-                        break;
-                    case CommandType.UNDO:
-                        if (settingsList.customKeywords_UNDO.Contains(newCommand))
-                            throw new RepeatCommandException("There is such a command in the UNDO list already");
-                        settingsList.customKeywords_UNDO.Add(newCommand);
-                        break;
-                    case CommandType.REDO:
-                        if (settingsList.customKeywords_REDO.Contains(newCommand))
-                            throw new RepeatCommandException("There is such a command in the REDO list already");
-                        settingsList.customKeywords_REDO.Add(newCommand);
-                        break;
-                }
+                if (settingsList.ContainsUserCommand(newCommand,commandType))
+                    throw new RepeatCommandException("There is such a command in the list already");
+                settingsList.userCommandKeywords.Add(newCommand, commandType);
             }
             catch (RepeatCommandException e)
             {
@@ -202,28 +173,10 @@ namespace ToDo
         /// <summary>
         /// This method removes the specified command
         /// </summary>
-        /// <param name="commandToRemove">Exact String of the Command to be removed</param>
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
-        internal static void RemoveCommand(string commandToRemove, CommandType commandType)
+        internal static void RemoveCommand(string commandToRemove)
         {
-            switch (commandType)
-            {
-                case CommandType.ADD:
-                    settingsList.customKeywords_ADD.Remove(commandToRemove);
-                    break;
-                case CommandType.DELETE:
-                    settingsList.customKeywords_DELETE.Remove(commandToRemove);
-                    break;
-                case CommandType.MODIFY:
-                    settingsList.customKeywords_MODIFY.Remove(commandToRemove);
-                    break;
-                case CommandType.UNDO:
-                    settingsList.customKeywords_UNDO.Remove(commandToRemove);
-                    break;
-                case CommandType.REDO:
-                    settingsList.customKeywords_REDO.Remove(commandToRemove);
-                    break;
-            }
+            settingsList.userCommandKeywords.Remove(commandToRemove);
         }
 
         /// <summary>
@@ -234,23 +187,9 @@ namespace ToDo
         internal static List<string> GetCommandList(CommandType commandType)
         {
             List<string> getCommands = new List<string>();
-            switch (commandType)
-            {
-                case CommandType.ADD:
-                    getCommands = settingsList.customKeywords_ADD;
-                    break;
-                case CommandType.DELETE:
-                    getCommands = settingsList.customKeywords_DELETE;
-                    break;
-                case CommandType.MODIFY:
-                    getCommands = settingsList.customKeywords_MODIFY;
-                    break;
-                case CommandType.UNDO:
-                    getCommands = settingsList.customKeywords_UNDO;
-                    break;
-                case CommandType.REDO:
-                    getCommands = settingsList.customKeywords_REDO;
-                    break;
+            foreach(var pair in settingsList.userCommandKeywords){
+                if(pair.Value==commandType)
+                    getCommands.Add(pair.Key);
             }
 
             return getCommands;
@@ -261,17 +200,7 @@ namespace ToDo
         /// </summary>
         internal static void AddCommandsToStringParser()
         {
-            StringParser.ResetCommandKeywords();
-            foreach (string userCommand in GetCommandList(CommandType.ADD))
-                StringParser.AddUserCommand(userCommand, CommandType.ADD);
-            foreach (string userCommand in GetCommandList(CommandType.DELETE))
-                StringParser.AddUserCommand(userCommand, CommandType.DELETE);
-            foreach (string userCommand in GetCommandList(CommandType.MODIFY))
-                StringParser.AddUserCommand(userCommand, CommandType.MODIFY);
-            foreach (string userCommand in GetCommandList(CommandType.UNDO))
-                StringParser.AddUserCommand(userCommand, CommandType.UNDO);
-            foreach (string userCommand in GetCommandList(CommandType.REDO))
-                StringParser.AddUserCommand(userCommand, CommandType.REDO);
+            throw new NotImplementedException();
         }
 
         #endregion

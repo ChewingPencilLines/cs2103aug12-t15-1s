@@ -21,21 +21,21 @@ namespace ToDo
 
         private void InitializeCheckBoxes()
         {
-            minimisedCheckbox.Checked = Settings.startMinimized;
-            loadOnStartupCheckbox.Checked = Settings.LoadOnStartup;
+            minimisedCheckbox.Checked = Settings.GetStartMinimizeStatus();
+            loadOnStartupCheckbox.Checked = Settings.GetLoadOnStartupStatus();
             firstLoad = true;
         }
 
         private void minimisedCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             if (firstLoad == true)
-                Settings.startMinimized = minimisedCheckbox.Checked;
+                Settings.SetStartMinimized(minimisedCheckbox.Checked);
         }
 
         private void loadOnStartupCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             if (firstLoad == true)
-                Settings.LoadOnStartup = loadOnStartupCheckbox.Checked;
+                Settings.SetLoadOnStartupStatus(loadOnStartupCheckbox.Checked);
         }
     }
 }
