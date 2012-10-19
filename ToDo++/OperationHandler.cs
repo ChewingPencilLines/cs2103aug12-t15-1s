@@ -49,12 +49,25 @@ namespace ToDo
                 response = Add(taskToAdd, ref taskList, out successFlag);
             }
             else if (operation is OperationDelete)
-            {
-                int index = ((OperationDelete)operation).Index;
-                Debug.Assert(index > 0 && index < taskList.Count);
-                Task taskToDelete = lastListedTasks[index-1];
-                response = Delete(ref taskToDelete, ref taskList, out successFlag);
-            }
+            {   
+                 int index = ((OperationDelete)operation).Index;
+                 string deleteString = ((OperationDelete)operation).DeleteString;
+                 if (index != -1)
+                 {
+                     Debug.Assert(index > 0 && index < taskList.Count);
+                     Task taskToDelete = lastListedTasks[index];
+                     response = Delete(ref taskToDelete, ref taskList, out successFlag);
+                     lastListedTasks = null;
+                 }
+                 else if (deleteString != null)
+                 {
+                     response = Search(ref lastListedTasks, taskList, deleteString);
+                 }
+                 else
+                 {
+                     return REPONSE_INVALID_COMMAND;
+                 }
+             }
             else if (operation is OperationDisplay)
             {
                 response = DisplayAll(taskList);
@@ -116,10 +129,10 @@ namespace ToDo
         private string DisplayAll(List<Task> taskList)
         {
             string displayString = String.Empty;
-            int index = 0;
+            int index = 1;
             foreach (Task task in taskList)
             {                
-                displayString += ((index+1) + ". " + task.taskname);
+                displayString += ((index) + ". " + task.taskname);
                 if (task is TaskDeadline)
                 {
                     displayString += (" BY: " + ((TaskDeadline)task).endtime);
