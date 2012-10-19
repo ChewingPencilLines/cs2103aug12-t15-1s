@@ -5,6 +5,7 @@ using System.Text;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using System.Xml.Serialization;
 
 namespace ToDo
@@ -12,40 +13,79 @@ namespace ToDo
     public class Storage
     {
         XmlWriter taskWriter, settingsWriter;
+        XmlWriterSettings xmlSettings;
 
         public Storage(string taskStorageFile, string settingsFile)
         {
+            //InitializeXMLSettings();
+            //CreateNewTaskFile(taskStorageFile, xmlSettings);
+            //CreateNewSettingsFile(settingsFile, xmlSettings);
+        }
+        /*
+        private static void InitializeXMLSettings()
+        {
             // Create an XmlWriterSettings object with the correct options. 
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            settings.IndentChars = ("\t");
-            settings.OmitXmlDeclaration = false;
+            xmlSettings = new XmlWriterSettings();
+            xmlSettings.Indent = true;
+            xmlSettings.IndentChars = ("\t");
+            xmlSettings.OmitXmlDeclaration = false;
+        }*/
 
+        internal bool CreateNewTaskFile(string filename)
+        {
             try
             {
-                using (taskWriter = XmlWriter.Create(taskStorageFile, settings))
-                {
-                    taskWriter.WriteStartDocument();
-                }
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml("<tasks>" +
+                            "</tasks>");
 
-                using (settingsWriter = XmlWriter.Create(settingsFile, settings))
+                // Create a new element node.
+                XmlNode newElem = doc.CreateNode("element", "tasks", "");
+                newElem.InnerText = "290";
+
+                XmlElement root = doc.DocumentElement;
+                root.AppendChild(newElem);
+
+                doc.Save("testfile.xml");
+            }
+            catch (ArgumentNullException)
+            {
+                CustomMessageBox.Show("Error!", "Task filename was not set!");
+            }
+            catch (InvalidOperationException)
+            {
+                CustomMessageBox.Show("Error!", "Failed to create task file.");
+            }
+            return false;
+        }
+
+        internal bool CreateNewSettingsFile(string filename, XmlWriterSettings settings)
+        {
+            try
+            {
+                using (settingsWriter = XmlWriter.Create(filename, settings))
                 {
                     settingsWriter.WriteStartDocument();
+
+                    return true;
                 }
-            }            
-            catch (ArgumentNullException nullfilename)
-            {
-                CustomMessageBox.Show("Error!", nullfilename.ParamName + " name was not set!");
             }
-            catch (InvalidOperationException failedCreation)
+            catch (ArgumentNullException)
             {
-                CustomMessageBox.Show("Error!",  "Failed to create: " + failedCreation.Source);
+                CustomMessageBox.Show("Error!", "Settings filename was not set!");
             }
+            catch (InvalidOperationException)
+            {
+                CustomMessageBox.Show("Error!", "Failed to create settings file.");
+            }
+            return false;
         }
+
+
 
         internal bool AddTask(Task taskToAdd, int id)
         {
-
+            XPathNavigator navigator;
             return true;
             throw new NotImplementedException();
         }

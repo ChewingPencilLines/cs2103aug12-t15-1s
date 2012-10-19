@@ -10,11 +10,13 @@ namespace ToDo
         OperationHandler operationHandler;
         CommandParser commandParser;
         StringParser stringParser;
+        Storage storage;
         List<Task> taskList;
   
         public Logic()
-        { 
-            operationHandler = new OperationHandler();
+        {
+            storage = new Storage("tasklist.xml", "settingstest.xml");
+            operationHandler = new OperationHandler(ref storage);
             stringParser = new StringParser();
             commandParser = new CommandParser(ref stringParser); 
             taskList = new List<Task>();

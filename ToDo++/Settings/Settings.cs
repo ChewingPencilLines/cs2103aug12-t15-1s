@@ -17,7 +17,6 @@ namespace ToDo
     {
         public bool loadOnStartup;
         public bool startMinimized;
-
         public int textSize;
 
         public List<string> customKeywords_ADD;

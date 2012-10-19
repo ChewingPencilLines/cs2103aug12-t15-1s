@@ -27,11 +27,11 @@ namespace ToDo
         const string REPONSE_INVALID_COMMAND = "Invalid command!"; 
         #endregion
 
-        public OperationHandler()
+        public OperationHandler(ref Storage storageXML)
         {
             lastListedTasks = new List<Task>();
             undoStack = new Stack<Operation>();
-            storageXML = new Storage("tasklist.xml", "settings.xml");
+            this.storageXML = storageXML;
         }
 
         public string Execute(Operation operation, ref List<Task> taskList)
