@@ -35,19 +35,38 @@ namespace ToDo
     }
 
     public class OperationDelete : Operation
-    {
-        private int index;
-
-        public int Index
-        {
-            get { return index; }
-        }
-
-        public OperationDelete(int index)
-        {
-            this.index = index - 1;
-        }
-    }
+     {
+         private int index;
+         private string deleteString;
+ 
+         public int Index
+         {
+             get
+             {
+                 return index;
+             } 
+         }
+ 
+         public string DeleteString
+         {
+             get
+             {
+                 return deleteString;
+             }
+         }
+        
+         public OperationDelete(int index)
+         {
+             this.index = index - 1;
+             this.deleteString = null;
+         }
+ 
+         public OperationDelete(string deleteString)
+         {
+             this.index = -1;
+             this.deleteString = deleteString;
+         }
+     }
 
     public class OperationDisplay : Operation
     {
