@@ -31,26 +31,28 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.loadButton = new System.Windows.Forms.Button();
             this.preferencesButton = new System.Windows.Forms.Button();
             this.helpButton = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.customPanelControl = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.textInput = new System.Windows.Forms.TextBox();
             this.outputBox = new ToDo.OutputBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.flexiCommandsControl1 = new ToDo.FlexiCommandsControl();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.preferencesPanel1 = new ToDo.PreferencesPanel();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.customScrollbar1 = new CustomControls.CustomScrollbar();
             this.dateTimeControl1 = new ToDo.DateTimeControl();
-            this.startingOptions1 = new ToDo.StartingOptions();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.customPanelControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // notifyIcon_taskBar
@@ -59,17 +61,6 @@
             this.notifyIcon_taskBar.Text = "notifyIcon";
             this.notifyIcon_taskBar.Visible = true;
             this.notifyIcon_taskBar.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Enabled = false;
-            this.pictureBox1.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.ErrorImage")));
-            this.pictureBox1.Image = global::ToDo.Properties.Resources.CoverPhoto;
-            this.pictureBox1.Location = new System.Drawing.Point(8, 47);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(377, 29);
-            this.pictureBox1.TabIndex = 9;
-            this.pictureBox1.TabStop = false;
             // 
             // loadButton
             // 
@@ -113,6 +104,17 @@
             this.helpButton.TabIndex = 15;
             this.helpButton.Text = "Help";
             this.helpButton.UseVisualStyleBackColor = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Enabled = false;
+            this.pictureBox1.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.ErrorImage")));
+            this.pictureBox1.Image = global::ToDo.Properties.Resources.CoverPhoto;
+            this.pictureBox1.Location = new System.Drawing.Point(8, 47);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(377, 29);
+            this.pictureBox1.TabIndex = 9;
+            this.pictureBox1.TabStop = false;
             // 
             // customPanelControl
             // 
@@ -161,8 +163,10 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.SteelBlue;
-            this.tabPage2.Controls.Add(this.groupBox2);
-            this.tabPage2.Controls.Add(this.groupBox1);
+            this.tabPage2.Controls.Add(this.panel1);
+            this.tabPage2.Controls.Add(this.pictureBox3);
+            this.tabPage2.Controls.Add(this.pictureBox2);
+            this.tabPage2.Controls.Add(this.customScrollbar1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -170,35 +174,58 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Preferences";
             // 
-            // groupBox2
+            // panel1
             // 
-            this.groupBox2.Controls.Add(this.flexiCommandsControl1);
-            this.groupBox2.ForeColor = System.Drawing.Color.Aqua;
-            this.groupBox2.Location = new System.Drawing.Point(6, 67);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(373, 119);
-            this.groupBox2.TabIndex = 3;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "FlexiCommands";
+            this.panel1.Controls.Add(this.preferencesPanel1);
+            this.panel1.Location = new System.Drawing.Point(1, -5);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(365, 180);
+            this.panel1.TabIndex = 3;
             // 
-            // flexiCommandsControl1
+            // preferencesPanel1
             // 
-            this.flexiCommandsControl1.BackColor = System.Drawing.Color.Transparent;
-            this.flexiCommandsControl1.Location = new System.Drawing.Point(-9, 11);
-            this.flexiCommandsControl1.Name = "flexiCommandsControl1";
-            this.flexiCommandsControl1.Size = new System.Drawing.Size(369, 111);
-            this.flexiCommandsControl1.TabIndex = 0;
+            this.preferencesPanel1.BackColor = System.Drawing.Color.SteelBlue;
+            this.preferencesPanel1.Location = new System.Drawing.Point(3, 3);
+            this.preferencesPanel1.Name = "preferencesPanel1";
+            this.preferencesPanel1.Size = new System.Drawing.Size(362, 277);
+            this.preferencesPanel1.TabIndex = 0;
             // 
-            // groupBox1
+            // pictureBox3
             // 
-            this.groupBox1.Controls.Add(this.startingOptions1);
-            this.groupBox1.ForeColor = System.Drawing.Color.Aqua;
-            this.groupBox1.Location = new System.Drawing.Point(6, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(373, 61);
-            this.groupBox1.TabIndex = 2;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Starting Options";
+            this.pictureBox3.Location = new System.Drawing.Point(379, -1);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(10, 171);
+            this.pictureBox3.TabIndex = 2;
+            this.pictureBox3.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Location = new System.Drawing.Point(356, 1);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(10, 171);
+            this.pictureBox2.TabIndex = 1;
+            this.pictureBox2.TabStop = false;
+            // 
+            // customScrollbar1
+            // 
+            this.customScrollbar1.ChannelColor = System.Drawing.Color.DodgerBlue;
+            this.customScrollbar1.DownArrowImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.DownArrowImage")));
+            this.customScrollbar1.LargeChange = 10;
+            this.customScrollbar1.Location = new System.Drawing.Point(365, -1);
+            this.customScrollbar1.Maximum = 100;
+            this.customScrollbar1.Minimum = 0;
+            this.customScrollbar1.MinimumSize = new System.Drawing.Size(15, 92);
+            this.customScrollbar1.Name = "customScrollbar1";
+            this.customScrollbar1.Size = new System.Drawing.Size(15, 180);
+            this.customScrollbar1.SmallChange = 1;
+            this.customScrollbar1.TabIndex = 0;
+            this.customScrollbar1.ThumbBottomImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.ThumbBottomImage")));
+            this.customScrollbar1.ThumbBottomSpanImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.ThumbBottomSpanImage")));
+            this.customScrollbar1.ThumbMiddleImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.ThumbMiddleImage")));
+            this.customScrollbar1.ThumbTopImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.ThumbTopImage")));
+            this.customScrollbar1.ThumbTopSpanImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.ThumbTopSpanImage")));
+            this.customScrollbar1.UpArrowImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.UpArrowImage")));
+            this.customScrollbar1.Value = 0;
             // 
             // dateTimeControl1
             // 
@@ -207,14 +234,6 @@
             this.dateTimeControl1.Name = "dateTimeControl1";
             this.dateTimeControl1.Size = new System.Drawing.Size(150, 36);
             this.dateTimeControl1.TabIndex = 10;
-            // 
-            // startingOptions1
-            // 
-            this.startingOptions1.BackColor = System.Drawing.Color.Transparent;
-            this.startingOptions1.Location = new System.Drawing.Point(6, 7);
-            this.startingOptions1.Name = "startingOptions1";
-            this.startingOptions1.Size = new System.Drawing.Size(248, 49);
-            this.startingOptions1.TabIndex = 0;
             // 
             // UI
             // 
@@ -237,8 +256,9 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -253,13 +273,14 @@
         private CustomPanelControl customPanelControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private FlexiCommandsControl flexiCommandsControl1;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.Button preferencesButton;
         private System.Windows.Forms.Button helpButton;
-        private StartingOptions startingOptions1;
+        private CustomControls.CustomScrollbar customScrollbar1;
+        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Panel panel1;
+        private PreferencesPanel preferencesPanel1;
     }
 }
 
