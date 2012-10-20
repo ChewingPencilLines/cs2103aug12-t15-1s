@@ -42,17 +42,15 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.coverPanel = new System.Windows.Forms.Panel();
             this.shiftPanel = new System.Windows.Forms.Panel();
-            this.preferencesPanel1 = new ToDo.PreferencesPanel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.customScrollbar1 = new CustomControls.CustomScrollbar();
+            this.customScrollbar = new CustomControls.CustomScrollbar();
             this.dateTimeControl1 = new ToDo.DateTimeControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.customPanelControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.coverPanel.SuspendLayout();
-            this.shiftPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -136,7 +134,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(440, 221);
+            this.tabPage1.Size = new System.Drawing.Size(372, 168);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             // 
@@ -168,7 +166,7 @@
             this.tabPage2.Controls.Add(this.coverPanel);
             this.tabPage2.Controls.Add(this.pictureBox3);
             this.tabPage2.Controls.Add(this.pictureBox2);
-            this.tabPage2.Controls.Add(this.customScrollbar1);
+            this.tabPage2.Controls.Add(this.customScrollbar);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -187,19 +185,10 @@
             // shiftPanel
             // 
             this.shiftPanel.AutoScroll = true;
-            this.shiftPanel.Controls.Add(this.preferencesPanel1);
             this.shiftPanel.Location = new System.Drawing.Point(5, 3);
             this.shiftPanel.Name = "shiftPanel";
             this.shiftPanel.Size = new System.Drawing.Size(383, 183);
             this.shiftPanel.TabIndex = 3;
-            // 
-            // preferencesPanel1
-            // 
-            this.preferencesPanel1.BackColor = System.Drawing.Color.SteelBlue;
-            this.preferencesPanel1.Location = new System.Drawing.Point(5, 6);
-            this.preferencesPanel1.Name = "preferencesPanel1";
-            this.preferencesPanel1.Size = new System.Drawing.Size(360, 240);
-            this.preferencesPanel1.TabIndex = 0;
             // 
             // pictureBox3
             // 
@@ -217,26 +206,27 @@
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
-            // customScrollbar1
+            // customScrollbar
             // 
-            this.customScrollbar1.ChannelColor = System.Drawing.Color.DodgerBlue;
-            this.customScrollbar1.DownArrowImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.DownArrowImage")));
-            this.customScrollbar1.LargeChange = 10;
-            this.customScrollbar1.Location = new System.Drawing.Point(365, -1);
-            this.customScrollbar1.Maximum = 100;
-            this.customScrollbar1.Minimum = 0;
-            this.customScrollbar1.MinimumSize = new System.Drawing.Size(15, 92);
-            this.customScrollbar1.Name = "customScrollbar1";
-            this.customScrollbar1.Size = new System.Drawing.Size(15, 180);
-            this.customScrollbar1.SmallChange = 1;
-            this.customScrollbar1.TabIndex = 0;
-            this.customScrollbar1.ThumbBottomImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.ThumbBottomImage")));
-            this.customScrollbar1.ThumbBottomSpanImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.ThumbBottomSpanImage")));
-            this.customScrollbar1.ThumbMiddleImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.ThumbMiddleImage")));
-            this.customScrollbar1.ThumbTopImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.ThumbTopImage")));
-            this.customScrollbar1.ThumbTopSpanImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.ThumbTopSpanImage")));
-            this.customScrollbar1.UpArrowImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar1.UpArrowImage")));
-            this.customScrollbar1.Value = 0;
+            this.customScrollbar.ChannelColor = System.Drawing.Color.DodgerBlue;
+            this.customScrollbar.DownArrowImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar.DownArrowImage")));
+            this.customScrollbar.LargeChange = 10;
+            this.customScrollbar.Location = new System.Drawing.Point(365, -1);
+            this.customScrollbar.Maximum = 100;
+            this.customScrollbar.Minimum = 0;
+            this.customScrollbar.MinimumSize = new System.Drawing.Size(15, 92);
+            this.customScrollbar.Name = "customScrollbar";
+            this.customScrollbar.Size = new System.Drawing.Size(15, 180);
+            this.customScrollbar.SmallChange = 1;
+            this.customScrollbar.TabIndex = 0;
+            this.customScrollbar.ThumbBottomImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar.ThumbBottomImage")));
+            this.customScrollbar.ThumbBottomSpanImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar.ThumbBottomSpanImage")));
+            this.customScrollbar.ThumbMiddleImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar.ThumbMiddleImage")));
+            this.customScrollbar.ThumbTopImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar.ThumbTopImage")));
+            this.customScrollbar.ThumbTopSpanImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar.ThumbTopSpanImage")));
+            this.customScrollbar.UpArrowImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar.UpArrowImage")));
+            this.customScrollbar.Value = 0;
+            this.customScrollbar.Scroll += new System.EventHandler(this.customScrollbar_Scroll);
             // 
             // dateTimeControl1
             // 
@@ -268,7 +258,6 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.coverPanel.ResumeLayout(false);
-            this.shiftPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
@@ -288,11 +277,10 @@
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.Button preferencesButton;
         private System.Windows.Forms.Button helpButton;
-        private CustomControls.CustomScrollbar customScrollbar1;
+        private CustomControls.CustomScrollbar customScrollbar;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Panel shiftPanel;
-        private PreferencesPanel preferencesPanel1;
         private System.Windows.Forms.Panel coverPanel;
     }
 }
