@@ -40,7 +40,8 @@
             this.textInput = new System.Windows.Forms.TextBox();
             this.outputBox = new ToDo.OutputBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.coverPanel = new System.Windows.Forms.Panel();
+            this.shiftPanel = new System.Windows.Forms.Panel();
             this.preferencesPanel1 = new ToDo.PreferencesPanel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -50,7 +51,8 @@
             this.customPanelControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.coverPanel.SuspendLayout();
+            this.shiftPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -134,7 +136,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(372, 168);
+            this.tabPage1.Size = new System.Drawing.Size(440, 221);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             // 
@@ -163,7 +165,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.SteelBlue;
-            this.tabPage2.Controls.Add(this.panel1);
+            this.tabPage2.Controls.Add(this.coverPanel);
             this.tabPage2.Controls.Add(this.pictureBox3);
             this.tabPage2.Controls.Add(this.pictureBox2);
             this.tabPage2.Controls.Add(this.customScrollbar1);
@@ -174,20 +176,29 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Preferences";
             // 
-            // panel1
+            // coverPanel
             // 
-            this.panel1.Controls.Add(this.preferencesPanel1);
-            this.panel1.Location = new System.Drawing.Point(1, -5);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(365, 180);
-            this.panel1.TabIndex = 3;
+            this.coverPanel.Controls.Add(this.shiftPanel);
+            this.coverPanel.Location = new System.Drawing.Point(-9, -10);
+            this.coverPanel.Name = "coverPanel";
+            this.coverPanel.Size = new System.Drawing.Size(370, 194);
+            this.coverPanel.TabIndex = 4;
+            // 
+            // shiftPanel
+            // 
+            this.shiftPanel.AutoScroll = true;
+            this.shiftPanel.Controls.Add(this.preferencesPanel1);
+            this.shiftPanel.Location = new System.Drawing.Point(5, 3);
+            this.shiftPanel.Name = "shiftPanel";
+            this.shiftPanel.Size = new System.Drawing.Size(383, 183);
+            this.shiftPanel.TabIndex = 3;
             // 
             // preferencesPanel1
             // 
             this.preferencesPanel1.BackColor = System.Drawing.Color.SteelBlue;
-            this.preferencesPanel1.Location = new System.Drawing.Point(3, 3);
+            this.preferencesPanel1.Location = new System.Drawing.Point(5, 6);
             this.preferencesPanel1.Name = "preferencesPanel1";
-            this.preferencesPanel1.Size = new System.Drawing.Size(362, 277);
+            this.preferencesPanel1.Size = new System.Drawing.Size(360, 240);
             this.preferencesPanel1.TabIndex = 0;
             // 
             // pictureBox3
@@ -256,7 +267,8 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
+            this.coverPanel.ResumeLayout(false);
+            this.shiftPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
@@ -279,8 +291,9 @@
         private CustomControls.CustomScrollbar customScrollbar1;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel shiftPanel;
         private PreferencesPanel preferencesPanel1;
+        private System.Windows.Forms.Panel coverPanel;
     }
 }
 
