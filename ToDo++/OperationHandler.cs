@@ -98,7 +98,7 @@ namespace ToDo
             try
             {
                 taskList.Add(taskToAdd);
-                if (storageXML.AddTask(taskToAdd, 0))
+                if (storageXML.AddTask(taskToAdd, "id"))
                 {
                     successFlag = true;
                     return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.taskname);

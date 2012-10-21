@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+using System.Xml.Linq;
 
 namespace ToDo
 {
@@ -22,10 +21,8 @@ namespace ToDo
          */
         public string taskname;
         public bool state;
-        public Task()
-        {
-
-        }
+        public Task() { }
+        public abstract XElement ToXElement();
     } 
     #endregion
 
@@ -34,7 +31,6 @@ namespace ToDo
     // ******************************************************************
 
     #region Definition of three different task types
-    [XmlInclude(typeof(TaskFloating))]
     public class TaskFloating : Task
     {
         public TaskFloating()
@@ -46,9 +42,18 @@ namespace ToDo
             taskname = TaskName;
             state = false;
         }
+
+        public override XElement ToXElement()
+        {
+            XElement task = new XElement("Task",
+                            new XAttribute("type", "Floating"),
+                            new XElement("Name", taskname),
+                            new XElement("State", state.ToString())
+                            );
+            return task;
+        }
     }
 
-    [XmlInclude(typeof(TaskDeadline))]
     public class TaskDeadline : Task
     {
         public DateTime endtime;
@@ -62,9 +67,19 @@ namespace ToDo
             endtime = EndTime;
             state = false;
         }
+
+        public override XElement ToXElement()
+        {
+            XElement task = new XElement("Task",
+                            new XAttribute("type", "Deadline"),
+                            new XElement("Name", taskname),
+                            new XElement("EndTime", endtime.ToString()),
+                            new XElement("State", state.ToString())
+                            );
+            return task;
+        }
     }
 
-    [XmlInclude(typeof(TaskEvent))]
     public class TaskEvent : Task
     {
         public DateTime endtime;
@@ -79,6 +94,18 @@ namespace ToDo
             starttime = StartTime;
             endtime = EndTime;
             state = false;
+        }
+
+        public override XElement ToXElement()
+        {
+            XElement task = new XElement("Task",
+                            new XAttribute("type", "Event"),
+                            new XElement("Name", taskname),
+                            new XElement("StartTime", starttime.ToString()),
+                            new XElement("EndTime", endtime.ToString()),
+                            new XElement("State", state.ToString())
+                            );
+            return task;
         }
     }
      #endregion
