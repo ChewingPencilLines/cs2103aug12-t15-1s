@@ -36,6 +36,7 @@ namespace ToDo
             InitializeSettings();                  //Sets the correct settings to ToDo++ at the start
             InitializeMenu();                      //Loads the Menu
             InitializeOutputBox();                 //Loads Output Box
+            IntializeScrolling();              //Loads the Scrolling Bar in the Settings Panel
             InitializeLogic();                     //Creates instance of Logic to be used by Text Processing
         }
 
@@ -211,6 +212,34 @@ namespace ToDo
         public void SwitchToToDoPanel()
         {
             this.customPanelControl.SelectedIndex = 0;
+        }
+
+        #endregion
+
+        #region SettingsScrollBar
+
+        private void IntializeScrolling()
+        {
+            PreferencesPanel lg = new PreferencesPanel();
+            lg.Location = new Point(5, 5);
+            this.shiftPanel.Controls.Add(lg);
+
+            shiftPanel.AutoScrollPosition = new Point(0, customScrollbar.Value);
+
+            Point pt = new Point(this.shiftPanel.AutoScrollPosition.X, this.shiftPanel.AutoScrollPosition.Y);
+            this.customScrollbar.Minimum = 0;
+            this.customScrollbar.Maximum = this.shiftPanel.DisplayRectangle.Height;
+            this.customScrollbar.LargeChange = customScrollbar.Maximum / customScrollbar.Height + this.shiftPanel.Height;
+            this.customScrollbar.SmallChange = 15;
+            this.customScrollbar.Value = Math.Abs(this.shiftPanel.AutoScrollPosition.Y);
+
+        }
+
+        private void customScrollbar_Scroll(object sender, EventArgs e)
+        {
+            shiftPanel.AutoScrollPosition = new Point(0, customScrollbar.Value);
+            customScrollbar.Invalidate();
+            Application.DoEvents();
         }
 
         #endregion
