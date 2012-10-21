@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using System.IO;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.XPath;
 using System.Xml.Serialization;
 
 namespace ToDo
@@ -29,13 +29,13 @@ namespace ToDo
                             "</tasks>");
 
                 // Create a new element node.
-                XmlNode newElem = doc.CreateNode("element", "tasks", "");
+                XmlNode newElem = doc.CreateNode("element", "task", "");
                 newElem.InnerText = "task1";
 
                 XmlElement root = doc.DocumentElement;
                 root.AppendChild(newElem);
 
-                doc.Save("testfile.xml");
+                doc.Save("testfile.xml");                
             }
             catch (ArgumentNullException)
             {
@@ -55,21 +55,10 @@ namespace ToDo
         
         internal bool AddTask(Task taskToAdd, string id)
         {
-            XmlDocument doc = new XmlDocument();
-            XmlTextReader reader = new XmlTextReader(taskStorageFile);
-            reader.WhitespaceHandling = WhitespaceHandling.None;
-            reader.MoveToContent();
-            reader.Read();
-            doc.Load(reader);
-            doc.CreateNode("element", id, "");
-            XmlSerializer xS = new XmlSerializer(taskToAdd.GetType(), "");
-            try
-            {
-             //   xS.Serialize(doc, taskToAdd);
-            } 
-            catch (Exception)
-            {            
-            }
+            XDocument doc = XDocument.Load("testfile.xml");
+            XElement newElem = taskToAdd.ToXElement();
+            doc.Root.Add(newElem);
+            doc.Save("testfile.xml");
             return true;
         }
 
