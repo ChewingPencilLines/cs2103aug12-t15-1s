@@ -5,25 +5,37 @@ using System.Text;
 using System.Xml.Linq;
 
 namespace ToDo
-{   
-    public class Task
+{
+    // ******************************************************************
+    // Abstract definition for task
+    // ******************************************************************
+
+    #region Abstract definition for task    
+    
+    public abstract class Task
     {
-        /*
-         * taskname should be public then xml can write this.
-         * state is false means the task is undone.
-         * @ivan to @alice: NO. make it a property (encapsulate field). Look @ how i do Tokens.
-         */
-
-        public enum TaskType { Floating, Deadline, Event}
-
         protected string taskName;
+        public string TaskName
+        {
+            get { return taskName; }
+            //set { taskName = value; }
+        }
+
         protected bool state;
-        protected TaskType type;
+        public bool State
+        {
+            get { return state; }
+            set { state = value; }
+        }
+
         protected int id;
+        public int ID
+        {
+            get { return id; }
+            //set { id = value; }
+        }
 
-        public virtual XElement ToXElement() { return null; }
-
-        internal Task(string taskName, bool state, int forceID)
+        public Task(string taskName, bool state, int forceID)
         {
             this.taskName = taskName;
             this.state = state;
@@ -32,83 +44,66 @@ namespace ToDo
             else forceID = id;
         }
 
-        internal string TaskName
-        {
-            get { return taskName; }
-        }
+        public abstract XElement ToXElement();
 
-        internal bool State
+        public override int GetHashCode()
         {
-            get { return state; }
-            set { state = value; }
-        }
-
-        internal TaskType Type
-        { 
-            get { return type; } 
-        }
-
-        internal int ID
-        {
-            get { return id; }
-            //set { id = value; }
+            int newHashCode = Math.Abs(base.GetHashCode() ^ (int)DateTime.Now.ToBinary());
+            return newHashCode;
         }
     } 
-
+    #endregion
 
     // ******************************************************************
     // Definition of derived Tasks
     // ******************************************************************
 
-    #region Definition of derived Tasks
-    class TaskFloating : Task
+    #region Definition of derived tasks
+    public class TaskFloating : Task
     {
-        internal TaskFloating()
+        public TaskFloating()
             : this(null)
         { }
 
-        internal TaskFloating(string taskName, bool state = false, int forceID = -1) : base (taskName, state, forceID)
-        {
-            type = TaskType.Floating;
+        public TaskFloating(string taskName, bool state = false, int forceID = -1) : base (taskName, state, forceID)
+        {            
         }
-        
+
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
                             new XAttribute("id", id.ToString()),
-                            new XAttribute("type", type.ToString()),
+                            new XAttribute("type", "Floating"),
                             new XElement("Name", taskName),
                             new XElement("State", state.ToString())
                             );
             return task;
         }
-   
     }
 
-    class TaskDeadline : Task
+    public class TaskDeadline : Task
     {
-        DateTime endTime;
-
-        internal DateTime EndTime
+        private DateTime endTime;
+        public DateTime EndTime
         {
             get { return endTime; }
+            //set { endTime = value; }
         }
 
-        internal TaskDeadline() : this(null, DateTime.Now)
+        public TaskDeadline() : this(null, DateTime.Now)
         { }
 
-        internal TaskDeadline(string taskName, DateTime endTime, bool state = false, int forceID = -1)
+        public TaskDeadline(string taskName, DateTime endTime, bool state = false, int forceID = -1)
             : base(taskName, state, forceID)
-        {       
+        {
             this.endTime = endTime;
-            type = TaskType.Deadline;
         }
 
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
                             new XAttribute("id", id.ToString()),
-                            new XAttribute("type", type.ToString()),
+                            new XAttribute("type", "Deadline"),
                             new XElement("Name", taskName),
                             new XElement("EndTime", endTime.ToString()),
                             new XElement("State", state.ToString())
@@ -117,37 +112,37 @@ namespace ToDo
         }
     }
 
-    class TaskEvent : Task
+    public class TaskEvent : Task
     {
-        DateTime endTime;
-        DateTime startTime;
-
-        internal DateTime StartTime
-        {
-            get { return startTime; }
-        }
-
-        internal DateTime EndTime
+        private DateTime endTime;
+        public DateTime EndTime
         {
             get { return endTime; }
+            //set { endTime = value; }
+        }
+
+        private DateTime startTime;
+        public DateTime StartTime
+        {
+            get { return startTime; }
+            //set { startTime = value; }
         }
 
         public TaskEvent() : this(null, DateTime.Now, DateTime.Now)
         { }
 
-        internal TaskEvent(string taskName, DateTime startTime, DateTime endTime, bool state = false, int forceID = -1)
+        public TaskEvent(string taskName, DateTime startTime, DateTime endTime, bool state = false, int forceID = -1)
             : base(taskName, state, forceID)
-         {
+        {
             this.startTime = startTime;
             this.endTime = endTime;
-            type = TaskType.Event;
-         }
+        }
 
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
                             new XAttribute("id", id.ToString()),
-                            new XAttribute("type", type.ToString()),
+                            new XAttribute("type", "Event"),
                             new XElement("Name", taskName),
                             new XElement("StartTime", startTime.ToString()),
                             new XElement("EndTime", endTime.ToString()),
