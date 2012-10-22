@@ -186,7 +186,7 @@ namespace ToDo
                     if (taskIndex == null)
                         throw new Exception("Invalid task name. Modify by name NYI.");
                     else newOperation = new OperationModify((int)taskIndex, task);
-                    throw new NotImplementedException();
+                    break;
                 case CommandType.SEARCH:
                     newOperation = new OperationSearch(taskName);
                     break;

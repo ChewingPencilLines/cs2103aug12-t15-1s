@@ -329,7 +329,7 @@ namespace ToDo
             {
                 if (commandKeywords.TryGetValue(words[i].ToLower(), out commandType) && i != words.Count)
                 {
-                    if (commandType == CommandType.DELETE || commandType == CommandType.MODIFY)
+                    if ((commandType == CommandType.DELETE || commandType == CommandType.MODIFY) && words.Count > 1)
                     {
                         int convert;
                         if (Int32.TryParse(words[i + 1], out convert))
