@@ -28,7 +28,22 @@ namespace ToDo
             return ExecuteCommand(operation);
         }
 
-        public bool UpdateSettings()
+        /// <summary>
+        /// This method updates settings to the various components using the specified SettingsList.
+        /// </summary>
+        /// <param name="settingsList"></param>
+        /// <returns></returns>
+        public bool UpdateSettings(SettingsList settingsList)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// This method loads settings to the specified SettingsList from storage.
+        /// </summary>
+        /// <param name="settingsList"></param>
+        /// <returns></returns>
+        public static void LoadSettings(SettingsList settingsList)
         {
             throw new NotImplementedException();
         }
@@ -52,6 +67,7 @@ namespace ToDo
                 return derivedOperation;
             }
         }
+
     }
  
 }

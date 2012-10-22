@@ -87,52 +87,8 @@ namespace ToDo
         private static void InitializeSettings()
         {
             settingsList = new SettingsList();
-            OpenFile();
+            Logic.LoadSettings(settingsList);
         }
-
-        // ******************************************************************
-        // I/O Operations
-        // ******************************************************************
-
-        #region IOFileOperations
-
-        private static void OpenFile()
-        {
-            //System.IO.StreamReader file;
-
-            //try
-            //{
-            //    file = new System.IO.StreamReader(fileName);
-            //    System.Xml.Serialization.XmlSerializer writer =
-            //    new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
-            //    settingsList = (SettingsList)writer.Deserialize(file);
-            //    file.Close();
-            //}
-            //catch (FileNotFoundException)
-            //{
-            //    AlertBox.Show("Settings File Not Found, new file will be created");
-            //    //MessageBox.Show("Settings File Not Found, new file will be created");
-            //    WriteToFile();
-            //}
-            //catch (InvalidOperationException)
-            //{
-            //    MessageBox.Show("There was an error with the Settings File, a new file will be created");
-            //    WriteToFile();
-            //}
-
-        }
-
-        private static void WriteToFile()
-        {
-            //System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
-
-            //System.Xml.Serialization.XmlSerializer writer =
-            //new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
-            //writer.Serialize(file, settingsList);
-            //file.Close();
-        }
-
-        #endregion
 
         // ******************************************************************
         // Getters/Setters

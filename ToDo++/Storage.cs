@@ -80,6 +80,41 @@ namespace ToDo
             return false;
         }
 
+        private void LoadSettingsFile()
+        {
+            //System.IO.StreamReader file;
+
+            //try
+            //{
+            //    file = new System.IO.StreamReader(fileName);
+            //    System.Xml.Serialization.XmlSerializer writer =
+            //    new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
+            //    settingsList = (SettingsList)writer.Deserialize(file);
+            //    file.Close();
+            //}
+            //catch (FileNotFoundException)
+            //{
+            //    AlertBox.Show("Settings File Not Found, new file will be created");
+            //    //MessageBox.Show("Settings File Not Found, new file will be created");
+            //    WriteToFile();
+            //}
+            //catch (InvalidOperationException)
+            //{
+            //    MessageBox.Show("There was an error with the Settings File, a new file will be created");
+            //    WriteToFile();
+            //}
+        }
+
+        private void UpdateSettingsFile()
+        {
+            //System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
+
+            //System.Xml.Serialization.XmlSerializer writer =
+            //new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
+            //writer.Serialize(file, settingsList);
+            //file.Close();
+        }
+
         internal bool AddTaskToFile(Task taskToAdd)
         {
             try
