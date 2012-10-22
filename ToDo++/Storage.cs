@@ -27,12 +27,14 @@ namespace ToDo
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml("<tasks>" +
                             "</tasks>");
-
+                
                 // Create a new element node.
-                XmlNode newElem = doc.CreateNode("element", "task", "");
-                newElem.InnerText = "task1";
-
+                XmlNode newElem = doc.CreateNode("element", "floating", "");
                 XmlElement root = doc.DocumentElement;
+                root.AppendChild(newElem);
+                newElem = doc.CreateNode("element", "deadline", "");
+                root.AppendChild(newElem);
+                newElem = doc.CreateNode("element", "event", "");
                 root.AppendChild(newElem);
 
                 doc.Save("testfile.xml");                
@@ -57,7 +59,6 @@ namespace ToDo
         {
             XDocument doc = XDocument.Load("testfile.xml");
             XElement newElem = taskToAdd.ToXElement();
-            doc.Root.Add(newElem);
             doc.Save("testfile.xml");
             return true;
         }
