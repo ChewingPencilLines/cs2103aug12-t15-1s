@@ -32,11 +32,11 @@ namespace ToDo
             lastListedTasks = new List<Task>();
             undoStack = new Stack<Operation>();
             this.storageXML = storageXML;
-        }
+        } 
 
         public string Execute(Operation operation, ref List<Task> taskList)
         {
-            string response;
+            string response; 
             bool successFlag;
             if (operation == null)
             {
@@ -44,7 +44,7 @@ namespace ToDo
             }
             else if (operation is OperationAdd)
             {
-                Task taskToAdd = ((OperationAdd)operation).GetTask();
+                Task taskToAdd = ((OperationAdd)operation).NewTask;
                 if (taskToAdd == null) return RESPONSE_ADD_FAIL;
                 response = Add(taskToAdd, ref taskList, out successFlag);
             }
