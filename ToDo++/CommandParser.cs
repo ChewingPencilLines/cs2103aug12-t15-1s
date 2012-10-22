@@ -201,7 +201,8 @@ namespace ToDo
                 case CommandType.REDO:
                     throw new NotImplementedException();
                 case CommandType.UNDO:
-                    throw new NotImplementedException();
+                    newOperation = new OperationUndo();
+                    break;
             }
             return newOperation;
         }
