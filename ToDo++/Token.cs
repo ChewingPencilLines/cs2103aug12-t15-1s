@@ -44,6 +44,7 @@ namespace ToDo
             get { return taskIndex; }
         }
 
+       // @ToDo:change default value of index to make 'delete' work.
         internal TokenCommand(int position, CommandType val, int taskIndex = 0)
             : base(position)
         {

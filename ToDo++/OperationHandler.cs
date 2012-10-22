@@ -51,11 +51,11 @@ namespace ToDo
             }
             else if (operation is OperationDelete)
             {   
-                 int index = ((OperationDelete)operation).Index;
+                 int? index = ((OperationDelete)operation).Index;
                  string deleteString = ((OperationDelete)operation).DeleteString;
-                 if (index == -1 && deleteString != null)
+                 if (index.HasValue == false && deleteString != null)
                  {                  
-                     response = Search(ref lastListedTasks, taskList, deleteString);
+                     response = Search(taskList, deleteString);
                  }
                  else if (index < 0 || index > taskList.Count - 1)
                  {
@@ -63,9 +63,8 @@ namespace ToDo
                  }
                  else if(deleteString == null)
                  {
-                     Task taskToDelete = lastListedTasks[index];
+                     Task taskToDelete = lastListedTasks[index.Value];
                      response = Delete(ref taskToDelete, ref taskList, out successFlag);
-                     lastListedTasks = null;
                  }                 
                  else
                  {
@@ -78,7 +77,24 @@ namespace ToDo
             }
             else if (operation is OperationModify)
             {
-                throw new NotImplementedException();
+                /*
+                 * only 'modify' and 'modify index newtask' works.
+                 */ 
+                int? index = ((OperationModify)operation).OldIndex;
+                Task newTask = ((OperationModify)operation).NewTask;
+                if (index.HasValue == false || newTask == null)
+                {
+                    response = DisplayAll(taskList);
+                }
+                else if (index < 0 || index > taskList.Count - 1)
+                {
+                    response = DisplayAll(taskList);
+                }
+                else
+                {
+                    Task taskToModify = lastListedTasks[index.Value];
+                    response = Modify(ref taskToModify, newTask, ref taskList, out successFlag);
+                }
             }
             else if (operation is OperationUndo)
             {
@@ -86,8 +102,8 @@ namespace ToDo
             }
             else if (operation is OperationSearch)
             {
-                string searchString = ((OperationSearch)operation).GetSearchString();
-                response = Search(ref lastListedTasks, taskList, searchString);
+                string searchString = ((OperationSearch)operation).SearchString;
+                response = Search(taskList, searchString);
             }
             else
             {
@@ -130,6 +146,20 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;            
         }
 
+        private string Modify(ref Task taskToModify,Task newTask, ref List<Task> taskList, out bool successFlag)
+        {
+            successFlag = false;
+            taskList.Remove(taskToModify);
+            taskList.Add(newTask);
+            if (storageXML.RemoveTaskFromFile(taskToModify)&&storageXML.AddTaskToFile(newTask))
+            {
+                successFlag = true;
+                return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName);
+            }
+            else
+                return RESPONSE_XML_READWRITE_FAIL;
+        }
+
         private string DisplayAll(List<Task> taskList)
         {
             string displayString = String.Empty;
@@ -156,7 +186,7 @@ namespace ToDo
             return displayString;
         }
 
-        private string Search(ref List<Task> lastListedTasks, List<Task> taskList, string searchString)
+        private string Search(List<Task> taskList, string searchString)
         {
             string displayString = String.Empty;
             int index = 1;

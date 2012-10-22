@@ -183,10 +183,16 @@ namespace ToDo
                     break;
                 case CommandType.MODIFY:
                     task = GenerateNewTask(taskName, startCombined, endCombined);
-                    if (taskIndex == null)
-                        throw new Exception("Invalid task name. Modify by name NYI.");
-                    else newOperation = new OperationModify((int)taskIndex, task);
-                    break;
+                    if (taskName != null && taskIndex != null)
+                    {
+                        newOperation = new OperationModify((int)taskIndex,task);
+                        break;
+                    }
+                    else
+                    {
+                        newOperation = new OperationModify();
+                        break;
+                    }
                 case CommandType.SEARCH:
                     newOperation = new OperationSearch(taskName);
                     break;

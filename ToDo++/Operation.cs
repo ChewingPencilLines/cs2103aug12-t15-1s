@@ -37,10 +37,10 @@ namespace ToDo
     class OperationDelete : Operation
     {
 
-        private int index;
+        private int? index;
         private string deleteString;
 
-        public int Index
+        public int? Index
         {
             get
             {
@@ -64,7 +64,7 @@ namespace ToDo
 
         public OperationDelete(string deleteString)
         {
-            this.index = -1;
+            this.index = null;
             this.deleteString = deleteString;
         }
     }
@@ -83,19 +83,38 @@ namespace ToDo
             this.searchString = searchString;
         }
 
-        public string GetSearchString() { return searchString; }
+        public string SearchString
+        {
+            get { return searchString; }
+        }
 
     }
     
     class OperationModify : Operation
     {
-        public int oldTaskindex;
+        private int? oldIndex;
         private Task newTask;
+
+        public int? OldIndex
+        {
+            get { return oldIndex; }
+        }
+
+        public Task NewTask
+        {
+            get { return newTask; }
+        }
 
         public OperationModify(int Previous, Task Revised)
         {
-            oldTaskindex = Previous - 1;
+            oldIndex = Previous - 1;
             newTask = Revised;
+        }
+
+        public OperationModify()
+        {
+            oldIndex = null;
+            newTask = null;
         }
     }
 
