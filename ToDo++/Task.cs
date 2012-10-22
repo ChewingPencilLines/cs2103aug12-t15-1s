@@ -41,7 +41,7 @@ namespace ToDo
             this.state = state;
             if (forceID < 0)
                 id = this.GetHashCode();
-            else forceID = id;
+            else id = forceID;
         }
 
         public abstract XElement ToXElement();
