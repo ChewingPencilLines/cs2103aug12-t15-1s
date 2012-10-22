@@ -558,6 +558,7 @@ namespace ToDo
                         Int32.TryParse(multiWordCommand[1], out taskIndex))
                     {
                         TokenCommand commandToken = new TokenCommand(index, commandType, taskIndex);
+                        tokens.Add(commandToken);
                     }
                 }
                 index++;
