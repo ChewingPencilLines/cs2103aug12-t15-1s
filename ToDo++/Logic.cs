@@ -33,7 +33,7 @@ namespace ToDo
             throw new NotImplementedException();
         }
 
-        public string ExecuteCommand(Operation operation)
+        private string ExecuteCommand(Operation operation)
         {
             string response;
             response = operationHandler.Execute(operation, ref taskList);
