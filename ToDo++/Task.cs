@@ -61,10 +61,6 @@ namespace ToDo
     #region Definition of derived tasks
     public class TaskFloating : Task
     {
-        public TaskFloating()
-            : this(null)
-        { }
-
         public TaskFloating(string taskName, bool state = false, int forceID = -1) : base (taskName, state, forceID)
         {            
         }
@@ -89,9 +85,6 @@ namespace ToDo
             get { return endTime; }
             //set { endTime = value; }
         }
-
-        public TaskDeadline() : this(null, DateTime.Now)
-        { }
 
         public TaskDeadline(string taskName, DateTime endTime, bool state = false, int forceID = -1)
             : base(taskName, state, forceID)
@@ -127,10 +120,7 @@ namespace ToDo
             get { return startTime; }
             //set { startTime = value; }
         }
-
-        public TaskEvent() : this(null, DateTime.Now, DateTime.Now)
-        { }
-
+        
         public TaskEvent(string taskName, DateTime startTime, DateTime endTime, bool state = false, int forceID = -1)
             : base(taskName, state, forceID)
         {

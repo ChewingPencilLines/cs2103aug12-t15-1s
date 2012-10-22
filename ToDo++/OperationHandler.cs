@@ -24,7 +24,8 @@ namespace ToDo
         const string RESPONSE_MODIFY_SUCCESS = "Modified task successfully.";
         const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
         const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
-        const string REPONSE_INVALID_COMMAND = "Invalid command!"; 
+        const string REPONSE_INVALID_COMMAND = "Invalid command!";
+        const string RESPONSE_INVALID_TASK_INDEX = "Invalid task index!";
         #endregion
 
         public OperationHandler(Storage storageXML)
@@ -52,17 +53,20 @@ namespace ToDo
             {   
                  int index = ((OperationDelete)operation).Index;
                  string deleteString = ((OperationDelete)operation).DeleteString;
-                 if (index != -1)
+                 if (index == -1 && deleteString != null)
+                 {                  
+                     response = Search(ref lastListedTasks, taskList, deleteString);
+                 }
+                 else if (index < 0 || index > taskList.Count - 1)
                  {
-                     Debug.Assert(index > 0 && index < taskList.Count);
+                     return RESPONSE_INVALID_TASK_INDEX;
+                 }
+                 else if(deleteString == null)
+                 {
                      Task taskToDelete = lastListedTasks[index];
                      response = Delete(ref taskToDelete, ref taskList, out successFlag);
                      lastListedTasks = null;
-                 }
-                 else if (deleteString != null)
-                 {
-                     response = Search(ref lastListedTasks, taskList, deleteString);
-                 }
+                 }                 
                  else
                  {
                      return REPONSE_INVALID_COMMAND;
@@ -146,8 +150,9 @@ namespace ToDo
                     displayString += (" TO: " + endTime.ToString());
                 }
                 displayString += "\r\n";
-                index++;
+                index++;                
             }
+            lastListedTasks = new List<Task>(taskList);
             return displayString;
         }
 
