@@ -19,9 +19,18 @@ namespace ToDo
         protected string taskName;
         protected bool state;
         protected TaskType type;
+        protected int id;
 
-        internal Task() { }
         public virtual XElement ToXElement() { return null; }
+
+        internal Task(string taskName, bool state, int forceID)
+        {
+            this.taskName = taskName;
+            this.state = state;
+            if (forceID < 0)
+                id = this.GetHashCode();
+            else forceID = id;
+        }
 
         internal string TaskName
         {
@@ -38,31 +47,36 @@ namespace ToDo
         { 
             get { return type; } 
         }
+
+        internal int ID
+        {
+            get { return id; }
+            //set { id = value; }
+        }
     } 
 
 
     // ******************************************************************
-    // Definition of three different task types
+    // Definition of derived Tasks
     // ******************************************************************
 
-    #region Definition of three different task types
+    #region Definition of derived Tasks
     class TaskFloating : Task
     {
         internal TaskFloating()
             : this(null)
         { }
 
-        internal TaskFloating(string taskName)
+        internal TaskFloating(string taskName, bool state = false, int forceID = -1) : base (taskName, state, forceID)
         {
-            this.taskName = taskName;
-            state = false;
             type = TaskType.Floating;
         }
-
+        
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
-                            new XElement("type",type.ToString()),
+                            new XAttribute("id", id.ToString()),
+                            new XAttribute("type", type.ToString()),
                             new XElement("Name", taskName),
                             new XElement("State", state.ToString())
                             );
@@ -83,18 +97,18 @@ namespace ToDo
         internal TaskDeadline() : this(null, DateTime.Now)
         { }
 
-        internal TaskDeadline(string taskName, DateTime endTime)
-        {
-            this.taskName = taskName;
+        internal TaskDeadline(string taskName, DateTime endTime, bool state = false, int forceID = -1)
+            : base(taskName, state, forceID)
+        {       
             this.endTime = endTime;
-            state = false;
             type = TaskType.Deadline;
         }
 
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
-                            new XElement("type", type.ToString()),
+                            new XAttribute("id", id.ToString()),
+                            new XAttribute("type", type.ToString()),
                             new XElement("Name", taskName),
                             new XElement("EndTime", endTime.ToString()),
                             new XElement("State", state.ToString())
@@ -121,19 +135,19 @@ namespace ToDo
         public TaskEvent() : this(null, DateTime.Now, DateTime.Now)
         { }
 
-        public TaskEvent(string taskName, DateTime startTime, DateTime endTime)
-        {
-            this.taskName = taskName;
+        internal TaskEvent(string taskName, DateTime startTime, DateTime endTime, bool state = false, int forceID = -1)
+            : base(taskName, state, forceID)
+         {
             this.startTime = startTime;
             this.endTime = endTime;
-            state = false;
             type = TaskType.Event;
-        }
+         }
 
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
-                            new XElement("type", type.ToString()),
+                            new XAttribute("id", id.ToString()),
+                            new XAttribute("type", type.ToString()),
                             new XElement("Name", taskName),
                             new XElement("StartTime", startTime.ToString()),
                             new XElement("EndTime", endTime.ToString()),
