@@ -13,7 +13,7 @@ namespace ToDo
     // ******************************************************************
     // Enumerations
     // ******************************************************************
-    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, INVALID };
+    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, INVALID };
     enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
     enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
@@ -128,6 +128,8 @@ namespace ToDo
             commandKeywords.Add("modify", CommandType.MODIFY);
             commandKeywords.Add("undo", CommandType.UNDO);
             commandKeywords.Add("redo", CommandType.REDO);
+            commandKeywords.Add("done", CommandType.DONE);
+            commandKeywords.Add("postpone", CommandType.POSTPONE);
         }
 
         private static void InitializeDateTimeKeywords()
