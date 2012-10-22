@@ -17,10 +17,6 @@ namespace ToDo
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Task task = new TaskDeadline("testTask",DateTime.Now);
-            Storage IO = new Storage("a", "b");
-            IO.CreateNewTaskFile("notused.xml");
-            IO.AddTask(task,"id");
             Application.Run(new UI());             
         }
 

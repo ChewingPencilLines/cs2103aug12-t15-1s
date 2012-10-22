@@ -15,11 +15,11 @@ namespace ToDo
   
         public Logic()
         {
-            storage = new Storage("tasklist.xml", "settingstest.xml");
-            operationHandler = new OperationHandler(ref storage);
+            storage = new Storage("testfile.xml", "testsettings.xml");
+            operationHandler = new OperationHandler(storage);
             stringParser = new StringParser();
-            commandParser = new CommandParser(ref stringParser); 
-            taskList = new List<Task>();
+            commandParser = new CommandParser(ref stringParser);
+            taskList = storage.LoadTasksFromFile();
         }
 
         public string ProcessCommand(string input)

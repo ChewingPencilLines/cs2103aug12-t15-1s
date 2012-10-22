@@ -14,81 +14,151 @@ namespace ToDo
     {
         string taskStorageFile, settingsFile;
 
+        /// <summary>
+        /// Constructs a Storage I/O handler class, creating two XML files for task storage and settings storage using
+        /// the specified taskStorageFile and settingsFile as their respective filenames.
+        /// </summary>
+        /// <param name="taskStorageFile">String representing the filename to create the task storage XML file.</param>
+        /// <param name="settingsFile">String representing the filename to create the settings XML file.</param>
+        /// <returns>Nothing</returns>
         public Storage(string taskStorageFile, string settingsFile)
         {
             this.taskStorageFile = taskStorageFile;
             this.settingsFile = settingsFile;
+            if (!ValidateTaskFile(this.taskStorageFile))
+                CreateNewTaskFile(this.taskStorageFile);
+            CreateNewSettingsFile(this.settingsFile);
         }
 
-        internal bool CreateNewTaskFile(string filename)
+        private bool ValidateTaskFile(string filename)
+        {
+            //check for well-formedness
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.ConformanceLevel = ConformanceLevel.Fragment;
+            try
+            {
+                using (XmlReader reader = XmlReader.Create(filename, settings))
+                {
+                    // check for "tasks" node
+                    reader.MoveToContent();
+                    if (reader.NodeType == XmlNodeType.Element)
+                        if (reader.Name == "tasks")
+                            return true;
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }            
+        }
+
+        private bool CreateNewTaskFile(string filename)
         {
             try
             {
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml("<tasks>" +
-                            "</tasks>");
-                
-                // Create a new element node.
-                XmlNode newElem = doc.CreateNode("element", "floating", "");
-                XmlElement root = doc.DocumentElement;
-                root.AppendChild(newElem);
-                newElem = doc.CreateNode("element", "deadline", "");
-                root.AppendChild(newElem);
-                newElem = doc.CreateNode("element", "event", "");
-                root.AppendChild(newElem);
-
-                doc.Save("testfile.xml");                
+                            "</tasks>");              
+                doc.Save(filename);                
             }
             catch (ArgumentNullException)
             {
                 CustomMessageBox.Show("Error!", "Task filename was not set!");
+                return false;
             }
             catch (InvalidOperationException)
             {
                 CustomMessageBox.Show("Error!", "Failed to create task file.");
+                return false;
             }
-            return false;
-        }
-
-        internal bool CreateNewSettingsFile(string filename, XmlWriterSettings settings)
-        {
-            return false;
-        }
-        
-        internal bool AddTask(Task taskToAdd, string id)
-        {
-            XDocument doc = XDocument.Load("testfile.xml");
-            XElement newElem = taskToAdd.ToXElement();
-            doc.Save("testfile.xml");
             return true;
         }
 
-        internal bool RemoveTask(Task taskToDelete)
+        internal bool CreateNewSettingsFile(string filename)
         {
-            return true;
-            throw new NotImplementedException();
+            return false;
         }
 
-        /*
-public bool WriteXML(Task task)
-{
+        internal bool AddTaskToFile(Task taskToAdd)
+        {
+            try
+            {
+                XDocument doc = XDocument.Load(taskStorageFile);
+                XElement newTaskElem = taskToAdd.ToXElement();
+                doc.Root.Add(newTaskElem);
+                doc.Save(taskStorageFile);
+            }
+            catch (Exception e)
+            {
+                CustomMessageBox.Show("Warning!", "A problem was encoutered saving the new task to file.");
+                return false;
+            }
+            return true;
+        }
 
-    // use reflection to get all derived types
-    var knownTypes = Assembly.GetExecutingAssembly().GetTypes().Where(
-        t => typeof(List<Task>).IsAssignableFrom(t) || typeof(
-        TaskFloating).IsAssignableFrom(t) || typeof(TaskDeadline).IsAssignableFrom(t)).ToArray();
+        internal bool RemoveTaskFromFile(Task taskToDelete)
+        {
+            XDocument doc = XDocument.Load(taskStorageFile);
+            
+            var task =  from node in doc.Descendants("Task")
+                        let attr = node.Attribute("id")
+                        where attr != null && attr.Value == taskToDelete.ID.ToString()
+                        select node;
+            task.ToList().ForEach(x => x.Remove());
 
-    // prepare to serialize a car object
-    XmlSerializer writer = new XmlSerializer(typeof(List<Task>), knownTypes);
+            doc.Save(taskStorageFile);
 
-    //System.Xml.Serialization.XmlSerializer writer =
-    //    new System.Xml.Serialization.XmlSerializer(typeof(TaskList));
+            return true;            
+        }
 
-    System.IO.StreamWriter file = new System.IO.StreamWriter(
-        @"..\..\StorageofTaskList.xml");
-    writer.Serialize(file, taskList);
-    file.Close();
-    return true;
-}*/
+        internal List<Task> LoadTasksFromFile()
+        {
+            List<Task> taskList = new List<Task>();
+            XDocument doc = XDocument.Load(taskStorageFile);
+            IEnumerable<XElement> tasks =
+                (from task in doc.Root.Elements("Task") select task);
+            foreach(XElement task in tasks)
+            {
+                Task addTask = GenerateTaskFromXElement(task);
+                if (addTask == null)
+                {
+                    CustomMessageBox.Show("Warning!", "Task storage file seems corrupted. Error reading from it!");
+                }
+                taskList.Add(addTask);
+            }
+            return taskList;
+        }
+
+        private Task GenerateTaskFromXElement(XElement task)
+        {
+            Task newTask = null;
+            string type = task.Attribute("type").Value;
+            int id = Int32.Parse(task.Attribute("id").Value);
+            string taskName = task.Element("Name").Value;
+            DateTime startTime, endTime;
+            bool state;
+
+            if ( task.Element("Name").Value == "True" ) state = true;
+            else state = false;
+
+            switch (type)
+            {
+                case "Floating":
+                    newTask = new TaskFloating(taskName, state, id);
+                    break;
+                case "Deadline":
+                    endTime = DateTime.Parse(task.Element("EndTime").Value);
+                    newTask = new TaskDeadline(taskName, endTime, state, id);
+                    break;
+                case "Event":
+                    endTime = DateTime.Parse(task.Element("EndTime").Value);
+                    startTime = DateTime.Parse(task.Element("StartTime").Value);
+                    newTask = new TaskDeadline(taskName, endTime, state, id);
+                    break;
+            }
+
+            return newTask;
+        }
     }
 }
