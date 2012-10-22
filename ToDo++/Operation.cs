@@ -19,61 +19,62 @@ namespace ToDo
     // ******************************************************************
 
     #region Definition for five different operation
-    public class OperationAdd : Operation
+    class OperationAdd : Operation
     {
         private Task newTask;
 
-        public OperationAdd(Task setTask)
+        internal OperationAdd(Task setTask)
         {
             newTask = setTask;
         }
 
-        public Task GetTask()
+        internal Task NewTask
         {
-            return newTask;
+            get {return newTask;}
         }
     }
 
-    public class OperationDelete : Operation
-     {
-         private int index;
-         private string deleteString;
- 
-         public int Index
-         {
-             get
-             {
-                 return index;
-             } 
-         }
- 
-         public string DeleteString
-         {
-             get
-             {
-                 return deleteString;
-             }
-         }
-        
-         public OperationDelete(int index)
-         {
-             this.index = index - 1;
-             this.deleteString = null;
-         }
- 
-         public OperationDelete(string deleteString)
-         {
-             this.index = -1;
-             this.deleteString = deleteString;
-         }
-     }
+    class OperationDelete : Operation
+    {
 
-    public class OperationDisplay : Operation
+        private int index;
+        private string deleteString;
+
+        public int Index
+        {
+            get
+            {
+                return index;
+            }
+        }
+
+        public string DeleteString
+        {
+            get
+            {
+                return deleteString;
+            }
+        }
+
+        public OperationDelete(int index)
+        {
+            this.index = index - 1;
+            this.deleteString = null;
+        }
+
+        public OperationDelete(string deleteString)
+        {
+            this.index = -1;
+            this.deleteString = deleteString;
+        }
+    }
+
+    class OperationDisplay : Operation
     {
 
     }
 
-    public class OperationSearch : Operation
+    class OperationSearch : Operation
     {
         private string searchString = "";
 
@@ -86,7 +87,7 @@ namespace ToDo
 
     }
     
-    public class OperationModify : Operation
+    class OperationModify : Operation
     {
         public int oldTaskindex;
         private Task newTask;
@@ -98,7 +99,7 @@ namespace ToDo
         }
     }
 
-    public class OperationUndo : Operation
+    class OperationUndo : Operation
     {
         //Variables not needed for now
         public OperationUndo()
@@ -106,7 +107,7 @@ namespace ToDo
 
     }
 
-    public class OperationDone : Operation
+    class OperationDone : Operation
     {
         private int index;
 

@@ -32,11 +32,11 @@ namespace ToDo
             lastListedTasks = new List<Task>();
             undoStack = new Stack<Operation>();
             this.storageXML = storageXML;
-        }
+        } 
 
         public string Execute(Operation operation, ref List<Task> taskList)
         {
-            string response;
+            string response; 
             bool successFlag;
             if (operation == null)
             {
@@ -44,7 +44,7 @@ namespace ToDo
             }
             else if (operation is OperationAdd)
             {
-                Task taskToAdd = ((OperationAdd)operation).GetTask();
+                Task taskToAdd = ((OperationAdd)operation).NewTask;
                 if (taskToAdd == null) return RESPONSE_ADD_FAIL;
                 response = Add(taskToAdd, ref taskList, out successFlag);
             }
@@ -101,7 +101,7 @@ namespace ToDo
                 if (storageXML.AddTask(taskToAdd, "id"))
                 {
                     successFlag = true;
-                    return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.taskname);
+                    return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.TaskName);
                 }
                 else
                     return RESPONSE_XML_READWRITE_FAIL;
@@ -120,7 +120,7 @@ namespace ToDo
             if (storageXML.RemoveTask(taskToDelete))
             {
                 successFlag = true;
-                return String.Format(RESPONSE_DELETE_SUCCESS, taskToDelete.taskname);
+                return String.Format(RESPONSE_DELETE_SUCCESS, taskToDelete.TaskName);
             }
             else
                 return RESPONSE_XML_READWRITE_FAIL;            
@@ -132,15 +132,15 @@ namespace ToDo
             int index = 1;
             foreach (Task task in taskList)
             {                
-                displayString += ((index) + ". " + task.taskname);
+                displayString += ((index) + ". " + task.TaskName);
                 if (task is TaskDeadline)
                 {
-                    displayString += (" BY: " + ((TaskDeadline)task).endtime);
+                    displayString += (" BY: " + ((TaskDeadline)task).EndTime);
                 }
                 else if (task is TaskEvent)
                 {
-                    DateTime startTime = ((TaskEvent)task).starttime;
-                    DateTime endTime = ((TaskEvent)task).endtime;
+                    DateTime startTime = ((TaskEvent)task).StartTime;
+                    DateTime endTime = ((TaskEvent)task).EndTime;
                     displayString += (" AT: " + startTime.ToString());
                     if(startTime != endTime && endTime != null)
                     displayString += (" TO: " + endTime.ToString());
@@ -157,18 +157,18 @@ namespace ToDo
             int index = 1;
             foreach (Task task in taskList)
             {
-                if (task.taskname.IndexOf(searchString) >= 0)
+                if (task.TaskName.IndexOf(searchString) >= 0)
                 {
                     lastListedTasks.Add(task);
-                    displayString += ((index) + ". " + task.taskname);
+                    displayString += ((index) + ". " + task.TaskName);
                     if (task is TaskDeadline)
                     {
-                        displayString += (" BY: " + ((TaskDeadline)task).endtime);
+                        displayString += (" BY: " + ((TaskDeadline)task).EndTime);
                     }
                     else if (task is TaskEvent)
                     {
-                        DateTime startTime = ((TaskEvent)task).starttime;
-                        DateTime endTime = ((TaskEvent)task).endtime;
+                        DateTime startTime = ((TaskEvent)task).StartTime;
+                        DateTime endTime = ((TaskEvent)task).EndTime;
                         displayString += (" AT: " + startTime.ToString());
                         if (startTime != endTime && endTime != null)
                             displayString += (" TO: " + endTime.ToString());
