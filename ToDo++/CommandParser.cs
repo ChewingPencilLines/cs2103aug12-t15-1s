@@ -177,7 +177,10 @@ namespace ToDo
                         break;
                     }
                     else
-                        throw new Exception("Invalid task name.");
+                    {
+                        newOperation = new OperationDelete("");
+                        break;
+                    }                   
                 case CommandType.DISPLAY:
                     newOperation = new OperationDisplay();
                     break;

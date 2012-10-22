@@ -56,16 +56,11 @@ namespace ToDo
             }
             else if (operation is OperationDelete)
             { 
-                 //@todo:cannot tell delete 0 and delete
                  int? index = ((OperationDelete)operation).Index;
                  string deleteString = ((OperationDelete)operation).DeleteString;
                  if (index.HasValue == false && deleteString != null)
                  {                  
                      response = Search(taskList, deleteString);
-                 }
-                 else if (index.Value == -1 && deleteString == null)
-                 {
-                     response = DisplayAll(taskList);
                  }
                  else if (index < 0 || index > taskList.Count - 1)
                  {
@@ -88,8 +83,10 @@ namespace ToDo
             else if (operation is OperationModify)
             {
                 /*
-                 * only 'modify' and 'modify index newtask' works.
-                 */ 
+                 *  when modify, if user key in nothing or only index or only task details
+                 *  after the commandtype, then all tasks will be shown.
+                 *  only when user input full information will modify operated.
+                 */
                 int? index = ((OperationModify)operation).OldIndex;
                 Task newTask = ((OperationModify)operation).NewTask;
                 if (index.HasValue == false || newTask == null)
@@ -115,12 +112,13 @@ namespace ToDo
                     Task task =((OperationAdd)undoOperation).NewTask;
                     response = Delete(ref task, ref taskList, out successFlag);
                 }
-                else if (undoOperation is OperationDelete)
+                else if (undoOperation is OperationDelete &&(((OperationDelete)undoOperation).Index.HasValue == true))
                 {
+                   
                     Task task = undoTask.Pop();
                     response = Add(task, ref taskList, out successFlag);
                 }
-                else if (undoOperation is OperationModify)
+                else if (undoOperation is OperationModify && ((OperationModify)undoOperation).NewTask!=null)
                 {
                     Task taskToModify = ((OperationModify)undoOperation).NewTask;
                     Task newTask = undoTask.Pop();

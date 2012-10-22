@@ -33,19 +33,18 @@ namespace ToDo
     class TokenCommand : Token
     {
         CommandType commandType;
-        int taskIndex;
+        int? taskIndex;
 
         internal CommandType Value
         {
             get { return commandType; }
         }
-        internal int TaskIndex
+        internal int? TaskIndex
         {
             get { return taskIndex; }
         }
 
-       // @ToDo:change default value of index to make 'delete' work.
-        internal TokenCommand(int position, CommandType val, int taskIndex = 0)
+        internal TokenCommand(int position, CommandType val, int? taskIndex = null)
             : base(position)
         {
             type = TokenType.COMMAND;
