@@ -182,7 +182,6 @@ namespace ToDo
                     index++;
                 }
             }
-            lastListedTasks = new List<Task>(taskList);
             return displayString;
         }
 
