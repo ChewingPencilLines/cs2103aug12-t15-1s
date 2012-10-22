@@ -154,12 +154,13 @@ namespace ToDo
         private string Search(ref List<Task> lastListedTasks, List<Task> taskList, string searchString)
         {
             string displayString = String.Empty;
+            int index = 1;
             foreach (Task task in taskList)
             {
                 if (task.taskname.IndexOf(searchString) >= 0)
                 {
                     lastListedTasks.Add(task);
-                    displayString += (task.taskname);
+                    displayString += ((index) + ". " + task.taskname);
                     if (task is TaskDeadline)
                     {
                         displayString += (" BY: " + ((TaskDeadline)task).endtime);
@@ -173,6 +174,7 @@ namespace ToDo
                             displayString += (" TO: " + endTime.ToString());
                     }
                     displayString += "\r\n";
+                    index++;
                 }
             }
             lastListedTasks = new List<Task>(taskList);
