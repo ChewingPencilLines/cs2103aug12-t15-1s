@@ -5,104 +5,138 @@ using System.Text;
 using System.Xml.Linq;
 
 namespace ToDo
-{
-    // ******************************************************************
-    // Abstract definition for task
-    // ******************************************************************
-
-    #region Abstract definition for task    
-    
-    public abstract class Task
+{   
+    public class Task
     {
         /*
          * taskname should be public then xml can write this.
          * state is false means the task is undone.
          * @ivan to @alice: NO. make it a property (encapsulate field). Look @ how i do Tokens.
          */
-        public string taskname;
-        public bool state;
-        public Task() { }
-        public abstract XElement ToXElement();
+
+        public enum TaskType { Floating, Deadline, Event}
+
+        protected string taskName;
+        protected bool state;
+        protected TaskType type;
+
+        internal Task() { }
+        public virtual XElement ToXElement() { return null; }
+
+        internal string TaskName
+        {
+            get { return taskName; }
+        }
+
+        internal bool State
+        {
+            get { return state; }
+            set { state = value; }
+        }
+
+        internal TaskType Type
+        { 
+            get { return type; } 
+        }
     } 
-    #endregion
+
 
     // ******************************************************************
     // Definition of three different task types
     // ******************************************************************
 
     #region Definition of three different task types
-    public class TaskFloating : Task
+    class TaskFloating : Task
     {
-        public TaskFloating()
+        internal TaskFloating()
             : this(null)
         { }
 
-        public TaskFloating(string TaskName)
+        internal TaskFloating(string taskName)
         {
-            taskname = TaskName;
+            this.taskName = taskName;
             state = false;
+            type = TaskType.Floating;
         }
 
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
-                            new XAttribute("type", "Floating"),
-                            new XElement("Name", taskname),
+                            new XElement("type",type.ToString()),
+                            new XElement("Name", taskName),
                             new XElement("State", state.ToString())
                             );
             return task;
         }
+   
     }
 
-    public class TaskDeadline : Task
+    class TaskDeadline : Task
     {
-        public DateTime endtime;
+        DateTime endTime;
 
-        public TaskDeadline() : this(null, DateTime.Now)
+        internal DateTime EndTime
+        {
+            get { return endTime; }
+        }
+
+        internal TaskDeadline() : this(null, DateTime.Now)
         { }
 
-        public TaskDeadline(string TaskName, DateTime EndTime)
+        internal TaskDeadline(string taskName, DateTime endTime)
         {
-            taskname = TaskName;
-            endtime = EndTime;
+            this.taskName = taskName;
+            this.endTime = endTime;
             state = false;
+            type = TaskType.Deadline;
         }
 
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
-                            new XAttribute("type", "Deadline"),
-                            new XElement("Name", taskname),
-                            new XElement("EndTime", endtime.ToString()),
+                            new XElement("type", type.ToString()),
+                            new XElement("Name", taskName),
+                            new XElement("EndTime", endTime.ToString()),
                             new XElement("State", state.ToString())
                             );
             return task;
         }
     }
 
-    public class TaskEvent : Task
+    class TaskEvent : Task
     {
-        public DateTime endtime;
-        public DateTime starttime;
+        DateTime endTime;
+        DateTime startTime;
+
+        internal DateTime StartTime
+        {
+            get { return startTime; }
+        }
+
+        internal DateTime EndTime
+        {
+            get { return endTime; }
+        }
 
         public TaskEvent() : this(null, DateTime.Now, DateTime.Now)
         { }
 
-        public TaskEvent(string TaskName, DateTime StartTime, DateTime EndTime)
+        public TaskEvent(string taskName, DateTime startTime, DateTime endTime)
         {
-            taskname = TaskName;
-            starttime = StartTime;
-            endtime = EndTime;
+            this.taskName = taskName;
+            this.startTime = startTime;
+            this.endTime = endTime;
             state = false;
+            type = TaskType.Event;
         }
 
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
-                            new XAttribute("type", "Event"),
-                            new XElement("Name", taskname),
-                            new XElement("StartTime", starttime.ToString()),
-                            new XElement("EndTime", endtime.ToString()),
+                            new XElement("type", type.ToString()),
+                            new XElement("Name", taskName),
+                            new XElement("StartTime", startTime.ToString()),
+                            new XElement("EndTime", endTime.ToString()),
                             new XElement("State", state.ToString())
                             );
             return task;
