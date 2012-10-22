@@ -50,17 +50,17 @@ namespace ToDo
             catch (Exception ex)
             {
                 return false;
-            }            
+            }
         }
 
-        private bool CreateNewTaskFile(string filename)
+        internal bool CreateNewTaskFile(string filename)
         {
             try
             {
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml("<tasks>" +
-                            "</tasks>");              
-                doc.Save(filename);                
+                            "</tasks>");
+                doc.Save(filename);
             }
             catch (ArgumentNullException)
             {
@@ -100,16 +100,16 @@ namespace ToDo
         internal bool RemoveTaskFromFile(Task taskToDelete)
         {
             XDocument doc = XDocument.Load(taskStorageFile);
-            
-            var task =  from node in doc.Descendants("Task")
-                        let attr = node.Attribute("id")
-                        where attr != null && attr.Value == taskToDelete.ID.ToString()
-                        select node;
+
+            var task = from node in doc.Descendants("Task")
+                       let attr = node.Attribute("id")
+                       where attr != null && attr.Value == taskToDelete.ID.ToString()
+                       select node;
             task.ToList().ForEach(x => x.Remove());
 
             doc.Save(taskStorageFile);
 
-            return true;            
+            return true;
         }
 
         internal List<Task> LoadTasksFromFile()
@@ -118,7 +118,7 @@ namespace ToDo
             XDocument doc = XDocument.Load(taskStorageFile);
             IEnumerable<XElement> tasks =
                 (from task in doc.Root.Elements("Task") select task);
-            foreach(XElement task in tasks)
+            foreach (XElement task in tasks)
             {
                 Task addTask = GenerateTaskFromXElement(task);
                 if (addTask == null)
@@ -139,7 +139,7 @@ namespace ToDo
             DateTime startTime, endTime;
             bool state;
 
-            if ( task.Element("Name").Value == "True" ) state = true;
+            if (task.Element("Name").Value == "True") state = true;
             else state = false;
 
             switch (type)
