@@ -75,11 +75,7 @@ namespace ToDo
                  {
                      return REPONSE_INVALID_COMMAND;
                  }
-             }
-            else if (operation is OperationDisplay)
-            {
-                response = DisplayAll(taskList);
-            }
+             } 
             else if (operation is OperationModify)
             {
                 /*
@@ -107,27 +103,11 @@ namespace ToDo
             {
                 undoStack.Pop();
                 Operation undoOperation = undoStack.Pop();
-                if (undoOperation is OperationAdd)
-                {
-                    Task task =((OperationAdd)undoOperation).NewTask;
-                    response = Delete(ref task, ref taskList, out successFlag);
-                }
-                else if (undoOperation is OperationDelete &&(((OperationDelete)undoOperation).Index.HasValue == true))
-                {
-                   
-                    Task task = undoTask.Pop();
-                    response = Add(task, ref taskList, out successFlag);
-                }
-                else if (undoOperation is OperationModify && ((OperationModify)undoOperation).NewTask!=null)
-                {
-                    Task taskToModify = ((OperationModify)undoOperation).NewTask;
-                    Task newTask = undoTask.Pop();
-                    response = Modify(ref taskToModify, newTask, ref taskList, out successFlag);
-                }
-                else
-                {
-                    response = "cannot undo this operation";
-                }
+                response = Undo(undoOperation, ref taskList);
+            }
+            else if (operation is OperationDisplay)
+            {
+                response = DisplayAll(taskList);
             }
             else if (operation is OperationSearch)
             {
@@ -198,26 +178,53 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;
         }
 
+        private string Undo(Operation undoOperation, ref List<Task> taskList)
+        {
+            string response;
+            bool successFlag;
+            if (undoOperation is OperationAdd)
+            {
+                Task task = ((OperationAdd)undoOperation).NewTask;
+                response = Delete(ref task, ref taskList, out successFlag);
+            }
+            else if (undoOperation is OperationDelete && (((OperationDelete)undoOperation).Index.HasValue == true))
+            {
+
+                Task task = undoTask.Pop();
+                response = Add(task, ref taskList, out successFlag);
+            }
+            else if (undoOperation is OperationModify && ((OperationModify)undoOperation).NewTask != null)
+            {
+                Task taskToModify = ((OperationModify)undoOperation).NewTask;
+                Task newTask = undoTask.Pop();
+                response = Modify(ref taskToModify, newTask, ref taskList, out successFlag);
+            }
+            else
+            {
+                response = "cannot undo this operation";
+            }
+            return response;
+        }
+
         private string DisplayAll(List<Task> taskList)
         {
             string displayString = String.Empty;
             int index = 1;
             foreach (Task task in taskList)
-            {                
-                displayString += ((index) + ". " + task.TaskName);
-                if (task is TaskDeadline)
+            {
+                displayString += index;
+                if (task is TaskFloating)
                 {
-                    displayString += (" BY: " + ((TaskDeadline)task).EndTime);
+                    displayString += ShowFloating((TaskFloating)task);
+                }
+                else if (task is TaskDeadline)
+                {
+                    displayString += ShowDeadline((TaskDeadline)task);
                 }
                 else if (task is TaskEvent)
                 {
-                    DateTime startTime = ((TaskEvent)task).StartTime;
-                    DateTime endTime = ((TaskEvent)task).EndTime;
-                    displayString += (" AT: " + startTime.ToString());
-                    if(startTime != endTime && endTime != null)
-                    displayString += (" TO: " + endTime.ToString());
-                }
-                displayString += "\r\n";
+                    displayString += ShowEvent((TaskEvent)task);
+                } 
                 index++;                
             }
             lastListedTasks = new List<Task>(taskList);
@@ -233,24 +240,55 @@ namespace ToDo
                 if (task.TaskName.IndexOf(searchString) >= 0)
                 {
                     lastListedTasks.Add(task);
-                    displayString += ((index) + ". " + task.TaskName);
-                    if (task is TaskDeadline)
+                    displayString += index;
+                    if (task is TaskFloating)
                     {
-                        displayString += (" BY: " + ((TaskDeadline)task).EndTime);
+                        displayString += ShowFloating((TaskFloating)task);
+                    }
+                    else if (task is TaskDeadline)
+                    {
+                        displayString += ShowDeadline((TaskDeadline)task);
                     }
                     else if (task is TaskEvent)
-                    {
-                        DateTime startTime = ((TaskEvent)task).StartTime;
-                        DateTime endTime = ((TaskEvent)task).EndTime;
-                        displayString += (" AT: " + startTime.ToString());
-                        if (startTime != endTime && endTime != null)
-                            displayString += (" TO: " + endTime.ToString());
-                    }
-                    displayString += "\r\n";
+                    { 
+                        displayString += ShowEvent((TaskEvent)task);
+                    } 
                     index++;
                 }
             }
             return displayString;
+        }
+
+        private string ShowFloating(TaskFloating task)
+        {
+            string feedback;
+            feedback = ". " + task.TaskName;
+            feedback += "\r\n";
+            return feedback;
+        }
+
+        private string ShowDeadline(TaskDeadline task)
+        {
+            string feedback;
+            feedback = ". " + task.TaskName;
+
+            feedback += (" BY: " + ((TaskDeadline)task).EndTime);
+            feedback += "\r\n";
+            return feedback;
+        }
+
+        private string ShowEvent(TaskEvent task)
+        { 
+            string feedback;
+            feedback = ". " + task.TaskName;
+
+            DateTime startTime = ((TaskEvent)task).StartTime;
+            DateTime endTime = ((TaskEvent)task).EndTime;
+            feedback += (" AT: " + startTime.ToString());
+            if (startTime != endTime && endTime != null)
+                feedback += (" TO: " + endTime.ToString());
+            feedback += "\r\n";
+            return feedback;
         }
 
         private void TrackOperation(Operation operation)

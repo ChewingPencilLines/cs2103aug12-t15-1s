@@ -5,11 +5,11 @@ namespace ToDo
 {
     public class TaskComparer : IComparer<Task>
     {
-        public int Compare(Task x, Task y)
+        public int Compare(Task taskx, Task tasky)
         {
-            if (x == null)
+            if (taskx == null)
             {
-                if (y == null)
+                if (tasky == null)
                 { 
                     return 0;
                 }
@@ -20,13 +20,13 @@ namespace ToDo
             }
             else
             { 
-                if (y == null) 
+                if (tasky == null) 
                 {
                     return 1;
                 }
                 else
                 { 
-                    int retval = x.TaskName.CompareTo(y.TaskName);
+                    int retval = taskx.TaskName.CompareTo(tasky.TaskName);
 
                     if (retval != 0)
                     {
@@ -34,7 +34,7 @@ namespace ToDo
                     }
                     else
                     { 
-                        return x.ID.CompareTo(y.ID);
+                        return taskx.ID.CompareTo(tasky.ID);
                     }
                 }
             }

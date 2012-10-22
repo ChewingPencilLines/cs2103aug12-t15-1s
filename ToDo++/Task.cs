@@ -12,7 +12,7 @@ namespace ToDo
 
     #region Abstract definition for task    
     
-    public class Task
+    public abstract class Task
     {
         protected string taskName;
         public string TaskName
@@ -44,7 +44,7 @@ namespace ToDo
             else id = forceID;
         }
 
-        public virtual XElement ToXElement() { return null; }
+        public abstract XElement ToXElement();
 
         public override int GetHashCode()
         {
