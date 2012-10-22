@@ -42,18 +42,12 @@ namespace ToDo
 
         public int? Index
         {
-            get
-            {
-                return index;
-            }
+            get {  return index;  }
         }
 
         public string DeleteString
         {
-            get
-            {
-                return deleteString;
-            }
+            get {  return deleteString; }
         }
 
         public OperationDelete(int index)
@@ -71,7 +65,42 @@ namespace ToDo
 
     class OperationDisplay : Operation
     {
+        public OperationDisplay()
+        { }
+    }
 
+    class OperationSort : Operation
+    {
+        public OperationSort()
+        { }
+    }
+
+    class OperationPostpone : Operation
+    { 
+        private int? oldIndex;
+        private Task postponedTask;
+
+        public int? OldIndex
+        {
+            get { return oldIndex; }
+        }
+
+        public Task PostponedTask
+        {
+            get { return postponedTask; }
+        }
+
+        public OperationPostpone(int Previous, Task Postponed)
+        {
+            oldIndex = Previous - 1;
+            postponedTask = Postponed;
+        }
+
+        public OperationPostpone()
+        {
+            oldIndex = null;
+            postponedTask = null;
+        }
     }
 
     class OperationSearch : Operation
@@ -120,24 +149,42 @@ namespace ToDo
 
     class OperationUndo : Operation
     {
-        //Variables not needed for now
         public OperationUndo()
         { }
 
     }
+       
+    class OperationRedo : Operation
+    {
+        public OperationRedo()
+        { }
+    }
 
     class OperationDone : Operation
     {
-        private int index;
+        private int? index;
+        private string doneString;
 
-        public int Index
+        public int? Index
         {
             get { return index; }
+        }
+
+        public string DoneString
+        {
+            get{ return doneString; }
         }
 
         public OperationDone(int index)
         {
             this.index = index - 1;
+            this.doneString = null;
+        }
+
+        public OperationDone(string doneString)
+        {
+            this.index = null;
+            this.doneString = doneString;
         }
 
     } 
