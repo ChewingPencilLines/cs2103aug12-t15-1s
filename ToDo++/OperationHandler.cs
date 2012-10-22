@@ -11,7 +11,8 @@ namespace ToDo
     {
         List<Task> lastListedTasks;
         Stack<Operation> undoStack;
-        Stack<Operation> redoStack;        
+        Stack<Task> undoTask;
+       // Stack<Operation> redoStack;        
         Storage storageXML;
 
         // ******************************************************************
@@ -32,6 +33,7 @@ namespace ToDo
         {
             lastListedTasks = new List<Task>();
             undoStack = new Stack<Operation>();
+            undoTask = new Stack<Task>();
             this.storageXML = storageXML;
         } 
 
@@ -39,6 +41,9 @@ namespace ToDo
         {
             string response; 
             bool successFlag;
+
+            TrackOperation(operation);
+
             if (operation == null)
             {
                 return REPONSE_INVALID_COMMAND;
@@ -103,7 +108,28 @@ namespace ToDo
             }
             else if (operation is OperationUndo)
             {
-                throw new NotImplementedException();
+                undoStack.Pop();
+                Operation undoOperation = undoStack.Pop();
+                if (undoOperation is OperationAdd)
+                {
+                    Task task =((OperationAdd)undoOperation).NewTask;
+                    response = Delete(ref task, ref taskList, out successFlag);
+                }
+                else if (undoOperation is OperationDelete)
+                {
+                    Task task = undoTask.Pop();
+                    response = Add(task, ref taskList, out successFlag);
+                }
+                else if (undoOperation is OperationModify)
+                {
+                    Task taskToModify = ((OperationModify)undoOperation).NewTask;
+                    Task newTask = undoTask.Pop();
+                    response = Modify(ref taskToModify, newTask, ref taskList, out successFlag);
+                }
+                else
+                {
+                    response = "cannot undo this operation";
+                }
             }
             else if (operation is OperationSearch)
             {
@@ -141,6 +167,7 @@ namespace ToDo
         private string Delete(ref Task taskToDelete, ref List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
+            undoTask.Push(taskToDelete);
             taskList.Remove(taskToDelete);
             if (storageXML.RemoveTaskFromFile(taskToDelete))
             {
@@ -154,6 +181,7 @@ namespace ToDo
         private string Modify(ref Task taskToModify,Task newTask, ref List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
+            undoTask.Push(taskToModify);
             taskList.Remove(taskToModify);
             taskList.Add(newTask);
             if (storageXML.RemoveTaskFromFile(taskToModify)&&storageXML.AddTaskToFile(newTask))
@@ -223,7 +251,7 @@ namespace ToDo
         private void TrackOperation(Operation operation)
         {
             undoStack.Push(operation);
-            redoStack.Clear();
+           // redoStack.Clear();
         }
     }
 }
