@@ -21,7 +21,7 @@ namespace ToDo
         const string RESPONSE_ADD_SUCCESS = "Added \"{0}\" successfully.";
         const string RESPONSE_ADD_FAIL = "Failed to add task!";
         const string RESPONSE_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
-        const string RESPONSE_MODIFY_SUCCESS = "Modified task successfully.";
+        const string RESPONSE_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
         const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
         const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string REPONSE_INVALID_COMMAND = "Invalid command!";
@@ -50,22 +50,27 @@ namespace ToDo
                 response = Add(taskToAdd, ref taskList, out successFlag);
             }
             else if (operation is OperationDelete)
-            {   
+            { 
+                 //@todo:cannot tell delete 0 and delete
                  int? index = ((OperationDelete)operation).Index;
                  string deleteString = ((OperationDelete)operation).DeleteString;
                  if (index.HasValue == false && deleteString != null)
                  {                  
                      response = Search(taskList, deleteString);
                  }
+                 else if (index.Value == -1 && deleteString == null)
+                 {
+                     response = DisplayAll(taskList);
+                 }
                  else if (index < 0 || index > taskList.Count - 1)
                  {
                      return RESPONSE_INVALID_TASK_INDEX;
                  }
-                 else if(deleteString == null)
+                 else if (deleteString == null)
                  {
                      Task taskToDelete = lastListedTasks[index.Value];
                      response = Delete(ref taskToDelete, ref taskList, out successFlag);
-                 }                 
+                 }
                  else
                  {
                      return REPONSE_INVALID_COMMAND;
@@ -154,7 +159,7 @@ namespace ToDo
             if (storageXML.RemoveTaskFromFile(taskToModify)&&storageXML.AddTaskToFile(newTask))
             {
                 successFlag = true;
-                return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName);
+                return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
             }
             else
                 return RESPONSE_XML_READWRITE_FAIL;
