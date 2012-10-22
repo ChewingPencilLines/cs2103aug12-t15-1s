@@ -12,7 +12,7 @@ namespace ToDo
 
     #region Abstract definition for task    
     
-    public abstract class Task
+    public class Task
     {
         protected string taskName;
         public string TaskName
@@ -34,7 +34,7 @@ namespace ToDo
             get { return id; }
             //set { id = value; }
         }
-
+         
         public Task(string taskName, bool state, int forceID)
         {
             this.taskName = taskName;
@@ -44,13 +44,13 @@ namespace ToDo
             else id = forceID;
         }
 
-        public abstract XElement ToXElement();
+        public virtual XElement ToXElement() { return null; }
 
         public override int GetHashCode()
         {
             int newHashCode = Math.Abs(base.GetHashCode() ^ (int)DateTime.Now.ToBinary());
             return newHashCode;
-        }
+        } 
     } 
     #endregion
 
@@ -142,4 +142,6 @@ namespace ToDo
         }
     }
      #endregion
+
+
 }

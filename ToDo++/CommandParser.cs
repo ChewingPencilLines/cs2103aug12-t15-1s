@@ -161,11 +161,7 @@ namespace ToDo
                     task = GenerateNewTask(taskName, startCombined, endCombined);
                     newOperation = new OperationAdd(task);
                     break;
-                case CommandType.DELETE:
-                    /*
-                    Debug.Assert(taskIndex != null, "task index is null!");
-                    newOperation = new OperationDelete((int)taskIndex);
-                     */
+                case CommandType.DELETE: 
                     if(taskName!=null)
                     {
                         newOperation = new OperationDelete(taskName);
@@ -200,12 +196,18 @@ namespace ToDo
                     newOperation = new OperationSearch(taskName);
                     break;
                 case CommandType.SORT:
-                    throw new NotImplementedException();
+                    newOperation = new OperationSort();
+                    break; 
                 case CommandType.REDO:
-                    throw new NotImplementedException();
+                    newOperation = new OperationRedo();
+                    break;
                 case CommandType.UNDO:
                     newOperation = new OperationUndo();
                     break;
+                case CommandType.DONE:
+                    throw new NotImplementedException();
+                case CommandType.POSTPONE:
+                    throw new NotImplementedException();
             }
             return newOperation;
         }
