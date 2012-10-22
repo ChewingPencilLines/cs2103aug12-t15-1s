@@ -162,9 +162,22 @@ namespace ToDo
                     newOperation = new OperationAdd(task);
                     break;
                 case CommandType.DELETE:
+                    /*
                     Debug.Assert(taskIndex != null, "task index is null!");
                     newOperation = new OperationDelete((int)taskIndex);
-                    break;
+                     */
+                    if(taskName!=null)
+                    {
+                        newOperation = new OperationDelete(taskName);
+                        break;
+                    }
+                    else if (taskIndex != null)
+                    {
+                        newOperation = new OperationDelete((int)taskIndex);
+                        break;
+                    }
+                    else
+                        throw new Exception("Invalid task name.");
                 case CommandType.DISPLAY:
                     newOperation = new OperationDisplay();
                     break;
