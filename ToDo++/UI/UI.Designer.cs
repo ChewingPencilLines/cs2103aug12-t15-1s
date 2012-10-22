@@ -37,7 +37,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.customPanelControl = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.textInput = new System.Windows.Forms.TextBox();
+            this.textInput = new ToDo.InputBox();
             this.outputBox = new ToDo.OutputBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.coverPanel = new System.Windows.Forms.Panel();
@@ -143,11 +143,12 @@
             this.textInput.BackColor = System.Drawing.Color.PaleTurquoise;
             this.textInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textInput.Location = new System.Drawing.Point(3, 164);
+            this.textInput.Location = new System.Drawing.Point(3, 163);
             this.textInput.Name = "textInput";
             this.textInput.Size = new System.Drawing.Size(378, 19);
-            this.textInput.TabIndex = 0;
+            this.textInput.TabIndex = 1;
             this.textInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
+            this.textInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textInput_PreviewKeyDown);
             // 
             // outputBox
             // 
@@ -266,7 +267,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textInput;
         private System.Windows.Forms.NotifyIcon notifyIcon_taskBar;
         private OutputBox outputBox;
         private System.Windows.Forms.PictureBox pictureBox1;
@@ -282,6 +282,7 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Panel shiftPanel;
         private System.Windows.Forms.Panel coverPanel;
+        private InputBox textInput;
     }
 }
 

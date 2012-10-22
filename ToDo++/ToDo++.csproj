@@ -46,6 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TaskComparer.cs" />
+    <Compile Include="UI\Components\InputBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\PreferencesPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
