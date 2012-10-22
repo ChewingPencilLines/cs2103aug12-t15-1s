@@ -15,10 +15,10 @@ namespace ToDo
     #endregion
 
     // ******************************************************************
-    // Definition for five different operation
+    // Definition for derived operations
     // ******************************************************************
 
-    #region Definition for five different operation
+    #region Definition for derived operations
     class OperationAdd : Operation
     {
         private Task newTask;

@@ -134,6 +134,13 @@ namespace ToDo
                 string searchString = ((OperationSearch)operation).SearchString;
                 response = Search(taskList, searchString);
             }
+            else if (operation is OperationSort)
+            {
+                //sort only change what user view, but not change in storage
+                TaskComparer tc = new TaskComparer(); 
+                lastListedTasks.Sort(tc);
+                response = DisplayAll(lastListedTasks);
+            }
             else
             {
                 return REPONSE_INVALID_COMMAND;
