@@ -174,6 +174,26 @@ namespace ToDo
 
         #endregion
 
+        /// <summary>
+        /// Allows resizing of borderless form
+        /// </summary>
+        #region Resizing
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd,
+                         int Msg, int wParam, int lParam);
+        [DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
+        private void UI_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+        }
+
+        #endregion
+
         #endregion
 
         // ******************************************************************
@@ -270,6 +290,14 @@ namespace ToDo
             shiftPanel.AutoScrollPosition = new Point(0, customScrollbar.Value);
             customScrollbar.Invalidate();
             Application.DoEvents();
+        }
+
+        /// <summary>
+        /// Sets correct length to scrollbar
+        /// </summary>
+        private void UI_Resize(object sender, EventArgs e)
+        {
+            this.customScrollbar.LargeChange = customScrollbar.Maximum / customScrollbar.Height + this.shiftPanel.Height;
         }
 
         #endregion
@@ -425,35 +453,7 @@ namespace ToDo
             Application.Exit();
         }
 
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HT_CAPTION = 0x2;
 
-        [DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd,
-                         int Msg, int wParam, int lParam);
-        [DllImportAttribute("user32.dll")]
-        public static extern bool ReleaseCapture();
-        private void UI_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-        }
-
-        private void UI_ResizeBegin(object sender, EventArgs e)
-        {
-
-        }
-
-        private void UI_Resize(object sender, EventArgs e)
-        {
-            this.customScrollbar.LargeChange = customScrollbar.Maximum / customScrollbar.Height + this.shiftPanel.Height;
-
-            //this.customScrollbar.Maximum = this.shiftPanel.DisplayRectangle.Height;
-        }
-
-        private void UI_ResizeEnd(object sender, EventArgs e)
-        {
-
-        }        
+     
     }
 }
