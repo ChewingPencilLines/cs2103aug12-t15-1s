@@ -25,9 +25,10 @@ namespace ToDo
         {
             this.taskStorageFile = taskStorageFile;
             this.settingsFile = settingsFile;
+
+            LoadSettingsFromFile(this.settingsFile);
             if (!ValidateTaskFile(this.taskStorageFile))
                 CreateNewTaskFile(this.taskStorageFile);
-            CreateNewSettingsFile(this.settingsFile);
         }
 
         private bool ValidateTaskFile(string filename)
@@ -75,44 +76,45 @@ namespace ToDo
             return true;
         }
 
-        internal bool CreateNewSettingsFile(string filename)
-        {
-            return false;
+        private SettingsList LoadSettingsFromFile(string filename)
+        {            
+            SettingsList settingsList = new SettingsList();
+            try
+            {
+                StreamReader file = new StreamReader(filename);
+                XmlSerializer writer = new XmlSerializer(typeof(SettingsList));
+                settingsList = (SettingsList)writer.Deserialize(file);
+                file.Close();
+            }
+            // Write default settings if file not found or invalid.
+            catch (FileNotFoundException)
+            {
+                AlertBox.Show("Settings file Not Found, new file will be created");
+                WriteSettingsToFile(settingsList);
+            }
+            catch (InvalidOperationException)
+            {
+                AlertBox.Show("There was an error with the settings file, a new file will be created");
+                WriteSettingsToFile(settingsList);
+            }
+            return settingsList;
         }
 
-        private void LoadSettingsFile()
+        internal bool WriteSettingsToFile(SettingsList settingsList)
         {
-            //System.IO.StreamReader file;
-
-            //try
-            //{
-            //    file = new System.IO.StreamReader(fileName);
-            //    System.Xml.Serialization.XmlSerializer writer =
-            //    new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
-            //    settingsList = (SettingsList)writer.Deserialize(file);
-            //    file.Close();
-            //}
-            //catch (FileNotFoundException)
-            //{
-            //    AlertBox.Show("Settings File Not Found, new file will be created");
-            //    //MessageBox.Show("Settings File Not Found, new file will be created");
-            //    WriteToFile();
-            //}
-            //catch (InvalidOperationException)
-            //{
-            //    MessageBox.Show("There was an error with the Settings File, a new file will be created");
-            //    WriteToFile();
-            //}
-        }
-
-        private void UpdateSettingsFile()
-        {
-            //System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
-
-            //System.Xml.Serialization.XmlSerializer writer =
-            //new System.Xml.Serialization.XmlSerializer(typeof(SettingsList));
-            //writer.Serialize(file, settingsList);
-            //file.Close();
+            try
+            {
+                StreamWriter file = new StreamWriter(settingsFile);
+                XmlSerializer writer = new XmlSerializer(typeof(ToDo.SettingsList.MiscSettings));
+                writer.Serialize(file, settingsList.misc);
+                file.Close();
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                AlertBox.Show("Failed to write to settings file!");
+                return false;
+            }
         }
 
         internal bool AddTaskToFile(Task taskToAdd)
@@ -126,7 +128,7 @@ namespace ToDo
             }
             catch (Exception e)
             {
-                CustomMessageBox.Show("Warning!", "A problem was encoutered saving the new task to file.");
+                AlertBox.Show("A problem was encoutered saving the new task to file.");
                 return false;
             }
             return true;
@@ -158,7 +160,7 @@ namespace ToDo
                 Task addTask = GenerateTaskFromXElement(task);
                 if (addTask == null)
                 {
-                    CustomMessageBox.Show("Warning!", "Task storage file seems corrupted. Error reading from it!");
+                    AlertBox.Show("Task storage file seems corrupted. Error reading from it!");
                 }
                 taskList.Add(addTask);
             }
