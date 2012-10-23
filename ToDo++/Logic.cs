@@ -35,7 +35,7 @@ namespace ToDo
         /// <returns></returns>
         public bool UpdateSettings(SettingsList settingsList)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ToDo
         /// <returns></returns>
         public static void LoadSettings(SettingsList settingsList)
         {
-            throw new NotImplementedException();
+            return;
         }
 
         private string ExecuteCommand(Operation operation)
