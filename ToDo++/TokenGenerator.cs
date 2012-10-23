@@ -85,7 +85,11 @@ namespace ToDo
             monthKeywords = stringParser.getMonthKeywords();
         }
 
-        #region Token Generation Methods
+        // ******************************************************************
+        // Public Methods
+        // ******************************************************************
+
+        #region Public Token Generation Methods
         /// <summary>
         /// This method searches an input list of strings and generates the relevant
         /// command, day, date, time, context and literal tokens of all the relevant matching strings.
@@ -238,125 +242,6 @@ namespace ToDo
             return dateTokens;
         }
 
-        private static bool TryParsingDate(ref DateTime date, int year, int month, int day, bool ignoreFailure)
-        {
-            try
-            {
-                date = new DateTime(year, month, day);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                if (ignoreFailure)
-                    date = new DateTime(1, 1, 1);
-                else
-                {
-                    //flag
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// This method searches a string for a date match (alphabetic, numeric or just day with suffixes)
-        /// and returns the match.
-        /// </summary>
-        /// <param name="theWord">The string to be searched/matched</param>
-        /// <returns>The match found</returns>
-        private static Match GetDateMatch(string theWord)
-        {
-            Match theMatch = date_numericFormat.Match(theWord);
-            if (!theMatch.Success)
-            {
-                theMatch = date_alphabeticFormat.Match(theWord);
-            }
-            if (!theMatch.Success)
-            {
-                theMatch = date_daysWithSuffixes.Match(theWord);
-            }
-            return theMatch;
-        }
-
-        /// <summary>
-        /// This method retrieves the values of the day, month and year groups from an input match.
-        /// </summary>
-        /// <param name="match">The input match</param>
-        /// <param name="day">The string value of the retrieved day group</param>
-        /// <param name="month">The string value of the retrieved month group</param>
-        /// <param name="year">The string value of the retrieved year group</param>
-        private static void GetMatchTagValues(Match match, ref string day, ref string month, ref string year)
-        {
-            day = match.Groups["day"].Value;
-            month = match.Groups["month"].Value;
-            year = match.Groups["year"].Value;
-        }
-
-        /// <summary>
-        /// This methods convert the day, month and year strings into their equivalent integers.
-        /// If the day and year strings are empty, they will be converted to zeroes.
-        /// </summary>
-        /// <param name="dayString">The input day string (may contain suffixes)</param>
-        /// <param name="monthString">The input month string (may be numeric or alphabetical)</param>
-        /// <param name="yearString">The input year string</param>
-        /// <param name="dayInt">The output day integer</param>
-        /// <param name="monthInt">The output month integer</param>
-        /// <param name="yearInt">The output year integer</param>      
-        private static void ConvertMatchTagValuesToInts(string dayString, string monthString, string yearString, ref int dayInt, ref int monthInt, ref int yearInt)
-        {
-            dayString = RemoveSuffixesIfRequired(dayString);
-            int.TryParse(dayString, out dayInt);
-            monthInt = ConvertToNumericMonth(monthString);
-            int.TryParse(yearString, out yearInt);
-        }
-
-        /// <summary>
-        /// This method takes in an input month string and returns its corresponding index as an integer.
-        /// If alphabetic, the string is looked up and compared to a dictionary.
-        /// For example, "january" or "jan" returns 1.
-        /// A 0 is returned if the string is empty.
-        /// </summary>
-        /// <param name="month">The input month string (can be numeric of alphabetic)</param>
-        /// <returns>An integer month index</returns>
-        private static int ConvertToNumericMonth(string month)
-        {
-            Month monthType;
-            int monthInt = 0;
-            bool success;
-            if (month == String.Empty)
-                return 0;
-            if (Char.IsDigit(month[0]))
-            {
-                success = int.TryParse(month, out monthInt);
-            }
-            else if (monthKeywords.TryGetValue(month, out monthType))
-            {
-                monthInt = (int)monthType;
-            }
-            else Debug.Assert(false, "Conversion to numeric month failed! There should always be a valid month matched.");
-            return monthInt;
-        }
-
-        /// <summary>
-        /// This method removes the suffix from a specified day string if it exists and returns the
-        /// shortened string.
-        /// For example, both "15th" and "15" returns "15".
-        /// </summary>
-        /// <param name="day">The input day string (may contain suffixes)</param>
-        /// <returns>The day string with no suffixes</returns>
-        private static string RemoveSuffixesIfRequired(string day)
-        {
-            // No day input
-            if (day == String.Empty)
-            {
-                return day;
-            }
-            if (!Char.IsDigit(day.Last()))
-            {
-                day = day.Remove(day.Length - 2, 2);
-            }
-            return day;
-        }
-
         /// <summary>
         /// This method searches an input list of strings for all valid times and generates a list of time tokens
         /// corresponding to all the found matched time strings using regexes.
@@ -462,15 +347,136 @@ namespace ToDo
             }
             return literalTokens;
         }
-
-        private static void AddLiteralToken(ref string literal, int index, ref List<Token> literalTokens)
-        {
-            literal = literal.Trim();
-            TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
-            literalTokens.Add(literalToken);
-            literal = String.Empty;
-        }
         #endregion
+
+        // ******************************************************************
+        // Private Methods
+        // ******************************************************************
+
+        #region Private Helper Methods
+        private static bool IsValidDate(string theDate)
+        {
+            return StringParser.IsValidNumericDate(theDate) || StringParser.IsValidAlphabeticDate(theDate);
+        }
+
+        /// <summary>
+        /// This method searches a string for a date match (alphabetic, numeric or just day with suffixes)
+        /// and returns the match.
+        /// </summary>
+        /// <param name="theWord">The string to be searched/matched</param>
+        /// <returns>The match found</returns>
+        private static Match GetDateMatch(string theWord)
+        {
+            Match theMatch = date_numericFormat.Match(theWord);
+            if (!theMatch.Success)
+            {
+                theMatch = date_alphabeticFormat.Match(theWord);
+            }
+            if (!theMatch.Success)
+            {
+                theMatch = date_daysWithSuffixes.Match(theWord);
+            }
+            return theMatch;
+        }
+
+        /// <summary>
+        /// This method retrieves the values of the day, month and year groups from an input match.
+        /// </summary>
+        /// <param name="match">The input match</param>
+        /// <param name="day">The string value of the retrieved day group</param>
+        /// <param name="month">The string value of the retrieved month group</param>
+        /// <param name="year">The string value of the retrieved year group</param>
+        private static void GetMatchTagValues(Match match, ref string day, ref string month, ref string year)
+        {
+            day = match.Groups["day"].Value;
+            month = match.Groups["month"].Value;
+            year = match.Groups["year"].Value;
+        }
+
+        /// <summary>
+        /// This methods convert the day, month and year strings into their equivalent integers.
+        /// If the day and year strings are empty, they will be converted to zeroes.
+        /// </summary>
+        /// <param name="dayString">The input day string (may contain suffixes)</param>
+        /// <param name="monthString">The input month string (may be numeric or alphabetical)</param>
+        /// <param name="yearString">The input year string</param>
+        /// <param name="dayInt">The output day integer</param>
+        /// <param name="monthInt">The output month integer</param>
+        /// <param name="yearInt">The output year integer</param>      
+        private static void ConvertMatchTagValuesToInts(string dayString, string monthString, string yearString, ref int dayInt, ref int monthInt, ref int yearInt)
+        {
+            dayString = RemoveSuffixesIfRequired(dayString);
+            int.TryParse(dayString, out dayInt);
+            monthInt = ConvertToNumericMonth(monthString);
+            int.TryParse(yearString, out yearInt);
+        }
+
+        /// <summary>
+        /// This method removes the suffix from a specified day string if it exists and returns the
+        /// shortened string.
+        /// For example, both "15th" and "15" returns "15".
+        /// </summary>
+        /// <param name="day">The input day string (may contain suffixes)</param>
+        /// <returns>The day string with no suffixes</returns>
+        private static string RemoveSuffixesIfRequired(string day)
+        {
+            // No day input
+            if (day == String.Empty)
+            {
+                return day;
+            }
+            if (!Char.IsDigit(day.Last()))
+            {
+                day = day.Remove(day.Length - 2, 2);
+            }
+            return day;
+        }
+
+        /// <summary>
+        /// This method takes in an input month string and returns its corresponding index as an integer.
+        /// If alphabetic, the string is looked up and compared to a dictionary.
+        /// For example, "january" or "jan" returns 1.
+        /// A 0 is returned if the string is empty.
+        /// </summary>
+        /// <param name="month">The input month string (can be numeric of alphabetic)</param>
+        /// <returns>An integer month index</returns>
+        private static int ConvertToNumericMonth(string month)
+        {
+            Month monthType;
+            int monthInt = 0;
+            bool success;
+            if (month == String.Empty)
+                return 0;
+            if (Char.IsDigit(month[0]))
+            {
+                success = int.TryParse(month, out monthInt);
+            }
+            else if (monthKeywords.TryGetValue(month, out monthType))
+            {
+                monthInt = (int)monthType;
+            }
+            else Debug.Assert(false, "Conversion to numeric month failed! There should always be a valid month matched.");
+            return monthInt;
+        }
+
+        private static bool TryParsingDate(ref DateTime date, int year, int month, int day, bool ignoreFailure)
+        {
+            try
+            {
+                date = new DateTime(year, month, day);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                if (ignoreFailure)
+                    date = new DateTime(1, 1, 1);
+                else
+                {
+                    //flag
+                    return false;
+                }
+            }
+            return true;
+        }
 
         /// <summary>
         /// This methods compares the 2 input tokens by their stored integer positions and
@@ -510,9 +516,13 @@ namespace ToDo
             return null;
         }
 
-        private static bool IsValidDate(string theDate)
+        private static void AddLiteralToken(ref string literal, int index, ref List<Token> literalTokens)
         {
-            return StringParser.IsValidNumericDate(theDate) || StringParser.IsValidAlphabeticDate(theDate);
+            literal = literal.Trim();
+            TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
+            literalTokens.Add(literalToken);
+            literal = String.Empty;
         }
+        #endregion
     }
 }
