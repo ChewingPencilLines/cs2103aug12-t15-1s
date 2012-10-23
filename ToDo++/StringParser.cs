@@ -288,7 +288,8 @@ namespace ToDo
         internal static List<Token> ParseStringIntoTokens(string input, List<int[]> indexOfDelimiters = null)
         {
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
-            return TokenGenerator.GenerateTokens(words);
+            TokenGenerator tokenGenerator = new TokenGenerator();
+            return tokenGenerator.GenerateTokens(words);
         }
         #endregion
 
