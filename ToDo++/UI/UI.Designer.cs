@@ -68,7 +68,7 @@
             this.loadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.loadButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loadButton.ForeColor = System.Drawing.Color.SteelBlue;
-            this.loadButton.Location = new System.Drawing.Point(9, 4);
+            this.loadButton.Location = new System.Drawing.Point(7, 5);
             this.loadButton.Name = "loadButton";
             this.loadButton.Size = new System.Drawing.Size(122, 37);
             this.loadButton.TabIndex = 13;
@@ -83,9 +83,9 @@
             this.preferencesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.preferencesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.preferencesButton.ForeColor = System.Drawing.Color.SteelBlue;
-            this.preferencesButton.Location = new System.Drawing.Point(135, 4);
+            this.preferencesButton.Location = new System.Drawing.Point(134, 5);
             this.preferencesButton.Name = "preferencesButton";
-            this.preferencesButton.Size = new System.Drawing.Size(122, 37);
+            this.preferencesButton.Size = new System.Drawing.Size(124, 37);
             this.preferencesButton.TabIndex = 14;
             this.preferencesButton.Text = "Preferences";
             this.preferencesButton.UseVisualStyleBackColor = false;
@@ -98,7 +98,7 @@
             this.helpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.helpButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.helpButton.ForeColor = System.Drawing.Color.SteelBlue;
-            this.helpButton.Location = new System.Drawing.Point(263, 4);
+            this.helpButton.Location = new System.Drawing.Point(263, 5);
             this.helpButton.Name = "helpButton";
             this.helpButton.Size = new System.Drawing.Size(122, 37);
             this.helpButton.TabIndex = 15;
@@ -110,7 +110,7 @@
             this.pictureBox1.Enabled = false;
             this.pictureBox1.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.ErrorImage")));
             this.pictureBox1.Image = global::ToDo.Properties.Resources.CoverPhoto;
-            this.pictureBox1.Location = new System.Drawing.Point(8, 47);
+            this.pictureBox1.Location = new System.Drawing.Point(7, 47);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(377, 29);
             this.pictureBox1.TabIndex = 9;
@@ -241,8 +241,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.SteelBlue;
-            this.ClientSize = new System.Drawing.Size(391, 282);
+            this.ClientSize = new System.Drawing.Size(393, 282);
             this.Controls.Add(this.helpButton);
             this.Controls.Add(this.preferencesButton);
             this.Controls.Add(this.loadButton);
@@ -253,6 +254,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "UI";
             this.Text = "ToDo++";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UI_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.customPanelControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -268,21 +270,21 @@
         #endregion
 
         private System.Windows.Forms.NotifyIcon notifyIcon_taskBar;
-        private OutputBox outputBox;
         private System.Windows.Forms.PictureBox pictureBox1;
         private DateTimeControl dateTimeControl1;
-        private CustomPanelControl customPanelControl;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.Button preferencesButton;
         private System.Windows.Forms.Button helpButton;
-        private CustomControls.CustomScrollbar customScrollbar;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Panel coverPanel;
+        private System.Windows.Forms.Panel shiftPanel;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Panel shiftPanel;
-        private System.Windows.Forms.Panel coverPanel;
+        private CustomControls.CustomScrollbar customScrollbar;
+        private System.Windows.Forms.TabPage tabPage1;
         private InputBox textInput;
+        private OutputBox outputBox;
+        private CustomPanelControl customPanelControl;
     }
 }
 

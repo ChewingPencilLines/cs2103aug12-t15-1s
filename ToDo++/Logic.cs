@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ToDo
 {
-    class Logic
+    public class Logic
     {
         OperationHandler operationHandler;
         CommandParser commandParser;
@@ -33,7 +33,7 @@ namespace ToDo
         /// </summary>
         /// <param name="settingsList"></param>
         /// <returns></returns>
-        public bool UpdateSettings(SettingsList settingsList)
+        public bool UpdateSettings()
         {
             return true;
         }
@@ -43,7 +43,7 @@ namespace ToDo
         /// </summary>
         /// <param name="settingsList"></param>
         /// <returns></returns>
-        public static void LoadSettings(SettingsList settingsList)
+        public void LoadSettings()
         {
             return;
         }

@@ -11,6 +11,8 @@ using System.IO;
 using Hotkeys;
 using Microsoft.Win32;
 using System.Windows.Forms.VisualStyles;
+using System.Runtime.InteropServices;
+
 
 namespace ToDo
 {
@@ -29,15 +31,15 @@ namespace ToDo
         /// <summary>
         /// Creates a new instance of the Main Program (UI) and loads the various Classes
         /// </summary>
-        public UI()
+        public UI(Logic logic)
         {
+            InitializeLogic(logic);                //Sets logic
             InitializeComponent();
             InitializeSystemTray();                //Loads Code to place App in System Tray
             InitializeSettings();                  //Sets the correct settings to ToDo++ at the start
             InitializeMenu();                      //Loads the Menu
             InitializeOutputBox();                 //Loads Output Box
-            IntializeScrolling();              //Loads the Scrolling Bar in the Settings Panel
-            InitializeLogic();                     //Creates instance of Logic to be used by Text Processing
+            IntializeScrolling();                  //Loads the Scrolling Bar in the Settings Panel            
         }
 
         #endregion
@@ -66,19 +68,32 @@ namespace ToDo
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == Hotkeys.Constants.WM_HOTKEY_MSG_ID)
-                MinimiseMaximiseTray();
-            base.WndProc(ref m);
-
+            const int htBottomLeft = 16;
+            const int htBottomRight = 17;
             switch (m.Msg)
             {
                 case WM_NCHITTEST:
+                    /*
                     if (m.Result == (IntPtr)HTCLIENT)
                     {
                         m.Result = (IntPtr)HTCAPTION;
+                    }*/
+                    int x = (int)(m.LParam.ToInt64() & 0xFFFF);
+                    int y = (int)((m.LParam.ToInt64() & 0xFFFF0000) >> 16);
+                    Point pt = PointToClient(new Point(x, y));
+                    Size clientSize = ClientSize;
+                    if (pt.X >= clientSize.Width - 16 && pt.Y >= clientSize.Height - 16 && clientSize.Height >= 16)
+                    {
+                        m.Result = (IntPtr)(IsMirrored ? htBottomLeft : htBottomRight);
+                        return;
                     }
                     break;
-            }            
+
+                case Hotkeys.Constants.WM_HOTKEY_MSG_ID:
+                    MinimiseMaximiseTray();
+                    break;
+            }
+            base.WndProc(ref m);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -172,6 +187,7 @@ namespace ToDo
         /// </summary>
         private void InitializeSettings()
         {
+            logic.LoadSettings();
             MinimiseToTrayWhenChecked();
             RegisterLoadOnStartupWhenChecked();
         }
@@ -181,7 +197,7 @@ namespace ToDo
         /// </summary>
         private void MinimiseToTrayWhenChecked()
         {
-            if(Settings.GetStartMinimizeStatus()==true)
+            if (Settings.GetStartMinimizeStatus() == true)
                 MinimiseMaximiseTray();
         }
 
@@ -294,15 +310,14 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Code for creating an instance of Logic goes here
+        // Set logic
         // ******************************************************************
 
         #region PrepareLogic
 
-        private void InitializeLogic()
-        {          
-
-            logic = new Logic();
+        private void InitializeLogic(Logic logic)
+        {
+            this.logic = logic;
         }
 
         #endregion
@@ -319,9 +334,9 @@ namespace ToDo
         private void ProcessText()
         {
             string input = textInput.Text;
-            string output=logic.ProcessCommand(input);
+            string output = logic.ProcessCommand(input);
 
-            outputBox.DisplayCommand(input,output);
+            outputBox.DisplayCommand(input, output);
             outputBox.SetOutputSize(Settings.GetTextSize());
             textInput.Clear();
         }
@@ -396,5 +411,18 @@ namespace ToDo
             Application.Exit();
         }
 
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd,
+                         int Msg, int wParam, int lParam);
+        [DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
+        private void UI_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+        }        
     }
 }
