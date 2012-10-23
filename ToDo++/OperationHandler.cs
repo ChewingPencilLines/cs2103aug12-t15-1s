@@ -20,10 +20,12 @@ namespace ToDo
         // ******************************************************************
         #region Feedback Strings
         const string RESPONSE_ADD_SUCCESS = "Added \"{0}\" successfully.";
-        const string RESPONSE_ADD_FAIL = "Failed to add task!";
+        const string RESPONSE_ADD_FAILURE = "Failed to add task!";
         const string RESPONSE_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
         const string RESPONSE_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
         const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
+        const string RESPONSE_UNDO_FAILURE = "Cannot undo last executed task!";
+        const string RESPONSE_SEARCH_FAILURE = "Error: No search input!";
         const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string REPONSE_INVALID_COMMAND = "Invalid command!";
         const string RESPONSE_INVALID_TASK_INDEX = "Invalid task index!";
@@ -51,7 +53,7 @@ namespace ToDo
             else if (operation is OperationAdd)
             {
                 Task taskToAdd = ((OperationAdd)operation).NewTask;
-                if (taskToAdd == null) return RESPONSE_ADD_FAIL;
+                if (taskToAdd == null) return RESPONSE_ADD_FAILURE;
                 response = Add(taskToAdd, ref taskList, out successFlag);
             }
             else if (operation is OperationDelete)
@@ -145,7 +147,7 @@ namespace ToDo
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return RESPONSE_ADD_FAIL + "\r\nThe following exception occured: " + e.ToString();
+                return RESPONSE_ADD_FAILURE + "\r\nThe following exception occured: " + e.ToString();
             }     
         }
 
@@ -201,7 +203,7 @@ namespace ToDo
             }
             else
             {
-                response = "cannot undo this operation";
+                response = RESPONSE_UNDO_FAILURE;
             }
             return response;
         }
@@ -235,6 +237,8 @@ namespace ToDo
         {
             string displayString = String.Empty;
             int index = 1;
+            if (searchString == null)
+                return RESPONSE_SEARCH_FAILURE;
             foreach (Task task in taskList)
             {
                 if (task.TaskName.IndexOf(searchString) >= 0)
@@ -255,7 +259,7 @@ namespace ToDo
                     } 
                     index++;
                 }
-            }
+            }   
             return displayString;
         }
 
