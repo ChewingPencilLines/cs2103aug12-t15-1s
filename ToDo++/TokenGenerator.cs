@@ -92,7 +92,7 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of tokens</returns>
-        public static List<Token> GenerateTokens(List<string> input)
+        public List<Token> GenerateTokens(List<string> input)
         {
             List<Token> tokens = new List<Token>();
             tokens.AddRange(GenerateCommandTokens(input));
