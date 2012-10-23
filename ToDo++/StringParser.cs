@@ -175,6 +175,7 @@ namespace ToDo
             dayKeywords.Add("sun", DayOfWeek.Sunday);
             dayKeywords.Add("sunday", DayOfWeek.Sunday);
             dayKeywords.Add("weekend", DayOfWeek.Sunday);
+            dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
             // NYI
             timeSpecificKeywords = new List<string> { "noon", "midnight" };        // special case    
             timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" }; // todo?
@@ -228,7 +229,6 @@ namespace ToDo
         // ******************************************************************
 
         #region Public Methods
-
         internal static void AddUserCommand(string userCommand, CommandType commandType)
         {
             try
@@ -307,7 +307,6 @@ namespace ToDo
         private static List<string> SplitStringIntoSubstrings(string input, List<int[]> indexOfDelimiters)
         {
             List<string> words = new List<string>();
-
             int processedIndex = 0, removedCount = 0;
 
             if (indexOfDelimiters == null)
@@ -537,8 +536,7 @@ namespace ToDo
         // Auxilliary Methods
         // ******************************************************************
 
-        #region Comparison Methods
-
+        #region Comparison Methods For Regexes
         private static bool IsValidTime(string theTime)
         {
             return (time_24HourFormat.IsMatch(theTime) || time_12HourFormat.IsMatch(theTime));
@@ -556,6 +554,5 @@ namespace ToDo
             return date_alphabeticFormat.IsMatch(theDate);
         }
         #endregion
-
     }
 }
