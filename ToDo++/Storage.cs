@@ -25,8 +25,9 @@ namespace ToDo
         {
             this.taskStorageFile = taskStorageFile;
             this.settingsFile = settingsFile;
-
-            LoadSettingsFromFile(this.settingsFile);
+                        
+            SettingsList loadedSettings = LoadSettingsFromFile(this.settingsFile);
+            Settings.UpdateSettings(loadedSettings);
             if (!ValidateTaskFile(this.taskStorageFile))
                 CreateNewTaskFile(this.taskStorageFile);
         }
@@ -83,8 +84,8 @@ namespace ToDo
             {
                 using (StreamReader file = new StreamReader(filename))
                 {
-                    XmlSerializer writer = new XmlSerializer(typeof(SettingsList));
-                    settingsList = (SettingsList)writer.Deserialize(file);
+                    XmlSerializer writer = new XmlSerializer(typeof(ToDo.SettingsList.MiscSettings));
+                    settingsList.misc = (ToDo.SettingsList.MiscSettings)writer.Deserialize(file);
                     file.Close();
                 }
             }
@@ -108,7 +109,9 @@ namespace ToDo
             {
                 StreamWriter file = new StreamWriter(settingsFile);
                 XmlSerializer writer = new XmlSerializer(typeof(ToDo.SettingsList.MiscSettings));
-                writer.Serialize(file, settingsList.misc);
+                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+                ns.Add("", "");
+                writer.Serialize(file, settingsList.misc, ns);
                 file.Close();
                 return true;
             }
