@@ -29,25 +29,15 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method updates settings to the various components using the specified SettingsList.
+        /// This method writes current settings to file
         /// </summary>
         /// <param name="settingsList"></param>
         /// <returns></returns>
-        public bool UpdateSettings()
+        public bool UpdateSettingsFile(SettingsList settings)
         {
-            return true;
+            return storage.WriteSettingsToFile(settings);
         }
-
-        /// <summary>
-        /// This method loads settings to the specified SettingsList from storage.
-        /// </summary>
-        /// <param name="settingsList"></param>
-        /// <returns></returns>
-        public void LoadSettings()
-        {
-            return;
-        }
-
+        
         private string ExecuteCommand(Operation operation)
         {
             string response;
@@ -67,7 +57,6 @@ namespace ToDo
                 return derivedOperation;
             }
         }
-
     }
  
 }
