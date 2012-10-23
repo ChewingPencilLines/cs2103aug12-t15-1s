@@ -39,32 +39,38 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.startingOptions1);
             this.groupBox1.ForeColor = System.Drawing.Color.Aqua;
             this.groupBox1.Location = new System.Drawing.Point(4, 1);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(354, 61);
+            this.groupBox1.Size = new System.Drawing.Size(337, 61);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Starting Options";
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.flexiCommandsControl1);
             this.groupBox2.ForeColor = System.Drawing.Color.Aqua;
             this.groupBox2.Location = new System.Drawing.Point(4, 68);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(354, 109);
+            this.groupBox2.Size = new System.Drawing.Size(337, 109);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "FlexiCommands";
             // 
             // NewOptions
             // 
+            this.NewOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.NewOptions.ForeColor = System.Drawing.Color.Aqua;
             this.NewOptions.Location = new System.Drawing.Point(3, 181);
             this.NewOptions.Name = "NewOptions";
-            this.NewOptions.Size = new System.Drawing.Size(355, 78);
+            this.NewOptions.Size = new System.Drawing.Size(338, 78);
             this.NewOptions.TabIndex = 6;
             this.NewOptions.TabStop = false;
             this.NewOptions.Text = "New Options";

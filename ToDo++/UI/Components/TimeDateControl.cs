@@ -12,7 +12,7 @@ namespace CustomControls
 {
     public partial class TimeDateControl : UserControl
     {
-        
+        /*
         #region Transparency
 
         public void TransparentControl()
@@ -49,6 +49,9 @@ namespace CustomControls
         }
 
         #endregion
+         * */
+
+
         
         private Timer timer;
 
@@ -57,7 +60,8 @@ namespace CustomControls
             InitializeComponent();
             SetDate();
             Clock();
-            TransparentControl();
+            //TransparentControl();
+            //ResizeRedraw = true;
         }
 
         public void Clock()

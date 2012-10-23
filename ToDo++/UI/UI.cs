@@ -98,8 +98,8 @@ namespace ToDo
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-            DrawGripper(e);
+            //base.OnPaint(e);
+            //DrawGripper(e);
         }
 
         public void DrawGripper(PaintEventArgs e)
@@ -232,12 +232,24 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        // Enables the Custom Scrollbar used in Preferences
+        // ******************************************************************
+
         #region SettingsScrollBar
 
         private void IntializeScrolling()
         {
             PreferencesPanel lg = new PreferencesPanel();
             lg.Location = new Point(5, 5);
+
+            foreach (Control item in lg.Controls)
+            {
+                //item.Anchor = AnchorStyles.None;
+                //item.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left);
+            }
+            lg.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left);
+
             this.shiftPanel.Controls.Add(lg);
 
             shiftPanel.AutoScrollPosition = new Point(0, customScrollbar.Value);
