@@ -248,7 +248,7 @@ namespace ToDo
                 //item.Anchor = AnchorStyles.None;
                 //item.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left);
             }
-            lg.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left);
+            lg.Anchor = (AnchorStyles.Top | AnchorStyles.Right |  AnchorStyles.Left);
 
             this.shiftPanel.Controls.Add(lg);
 
@@ -260,6 +260,8 @@ namespace ToDo
             this.customScrollbar.LargeChange = customScrollbar.Maximum / customScrollbar.Height + this.shiftPanel.Height;
             this.customScrollbar.SmallChange = 15;
             this.customScrollbar.Value = Math.Abs(this.shiftPanel.AutoScrollPosition.Y);
+
+            this.shiftPanel.BringToFront();
 
         }
 
@@ -435,6 +437,23 @@ namespace ToDo
         {
             ReleaseCapture();
             SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+        }
+
+        private void UI_ResizeBegin(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UI_Resize(object sender, EventArgs e)
+        {
+            this.customScrollbar.LargeChange = customScrollbar.Maximum / customScrollbar.Height + this.shiftPanel.Height;
+
+            //this.customScrollbar.Maximum = this.shiftPanel.DisplayRectangle.Height;
+        }
+
+        private void UI_ResizeEnd(object sender, EventArgs e)
+        {
+
         }        
     }
 }

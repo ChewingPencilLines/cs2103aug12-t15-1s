@@ -30,6 +30,7 @@
         {
             this.minimisedCheckbox = new System.Windows.Forms.CheckBox();
             this.loadOnStartupCheckbox = new System.Windows.Forms.CheckBox();
+            this.stayOnTopCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // minimisedCheckbox
@@ -38,7 +39,7 @@
             this.minimisedCheckbox.BackColor = System.Drawing.Color.SteelBlue;
             this.minimisedCheckbox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.minimisedCheckbox.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.minimisedCheckbox.Location = new System.Drawing.Point(8, 9);
+            this.minimisedCheckbox.Location = new System.Drawing.Point(8, 4);
             this.minimisedCheckbox.Name = "minimisedCheckbox";
             this.minimisedCheckbox.Size = new System.Drawing.Size(94, 17);
             this.minimisedCheckbox.TabIndex = 2;
@@ -52,7 +53,7 @@
             this.loadOnStartupCheckbox.BackColor = System.Drawing.Color.SteelBlue;
             this.loadOnStartupCheckbox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.loadOnStartupCheckbox.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.loadOnStartupCheckbox.Location = new System.Drawing.Point(8, 29);
+            this.loadOnStartupCheckbox.Location = new System.Drawing.Point(8, 24);
             this.loadOnStartupCheckbox.Name = "loadOnStartupCheckbox";
             this.loadOnStartupCheckbox.Size = new System.Drawing.Size(101, 17);
             this.loadOnStartupCheckbox.TabIndex = 3;
@@ -60,15 +61,29 @@
             this.loadOnStartupCheckbox.UseVisualStyleBackColor = false;
             this.loadOnStartupCheckbox.CheckedChanged += new System.EventHandler(this.loadOnStartupCheckbox_CheckedChanged);
             // 
+            // stayOnTopCheckBox
+            // 
+            this.stayOnTopCheckBox.AutoSize = true;
+            this.stayOnTopCheckBox.BackColor = System.Drawing.Color.SteelBlue;
+            this.stayOnTopCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.stayOnTopCheckBox.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.stayOnTopCheckBox.Location = new System.Drawing.Point(8, 45);
+            this.stayOnTopCheckBox.Name = "stayOnTopCheckBox";
+            this.stayOnTopCheckBox.Size = new System.Drawing.Size(83, 17);
+            this.stayOnTopCheckBox.TabIndex = 4;
+            this.stayOnTopCheckBox.Text = "Stay On Top";
+            this.stayOnTopCheckBox.UseVisualStyleBackColor = false;
+            // 
             // StartingOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SteelBlue;
+            this.Controls.Add(this.stayOnTopCheckBox);
             this.Controls.Add(this.loadOnStartupCheckbox);
             this.Controls.Add(this.minimisedCheckbox);
             this.Name = "StartingOptions";
-            this.Size = new System.Drawing.Size(248, 54);
+            this.Size = new System.Drawing.Size(248, 66);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -78,5 +93,6 @@
 
         private System.Windows.Forms.CheckBox minimisedCheckbox;
         private System.Windows.Forms.CheckBox loadOnStartupCheckbox;
+        private System.Windows.Forms.CheckBox stayOnTopCheckBox;
     }
 }
