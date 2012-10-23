@@ -324,7 +324,7 @@ namespace ToDo
 
                 // Get absolute substring without the delimiter characters and add to return list
                 string absoluteSubstr = input.Substring(startIndex + 1, count - 2);
-                words.Add("\" " + absoluteSubstr); // " marks an absolute string
+                words.Add(absoluteSubstr);
 
                 // Update processed index state and count of removed characters
                 processedIndex = substringIndex[END_INDEX] + 1;
