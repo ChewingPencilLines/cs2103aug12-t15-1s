@@ -122,9 +122,9 @@
             // 
             this.timeDateControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.timeDateControl1.BackColor = System.Drawing.Color.Aqua;
-            this.timeDateControl1.Location = new System.Drawing.Point(252, 47);
+            this.timeDateControl1.Location = new System.Drawing.Point(247, 47);
             this.timeDateControl1.Name = "timeDateControl1";
-            this.timeDateControl1.Size = new System.Drawing.Size(129, 29);
+            this.timeDateControl1.Size = new System.Drawing.Size(137, 29);
             this.timeDateControl1.TabIndex = 16;
             // 
             // customPanelControl
