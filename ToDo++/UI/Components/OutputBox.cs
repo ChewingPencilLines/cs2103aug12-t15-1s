@@ -13,12 +13,15 @@ namespace ToDo
 {
     class OutputBox : RichTextBox
     {
+        private Settings settings;
+
         /// <summary>
         /// Currently sets the Text Size of the OutputBox
         /// </summary>
-        public void InitializeWithSettings()
+        public void InitializeWithSettings(Settings settings)
         {
-            this.SetOutputSize(Settings.GetTextSize());
+            this.settings = settings;
+            this.SetOutputSize(settings.GetTextSize());
         }
 
         #region TextSizeControl
@@ -40,8 +43,8 @@ namespace ToDo
         /// </summary>
         public void DecreaseSizeOfOutput()
         {
-            Settings.SetTextSize(Settings.GetTextSize() - 1);
-            this.SetOutputSize(Settings.GetTextSize());
+            settings.SetTextSize(settings.GetTextSize() - 1);
+            this.SetOutputSize(settings.GetTextSize());
         }
 
         /// <summary>
@@ -49,8 +52,8 @@ namespace ToDo
         /// </summary>
         public void IncreaseSizeOfOutput()
         {
-            Settings.SetTextSize(Settings.GetTextSize() - 1);
-            this.SetOutputSize(Settings.GetTextSize());
+            settings.SetTextSize(settings.GetTextSize() - 1);
+            this.SetOutputSize(settings.GetTextSize());
         }
 
         #endregion

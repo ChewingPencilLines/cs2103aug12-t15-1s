@@ -31,15 +31,15 @@ namespace ToDo
         /// <summary>
         /// Creates a new instance of the Main Program (UI) and loads the various Classes
         /// </summary>
-        public UI(Logic logic)
+        public UI(Logic logic,Settings settings)
         {
-            InitializeLogic(logic);                //Sets logic
             InitializeComponent();
-            InitializeSystemTray();                //Loads Code to place App in System Tray
-            InitializeSettings();                  //Sets the correct settings to ToDo++ at the start
-            InitializeMenu();                      //Loads the Menu
-            InitializeOutputBox();                 //Loads Output Box
-            IntializeScrolling();                  //Loads the Scrolling Bar in the Settings Panel            
+            InitializeLogic(logic);                                 //Sets logic
+            InitializeSystemTray();                                 //Loads Code to place App in System Tray
+            InitializeSettings(settings);                           //Sets the correct settings to ToDo++ at the start
+            InitializeMenu();                                       //Loads the Menu
+            InitializeOutputBox(settings);                          //Loads Output Box
+            InitializePreferencesPanel(settings);                   //Loads the Scrolling Bar in the Settings Panel        
         }
 
         #endregion
@@ -205,28 +205,28 @@ namespace ToDo
         /// <summary>
         /// Creates an Instance of Settings Manager
         /// </summary>
-        private void InitializeSettings()
+        private void InitializeSettings(Settings settings)
         {
             logic.LoadSettings();
-            MinimiseToTrayWhenChecked();
-            RegisterLoadOnStartupWhenChecked();
+            MinimiseToTrayWhenChecked(settings);
+            RegisterLoadOnStartupWhenChecked(settings);
         }
 
         /// <summary>
         /// Minimizes App to System tray if true
         /// </summary>
-        private void MinimiseToTrayWhenChecked()
+        private void MinimiseToTrayWhenChecked(Settings settings)
         {
-            if (Settings.GetStartMinimizeStatus() == true)
+            if (settings.GetStartMinimizeStatus() == true)
                 MinimiseMaximiseTray();
         }
 
         /// <summary>
         /// Sets the Load on Startup Status
         /// </summary>
-        private void RegisterLoadOnStartupWhenChecked()
+        private void RegisterLoadOnStartupWhenChecked(Settings settings)
         {
-            if (Settings.GetLoadOnStartupStatus() == true)
+            if (settings.GetLoadOnStartupStatus() == true)
                 RegisterInStartup(true);
             else
                 RegisterInStartup(false);
@@ -256,11 +256,17 @@ namespace ToDo
         // Enables the Custom Scrollbar used in Preferences
         // ******************************************************************
 
-        #region SettingsScrollBar
+        #region PreferencesPanel
+
+        PreferencesPanel lg;
+        private void InitializePreferencesPanel(Settings settings)
+        {
+            lg = new PreferencesPanel();
+            IntializeScrolling();
+        }
 
         private void IntializeScrolling()
         {
-            PreferencesPanel lg = new PreferencesPanel();
             lg.Location = new Point(5, 5);
 
             foreach (Control item in lg.Controls)
@@ -344,9 +350,9 @@ namespace ToDo
         /// <summary>
         /// Prepare the Output Box. Pass an instance of settings manager into it so it can interact with it
         /// </summary>
-        private void InitializeOutputBox()
+        private void InitializeOutputBox(Settings settings)
         {
-            outputBox.InitializeWithSettings();
+            outputBox.InitializeWithSettings(settings);
         }
 
         #endregion
@@ -379,7 +385,6 @@ namespace ToDo
             string output = logic.ProcessCommand(input);
 
             outputBox.DisplayCommand(input, output);
-            outputBox.SetOutputSize(Settings.GetTextSize());
             textInput.Clear();
         }
 
