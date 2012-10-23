@@ -73,6 +73,7 @@
             this.stayOnTopCheckBox.TabIndex = 4;
             this.stayOnTopCheckBox.Text = "Stay On Top";
             this.stayOnTopCheckBox.UseVisualStyleBackColor = false;
+            this.stayOnTopCheckBox.CheckedChanged += new System.EventHandler(this.stayOnTopCheckBox_CheckedChanged);
             // 
             // StartingOptions
             // 
