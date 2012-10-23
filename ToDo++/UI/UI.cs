@@ -187,7 +187,6 @@ namespace ToDo
         /// </summary>
         private void InitializeSettings()
         {
-            logic.LoadSettings();
             MinimiseToTrayWhenChecked();
             RegisterLoadOnStartupWhenChecked();
         }
