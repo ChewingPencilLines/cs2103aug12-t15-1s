@@ -81,10 +81,12 @@ namespace ToDo
             SettingsList settingsList = new SettingsList();
             try
             {
-                StreamReader file = new StreamReader(filename);
-                XmlSerializer writer = new XmlSerializer(typeof(SettingsList));
-                settingsList = (SettingsList)writer.Deserialize(file);
-                file.Close();
+                using (StreamReader file = new StreamReader(filename))
+                {
+                    XmlSerializer writer = new XmlSerializer(typeof(SettingsList));
+                    settingsList = (SettingsList)writer.Deserialize(file);
+                    file.Close();
+                }
             }
             // Write default settings if file not found or invalid.
             catch (FileNotFoundException)
