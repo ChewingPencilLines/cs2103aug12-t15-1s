@@ -343,7 +343,6 @@ namespace ToDo
             indexOfDelimiters.Sort(comparison);
         }
             
-
         /// <summary>
         /// This method is a comparator to safely sort a container of int[] based on their zeroth index only.
         /// </summary>
