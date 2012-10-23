@@ -278,8 +278,6 @@
             this.MinimumSize = new System.Drawing.Size(393, 282);
             this.Name = "UI";
             this.Text = "ToDo++";
-            this.ResizeBegin += new System.EventHandler(this.UI_ResizeBegin);
-            this.ResizeEnd += new System.EventHandler(this.UI_ResizeEnd);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UI_MouseDown);
             this.Resize += new System.EventHandler(this.UI_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
