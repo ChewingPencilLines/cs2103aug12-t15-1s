@@ -35,6 +35,7 @@
             this.preferencesButton = new System.Windows.Forms.Button();
             this.helpButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.timeDateControl1 = new CustomControls.TimeDateControl();
             this.customPanelControl = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.textInput = new ToDo.InputBox();
@@ -45,7 +46,6 @@
             this.customScrollbar = new CustomControls.CustomScrollbar();
             this.coverPanel = new System.Windows.Forms.Panel();
             this.shiftPanel = new System.Windows.Forms.Panel();
-            this.dateTimeControl1 = new ToDo.DateTimeControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.customPanelControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -107,7 +107,8 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Enabled = false;
             this.pictureBox1.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.ErrorImage")));
             this.pictureBox1.Image = global::ToDo.Properties.Resources.CoverPhoto;
@@ -116,6 +117,15 @@
             this.pictureBox1.Size = new System.Drawing.Size(377, 29);
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
+            // 
+            // timeDateControl1
+            // 
+            this.timeDateControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.timeDateControl1.BackColor = System.Drawing.Color.Aqua;
+            this.timeDateControl1.Location = new System.Drawing.Point(252, 47);
+            this.timeDateControl1.Name = "timeDateControl1";
+            this.timeDateControl1.Size = new System.Drawing.Size(129, 29);
+            this.timeDateControl1.TabIndex = 16;
             // 
             // customPanelControl
             // 
@@ -250,15 +260,6 @@
             this.shiftPanel.Size = new System.Drawing.Size(379, 168);
             this.shiftPanel.TabIndex = 3;
             // 
-            // dateTimeControl1
-            // 
-            this.dateTimeControl1.BackColor = System.Drawing.Color.Cyan;
-            this.dateTimeControl1.Enabled = false;
-            this.dateTimeControl1.Location = new System.Drawing.Point(229, 42);
-            this.dateTimeControl1.Name = "dateTimeControl1";
-            this.dateTimeControl1.Size = new System.Drawing.Size(150, 36);
-            this.dateTimeControl1.TabIndex = 10;
-            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -266,11 +267,11 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.SteelBlue;
             this.ClientSize = new System.Drawing.Size(393, 282);
+            this.Controls.Add(this.timeDateControl1);
             this.Controls.Add(this.helpButton);
             this.Controls.Add(this.preferencesButton);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.customPanelControl);
-            this.Controls.Add(this.dateTimeControl1);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -297,7 +298,6 @@
 
         private System.Windows.Forms.NotifyIcon notifyIcon_taskBar;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private DateTimeControl dateTimeControl1;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.Button preferencesButton;
         private System.Windows.Forms.Button helpButton;
@@ -311,6 +311,7 @@
         private System.Windows.Forms.Panel coverPanel;
         private System.Windows.Forms.Panel shiftPanel;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private CustomControls.TimeDateControl timeDateControl1;
     }
 }
 
