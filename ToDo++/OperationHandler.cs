@@ -25,7 +25,6 @@ namespace ToDo
         const string RESPONSE_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
         const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
         const string RESPONSE_UNDO_FAILURE = "Cannot undo last executed task!";
-        const string RESPONSE_SEARCH_FAILURE = "Error: No search input!";
         const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string REPONSE_INVALID_COMMAND = "Invalid command!";
         const string RESPONSE_INVALID_TASK_INDEX = "Invalid task index!";
@@ -41,7 +40,7 @@ namespace ToDo
 
         public string Execute(Operation operation, ref List<Task> taskList)
         {
-            string response; 
+            string response = String.Empty; 
             bool successFlag;
 
             TrackOperation(operation);
@@ -50,13 +49,15 @@ namespace ToDo
             {
                 return REPONSE_INVALID_COMMAND;
             }
-            else if (operation is OperationAdd)
+
+            if (operation is OperationAdd)
             {
                 Task taskToAdd = ((OperationAdd)operation).NewTask;
                 if (taskToAdd == null) return RESPONSE_ADD_FAILURE;
                 response = Add(taskToAdd, ref taskList, out successFlag);
             }
-            else if (operation is OperationDelete)
+
+            if (operation is OperationDelete)
             { 
                  int? index = ((OperationDelete)operation).Index;
                  string deleteString = ((OperationDelete)operation).DeleteString;
@@ -77,8 +78,9 @@ namespace ToDo
                  {
                      return REPONSE_INVALID_COMMAND;
                  }
-             } 
-            else if (operation is OperationModify)
+            }
+
+            if (operation is OperationModify)
             {
                 /*
                  *  when modify, if user key in nothing or only index or only task details
@@ -101,31 +103,31 @@ namespace ToDo
                     response = Modify(ref taskToModify, newTask, ref taskList, out successFlag);
                 }
             }
-            else if (operation is OperationUndo)
+
+            if (operation is OperationUndo)
             {
                 undoStack.Pop();
                 Operation undoOperation = undoStack.Pop();
                 response = Undo(undoOperation, ref taskList);
             }
-            else if (operation is OperationDisplay)
+
+            if (operation is OperationDisplay)
             {
                 response = DisplayAll(taskList);
             }
-            else if (operation is OperationSearch)
+
+            if (operation is OperationSearch)
             {
                 string searchString = ((OperationSearch)operation).SearchString;
                 response = Search(taskList, searchString);
             }
-            else if (operation is OperationSort)
+
+            if (operation is OperationSort)
             {
                 //sort only change what user view, but not change in storage
                 TaskComparer tc = new TaskComparer(); 
                 lastListedTasks.Sort(tc);
                 response = DisplayAll(lastListedTasks);
-            }
-            else
-            {
-                return REPONSE_INVALID_COMMAND;
             }
             return response;
         }
@@ -238,7 +240,7 @@ namespace ToDo
             string displayString = String.Empty;
             int index = 1;
             if (searchString == null)
-                return RESPONSE_SEARCH_FAILURE;
+                return DisplayAll(taskList);
             foreach (Task task in taskList)
             {
                 if (task.TaskName.IndexOf(searchString) >= 0)
