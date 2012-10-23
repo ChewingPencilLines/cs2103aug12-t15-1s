@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    class Token
+    public class Token
     {
         public enum TokenType { COMMAND, DATE, TIME, DAY, CONTEXT, LITERAL, INDEX };
 
@@ -30,7 +30,7 @@ namespace ToDo
 
     }
 
-    class TokenCommand : Token
+    public class TokenCommand : Token
     {
         CommandType commandType;
         int? taskIndex;
@@ -53,7 +53,7 @@ namespace ToDo
         }
     }
 
-    class TokenDate : Token
+    public class TokenDate : Token
     {
         DateTime dateTime;
         bool specific;
@@ -73,7 +73,7 @@ namespace ToDo
         }
     }
 
-    class TokenTime : Token
+    public class TokenTime : Token
     {
         TimeSpan time;
         internal TimeSpan Value
@@ -88,7 +88,7 @@ namespace ToDo
         }
     }
 
-    class TokenDay : Token
+    public class TokenDay : Token
     {
         DayOfWeek dayOfWeek;
         internal DayOfWeek Value
@@ -103,7 +103,7 @@ namespace ToDo
         }
     }
 
-    class TokenContext : Token
+    public class TokenContext : Token
     {
         ContextType contextType;
         internal ContextType Value
@@ -118,7 +118,7 @@ namespace ToDo
         }
     }
 
-    class TokenIndex : Token
+    public class TokenIndex : Token
     {
         string index;
         internal string Value
@@ -133,7 +133,7 @@ namespace ToDo
         }
     }
 
-    class TokenLiteral : Token
+    public class TokenLiteral : Token
     {
         string literal;
         internal string Value
