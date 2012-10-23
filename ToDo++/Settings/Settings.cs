@@ -38,27 +38,37 @@ namespace ToDo
 
         public MiscSettings misc;
         public Dictionary<string, CommandType> userCommandKeywords;
-        public Dictionary<string, CommandType> userContextKeywords;
+        public Dictionary<string, ContextType> userContextKeywords;
 
         public SettingsList()
         {
             misc = new MiscSettings(false, false, false, 8);
             userCommandKeywords = new Dictionary<string, CommandType>();
-            userContextKeywords = new Dictionary<string, CommandType>();
+            userContextKeywords = new Dictionary<string, ContextType>();
         }
 
-        public bool ContainsCommandKeyword(string userCommand,CommandType commandType)
+        public bool ContainsCommandKeyword(string userKeyword,CommandType commandType)
         {
-            if (userCommandKeywords.ContainsKey(userCommand) && userCommandKeywords.ContainsValue(commandType))
-                return true;
+            CommandType match;
+            if (userCommandKeywords.TryGetValue(userKeyword, out match))
+            {
+                if (match == commandType)
+                    return true;
+                else return false;
+            }
             else
                 return false;
         }
 
-        public bool ContainsContextKeyword(string userCommand, CommandType commandType)
+        public bool ContainsContextKeyword(string userKeyword, ContextType commandType)
         {
-            if (userContextKeywords.ContainsKey(userCommand) && userContextKeywords.ContainsValue(commandType))
-                return true;
+            ContextType match;
+            if (userContextKeywords.TryGetValue(userKeyword, out match))
+            {
+                if (match == commandType)
+                    return true;
+                else return false;
+            }
             else
                 return false;
         }
@@ -87,6 +97,11 @@ namespace ToDo
         private static void InitializeSettings()
         {
             settingsList = new SettingsList();
+        }
+
+        public static void UpdateSettings(SettingsList updatedList)
+        {
+            settingsList = updatedList;
         }
 
         // ******************************************************************
@@ -170,7 +185,7 @@ namespace ToDo
         /// </summary>
         /// <param name="newCommand">New Command that is to be added</param>
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
-        internal static void AddContextKeyword(string newCommand, CommandType commandType)
+        internal static void AddContextKeyword(string newCommand, ContextType commandType)
         {
             try
             {
@@ -199,7 +214,7 @@ namespace ToDo
         /// </summary>
         /// <param name="commandType">Specify the type of Command you wish to see User Commands of</param>
         /// <returns>Returns a list of added commands</returns>
-        internal static List<string> GetContextKeywordList(CommandType commandType)
+        internal static List<string> GetContextKeywordList(ContextType commandType)
         {
             List<string> getCommands = new List<string>();
             foreach (var pair in settingsList.userContextKeywords)
