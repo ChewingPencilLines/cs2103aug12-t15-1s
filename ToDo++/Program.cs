@@ -17,7 +17,8 @@ namespace ToDo
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new UI());             
+            Logic logic = new Logic();
+            Application.Run(new UI(logic));             
         }
 
     }

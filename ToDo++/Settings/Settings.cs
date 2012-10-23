@@ -87,7 +87,6 @@ namespace ToDo
         private static void InitializeSettings()
         {
             settingsList = new SettingsList();
-            Logic.LoadSettings(settingsList);
         }
 
         // ******************************************************************
