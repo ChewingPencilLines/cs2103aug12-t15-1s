@@ -161,11 +161,7 @@ namespace ToDo
                     task = GenerateNewTask(taskName, startCombined, endCombined);
                     newOperation = new OperationAdd(task);
                     break;
-                case CommandType.DELETE:
-                    /*
-                    Debug.Assert(taskIndex != null, "task index is null!");
-                    newOperation = new OperationDelete((int)taskIndex);
-                     */
+                case CommandType.DELETE: 
                     if(taskName!=null)
                     {
                         newOperation = new OperationDelete(taskName);
@@ -177,24 +173,40 @@ namespace ToDo
                         break;
                     }
                     else
-                        throw new Exception("Invalid task name.");
+                    {
+                        newOperation = new OperationDelete("");
+                        break;
+                    }                   
                 case CommandType.DISPLAY:
                     newOperation = new OperationDisplay();
                     break;
                 case CommandType.MODIFY:
                     task = GenerateNewTask(taskName, startCombined, endCombined);
-                    if (taskIndex == null)
-                        throw new Exception("Invalid task name. Modify by name NYI.");
-                    else newOperation = new OperationModify((int)taskIndex, task);
-                    break;
+                    if (taskName != null && taskIndex != null)
+                    {
+                        newOperation = new OperationModify((int)taskIndex,task);
+                        break;
+                    }
+                    else
+                    {
+                        newOperation = new OperationModify();
+                        break;
+                    }
                 case CommandType.SEARCH:
                     newOperation = new OperationSearch(taskName);
                     break;
                 case CommandType.SORT:
-                    throw new NotImplementedException();
+                    newOperation = new OperationSort();
+                    break; 
                 case CommandType.REDO:
-                    throw new NotImplementedException();
+                    newOperation = new OperationRedo();
+                    break;
                 case CommandType.UNDO:
+                    newOperation = new OperationUndo();
+                    break;
+                case CommandType.DONE:
+                    throw new NotImplementedException();
+                case CommandType.POSTPONE:
                     throw new NotImplementedException();
             }
             return newOperation;

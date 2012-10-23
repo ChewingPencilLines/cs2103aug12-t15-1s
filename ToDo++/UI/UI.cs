@@ -341,7 +341,27 @@ namespace ToDo
         {
             if (e.KeyChar == (char)13)
             {
+                e.Handled = true;
+                textInput.AddToList(textInput.Text);
                 ProcessText();
+            }
+
+        }
+
+        /// <summary>
+        /// When Up/Down Keys Pressed
+        /// </summary>
+        private void textInput_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            e.IsInputKey = true;
+            if (e.KeyCode == Keys.Up)
+            {
+                textInput.UpdateWithPrevCommand();
+            }
+
+            if (e.KeyCode == Keys.Down)
+            {
+                textInput.UpdateWithNextCommand();
             }
         }
 

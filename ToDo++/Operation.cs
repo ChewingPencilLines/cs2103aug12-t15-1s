@@ -15,10 +15,10 @@ namespace ToDo
     #endregion
 
     // ******************************************************************
-    // Definition for five different operation
+    // Definition for derived operations
     // ******************************************************************
 
-    #region Definition for five different operation
+    #region Definition for derived operations
     class OperationAdd : Operation
     {
         private Task newTask;
@@ -37,23 +37,17 @@ namespace ToDo
     class OperationDelete : Operation
     {
 
-        private int index;
+        private int? index;
         private string deleteString;
 
-        public int Index
+        public int? Index
         {
-            get
-            {
-                return index;
-            }
+            get {  return index;  }
         }
 
         public string DeleteString
         {
-            get
-            {
-                return deleteString;
-            }
+            get {  return deleteString; }
         }
 
         public OperationDelete(int index)
@@ -64,14 +58,49 @@ namespace ToDo
 
         public OperationDelete(string deleteString)
         {
-            this.index = -1;
+            this.index = null;
             this.deleteString = deleteString;
         }
     }
 
     class OperationDisplay : Operation
     {
+        public OperationDisplay()
+        { }
+    }
 
+    class OperationSort : Operation
+    {
+        public OperationSort()
+        { }
+    }
+
+    class OperationPostpone : Operation
+    { 
+        private int? oldIndex;
+        private Task postponedTask;
+
+        public int? OldIndex
+        {
+            get { return oldIndex; }
+        }
+
+        public Task PostponedTask
+        {
+            get { return postponedTask; }
+        }
+
+        public OperationPostpone(int Previous, Task Postponed)
+        {
+            oldIndex = Previous - 1;
+            postponedTask = Postponed;
+        }
+
+        public OperationPostpone()
+        {
+            oldIndex = null;
+            postponedTask = null;
+        }
     }
 
     class OperationSearch : Operation
@@ -83,42 +112,79 @@ namespace ToDo
             this.searchString = searchString;
         }
 
-        public string GetSearchString() { return searchString; }
+        public string SearchString
+        {
+            get { return searchString; }
+        }
 
     }
     
     class OperationModify : Operation
     {
-        public int oldTaskindex;
+        private int? oldIndex;
         private Task newTask;
+
+        public int? OldIndex
+        {
+            get { return oldIndex; }
+        }
+
+        public Task NewTask
+        {
+            get { return newTask; }
+        }
 
         public OperationModify(int Previous, Task Revised)
         {
-            oldTaskindex = Previous - 1;
+            oldIndex = Previous - 1;
             newTask = Revised;
+        }
+
+        public OperationModify()
+        {
+            oldIndex = null;
+            newTask = null;
         }
     }
 
     class OperationUndo : Operation
     {
-        //Variables not needed for now
         public OperationUndo()
         { }
 
     }
+       
+    class OperationRedo : Operation
+    {
+        public OperationRedo()
+        { }
+    }
 
     class OperationDone : Operation
     {
-        private int index;
+        private int? index;
+        private string doneString;
 
-        public int Index
+        public int? Index
         {
             get { return index; }
+        }
+
+        public string DoneString
+        {
+            get{ return doneString; }
         }
 
         public OperationDone(int index)
         {
             this.index = index - 1;
+            this.doneString = null;
+        }
+
+        public OperationDone(string doneString)
+        {
+            this.index = null;
+            this.doneString = doneString;
         }
 
     } 
