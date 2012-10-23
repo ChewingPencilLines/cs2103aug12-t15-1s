@@ -82,7 +82,6 @@ namespace ToDo
         // Static Keyword Declarations
         // ******************************************************************
 
-        static string fileName = "Settings.xml";
         static SettingsList settingsList;
 
         static Settings()
@@ -101,7 +100,7 @@ namespace ToDo
 
         public static void UpdateSettings(SettingsList updatedList)
         {
-            settingsList = updatedList;
+            settingsList.misc = updatedList.misc;
         }
 
         // ******************************************************************
