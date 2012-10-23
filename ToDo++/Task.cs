@@ -34,7 +34,7 @@ namespace ToDo
             get { return id; }
             //set { id = value; }
         }
-
+         
         public Task(string taskName, bool state, int forceID)
         {
             this.taskName = taskName;
@@ -50,7 +50,7 @@ namespace ToDo
         {
             int newHashCode = Math.Abs(base.GetHashCode() ^ (int)DateTime.Now.ToBinary());
             return newHashCode;
-        }
+        } 
     } 
     #endregion
 
@@ -142,4 +142,6 @@ namespace ToDo
         }
     }
      #endregion
+
+
 }

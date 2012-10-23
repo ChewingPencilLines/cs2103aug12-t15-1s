@@ -11,7 +11,8 @@ namespace ToDo
     {
         List<Task> lastListedTasks;
         Stack<Operation> undoStack;
-        Stack<Operation> redoStack;        
+        Stack<Task> undoTask;
+       // Stack<Operation> redoStack;        
         Storage storageXML;
 
         // ******************************************************************
@@ -21,7 +22,7 @@ namespace ToDo
         const string RESPONSE_ADD_SUCCESS = "Added \"{0}\" successfully.";
         const string RESPONSE_ADD_FAIL = "Failed to add task!";
         const string RESPONSE_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
-        const string RESPONSE_MODIFY_SUCCESS = "Modified task successfully.";
+        const string RESPONSE_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
         const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
         const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string REPONSE_INVALID_COMMAND = "Invalid command!";
@@ -32,6 +33,7 @@ namespace ToDo
         {
             lastListedTasks = new List<Task>();
             undoStack = new Stack<Operation>();
+            undoTask = new Stack<Task>();
             this.storageXML = storageXML;
         } 
 
@@ -39,6 +41,9 @@ namespace ToDo
         {
             string response; 
             bool successFlag;
+
+            TrackOperation(operation);
+
             if (operation == null)
             {
                 return REPONSE_INVALID_COMMAND;
@@ -50,44 +55,71 @@ namespace ToDo
                 response = Add(taskToAdd, ref taskList, out successFlag);
             }
             else if (operation is OperationDelete)
-            {   
-                 int index = ((OperationDelete)operation).Index;
+            { 
+                 int? index = ((OperationDelete)operation).Index;
                  string deleteString = ((OperationDelete)operation).DeleteString;
-                 if (index == -1 && deleteString != null)
+                 if (index.HasValue == false && deleteString != null)
                  {                  
-                     response = Search(ref lastListedTasks, taskList, deleteString);
+                     response = Search(taskList, deleteString);
                  }
                  else if (index < 0 || index > taskList.Count - 1)
                  {
                      return RESPONSE_INVALID_TASK_INDEX;
                  }
-                 else if(deleteString == null)
+                 else if (deleteString == null)
                  {
-                     Task taskToDelete = lastListedTasks[index];
+                     Task taskToDelete = lastListedTasks[index.Value];
                      response = Delete(ref taskToDelete, ref taskList, out successFlag);
-                     lastListedTasks = null;
-                 }                 
+                 }
                  else
                  {
                      return REPONSE_INVALID_COMMAND;
                  }
-             }
+             } 
+            else if (operation is OperationModify)
+            {
+                /*
+                 *  when modify, if user key in nothing or only index or only task details
+                 *  after the commandtype, then all tasks will be shown.
+                 *  only when user input full information will modify operated.
+                 */
+                int? index = ((OperationModify)operation).OldIndex;
+                Task newTask = ((OperationModify)operation).NewTask;
+                if (index.HasValue == false || newTask == null)
+                {
+                    response = DisplayAll(taskList);
+                }
+                else if (index < 0 || index > taskList.Count - 1)
+                {
+                    response = DisplayAll(taskList);
+                }
+                else
+                {
+                    Task taskToModify = lastListedTasks[index.Value];
+                    response = Modify(ref taskToModify, newTask, ref taskList, out successFlag);
+                }
+            }
+            else if (operation is OperationUndo)
+            {
+                undoStack.Pop();
+                Operation undoOperation = undoStack.Pop();
+                response = Undo(undoOperation, ref taskList);
+            }
             else if (operation is OperationDisplay)
             {
                 response = DisplayAll(taskList);
             }
-            else if (operation is OperationModify)
-            {
-                throw new NotImplementedException();
-            }
-            else if (operation is OperationUndo)
-            {
-                throw new NotImplementedException();
-            }
             else if (operation is OperationSearch)
             {
-                string searchString = ((OperationSearch)operation).GetSearchString();
-                response = Search(ref lastListedTasks, taskList, searchString);
+                string searchString = ((OperationSearch)operation).SearchString;
+                response = Search(taskList, searchString);
+            }
+            else if (operation is OperationSort)
+            {
+                //sort only change what user view, but not change in storage
+                TaskComparer tc = new TaskComparer(); 
+                lastListedTasks.Sort(tc);
+                response = DisplayAll(lastListedTasks);
             }
             else
             {
@@ -120,6 +152,7 @@ namespace ToDo
         private string Delete(ref Task taskToDelete, ref List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
+            undoTask.Push(taskToDelete);
             taskList.Remove(taskToDelete);
             if (storageXML.RemoveTaskFromFile(taskToDelete))
             {
@@ -130,33 +163,75 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;            
         }
 
+        private string Modify(ref Task taskToModify,Task newTask, ref List<Task> taskList, out bool successFlag)
+        {
+            successFlag = false;
+            undoTask.Push(taskToModify);
+            taskList.Remove(taskToModify);
+            taskList.Add(newTask);
+            if (storageXML.RemoveTaskFromFile(taskToModify)&&storageXML.AddTaskToFile(newTask))
+            {
+                successFlag = true;
+                return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
+            }
+            else
+                return RESPONSE_XML_READWRITE_FAIL;
+        }
+
+        private string Undo(Operation undoOperation, ref List<Task> taskList)
+        {
+            string response;
+            bool successFlag;
+            if (undoOperation is OperationAdd)
+            {
+                Task task = ((OperationAdd)undoOperation).NewTask;
+                response = Delete(ref task, ref taskList, out successFlag);
+            }
+            else if (undoOperation is OperationDelete && (((OperationDelete)undoOperation).Index.HasValue == true))
+            {
+
+                Task task = undoTask.Pop();
+                response = Add(task, ref taskList, out successFlag);
+            }
+            else if (undoOperation is OperationModify && ((OperationModify)undoOperation).NewTask != null)
+            {
+                Task taskToModify = ((OperationModify)undoOperation).NewTask;
+                Task newTask = undoTask.Pop();
+                response = Modify(ref taskToModify, newTask, ref taskList, out successFlag);
+            }
+            else
+            {
+                response = "cannot undo this operation";
+            }
+            return response;
+        }
+
         private string DisplayAll(List<Task> taskList)
         {
             string displayString = String.Empty;
             int index = 1;
             foreach (Task task in taskList)
-            {                
-                displayString += ((index) + ". " + task.TaskName);
-                if (task is TaskDeadline)
+            {
+                displayString += index;
+                if (task is TaskFloating)
                 {
-                    displayString += (" BY: " + ((TaskDeadline)task).EndTime);
+                    displayString += ShowFloating((TaskFloating)task);
+                }
+                else if (task is TaskDeadline)
+                {
+                    displayString += ShowDeadline((TaskDeadline)task);
                 }
                 else if (task is TaskEvent)
                 {
-                    DateTime startTime = ((TaskEvent)task).StartTime;
-                    DateTime endTime = ((TaskEvent)task).EndTime;
-                    displayString += (" AT: " + startTime.ToString());
-                    if(startTime != endTime && endTime != null)
-                    displayString += (" TO: " + endTime.ToString());
-                }
-                displayString += "\r\n";
+                    displayString += ShowEvent((TaskEvent)task);
+                } 
                 index++;                
             }
             lastListedTasks = new List<Task>(taskList);
             return displayString;
         }
 
-        private string Search(ref List<Task> lastListedTasks, List<Task> taskList, string searchString)
+        private string Search(List<Task> taskList, string searchString)
         {
             string displayString = String.Empty;
             int index = 1;
@@ -165,31 +240,61 @@ namespace ToDo
                 if (task.TaskName.IndexOf(searchString) >= 0)
                 {
                     lastListedTasks.Add(task);
-                    displayString += ((index) + ". " + task.TaskName);
-                    if (task is TaskDeadline)
+                    displayString += index;
+                    if (task is TaskFloating)
                     {
-                        displayString += (" BY: " + ((TaskDeadline)task).EndTime);
+                        displayString += ShowFloating((TaskFloating)task);
+                    }
+                    else if (task is TaskDeadline)
+                    {
+                        displayString += ShowDeadline((TaskDeadline)task);
                     }
                     else if (task is TaskEvent)
-                    {
-                        DateTime startTime = ((TaskEvent)task).StartTime;
-                        DateTime endTime = ((TaskEvent)task).EndTime;
-                        displayString += (" AT: " + startTime.ToString());
-                        if (startTime != endTime && endTime != null)
-                            displayString += (" TO: " + endTime.ToString());
-                    }
-                    displayString += "\r\n";
+                    { 
+                        displayString += ShowEvent((TaskEvent)task);
+                    } 
                     index++;
                 }
             }
-            lastListedTasks = new List<Task>(taskList);
             return displayString;
+        }
+
+        private string ShowFloating(TaskFloating task)
+        {
+            string feedback;
+            feedback = ". " + task.TaskName;
+            feedback += "\r\n";
+            return feedback;
+        }
+
+        private string ShowDeadline(TaskDeadline task)
+        {
+            string feedback;
+            feedback = ". " + task.TaskName;
+
+            feedback += (" BY: " + ((TaskDeadline)task).EndTime);
+            feedback += "\r\n";
+            return feedback;
+        }
+
+        private string ShowEvent(TaskEvent task)
+        { 
+            string feedback;
+            feedback = ". " + task.TaskName;
+
+            DateTime startTime = ((TaskEvent)task).StartTime;
+            DateTime endTime = ((TaskEvent)task).EndTime;
+            feedback += (" AT: " + startTime.ToString());
+            if (startTime != endTime && endTime != null)
+                feedback += (" TO: " + endTime.ToString());
+            feedback += "\r\n";
+            return feedback;
         }
 
         private void TrackOperation(Operation operation)
         {
             undoStack.Push(operation);
-            redoStack.Clear();
+           // redoStack.Clear();
         }
     }
 }
