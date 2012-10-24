@@ -193,6 +193,11 @@ namespace ToDo
                         newOperation = new OperationModify((int)taskIndex,task);
                         break;
                     }
+                    else if (taskName != null)
+                    {
+                        newOperation = new OperationModify(task);
+                        break;
+                    }
                     else
                     {
                         newOperation = new OperationModify();
