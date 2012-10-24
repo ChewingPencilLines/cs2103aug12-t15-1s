@@ -176,7 +176,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 0);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(378, 132);
+            this.outputBox.Size = new System.Drawing.Size(369, 132);
             this.outputBox.TabIndex = 7;
             this.outputBox.Text = "";
             // 

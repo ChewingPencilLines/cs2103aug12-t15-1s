@@ -264,6 +264,18 @@ namespace ToDo
         {
             lg = new PreferencesPanel();
             IntializeScrolling();
+
+            //coverPanel.Scroll += MouseHoverCapture;
+            //coverPanel.MouseEnter += MouseHoverCapture;
+            //shiftPanel.Scroll += MouseHoverCapture;
+            //shiftPanel.MouseEnter+=MouseHoverCapture;
+            //lg.Scroll += MouseHoverCapture;
+            //lg.MouseEnter += MouseHoverCapture;
+        }
+
+        private void MouseHoverCapture(object sender, EventArgs e)
+        {
+            MessageBox.Show(sender.ToString());
         }
 
         private void IntializeScrolling()
@@ -476,10 +488,6 @@ namespace ToDo
         {
             Application.Exit();
         }
-
-
-
-
 
     }
 }
