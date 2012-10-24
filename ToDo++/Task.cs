@@ -21,11 +21,11 @@ namespace ToDo
             //set { taskName = value; }
         }
 
-        protected bool state;
+        protected bool doneState;
         public bool State
         {
-            get { return state; }
-            set { state = value; }
+            get { return doneState; }
+            set { doneState = value; }
         }
 
         protected int id;
@@ -38,7 +38,7 @@ namespace ToDo
         public Task(string taskName, bool state, int forceID)
         {
             this.taskName = taskName;
-            this.state = state;
+            this.doneState = state;
             if (forceID < 0)
                 id = this.GetHashCode();
             else id = forceID;
@@ -71,7 +71,7 @@ namespace ToDo
                             new XAttribute("id", id.ToString()),
                             new XAttribute("type", "Floating"),
                             new XElement("Name", taskName),
-                            new XElement("State", state.ToString())
+                            new XElement("State", doneState.ToString())
                             );
             return task;
         }
@@ -99,7 +99,7 @@ namespace ToDo
                             new XAttribute("type", "Deadline"),
                             new XElement("Name", taskName),
                             new XElement("EndTime", endTime.ToString()),
-                            new XElement("State", state.ToString())
+                            new XElement("State", doneState.ToString())
                             );
             return task;
         }
@@ -136,7 +136,7 @@ namespace ToDo
                             new XElement("Name", taskName),
                             new XElement("StartTime", startTime.ToString()),
                             new XElement("EndTime", endTime.ToString()),
-                            new XElement("State", state.ToString())
+                            new XElement("State", doneState.ToString())
                             );
             return task;
         }
