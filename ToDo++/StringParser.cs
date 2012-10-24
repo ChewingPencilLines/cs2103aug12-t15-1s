@@ -27,33 +27,25 @@ namespace ToDo
         const int END_INDEX = 1;
         static char[,] delimitingCharacters = { { '\'', '\'' }, { '\"', '\"' }, { '[', ']' }, { '(', ')' }, { '{', '}' } };
         static Dictionary<string, CommandType> commandKeywords;
-        static Dictionary<string, ContextType> contextKeywords;
-        static Dictionary<string, DayOfWeek> dayKeywords;
         static Dictionary<string, Month> monthKeywords;
-        static List<string> timeSpecificKeywords;
-        static List<string> timeGeneralKeywords;
         static List<string> timeSuffixes;
 
         // ******************************************************************
         // Getter Methods
         // ******************************************************************
 
-        #region Getter Methods For Dictionaries
+        #region Getter Methods For Dictionaries & List
         public Dictionary<string, CommandType> getCommandKeywords()
         {
             return commandKeywords;
         }
-        public Dictionary<string, ContextType> getContextKeywords()
-        {
-            return contextKeywords;
-        }
-        public Dictionary<string, DayOfWeek> getDayKeywords()
-        {
-            return dayKeywords;
-        }
         public Dictionary<string, Month> getMonthKeywords()
         {
             return monthKeywords;
+        }
+        public List<string> getTimeSuffixes()
+        {
+            return timeSuffixes;
         }
         #endregion
 
@@ -134,9 +126,13 @@ namespace ToDo
         private static void InitializeDefaultKeywords()
         {
             InitializeCommandKeywords();
-            InitializeDateTimeKeywords();
             InitializeMonthKeywords();
-            InitializeContextKeywords();
+            InitializeTimeSuffixes();
+        }
+
+        private static void InitializeTimeSuffixes()
+        {
+            timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
         }
 
         private static void InitializeCommandKeywords()
@@ -153,35 +149,6 @@ namespace ToDo
             commandKeywords.Add("redo", CommandType.REDO);
             commandKeywords.Add("done", CommandType.DONE);
             commandKeywords.Add("postpone", CommandType.POSTPONE);
-        }
-
-        private static void InitializeDateTimeKeywords()
-        {
-            dayKeywords = new Dictionary<string, DayOfWeek>();
-            dayKeywords.Add("mon", DayOfWeek.Monday);
-            dayKeywords.Add("monday", DayOfWeek.Monday);
-            dayKeywords.Add("tue", DayOfWeek.Tuesday);
-            dayKeywords.Add("tues", DayOfWeek.Tuesday);
-            dayKeywords.Add("tuesday", DayOfWeek.Tuesday);
-            dayKeywords.Add("wed", DayOfWeek.Wednesday);
-            dayKeywords.Add("wednesday", DayOfWeek.Wednesday);
-            dayKeywords.Add("thur", DayOfWeek.Thursday);
-            dayKeywords.Add("thurs", DayOfWeek.Thursday);
-            dayKeywords.Add("thursday", DayOfWeek.Thursday);
-            dayKeywords.Add("fri", DayOfWeek.Friday);
-            dayKeywords.Add("friday", DayOfWeek.Friday);
-            dayKeywords.Add("sat", DayOfWeek.Saturday);
-            dayKeywords.Add("saturday", DayOfWeek.Saturday);
-            dayKeywords.Add("sun", DayOfWeek.Sunday);
-            dayKeywords.Add("sunday", DayOfWeek.Sunday);
-            dayKeywords.Add("weekend", DayOfWeek.Sunday);
-            dayKeywords.Add("tmr", DateTime.Today.AddDays(1).DayOfWeek);
-            dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
-            // NYI
-            timeSpecificKeywords = new List<string> { "noon", "midnight" };        // special case    
-            timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" }; // todo?
-            // ===
-            timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
         }
 
         private static void InitializeMonthKeywords()
@@ -210,20 +177,6 @@ namespace ToDo
             monthKeywords.Add("dec", Month.DEC);
             monthKeywords.Add("december", Month.DEC);
         }
-
-        private static void InitializeContextKeywords()
-        {
-            contextKeywords = new Dictionary<string, ContextType>();
-            contextKeywords.Add("by", ContextType.DEADLINE);
-            contextKeywords.Add("on", ContextType.STARTTIME);
-            contextKeywords.Add("from", ContextType.STARTTIME);
-            contextKeywords.Add("to", ContextType.ENDTIME);
-            contextKeywords.Add("-", ContextType.ENDTIME);
-            contextKeywords.Add("this", ContextType.CURRENT);
-            contextKeywords.Add("next", ContextType.NEXT);
-            contextKeywords.Add("following", ContextType.FOLLOWING);
-        }
-
         #endregion
 
         // ******************************************************************
