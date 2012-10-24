@@ -154,6 +154,11 @@ namespace ToDo
             newTask = Revised;
         }
 
+        public OperationModify(Task Search)
+        {
+            newTask = Search;
+        }
+
         public OperationModify()
         {
             oldIndex = null;

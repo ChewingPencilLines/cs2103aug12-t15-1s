@@ -94,13 +94,26 @@ namespace ToDo
                  */
                 int? index = ((OperationModify)operation).OldIndex;
                 Task newTask = ((OperationModify)operation).NewTask;
-                if (index.HasValue == false || newTask == null)
+                if (index.HasValue == false && newTask == null)
                 {
                     response = DisplayAll(taskList);
                 }
-                else if (index < 0 || index > taskList.Count - 1)
+                else if (index.HasValue == false && newTask != null)
                 {
-                    response = DisplayAll(taskList);
+                    int numberOfMatches;
+                    response = Search(out numberOfMatches, taskList, newTask.TaskName);
+                }
+                else if (index.HasValue == true && (index < 0 || index > taskList.Count - 1))
+                {
+                    if (newTask != null)
+                    {
+                        int numberOfMatches;
+                        response = Search(out numberOfMatches, taskList, newTask.TaskName);
+                    }
+                    else
+                    {
+                        response = DisplayAll(taskList);
+                    }
                 }
                 else
                 {
