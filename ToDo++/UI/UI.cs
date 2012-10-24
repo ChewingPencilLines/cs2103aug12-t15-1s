@@ -40,6 +40,7 @@ namespace ToDo
             InitializeMenu();                                       //Loads the Menu
             InitializeOutputBox(logic.MainSettings);                //Loads Output Box
             InitializePreferencesPanel(logic.MainSettings);         //Loads the Scrolling Bar in the Settings Panel        
+            this.ActiveControl = textInput;
         }
 
         #endregion
