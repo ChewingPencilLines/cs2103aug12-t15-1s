@@ -275,7 +275,7 @@ namespace ToDo
             List<Task> filteredTasks = taskList;
             if (searchString != null)
                 filteredTasks = (from task in filteredTasks
-                                 where String.Compare(task.TaskName, searchString, true) == 0
+                                 where task.TaskName.IndexOf(searchString) >= 0 
                                  select task).ToList();
 
             // Search all tasks that end before EndTime or have deadlines before EndTime
