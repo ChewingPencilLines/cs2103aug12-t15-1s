@@ -137,7 +137,7 @@
             this.customPanelControl.Location = new System.Drawing.Point(5, 84);
             this.customPanelControl.Name = "customPanelControl";
             this.customPanelControl.SelectedIndex = 0;
-            this.customPanelControl.Size = new System.Drawing.Size(380, 194);
+            this.customPanelControl.Size = new System.Drawing.Size(380, 302);
             this.customPanelControl.TabIndex = 12;
             // 
             // tabPage1
@@ -148,7 +148,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(372, 168);
+            this.tabPage1.Size = new System.Drawing.Size(372, 276);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             // 
@@ -159,7 +159,7 @@
             this.textInput.BackColor = System.Drawing.Color.PaleTurquoise;
             this.textInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textInput.Location = new System.Drawing.Point(3, 138);
+            this.textInput.Location = new System.Drawing.Point(3, 246);
             this.textInput.Name = "textInput";
             this.textInput.Size = new System.Drawing.Size(378, 19);
             this.textInput.TabIndex = 0;
@@ -176,7 +176,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 0);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(369, 132);
+            this.outputBox.Size = new System.Drawing.Size(369, 240);
             this.outputBox.TabIndex = 7;
             this.outputBox.Text = "";
             // 
@@ -190,7 +190,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(372, 168);
+            this.tabPage2.Size = new System.Drawing.Size(372, 286);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Preferences";
             // 
@@ -200,7 +200,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox2.Location = new System.Drawing.Point(355, -12);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(3, 200);
+            this.pictureBox2.Size = new System.Drawing.Size(3, 318);
             this.pictureBox2.TabIndex = 16;
             this.pictureBox2.TabStop = false;
             // 
@@ -210,7 +210,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox3.Location = new System.Drawing.Point(371, 12);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(10, 145);
+            this.pictureBox3.Size = new System.Drawing.Size(10, 263);
             this.pictureBox3.TabIndex = 13;
             this.pictureBox3.TabStop = false;
             // 
@@ -226,7 +226,7 @@
             this.customScrollbar.Minimum = 0;
             this.customScrollbar.MinimumSize = new System.Drawing.Size(15, 92);
             this.customScrollbar.Name = "customScrollbar";
-            this.customScrollbar.Size = new System.Drawing.Size(15, 165);
+            this.customScrollbar.Size = new System.Drawing.Size(15, 283);
             this.customScrollbar.SmallChange = 1;
             this.customScrollbar.TabIndex = 11;
             this.customScrollbar.ThumbBottomImage = ((System.Drawing.Image)(resources.GetObject("customScrollbar.ThumbBottomImage")));
@@ -246,7 +246,7 @@
             this.coverPanel.Controls.Add(this.shiftPanel);
             this.coverPanel.Location = new System.Drawing.Point(-9, -10);
             this.coverPanel.Name = "coverPanel";
-            this.coverPanel.Size = new System.Drawing.Size(387, 177);
+            this.coverPanel.Size = new System.Drawing.Size(387, 295);
             this.coverPanel.TabIndex = 4;
             // 
             // shiftPanel
@@ -257,7 +257,7 @@
             this.shiftPanel.AutoScroll = true;
             this.shiftPanel.Location = new System.Drawing.Point(5, 3);
             this.shiftPanel.Name = "shiftPanel";
-            this.shiftPanel.Size = new System.Drawing.Size(379, 168);
+            this.shiftPanel.Size = new System.Drawing.Size(379, 286);
             this.shiftPanel.TabIndex = 3;
             // 
             // UI
@@ -266,7 +266,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.SteelBlue;
-            this.ClientSize = new System.Drawing.Size(393, 282);
+            this.ClientSize = new System.Drawing.Size(393, 390);
             this.Controls.Add(this.timeDateControl1);
             this.Controls.Add(this.helpButton);
             this.Controls.Add(this.preferencesButton);

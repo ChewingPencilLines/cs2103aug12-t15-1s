@@ -28,7 +28,7 @@ namespace ToDo
         const string RESPONSE_UNDO_FAILURE = "Cannot undo last executed task!";
         const string RESPONSE_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
         const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
-        const string REPONSE_INVALID_COMMAND = "Invalid command!";
+        const string REPONSE_INVALID_COMMAND = "Invalid command input!";
         const string RESPONSE_INVALID_TASK_INDEX = "Invalid task index!";
         #endregion
 
@@ -146,7 +146,7 @@ namespace ToDo
                 else if (doneString == null)
                 {
                     Task taskToMarkAsDone = lastListedTasks[index.Value];
-                    response = MarkAsDone(ref taskToMarkAsDone, ref taskList, out successFlag);
+                    response = MarkAsDone(ref taskToMarkAsDone, out successFlag);
                 }
                 else
                 {
@@ -192,7 +192,7 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;
         }
 
-        private string MarkAsDone(ref Task taskToMarkAsDone, ref List<Task> taskList, out bool successFlag)
+        private string MarkAsDone(ref Task taskToMarkAsDone, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToMarkAsDone);
@@ -257,17 +257,7 @@ namespace ToDo
             foreach (Task task in taskList)
             {
                 displayString += index;
-                if (task is TaskFloating)
-                {
-                    displayString += ShowFloating((TaskFloating)task);
-                }
-                else if (task is TaskDeadline)
-                {
-                    displayString += ShowDeadline((TaskDeadline)task);
-                }
-                else if (task is TaskEvent)
-                {
-                    displayString += ShowEvent((TaskEvent)task);
+                displayString += GetTaskInformation(task);
                 }
                 index++;
             }
@@ -342,28 +332,38 @@ namespace ToDo
                 lastListedTasks.Clear();
                 lastListedTasks.Add(task);
                 displayString += index;
-                if (task is TaskFloating)
-                {
-                    displayString += ShowFloating((TaskFloating)task);
+                    displayString += GetTaskInformation(task);
+                    index++;  
                 }
-                else if (task is TaskDeadline)
-                {
-                    displayString += ShowDeadline((TaskDeadline)task);
-                }
-                else if (task is TaskEvent)
-                {
-                    displayString += ShowEvent((TaskEvent)task);
-                }
-                index++;
-            }
+            }   
             return displayString;
+        }
+
+        private string GetTaskInformation(Task task)
+        {
+            string taskString = String.Empty;
+            if (task is TaskFloating)
+            {
+                taskString += ShowFloating((TaskFloating)task);
+            }
+            else if (task is TaskDeadline)
+            {
+                taskString += ShowDeadline((TaskDeadline)task);
+            }
+            else if (task is TaskEvent)
+            {
+                taskString += ShowEvent((TaskEvent)task);
+            }
+            if (task.State)
+                taskString += " [DONE]";
+            taskString += "\r\n";
+            return taskString;
         }
 
         private string ShowFloating(TaskFloating task)
         {
             string feedback;
             feedback = ". " + task.TaskName;
-            feedback += "\r\n";
             return feedback;
         }
 
@@ -373,7 +373,6 @@ namespace ToDo
             feedback = ". " + task.TaskName;
 
             feedback += (" BY: " + ((TaskDeadline)task).EndTime);
-            feedback += "\r\n";
             return feedback;
         }
 
@@ -387,7 +386,6 @@ namespace ToDo
             feedback += (" AT: " + startTime.ToString());
             if (startTime != endTime && endTime != null)
                 feedback += (" TO: " + endTime.ToString());
-            feedback += "\r\n";
             return feedback;
         }
 

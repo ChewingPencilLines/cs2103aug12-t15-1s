@@ -63,7 +63,7 @@ namespace ToDo
                     else
                     {
                         commandType = ((TokenCommand)token).Value;
-                        if (commandType == CommandType.DELETE || commandType == CommandType.MODIFY)
+                        if (commandType == CommandType.DELETE || commandType == CommandType.MODIFY || commandType == CommandType.DONE)
                         {
                             taskIndex = ((TokenCommand)token).TaskIndex;
                         }
@@ -222,7 +222,7 @@ namespace ToDo
                     }
                     else
                     {
-                        newOperation = new OperationDelete("");
+                        newOperation = new OperationMarkAsDone("");
                         break;
                     }
                 case CommandType.POSTPONE:

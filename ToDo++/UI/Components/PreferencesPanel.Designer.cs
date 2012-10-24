@@ -31,8 +31,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.NewOptions = new System.Windows.Forms.GroupBox();
-            this.startingOptions1 = new ToDo.StartingOptions();
-            this.flexiCommandsControl1 = new ToDo.FlexiCommandsControl();
+            this.startingOptions = new ToDo.StartingOptions();
+            this.flexiCommandsControl = new ToDo.FlexiCommandsControl();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -41,7 +41,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.startingOptions1);
+            this.groupBox1.Controls.Add(this.startingOptions);
             this.groupBox1.ForeColor = System.Drawing.Color.Aqua;
             this.groupBox1.Location = new System.Drawing.Point(4, 1);
             this.groupBox1.Name = "groupBox1";
@@ -54,11 +54,11 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.flexiCommandsControl1);
+            this.groupBox2.Controls.Add(this.flexiCommandsControl);
             this.groupBox2.ForeColor = System.Drawing.Color.Aqua;
-            this.groupBox2.Location = new System.Drawing.Point(4, 88);
+            this.groupBox2.Location = new System.Drawing.Point(4, 89);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(364, 109);
+            this.groupBox2.Size = new System.Drawing.Size(364, 208);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "FlexiCommands";
@@ -68,28 +68,28 @@
             this.NewOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.NewOptions.ForeColor = System.Drawing.Color.Aqua;
-            this.NewOptions.Location = new System.Drawing.Point(3, 198);
+            this.NewOptions.Location = new System.Drawing.Point(4, 299);
             this.NewOptions.Name = "NewOptions";
-            this.NewOptions.Size = new System.Drawing.Size(365, 78);
+            this.NewOptions.Size = new System.Drawing.Size(365, 65);
             this.NewOptions.TabIndex = 6;
             this.NewOptions.TabStop = false;
             this.NewOptions.Text = "New Options";
             // 
-            // startingOptions1
+            // startingOptions
             // 
-            this.startingOptions1.BackColor = System.Drawing.Color.SteelBlue;
-            this.startingOptions1.Location = new System.Drawing.Point(6, 14);
-            this.startingOptions1.Name = "startingOptions1";
-            this.startingOptions1.Size = new System.Drawing.Size(248, 66);
-            this.startingOptions1.TabIndex = 0;
+            this.startingOptions.BackColor = System.Drawing.Color.SteelBlue;
+            this.startingOptions.Location = new System.Drawing.Point(6, 14);
+            this.startingOptions.Name = "startingOptions";
+            this.startingOptions.Size = new System.Drawing.Size(248, 66);
+            this.startingOptions.TabIndex = 0;
             // 
-            // flexiCommandsControl1
+            // flexiCommandsControl
             // 
-            this.flexiCommandsControl1.BackColor = System.Drawing.Color.Transparent;
-            this.flexiCommandsControl1.Location = new System.Drawing.Point(-9, 11);
-            this.flexiCommandsControl1.Name = "flexiCommandsControl1";
-            this.flexiCommandsControl1.Size = new System.Drawing.Size(369, 92);
-            this.flexiCommandsControl1.TabIndex = 0;
+            this.flexiCommandsControl.BackColor = System.Drawing.Color.Transparent;
+            this.flexiCommandsControl.Location = new System.Drawing.Point(-9, 7);
+            this.flexiCommandsControl.Name = "flexiCommandsControl";
+            this.flexiCommandsControl.Size = new System.Drawing.Size(369, 200);
+            this.flexiCommandsControl.TabIndex = 0;
             // 
             // PreferencesPanel
             // 
@@ -100,7 +100,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Name = "PreferencesPanel";
-            this.Size = new System.Drawing.Size(371, 286);
+            this.Size = new System.Drawing.Size(371, 373);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -110,9 +110,9 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private FlexiCommandsControl flexiCommandsControl1;
+        private FlexiCommandsControl flexiCommandsControl;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox NewOptions;
-        private StartingOptions startingOptions1;
+        private StartingOptions startingOptions;
     }
 }
