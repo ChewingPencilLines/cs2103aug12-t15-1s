@@ -56,12 +56,12 @@ namespace ToDo
     public class TokenDate : Token
     {
         DateTime dateTime;
-        bool specific;
+        Boolean specific;
         internal DateTime Value
         {
             get { return dateTime; }
         }
-        internal bool IsSpecific
+        internal Boolean IsSpecific
         {
             get { return specific; }
         }
@@ -76,12 +76,12 @@ namespace ToDo
     public class TokenTime : Token
     {
         TimeSpan time;
-        bool specific;
+        Boolean specific;
         internal TimeSpan Value
         {
             get { return time; }
         }
-        internal bool IsSpecific
+        internal Boolean IsSpecific
         {
             get { return specific; }
         }
