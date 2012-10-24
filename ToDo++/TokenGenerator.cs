@@ -215,23 +215,23 @@ namespace ToDo
                     // no year input
                     if (year == 0)
                     {
-                        TryParsingDate(ref dateTime, DateTime.Today.Year, month, day, true);
+                        dateTime = TryParsingDate(dateTime, DateTime.Today.Year, month, day, true);
                         if (DateTime.Compare(dateTime, DateTime.Today) < 0)
                         {
                             if (isMonthGiven == false)
                             {
                                 isMonthGiven = true;
-                                if (!TryParsingDate(ref dateTime, DateTime.Today.AddMonths(1).Year, DateTime.Today.AddMonths(1).Month, day, false)) continue;
+                                dateTime = TryParsingDate(dateTime, DateTime.Today.AddMonths(1).Year, DateTime.Today.AddMonths(1).Month, day, false);
                             }
                             else
                             {
-                                if (!TryParsingDate(ref dateTime, DateTime.Today.AddYears(1).Year, month, day, false)) continue;
+                                dateTime = TryParsingDate(dateTime, DateTime.Today.AddYears(1).Year, month, day, false);
                             }
                         }
                     }
                     else
                     {
-                        if (!TryParsingDate(ref dateTime, year, month, day, false)) continue;
+                        dateTime = TryParsingDate(dateTime, year, month, day, false);
                     }
                     TokenDate dateToken = new TokenDate(index, dateTime, isSpecific);
                     dateTokens.Add(dateToken);
@@ -459,7 +459,7 @@ namespace ToDo
             return monthInt;
         }
 
-        private static bool TryParsingDate(ref DateTime date, int year, int month, int day, bool ignoreFailure)
+        private static DateTime TryParsingDate(DateTime date, int year, int month, int day, bool ignoreFailure)
         {
             try
             {
@@ -471,11 +471,10 @@ namespace ToDo
                     date = new DateTime(1, 1, 1);
                 else
                 {
-                    //flag
-                    return false;
+                    AlertBox.Show("Invalid date input!\n" + day + "/" + month + "/" + year);
                 }
             }
-            return true;
+            return date;
         }
 
         /// <summary>

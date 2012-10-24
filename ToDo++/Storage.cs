@@ -89,7 +89,7 @@ namespace ToDo
             // Write default settings if file not found or invalid.
             catch (FileNotFoundException)
             {
-                AlertBox.Show("Settings file Not Found, new file will be created");
+                AlertBox.Show("Settings file not found.\nNew file will be created");
                 WriteSettingsToFile(settingsList);
             }
             catch (InvalidOperationException)
