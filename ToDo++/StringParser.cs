@@ -175,6 +175,7 @@ namespace ToDo
             dayKeywords.Add("sun", DayOfWeek.Sunday);
             dayKeywords.Add("sunday", DayOfWeek.Sunday);
             dayKeywords.Add("weekend", DayOfWeek.Sunday);
+            dayKeywords.Add("tmr", DateTime.Today.AddDays(1).DayOfWeek);
             dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
             // NYI
             timeSpecificKeywords = new List<string> { "noon", "midnight" };        // special case    
