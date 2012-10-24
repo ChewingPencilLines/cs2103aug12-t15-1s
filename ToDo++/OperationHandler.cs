@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Linq;
 using System.Diagnostics;
 
 
@@ -12,7 +13,7 @@ namespace ToDo
         List<Task> lastListedTasks;
         Stack<Operation> undoStack;
         Stack<Task> undoTask;
-       // Stack<Operation> redoStack;        
+        // Stack<Operation> redoStack;        
         Storage storageXML;
 
         // ******************************************************************
@@ -37,11 +38,11 @@ namespace ToDo
             undoStack = new Stack<Operation>();
             undoTask = new Stack<Task>();
             this.storageXML = storageXML;
-        } 
+        }
 
         public string Execute(Operation operation, ref List<Task> taskList)
         {
-            string response = String.Empty; 
+            string response = String.Empty;
             bool successFlag;
 
             TrackOperation(operation);
@@ -59,26 +60,26 @@ namespace ToDo
             }
 
             if (operation is OperationDelete)
-            { 
-                 int? index = ((OperationDelete)operation).Index;
-                 string deleteString = ((OperationDelete)operation).DeleteString;
-                 if (index.HasValue == false && deleteString != null)
-                 {                  
-                     response = Search(taskList, deleteString);
-                 }
-                 else if (index < 0 || index > taskList.Count - 1)
-                 {
-                     return RESPONSE_INVALID_TASK_INDEX;
-                 }
-                 else if (deleteString == null)
-                 {
-                     Task taskToDelete = lastListedTasks[index.Value];
-                     response = Delete(ref taskToDelete, ref taskList, out successFlag);
-                 }
-                 else
-                 {
-                     return REPONSE_INVALID_COMMAND;
-                 }
+            {
+                int? index = ((OperationDelete)operation).Index;
+                string deleteString = ((OperationDelete)operation).DeleteString;
+                if (index.HasValue == false && deleteString != null)
+                {
+                    response = Search(taskList, (OperationSearch)operation);
+                }
+                else if (index < 0 || index > taskList.Count - 1)
+                {
+                    return RESPONSE_INVALID_TASK_INDEX;
+                }
+                else if (deleteString == null)
+                {
+                    Task taskToDelete = lastListedTasks[index.Value];
+                    response = Delete(ref taskToDelete, ref taskList, out successFlag);
+                }
+                else
+                {
+                    return REPONSE_INVALID_COMMAND;
+                }
             }
 
             if (operation is OperationModify)
@@ -119,14 +120,13 @@ namespace ToDo
 
             if (operation is OperationSearch)
             {
-                string searchString = ((OperationSearch)operation).SearchString;
-                response = Search(taskList, searchString);
+                response = Search(taskList, (OperationSearch)operation);
             }
 
             if (operation is OperationSort)
             {
                 //sort only change what user view, but not change in storage
-                TaskComparer tc = new TaskComparer(); 
+                TaskComparer tc = new TaskComparer();
                 lastListedTasks.Sort(tc);
                 response = DisplayAll(lastListedTasks);
             }
@@ -137,7 +137,7 @@ namespace ToDo
                 string doneString = ((OperationMarkAsDone)operation).DoneString;
                 if (index.HasValue == false && doneString != null)
                 {
-                    response = Search(taskList, doneString);
+                    response = Search(taskList, (OperationSearch)operation);
                 }
                 else if (index < 0 || index > taskList.Count - 1)
                 {
@@ -156,7 +156,7 @@ namespace ToDo
 
             return response;
         }
-                
+
         private string Add(Task taskToAdd, ref List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
@@ -175,7 +175,7 @@ namespace ToDo
             {
                 Debug.WriteLine(e.ToString());
                 return RESPONSE_ADD_FAILURE + "\r\nThe following exception occured: " + e.ToString();
-            }     
+            }
         }
 
         private string Delete(ref Task taskToDelete, ref List<Task> taskList, out bool successFlag)
@@ -189,7 +189,7 @@ namespace ToDo
                 return String.Format(RESPONSE_DELETE_SUCCESS, taskToDelete.TaskName);
             }
             else
-                return RESPONSE_XML_READWRITE_FAIL;            
+                return RESPONSE_XML_READWRITE_FAIL;
         }
 
         private string MarkAsDone(ref Task taskToMarkAsDone, out bool successFlag)
@@ -197,23 +197,23 @@ namespace ToDo
             successFlag = false;
             undoTask.Push(taskToMarkAsDone);
             taskToMarkAsDone.State = true;
-            
+
             //if (storageXML.UpdateTaskAsDone(taskToMarkAsDone))
             //{
-                successFlag = true;
-                return String.Format(RESPONSE_MARKASDONE_SUCCESS, taskToMarkAsDone.TaskName);
+            successFlag = true;
+            return String.Format(RESPONSE_MARKASDONE_SUCCESS, taskToMarkAsDone.TaskName);
             //}
             //else
             //    return RESPONSE_XML_READWRITE_FAIL;*/
         }
 
-        private string Modify(ref Task taskToModify,Task newTask, ref List<Task> taskList, out bool successFlag)
+        private string Modify(ref Task taskToModify, Task newTask, ref List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToModify);
             taskList.Remove(taskToModify);
             taskList.Add(newTask);
-            if (storageXML.RemoveTaskFromFile(taskToModify)&&storageXML.AddTaskToFile(newTask))
+            if (storageXML.RemoveTaskFromFile(taskToModify) && storageXML.AddTaskToFile(newTask))
             {
                 successFlag = true;
                 return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
@@ -258,24 +258,80 @@ namespace ToDo
             {
                 displayString += index;
                 displayString += GetTaskInformation(task);
-                index++;                
+                }
+                index++;
             }
             lastListedTasks = new List<Task>(taskList);
             return displayString;
         }
 
-        private string Search(List<Task> taskList, string searchString)
+        private string Search(List<Task> taskList, OperationSearch searchOp)
         {
-            string displayString = String.Empty;
-            int index = 1;
-            if (searchString == null)
-                return DisplayAll(taskList);
-            foreach (Task task in taskList)
+            List<Task> filteredTasks = taskList;
+            if (searchOp.SearchString != null)
+                filteredTasks = (from task in filteredTasks
+                                 where String.Compare(task.TaskName, searchOp.SearchString, true) == 0
+                                 select task).ToList();
+
+            // Search all tasks that end before EndTime or have deadlines before EndTime
+            if (searchOp.StartTime == null && searchOp.EndTime != null)
             {
-                if (task.TaskName.IndexOf(searchString) >= 0)
-                {
-                    lastListedTasks.Add(task);
-                    displayString += index;
+                List<Task> tempList = new List<Task>();
+                tempList = filteredTasks.GetRange(0, filteredTasks.Count);
+                filteredTasks = (from task in tempList
+                                 where (task is TaskDeadline)
+                                 where (((TaskDeadline)task).EndTime <= (DateTime)searchOp.EndTime)
+                                 select task).ToList();
+                filteredTasks.AddRange((from task in tempList
+                                        where (task is TaskEvent)
+                                        where (((TaskEvent)task).EndTime <= searchOp.EndTime)
+                                        select task).ToList());
+            }
+
+            // Search all tasks that occur between StartTime and EndTime
+            else if (searchOp.StartTime != null && searchOp.EndTime != null)
+            {
+                List<Task> tempList = new List<Task>();
+                tempList = filteredTasks.GetRange(0, filteredTasks.Count);
+                filteredTasks = (from task in tempList
+                                 where (task is TaskDeadline)
+                                 where (((TaskDeadline)task).EndTime >= (DateTime)searchOp.StartTime)
+                                 where (((TaskDeadline)task).EndTime <= (DateTime)searchOp.EndTime)
+                                 select task).ToList();
+                filteredTasks.AddRange((from task in tempList
+                                        where (task is TaskEvent)
+                                        where (((TaskEvent)task).StartTime >= searchOp.StartTime)
+                                        where (((TaskEvent)task).EndTime <= searchOp.EndTime)
+                                        select task).ToList());
+            }
+
+            // Search all tasks that fall on the day of StartTime
+            else if (searchOp.StartTime != null && searchOp.EndTime == null)
+            {
+                List<Task> tempList = new List<Task>();
+                tempList = filteredTasks.GetRange(0, filteredTasks.Count);
+                filteredTasks = (from task in tempList
+                                 where (task is TaskDeadline)
+                                 where (((TaskDeadline)task).EndTime.Date == ((DateTime)searchOp.StartTime).Date)
+                                 select task).ToList();
+                filteredTasks.AddRange((from task in tempList
+                                        where (task is TaskEvent)
+                                        where (((TaskEvent)task).StartTime.Date <= ((DateTime)searchOp.StartTime).Date)
+                                        where (((TaskEvent)task).EndTime.Date >= ((DateTime)searchOp.StartTime).Date)
+                                        select task).ToList());
+            }
+            return GenerateDisplayString(filteredTasks);
+        }
+
+        private string GenerateDisplayString(List<Task> filteredTasks)
+        {
+            string displayString = "";
+            int index = 1;
+            foreach (Task task in filteredTasks)
+            {
+                lastListedTasks.Clear();
+                lastListedTasks.Add(task);
+                displayString += index;
                     displayString += GetTaskInformation(task);
                     index++;  
                 }
@@ -321,7 +377,7 @@ namespace ToDo
         }
 
         private string ShowEvent(TaskEvent task)
-        { 
+        {
             string feedback;
             feedback = ". " + task.TaskName;
 
@@ -336,7 +392,7 @@ namespace ToDo
         private void TrackOperation(Operation operation)
         {
             undoStack.Push(operation);
-           // redoStack.Clear();
+            // redoStack.Clear();
         }
     }
 }

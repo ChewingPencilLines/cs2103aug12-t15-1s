@@ -137,7 +137,12 @@ namespace ToDo
                     throw new Exception("Token type not matched!");
                 }
             }
-
+            // If searching only for a single time, assume it's the end time.
+            if (commandType == CommandType.SEARCH && startTime != null && endTime == null && endDate == null)
+            {
+                endTime = startTime;
+                startTime = null;
+            }
             // Combine Date/Times
             startCombined = CombineDateAndTime(startTime, startDate, DateTime.Now);
             if(startCombined == null)
@@ -192,8 +197,8 @@ namespace ToDo
                         newOperation = new OperationModify();
                         break;
                     }
-                case CommandType.SEARCH:
-                    newOperation = new OperationSearch(taskName);
+                case CommandType.SEARCH:                    
+                    newOperation = new OperationSearch(taskName, startCombined, endCombined);
                     break;
                 case CommandType.SORT:
                     newOperation = new OperationSort();

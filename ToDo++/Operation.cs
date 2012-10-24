@@ -106,10 +106,18 @@ namespace ToDo
     class OperationSearch : Operation
     {
         private string searchString = "";
+        private DateTime? startTime = null, endTime = null;
 
-        public OperationSearch(string searchString)
+        public DateTime? EndTime
         {
-            this.searchString = searchString;
+            get { return endTime; }
+            //set { endTime = value; }
+        }
+
+        public DateTime? StartTime
+        {
+            get { return startTime; }
+            //set { startTime = value; }
         }
 
         public string SearchString
@@ -117,6 +125,12 @@ namespace ToDo
             get { return searchString; }
         }
 
+        public OperationSearch(string searchString, DateTime? startTime, DateTime? endTime)
+        {
+            this.searchString = searchString;
+            this.startTime = startTime;
+            this.endTime = endTime;
+        }
     }
     
     class OperationModify : Operation
