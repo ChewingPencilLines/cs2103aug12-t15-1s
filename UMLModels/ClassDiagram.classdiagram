@@ -1,25 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" xmlns:dm9="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner" dslVersion="1.0.0.0" Id="12016a1a-f3bc-4286-939c-fce86c325b59" name="UMLClassDiagram1" linkedPackageId="c96747f5-4669-4277-8a5c-5bd56dda640b" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
-  <profileInstances>
-    <packageHasProfileInstances Id="54498361-3302-426b-8d8c-0159e7e580f4">
-      <profileInstance Id="fa1bde9a-3edf-43a9-be8f-fa70ae3dc944" name="StandardProfileL2">
-        <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
-      </profileInstance>
-      <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
-    </packageHasProfileInstances>
-    <packageHasProfileInstances Id="76d01785-c3c4-4977-acd1-b23dfd0c7d30">
-      <profileInstance Id="cf878a37-bded-4c8e-b7a1-4908b1ba81da" name="StandardProfileL3">
-        <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
-      </profileInstance>
-      <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
-    </packageHasProfileInstances>
-    <packageHasProfileInstances Id="09c00d79-58a1-4595-ad8a-5ca89db5205a">
-      <profileInstance Id="fdfc7b94-c22a-4f9e-b5f4-4c4d4ed452b1" name="CSharpProfile">
-        <elementDefinition Id="c95882b7-becd-40c2-bb59-d9d4b13504b1" />
-      </profileInstance>
-      <elementDefinition Id="89104856-de92-4222-a718-4a963201a098" />
-    </packageHasProfileInstances>
-  </profileInstances>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="12016a1a-f3bc-4286-939c-fce86c325b59" name="UMLClassDiagram1" linkedPackageId="c96747f5-4669-4277-8a5c-5bd56dda640b" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
   <packagedElements>
     <packageHasNamedElement>
       <referencedType Id="c52d774b-bcd2-44c0-9a12-bad4b01d3978" name="String" isAbstract="false" isLeaf="false" cachedFullName="String">
@@ -711,6 +691,32 @@
               </associationHasOwnedEnds>
             </relationshipOwnedElementsInternal>
             <elementDefinition Id="a7b5f0ae-4ddd-4755-a7a3-4bce2943f029" />
+          </association>
+          <association Id="8f4b7b5f-d514-454c-bcce-5e8ccb543691" isDerived="false" sourceEndRoleName="Processes" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="e2e92dc0-c5e4-4b17-b639-8e4256599637" LastKnownName="Token" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="7957ffc5-d028-4822-b594-70be78bb62ff" name="Processes" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="8e4d020f-35e3-49ec-87fc-9be99ef0abfc" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="380b546c-e0f8-437e-8696-50f88d47fdd6" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <lowerValueInternal>
+                    <literalString Id="55bf9b6b-be82-4f31-990b-cf9502362128" name="Lower" value="*">
+                      <elementDefinition Id="065b7363-f5d6-4226-810f-37f932cb64ac" />
+                    </literalString>
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString Id="da5be83c-45ea-4737-b377-5cf25095cf86" name="Upper" value="*">
+                      <elementDefinition Id="aa47fa9b-b399-4117-a36e-534f952e5582" />
+                    </literalString>
+                  </upperValueInternal>
+                  <elementDefinition Id="8d67e914-8b3d-4887-b47b-49ddbd914ad1" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="09942430-64dc-4201-bec1-87fa2f8009ad" />
           </association>
         </targetEnds>
         <ownedAttributesInternal>
@@ -7729,24 +7735,6 @@
           </stereotypeInstance>
         </appliedStereotypesInternal>
         <elementDefinition Id="4cdc7a48-a7b7-48f7-9da1-bb9b81b7318f" />
-        <targetEnds>
-          <association Id="fe4f5c0e-870e-498d-a7d6-bc8a60d3db53" isDerived="false" sourceEndRoleName="" targetEndRoleName="Processes" isLeaf="false" isAbstract="false">
-            <classMoniker Id="474c95ad-b090-4494-98ab-bb5ea5622282" LastKnownName="CommandParser" />
-            <relationshipOwnedElementsInternal>
-              <associationHasOwnedEnds>
-                <memberEnd Id="b6dc148e-9b59-4ce7-97a4-1d4f35eb6e91" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
-                  <elementDefinition Id="917af263-2891-4b4a-9cb1-e96395e983c7" />
-                </memberEnd>
-              </associationHasOwnedEnds>
-              <associationHasOwnedEnds>
-                <memberEnd Id="5839637b-5628-4fbd-a253-f8b17b99d67e" name="Processes" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
-                  <elementDefinition Id="93227d5b-1498-41b4-93ba-7575191ef9cb" />
-                </memberEnd>
-              </associationHasOwnedEnds>
-            </relationshipOwnedElementsInternal>
-            <elementDefinition Id="502787ea-c5a0-4709-88ac-507e0e3ea340" />
-          </association>
-        </targetEnds>
         <ownedAttributesInternal>
           <property Id="8511659f-3b26-4f68-a952-65d810838998" name="Position" visibility="Package" isLeaf="false" isStatic="false" isReadOnly="true" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
             <referencesInternal>
@@ -15501,5 +15489,25 @@
   </packagedElements>
   <package Id="c96747f5-4669-4277-8a5c-5bd56dda640b" name="ModelingProject">
     <elementDefinition Id="2b53fb6f-3ce5-4516-9539-9615520b11e6" />
+    <profileInstances>
+      <packageHasProfileInstances Id="54498361-3302-426b-8d8c-0159e7e580f4">
+        <profileInstance Id="fa1bde9a-3edf-43a9-be8f-fa70ae3dc944" name="StandardProfileL2">
+          <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+        </profileInstance>
+        <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+      </packageHasProfileInstances>
+      <packageHasProfileInstances Id="76d01785-c3c4-4977-acd1-b23dfd0c7d30">
+        <profileInstance Id="cf878a37-bded-4c8e-b7a1-4908b1ba81da" name="StandardProfileL3">
+          <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+        </profileInstance>
+        <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+      </packageHasProfileInstances>
+      <packageHasProfileInstances Id="09c00d79-58a1-4595-ad8a-5ca89db5205a">
+        <profileInstance Id="fdfc7b94-c22a-4f9e-b5f4-4c4d4ed452b1" name="CSharpProfile">
+          <elementDefinition Id="c95882b7-becd-40c2-bb59-d9d4b13504b1" />
+        </profileInstance>
+        <elementDefinition Id="89104856-de92-4222-a718-4a963201a098" />
+      </packageHasProfileInstances>
+    </profileInstances>
   </package>
 </logicalClassDesignerModel>
