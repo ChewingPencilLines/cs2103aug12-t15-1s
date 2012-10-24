@@ -63,7 +63,6 @@ namespace ToDo
         public TaskFloating(string taskName, Boolean state = false, int forceID = -1) : base (taskName, state, forceID)
         {            
         }
-
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
@@ -84,13 +83,11 @@ namespace ToDo
             get { return endTime; }
             //set { endTime = value; }
         }
-
         public TaskDeadline(string taskName, DateTime endTime, Boolean state = false, int forceID = -1)
             : base(taskName, state, forceID)
         {
             this.endTime = endTime;
         }
-
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",

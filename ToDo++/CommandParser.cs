@@ -60,7 +60,10 @@ namespace ToDo
                 else if (token is TokenCommand)
                 {
                     if (commandType != CommandType.INVALID)
+                    {
                         WarnUserOfMultipleCommands();
+                        return null;
+                    }
                     else
                     {
                         commandType = ((TokenCommand)token).Value;
@@ -341,7 +344,8 @@ namespace ToDo
 
         private static void WarnUserOfMultipleCommands()
         {
-            throw new NotImplementedException("Multiple commands were issued. Functionality NYI.");
+            AlertBox.Show("Invalid input.\nMultiple commands were entered.");
+            //throw new NotImplementedException("Multiple commands were issued. Functionality NYI.");
         }  
 
         private List<int[]> GetPositionsOfDelimiters(string input)

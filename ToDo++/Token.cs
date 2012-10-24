@@ -9,7 +9,6 @@ namespace ToDo
     public class Token
     {        
         private int position;
-
         internal Token(int position)
         {
             this.position = position;
