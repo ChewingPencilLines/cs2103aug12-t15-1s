@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParsingLogicUnitTest", "Par
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomControls", "CustomControls\CustomControls.csproj", "{5B85E2D7-2005-4496-B5D7-59C68A1EC91D}"
 EndProject
-Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "ProjectModel", "ModelingProject1\ProjectModel.modelproj", "{794D6291-8262-4A7D-BE6F-5E89F7DE1536}"
+Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "ProjectModel", "UMLModels\ProjectModel.modelproj", "{794D6291-8262-4A7D-BE6F-5E89F7DE1536}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
