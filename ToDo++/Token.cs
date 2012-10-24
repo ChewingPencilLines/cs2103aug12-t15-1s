@@ -7,27 +7,17 @@ using System.Threading.Tasks;
 namespace ToDo
 {
     public class Token
-    {
-        public enum TokenType { COMMAND, DATE, TIME, DAY, CONTEXT, LITERAL, INDEX };
-
+    {        
         private int position;
-        protected TokenType type;
 
         internal Token(int position)
         {
             this.position = position;
-        }
-
-        internal TokenType Type
-        {            
-            get { return type; }
-        } 
-           
+        }  
         internal int Position
         {
             get { return position; }           
         }
-
     }
 
     public class TokenCommand : Token
@@ -47,7 +37,6 @@ namespace ToDo
         internal TokenCommand(int position, CommandType val, int? taskIndex = null)
             : base(position)
         {
-            type = TokenType.COMMAND;
             commandType = val;
             this.taskIndex = taskIndex;
         }
@@ -88,7 +77,6 @@ namespace ToDo
         internal TokenTime(int position, TimeSpan val, Boolean specific_flag)
             : base(position)
         {
-            type = TokenType.TIME;
             time = val;
             specific = specific_flag;
         }
@@ -104,7 +92,6 @@ namespace ToDo
         internal TokenDay(int position, DayOfWeek val)
             : base(position)
         {
-            type = TokenType.DAY;
             dayOfWeek = val;
         }
     }
@@ -119,7 +106,6 @@ namespace ToDo
         internal TokenContext(int position, ContextType val)
             : base(position)
         {
-            type = TokenType.CONTEXT;
             contextType = val;
         }
     }
@@ -134,7 +120,6 @@ namespace ToDo
         internal TokenIndex(int position, string val)
             : base(position)
         {
-            type = TokenType.LITERAL;
             index = val;
         }
     }
@@ -149,7 +134,6 @@ namespace ToDo
         internal TokenLiteral(int position, string val)
             : base(position)
         {
-            type = TokenType.LITERAL;
             literal = val;
         }
     }
