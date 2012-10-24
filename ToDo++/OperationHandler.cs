@@ -65,8 +65,8 @@ namespace ToDo
                 string deleteString = ((OperationDelete)operation).DeleteString;
                 if (index.HasValue == false && deleteString != null)
                  {
-                     int numberOfMatches = 0;
-                     response = Search(taskList, (OperationSearch)operation, out numberOfMatches);
+                     int numberOfMatches;
+                     response = Search(out numberOfMatches, taskList, deleteString);
                      if (numberOfMatches == 1)
                      {
                          response = Delete(lastListedTasks[0], ref taskList, out successFlag);
@@ -126,7 +126,11 @@ namespace ToDo
             if (operation is OperationSearch)
             {
                 int numberOfMatches;
-                response = Search(taskList, (OperationSearch)operation, out numberOfMatches);
+                OperationSearch searchOp = ((OperationSearch)operation);
+                string searchString = searchOp.SearchString;
+                DateTime? startTime = searchOp.StartTime;
+                DateTime? endTime = searchOp.EndTime;
+                response = Search(out numberOfMatches, taskList, searchString, startTime, endTime);
             }
 
             if (operation is OperationSort)
@@ -144,7 +148,7 @@ namespace ToDo
                 if (index.HasValue == false && doneString != null)
                 {
                     int numberOfMatches = 0;
-                    response = Search(taskList, (OperationSearch)operation, out numberOfMatches);
+                    response = Search(out numberOfMatches, taskList, doneString);
                     if (numberOfMatches == 1)
                     {
                         response = MarkAsDone(lastListedTasks[0], out successFlag);
@@ -263,81 +267,79 @@ namespace ToDo
 
         private string DisplayAll(List<Task> taskList)
         {
-            lastListedTasks = new List<Task>(taskList);
             return GenerateDisplayString(taskList);
         }
 
-        private string Search(List<Task> taskList, OperationSearch searchOp, out int numberOfMatches)
+        private string Search(out int numberOfMatches, List<Task> taskList, string searchString, DateTime? startTime = null, DateTime? endTime = null)
         {            
             List<Task> filteredTasks = taskList;
-            if (searchOp.SearchString != null)
+            if (searchString != null)
                 filteredTasks = (from task in filteredTasks
-                                 where String.Compare(task.TaskName, searchOp.SearchString, true) == 0
+                                 where String.Compare(task.TaskName, searchString, true) == 0
                                  select task).ToList();
 
             // Search all tasks that end before EndTime or have deadlines before EndTime
-            if (searchOp.StartTime == null && searchOp.EndTime != null)
+            if (startTime == null && endTime != null)
             {
                 List<Task> tempList = new List<Task>();
                 tempList = filteredTasks.GetRange(0, filteredTasks.Count);
                 filteredTasks = (from task in tempList
                                  where (task is TaskDeadline)
-                                 where (((TaskDeadline)task).EndTime <= (DateTime)searchOp.EndTime)
+                                 where (((TaskDeadline)task).EndTime <= endTime)
                                  select task).ToList();
                 filteredTasks.AddRange((from task in tempList
                                         where (task is TaskEvent)
-                                        where (((TaskEvent)task).EndTime <= searchOp.EndTime)
+                                        where (((TaskEvent)task).EndTime <= endTime)
                                         select task).ToList());
             }
 
             // Search all tasks that occur between StartTime and EndTime
-            else if (searchOp.StartTime != null && searchOp.EndTime != null)
+            else if (startTime != null && endTime != null)
             {
                 List<Task> tempList = new List<Task>();
                 tempList = filteredTasks.GetRange(0, filteredTasks.Count);
                 filteredTasks = (from task in tempList
                                  where (task is TaskDeadline)
-                                 where (((TaskDeadline)task).EndTime >= (DateTime)searchOp.StartTime)
-                                 where (((TaskDeadline)task).EndTime <= (DateTime)searchOp.EndTime)
+                                 where (((TaskDeadline)task).EndTime >= startTime)
+                                 where (((TaskDeadline)task).EndTime <= endTime)
                                  select task).ToList();
                 filteredTasks.AddRange((from task in tempList
                                         where (task is TaskEvent)
-                                        where (((TaskEvent)task).StartTime >= searchOp.StartTime)
-                                        where (((TaskEvent)task).EndTime <= searchOp.EndTime)
+                                        where (((TaskEvent)task).StartTime >= startTime)
+                                        where (((TaskEvent)task).EndTime <= endTime)
                                         select task).ToList());
             }
 
             // Search all tasks that fall on the day of StartTime
-            else if (searchOp.StartTime != null && searchOp.EndTime == null)
+            else if (startTime != null && endTime == null)
             {
                 List<Task> tempList = new List<Task>();
                 tempList = filteredTasks.GetRange(0, filteredTasks.Count);
                 filteredTasks = (from task in tempList
                                  where (task is TaskDeadline)
-                                 where (((TaskDeadline)task).EndTime.Date == ((DateTime)searchOp.StartTime).Date)
+                                 where (((TaskDeadline)task).EndTime.Date == ((DateTime)startTime).Date)
                                  select task).ToList();
                 filteredTasks.AddRange((from task in tempList
                                         where (task is TaskEvent)
-                                        where (((TaskEvent)task).StartTime.Date <= ((DateTime)searchOp.StartTime).Date)
-                                        where (((TaskEvent)task).EndTime.Date >= ((DateTime)searchOp.StartTime).Date)
+                                        where (((TaskEvent)task).StartTime.Date <= ((DateTime)startTime).Date)
+                                        where (((TaskEvent)task).EndTime.Date >= ((DateTime)startTime).Date)
                                         select task).ToList());
             }
             numberOfMatches = filteredTasks.Count;
             return GenerateDisplayString(filteredTasks);
         }
 
-        private string GenerateDisplayString(List<Task> filteredTasks)
+        private string GenerateDisplayString(List<Task> tasksToDisplay)
         {
             string displayString = "";
             int index = 1;
-            foreach (Task task in filteredTasks)
+            foreach (Task task in tasksToDisplay)
             {
-                lastListedTasks.Clear();
-                lastListedTasks.Add(task);
                 displayString += index;
                 displayString += GetTaskInformation(task);
                 index++;  
             }
+            lastListedTasks = new List<Task>(tasksToDisplay);
             return displayString;
         }
 
