@@ -39,6 +39,7 @@ namespace ToDo
             DateTime? startCombined = null, endCombined = null;
             string taskName = null;
             int? taskIndex = null;
+            bool specificity = true;
 
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
@@ -88,7 +89,7 @@ namespace ToDo
                     }
                 }
                 else if (token is TokenDay)
-                {                                        
+                {                                 
                     switch (currentMode)
                     {
                         case ContextType.STARTTIME:
@@ -111,6 +112,7 @@ namespace ToDo
                 }
                 else if (token is TokenDate)
                 {
+                    specificity = ((TokenDate)token).IsSpecific;
                     switch (currentMode)
                     {
                         case ContextType.STARTTIME:
@@ -150,20 +152,19 @@ namespace ToDo
             else
                 endCombined = CombineDateAndTime(endTime, endDate, (DateTime)startCombined);
 
-            
-            Operation newOperation = CreateOperation(commandType, startCombined, endCombined, taskName, taskIndex);
+            Operation newOperation = CreateOperation(commandType, startCombined, endCombined, taskName, taskIndex, specificity);
             return newOperation;
         }
 
         // Create operation based on derived values, and whether they have been used.
-        private static Operation CreateOperation(CommandType commandType, DateTime? startCombined, DateTime? endCombined, string taskName, int? taskIndex)
+        private static Operation CreateOperation(CommandType commandType, DateTime? startCombined, DateTime? endCombined, string taskName, int? taskIndex, bool specificity)
         {
             Task task;
             Operation newOperation = null;
             switch (commandType)
             {
                 case CommandType.ADD:
-                    task = GenerateNewTask(taskName, startCombined, endCombined);
+                    task = GenerateNewTask(taskName, startCombined, endCombined, specificity);
                     newOperation = new OperationAdd(task);
                     break;
                 case CommandType.DELETE: 
@@ -186,7 +187,7 @@ namespace ToDo
                     newOperation = new OperationDisplay();
                     break;
                 case CommandType.MODIFY:
-                    task = GenerateNewTask(taskName, startCombined, endCombined);
+                    task = GenerateNewTask(taskName, startCombined, endCombined, specificity);
                     if (taskName != null && taskIndex != null)
                     {
                         newOperation = new OperationModify((int)taskIndex,task);
@@ -266,16 +267,21 @@ namespace ToDo
             return combinedDT;
         }
 
-        private static Task GenerateNewTask(string taskName, DateTime? startTime, DateTime? endTime)
+        private static Task GenerateNewTask(string taskName, DateTime? startTime, DateTime? endTime, bool specificity)
         {
+            if (!specificity)
+                endTime = new DateTime(((DateTime)startTime).Year, ((DateTime)startTime).Month, DateTime.DaysInMonth(((DateTime)startTime).Year, ((DateTime)startTime).Month));
             if (startTime == null && endTime == null)
                 return new TaskFloating(taskName);
             else if (startTime == null && endTime != null)
                 return new TaskDeadline(taskName, (DateTime)endTime);
             else if (startTime != null && endTime == null)
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime); // note: set endTime as what for default?
+            {
+                AlertBox.Show("No specific end time given for timed event task!");
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, specificity); // note: set endTime as what for default?
+            }
             else
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime);
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, specificity);
         }
 
         /// <summary>
