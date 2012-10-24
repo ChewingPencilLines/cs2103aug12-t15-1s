@@ -64,8 +64,13 @@ namespace ToDo
                 int? index = ((OperationDelete)operation).Index;
                 string deleteString = ((OperationDelete)operation).DeleteString;
                 if (index.HasValue == false && deleteString != null)
-                {
-                    response = Search(taskList, (OperationSearch)operation);
+                 {
+                     int numberOfMatches = 0;
+                     response = Search(taskList, deleteString, ref numberOfMatches);
+                     if (numberOfMatches == 1)
+                     {
+                         response = Delete(lastListedTasks[0], ref taskList, out successFlag);
+                     }
                 }
                 else if (index < 0 || index > taskList.Count - 1)
                 {
@@ -74,7 +79,7 @@ namespace ToDo
                 else if (deleteString == null)
                 {
                     Task taskToDelete = lastListedTasks[index.Value];
-                    response = Delete(ref taskToDelete, ref taskList, out successFlag);
+                     response = Delete(taskToDelete, ref taskList, out successFlag);
                 }
                 else
                 {
@@ -120,7 +125,8 @@ namespace ToDo
 
             if (operation is OperationSearch)
             {
-                response = Search(taskList, (OperationSearch)operation);
+                int numberOfMatches = 0;
+                response = Search(taskList, searchString, ref numberOfMatches);
             }
 
             if (operation is OperationSort)
@@ -137,7 +143,12 @@ namespace ToDo
                 string doneString = ((OperationMarkAsDone)operation).DoneString;
                 if (index.HasValue == false && doneString != null)
                 {
-                    response = Search(taskList, (OperationSearch)operation);
+                    int numberOfMatches = 0;
+                    response = Search(taskList, doneString, ref numberOfMatches);
+                    if (numberOfMatches == 1)
+                    {
+                        response = MarkAsDone(lastListedTasks[0], out successFlag);
+                    }
                 }
                 else if (index < 0 || index > taskList.Count - 1)
                 {
@@ -146,7 +157,7 @@ namespace ToDo
                 else if (doneString == null)
                 {
                     Task taskToMarkAsDone = lastListedTasks[index.Value];
-                    response = MarkAsDone(ref taskToMarkAsDone, out successFlag);
+                    response = MarkAsDone(taskToMarkAsDone, out successFlag);
                 }
                 else
                 {
@@ -178,7 +189,7 @@ namespace ToDo
             }
         }
 
-        private string Delete(ref Task taskToDelete, ref List<Task> taskList, out bool successFlag)
+        private string Delete(Task taskToDelete, ref List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToDelete);
@@ -192,7 +203,7 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;
         }
 
-        private string MarkAsDone(ref Task taskToMarkAsDone, out bool successFlag)
+        private string MarkAsDone(Task taskToMarkAsDone, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToMarkAsDone);
@@ -229,7 +240,7 @@ namespace ToDo
             if (undoOperation is OperationAdd)
             {
                 Task task = ((OperationAdd)undoOperation).NewTask;
-                response = Delete(ref task, ref taskList, out successFlag);
+                response = Delete(task, ref taskList, out successFlag);
             }
             else if (undoOperation is OperationDelete && (((OperationDelete)undoOperation).Index.HasValue == true))
             {
@@ -326,7 +337,8 @@ namespace ToDo
                 displayString += GetTaskInformation(task);
                 index++;  
             }   
-            return displayString;
+            numberOfMatches = index - 1;
+            return DisplayAll(lastListedTasks);
         }
 
         private string GetTaskInformation(Task task)
