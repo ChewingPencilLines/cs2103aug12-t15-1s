@@ -11,7 +11,16 @@ namespace CommandParserTest
     {
         StringParser testStrParser;
         CommandParser testCmdParser;
-        
+
+        [TestMethod]
+        public void OperationParseSearchDeadlineTest()
+        {
+            testStrParser = new StringParser();
+            testCmdParser = new CommandParser(ref testStrParser);
+            Operation op1 = testCmdParser.ParseOperation("search by oct 30th");
+            return;
+        }
+
         [TestMethod]
         public void OperationParseTestTimedSingle()
         {
