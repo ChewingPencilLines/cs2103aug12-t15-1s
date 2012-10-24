@@ -36,10 +36,10 @@ namespace ToDo
             InitializeComponent();
             InitializeLogic(logic);                                 //Sets logic
             InitializeSystemTray();                                 //Loads Code to place App in System Tray
-            InitializeSettings(logic.MainSettings);                 //Sets the correct settings to ToDo++ at the start
+            InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
             InitializeMenu();                                       //Loads the Menu
-            InitializeOutputBox(logic.MainSettings);                //Loads Output Box
-            InitializePreferencesPanel(logic.MainSettings);         //Loads the Scrolling Bar in the Settings Panel        
+            InitializeOutputBox();                //Loads Output Box
+            InitializePreferencesPanel();         //Loads the Scrolling Bar in the Settings Panel        
             this.ActiveControl = textInput;
         }
 
@@ -206,27 +206,27 @@ namespace ToDo
         /// <summary>
         /// Creates an Instance of Settings Manager
         /// </summary>
-        private void InitializeSettings(Settings settings)
+        private void InitializeSettings()
         {
-            MinimiseToTrayWhenChecked(settings);
-            RegisterLoadOnStartupWhenChecked(settings);
+            MinimiseToTrayWhenChecked();
+            RegisterLoadOnStartupWhenChecked();
         }
 
         /// <summary>
         /// Minimizes App to System tray if true
         /// </summary>
-        private void MinimiseToTrayWhenChecked(Settings settings)
+        private void MinimiseToTrayWhenChecked()
         {
-            if (settings.GetStartMinimizeStatus() == true)
+            if (logic.MainSettings.GetStartMinimizeStatus() == true)
                 MinimiseMaximiseTray();
         }
 
         /// <summary>
         /// Sets the Load on Startup Status
         /// </summary>
-        private void RegisterLoadOnStartupWhenChecked(Settings settings)
+        private void RegisterLoadOnStartupWhenChecked()
         {
-            if (settings.GetLoadOnStartupStatus() == true)
+            if (logic.MainSettings.GetLoadOnStartupStatus() == true)
                 RegisterInStartup(true);
             else
                 RegisterInStartup(false);
@@ -259,7 +259,7 @@ namespace ToDo
         #region PreferencesPanel
 
         PreferencesPanel lg;
-        private void InitializePreferencesPanel(Settings settings)
+        private void InitializePreferencesPanel()
         {
             lg = new PreferencesPanel();
             IntializeScrolling();
@@ -350,9 +350,9 @@ namespace ToDo
         /// <summary>
         /// Prepare the Output Box. Pass an instance of settings manager into it so it can interact with it
         /// </summary>
-        private void InitializeOutputBox(Settings settings)
+        private void InitializeOutputBox()
         {
-            outputBox.InitializeWithSettings(settings);
+            outputBox.InitializeWithSettings(logic.MainSettings);
         }
 
         #endregion
@@ -383,7 +383,7 @@ namespace ToDo
         {
             string input = textInput.Text;
             string output = logic.ProcessCommand(input);
-
+            outputBox.SetOutputSize(logic.MainSettings.GetTextSize());
             outputBox.DisplayCommand(input, output);
             textInput.Clear();
         }
