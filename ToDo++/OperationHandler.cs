@@ -335,6 +335,7 @@ namespace ToDo
             int index = 1;
             foreach (Task task in tasksToDisplay)
             {
+                displayString += "\r\n";
                 displayString += index;
                 displayString += GetTaskInformation(task);
                 index++;  
@@ -360,7 +361,6 @@ namespace ToDo
             }
             if (task.State)
                 taskString += " [DONE]";
-            taskString += "\r\n";
             return taskString;
         }
 
