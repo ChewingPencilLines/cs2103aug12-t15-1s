@@ -66,7 +66,7 @@ namespace ToDo
                 if (index.HasValue == false && deleteString != null)
                  {
                      int numberOfMatches = 0;
-                     response = Search(taskList, deleteString, ref numberOfMatches);
+                     response = Search(taskList, (OperationSearch)operation, out numberOfMatches);
                      if (numberOfMatches == 1)
                      {
                          response = Delete(lastListedTasks[0], ref taskList, out successFlag);
@@ -125,8 +125,8 @@ namespace ToDo
 
             if (operation is OperationSearch)
             {
-                int numberOfMatches = 0;
-                response = Search(taskList, searchString, ref numberOfMatches);
+                int numberOfMatches;
+                response = Search(taskList, (OperationSearch)operation, out numberOfMatches);
             }
 
             if (operation is OperationSort)
@@ -144,7 +144,7 @@ namespace ToDo
                 if (index.HasValue == false && doneString != null)
                 {
                     int numberOfMatches = 0;
-                    response = Search(taskList, doneString, ref numberOfMatches);
+                    response = Search(taskList, (OperationSearch)operation, out numberOfMatches);
                     if (numberOfMatches == 1)
                     {
                         response = MarkAsDone(lastListedTasks[0], out successFlag);
@@ -267,8 +267,8 @@ namespace ToDo
             return GenerateDisplayString(taskList);
         }
 
-        private string Search(List<Task> taskList, OperationSearch searchOp)
-        {
+        private string Search(List<Task> taskList, OperationSearch searchOp, out int numberOfMatches)
+        {            
             List<Task> filteredTasks = taskList;
             if (searchOp.SearchString != null)
                 filteredTasks = (from task in filteredTasks
@@ -322,6 +322,7 @@ namespace ToDo
                                         where (((TaskEvent)task).EndTime.Date >= ((DateTime)searchOp.StartTime).Date)
                                         select task).ToList());
             }
+            numberOfMatches = filteredTasks.Count;
             return GenerateDisplayString(filteredTasks);
         }
 
@@ -336,9 +337,8 @@ namespace ToDo
                 displayString += index;
                 displayString += GetTaskInformation(task);
                 index++;  
-            }   
-            numberOfMatches = index - 1;
-            return DisplayAll(lastListedTasks);
+            }
+            return displayString;
         }
 
         private string GetTaskInformation(Task task)
