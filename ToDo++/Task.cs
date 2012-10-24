@@ -10,8 +10,7 @@ namespace ToDo
     // Abstract definition for task
     // ******************************************************************
 
-    #region Abstract definition for task    
-    
+    #region Abstract definition for task      
     public abstract class Task
     {
         protected string taskName;
@@ -21,8 +20,8 @@ namespace ToDo
             //set { taskName = value; }
         }
 
-        protected bool doneState;
-        public bool State
+        protected Boolean doneState;
+        public Boolean State
         {
             get { return doneState; }
             set { doneState = value; }
@@ -35,7 +34,7 @@ namespace ToDo
             //set { id = value; }
         }
          
-        public Task(string taskName, bool state, int forceID)
+        public Task(string taskName, Boolean state, int forceID)
         {
             this.taskName = taskName;
             this.doneState = state;
@@ -61,7 +60,7 @@ namespace ToDo
     #region Definition of derived tasks
     public class TaskFloating : Task
     {
-        public TaskFloating(string taskName, bool state = false, int forceID = -1) : base (taskName, state, forceID)
+        public TaskFloating(string taskName, Boolean state = false, int forceID = -1) : base (taskName, state, forceID)
         {            
         }
 
@@ -86,7 +85,7 @@ namespace ToDo
             //set { endTime = value; }
         }
 
-        public TaskDeadline(string taskName, DateTime endTime, bool state = false, int forceID = -1)
+        public TaskDeadline(string taskName, DateTime endTime, Boolean state = false, int forceID = -1)
             : base(taskName, state, forceID)
         {
             this.endTime = endTime;
@@ -113,19 +112,24 @@ namespace ToDo
             get { return endTime; }
             //set { endTime = value; }
         }
-
+        private Boolean specific;
+        public Boolean IsSpecific
+        {
+            get { return specific; }
+        }
         private DateTime startTime;
         public DateTime StartTime
         {
             get { return startTime; }
             //set { startTime = value; }
         }
-        
-        public TaskEvent(string taskName, DateTime startTime, DateTime endTime, bool state = false, int forceID = -1)
+
+        public TaskEvent(string taskName, DateTime startTime, DateTime endTime, Boolean specific_flag, Boolean state = false, int forceID = -1)
             : base(taskName, state, forceID)
         {
             this.startTime = startTime;
             this.endTime = endTime;
+            this.specific = specific_flag;
         }
 
         public override XElement ToXElement()
