@@ -257,7 +257,9 @@ namespace ToDo
             {
                 combinedDT = date;
             }
-            if (limit > combinedDT) throw new Exception("End DateTime set to later then limit or DateTime that is already over was set!");
+            if (limit > combinedDT) //throw new Exception("End DateTime set to later then limit or DateTime that is already over was set!");
+                if (combinedDT != new DateTime(0001, 1, 1))
+                    AlertBox.Show("Note that date specified is past.");
             return combinedDT;
         }
 
