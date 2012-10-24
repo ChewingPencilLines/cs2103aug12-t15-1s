@@ -267,7 +267,7 @@ namespace ToDo
                     if (strHours.Length != 0)
                     {
                         hours = Int32.Parse(strHours);
-                        if (Format_12Hour) ConvertTo24HoursFormat(match.Groups["format"].Value, hours);
+                        if (Format_12Hour) hours = ConvertTo24HoursFormat(match.Groups["format"].Value, hours);
                     }
                     if (strMinutes.Length != 0)
                         minutes = Int32.Parse(strMinutes);
@@ -285,7 +285,7 @@ namespace ToDo
             if (format.ToLower() == "pm" && hours != 12)
                 hours += 12;
             if (format.ToLower() == "am" && hours == 12)
-                hours = 24;
+                hours = 0;
             return hours;
         }
 
