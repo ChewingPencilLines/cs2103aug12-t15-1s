@@ -10,7 +10,5 @@ namespace ToDo
     {
         public static event EventHandler StayOnTopHandler;
         public static void StayOnTop(bool status){ StayOnTopHandler(status, EventArgs.Empty);}
-
-        
     }
 }
