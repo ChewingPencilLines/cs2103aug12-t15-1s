@@ -25,6 +25,7 @@ namespace ToDo
         const string RESPONSE_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
         const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
         const string RESPONSE_UNDO_FAILURE = "Cannot undo last executed task!";
+        const string RESPONSE_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
         const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string REPONSE_INVALID_COMMAND = "Invalid command!";
         const string RESPONSE_INVALID_TASK_INDEX = "Invalid task index!";
@@ -130,6 +131,29 @@ namespace ToDo
                 response = DisplayAll(lastListedTasks);
             }
 
+            if (operation is OperationMarkAsDone)
+            {
+                int? index = ((OperationMarkAsDone)operation).Index;
+                string doneString = ((OperationMarkAsDone)operation).DoneString;
+                if (index.HasValue == false && doneString != null)
+                {
+                    response = Search(taskList, doneString);
+                }
+                else if (index < 0 || index > taskList.Count - 1)
+                {
+                    return RESPONSE_INVALID_TASK_INDEX;
+                }
+                else if (doneString == null)
+                {
+                    Task taskToMarkAsDone = lastListedTasks[index.Value];
+                    response = MarkAsDone(ref taskToMarkAsDone, ref taskList, out successFlag);
+                }
+                else
+                {
+                    return REPONSE_INVALID_COMMAND;
+                }
+            }
+
             return response;
         }
                 
@@ -166,6 +190,21 @@ namespace ToDo
             }
             else
                 return RESPONSE_XML_READWRITE_FAIL;            
+        }
+
+        private string MarkAsDone(ref Task taskToMarkAsDone, ref List<Task> taskList, out bool successFlag)
+        {
+            successFlag = false;
+            undoTask.Push(taskToMarkAsDone);
+            taskToMarkAsDone.State = true;
+            
+            //if (storageXML.UpdateTaskAsDone(taskToMarkAsDone))
+            //{
+                successFlag = true;
+                return String.Format(RESPONSE_MARKASDONE_SUCCESS, taskToMarkAsDone.TaskName);
+            //}
+            //else
+            //    return RESPONSE_XML_READWRITE_FAIL;*/
         }
 
         private string Modify(ref Task taskToModify,Task newTask, ref List<Task> taskList, out bool successFlag)

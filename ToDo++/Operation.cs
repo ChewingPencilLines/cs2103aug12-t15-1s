@@ -160,7 +160,7 @@ namespace ToDo
         { }
     }
 
-    class OperationDone : Operation
+    class OperationMarkAsDone : Operation
     {
         private int? index;
         private string doneString;
@@ -175,13 +175,13 @@ namespace ToDo
             get{ return doneString; }
         }
 
-        public OperationDone(int index)
+        public OperationMarkAsDone(int index)
         {
             this.index = index - 1;
             this.doneString = null;
         }
 
-        public OperationDone(string doneString)
+        public OperationMarkAsDone(string doneString)
         {
             this.index = null;
             this.doneString = doneString;
@@ -190,6 +190,4 @@ namespace ToDo
     } 
 
     #endregion
-
-
 }
