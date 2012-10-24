@@ -205,7 +205,21 @@ namespace ToDo
                     newOperation = new OperationUndo();
                     break;
                 case CommandType.DONE:
-                    throw new NotImplementedException();
+                    if (taskName != null)
+                    {
+                        newOperation = new OperationMarkAsDone(taskName);
+                        break;
+                    }
+                    else if (taskIndex != null)
+                    {
+                        newOperation = new OperationMarkAsDone((int)taskIndex);
+                        break;
+                    }
+                    else
+                    {
+                        newOperation = new OperationDelete("");
+                        break;
+                    }
                 case CommandType.POSTPONE:
                     throw new NotImplementedException();
             }
