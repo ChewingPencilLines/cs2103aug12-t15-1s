@@ -252,17 +252,8 @@ namespace ToDo
 
         private string DisplayAll(List<Task> taskList)
         {
-            string displayString = String.Empty;
-            int index = 1;
-            foreach (Task task in taskList)
-            {
-                displayString += index;
-                displayString += GetTaskInformation(task);
-                }
-                index++;
-            }
             lastListedTasks = new List<Task>(taskList);
-            return displayString;
+            return GenerateDisplayString(taskList);
         }
 
         private string Search(List<Task> taskList, OperationSearch searchOp)
@@ -332,9 +323,8 @@ namespace ToDo
                 lastListedTasks.Clear();
                 lastListedTasks.Add(task);
                 displayString += index;
-                    displayString += GetTaskInformation(task);
-                    index++;  
-                }
+                displayString += GetTaskInformation(task);
+                index++;  
             }   
             return displayString;
         }
