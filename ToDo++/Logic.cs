@@ -10,12 +10,21 @@ namespace ToDo
         OperationHandler operationHandler;
         CommandParser commandParser;
         StringParser stringParser;
+        Settings mainSettings;
+
+        public Settings MainSettings
+        {
+            get { return mainSettings; }
+            set { mainSettings = value; }
+        }
         Storage storage;
         List<Task> taskList;
   
         public Logic()
         {
+            mainSettings = new Settings();
             storage = new Storage("testfile.xml", "testsettings.xml");
+            mainSettings.UpdateSettings(storage.LoadSettingsFromFile());
             operationHandler = new OperationHandler(storage);
             stringParser = new StringParser();
             commandParser = new CommandParser(ref stringParser);

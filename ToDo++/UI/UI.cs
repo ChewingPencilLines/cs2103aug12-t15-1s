@@ -31,15 +31,15 @@ namespace ToDo
         /// <summary>
         /// Creates a new instance of the Main Program (UI) and loads the various Classes
         /// </summary>
-        public UI(Logic logic,Settings settings)
+        public UI(Logic logic)
         {
             InitializeComponent();
             InitializeLogic(logic);                                 //Sets logic
             InitializeSystemTray();                                 //Loads Code to place App in System Tray
-            InitializeSettings(settings);                           //Sets the correct settings to ToDo++ at the start
+            InitializeSettings(logic.MainSettings);                 //Sets the correct settings to ToDo++ at the start
             InitializeMenu();                                       //Loads the Menu
-            InitializeOutputBox(settings);                          //Loads Output Box
-            InitializePreferencesPanel(settings);                   //Loads the Scrolling Bar in the Settings Panel        
+            InitializeOutputBox(logic.MainSettings);                //Loads Output Box
+            InitializePreferencesPanel(logic.MainSettings);         //Loads the Scrolling Bar in the Settings Panel        
         }
 
         #endregion

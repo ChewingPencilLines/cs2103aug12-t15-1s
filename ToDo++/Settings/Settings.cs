@@ -98,7 +98,7 @@ namespace ToDo
             settingsList = new SettingsList();
         }
 
-        public static void UpdateSettings(SettingsList updatedList)
+        public void UpdateSettings(SettingsList updatedList)
         {
             settingsList.misc = updatedList.misc;
         }
