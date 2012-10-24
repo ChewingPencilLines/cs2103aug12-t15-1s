@@ -162,7 +162,7 @@
             this.textInput.Location = new System.Drawing.Point(3, 138);
             this.textInput.Name = "textInput";
             this.textInput.Size = new System.Drawing.Size(378, 19);
-            this.textInput.TabIndex = 1;
+            this.textInput.TabIndex = 0;
             this.textInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
             this.textInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textInput_PreviewKeyDown);
             // 
