@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner" xmlns:dm9="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="2b53fb6f-3ce5-4516-9539-9615520b11e6"
+  name="ModelingProject" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <profileInstances>
+    <packageHasProfileInstances
+      Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b">
+      <profileInstance
+        Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791"
+        name="StandardProfileL2" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances
+      Id="29349502-908c-4fda-9054-c48619c59ed0">
+      <profileInstance
+        Id="532ea607-fb19-44b8-8502-3351b05452be"
+        name="StandardProfileL3" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances
+      Id="89104856-de92-4222-a718-4a963201a098">
+      <profileInstance
+        Id="c95882b7-becd-40c2-bb59-d9d4b13504b1"
+        name="CSharpProfile" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <packageHasNamedElement>
+      <component
+        Id="3597a6d1-4626-46df-bc26-589ab145de30"
+        name="Logic"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <dependency
+            Id="86ad9e1b-246d-40c8-94a3-24390a910ca3">
+            <componentMoniker
+              Id="71088a6f-1b2d-4c03-b4af-6bc7527336e7"
+              LastKnownName="XML Files"
+              LastKnownLocation="ModelingProject1.uml" />
+          </dependency>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <part
+            Id="463b05fc-fe04-440b-988d-cf18eed0986b"
+            name="Parsers"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="Composite"
+            isComposite="true">
+            <targetNamedElementsInternal>
+              <connector
+                Id="925eb71b-8db3-428f-b406-c28518cec0eb"
+                isLeaf="false"
+                isStatic="false">
+                <partMoniker
+                  Id="fdad5d55-457c-4c48-b1d7-ceca3df76df9"
+                  LastKnownName="OperationDriver"
+                  LastKnownLocation="ModelingProject1.uml" />
+                <relationshipOwnedElementsInternal>
+                  <connectorHasConnectorEnds>
+                    <connectorEnd
+                      Id="68de2477-a129-4e30-82e9-3ff694572d60" />
+                  </connectorHasConnectorEnds>
+                  <connectorHasConnectorEnds>
+                    <connectorEnd
+                      Id="aaffcba3-8c5f-430c-91ab-92688195c281" />
+                  </connectorHasConnectorEnds>
+                </relationshipOwnedElementsInternal>
+              </connector>
+            </targetNamedElementsInternal>
+            <type_NamedElement>
+              <componentMoniker
+                Id="5ccdfb89-68ce-4c1c-8953-63c77750fe51"
+                LastKnownName="Parser"
+                LastKnownLocation="ModelingProject1.uml" />
+            </type_NamedElement>
+          </part>
+          <part
+            Id="7034b021-ca93-4fb8-9c69-49629988e17e"
+            name="Storage"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="Composite"
+            isComposite="true">
+            <type_NamedElement>
+              <componentMoniker
+                Id="8f16c895-a8a4-44d4-9cdb-a41099e4ff8b"
+                LastKnownName="Handler"
+                LastKnownLocation="ModelingProject1.uml" />
+            </type_NamedElement>
+          </part>
+          <part
+            Id="fdad5d55-457c-4c48-b1d7-ceca3df76df9"
+            name="OperationDriver"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="Composite"
+            isComposite="true">
+            <targetNamedElementsInternal>
+              <connector
+                Id="07ac69d2-f45b-4850-a7aa-b93863e48af4"
+                isLeaf="false"
+                isStatic="false">
+                <partMoniker
+                  Id="463b05fc-fe04-440b-988d-cf18eed0986b"
+                  LastKnownName="Parsers"
+                  LastKnownLocation="ModelingProject1.uml" />
+                <relationshipOwnedElementsInternal>
+                  <connectorHasConnectorEnds>
+                    <connectorEnd
+                      Id="7d182478-3f69-4b9c-81f5-40823ce8fdb4" />
+                  </connectorHasConnectorEnds>
+                  <connectorHasConnectorEnds>
+                    <connectorEnd
+                      Id="3e540751-6354-4429-90b2-fa6d06e32d8f" />
+                  </connectorHasConnectorEnds>
+                </relationshipOwnedElementsInternal>
+              </connector>
+              <connector
+                Id="8f7ba7ba-31c8-4813-be54-1eb9c7f43b45"
+                isLeaf="false"
+                isStatic="false">
+                <partMoniker
+                  Id="7034b021-ca93-4fb8-9c69-49629988e17e"
+                  LastKnownName="Storage"
+                  LastKnownLocation="ModelingProject1.uml" />
+                <relationshipOwnedElementsInternal>
+                  <connectorHasConnectorEnds>
+                    <connectorEnd
+                      Id="8f99d204-bf1c-4396-92d6-80da5a04c542" />
+                  </connectorHasConnectorEnds>
+                  <connectorHasConnectorEnds>
+                    <connectorEnd
+                      Id="6592a2f5-07a3-4489-bfc5-b5d40370d481" />
+                  </connectorHasConnectorEnds>
+                </relationshipOwnedElementsInternal>
+              </connector>
+            </targetNamedElementsInternal>
+            <type_NamedElement>
+              <componentMoniker
+                Id="5b421b2b-b95a-4d4d-9d41-560132352b0e"
+                LastKnownName="Handler"
+                LastKnownLocation="ModelingProject1.uml" />
+            </type_NamedElement>
+          </part>
+        </ownedAttributesInternal>
+      </component>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="cb37ca45-f00a-4bf5-9956-4c841111ccf4"
+        LastKnownName="ToDo"
+        LastKnownLocation="Package_1759.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="424b75ed-236f-456e-9201-994e1232fb06"
+        LastKnownName="System"
+        LastKnownLocation="Package1_1759.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="577921f7-1aca-448a-9ec4-b20a34a7378e"
+        LastKnownName="CustomControls"
+        LastKnownLocation="Package5_1759.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="7b7af4e0-9df6-487e-a5f5-113bc4acb375"
+        LastKnownName="Hotkeys"
+        LastKnownLocation="Package6_1759.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="6313cf43-212f-40ed-b36b-2a81fc6f57d6"
+        name="UI"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <dependency
+            Id="75ac7052-f9ba-48f5-9069-973890f36271">
+            <componentMoniker
+              Id="3597a6d1-4626-46df-bc26-589ab145de30"
+              LastKnownName="Logic"
+              LastKnownLocation="ModelingProject1.uml" />
+          </dependency>
+        </suppliersInternal>
+      </component>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="71088a6f-1b2d-4c03-b4af-6bc7527336e7"
+        name="XML Files"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <ownedAttributesInternal>
+          <part
+            Id="ea34c8db-11f4-4c1a-8f01-e9cf49005231"
+            name="TaskFile"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="Composite"
+            isComposite="true">
+            <type_NamedElement>
+              <componentMoniker
+                Id="ab0732eb-a036-4bfc-83a8-3302de17febe"
+                LastKnownName="XML"
+                LastKnownLocation="ModelingProject1.uml" />
+            </type_NamedElement>
+          </part>
+          <part
+            Id="04ce5023-464f-4326-ae18-9587ec12dc7d"
+            name="SettingsFile"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="Composite"
+            isComposite="true">
+            <type_NamedElement>
+              <componentMoniker
+                Id="81051f0e-fc1d-43df-a4a5-a92505c83bb3"
+                LastKnownName="XML"
+                LastKnownLocation="ModelingProject1.uml" />
+            </type_NamedElement>
+          </part>
+        </ownedAttributesInternal>
+      </component>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="ab0732eb-a036-4bfc-83a8-3302de17febe"
+        name="XML"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="81051f0e-fc1d-43df-a4a5-a92505c83bb3"
+        name="XML"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="5ccdfb89-68ce-4c1c-8953-63c77750fe51"
+        name="Parser"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="8f16c895-a8a4-44d4-9cdb-a41099e4ff8b"
+        name="Handler"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="5b421b2b-b95a-4d4d-9d41-560132352b0e"
+        name="Handler"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+  </packagedElements>
+  <primitiveType
+    Id="220a3521-e091-4221-bae9-3ef9018e845c"
+    name="Integer"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="8943dc84-709e-4f62-b15a-a3273aa6f165"
+    name="Boolean"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="59259974-6d55-42c6-b7bd-763d77ac8ef9"
+    name="String"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="3ab42e7d-4969-445a-b209-471f5cb8209c"
+    name="UnlimitedNatural"
+    isAbstract="false"
+    isLeaf="false" />
+</modelStoreModel>
