@@ -257,21 +257,7 @@ namespace ToDo
             foreach (Task task in taskList)
             {
                 displayString += index;
-                if (task is TaskFloating)
-                {
-                    displayString += ShowFloating((TaskFloating)task);
-                }
-                else if (task is TaskDeadline)
-                {
-                    displayString += ShowDeadline((TaskDeadline)task);
-                }
-                else if (task is TaskEvent)
-                {
-                    displayString += ShowEvent((TaskEvent)task);
-                }
-                if (task.State)
-                    displayString += " [DONE]";
-                displayString += "\r\n";
+                displayString += GetTaskInformation(task);
                 index++;                
             }
             lastListedTasks = new List<Task>(taskList);
@@ -290,22 +276,32 @@ namespace ToDo
                 {
                     lastListedTasks.Add(task);
                     displayString += index;
-                    if (task is TaskFloating)
-                    {
-                        displayString += ShowFloating((TaskFloating)task);
-                    }
-                    else if (task is TaskDeadline)
-                    {
-                        displayString += ShowDeadline((TaskDeadline)task);
-                    }
-                    else if (task is TaskEvent)
-                    { 
-                        displayString += ShowEvent((TaskEvent)task);
-                    } 
-                    index++;
+                    displayString += GetTaskInformation(task);
+                    index++;  
                 }
             }   
             return displayString;
+        }
+
+        private string GetTaskInformation(Task task)
+        {
+            string taskString = String.Empty;
+            if (task is TaskFloating)
+            {
+                taskString += ShowFloating((TaskFloating)task);
+            }
+            else if (task is TaskDeadline)
+            {
+                taskString += ShowDeadline((TaskDeadline)task);
+            }
+            else if (task is TaskEvent)
+            {
+                taskString += ShowEvent((TaskEvent)task);
+            }
+            if (task.State)
+                taskString += " [DONE]";
+            taskString += "\r\n";
+            return taskString;
         }
 
         private string ShowFloating(TaskFloating task)
