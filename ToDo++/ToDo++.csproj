@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalEventHandlers.cs" />
     <Compile Include="TaskComparer.cs" />
     <Compile Include="UI\Components\InputBox.cs">
       <SubType>Component</SubType>

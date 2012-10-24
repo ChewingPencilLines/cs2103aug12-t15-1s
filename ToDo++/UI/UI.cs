@@ -34,12 +34,13 @@ namespace ToDo
         public UI(Logic logic)
         {
             InitializeComponent();
-            InitializeLogic(logic);                                 //Sets logic
-            InitializeSystemTray();                                 //Loads Code to place App in System Tray
+            InitializeLogic(logic);               //Sets logic
+            InitializeSystemTray();               //Loads Code to place App in System Tray
             InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
-            InitializeMenu();                                       //Loads the Menu
+            InitializeMenu();                     //Loads the Menu
             InitializeOutputBox();                //Loads Output Box
-            InitializePreferencesPanel();         //Loads the Scrolling Bar in the Settings Panel        
+            InitializePreferencesPanel();         //Loads the Scrolling Bar in the Settings Panel     
+            InitializeEventHandlers();            //Adds Event Handlers
             this.ActiveControl = textInput;
         }
 
@@ -450,6 +451,24 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        // Event Handlers
+        // ******************************************************************
+
+        #region EventHandlers
+
+        private void InitializeEventHandlers()
+        {
+            EventHandlers.StayOnTopHandler += SetStayOnTop;
+        }
+
+        private void SetStayOnTop(object sender, EventArgs args)
+        {
+            this.TopMost = Convert.ToBoolean(sender);
+        }
+
+        #endregion
+
         /// <summary>
         /// Exit the Application
         /// </summary>
@@ -459,6 +478,8 @@ namespace ToDo
         }
 
 
-     
+
+
+
     }
 }

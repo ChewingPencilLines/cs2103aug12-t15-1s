@@ -12,8 +12,6 @@ namespace ToDo
 {
     public partial class StartingOptions : UserControl
     {
-        public event EventHandler UIStayOnTopChangedHandler;
-
         bool firstLoad = false;
         public StartingOptions()
         {
@@ -44,19 +42,8 @@ namespace ToDo
         private void stayOnTopCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (firstLoad == true)
-            {
-                //Settings.SetStayOnTop(stayOnTopCheckBox.Checked);
-                OnStayOnTopChanged(stayOnTopCheckBox.Checked);
-            }
+                EventHandlers.StayOnTop(stayOnTopCheckBox.Checked);
         }
 
-        protected void OnStayOnTopChanged(bool x)
-        {
-            var handler = UIStayOnTopChangedHandler;
-            if (handler != null)
-            {
-                handler(x, EventArgs.Empty);
-            }
-        }
     }
 }
