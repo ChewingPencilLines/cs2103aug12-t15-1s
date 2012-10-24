@@ -204,6 +204,7 @@ namespace ToDo
             monthKeywords.Add("september", Month.SEP);
             monthKeywords.Add("oct", Month.OCT);
             monthKeywords.Add("october", Month.OCT);
+            monthKeywords.Add("nov", Month.NOV);
             monthKeywords.Add("november", Month.NOV);
             monthKeywords.Add("dec", Month.DEC);
             monthKeywords.Add("december", Month.DEC);
