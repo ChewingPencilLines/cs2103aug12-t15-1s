@@ -12,9 +12,11 @@ namespace ToDo
 {
     public partial class PreferencesPanel : UserControl
     {
-        public PreferencesPanel()
+        public PreferencesPanel(Settings settings)
         {
             InitializeComponent();
+            startingOptions.InitializeStartingOptions(settings);
+            flexiCommandsControl.InitializeFlexiCommands(settings);
         }
     }
 }
