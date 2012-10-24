@@ -27,7 +27,7 @@ namespace ToDo
         const string RESPONSE_UNDO_FAILURE = "Cannot undo last executed task!";
         const string RESPONSE_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
         const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
-        const string REPONSE_INVALID_COMMAND = "Invalid command!";
+        const string REPONSE_INVALID_COMMAND = "Invalid command input!";
         const string RESPONSE_INVALID_TASK_INDEX = "Invalid task index!";
         #endregion
 
@@ -146,7 +146,7 @@ namespace ToDo
                 else if (doneString == null)
                 {
                     Task taskToMarkAsDone = lastListedTasks[index.Value];
-                    response = MarkAsDone(ref taskToMarkAsDone, ref taskList, out successFlag);
+                    response = MarkAsDone(ref taskToMarkAsDone, out successFlag);
                 }
                 else
                 {
@@ -192,7 +192,7 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;            
         }
 
-        private string MarkAsDone(ref Task taskToMarkAsDone, ref List<Task> taskList, out bool successFlag)
+        private string MarkAsDone(ref Task taskToMarkAsDone, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToMarkAsDone);
@@ -268,7 +268,10 @@ namespace ToDo
                 else if (task is TaskEvent)
                 {
                     displayString += ShowEvent((TaskEvent)task);
-                } 
+                }
+                if (task.State)
+                    displayString += " [DONE]";
+                displayString += "\r\n";
                 index++;                
             }
             lastListedTasks = new List<Task>(taskList);
@@ -309,7 +312,6 @@ namespace ToDo
         {
             string feedback;
             feedback = ". " + task.TaskName;
-            feedback += "\r\n";
             return feedback;
         }
 
@@ -319,7 +321,6 @@ namespace ToDo
             feedback = ". " + task.TaskName;
 
             feedback += (" BY: " + ((TaskDeadline)task).EndTime);
-            feedback += "\r\n";
             return feedback;
         }
 
@@ -333,7 +334,6 @@ namespace ToDo
             feedback += (" AT: " + startTime.ToString());
             if (startTime != endTime && endTime != null)
                 feedback += (" TO: " + endTime.ToString());
-            feedback += "\r\n";
             return feedback;
         }
 
