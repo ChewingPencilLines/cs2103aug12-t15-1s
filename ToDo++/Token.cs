@@ -76,15 +76,21 @@ namespace ToDo
     public class TokenTime : Token
     {
         TimeSpan time;
+        bool specific;
         internal TimeSpan Value
         {
             get { return time; }
         }
-        internal TokenTime(int position, TimeSpan val)
+        internal bool IsSpecific
+        {
+            get { return specific; }
+        }
+        internal TokenTime(int position, TimeSpan val, Boolean specific_flag)
             : base(position)
         {
             type = TokenType.TIME;
             time = val;
+            specific = specific_flag;
         }
     }
 

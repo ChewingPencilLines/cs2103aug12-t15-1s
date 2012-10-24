@@ -151,6 +151,22 @@ namespace ToDo
             return true;            
         }
 
+        // ivan: please help to complete this function, then uncomment the lines in OperationHandler.MarkAsDone
+        internal bool MarkTaskAsDone(Task taskToMarkAsDone)
+        {
+            XDocument doc = XDocument.Load(taskStorageFile);
+
+            var task = from node in doc.Descendants("Task")
+                       let attr = node.Attribute("id")
+                       where attr != null && attr.Value == taskToMarkAsDone.ID.ToString()
+                       select node;
+
+            // selectedNode.Attributes["State"].Value = "true";
+            
+            doc.Save(taskStorageFile);
+            return true;
+        }
+
         internal List<Task> LoadTasksFromFile()
         {
             List<Task> taskList = new List<Task>();
