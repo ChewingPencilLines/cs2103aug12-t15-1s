@@ -227,6 +227,9 @@ namespace ToDo
                     }
                 case CommandType.POSTPONE:
                     throw new NotImplementedException();
+                case CommandType.EXIT:
+                    System.Environment.Exit(0);
+                    break;
             }
             return newOperation;
         }
