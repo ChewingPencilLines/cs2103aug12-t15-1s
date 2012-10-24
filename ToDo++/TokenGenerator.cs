@@ -76,14 +76,59 @@ namespace ToDo
         static Dictionary<string, ContextType> contextKeywords;
         static Dictionary<string, DayOfWeek> dayKeywords;
         static Dictionary<string, Month> monthKeywords;
+        static List<string> timeSpecificKeywords;
+        static List<string> timeGeneralKeywords;
+        static List<string> timeSuffixes;
 
         public TokenGenerator()
         {
             commandKeywords = stringParser.getCommandKeywords();
-            contextKeywords = stringParser.getContextKeywords();
-            dayKeywords = stringParser.getDayKeywords();
             monthKeywords = stringParser.getMonthKeywords();
+            timeSuffixes = stringParser.getTimeSuffixes();
+            InitializeDateTimeKeywords();
+            InitializeContextKeywords();
         }
+
+        private static void InitializeDateTimeKeywords()
+        {
+            dayKeywords = new Dictionary<string, DayOfWeek>();
+            dayKeywords.Add("mon", DayOfWeek.Monday);
+            dayKeywords.Add("monday", DayOfWeek.Monday);
+            dayKeywords.Add("tue", DayOfWeek.Tuesday);
+            dayKeywords.Add("tues", DayOfWeek.Tuesday);
+            dayKeywords.Add("tuesday", DayOfWeek.Tuesday);
+            dayKeywords.Add("wed", DayOfWeek.Wednesday);
+            dayKeywords.Add("wednesday", DayOfWeek.Wednesday);
+            dayKeywords.Add("thur", DayOfWeek.Thursday);
+            dayKeywords.Add("thurs", DayOfWeek.Thursday);
+            dayKeywords.Add("thursday", DayOfWeek.Thursday);
+            dayKeywords.Add("fri", DayOfWeek.Friday);
+            dayKeywords.Add("friday", DayOfWeek.Friday);
+            dayKeywords.Add("sat", DayOfWeek.Saturday);
+            dayKeywords.Add("saturday", DayOfWeek.Saturday);
+            dayKeywords.Add("sun", DayOfWeek.Sunday);
+            dayKeywords.Add("sunday", DayOfWeek.Sunday);
+            dayKeywords.Add("weekend", DayOfWeek.Sunday);
+            dayKeywords.Add("tmr", DateTime.Today.AddDays(1).DayOfWeek);
+            dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
+            // NYI
+            timeSpecificKeywords = new List<string> { "noon", "midnight" };        // special case    
+            timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" }; // todo?
+        }
+
+        private static void InitializeContextKeywords()
+        {
+            contextKeywords = new Dictionary<string, ContextType>();
+            contextKeywords.Add("by", ContextType.DEADLINE);
+            contextKeywords.Add("on", ContextType.STARTTIME);
+            contextKeywords.Add("from", ContextType.STARTTIME);
+            contextKeywords.Add("to", ContextType.ENDTIME);
+            contextKeywords.Add("-", ContextType.ENDTIME);
+            contextKeywords.Add("this", ContextType.CURRENT);
+            contextKeywords.Add("next", ContextType.NEXT);
+            contextKeywords.Add("following", ContextType.FOLLOWING);
+        }
+
 
         // ******************************************************************
         // Public Methods
@@ -171,7 +216,7 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method searches an input list of strings for all valid dates and generates a list of date tokens
+        /// This method searches an input list of -strings for all valid dates and generates a list of date tokens
         /// corresponding to all the found matched date strings using regexes.
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
@@ -254,30 +299,86 @@ namespace ToDo
             List<Token> timeTokens = new List<Token>();
             Match match;
             int index = 0, hours = 0, minutes = 0, seconds = 0;
+            bool specificity = true;
             bool Format_12Hour = false;
+            bool isTime = false;
             foreach (string word in input)
             {
-                match = time_12HourFormat.Match(word);
-                if (!match.Success) match = time_24HourFormat.Match(word);
-                else Format_12Hour = true;
-                if (match.Success)
+                if (CheckIfIsValidTimeInWordFormat(word))
                 {
-                    string strHours = match.Groups["hours"].Value;
-                    string strMinutes = match.Groups["minutes"].Value;
-                    if (strHours.Length != 0)
+                    specificity = GetDefaultTimeValues(word, ref hours);
+                    isTime = true;
+                }
+                else
+                {
+                    match = time_12HourFormat.Match(word);
+                    if (!match.Success) match = time_24HourFormat.Match(word);
+                    else Format_12Hour = true;
+                    if (match.Success)
                     {
-                        hours = Int32.Parse(strHours);
-                        if (Format_12Hour) hours = ConvertTo24HoursFormat(match.Groups["format"].Value, hours);
+                        isTime = true;
+                        string strHours = match.Groups["hours"].Value;
+                        string strMinutes = match.Groups["minutes"].Value;
+                        if (strHours.Length != 0)
+                        {
+                            hours = Int32.Parse(strHours);
+                            if (Format_12Hour) hours = ConvertTo24HoursFormat(match.Groups["format"].Value, hours);
+                        }
+                        if (strMinutes.Length != 0)
+                            minutes = Int32.Parse(strMinutes);
                     }
-                    if (strMinutes.Length != 0)
-                        minutes = Int32.Parse(strMinutes);
+                }
+                if (isTime)
+                {
                     TimeSpan time = new TimeSpan(hours, minutes, seconds);
-                    TokenTime timeToken = new TokenTime(index, time);
+                    TokenTime timeToken = new TokenTime(index, time, specificity);
                     timeTokens.Add(timeToken);
                 }
                 index++;
             }
             return timeTokens;
+        }
+
+        private static bool CheckIfIsValidTimeInWordFormat(string word)
+        {
+            foreach (string timeSpecificKeyword in timeSpecificKeywords)
+            {
+                if (word.ToLower() == timeSpecificKeyword)
+                    return true;
+            }
+            foreach (string timeGeneralKeyword in timeGeneralKeywords)
+            {
+                if (word.ToLower() == timeGeneralKeyword)
+                    return true;
+            }
+            return false;
+        }
+
+        private static bool GetDefaultTimeValues(string word, ref int hours)
+        {
+            switch (word.ToLower())
+            {
+                case "noon":
+                    hours = 12;
+                    return true;
+                case "midnight":
+                    hours = 0;
+                    return true;
+                case "morning":
+                    hours = 6;
+                    return false;
+                case "afternoon":
+                    hours = 12;
+                    return false;
+                case "evening":
+                    hours = 18;
+                    return false;
+                case "night":
+                    hours = 0;
+                    return false;
+                default:
+                    throw new Exception("Word not recognized as a valid day input!");
+            }
         }
 
         private static int ConvertTo24HoursFormat(string format, int hours)

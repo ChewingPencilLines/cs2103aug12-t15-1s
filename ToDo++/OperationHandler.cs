@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Linq;
 using System.Diagnostics;
-
 
 namespace ToDo
 {
@@ -23,7 +21,9 @@ namespace ToDo
         const string RESPONSE_ADD_SUCCESS = "Added \"{0}\" successfully.";
         const string RESPONSE_ADD_FAILURE = "Failed to add task!";
         const string RESPONSE_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
+        const string RESPONSE_DELETE_FAILURE = "No matching task found!";
         const string RESPONSE_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
+        const string RESPONSE_DISPLAY_NOTASK = "There is no task for display.";
         const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
         const string RESPONSE_UNDO_FAILURE = "Cannot undo last executed task!";
         const string RESPONSE_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
@@ -67,10 +67,8 @@ namespace ToDo
                  {
                      int numberOfMatches;
                      response = Search(out numberOfMatches, taskList, deleteString);
-                     if (numberOfMatches == 1)
-                     {
-                         response = Delete(lastListedTasks[0], ref taskList, out successFlag);
-                     }
+                     if (numberOfMatches == 0) { response = RESPONSE_DELETE_FAILURE; }
+                     if (numberOfMatches == 1) { response = Delete(lastListedTasks[0], ref taskList, out successFlag); }
                 }
                 else if (index < 0 || index > taskList.Count - 1)
                 {
@@ -332,6 +330,8 @@ namespace ToDo
         private string GenerateDisplayString(List<Task> tasksToDisplay)
         {
             string displayString = "";
+            if (tasksToDisplay.Count == 0)
+                return RESPONSE_DISPLAY_NOTASK;
             int index = 1;
             foreach (Task task in tasksToDisplay)
             {
