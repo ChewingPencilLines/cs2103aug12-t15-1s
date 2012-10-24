@@ -262,7 +262,7 @@ namespace ToDo
         PreferencesPanel lg;
         private void InitializePreferencesPanel()
         {
-            lg = new PreferencesPanel();
+            lg = new PreferencesPanel(logic.MainSettings);
             IntializeScrolling();
 
             //coverPanel.Scroll += MouseHoverCapture;
