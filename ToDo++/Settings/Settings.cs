@@ -38,27 +38,37 @@ namespace ToDo
 
         public MiscSettings misc;
         public Dictionary<string, CommandType> userCommandKeywords;
-        public Dictionary<string, CommandType> userContextKeywords;
+        public Dictionary<string, ContextType> userContextKeywords;
 
         public SettingsList()
         {
             misc = new MiscSettings(false, false, false, 8);
             userCommandKeywords = new Dictionary<string, CommandType>();
-            userContextKeywords = new Dictionary<string, CommandType>();
+            userContextKeywords = new Dictionary<string, ContextType>();
         }
 
-        public bool ContainsCommandKeyword(string userCommand,CommandType commandType)
+        public bool ContainsCommandKeyword(string userKeyword,CommandType commandType)
         {
-            if (userCommandKeywords.ContainsKey(userCommand) && userCommandKeywords.ContainsValue(commandType))
-                return true;
+            CommandType match;
+            if (userCommandKeywords.TryGetValue(userKeyword, out match))
+            {
+                if (match == commandType)
+                    return true;
+                else return false;
+            }
             else
                 return false;
         }
 
-        public bool ContainsContextKeyword(string userCommand, CommandType commandType)
+        public bool ContainsContextKeyword(string userKeyword, ContextType commandType)
         {
-            if (userContextKeywords.ContainsKey(userCommand) && userContextKeywords.ContainsValue(commandType))
-                return true;
+            ContextType match;
+            if (userContextKeywords.TryGetValue(userKeyword, out match))
+            {
+                if (match == commandType)
+                    return true;
+                else return false;
+            }
             else
                 return false;
         }
@@ -72,7 +82,6 @@ namespace ToDo
         // Static Keyword Declarations
         // ******************************************************************
 
-        static string fileName = "Settings.xml";
         static SettingsList settingsList;
 
         public Settings()
@@ -87,6 +96,11 @@ namespace ToDo
         private void InitializeSettings()
         {
             settingsList = new SettingsList();
+        }
+
+        public static void UpdateSettings(SettingsList updatedList)
+        {
+            settingsList.misc = updatedList.misc;
         }
 
         // ******************************************************************
@@ -118,15 +132,15 @@ namespace ToDo
         /// This method adds a new Command to the list of available commands
         /// If a command repeats itself, an exception will be thrown
         /// </summary>
-        /// <param name="newCommand">New Command that is to be added</param>
+        /// <param name="newKeyword">New Command that is to be added</param>
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
-        public void AddCommandKeyword(string newCommand, CommandType commandType)
+        internal static void AddCommandKeyword(string newKeyword, CommandType commandType)
         {
             try
             {
-                if (settingsList.ContainsCommandKeyword(newCommand,commandType))
+                if (settingsList.ContainsCommandKeyword(newKeyword,commandType))
                     throw new RepeatCommandException("There is such a command in the list already");
-                settingsList.userCommandKeywords.Add(newCommand, commandType);
+                settingsList.userCommandKeywords.Add(newKeyword, commandType);
             }
             catch (RepeatCommandException e)
             {
@@ -139,9 +153,9 @@ namespace ToDo
         /// This method removes the specified command
         /// </summary>
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
-        public void RemoveCommandKeyword(string commandToRemove)
+        internal static void RemoveCommandKeyword(string keywordToRemove)
         {
-            settingsList.userCommandKeywords.Remove(commandToRemove);
+            settingsList.userCommandKeywords.Remove(keywordToRemove);
         }
 
         /// <summary>
@@ -168,15 +182,15 @@ namespace ToDo
         /// This method adds a new Command to the list of available commands
         /// If a command repeats itself, an exception will be thrown
         /// </summary>
-        /// <param name="newCommand">New Command that is to be added</param>
+        /// <param name="newKeyword">New Command that is to be added</param>
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
-        public void AddContextKeyword(string newCommand, CommandType commandType)
+        internal static void AddContextKeyword(string newKeyword, ContextType contextType)
         {
             try
             {
-                if (settingsList.ContainsContextKeyword(newCommand, commandType))
+                if (settingsList.ContainsContextKeyword(newKeyword, contextType))
                     throw new RepeatCommandException("There is such a command in the list already");
-                settingsList.userContextKeywords.Add(newCommand, commandType);
+                settingsList.userContextKeywords.Add(newKeyword, contextType);
             }
             catch (RepeatCommandException e)
             {
@@ -189,22 +203,22 @@ namespace ToDo
         /// This method removes the specified command
         /// </summary>
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
-        public void RemoveContextKeyword(string commandToRemove)
+        internal static void RemoveContextKeyword(string keywordToRemove)
         {
-            settingsList.userContextKeywords.Remove(commandToRemove);
+            settingsList.userContextKeywords.Remove(keywordToRemove);
         }
 
         /// <summary>
         /// Returns a list of all added/available user commands
         /// </summary>
-        /// <param name="commandType">Specify the type of Command you wish to see User Commands of</param>
+        /// <param name="contextType">Specify the type of Command you wish to see User Commands of</param>
         /// <returns>Returns a list of added commands</returns>
-        public List<string> GetContextKeywordList(CommandType commandType)
+        internal static List<string> GetContextKeywordList(ContextType contextType)
         {
             List<string> getCommands = new List<string>();
             foreach (var pair in settingsList.userContextKeywords)
             {
-                if (pair.Value == commandType)
+                if (pair.Value == contextType)
                     getCommands.Add(pair.Key);
             }
 
