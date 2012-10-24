@@ -45,14 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalEventHandlers.cs" />
     <Compile Include="TaskComparer.cs" />
     <Compile Include="UI\Components\InputBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\PreferencesPanel.cs">
+    <Compile Include="UI\Components\PreferencesPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\PreferencesPanel.Designer.cs">
+    <Compile Include="UI\Components\PreferencesPanel.Designer.cs">
       <DependentUpon>PreferencesPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Components\StartingOptions.cs">
@@ -62,10 +63,10 @@
       <DependentUpon>StartingOptions.cs</DependentUpon>
     </Compile>
     <Compile Include="TokenGenerator.cs" />
-    <Compile Include="UI\AlertForm.cs">
+    <Compile Include="UI\Components\AlertForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\AlertForm.Designer.cs">
+    <Compile Include="UI\Components\AlertForm.Designer.cs">
       <DependentUpon>AlertForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CommandParser.cs" />
@@ -81,17 +82,17 @@
     <Compile Include="Logic.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="OperationHandler.cs" />
-    <Compile Include="UI\PopUpForm.cs">
+    <Compile Include="UI\Components\PopUpForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\PopUpForm.Designer.cs">
+    <Compile Include="UI\Components\PopUpForm.Designer.cs">
       <DependentUpon>PopUpForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\SettingsExceptions.cs" />
     <Compile Include="StringParser.cs" />
     <Compile Include="Task.cs" />
-    <Compile Include="UI\CustomMessageBox.cs" />
+    <Compile Include="UI\Components\CustomMessageBox.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="UI\Components\DateTimeControl.cs">
       <SubType>UserControl</SubType>
@@ -117,19 +118,19 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
-    <EmbeddedResource Include="UI\PreferencesPanel.resx">
+    <EmbeddedResource Include="UI\Components\PreferencesPanel.resx">
       <DependentUpon>PreferencesPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\StartingOptions.resx">
       <DependentUpon>StartingOptions.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\AlertForm.resx">
+    <EmbeddedResource Include="UI\Components\AlertForm.resx">
       <DependentUpon>AlertForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\FlexiCommandsControl.resx">
       <DependentUpon>FlexiCommandsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\PopUpForm.resx">
+    <EmbeddedResource Include="UI\Components\PopUpForm.resx">
       <DependentUpon>PopUpForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\DateTimeControl.resx">
