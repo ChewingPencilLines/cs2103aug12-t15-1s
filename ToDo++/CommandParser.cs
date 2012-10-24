@@ -275,7 +275,7 @@ namespace ToDo
                 return new TaskFloating(taskName);
             else if (startTime == null && endTime != null)
                 return new TaskDeadline(taskName, (DateTime)endTime);
-            else if (startTime != null && endTime == null)
+            else if (startTime != null && endTime == null && specificity == true)
             {
                 AlertBox.Show("No specific end time given for timed event task!");
                 return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, specificity); // note: set endTime as what for default?
