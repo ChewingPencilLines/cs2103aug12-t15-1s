@@ -147,8 +147,11 @@ namespace ToDo
             if (operation is OperationSort)
             {
                 //sort only change what user view, but not change in storage
-                TaskComparer tc = new TaskComparer();
-                lastListedTasks.Sort(tc);
+                //TaskComparer tc = new TaskComparer();
+                //lastListedTasks.Sort(tc);
+                lastListedTasks = (from task in lastListedTasks
+                                  orderby task.TaskName
+                                  select task).ToList();
                 response = DisplayAll(lastListedTasks);
             }
 
@@ -297,7 +300,8 @@ namespace ToDo
                 filteredTasks = (from task in tempList
                                  where (task is TaskDeadline)
                                  where (((TaskDeadline)task).EndTime <= endTime)
-                                 select task).ToList();
+                                 select task                                 
+                                 ).ToList();
                 filteredTasks.AddRange((from task in tempList
                                         where (task is TaskEvent)
                                         where (((TaskEvent)task).EndTime <= endTime)

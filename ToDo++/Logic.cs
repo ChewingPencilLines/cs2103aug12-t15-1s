@@ -33,7 +33,15 @@ namespace ToDo
 
         public string ProcessCommand(string input)
         {
-            Operation operation = ParseCommand(input);
+            Operation operation = null;
+            try
+            {
+                operation = ParseCommand(input);
+            }
+            catch (InvalidDateTimeException e)
+            {
+                AlertBox.Show(e.Message);
+            }
             return ExecuteCommand(operation);
         }
 

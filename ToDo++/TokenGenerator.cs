@@ -572,7 +572,7 @@ namespace ToDo
                     date = new DateTime(1, 1, 1);
                 else
                 {
-                    AlertBox.Show("Invalid date input!\n" + day + "/" + month + "/" + year);
+                    throw new InvalidDateTimeException("Invalid date input!\n" + day + "/" + month + "/" + year);
                 }
             }
             return date;

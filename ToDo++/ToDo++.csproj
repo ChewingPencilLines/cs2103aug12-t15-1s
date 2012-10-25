@@ -89,7 +89,7 @@
       <DependentUpon>PopUpForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings\Settings.cs" />
-    <Compile Include="Settings\SettingsExceptions.cs" />
+    <Compile Include="CustomExceptions.cs" />
     <Compile Include="StringParser.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="UI\Components\CustomMessageBox.cs" />

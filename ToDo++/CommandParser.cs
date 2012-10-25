@@ -344,7 +344,7 @@ namespace ToDo
 
         private static void WarnUserOfMultipleCommands()
         {
-            AlertBox.Show("Invalid input.\nMultiple commands were entered.");
+            AlertBox.Show("Invalid input.\r\nMultiple commands were entered.");
             //throw new NotImplementedException("Multiple commands were issued. Functionality NYI.");
         }  
 
@@ -378,57 +378,10 @@ namespace ToDo
 
         private void SortIndexes(ref List<int[]> indexOfDelimiters)
         {
-            Comparison<int[]> comparison = new Comparison<int[]>(CompareBasedOnZerothIndex);
-            indexOfDelimiters.Sort(comparison);
-        }
-            
-        /// <summary>
-        /// This method is a comparator to safely sort a container of int[] based on their zeroth index only.
-        /// </summary>
-        /// <param name="x">First object to compare</param>
-        /// <param name="y">Second object to compare</param>
-        /// <returns>int: -1 if x less y, 0 if x equals y, 1 if x more y</returns>
-        private static int CompareBasedOnZerothIndex(int[] x, int[] y)
-        {
-            if (x == null || x.Count() < 1)
-            {
-                if (y == null || y.Count() < 1)
-                {
-                    // If x is null and y is null or have less than 1 element, they're equal
-                    return 0;
-                }
-                else
-                {
-                    // If x is null or have less than 1 element and y is valid, y is greater
-                    return -1;
-                }
-            }
-            else
-            {
-                // If x is valid
-                if (y == null || y.Count() < 1)
-                // ...and y is null or less than 1 element, x is greater.
-                {
-                    return 1;
-                }
-                else
-                {
-                    // ...and y is valid, compare the zeroth index of the array
-                    if (x[0] == y[0])
-                    {
-                        return 0;
-                    }
-                    else if (x[0] < y[0])
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-            }
-        }
+            indexOfDelimiters = (from index in indexOfDelimiters
+                                 orderby index[0]
+                                 select index).ToList();
+        }       
 
     }
 }
