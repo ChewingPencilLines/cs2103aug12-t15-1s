@@ -150,8 +150,7 @@ namespace ToDo
 
             return true;            
         }
-
-        // ivan: please help to complete this function, then uncomment the lines in OperationHandler.MarkAsDone
+               
         internal bool MarkTaskAsDone(Task taskToMarkAsDone)
         {
             XDocument doc = XDocument.Load(taskStorageFile);
@@ -161,8 +160,8 @@ namespace ToDo
                        where attr != null && attr.Value == taskToMarkAsDone.ID.ToString()
                        select node;
 
-            // selectedNode.Attributes["State"].Value = "true";
-            
+            task.First().Element("State").ReplaceNodes("True");
+
             doc.Save(taskStorageFile);
             return true;
         }
@@ -194,7 +193,7 @@ namespace ToDo
             DateTime startTime, endTime;
             bool state;
 
-            if ( task.Element("Name").Value == "True" ) state = true;
+            if ( task.Element("State").Value == "True" ) state = true;
             else state = false;
 
             switch (type)
