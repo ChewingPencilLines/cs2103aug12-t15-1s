@@ -23,7 +23,7 @@ namespace ToDo
         const string RESPONSE_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
         const string RESPONSE_DELETE_FAILURE = "No matching task found!";
         const string RESPONSE_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
-        const string RESPONSE_DISPLAY_NOTASK = "There is no task for display.";
+        const string RESPONSE_DISPLAY_NOTASK = "There are no tasks for display.";
         const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
         const string RESPONSE_UNDO_FAILURE = "Cannot undo last executed task!";
         const string RESPONSE_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
@@ -66,9 +66,16 @@ namespace ToDo
                 if (index.HasValue == false && deleteString != null)
                  {
                      int numberOfMatches;
-                     response = Search(out numberOfMatches, taskList, deleteString);
-                     if (numberOfMatches == 0) { response = RESPONSE_DELETE_FAILURE; }
-                     if (numberOfMatches == 1) { response = Delete(lastListedTasks[0], ref taskList, out successFlag); }
+                     response = Search(out numberOfMatches, taskList, deleteString, true);
+                     if (numberOfMatches == 0) {
+                         //check substring
+                         response = Search(out numberOfMatches, taskList, deleteString, false);
+                         if (numberOfMatches == 0)
+                             response = RESPONSE_DELETE_FAILURE;
+                     }   
+                     else if (numberOfMatches == 1) { 
+                         response = Delete(lastListedTasks[0], ref taskList, out successFlag);
+                     }
                 }
                 else if (index < 0 || index > taskList.Count - 1)
                 {
@@ -141,7 +148,7 @@ namespace ToDo
                 string searchString = searchOp.SearchString;
                 DateTime? startTime = searchOp.StartTime;
                 DateTime? endTime = searchOp.EndTime;
-                response = Search(out numberOfMatches, taskList, searchString, startTime, endTime);
+                response = Search(out numberOfMatches, taskList, searchString, false, startTime, endTime);
             }
 
             if (operation is OperationSort)
@@ -284,12 +291,13 @@ namespace ToDo
             return GenerateDisplayString(taskList);
         }
 
-        private string Search(out int numberOfMatches, List<Task> taskList, string searchString, DateTime? startTime = null, DateTime? endTime = null)
+        private string Search(out int numberOfMatches, List<Task> taskList, string searchString, bool exact = false, DateTime? startTime = null, DateTime? endTime = null)
         {            
             List<Task> filteredTasks = taskList;
             if (searchString != null)
                 filteredTasks = (from task in filteredTasks
-                                 where task.TaskName.IndexOf(searchString) >= 0 
+                                 where ((task.TaskName.IndexOf(searchString) >= 0 && exact == false) ||
+                                       (String.Compare(searchString,task.TaskName,true) == 0 && exact == true))
                                  select task).ToList();
 
             // Search all tasks that end before EndTime or have deadlines before EndTime
