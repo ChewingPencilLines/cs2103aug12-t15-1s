@@ -45,22 +45,24 @@ namespace ToDo
             string response = String.Empty;
             bool successFlag;
 
-            TrackOperation(operation);
+         //   TrackOperation(operation);
 
             if (operation == null)
             {
                 return REPONSE_INVALID_COMMAND;
             }
 
-            if (operation is OperationAdd)
+            else if (operation is OperationAdd)
             {
+                TrackOperation(operation);
                 Task taskToAdd = ((OperationAdd)operation).NewTask;
                 if (taskToAdd == null) return RESPONSE_ADD_FAILURE;
                 response = Add(taskToAdd, ref taskList, out successFlag);
             }
 
-            if (operation is OperationDelete)
+            else if (operation is OperationDelete)
             {
+                TrackOperation(operation);
                 int? index = ((OperationDelete)operation).Index;
                 string deleteString = ((OperationDelete)operation).DeleteString;
                 if (index.HasValue == false && deleteString != null)
@@ -92,13 +94,14 @@ namespace ToDo
                 }
             }
 
-            if (operation is OperationModify)
+            else if (operation is OperationModify)
             {
                 /*
                  *  when modify, if user key in nothing or only index or only task details
                  *  after the commandtype, then all tasks will be shown.
                  *  only when user input full information will modify operated.
                  */
+                TrackOperation(operation);
                 int? index = ((OperationModify)operation).OldIndex;
                 Task newTask = ((OperationModify)operation).NewTask;
                 if (index.HasValue == false && newTask == null)
@@ -129,19 +132,18 @@ namespace ToDo
                 }
             }
 
-            if (operation is OperationUndo)
+            else if (operation is OperationUndo)
             {
-                undoStack.Pop();
                 Operation undoOperation = undoStack.Pop();
                 response = Undo(undoOperation, ref taskList);
             }
 
-            if (operation is OperationDisplay)
+            else if (operation is OperationDisplay)
             {
                 response = DisplayAll(taskList);
             }
 
-            if (operation is OperationSearch)
+            else if (operation is OperationSearch)
             {
                 int numberOfMatches;
                 OperationSearch searchOp = ((OperationSearch)operation);
@@ -151,7 +153,7 @@ namespace ToDo
                 response = Search(out numberOfMatches, taskList, searchString, false, startTime, endTime);
             }
 
-            if (operation is OperationSort)
+            else if (operation is OperationSort)
             {
                 //sort only change what user view, but not change in storage
                 //TaskComparer tc = new TaskComparer();
@@ -162,8 +164,9 @@ namespace ToDo
                 response = DisplayAll(lastListedTasks);
             }
 
-            if (operation is OperationMarkAsDone)
+            else if (operation is OperationMarkAsDone)
             {
+                TrackOperation(operation);
                 int? index = ((OperationMarkAsDone)operation).Index;
                 string doneString = ((OperationMarkAsDone)operation).DoneString;
                 if (index.HasValue == false && doneString != null)
