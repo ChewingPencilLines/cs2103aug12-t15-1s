@@ -227,13 +227,13 @@ namespace ToDo
             undoTask.Push(taskToMarkAsDone);
             taskToMarkAsDone.State = true;
 
-            //if (storageXML.UpdateTaskAsDone(taskToMarkAsDone))
-            //{
+            if (storageXML.MarkTaskAsDone(taskToMarkAsDone))
+            {
             successFlag = true;
             return String.Format(RESPONSE_MARKASDONE_SUCCESS, taskToMarkAsDone.TaskName);
-            //}
-            //else
-            //    return RESPONSE_XML_READWRITE_FAIL;*/
+            }
+            else
+                return RESPONSE_XML_READWRITE_FAIL;
         }
 
         private string Modify(ref Task taskToModify, Task newTask, ref List<Task> taskList, out bool successFlag)
