@@ -6319,58 +6319,6 @@
         uWA3SyhAGQRAAASsBHy7AR0QAAEQ+NcE/gIWh5qC0gNb6gAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="customScrollbar.DownArrowImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAAA8AAAASCAIAAAAL/BNYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADrwAAA68AZW8ckkAAABMSURBVDhPY3Br2iIR3kMMAqpkGHmq////jxY4yCIoYQKU
-        gAC4BjQR9BBElsbUjCW84YrQ7AFaiD12ME2FuA1nXGJ6F59qrMlmxKQTAImMSRy7ZX8OAAAAAElFTkSu
-        QmCC
-</value>
-  </data>
-  <data name="customScrollbar.ThumbBottomImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAAA0AAAABCAIAAACKS7NQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADrwAAA68AZW8ckkAAAAOSURBVBhXYyjfep8YBAAOKhqQqhm2LwAAAABJRU5ErkJg
-        gg==
-</value>
-  </data>
-  <data name="customScrollbar.ThumbBottomSpanImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAAA0AAAABCAIAAACKS7NQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADrwAAA68AZW8ckkAAAAOSURBVBhXYyjfep8YBAAOKhqQqhm2LwAAAABJRU5ErkJg
-        gg==
-</value>
-  </data>
-  <data name="customScrollbar.ThumbMiddleImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAAA0AAAAoCAIAAACq6OeuAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADrwAAA68AZW8ckkAAAAoSURBVDhPYyjfep8YxECMIqCaUXXYg3M0XEbDBRQCo+lg
-        NB0Mp3QAAMh5JpUrQqxaAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="customScrollbar.ThumbTopImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAAA0AAAABCAIAAACKS7NQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADrwAAA68AZW8ckkAAAAOSURBVBhXYyjfep8YBAAOKhqQqhm2LwAAAABJRU5ErkJg
-        gg==
-</value>
-  </data>
-  <data name="customScrollbar.ThumbTopSpanImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAAA0AAAABCAIAAACKS7NQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADrwAAA68AZW8ckkAAAAOSURBVBhXYyjfep8YBAAOKhqQqhm2LwAAAABJRU5ErkJg
-        gg==
-</value>
-  </data>
-  <data name="customScrollbar.UpArrowImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAAA8AAAASCAIAAAAL/BNYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADrwAAA68AZW8ckkAAACgSURBVDhPrZLLDYAgEEQtQsSKLAGwHW/+m7E/nBVBAiqS
-        aOZA1rfDAlM03Vap6YtAFkTLleh2gZiaILNGkam1llThYrR0nvcHuhRDhjeTf02itQ5u6dEbqPn8hnva
-        oXFDeErfNd7hpHk7Y9P4t1+ppb1BrujZTENwOFfBi57eTKRzwkXvckKTvOvyxipJI1h2kpTxEUaPNkF9
-        V0aqYA96B8chSDcK+BW1AAAAAElFTkSuQmCC
-</value>
-  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>61</value>
   </metadata>
