@@ -13,14 +13,14 @@ namespace ToDo
     public partial class FlexiCommandsControl : UserControl
     {
         Settings settings;
+        CommandType selectedCommand;
+        ContextType selectedContext;
 
         public FlexiCommandsControl()
         {
             InitializeComponent();
             LoadCommandList();
-            //LoadContextList();
-            //nextButton.FlatAppearance.BorderColor = Color.SteelBlue;
-            //prevButton.FlatAppearance.BorderColor = Color.SteelBlue;
+            LoadContextList();
         }
 
         public void InitializeFlexiCommands(Settings settings)
@@ -55,21 +55,21 @@ namespace ToDo
 
         private void LoadContextList()
         {
-            commandTree.Nodes.Clear();
+            contextTree.Nodes.Clear();
             TreeNode treeNode = new TreeNode("ON");
-            commandTree.Nodes.Add(treeNode);
+            contextTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("FROM");
-            commandTree.Nodes.Add(treeNode);
+            contextTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("TO");
-            commandTree.Nodes.Add(treeNode);
+            contextTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("-");
-            commandTree.Nodes.Add(treeNode);
+            contextTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("THIS");
-            commandTree.Nodes.Add(treeNode);
+            contextTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("NEXT");
-            commandTree.Nodes.Add(treeNode);
+            contextTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("FOLLOWING");
-            commandTree.Nodes.Add(treeNode);
+            contextTree.Nodes.Add(treeNode);
         }
 
         private void addButton_Click(object sender, EventArgs e)
@@ -81,9 +81,50 @@ namespace ToDo
              
         }
 
-        private void nextList_Click(object sender, EventArgs e)
+        private CommandType ConvertStringToCommand(string command)
         {
-            LoadContextList();
+            switch (command)
+            {
+                case "ADD":
+                    return CommandType.ADD;
+                case "DELETE":
+                    return CommandType.DELETE;
+                case "DISPLAY":
+                    return CommandType.DISPLAY;
+                case "SORT":
+                    return CommandType.SORT;
+                case "SEARCH":
+                    return CommandType.SEARCH;
+                case "MODIFY":
+                    return CommandType.MODIFY;
+                case "UNDO":
+                    return CommandType.UNDO;
+                case "REDO":
+                    return CommandType.REDO;
+                case "DONE":
+                    return CommandType.DONE;
+                case "POSTPONE":
+                    return CommandType.POSTPONE;
+                case "EXIT":
+                    return CommandType.EXIT;
+            }
+
+            return CommandType.INVALID;
         }
+
+        //private void ContextType ConvertStringToContext(string context)
+        //{
+        //    switch(context)
+        //    {
+        //        case "aa":
+        //            return ContextType.STARTTIME;
+        //    }
+        //}
+
+        private void commandTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
+
     }
 }

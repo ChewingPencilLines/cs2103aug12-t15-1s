@@ -38,9 +38,9 @@ namespace ToDo
             InitializeSystemTray();               //Loads Code to place App in System Tray
             InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
             InitializeMenu();                     //Loads the Menu
-            InitializeOutputBox();                //Loads Output Box
-            InitializePreferencesPanel();         //Loads the Scrolling Bar in the Settings Panel     
+            InitializeOutputBox();                //Loads Output Box    
             InitializeEventHandlers();            //Adds Event Handlers
+            InitializePreferencesPanel();
             this.ActiveControl = textInput;
         }
 
@@ -257,69 +257,10 @@ namespace ToDo
         // Enables the Custom Scrollbar used in Preferences
         // ******************************************************************
 
-        #region PreferencesPanel
-
-        PreferencesPanel lg;
         private void InitializePreferencesPanel()
         {
-            lg = new PreferencesPanel(logic.MainSettings);
-            IntializeScrolling();
-
-            //coverPanel.Scroll += MouseHoverCapture;
-            //coverPanel.MouseEnter += MouseHoverCapture;
-            //shiftPanel.Scroll += MouseHoverCapture;
-            //shiftPanel.MouseEnter+=MouseHoverCapture;
-            //lg.Scroll += MouseHoverCapture;
-            //lg.MouseEnter += MouseHoverCapture;
+            preferencesPanel.InitializeWithSettings(logic.MainSettings);
         }
-
-        private void MouseHoverCapture(object sender, EventArgs e)
-        {
-            MessageBox.Show(sender.ToString());
-        }
-
-        private void IntializeScrolling()
-        {
-            lg.Location = new Point(5, 5);
-
-            foreach (Control item in lg.Controls)
-            {
-                //item.Anchor = AnchorStyles.None;
-                //item.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left);
-            }
-            lg.Anchor = (AnchorStyles.Top | AnchorStyles.Right |  AnchorStyles.Left);
-
-            this.shiftPanel.Controls.Add(lg);
-
-            shiftPanel.AutoScrollPosition = new Point(0, customScrollbar.Value);
-
-            Point pt = new Point(this.shiftPanel.AutoScrollPosition.X, this.shiftPanel.AutoScrollPosition.Y);
-            this.customScrollbar.Minimum = 0;
-            this.customScrollbar.Maximum = this.shiftPanel.DisplayRectangle.Height;
-            this.customScrollbar.LargeChange = customScrollbar.Maximum / customScrollbar.Height + this.shiftPanel.Height;
-            this.customScrollbar.SmallChange = 15;
-            this.customScrollbar.Value = Math.Abs(this.shiftPanel.AutoScrollPosition.Y);
-
-            this.shiftPanel.BringToFront();
-
-        }
-
-        private void customScrollbar_Scroll(object sender, EventArgs e)
-        {
-            shiftPanel.AutoScrollPosition = new Point(0, customScrollbar.Value);
-            customScrollbar.Invalidate();
-            Application.DoEvents();
-        }
-
-        /// <summary>
-        /// Sets correct length to scrollbar
-        /// </summary>
-        private void UI_Resize(object sender, EventArgs e)
-        {
-            this.customScrollbar.LargeChange = customScrollbar.Maximum / customScrollbar.Height + this.shiftPanel.Height;
-        }
-
-        #endregion
 
         // ******************************************************************
         // Prepare the Menu Bar
