@@ -9,21 +9,20 @@ namespace ToDo
     public class OperationHandler
     {
         static List<Task> lastListedTasks;
-
         public List<Task> LastListedTasks
         {
             get { return OperationHandler.lastListedTasks; }
             //set { OperationHandler.lastListedTasks = value; }
         }
-
         public static void Initialze_ListOfLastDisplayedTasks()
         {
             OperationHandler.lastListedTasks = new List<Task>(); 
         }
 
-        Stack<Operation> undoStack;
-        Stack<Task> undoTask;
-        // Stack<Operation> redoStack;        
+        static Stack<Operation> undoStack;
+        static Stack<Operation> redoStack;
+        static Stack<Task> undoTask;  
+    
         Storage storageXML;
 
         // ******************************************************************
@@ -50,28 +49,7 @@ namespace ToDo
             undoTask = new Stack<Task>();
             this.storageXML = storageXML;
         }
-
-        public string Execute(Operation operation, ref List<Task> taskList)
-        {
-            string response = String.Empty;
-
-         //   TrackOperation(operation);
-
-            if (operation == null)
-            {
-                return REPONSE_INVALID_COMMAND;
-            }
-                
-
-            else if (operation is OperationSearch)
-            {
-
-            }
-
-
-            return response;
-        }
-
+        
         public string Add(Task taskToAdd, List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
@@ -172,11 +150,6 @@ namespace ToDo
              * */            
         }
 
-        public string DisplayAll(List<Task> taskList)
-        {
-            return GenerateDisplayString(taskList);
-        }
-
         public string Search(out int numberOfMatches, List<Task> taskList, string searchString, bool exact = false, DateTime? startTime = null, DateTime? endTime = null)
         {            
             List<Task> filteredTasks = taskList;
@@ -236,6 +209,11 @@ namespace ToDo
             }
             numberOfMatches = filteredTasks.Count;
             return GenerateDisplayString(filteredTasks);
+        }
+
+        public string DisplayAll(List<Task> taskList)
+        {
+            return GenerateDisplayString(taskList);
         }
 
         private string GenerateDisplayString(List<Task> tasksToDisplay)
