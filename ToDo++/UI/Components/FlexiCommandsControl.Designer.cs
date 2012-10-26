@@ -33,7 +33,7 @@
             this.removeButton = new System.Windows.Forms.Button();
             this.contextTree = new System.Windows.Forms.TreeView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.addedFlexiCommands = new System.Windows.Forms.ListBox();
+            this.listedFlexiCommands = new System.Windows.Forms.ListBox();
             this.DescriptionDetail = new System.Windows.Forms.RichTextBox();
             this.DescriptionTitle = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
@@ -95,31 +95,31 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.BackColor = System.Drawing.Color.SteelBlue;
-            this.groupBox1.Controls.Add(this.addedFlexiCommands);
+            this.groupBox1.Controls.Add(this.listedFlexiCommands);
             this.groupBox1.Location = new System.Drawing.Point(3, 156);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(379, 61);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             // 
-            // addedFlexiCommands
+            // listedFlexiCommands
             // 
-            this.addedFlexiCommands.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.listedFlexiCommands.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.addedFlexiCommands.BackColor = System.Drawing.Color.SteelBlue;
-            this.addedFlexiCommands.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.addedFlexiCommands.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addedFlexiCommands.ForeColor = System.Drawing.Color.PowderBlue;
-            this.addedFlexiCommands.FormattingEnabled = true;
-            this.addedFlexiCommands.ItemHeight = 16;
-            this.addedFlexiCommands.Items.AddRange(new object[] {
+            this.listedFlexiCommands.BackColor = System.Drawing.Color.SteelBlue;
+            this.listedFlexiCommands.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listedFlexiCommands.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listedFlexiCommands.ForeColor = System.Drawing.Color.PowderBlue;
+            this.listedFlexiCommands.FormattingEnabled = true;
+            this.listedFlexiCommands.ItemHeight = 16;
+            this.listedFlexiCommands.Items.AddRange(new object[] {
             "add",
             "++",
             "remind"});
-            this.addedFlexiCommands.Location = new System.Drawing.Point(6, 10);
-            this.addedFlexiCommands.Name = "addedFlexiCommands";
-            this.addedFlexiCommands.Size = new System.Drawing.Size(367, 48);
-            this.addedFlexiCommands.TabIndex = 2;
+            this.listedFlexiCommands.Location = new System.Drawing.Point(6, 10);
+            this.listedFlexiCommands.Name = "listedFlexiCommands";
+            this.listedFlexiCommands.Size = new System.Drawing.Size(367, 48);
+            this.listedFlexiCommands.TabIndex = 2;
             // 
             // DescriptionDetail
             // 
@@ -173,7 +173,7 @@
         private System.Windows.Forms.Button removeButton;
         private System.Windows.Forms.TreeView contextTree;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ListBox addedFlexiCommands;
+        private System.Windows.Forms.ListBox listedFlexiCommands;
         private System.Windows.Forms.RichTextBox DescriptionDetail;
         private System.Windows.Forms.Label DescriptionTitle;
     }

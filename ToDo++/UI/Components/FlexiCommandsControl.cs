@@ -15,6 +15,15 @@ namespace ToDo
         Settings settings;
         CommandType selectedCommand;
         ContextType selectedContext;
+        SelectedType selectedType;
+        List<string> selectedFlexiCommands;
+
+        public void InitializeFlexiCommands(Settings settings)
+        {
+            this.settings = settings;
+            this.selectedFlexiCommands=new List<string>();
+            //this.selectedType = SelectedType.CommandSelected;
+        }
 
         public FlexiCommandsControl()
         {
@@ -23,10 +32,65 @@ namespace ToDo
             LoadContextList();
         }
 
-        public void InitializeFlexiCommands(Settings settings)
+        #region ConversionStringToEnum
+
+        public enum SelectedType { CommandSelected = 1, ContextSelected };
+
+        private CommandType ConvertStringToCommand(string command)
         {
-            this.settings = settings;
+            switch (command)
+            {
+                case "ADD":
+                    return CommandType.ADD;
+                case "DELETE":
+                    return CommandType.DELETE;
+                case "DISPLAY":
+                    return CommandType.DISPLAY;
+                case "SORT":
+                    return CommandType.SORT;
+                case "SEARCH":
+                    return CommandType.SEARCH;
+                case "MODIFY":
+                    return CommandType.MODIFY;
+                case "UNDO":
+                    return CommandType.UNDO;
+                case "REDO":
+                    return CommandType.REDO;
+                case "DONE":
+                    return CommandType.DONE;
+                case "POSTPONE":
+                    return CommandType.POSTPONE;
+                case "EXIT":
+                    return CommandType.EXIT;
+            }
+
+            return CommandType.INVALID;
         }
+
+        private ContextType ConvertStringToContext(string context)
+        {
+            switch (context)
+            {
+                case "ON":
+                    return ContextType.STARTTIME;
+                case "FROM":
+                    return ContextType.STARTTIME;
+                case "TO":
+                    return ContextType.ENDTIME;
+                case "-":
+                    return ContextType.ENDTIME;
+                case "THIS":
+                    return ContextType.CURRENT;
+                case "NEXT":
+                    return ContextType.NEXT;
+                case "FOLLOWING":
+                    return ContextType.FOLLOWING;
+            }
+
+            return ContextType.DEADLINE;
+        }
+
+        #endregion
 
         #region LoadTreeLists
 
@@ -78,81 +142,65 @@ namespace ToDo
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            
             CustomMessageBox.Show("Add Command", "Enter your new command here");
             if (CustomMessageBox.ValidData())
-                addedFlexiCommands.Items.Add(CustomMessageBox.GetInput());
-             
+                AddFlexiCommandToSettings(CustomMessageBox.GetInput());
+
+            UpdateFlexiCommandList();
         }
-
-        #region ConversionStringToEnum
-
-        private CommandType ConvertStringToCommand(string command)
-        {
-            switch (command)
-            {
-                case "ADD":
-                    return CommandType.ADD;
-                case "DELETE":
-                    return CommandType.DELETE;
-                case "DISPLAY":
-                    return CommandType.DISPLAY;
-                case "SORT":
-                    return CommandType.SORT;
-                case "SEARCH":
-                    return CommandType.SEARCH;
-                case "MODIFY":
-                    return CommandType.MODIFY;
-                case "UNDO":
-                    return CommandType.UNDO;
-                case "REDO":
-                    return CommandType.REDO;
-                case "DONE":
-                    return CommandType.DONE;
-                case "POSTPONE":
-                    return CommandType.POSTPONE;
-                case "EXIT":
-                    return CommandType.EXIT;
-            }
-
-            return CommandType.INVALID;
-        }
-
-        private ContextType ConvertStringToContext(string context)
-        {
-            switch(context)
-            {
-                case "ON":
-                    return ContextType.STARTTIME;
-                case "FROM":
-                    return ContextType.STARTTIME;
-                case "TO":
-                    return ContextType.ENDTIME;
-                case "-":
-                    return ContextType.ENDTIME;
-                case "THIS":
-                    return ContextType.CURRENT;
-                case "NEXT":
-                    return ContextType.NEXT;
-                case "FOLLOWING":
-                    return ContextType.FOLLOWING;
-            }
-
-            return ContextType.DEADLINE;
-        }
-
-        #endregion
 
         private void commandTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            this.selectedType = SelectedType.CommandSelected;
             string selected = commandTree.SelectedNode.Text;
             this.selectedCommand = ConvertStringToCommand(selected);
+
+            UpdateFlexiCommandList();
         }
 
         private void contextTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            this.selectedType = SelectedType.ContextSelected;
             string selected = contextTree.SelectedNode.Text;
             this.selectedContext = ConvertStringToContext(selected);
+
+            UpdateFlexiCommandList();
+        }
+
+        private void UpdateFlexiCommandList()
+        {
+            listedFlexiCommands.Items.Clear();
+            if (this.selectedType == SelectedType.CommandSelected)
+            {
+                this.selectedFlexiCommands.Clear();
+                foreach (string command in settings.GetCommandKeywordList(this.selectedCommand))
+                    this.selectedFlexiCommands.Add(command);
+            }
+            else if(this.selectedType==SelectedType.ContextSelected)
+            {
+                this.selectedFlexiCommands.Clear();
+                foreach (string flexiCommand in settings.GetContextKeywordList(this.selectedContext))
+                    this.selectedFlexiCommands.Add(flexiCommand);
+            }
+
+            foreach (string flexiCommand in this.selectedFlexiCommands)
+                listedFlexiCommands.Items.Add(flexiCommand);
+        }
+
+        private void AddFlexiCommandToSettings(string flexiCommand)
+        {
+            try
+            {
+                if (this.selectedType == SelectedType.CommandSelected)
+                    settings.AddCommandKeyword(flexiCommand, this.selectedCommand);
+                else if (this.selectedType == SelectedType.ContextSelected)
+                    settings.AddContextKeyword(flexiCommand, this.selectedContext);
+            }
+            catch (RepeatCommandException e)
+            {
+                AlertBox.Show(e.Message);
+            }
+
         }
 
     }
