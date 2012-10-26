@@ -28,6 +28,8 @@ namespace ToDo
             this.settings = settings;
         }
 
+        #region LoadTreeLists
+
         private void LoadCommandList()
         {
             commandTree.Nodes.Clear();
@@ -72,6 +74,8 @@ namespace ToDo
             contextTree.Nodes.Add(treeNode);
         }
 
+        #endregion
+
         private void addButton_Click(object sender, EventArgs e)
         {
             
@@ -80,6 +84,8 @@ namespace ToDo
                 addedFlexiCommands.Items.Add(CustomMessageBox.GetInput());
              
         }
+
+        #region ConversionStringToEnum
 
         private CommandType ConvertStringToCommand(string command)
         {
@@ -112,18 +118,41 @@ namespace ToDo
             return CommandType.INVALID;
         }
 
-        //private void ContextType ConvertStringToContext(string context)
-        //{
-        //    switch(context)
-        //    {
-        //        case "aa":
-        //            return ContextType.STARTTIME;
-        //    }
-        //}
+        private ContextType ConvertStringToContext(string context)
+        {
+            switch(context)
+            {
+                case "ON":
+                    return ContextType.STARTTIME;
+                case "FROM":
+                    return ContextType.STARTTIME;
+                case "TO":
+                    return ContextType.ENDTIME;
+                case "-":
+                    return ContextType.ENDTIME;
+                case "THIS":
+                    return ContextType.CURRENT;
+                case "NEXT":
+                    return ContextType.NEXT;
+                case "FOLLOWING":
+                    return ContextType.FOLLOWING;
+            }
+
+            return ContextType.DEADLINE;
+        }
+
+        #endregion
 
         private void commandTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            string selected = commandTree.SelectedNode.Text;
+            this.selectedCommand = ConvertStringToCommand(selected);
+        }
 
+        private void contextTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            string selected = contextTree.SelectedNode.Text;
+            this.selectedContext = ConvertStringToContext(selected);
         }
 
     }
