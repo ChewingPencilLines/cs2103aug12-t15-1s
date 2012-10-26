@@ -8,7 +8,19 @@ namespace ToDo
 {
     public class OperationHandler
     {
-        List<Task> lastListedTasks;
+        static List<Task> lastListedTasks;
+
+        public List<Task> LastListedTasks
+        {
+            get { return OperationHandler.lastListedTasks; }
+            //set { OperationHandler.lastListedTasks = value; }
+        }
+
+        public static void Initialze_ListOfLastDisplayedTasks()
+        {
+            OperationHandler.lastListedTasks = new List<Task>(); 
+        }
+
         Stack<Operation> undoStack;
         Stack<Task> undoTask;
         // Stack<Operation> redoStack;        
@@ -34,7 +46,6 @@ namespace ToDo
 
         public OperationHandler(Storage storageXML)
         {
-            lastListedTasks = new List<Task>();
             undoStack = new Stack<Operation>();
             undoTask = new Stack<Task>();
             this.storageXML = storageXML;
@@ -43,7 +54,6 @@ namespace ToDo
         public string Execute(Operation operation, ref List<Task> taskList)
         {
             string response = String.Empty;
-            bool successFlag;
 
          //   TrackOperation(operation);
 
@@ -51,152 +61,18 @@ namespace ToDo
             {
                 return REPONSE_INVALID_COMMAND;
             }
-
-            else if (operation is OperationAdd)
-            {
-                TrackOperation(operation);
-                Task taskToAdd = ((OperationAdd)operation).NewTask;
-                if (taskToAdd == null) return RESPONSE_ADD_FAILURE;
-                response = Add(taskToAdd, ref taskList, out successFlag);
-            }
-
-            else if (operation is OperationDelete)
-            {
-                TrackOperation(operation);
-                int? index = ((OperationDelete)operation).Index;
-                string deleteString = ((OperationDelete)operation).DeleteString;
-                if (index.HasValue == false && deleteString != null)
-                 {
-                     int numberOfMatches;
-                     response = Search(out numberOfMatches, taskList, deleteString, true);
-                     if (numberOfMatches == 0) {
-                         //check substring
-                         response = Search(out numberOfMatches, taskList, deleteString, false);
-                         if (numberOfMatches == 0)
-                             response = RESPONSE_DELETE_FAILURE;
-                     }   
-                     else if (numberOfMatches == 1) { 
-                         response = Delete(lastListedTasks[0], ref taskList, out successFlag);
-                     }
-                }
-                else if (index < 0 || index > taskList.Count - 1)
-                {
-                    return RESPONSE_INVALID_TASK_INDEX;
-                }
-                else if (deleteString == null)
-                {
-                    Task taskToDelete = lastListedTasks[index.Value];
-                     response = Delete(taskToDelete, ref taskList, out successFlag);
-                }
-                else
-                {
-                    return REPONSE_INVALID_COMMAND;
-                }
-            }
-
-            else if (operation is OperationModify)
-            {
-                /*
-                 *  when modify, if user key in nothing or only index or only task details
-                 *  after the commandtype, then all tasks will be shown.
-                 *  only when user input full information will modify operated.
-                 */
-                TrackOperation(operation);
-                int? index = ((OperationModify)operation).OldIndex;
-                Task newTask = ((OperationModify)operation).NewTask;
-                if (index.HasValue == false && newTask == null)
-                {
-                    response = DisplayAll(taskList);
-                }
-                else if (index.HasValue == false && newTask != null)
-                {
-                    int numberOfMatches;
-                    response = Search(out numberOfMatches, taskList, newTask.TaskName);
-                }
-                else if (index.HasValue == true && (index < 0 || index > taskList.Count - 1))
-                {
-                    if (newTask != null)
-                    {
-                        int numberOfMatches;
-                        response = Search(out numberOfMatches, taskList, newTask.TaskName);
-                    }
-                    else
-                    {
-                        response = DisplayAll(taskList);
-                    }
-                }
-                else
-                {
-                    Task taskToModify = lastListedTasks[index.Value];
-                    response = Modify(ref taskToModify, newTask, ref taskList, out successFlag);
-                }
-            }
-
-            else if (operation is OperationUndo)
-            {
-                Operation undoOperation = undoStack.Pop();
-                response = Undo(undoOperation, ref taskList);
-            }
-
-            else if (operation is OperationDisplay)
-            {
-                response = DisplayAll(taskList);
-            }
+                
 
             else if (operation is OperationSearch)
             {
-                int numberOfMatches;
-                OperationSearch searchOp = ((OperationSearch)operation);
-                string searchString = searchOp.SearchString;
-                DateTime? startTime = searchOp.StartTime;
-                DateTime? endTime = searchOp.EndTime;
-                response = Search(out numberOfMatches, taskList, searchString, false, startTime, endTime);
+
             }
 
-            else if (operation is OperationSort)
-            {
-                //sort only change what user view, but not change in storage
-                //TaskComparer tc = new TaskComparer();
-                //lastListedTasks.Sort(tc);
-                lastListedTasks = (from task in lastListedTasks
-                                  orderby task.TaskName
-                                  select task).ToList();
-                response = DisplayAll(lastListedTasks);
-            }
-
-            else if (operation is OperationMarkAsDone)
-            {
-                TrackOperation(operation);
-                int? index = ((OperationMarkAsDone)operation).Index;
-                string doneString = ((OperationMarkAsDone)operation).DoneString;
-                if (index.HasValue == false && doneString != null)
-                {
-                    int numberOfMatches = 0;
-                    response = Search(out numberOfMatches, taskList, doneString);
-                    if (numberOfMatches == 1)
-                    {
-                        response = MarkAsDone(lastListedTasks[0], out successFlag);
-                    }
-                }
-                else if (index < 0 || index > taskList.Count - 1)
-                {
-                    return RESPONSE_INVALID_TASK_INDEX;
-                }
-                else if (doneString == null)
-                {
-                    Task taskToMarkAsDone = lastListedTasks[index.Value];
-                    response = MarkAsDone(taskToMarkAsDone, out successFlag);
-                }
-                else
-                {
-                    return REPONSE_INVALID_COMMAND;
-                }
-            }
 
             return response;
         }
 
-        private string Add(Task taskToAdd, ref List<Task> taskList, out bool successFlag)
+        public string Add(Task taskToAdd, List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
             try
@@ -217,7 +93,7 @@ namespace ToDo
             }
         }
 
-        private string Delete(Task taskToDelete, ref List<Task> taskList, out bool successFlag)
+        public string Delete(Task taskToDelete, List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToDelete);
@@ -231,7 +107,7 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;
         }
 
-        private string MarkAsDone(Task taskToMarkAsDone, out bool successFlag)
+        public string MarkAsDone(Task taskToMarkAsDone, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToMarkAsDone);
@@ -246,7 +122,7 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;
         }
 
-        private string Modify(ref Task taskToModify, Task newTask, ref List<Task> taskList, out bool successFlag)
+        public string Modify(ref Task taskToModify, Task newTask, ref List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToModify);
@@ -261,20 +137,26 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;
         }
 
-        private string Undo(Operation undoOperation, ref List<Task> taskList)
+        public string UndoLastOperation()
         {
+            // @ivan: all undoable Operations should have a undo method so we can just call operation.undo
+            //Operation opToUndo = undoStack.Pop();
+            //opToUndo.Undo();
+            throw new NotImplementedException();
+            
+            /*
             string response;
             bool successFlag;
             if (undoOperation is OperationAdd)
             {
                 Task task = ((OperationAdd)undoOperation).NewTask;
-                response = Delete(task, ref taskList, out successFlag);
+                response = Delete(task, taskList, out successFlag);
             }
             else if (undoOperation is OperationDelete && (((OperationDelete)undoOperation).Index.HasValue == true))
             {
 
                 Task task = undoTask.Pop();
-                response = Add(task, ref taskList, out successFlag);
+                response = Add(task, taskList, out successFlag);
             }
             else if (undoOperation is OperationModify && ((OperationModify)undoOperation).NewTask != null)
             {
@@ -287,14 +169,15 @@ namespace ToDo
                 response = RESPONSE_UNDO_FAILURE;
             }
             return response;
+             * */            
         }
 
-        private string DisplayAll(List<Task> taskList)
+        public string DisplayAll(List<Task> taskList)
         {
             return GenerateDisplayString(taskList);
         }
 
-        private string Search(out int numberOfMatches, List<Task> taskList, string searchString, bool exact = false, DateTime? startTime = null, DateTime? endTime = null)
+        public string Search(out int numberOfMatches, List<Task> taskList, string searchString, bool exact = false, DateTime? startTime = null, DateTime? endTime = null)
         {            
             List<Task> filteredTasks = taskList;
             if (searchString != null)
@@ -421,7 +304,7 @@ namespace ToDo
             return feedback;
         }
 
-        private void TrackOperation(Operation operation)
+        public void TrackOperation(Operation operation)
         {
             undoStack.Push(operation);
             // redoStack.Clear();
