@@ -26,6 +26,7 @@ namespace ToDo
             storage = new Storage("testfile.xml", "testsettings.xml");
             mainSettings.UpdateSettings(storage.LoadSettingsFromFile());
             operationHandler = new OperationHandler(storage);
+            OperationHandler.Initialze_ListOfLastDisplayedTasks();
             stringParser = new StringParser();
             commandParser = new CommandParser(ref stringParser);
             taskList = storage.LoadTasksFromFile();
@@ -58,7 +59,7 @@ namespace ToDo
         private string ExecuteCommand(Operation operation)
         {
             string response;
-            response = operationHandler.Execute(operation, ref taskList);
+            response = operation.Execute(taskList, storage);
             return response;
         }
 
