@@ -19,7 +19,7 @@ namespace ToDo
             List<Task> sortedTasks = (from task in opHandler.LastListedTasks
                                orderby task.TaskName
                                select task).ToList();
-            response = opHandler.DisplayAll(sortedTasks);
+            response = opHandler.Display(sortedTasks);
             return response;
         }
     }

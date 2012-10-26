@@ -43,21 +43,23 @@ namespace ToDo
             OperationHandler opHandler = new OperationHandler(storageXML);
             string response;
 
+            List<Task> searchResults;
             if (index.HasValue == false && deleteString != null)
             {
-                int numberOfMatches;
-                response = opHandler.Search(out numberOfMatches, taskList, deleteString, true);
-                if (numberOfMatches == 0)
+                searchResults = opHandler.Search(taskList, deleteString, true);
+                if (searchResults.Count == 0)
                 {
                     //check substring
-                    response = opHandler.Search(out numberOfMatches, taskList, deleteString, false);
-                    if (numberOfMatches == 0)
+                    searchResults = opHandler.Search(taskList, deleteString, false);
+                    if (searchResults.Count == 0)
                         response = RESPONSE_DELETE_FAILURE;
+                    else response = opHandler.Display(searchResults);
                 }
-                else if (numberOfMatches == 1)
+                else if (searchResults.Count == 1)
                 {
-                    response = opHandler.Delete(opHandler.LastListedTasks[0], taskList, out successFlag);
+                    response = opHandler.Delete(searchResults[0], taskList, out successFlag);
                 }
+                else response = opHandler.Display(searchResults);
             }
             else if (index < 0 || index > taskList.Count - 1)
             {
@@ -66,7 +68,9 @@ namespace ToDo
             else if (deleteString == null)
             {
                 Task taskToDelete = opHandler.LastListedTasks[index.Value];
-                response = opHandler.Delete(taskToDelete, taskList, out successFlag);
+                if (taskToDelete == null)
+                    return RESPONSE_DELETE_ALREADY;
+                else response = opHandler.Delete(taskToDelete, taskList, out successFlag);
             }
             else
             {
