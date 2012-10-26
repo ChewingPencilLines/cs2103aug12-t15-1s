@@ -9,6 +9,10 @@ namespace ToDo
     class OperationDelete : Operation
     {
 
+        // @ivan -> alice: not good enough. needs to be able to delete by range of index / dates.
+        // work on letting it search by dates first. i will get range of index detected soon.
+        // i will also catch the "all" keyword, letting u allow all search hits to be deleted immediately.
+
         private int? index;
         private string deleteString;
 
@@ -21,7 +25,7 @@ namespace ToDo
         {
             get { return deleteString; }
         }
-
+        
         public OperationDelete(int index)
         {
             this.index = index - 1;
