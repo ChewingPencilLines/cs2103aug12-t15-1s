@@ -127,6 +127,7 @@ namespace ToDo
             this.startTime = startTime;
             this.endTime = endTime;
             this.specific = specific_flag;
+            //@ivan->jenna specific what? not engh.
         }
 
         public override XElement ToXElement()
