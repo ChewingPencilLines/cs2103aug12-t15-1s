@@ -88,6 +88,7 @@
             this.contextTree.Name = "contextTree";
             this.contextTree.Size = new System.Drawing.Size(111, 188);
             this.contextTree.TabIndex = 10;
+            this.contextTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.contextTree_AfterSelect);
             // 
             // groupBox1
             // 
