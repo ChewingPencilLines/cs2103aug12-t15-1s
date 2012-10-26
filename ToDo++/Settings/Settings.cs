@@ -37,22 +37,22 @@ namespace ToDo
         }
 
         public MiscSettings misc;
-        public Dictionary<CommandType, string> userCommandKeywords;
-        public Dictionary<ContextType, string> userContextKeywords;
+        public Dictionary<string, CommandType> userCommandKeywords;
+        public Dictionary<string, ContextType> userContextKeywords;
 
         public SettingsList()
         {
             misc = new MiscSettings(false, false, false, 8);
-            userCommandKeywords = new Dictionary<CommandType, string>();
-            userContextKeywords = new Dictionary<ContextType, string>();
+            userCommandKeywords = new Dictionary<string, CommandType>();
+            userContextKeywords = new Dictionary<string, ContextType>();
         }
 
         public bool ContainsCommandKeyword(string userKeyword,CommandType commandType)
         {
-            string passed;
-            if (userCommandKeywords.TryGetValue(commandType, out passed))
+            CommandType passed;
+            if (userCommandKeywords.TryGetValue(userKeyword, out passed))
             {
-                if (passed == userKeyword)
+                if (passed == commandType)
                     return true;
                 else 
                     return false;
@@ -63,10 +63,10 @@ namespace ToDo
 
         public bool ContainsContextKeyword(string userKeyword, ContextType commandType)
         {
-            string passed;
-            if (userContextKeywords.TryGetValue(commandType, out passed))
+            ContextType passed;
+            if (userContextKeywords.TryGetValue(userKeyword, out passed))
             {
-                if (passed == userKeyword)
+                if (passed == commandType)
                     return true;
                 else return false;
             }
@@ -137,10 +137,13 @@ namespace ToDo
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
         public void AddCommandKeyword(string newKeyword, CommandType commandType)
         {
-                if (settingsList.ContainsCommandKeyword(newKeyword,commandType))
-                    throw new RepeatCommandException("There is such a command in the list already");
-                settingsList.userCommandKeywords.Add(commandType, newKeyword);
-                //key then value
+            if (settingsList.ContainsCommandKeyword(newKeyword, commandType))
+                throw new RepeatCommandException("There is such a command in the list already");
+            if (settingsList.userContextKeywords.ContainsKey(newKeyword))
+                throw new RepeatCommandException("There is a repeat keyword already");
+            if (settingsList.userCommandKeywords.ContainsKey(newKeyword))
+                throw new RepeatCommandException("There is a repeat keyword already");
+            settingsList.userCommandKeywords.Add(newKeyword, commandType);
         }
 
         /// <summary>
@@ -149,8 +152,7 @@ namespace ToDo
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
         public void RemoveCommandKeyword(string keywordToRemove)
         {
-            throw new NotImplementedException();
-            //settingsList.userCommandKeywords.Remove(keywordToRemove);
+            settingsList.userCommandKeywords.Remove(keywordToRemove);
         }
 
         /// <summary>
@@ -162,8 +164,8 @@ namespace ToDo
         {
             List<string> getCommands = new List<string>();
             foreach(var pair in settingsList.userCommandKeywords){
-                if(pair.Key==commandType)
-                    getCommands.Add(pair.Value);
+                if(pair.Value==commandType)
+                    getCommands.Add(pair.Key);
             }
 
             return getCommands;
@@ -183,7 +185,11 @@ namespace ToDo
         {
             if (settingsList.ContainsContextKeyword(newKeyword, contextType))
                 throw new RepeatCommandException("There is such a command in the list already");
-            settingsList.userContextKeywords.Add(contextType, newKeyword);
+            if (settingsList.userContextKeywords.ContainsKey(newKeyword))
+                throw new RepeatCommandException("There is a repeat keyword already");
+            if (settingsList.userCommandKeywords.ContainsKey(newKeyword))
+                throw new RepeatCommandException("There is a repeat keyword already");
+            settingsList.userContextKeywords.Add(newKeyword, contextType);
         }
 
         /// <summary>
@@ -192,8 +198,7 @@ namespace ToDo
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
         public void RemoveContextKeyword(string keywordToRemove)
         {
-            throw new NotImplementedException();
-            //settingsList.userContextKeywords.Remove(keywordToRemove);
+            settingsList.userContextKeywords.Remove(keywordToRemove);
         }
 
         /// <summary>
@@ -206,8 +211,8 @@ namespace ToDo
             List<string> getCommands = new List<string>();
             foreach (var pair in settingsList.userContextKeywords)
             {
-                if (pair.Key == contextType)
-                    getCommands.Add(pair.Value);
+                if (pair.Value == contextType)
+                    getCommands.Add(pair.Key);
             }
 
             return getCommands;

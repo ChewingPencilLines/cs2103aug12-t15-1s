@@ -71,9 +71,7 @@ namespace ToDo
         {
             switch (context)
             {
-                case "ON":
-                    return ContextType.STARTTIME;
-                case "FROM":
+                case "ON/FROM":
                     return ContextType.STARTTIME;
                 case "TO":
                     return ContextType.ENDTIME;
@@ -122,9 +120,7 @@ namespace ToDo
         private void LoadContextList()
         {
             contextTree.Nodes.Clear();
-            TreeNode treeNode = new TreeNode("ON");
-            contextTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("FROM");
+            TreeNode treeNode = new TreeNode("ON/FROM");
             contextTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("TO");
             contextTree.Nodes.Add(treeNode);
@@ -151,6 +147,7 @@ namespace ToDo
 
         private void commandTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            this.contextTree.SelectedNode = null;
             this.selectedType = SelectedType.CommandSelected;
             string selected = commandTree.SelectedNode.Text;
             this.selectedCommand = ConvertStringToCommand(selected);
@@ -160,6 +157,7 @@ namespace ToDo
 
         private void contextTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            this.commandTree.SelectedNode = null;
             this.selectedType = SelectedType.ContextSelected;
             string selected = contextTree.SelectedNode.Text;
             this.selectedContext = ConvertStringToContext(selected);
