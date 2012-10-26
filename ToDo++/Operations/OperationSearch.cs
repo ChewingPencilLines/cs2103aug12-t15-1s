@@ -39,9 +39,9 @@ namespace ToDo
         {
             OperationHandler opHandler = new OperationHandler(storageXML);
             string response;
-            int numberOfMatches;
 
-            response = opHandler.Search(out numberOfMatches, taskList, searchString, false, startTime, endTime);
+            List<Task> searchResults = opHandler.Search(taskList, searchString, false, startTime, endTime);
+            response = opHandler.Display(searchResults);
             return response;
         }
     }   

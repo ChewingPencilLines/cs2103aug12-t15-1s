@@ -47,25 +47,27 @@ namespace ToDo
              */
             OperationHandler opHandler = new OperationHandler(storageXML);
             string response;
+            List<Task> searchResults;
+
             if (oldIndex.HasValue == false && newTask == null)
             {
-                response = opHandler.DisplayAll(taskList);
+                response = opHandler.Display(taskList);
             }
             else if (oldIndex.HasValue == false && newTask != null)
             {
-                int numberOfMatches;
-                response = opHandler.Search(out numberOfMatches, taskList, newTask.TaskName);
+                searchResults = opHandler.Search(taskList, newTask.TaskName);
+                response = opHandler.Display(searchResults);
             }
             else if (oldIndex.HasValue == true && (oldIndex < 0 || oldIndex > taskList.Count - 1))
             {
                 if (newTask != null)
                 {
-                    int numberOfMatches;
-                    response = opHandler.Search(out numberOfMatches, taskList, newTask.TaskName);
+                    searchResults = opHandler.Search(taskList, newTask.TaskName);
+                    response = opHandler.Display(searchResults);
                 }
                 else
                 {
-                    response = opHandler.DisplayAll(taskList);
+                    response = opHandler.Display(taskList);
                 }
             }
             else

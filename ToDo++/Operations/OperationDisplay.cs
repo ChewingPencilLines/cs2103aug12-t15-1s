@@ -17,7 +17,7 @@ namespace ToDo
             string response;
             // int numOfMatches;
             // return opHandler.Search(out numOfMatches, taskList, "");            
-            response = opHandler.DisplayAll(taskList);
+            response = opHandler.Display(taskList);
             return response;
         }
     }

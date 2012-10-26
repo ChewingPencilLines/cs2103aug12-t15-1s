@@ -74,8 +74,15 @@ namespace ToDo
         public string Delete(Task taskToDelete, List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
+
+            // Remove tasks and push to undo stack.
             undoTask.Push(taskToDelete);
             taskList.Remove(taskToDelete);
+
+            // Adjust list to null references to deleted tasks without changing order.
+            int nullIndex = lastListedTasks.IndexOf(taskToDelete);
+            lastListedTasks[nullIndex] = null;
+
             if (storageXML.RemoveTaskFromFile(taskToDelete))
             {
                 successFlag = true;
@@ -150,7 +157,7 @@ namespace ToDo
              * */            
         }
 
-        public string Search(out int numberOfMatches, List<Task> taskList, string searchString, bool exact = false, DateTime? startTime = null, DateTime? endTime = null)
+        public List<Task> Search(List<Task> taskList, string searchString, bool exact = false, DateTime? startTime = null, DateTime? endTime = null)
         {            
             List<Task> filteredTasks = taskList;
             if (searchString != null)
@@ -207,11 +214,10 @@ namespace ToDo
                                         where (((TaskEvent)task).EndTime.Date >= ((DateTime)startTime).Date)
                                         select task).ToList());
             }
-            numberOfMatches = filteredTasks.Count;
-            return GenerateDisplayString(filteredTasks);
+            return filteredTasks;
         }
 
-        public string DisplayAll(List<Task> taskList)
+        public string Display(List<Task> taskList)
         {
             return GenerateDisplayString(taskList);
         }

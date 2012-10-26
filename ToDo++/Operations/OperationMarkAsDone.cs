@@ -40,12 +40,12 @@ namespace ToDo
             string response;
             if (index.HasValue == false && doneString != null)
             {
-                int numberOfMatches = 0;
-                response = opHandler.Search(out numberOfMatches, taskList, doneString);
-                if (numberOfMatches == 1)
+                List<Task> searchResults = opHandler.Search(taskList, doneString);
+                if (searchResults.Count == 1)
                 {
                     response = opHandler.MarkAsDone(opHandler.LastListedTasks[0], out successFlag);
                 }
+                else response = opHandler.Display(searchResults);
             }
             else if (index < 0 || index > taskList.Count - 1)
             {

@@ -16,6 +16,7 @@ namespace ToDo
         protected const string RESPONSE_ADD_FAILURE = "Failed to add task!";
         protected const string RESPONSE_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
         protected const string RESPONSE_DELETE_FAILURE = "No matching task found!";
+        protected const string RESPONSE_DELETE_ALREADY = "Task has already been deleted!";
         protected const string RESPONSE_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
         protected const string RESPONSE_DISPLAY_NOTASK = "There are no tasks for display.";
         protected const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
