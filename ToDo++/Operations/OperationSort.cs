@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ToDo
 {
@@ -13,13 +12,16 @@ namespace ToDo
 
         public override string Execute(List<Task> taskList, Storage storageXML)
         {
-            OperationHandler opHandler = new OperationHandler(storageXML);
-            opHandler.TrackOperation(this);
+            this.storageXML = storageXML;
             string response;
-            List<Task> sortedTasks = (from task in opHandler.LastListedTasks
+
+            List<Task> sortedTasks = (from task in lastListedTasks
                                orderby task.TaskName
                                select task).ToList();
-            response = opHandler.Display(sortedTasks);
+            response = GenerateDisplayString(sortedTasks);
+
+            TrackOperation();
+
             return response;
         }
     }

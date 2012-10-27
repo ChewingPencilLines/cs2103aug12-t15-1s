@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ToDo
 {
@@ -15,21 +13,18 @@ namespace ToDo
             newTask = setTask;
         }
 
-        internal Task NewTask
-        {
-            get { return newTask; }
-        }
-
         public override string Execute(List<Task> taskList, Storage storageXML)
         {
-            OperationHandler opHandler = new OperationHandler(storageXML);
+            this.storageXML = storageXML;
             string response;
 
             if (newTask == null) return RESPONSE_ADD_FAILURE;
-            response = opHandler.Add(newTask, taskList, out successFlag);
-            if (successFlag) opHandler.TrackOperation(this);
-            return response;
-        }
 
+            response = AddTask(newTask, taskList, out successFlag);
+
+            if (successFlag) TrackOperation();
+
+            return response;
+        }      
     }
 }

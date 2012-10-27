@@ -91,7 +91,6 @@
       <DependentUpon>FlexiCommandsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Logic.cs" />
-    <Compile Include="OperationHandler.cs" />
     <Compile Include="UI\Components\PopUpForm.cs">
       <SubType>Form</SubType>
     </Compile>

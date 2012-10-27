@@ -37,11 +37,11 @@ namespace ToDo
 
         public override string Execute(List<Task> taskList, Storage storageXML)
         {
-            OperationHandler opHandler = new OperationHandler(storageXML);
+            this.storageXML = storageXML;
             string response;
 
-            List<Task> searchResults = opHandler.Search(taskList, searchString, false, startTime, endTime);
-            response = opHandler.Display(searchResults);
+            List<Task> searchResults = SearchForTasks(taskList, searchString, false, startTime, endTime);
+            response = GenerateDisplayString(searchResults);
             return response;
         }
     }   

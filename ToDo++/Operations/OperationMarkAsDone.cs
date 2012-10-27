@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ToDo
 {
@@ -36,17 +34,16 @@ namespace ToDo
 
         public override string Execute(List<Task> taskList, Storage storageXML)
         {
-            OperationHandler opHandler = new OperationHandler(storageXML);
-            opHandler.TrackOperation(this);
+            this.storageXML = storageXML;
             string response;
             if (index.HasValue == false && doneString != null)
             {
-                List<Task> searchResults = opHandler.Search(taskList, doneString);
+                List<Task> searchResults = SearchForTasks(taskList, doneString);
                 if (searchResults.Count == 1)
                 {
-                    response = opHandler.MarkAsDone(opHandler.LastListedTasks[0], out successFlag);
+                    response = MarkAsDone(lastListedTasks[0], out successFlag);
                 }
-                else response = opHandler.Display(searchResults);
+                else response = GenerateDisplayString(searchResults);
             }
             else if (index < 0 || index > taskList.Count - 1)
             {
@@ -54,14 +51,14 @@ namespace ToDo
             }
             else if (doneString == null)
             {
-                Task taskToMarkAsDone = opHandler.LastListedTasks[index.Value];
-                response = opHandler.MarkAsDone(taskToMarkAsDone, out successFlag);
+                Task taskToMarkAsDone = lastListedTasks[index.Value];
+                response = MarkAsDone(taskToMarkAsDone, out successFlag);
             }
             else
             {
                 return REPONSE_INVALID_COMMAND;
             }
-            if (successFlag) opHandler.TrackOperation(this);
+            if (successFlag) TrackOperation();
             return response;
         }
     } 

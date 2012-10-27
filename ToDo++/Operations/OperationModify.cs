@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ToDo
 {
@@ -45,37 +41,37 @@ namespace ToDo
              *  after the commandtype, then all tasks will be shown.
              *  only when user input full information will modify operated.
              */
-            OperationHandler opHandler = new OperationHandler(storageXML);
+            this.storageXML = storageXML;
             string response;
             List<Task> searchResults;
 
             if (oldIndex.HasValue == false && newTask == null)
             {
-                response = opHandler.Display(taskList);
+                response = GenerateDisplayString(taskList);
             }
             else if (oldIndex.HasValue == false && newTask != null)
             {
-                searchResults = opHandler.Search(taskList, newTask.TaskName);
-                response = opHandler.Display(searchResults);
+                searchResults = SearchForTasks(taskList, newTask.TaskName);
+                response = GenerateDisplayString(searchResults);
             }
             else if (oldIndex.HasValue == true && (oldIndex < 0 || oldIndex > taskList.Count - 1))
             {
                 if (newTask != null)
                 {
-                    searchResults = opHandler.Search(taskList, newTask.TaskName);
-                    response = opHandler.Display(searchResults);
+                    searchResults = SearchForTasks(taskList, newTask.TaskName);
+                    response = GenerateDisplayString(searchResults);
                 }
                 else
                 {
-                    response = opHandler.Display(taskList);
+                    response = GenerateDisplayString(taskList);
                 }
             }
             else
             {
-                Task taskToModify = opHandler.LastListedTasks[oldIndex.Value];
-                response = opHandler.Modify(ref taskToModify, newTask, ref taskList, out successFlag);
+                Task taskToModify = lastListedTasks[oldIndex.Value];
+                response = ModifyTask(ref taskToModify, newTask, ref taskList, out successFlag);
             }
-            if (successFlag) opHandler.TrackOperation(this);
+            if (successFlag) TrackOperation();
             return response;
         }
     }

@@ -36,40 +36,40 @@ namespace ToDo
 
         public override string Execute(List<Task> taskList, Storage storageXML)
         {
-            OperationHandler opHandler = new OperationHandler(storageXML);
+            this.storageXML = storageXML;
             string response;
 
             List<Task> searchResults;
             if (index == null)
             {
-                searchResults = opHandler.Search(taskList, taskName, true);
+                searchResults = SearchForTasks(taskList, taskName, true);
                 if (searchResults.Count == 0)
                 {
                     //check substring
-                    searchResults = opHandler.Search(taskList, taskName, false);
+                    searchResults = SearchForTasks(taskList, taskName, false);
                     if (searchResults.Count == 0)
                         response = RESPONSE_DELETE_FAILURE;
-                    else response = opHandler.Display(searchResults);
+                    else response = GenerateDisplayString(searchResults);
                 }
                 else if (searchResults.Count == 1)
                 {
-                    response = opHandler.Delete(searchResults[0], taskList, out successFlag);
+                    response = DeleteTask(searchResults[0], taskList, out successFlag);
                 }
-                else response = opHandler.Display(searchResults);
+                else response = GenerateDisplayString(searchResults);
             }
-            else if (index < 0 || index > opHandler.LastListedTasks.Count - 1)
+            else if (index < 0 || index > lastListedTasks.Count - 1)
             {
                 return RESPONSE_INVALID_TASK_INDEX;
             }
             else
             {
-                Task taskToDelete = opHandler.LastListedTasks[index.Value];
+                Task taskToDelete = lastListedTasks[index.Value];
                 if (taskToDelete == null)
                     return RESPONSE_DELETE_ALREADY;
-                else response = opHandler.Delete(taskToDelete, taskList, out successFlag);
+                else response = DeleteTask(taskToDelete, taskList, out successFlag);
             }
 
-            if (successFlag) opHandler.TrackOperation(this);
+            if (successFlag) TrackOperation();
             return response;
         }
     }

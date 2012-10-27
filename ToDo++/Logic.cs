@@ -7,7 +7,6 @@ namespace ToDo
 {
     public class Logic
     {
-        OperationHandler operationHandler;
         CommandParser commandParser;
         StringParser stringParser;
         Settings mainSettings;
@@ -25,7 +24,6 @@ namespace ToDo
             mainSettings = new Settings();
             storage = new Storage("testfile.xml", "testsettings.xml");
             mainSettings.UpdateSettings(storage.LoadSettingsFromFile());
-            operationHandler = new OperationHandler(storage);
             stringParser = new StringParser();
             commandParser = new CommandParser(ref stringParser);
             taskList = storage.LoadTasksFromFile();
@@ -42,7 +40,7 @@ namespace ToDo
             {
                 AlertBox.Show(e.Message);
             }
-            if (operation == null) return "Null operation!";
+            if (operation == null) return Operation.REPONSE_INVALID_COMMAND;
             else return ExecuteCommand(operation);
         }
 

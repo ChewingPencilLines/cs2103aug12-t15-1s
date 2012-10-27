@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ToDo
 {
@@ -13,11 +11,11 @@ namespace ToDo
 
         public override string Execute(List<Task> taskList, Storage storageXML)
         {
-            OperationHandler opHandler = new OperationHandler(storageXML);
+            this.storageXML = storageXML;
             string response;
             // int numOfMatches;
-            // return opHandler.Search(out numOfMatches, taskList, "");            
-            response = opHandler.Display(taskList);
+            // return Search(out numOfMatches, taskList, "");            
+            response = GenerateDisplayString(taskList);
             return response;
         }
     }
