@@ -208,7 +208,7 @@
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(393, 282);
+            this.MinimumSize = new System.Drawing.Size(522, 385);
             this.Name = "UI";
             this.Text = "ToDo++";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UI_MouseDown);

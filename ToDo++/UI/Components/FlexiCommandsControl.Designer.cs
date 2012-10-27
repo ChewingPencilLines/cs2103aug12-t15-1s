@@ -34,8 +34,8 @@
             this.contextTree = new System.Windows.Forms.TreeView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.listedFlexiCommands = new System.Windows.Forms.ListBox();
-            this.DescriptionDetail = new System.Windows.Forms.RichTextBox();
-            this.DescriptionTitle = new System.Windows.Forms.Label();
+            this.descriptionLabel = new System.Windows.Forms.RichTextBox();
+            this.titleLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -121,38 +121,38 @@
             this.listedFlexiCommands.Size = new System.Drawing.Size(367, 48);
             this.listedFlexiCommands.TabIndex = 2;
             // 
-            // DescriptionDetail
+            // descriptionLabel
             // 
-            this.DescriptionDetail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.descriptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.DescriptionDetail.BackColor = System.Drawing.Color.SteelBlue;
-            this.DescriptionDetail.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.DescriptionDetail.ForeColor = System.Drawing.SystemColors.Info;
-            this.DescriptionDetail.Location = new System.Drawing.Point(201, 33);
-            this.DescriptionDetail.Name = "DescriptionDetail";
-            this.DescriptionDetail.Size = new System.Drawing.Size(181, 107);
-            this.DescriptionDetail.TabIndex = 13;
-            this.DescriptionDetail.Text = "Lting and typesetting industry. Lorem Ipsum has been the industry\'s standard dumm" +
+            this.descriptionLabel.BackColor = System.Drawing.Color.SteelBlue;
+            this.descriptionLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.descriptionLabel.ForeColor = System.Drawing.SystemColors.Info;
+            this.descriptionLabel.Location = new System.Drawing.Point(201, 33);
+            this.descriptionLabel.Name = "descriptionLabel";
+            this.descriptionLabel.Size = new System.Drawing.Size(181, 107);
+            this.descriptionLabel.TabIndex = 13;
+            this.descriptionLabel.Text = "Lting and typesetting industry. Lorem Ipsum has been the industry\'s standard dumm" +
     "y text ever since the 1500s, when an unknown printer took a galley of type ";
             // 
-            // DescriptionTitle
+            // titleLabel
             // 
-            this.DescriptionTitle.AutoSize = true;
-            this.DescriptionTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DescriptionTitle.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.DescriptionTitle.Location = new System.Drawing.Point(195, 3);
-            this.DescriptionTitle.Name = "DescriptionTitle";
-            this.DescriptionTitle.Size = new System.Drawing.Size(53, 25);
-            this.DescriptionTitle.TabIndex = 12;
-            this.DescriptionTitle.Text = "Title";
+            this.titleLabel.AutoSize = true;
+            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.titleLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.titleLabel.Location = new System.Drawing.Point(195, 3);
+            this.titleLabel.Name = "titleLabel";
+            this.titleLabel.Size = new System.Drawing.Size(53, 25);
+            this.titleLabel.TabIndex = 12;
+            this.titleLabel.Text = "Title";
             // 
             // FlexiCommandsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.Controls.Add(this.DescriptionDetail);
-            this.Controls.Add(this.DescriptionTitle);
+            this.Controls.Add(this.descriptionLabel);
+            this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.contextTree);
             this.Controls.Add(this.removeButton);
@@ -174,7 +174,7 @@
         private System.Windows.Forms.TreeView contextTree;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ListBox listedFlexiCommands;
-        private System.Windows.Forms.RichTextBox DescriptionDetail;
-        private System.Windows.Forms.Label DescriptionTitle;
+        private System.Windows.Forms.RichTextBox descriptionLabel;
+        private System.Windows.Forms.Label titleLabel;
     }
 }

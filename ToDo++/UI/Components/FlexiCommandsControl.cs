@@ -22,7 +22,6 @@ namespace ToDo
         {
             this.settings = settings;
             this.selectedFlexiCommands=new List<string>();
-            //this.selectedType = SelectedType.CommandSelected;
         }
 
         public FlexiCommandsControl()
@@ -136,6 +135,8 @@ namespace ToDo
 
         #endregion
 
+        #region EventHandlersForButtons
+
         private void addButton_Click(object sender, EventArgs e)
         {
             CustomMessageBox.Show("Add Command", "Enter your new command here");
@@ -153,6 +154,7 @@ namespace ToDo
             this.selectedCommand = ConvertStringToCommand(selected);
 
             UpdateFlexiCommandList();
+            UpdateDescription();
         }
 
         private void contextTree_AfterSelect(object sender, TreeViewEventArgs e)
@@ -163,7 +165,10 @@ namespace ToDo
             this.selectedContext = ConvertStringToContext(selected);
 
             UpdateFlexiCommandList();
+            UpdateDescription();
         }
+
+        #endregion
 
         private void UpdateFlexiCommandList()
         {
@@ -199,6 +204,44 @@ namespace ToDo
                 AlertBox.Show(e.Message);
             }
 
+        }
+
+        private void UpdateDescription()
+        {
+            string title="";
+            string description="";
+
+            if (this.selectedType == SelectedType.CommandSelected)
+            {
+                title = commandTree.SelectedNode.Text;
+                switch (selectedCommand)
+                {
+                    case CommandType.ADD:
+                        description = "This is a description for ADD Command";
+                        break;
+
+                    default:
+                        description = "Not Implemented Exception";
+                        break;
+                }
+            }
+            else if (this.selectedType == SelectedType.ContextSelected)
+            {
+                title = contextTree.SelectedNode.Text;
+                switch (selectedContext)
+                {
+                    case ContextType.CURRENT:
+                        description = "This is a description for Current Command";
+                        break;
+
+                    default:
+                        description = "Not Implemented Exception";
+                        break;
+                }
+            }
+
+            titleLabel.Text = title;
+            descriptionLabel.Text = description;
         }
 
     }

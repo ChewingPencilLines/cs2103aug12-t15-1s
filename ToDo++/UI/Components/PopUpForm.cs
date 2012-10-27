@@ -43,6 +43,11 @@ namespace ToDo
             subtitleLabel.Text = subTitle;
         }
 
+        public void SetUserInput(string input)
+        {
+            userInputBox.Text = input;
+        }
+
         public bool UserEnteredData()
         {
             if (userInput == "")
