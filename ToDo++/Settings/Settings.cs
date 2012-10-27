@@ -42,7 +42,7 @@ namespace ToDo
 
         public SettingsList()
         {
-            misc = new MiscSettings(false, false, false, 8);
+            misc = new MiscSettings(false, false, false, 9);
             userCommandKeywords = new Dictionary<string, CommandType>();
             userContextKeywords = new Dictionary<string, ContextType>();
         }
