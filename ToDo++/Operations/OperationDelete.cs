@@ -14,28 +14,24 @@ namespace ToDo
         // i will also catch the "all" keyword, letting u allow all search hits to be deleted immediately.
 
         private int? index;
-        private string deleteString;
+        private string taskName;
 
         public int? Index
         {
             get { return index; }
         }
 
-        public string DeleteString
+        public string TaskName
         {
-            get { return deleteString; }
+            get { return taskName; }
         }
         
-        public OperationDelete(int index)
+        public OperationDelete(string taskName, int[] indexRange)
         {
-            this.index = index - 1;
-            this.deleteString = null;
-        }
-
-        public OperationDelete(string deleteString)
-        {
-            this.index = null;
-            this.deleteString = deleteString;
+            if (indexRange == null) this.index = null;
+            else this.index = indexRange[TokenCommand.START_INDEX] - 1;
+            if (taskName == null) this.taskName = "";
+            else this.taskName = taskName;
         }
 
         public override string Execute(List<Task> taskList, Storage storageXML)
@@ -44,13 +40,13 @@ namespace ToDo
             string response;
 
             List<Task> searchResults;
-            if (index.HasValue == false && deleteString != null)
+            if (index == null)
             {
-                searchResults = opHandler.Search(taskList, deleteString, true);
+                searchResults = opHandler.Search(taskList, taskName, true);
                 if (searchResults.Count == 0)
                 {
                     //check substring
-                    searchResults = opHandler.Search(taskList, deleteString, false);
+                    searchResults = opHandler.Search(taskList, taskName, false);
                     if (searchResults.Count == 0)
                         response = RESPONSE_DELETE_FAILURE;
                     else response = opHandler.Display(searchResults);
@@ -65,17 +61,14 @@ namespace ToDo
             {
                 return RESPONSE_INVALID_TASK_INDEX;
             }
-            else if (deleteString == null)
+            else
             {
                 Task taskToDelete = opHandler.LastListedTasks[index.Value];
                 if (taskToDelete == null)
                     return RESPONSE_DELETE_ALREADY;
                 else response = opHandler.Delete(taskToDelete, taskList, out successFlag);
             }
-            else
-            {
-                return REPONSE_INVALID_COMMAND;
-            }
+
             if (successFlag) opHandler.TrackOperation(this);
             return response;
         }

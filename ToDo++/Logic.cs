@@ -42,7 +42,8 @@ namespace ToDo
             {
                 AlertBox.Show(e.Message);
             }
-            return ExecuteCommand(operation);
+            if (operation == null) return "Null operation!";
+            else return ExecuteCommand(operation);
         }
 
         /// <summary>

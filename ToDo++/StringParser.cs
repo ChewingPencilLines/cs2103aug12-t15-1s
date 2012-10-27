@@ -110,6 +110,7 @@ namespace ToDo
 
         static Regex date_daysWithSuffixes =
              new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
+        
         #endregion
 
         // ******************************************************************
@@ -291,7 +292,7 @@ namespace ToDo
             // Add remaining words
             string remainingStr = input.Substring(processedIndex);
             words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());
-            words = MergeCommandAndIndexKeywords(words);
+            //words = MergeCommandAndIndexKeywords(words);
             words = MergeDateAndTimeWords(words);
             return words;
         }
@@ -318,6 +319,8 @@ namespace ToDo
                return sb.ToString();
         }
 
+        //Moved to token generation
+        /*
         /// <summary>
         /// This method checks to see if the command is followed by an index.
         /// If it is, it merges the command with the index.
@@ -331,6 +334,7 @@ namespace ToDo
             CommandType commandType;
             for (int i = 0; i < words.Count; i++) // don't check last word
             {
+                
                 if (commandKeywords.TryGetValue(words[i].ToLower(), out commandType) && i != words.Count)
                 {
                     if ((commandType == CommandType.DELETE || commandType == CommandType.MODIFY || commandType == CommandType.DONE) && i + 1 < words.Count)
@@ -352,6 +356,7 @@ namespace ToDo
             }
             return output;
         }
+        */
 
         /// <summary>
         /// This method detects and merges all the date and time words into a single string
@@ -534,5 +539,6 @@ namespace ToDo
             return date_alphabeticFormat.IsMatch(theDate);
         }
         #endregion
+
     }
 }

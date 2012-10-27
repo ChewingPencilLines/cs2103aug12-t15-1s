@@ -69,6 +69,10 @@ namespace ToDo
 
         static Regex date_daysWithSuffixes =
              new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
+
+        Regex isNumericalRange =
+            new Regex(@"^(?<start>\d?\d?\d)(\-(?<end>\d?\d?\d))?");
+
         #endregion
 
         static Dictionary<string, CommandType> commandKeywords;
@@ -142,15 +146,18 @@ namespace ToDo
         /// <returns>List of tokens</returns>
         public List<Token> GenerateTokens(List<string> input)
         {
+            // make copy of string to be parsed.
+            List<string> parseString = new List<string>(input);
             List<Token> tokens = new List<Token>();
-            tokens.AddRange(GenerateCommandTokens(input));
-            tokens.AddRange(GenerateDayTokens(input));
-            tokens.AddRange(GenerateDateTokens(input));
-            tokens.AddRange(GenerateTimeTokens(input));
+            // must be done first to catch index ranges.
+            tokens.AddRange(GenerateCommandTokens(parseString));
+            tokens.AddRange(GenerateDayTokens(parseString));
+            tokens.AddRange(GenerateDateTokens(parseString));
+            tokens.AddRange(GenerateTimeTokens(parseString));
             // must be done after generating day/date/time tokens.
-            tokens.AddRange(GenerateContextTokens(input, tokens));
+            tokens.AddRange(GenerateContextTokens(parseString, tokens));
             // must be done last. all non-hits are taken to be literals            
-            tokens.AddRange(GenerateLiteralTokens(input, tokens));
+            tokens.AddRange(GenerateLiteralTokens(parseString, tokens));
             tokens.Sort(CompareByPosition);
             return tokens;
         }
@@ -163,31 +170,53 @@ namespace ToDo
         /// <returns>List of command tokens</returns>
         public List<Token> GenerateCommandTokens(List<string> inputWords)
         {
-            int index = 0;
             CommandType commandType;
             List<Token> tokens = new List<Token>();
-            foreach (string word in inputWords)
+            int[] userDefinedIndex = null;
+            for (int i = 0; i < inputWords.Count; i++)
             {
-                if (commandKeywords.TryGetValue(word.ToLower(), out commandType))
+                if (commandKeywords.TryGetValue(inputWords[i].ToLower(), out commandType))
                 {
-                    TokenCommand commandToken = new TokenCommand(index, commandType);
+                    // Check for numerical index ranges.
+                    if ((commandType == CommandType.DELETE || commandType == CommandType.MODIFY || commandType == CommandType.DONE))
+                    {
+                        int j = 1;
+                        string matchCheck = "";
+                        bool success = true;
+                        while (success && i + j < inputWords.Count) // Don't check last word.
+                        {
+                            matchCheck += inputWords[i + j];
+                            success = TryGetNumericalRange(matchCheck, out userDefinedIndex);
+                            if (success) inputWords[i + j] = "";
+                            j++;
+                        }
+                    }
+                    TokenCommand commandToken = new TokenCommand(i, commandType, userDefinedIndex);
                     tokens.Add(commandToken);
                 }
-                else
-                {
-                    int taskIndex;
-                    string[] multiWordCommand = word.Split();
-                    if (multiWordCommand.Length == 2 &&
-                        commandKeywords.TryGetValue(multiWordCommand[0].ToLower(), out commandType) &&
-                        Int32.TryParse(multiWordCommand[1], out taskIndex))
-                    {
-                        TokenCommand commandToken = new TokenCommand(index, commandType, taskIndex);
-                        tokens.Add(commandToken);
-                    }
-                }
-                index++;
             }
             return tokens;
+        }
+
+        private bool TryGetNumericalRange(string matchCheck, out int[] userDefinedIndex)
+        {
+            userDefinedIndex = null;
+            Match match = isNumericalRange.Match(matchCheck);
+            bool matchSuccess = match.Success;
+            if (matchSuccess)
+            {
+                userDefinedIndex = new int[TokenCommand.RANGE];
+                int startIndex, endIndex;
+                Int32.TryParse(match.Groups["start"].Value, out startIndex);
+                if (match.Groups["end"].Success)
+                {
+                    Int32.TryParse(match.Groups["end"].Value, out endIndex);
+                }
+                else endIndex = startIndex;
+                userDefinedIndex[TokenCommand.START_INDEX] = startIndex;
+                userDefinedIndex[TokenCommand.END_INDEX] = endIndex;
+            }
+            return matchSuccess;
         }
 
         /// <summary>

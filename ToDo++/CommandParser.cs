@@ -38,7 +38,7 @@ namespace ToDo
             DayOfWeek? startDay = null, endDay = null;
             DateTime? startCombined = null, endCombined = null;
             string taskName = null;
-            int? taskIndex = null;
+            int[] taskIndex = null;
             bool specificity = true;
 
             commandType = CommandType.INVALID;
@@ -160,7 +160,7 @@ namespace ToDo
         }
 
         // Create operation based on derived values, and whether they have been used.
-        private static Operation CreateOperation(CommandType commandType, DateTime? startCombined, DateTime? endCombined, string taskName, int? taskIndex, bool specificity)
+        private static Operation CreateOperation(CommandType commandType, DateTime? startCombined, DateTime? endCombined, string taskName, int[] taskIndex, bool specificity)
         {
             Task task;
             Operation newOperation = null;
@@ -170,22 +170,9 @@ namespace ToDo
                     task = GenerateNewTask(taskName, startCombined, endCombined, specificity);
                     newOperation = new OperationAdd(task);
                     break;
-                case CommandType.DELETE: 
-                    if(taskName!=null)
-                    {
-                        newOperation = new OperationDelete(taskName);
-                        break;
-                    }
-                    else if (taskIndex != null)
-                    {
-                        newOperation = new OperationDelete((int)taskIndex);
-                        break;
-                    }
-                    else
-                    {
-                        newOperation = new OperationDelete("");
-                        break;
-                    }                   
+                case CommandType.DELETE:
+                    newOperation = new OperationDelete(taskName, taskIndex);
+                    break;
                 case CommandType.DISPLAY:
                     newOperation = new OperationDisplay();
                     break;
@@ -193,7 +180,7 @@ namespace ToDo
                     task = GenerateNewTask(taskName, startCombined, endCombined, specificity);
                     if (taskName != null && taskIndex != null)
                     {
-                        newOperation = new OperationModify((int)taskIndex,task);
+                        newOperation = new OperationModify(taskIndex[TokenCommand.START_INDEX],task);
                         break;
                     }
                     else if (taskName != null)
@@ -226,7 +213,7 @@ namespace ToDo
                     }
                     else if (taskIndex != null)
                     {
-                        newOperation = new OperationMarkAsDone((int)taskIndex);
+                        newOperation = new OperationMarkAsDone(taskIndex);
                         break;
                     }
                     else
@@ -271,7 +258,7 @@ namespace ToDo
             }
             if (limit > combinedDT) //throw new Exception("End DateTime set to later then limit or DateTime that is already over was set!");
                 if (combinedDT != new DateTime(0001, 1, 1))
-                    AlertBox.Show("Note that date specified is past.");
+                    AlertBox.Show("Note that date specified is in the past.");
             return combinedDT;
         }
 

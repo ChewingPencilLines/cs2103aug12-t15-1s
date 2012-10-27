@@ -21,9 +21,10 @@ namespace ToDo
             get { return doneString; }
         }
 
-        public OperationMarkAsDone(int index)
+        public OperationMarkAsDone(int[] indexRange)
         {
-            this.index = index - 1;
+            if (indexRange == null) this.index = null;
+            else this.index = indexRange[TokenCommand.START_INDEX] - 1;
             this.doneString = null;
         }
 
