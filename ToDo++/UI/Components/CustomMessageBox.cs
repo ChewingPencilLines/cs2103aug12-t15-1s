@@ -14,7 +14,7 @@ namespace ToDo
         internal static void Show(string title,string subTitle)
         {
             popUp.SetTitle(title, subTitle);
-            popUp.userInput = "";
+            popUp.SetUserInput("");
             popUp.ShowDialog();
         }
 
