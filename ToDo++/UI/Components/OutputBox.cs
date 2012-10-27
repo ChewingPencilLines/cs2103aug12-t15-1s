@@ -85,12 +85,13 @@ namespace ToDo
         /// <param name="systemOutput">What ToDo++ returns as an output</param>
         public void DisplayCommand(string userInput,string systemOutput)
         {
-            SetFormat(Color.Blue, "User: ", 8);
-            SetFormat(Color.Black, userInput, 8);
-            SetFormat(Color.Red, "\n", 8);
-            SetFormat(Color.Red, "ToDo++: ", 8);
-            SetFormat(Color.Black, systemOutput, 8);
-            SetFormat(Color.Red, "\n", 8);
+            int currentSize = settings.GetTextSize();
+            SetFormat(Color.Blue, "User: ", currentSize);
+            SetFormat(Color.Black, userInput, currentSize);
+            SetFormat(Color.Red, "\n", currentSize);
+            SetFormat(Color.Red, "ToDo++: ", currentSize);
+            SetFormat(Color.Black, systemOutput, currentSize);
+            SetFormat(Color.Red, "\n", currentSize);
             this.ScrollToCaret();
         }
 

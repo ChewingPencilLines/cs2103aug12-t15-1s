@@ -337,7 +337,7 @@ namespace ToDo
         {
             string input = textInput.Text;
             string output = logic.ProcessCommand(input);
-            outputBox.SetOutputSize(logic.MainSettings.GetTextSize());
+            //outputBox.SetOutputSize(logic.MainSettings.GetTextSize());
             outputBox.DisplayCommand(input, output);
             textInput.Clear();
         }
