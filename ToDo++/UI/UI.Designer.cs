@@ -104,7 +104,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Enabled = false;
             this.pictureBox1.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.ErrorImage")));
-            this.pictureBox1.Image = global::ToDo.Properties.Resources.CoverPhoto;
+            this.pictureBox1.Image = global::ToDo.Properties.Resources.CoverPhotoFinal;
             this.pictureBox1.Location = new System.Drawing.Point(7, 47);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(506, 29);
@@ -180,7 +180,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(501, 266);
+            this.tabPage2.Size = new System.Drawing.Size(501, 271);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Preferences";
             // 

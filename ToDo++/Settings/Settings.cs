@@ -49,12 +49,13 @@ namespace ToDo
 
         public bool ContainsCommandKeyword(string userKeyword,CommandType commandType)
         {
-            CommandType match;
-            if (userCommandKeywords.TryGetValue(userKeyword, out match))
+            CommandType passed;
+            if (userCommandKeywords.TryGetValue(userKeyword, out passed))
             {
-                if (match == commandType)
+                if (passed == commandType)
                     return true;
-                else return false;
+                else 
+                    return false;
             }
             else
                 return false;
@@ -62,10 +63,10 @@ namespace ToDo
 
         public bool ContainsContextKeyword(string userKeyword, ContextType commandType)
         {
-            ContextType match;
-            if (userContextKeywords.TryGetValue(userKeyword, out match))
+            ContextType passed;
+            if (userContextKeywords.TryGetValue(userKeyword, out passed))
             {
-                if (match == commandType)
+                if (passed == commandType)
                     return true;
                 else return false;
             }
@@ -134,26 +135,22 @@ namespace ToDo
         /// </summary>
         /// <param name="newKeyword">New Command that is to be added</param>
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
-        internal static void AddCommandKeyword(string newKeyword, CommandType commandType)
+        public void AddCommandKeyword(string newKeyword, CommandType commandType)
         {
-            try
-            {
-                if (settingsList.ContainsCommandKeyword(newKeyword,commandType))
-                    throw new RepeatCommandException("There is such a command in the list already");
-                settingsList.userCommandKeywords.Add(newKeyword, commandType);
-            }
-            catch (RepeatCommandException e)
-            {
-                MessageBox.Show(e.Message);
-            }
-
+            if (settingsList.ContainsCommandKeyword(newKeyword, commandType))
+                throw new RepeatCommandException("There is such a command in the list already");
+            if (settingsList.userContextKeywords.ContainsKey(newKeyword))
+                throw new RepeatCommandException("There is a repeat keyword already");
+            if (settingsList.userCommandKeywords.ContainsKey(newKeyword))
+                throw new RepeatCommandException("There is a repeat keyword already");
+            settingsList.userCommandKeywords.Add(newKeyword, commandType);
         }
 
         /// <summary>
         /// This method removes the specified command
         /// </summary>
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
-        internal static void RemoveCommandKeyword(string keywordToRemove)
+        public void RemoveCommandKeyword(string keywordToRemove)
         {
             settingsList.userCommandKeywords.Remove(keywordToRemove);
         }
@@ -184,26 +181,22 @@ namespace ToDo
         /// </summary>
         /// <param name="newKeyword">New Command that is to be added</param>
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
-        internal static void AddContextKeyword(string newKeyword, ContextType contextType)
+        public void AddContextKeyword(string newKeyword, ContextType contextType)
         {
-            try
-            {
-                if (settingsList.ContainsContextKeyword(newKeyword, contextType))
-                    throw new RepeatCommandException("There is such a command in the list already");
-                settingsList.userContextKeywords.Add(newKeyword, contextType);
-            }
-            catch (RepeatCommandException e)
-            {
-                MessageBox.Show(e.Message);
-            }
-
+            if (settingsList.ContainsContextKeyword(newKeyword, contextType))
+                throw new RepeatCommandException("There is such a command in the list already");
+            if (settingsList.userContextKeywords.ContainsKey(newKeyword))
+                throw new RepeatCommandException("There is a repeat keyword already");
+            if (settingsList.userCommandKeywords.ContainsKey(newKeyword))
+                throw new RepeatCommandException("There is a repeat keyword already");
+            settingsList.userContextKeywords.Add(newKeyword, contextType);
         }
 
         /// <summary>
         /// This method removes the specified command
         /// </summary>
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
-        internal static void RemoveContextKeyword(string keywordToRemove)
+        public void RemoveContextKeyword(string keywordToRemove)
         {
             settingsList.userContextKeywords.Remove(keywordToRemove);
         }
@@ -213,7 +206,7 @@ namespace ToDo
         /// </summary>
         /// <param name="contextType">Specify the type of Command you wish to see User Commands of</param>
         /// <returns>Returns a list of added commands</returns>
-        internal static List<string> GetContextKeywordList(ContextType contextType)
+        public List<string> GetContextKeywordList(ContextType contextType)
         {
             List<string> getCommands = new List<string>();
             foreach (var pair in settingsList.userContextKeywords)
