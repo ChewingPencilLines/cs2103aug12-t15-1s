@@ -8,6 +8,7 @@ namespace ToDo
     {
         public OperationRedo()
         { }
+
         public override string Execute(List<Task> taskList, Storage storageXML)
         {
             throw new NotImplementedException();

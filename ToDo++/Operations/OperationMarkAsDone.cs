@@ -9,16 +9,6 @@ namespace ToDo
         private int? index;
         private string doneString;
 
-        public int? Index
-        {
-            get { return index; }
-        }
-
-        public string DoneString
-        {
-            get { return doneString; }
-        }
-
         public OperationMarkAsDone(int[] indexRange)
         {
             if (indexRange == null) this.index = null;

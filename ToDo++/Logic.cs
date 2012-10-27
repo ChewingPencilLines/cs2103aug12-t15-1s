@@ -44,23 +44,6 @@ namespace ToDo
             else return ExecuteCommand(operation);
         }
 
-        /// <summary>
-        /// This method writes current settings to file
-        /// </summary>
-        /// <param name="settingsList"></param>
-        /// <returns></returns>
-        public bool UpdateSettingsFile(SettingsList settings)
-        {
-            return storage.WriteSettingsToFile(settings);
-        }
-        
-        private string ExecuteCommand(Operation operation)
-        {
-            string response;
-            response = operation.Execute(taskList, storage);
-            return response;
-        }
-
         private Operation ParseCommand(string command)
         {
             if (command.Equals(null))
@@ -73,6 +56,23 @@ namespace ToDo
                 return derivedOperation;
             }
         }
-    }
- 
+
+        private string ExecuteCommand(Operation operation)
+        {
+            string response;
+            response = operation.Execute(taskList, storage);
+            return response;
+        }
+
+        /// <summary>
+        /// This method writes current settings to file
+        /// </summary>
+        /// <param name="settingsList"></param>
+        /// <returns></returns>
+        public bool UpdateSettingsFile(SettingsList settings)
+        {
+            return storage.WriteSettingsToFile(settings);
+        }
+
+    } 
 }

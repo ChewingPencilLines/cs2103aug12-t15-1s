@@ -11,23 +11,6 @@ namespace ToDo
         private string searchString = "";
         private DateTime? startTime = null, endTime = null;
 
-        public DateTime? EndTime
-        {
-            get { return endTime; }
-            //set { endTime = value; }
-        }
-
-        public DateTime? StartTime
-        {
-            get { return startTime; }
-            //set { startTime = value; }
-        }
-
-        public string SearchString
-        {
-            get { return searchString; }
-        }
-
         public OperationSearch(string searchString, DateTime? startTime, DateTime? endTime)
         {
             this.searchString = searchString;

@@ -15,17 +15,7 @@ namespace ToDo
 
         private int? index;
         private string taskName;
-
-        public int? Index
-        {
-            get { return index; }
-        }
-
-        public string TaskName
-        {
-            get { return taskName; }
-        }
-        
+                
         public OperationDelete(string taskName, int[] indexRange)
         {
             if (indexRange == null) this.index = null;
