@@ -46,16 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GlobalEventHandlers.cs" />
-    <Compile Include="Operations\OperationAdd.cs" />
-    <Compile Include="Operations\OperationDelete.cs" />
-    <Compile Include="Operations\OperationDisplay.cs" />
-    <Compile Include="Operations\OperationMarkAsDone.cs" />
-    <Compile Include="Operations\OperationModify.cs" />
-    <Compile Include="Operations\OperationPostpone.cs" />
-    <Compile Include="Operations\OperationRedo.cs" />
-    <Compile Include="Operations\OperationSearch.cs" />
-    <Compile Include="Operations\OperationSort.cs" />
-    <Compile Include="Operations\OperationUndo.cs" />
     <Compile Include="TaskComparer.cs" />
     <Compile Include="UI\Components\InputBox.cs">
       <SubType>Component</SubType>
@@ -90,7 +80,7 @@
       <DependentUpon>FlexiCommandsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Logic.cs" />
-    <Compile Include="Operations\Operation.cs" />
+    <Compile Include="Operation.cs" />
     <Compile Include="OperationHandler.cs" />
     <Compile Include="UI\Components\PopUpForm.cs">
       <SubType>Form</SubType>
@@ -184,6 +174,7 @@
     <Content Include="Resources\CoverPhoto.png" />
     <None Include="Resources\folder.png" />
     <None Include="Resources\help.png" />
+    <None Include="Resources\CoverPhotoFinal.png" />
     <Content Include="Resources\icon.ico" />
     <None Include="Resources\tempImage.png" />
   </ItemGroup>
