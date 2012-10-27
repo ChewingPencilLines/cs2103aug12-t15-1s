@@ -106,9 +106,9 @@
             this.Controls.Add(this.confirmButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.userInputBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "PopUpForm";
-            this.Text = "PopUpForm";
+            this.Text = "Pop Up";
             this.ResumeLayout(false);
             this.PerformLayout();
 
