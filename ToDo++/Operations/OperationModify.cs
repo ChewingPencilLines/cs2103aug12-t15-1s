@@ -6,17 +6,7 @@ namespace ToDo
     {
         private int? oldIndex;
         private Task newTask;
-
-        public int? OldIndex
-        {
-            get { return oldIndex; }
-        }
-
-        public Task NewTask
-        {
-            get { return newTask; }
-        }
-
+        
         public OperationModify(int Previous, Task Revised)
         {
             oldIndex = Previous - 1;
