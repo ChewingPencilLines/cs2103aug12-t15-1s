@@ -35,15 +35,15 @@ namespace ToDo
         // ******************************************************************
 
         #region Getter Methods For Dictionaries & List
-        public Dictionary<string, CommandType> getCommandKeywords()
+        public static Dictionary<string, CommandType> getCommandKeywords()
         {
             return commandKeywords;
         }
-        public Dictionary<string, Month> getMonthKeywords()
+        public static Dictionary<string, Month> getMonthKeywords()
         {
             return monthKeywords;
         }
-        public List<string> getTimeSuffixes()
+        public static List<string> getTimeSuffixes()
         {
             return timeSuffixes;
         }
@@ -185,7 +185,7 @@ namespace ToDo
         // ******************************************************************
 
         #region Public Methods
-        internal static void AddUserCommand(string userCommand, CommandType commandType)
+        internal void AddUserCommand(string userCommand, CommandType commandType)
         {
             try
             {
@@ -199,7 +199,7 @@ namespace ToDo
             }
         }
 
-        internal static void ResetCommandKeywords()
+        internal void ResetCommandKeywords()
         {
             InitializeCommandKeywords();
         }
@@ -210,7 +210,7 @@ namespace ToDo
         /// </summary>
         /// <param name="input"></param>
         /// <returns>List containing all matching sets of delimiters as integer pairs</returns>
-        internal static List<int[]> FindPositionOfDelimiters(string input)
+        internal List<int[]> FindPositionOfDelimiters(string input)
         {
             List<int[]> indexOfDelimiters = new List<int[]>();
             int startIndex = 0, endIndex = -1;
@@ -241,7 +241,7 @@ namespace ToDo
         /// <param name="input">The string of words to be parsed</param>
         /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings</param>
         /// <returns>The list of tokens</returns>
-        internal static List<Token> ParseStringIntoTokens(string input, List<int[]> indexOfDelimiters = null)
+        internal List<Token> ParseStringIntoTokens(string input, List<int[]> indexOfDelimiters = null)
         {
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
             TokenGenerator tokenGenerator = new TokenGenerator();
@@ -261,7 +261,7 @@ namespace ToDo
         /// <param name="input">The string of words to be split</param>
         /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings</param>
         /// <returns>List of substrings</returns>
-        private static List<string> SplitStringIntoSubstrings(string input, List<int[]> indexOfDelimiters)
+        private List<string> SplitStringIntoSubstrings(string input, List<int[]> indexOfDelimiters)
         {
             List<string> words = new List<string>();
             int processedIndex = 0, removedCount = 0;
@@ -280,6 +280,7 @@ namespace ToDo
 
                 // Get absolute substring without the delimiter characters and add to return list
                 string absoluteSubstr = input.Substring(startIndex + 1, count - 2);
+                absoluteSubstr = MarkWordsAsAbsolute(absoluteSubstr);
                 words.Add(absoluteSubstr);
 
                 // Update processed index state and count of removed characters
@@ -295,13 +296,35 @@ namespace ToDo
             return words;
         }
 
+        public static string MarkWordsAsAbsolute (string absoluteSubstr)
+        {
+            string[] words = absoluteSubstr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries);
+            string output = "";
+            foreach (string word in words)
+            {
+                output += "\"" + word + "\" ";
+            }
+            output.TrimEnd();
+            return output;
+        }
+
+        public static string UnmarkWordsAsAbsolute(string absoluteSubstr)
+        {
+               StringBuilder sb = new StringBuilder();
+               foreach (char c in absoluteSubstr) {
+                  if (c != '\"')
+                     sb.Append(c);                  
+               }
+               return sb.ToString();
+        }
+
         /// <summary>
         /// This method checks to see if the command is followed by an index.
         /// If it is, it merges the command with the index.
         /// </summary>
         /// <param name="input">The list of separated words</param>
         /// <returns>List of string with command(s) merged with index(es)</returns>
-        private static List<string> MergeCommandAndIndexKeywords(List<string> words)
+        private List<string> MergeCommandAndIndexKeywords(List<string> words)
         {
             List<string> output = new List<string>();
             bool merged = false;
@@ -338,7 +361,7 @@ namespace ToDo
         /// </summary>
         /// <param name="input">The list of unmerged delimited words</param>
         /// <returns>List of separate words or merged time/date phrases</returns>
-        private static List<string> MergeDateAndTimeWords(List<string> input)
+        private List<string> MergeDateAndTimeWords(List<string> input)
         {
             input = MergeTimeWords(input);
             input = MergeDateWords(input);
@@ -352,7 +375,7 @@ namespace ToDo
         /// </summary>
         /// <param name="input">The list of unmerged delimited words</param>
         /// <returns>List of separate words or merged time phrases</returns>
-        private static List<string> MergeTimeWords(List<string> input)
+        private List<string> MergeTimeWords(List<string> input)
         {
             List<string> output = new List<string>();
             int position = 0;
@@ -382,7 +405,7 @@ namespace ToDo
         /// <param name="input">The list of unmerged delimited words</param>
         /// <param name="position">The index of the word in the input list to be checked</param>
         /// <returns>True if the indicated word is part of a time phrase and false if otherwise</returns>
-        private static bool MergeWord_IfValidTime(ref List<string> output, List<string> input, int position)
+        private bool MergeWord_IfValidTime(ref List<string> output, List<string> input, int position)
         {
             string backHalf = input.ElementAt(position);
             string frontHalf;
@@ -409,7 +432,7 @@ namespace ToDo
         /// </summary>
         /// <param name="input">The list of unmerged delimited words</param>
         /// <returns>List of separate words or merged date phrases</returns>
-        private static List<string> MergeDateWords(List<string> input)
+        private List<string> MergeDateWords(List<string> input)
         {
             List<string> output = new List<string>();
             int position = 0, skipWords = 0;
@@ -452,7 +475,7 @@ namespace ToDo
         /// <param name="position">The index of the word  in the input list to be checked</param>
         /// <param name="numberOfWords">The number of words behind the indicated word that were merged to form the date</param>
         /// <returns>True if the indicated word is part of a date phrase and false if otherwise</returns>
-        private static bool MergeWord_IfValidAlphabeticDate(ref List<string> output, List<string> input, int position, ref int numberOfWords)
+        private bool MergeWord_IfValidAlphabeticDate(ref List<string> output, List<string> input, int position, ref int numberOfWords)
         {
             string month = input.ElementAt(position);
             string mergedWord = month;
@@ -494,7 +517,7 @@ namespace ToDo
         // ******************************************************************
 
         #region Comparison Methods For Regexes
-        private static bool IsValidTime(string theTime)
+        private bool IsValidTime(string theTime)
         {
             return (time_24HourFormat.IsMatch(theTime) || time_12HourFormat.IsMatch(theTime));
         }

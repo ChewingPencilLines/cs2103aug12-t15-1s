@@ -14,10 +14,6 @@ namespace ToDo
             get { return OperationHandler.lastListedTasks; }
             //set { OperationHandler.lastListedTasks = value; }
         }
-        public static void Initialze_ListOfLastDisplayedTasks()
-        {
-            OperationHandler.lastListedTasks = new List<Task>(); 
-        }
 
         static Stack<Operation> undoStack;
         static Stack<Operation> redoStack;
@@ -48,6 +44,11 @@ namespace ToDo
             undoStack = new Stack<Operation>();
             undoTask = new Stack<Task>();
             this.storageXML = storageXML;
+        }
+
+        static OperationHandler()
+        {
+            lastListedTasks = new List<Task>();
         }
         
         public string Add(Task taskToAdd, List<Task> taskList, out bool successFlag)

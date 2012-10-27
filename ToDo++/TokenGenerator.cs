@@ -71,7 +71,6 @@ namespace ToDo
              new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
         #endregion
 
-        StringParser stringParser = new StringParser();
         static Dictionary<string, CommandType> commandKeywords;
         static Dictionary<string, ContextType> contextKeywords;
         static Dictionary<string, DayOfWeek> dayKeywords;
@@ -82,9 +81,9 @@ namespace ToDo
 
         public TokenGenerator()
         {
-            commandKeywords = stringParser.getCommandKeywords();
-            monthKeywords = stringParser.getMonthKeywords();
-            timeSuffixes = stringParser.getTimeSuffixes();
+            commandKeywords = StringParser.getCommandKeywords();
+            monthKeywords = StringParser.getMonthKeywords();
+            timeSuffixes = StringParser.getTimeSuffixes();
             InitializeDateTimeKeywords();
             InitializeContextKeywords();
         }
@@ -150,7 +149,7 @@ namespace ToDo
             tokens.AddRange(GenerateTimeTokens(input));
             // must be done after generating day/date/time tokens.
             tokens.AddRange(GenerateContextTokens(input, tokens));
-            // must be done last. all non-hits are taken to be literals
+            // must be done last. all non-hits are taken to be literals            
             tokens.AddRange(GenerateLiteralTokens(input, tokens));
             tokens.Sort(CompareByPosition);
             return tokens;
@@ -162,7 +161,7 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of command tokens</returns>
-        public static List<Token> GenerateCommandTokens(List<string> inputWords)
+        public List<Token> GenerateCommandTokens(List<string> inputWords)
         {
             int index = 0;
             CommandType commandType;
@@ -197,7 +196,7 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of day tokens</returns>
-        public static List<Token> GenerateDayTokens(List<string> input)
+        public List<Token> GenerateDayTokens(List<string> input)
         {
             List<Token> dayTokens = new List<Token>();
             DayOfWeek day;
@@ -224,7 +223,7 @@ namespace ToDo
 
         // note: currently, the method just ignores invalid dates such as 30th feb
         // might wish to change the catch case to flag the invalid date input
-        public static List<TokenDate> GenerateDateTokens(List<string> input)
+        public List<TokenDate> GenerateDateTokens(List<string> input)
         {
             string dayString = String.Empty;
             string monthString = String.Empty;
@@ -294,7 +293,7 @@ namespace ToDo
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of time tokens</returns>
         // uses a combined regex to get hour, minute, second via tags and return a TimeSpan.
-        public static List<Token> GenerateTimeTokens(List<string> input)
+        public List<Token> GenerateTimeTokens(List<string> input)
         {
             List<Token> timeTokens = new List<Token>();
             Match match;
@@ -339,7 +338,7 @@ namespace ToDo
             return timeTokens;
         }
 
-        private static bool CheckIfIsValidTimeInWordFormat(string word)
+        private bool CheckIfIsValidTimeInWordFormat(string word)
         {
             foreach (string timeSpecificKeyword in timeSpecificKeywords)
             {
@@ -354,10 +353,11 @@ namespace ToDo
             return false;
         }
 
-        private static bool GetDefaultTimeValues(string word, ref int hours)
+        private bool GetDefaultTimeValues(string word, ref int hours)
         {
             switch (word.ToLower())
             {
+                //@ivan -> jenna: unmagic number these pls
                 case "noon":
                     hours = 12;
                     return true;
@@ -377,11 +377,12 @@ namespace ToDo
                     hours = 0;
                     return false;
                 default:
-                    throw new Exception("Word not recognized as a valid day input!");
+                    Debug.Assert(false, "Control fell to default case statement in GetDefaultTimeValues. Assumption is that only hard-coded words are allowed currently.");
+                    return false;
             }
         }
 
-        private static int ConvertTo24HoursFormat(string format, int hours)
+        private int ConvertTo24HoursFormat(string format, int hours)
         {
             if (format.ToLower() == "pm" && hours != 12)
                 hours += 12;
@@ -396,7 +397,7 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of context tokens</returns>
-        public static List<TokenContext> GenerateContextTokens(List<string> input, List<Token> parsedTokens)
+        public List<TokenContext> GenerateContextTokens(List<string> input, List<Token> parsedTokens)
         {
             int index = 0;
             ContextType context;
@@ -425,7 +426,7 @@ namespace ToDo
         /// <param name="input">The list of input words</param>
         /// <param name="parsedTokens">The list of parsedTokens</param>
         /// <returns>List of context tokens</returns>
-        public static List<Token> GenerateLiteralTokens(List<string> input, List<Token> parsedTokens)
+        public List<Token> GenerateLiteralTokens(List<string> input, List<Token> parsedTokens)
         {
             List<Token> literalTokens = new List<Token>();
             foreach (Token token in parsedTokens)
@@ -437,7 +438,7 @@ namespace ToDo
             foreach (string remainingWord in input)
             {
                 if (remainingWord != null)
-                    literal = literal + remainingWord + " ";
+                    literal = literal + StringParser.UnmarkWordsAsAbsolute(remainingWord) + " ";
                 else if (remainingWord == null && literal != String.Empty)
                     AddLiteralToken(ref literal, index, ref literalTokens);
                 index++;
@@ -455,7 +456,7 @@ namespace ToDo
         // ******************************************************************
 
         #region Private Helper Methods
-        private static bool IsValidDate(string theDate)
+        private bool IsValidDate(string theDate)
         {
             return StringParser.IsValidNumericDate(theDate) || StringParser.IsValidAlphabeticDate(theDate);
         }
@@ -466,7 +467,7 @@ namespace ToDo
         /// </summary>
         /// <param name="theWord">The string to be searched/matched</param>
         /// <returns>The match found</returns>
-        private static Match GetDateMatch(string theWord)
+        private Match GetDateMatch(string theWord)
         {
             Match theMatch = date_numericFormat.Match(theWord);
             if (!theMatch.Success)
@@ -487,7 +488,7 @@ namespace ToDo
         /// <param name="day">The string value of the retrieved day group</param>
         /// <param name="month">The string value of the retrieved month group</param>
         /// <param name="year">The string value of the retrieved year group</param>
-        private static void GetMatchTagValues(Match match, ref string day, ref string month, ref string year)
+        private void GetMatchTagValues(Match match, ref string day, ref string month, ref string year)
         {
             day = match.Groups["day"].Value;
             month = match.Groups["month"].Value;
@@ -504,7 +505,7 @@ namespace ToDo
         /// <param name="dayInt">The output day integer</param>
         /// <param name="monthInt">The output month integer</param>
         /// <param name="yearInt">The output year integer</param>      
-        private static void ConvertMatchTagValuesToInts(string dayString, string monthString, string yearString, ref int dayInt, ref int monthInt, ref int yearInt)
+        private void ConvertMatchTagValuesToInts(string dayString, string monthString, string yearString, ref int dayInt, ref int monthInt, ref int yearInt)
         {
             dayString = RemoveSuffixesIfRequired(dayString);
             int.TryParse(dayString, out dayInt);
@@ -519,7 +520,7 @@ namespace ToDo
         /// </summary>
         /// <param name="day">The input day string (may contain suffixes)</param>
         /// <returns>The day string with no suffixes</returns>
-        private static string RemoveSuffixesIfRequired(string day)
+        private string RemoveSuffixesIfRequired(string day)
         {
             // No day input
             if (day == String.Empty)
@@ -541,7 +542,7 @@ namespace ToDo
         /// </summary>
         /// <param name="month">The input month string (can be numeric of alphabetic)</param>
         /// <returns>An integer month index</returns>
-        private static int ConvertToNumericMonth(string month)
+        private int ConvertToNumericMonth(string month)
         {
             Month monthType;
             int monthInt = 0;
@@ -560,7 +561,7 @@ namespace ToDo
             return monthInt;
         }
 
-        private static DateTime TryParsingDate(DateTime date, int year, int month, int day, bool ignoreFailure)
+        private DateTime TryParsingDate(DateTime date, int year, int month, int day, bool ignoreFailure)
         {
             try
             {
@@ -587,7 +588,7 @@ namespace ToDo
         /// <param name="x">The first token</param>
         /// <param name="x">The second token to be compared with</param>
         /// <returns>-1, 1, or 0, indicating the results of the comparison</returns>
-        private static int CompareByPosition(Token x, Token y)
+        private int CompareByPosition(Token x, Token y)
         {
             int xPosition = x.Position;
             int yPosition = y.Position;
@@ -607,7 +608,7 @@ namespace ToDo
         /// <param name="tokens">The list of input tokens</param>
         /// <param name="p">The position of the required token</param>
         /// <returns>The retrieved token</returns>
-        private static object GetTokenAtPosition(List<Token> tokens, int p)
+        private object GetTokenAtPosition(List<Token> tokens, int p)
         {
             foreach (Token token in tokens)
             {
@@ -616,7 +617,7 @@ namespace ToDo
             return null;
         }
 
-        private static void AddLiteralToken(ref string literal, int index, ref List<Token> literalTokens)
+        private void AddLiteralToken(ref string literal, int index, ref List<Token> literalTokens)
         {
             literal = literal.Trim();
             TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
