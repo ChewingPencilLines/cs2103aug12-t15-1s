@@ -26,7 +26,6 @@ namespace ToDo
             storage = new Storage("testfile.xml", "testsettings.xml");
             mainSettings.UpdateSettings(storage.LoadSettingsFromFile());
             operationHandler = new OperationHandler(storage);
-            OperationHandler.Initialze_ListOfLastDisplayedTasks();
             stringParser = new StringParser();
             commandParser = new CommandParser(ref stringParser);
             taskList = storage.LoadTasksFromFile();

@@ -24,7 +24,7 @@ namespace ToDo
         {
             // Get position of delimiters so we can treat those substrings as a single word.
             List<int[]> positionsOfDelimiters = GetPositionsOfDelimiters(input);
-            List<Token> tokens = StringParser.ParseStringIntoTokens(input, positionsOfDelimiters);
+            List<Token> tokens = stringParser.ParseStringIntoTokens(input, positionsOfDelimiters);
             return GenerateOperation(tokens);            
         }
 
@@ -351,7 +351,7 @@ namespace ToDo
         private List<int[]> GetPositionsOfDelimiters(string input)
         {
             List<int[]> positionsOfDelimiters;
-            positionsOfDelimiters = StringParser.FindPositionOfDelimiters(input);
+            positionsOfDelimiters = stringParser.FindPositionOfDelimiters(input);
             SortIndexes(ref positionsOfDelimiters);
             RemoveBadIndexes(ref positionsOfDelimiters);
             return positionsOfDelimiters;

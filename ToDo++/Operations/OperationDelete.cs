@@ -61,7 +61,7 @@ namespace ToDo
                 }
                 else response = opHandler.Display(searchResults);
             }
-            else if (index < 0 || index > taskList.Count - 1)
+            else if (index < 0 || index > opHandler.LastListedTasks.Count - 1)
             {
                 return RESPONSE_INVALID_TASK_INDEX;
             }
