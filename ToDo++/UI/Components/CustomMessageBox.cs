@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ToDo;
 
 namespace ToDo
 {
@@ -42,5 +43,17 @@ namespace ToDo
             popUp.SetAlertText(alertText);
             popUp.ShowDialog();
         }
+    }
+
+    public static class FontBox
+    {
+        
+        private static FontDialogToDo popUp = new FontDialogToDo();
+
+        internal static void Show()
+        {
+            popUp.ShowDialog();
+        }
+
     }
 }

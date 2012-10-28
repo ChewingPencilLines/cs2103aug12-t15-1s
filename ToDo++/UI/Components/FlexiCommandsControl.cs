@@ -168,6 +168,12 @@ namespace ToDo
             UpdateDescription();
         }
 
+        private void removeButton_Click(object sender, EventArgs e)
+        {
+            RemoveFlexiCommandFromSettings(this.listedFlexiCommands.SelectedItem.ToString());
+            UpdateFlexiCommandList();
+        }
+
         #endregion
 
         private void UpdateFlexiCommandList()
@@ -204,6 +210,21 @@ namespace ToDo
                 AlertBox.Show(e.Message);
             }
 
+        }
+
+        private void RemoveFlexiCommandFromSettings(string flexiCommand)
+        {
+            try
+            {
+                if (this.selectedType == SelectedType.CommandSelected)
+                    settings.RemoveCommandKeyword(flexiCommand);
+                else if (this.selectedType == SelectedType.ContextSelected)
+                    settings.RemoveContextKeyword(flexiCommand);
+            }
+            catch (RepeatCommandException e)
+            {
+                AlertBox.Show(e.Message);
+            }
         }
 
         private void UpdateDescription()
@@ -243,6 +264,8 @@ namespace ToDo
             titleLabel.Text = title;
             descriptionLabel.Text = description;
         }
+
+
 
     }
 }

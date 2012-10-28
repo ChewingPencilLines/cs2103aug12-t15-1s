@@ -29,18 +29,21 @@
         private void InitializeComponent()
         {
             this.preferencesTitle = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.preferencesTree = new System.Windows.Forms.TreeView();
             this.preferencesSelector = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.startingOptions = new ToDo.StartingOptions();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.flexiCommandsControl = new ToDo.FlexiCommandsControl();
+            this.fontPage = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.preferencesTree = new System.Windows.Forms.TreeView();
+            this.button1 = new System.Windows.Forms.Button();
             this.preferencesTitle.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.preferencesSelector.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.fontPage.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // preferencesTitle
@@ -57,32 +60,6 @@
             this.preferencesTitle.TabStop = false;
             this.preferencesTitle.Text = "Starting Options";
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox2.Controls.Add(this.preferencesTree);
-            this.groupBox2.ForeColor = System.Drawing.Color.Aqua;
-            this.groupBox2.Location = new System.Drawing.Point(3, 0);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(114, 308);
-            this.groupBox2.TabIndex = 5;
-            this.groupBox2.TabStop = false;
-            // 
-            // preferencesTree
-            // 
-            this.preferencesTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.preferencesTree.BackColor = System.Drawing.Color.SteelBlue;
-            this.preferencesTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.preferencesTree.ForeColor = System.Drawing.SystemColors.Info;
-            this.preferencesTree.LineColor = System.Drawing.Color.White;
-            this.preferencesTree.Location = new System.Drawing.Point(3, 15);
-            this.preferencesTree.Name = "preferencesTree";
-            this.preferencesTree.Size = new System.Drawing.Size(102, 283);
-            this.preferencesTree.TabIndex = 0;
-            this.preferencesTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.preferencesTree_AfterSelect);
-            // 
             // preferencesSelector
             // 
             this.preferencesSelector.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -90,6 +67,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.preferencesSelector.Controls.Add(this.tabPage1);
             this.preferencesSelector.Controls.Add(this.tabPage2);
+            this.preferencesSelector.Controls.Add(this.fontPage);
             this.preferencesSelector.Location = new System.Drawing.Point(6, 17);
             this.preferencesSelector.Name = "preferencesSelector";
             this.preferencesSelector.SelectedIndex = 0;
@@ -137,6 +115,53 @@
             this.flexiCommandsControl.Size = new System.Drawing.Size(329, 258);
             this.flexiCommandsControl.TabIndex = 0;
             // 
+            // fontPage
+            // 
+            this.fontPage.BackColor = System.Drawing.Color.SteelBlue;
+            this.fontPage.Controls.Add(this.button1);
+            this.fontPage.Location = new System.Drawing.Point(4, 22);
+            this.fontPage.Name = "fontPage";
+            this.fontPage.Padding = new System.Windows.Forms.Padding(3);
+            this.fontPage.Size = new System.Drawing.Size(332, 254);
+            this.fontPage.TabIndex = 2;
+            this.fontPage.Text = "Font";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox2.Controls.Add(this.preferencesTree);
+            this.groupBox2.ForeColor = System.Drawing.Color.Aqua;
+            this.groupBox2.Location = new System.Drawing.Point(3, 0);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(114, 308);
+            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabStop = false;
+            // 
+            // preferencesTree
+            // 
+            this.preferencesTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.preferencesTree.BackColor = System.Drawing.Color.SteelBlue;
+            this.preferencesTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.preferencesTree.ForeColor = System.Drawing.SystemColors.Info;
+            this.preferencesTree.LineColor = System.Drawing.Color.White;
+            this.preferencesTree.Location = new System.Drawing.Point(3, 15);
+            this.preferencesTree.Name = "preferencesTree";
+            this.preferencesTree.Size = new System.Drawing.Size(102, 283);
+            this.preferencesTree.TabIndex = 0;
+            this.preferencesTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.preferencesTree_AfterSelect);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(111, 53);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(126, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Click Me to test";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // PreferencesPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -147,10 +172,11 @@
             this.Name = "PreferencesPanel";
             this.Size = new System.Drawing.Size(478, 314);
             this.preferencesTitle.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
             this.preferencesSelector.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.fontPage.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -165,5 +191,7 @@
         private System.Windows.Forms.TabPage tabPage2;
         private StartingOptions startingOptions;
         private FlexiCommandsControl flexiCommandsControl;
+        private System.Windows.Forms.TabPage fontPage;
+        private System.Windows.Forms.Button button1;
     }
 }

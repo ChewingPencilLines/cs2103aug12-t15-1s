@@ -45,6 +45,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FontDialogBox\CGCategoryAttribute.cs" />
+    <Compile Include="FontDialogBox\CGDescriptionAttribute.cs" />
+    <Compile Include="FontDialogBox\CGResource.cs" />
+    <Compile Include="FontDialogBox\ColorComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FontDialogBox\ColorComboBox.designer.cs">
+      <DependentUpon>ColorComboBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FontDialogBox\FontControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FontDialogBox\FontDialogToDo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FontDialogBox\FontDialogToDo.designer.cs">
+      <DependentUpon>FontDialogToDo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FontDialogBox\SizeComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GlobalEventHandlers.cs" />
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\OperationAdd.cs" />
@@ -127,6 +148,15 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
+    <EmbeddedResource Include="FontDialogBox\CGResource.resx">
+      <DependentUpon>CGResource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FontDialogBox\ColorComboBox.resx">
+      <DependentUpon>ColorComboBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FontDialogBox\FontDialogToDo.resx">
+      <DependentUpon>FontDialogToDo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\PreferencesPanel.resx">
       <DependentUpon>PreferencesPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -162,6 +192,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="FontDialogBox\App.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -178,6 +209,7 @@
   <ItemGroup>
     <None Include="Resources\applications.png" />
     <None Include="Resources\Alert.png" />
+    <Content Include="FontDialogBox\CGFontCombo.bmp" />
     <Content Include="Resources\Cover.png" />
     <Content Include="Resources\Cover1.png" />
     <Content Include="Resources\CoverPhoto.png" />

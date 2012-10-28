@@ -54,7 +54,16 @@ namespace ToDo
                 case 1:
                     preferencesSelector.SelectedIndex = 1;
                     break;
+
+                case 2:
+                    preferencesSelector.SelectedIndex = 2;
+                    break;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FontBox.Show();
         }
     }
 }
