@@ -122,8 +122,7 @@ namespace ToDo
             InitializeDefaultKeywords();
         }
 
-        #region Initialization Methods
-
+        #region Private Initialization Methods
         private static void InitializeDefaultKeywords()
         {
             InitializeCommandKeywords();
@@ -182,10 +181,10 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Public Methods
+        // Internal Methods
         // ******************************************************************
 
-        #region Public Methods
+        #region Internal Methods
         internal void AddUserCommand(string userCommand, CommandType commandType)
         {
             try
@@ -248,6 +247,29 @@ namespace ToDo
             TokenGenerator tokenGenerator = new TokenGenerator();
             return tokenGenerator.GenerateTokens(words);
         }
+
+        internal static string MarkWordsAsAbsolute(string absoluteSubstr)
+        {
+            string[] words = absoluteSubstr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries);
+            string output = "";
+            foreach (string word in words)
+            {
+                output += "\"" + word + "\" ";
+            }
+            output.TrimEnd();
+            return output;
+        }
+
+        internal static string UnmarkWordsAsAbsolute(string absoluteSubstr)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in absoluteSubstr)
+            {
+                if (c != '\"')
+                    sb.Append(c);
+            }
+            return sb.ToString();
+        }
         #endregion
 
         // ******************************************************************
@@ -297,67 +319,6 @@ namespace ToDo
             return words;
         }
 
-        public static string MarkWordsAsAbsolute (string absoluteSubstr)
-        {
-            string[] words = absoluteSubstr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries);
-            string output = "";
-            foreach (string word in words)
-            {
-                output += "\"" + word + "\" ";
-            }
-            output.TrimEnd();
-            return output;
-        }
-
-        public static string UnmarkWordsAsAbsolute(string absoluteSubstr)
-        {
-               StringBuilder sb = new StringBuilder();
-               foreach (char c in absoluteSubstr) {
-                  if (c != '\"')
-                     sb.Append(c);                  
-               }
-               return sb.ToString();
-        }
-
-        //Moved to token generation
-        /*
-        /// <summary>
-        /// This method checks to see if the command is followed by an index.
-        /// If it is, it merges the command with the index.
-        /// </summary>
-        /// <param name="input">The list of separated words</param>
-        /// <returns>List of string with command(s) merged with index(es)</returns>
-        private List<string> MergeCommandAndIndexKeywords(List<string> words)
-        {
-            List<string> output = new List<string>();
-            bool merged = false;
-            CommandType commandType;
-            for (int i = 0; i < words.Count; i++) // don't check last word
-            {
-                
-                if (commandKeywords.TryGetValue(words[i].ToLower(), out commandType) && i != words.Count)
-                {
-                    if ((commandType == CommandType.DELETE || commandType == CommandType.MODIFY || commandType == CommandType.DONE) && i + 1 < words.Count)
-                    {
-                        int convert;
-                        if (Int32.TryParse(words[i + 1], out convert))
-                        {
-                            output.Add(words[i] + " " + words[i + 1]);
-                            merged = true;
-                        }
-                    }
-                }
-                if (merged)
-                {
-                    i++;
-                    merged = false;
-                }
-                else output.Add(words[i]);
-            }
-            return output;
-        }
-        */
-
         /// <summary>
         /// This method detects and merges all the date and time words into a single string
         /// while keeping the other words separate and unmerged.
@@ -384,22 +345,36 @@ namespace ToDo
         {
             List<string> output = new List<string>();
             int position = 0;
-            bool wordAdded = false;
+            bool isWordAdded = false;
             foreach (string word in input)
             {
-                foreach (string keyword in timeSuffixes)
+                if (CheckIfWordIsTimeKeyword(word))
                 {
-                    if (word.ToLower() == keyword)
-                    {
-                        wordAdded = MergeWord_IfValidTime(ref output, input, position);
-                        if (wordAdded) break;
-                    }
+                    isWordAdded = MergeWord_IfValidTime(ref output, input, position);
+                    if (isWordAdded) break;
                 }
-                if (!wordAdded) output.Add(word);
-                wordAdded = false;
+                if (!isWordAdded)
+                {
+                    output.Add(word);
+                }
+                isWordAdded = false;
                 position++;
             }
             return output;
+        }
+
+        /// <summary> This method checks if a word is a time keyword.
+        /// </summary>
+        /// <param name="word">The word to be checked</param>
+        /// <returns>True if the word is a time keyword, false if otherwise</returns>
+        private bool CheckIfWordIsTimeKeyword(string word)
+        {
+            foreach (string keyword in timeSuffixes)
+            {
+                if (word.ToLower() == keyword)
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -442,9 +417,9 @@ namespace ToDo
             List<string> output = new List<string>();
             int position = 0, skipWords = 0;
             bool isWordAdded = false;
-            // check for all full or partial dates in alphabetic date formats
             foreach (string word in input)
             {
+                // skip word if it has been combined with the last determined date keyword into a date phrase
                 if (skipWords > 0)
                 {
                     skipWords--;
@@ -459,8 +434,8 @@ namespace ToDo
                 {
                     output.Add(word);
                 }
-                position++;
                 isWordAdded = false;
+                position++;
             }
             // dates in numeric date formats and dates that are only specified by day with suffixes i.e. "15th"
             // need not be checked for and merged since they are already whole words on their own.
@@ -540,5 +515,43 @@ namespace ToDo
         }
         #endregion
 
+        //Moved to token generation
+        /*
+        /// <summary>
+        /// This method checks to see if the command is followed by an index.
+        /// If it is, it merges the command with the index.
+        /// </summary>
+        /// <param name="input">The list of separated words</param>
+        /// <returns>List of string with command(s) merged with index(es)</returns>
+        private List<string> MergeCommandAndIndexKeywords(List<string> words)
+        {
+            List<string> output = new List<string>();
+            bool merged = false;
+            CommandType commandType;
+            for (int i = 0; i < words.Count; i++) // don't check last word
+            {
+                
+                if (commandKeywords.TryGetValue(words[i].ToLower(), out commandType) && i != words.Count)
+                {
+                    if ((commandType == CommandType.DELETE || commandType == CommandType.MODIFY || commandType == CommandType.DONE) && i + 1 < words.Count)
+                    {
+                        int convert;
+                        if (Int32.TryParse(words[i + 1], out convert))
+                        {
+                            output.Add(words[i] + " " + words[i + 1]);
+                            merged = true;
+                        }
+                    }
+                }
+                if (merged)
+                {
+                    i++;
+                    merged = false;
+                }
+                else output.Add(words[i]);
+            }
+            return output;
+        }
+        */
     }
 }
