@@ -76,7 +76,10 @@ namespace ToDo
 
             // Adjust list to null references to deleted tasks without changing order.
             int nullIndex = lastListedTasks.IndexOf(taskToDelete);
-            lastListedTasks[nullIndex] = null;
+            if (nullIndex >= 0 && nullIndex < lastListedTasks.Count)
+            {
+                lastListedTasks[nullIndex] = null;
+            }
 
             if (storageXML.RemoveTaskFromFile(taskToDelete))
             {
