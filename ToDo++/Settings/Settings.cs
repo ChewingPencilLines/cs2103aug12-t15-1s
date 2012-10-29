@@ -101,7 +101,8 @@ namespace ToDo
 
         public void UpdateSettings(SettingsList updatedList)
         {
-            settingsList.misc = updatedList.misc;
+            settingsList = updatedList;
+            //settingsList.misc = updatedList.misc;
         }
 
         // ******************************************************************
@@ -110,13 +111,13 @@ namespace ToDo
 
         #region GettersSetters
 
-        public void SetTextSize(int size) { settingsList.misc.TextSize = size; }
+        public void SetTextSize(int size) { settingsList.misc.TextSize = size; EventHandlers.UpdateSettings(settingsList); }
         public int GetTextSize() { return settingsList.misc.TextSize; }
-        public void SetLoadOnStartupStatus(bool status) { settingsList.misc.LoadOnStartup = status; }
+        public void SetLoadOnStartupStatus(bool status) { settingsList.misc.LoadOnStartup = status; EventHandlers.UpdateSettings(settingsList); }
         public bool GetLoadOnStartupStatus() { return settingsList.misc.LoadOnStartup; }
-        public void SetStartMinimized(bool status) { settingsList.misc.StartMinimized = status; }
+        public void SetStartMinimized(bool status) { settingsList.misc.StartMinimized = status; EventHandlers.UpdateSettings(settingsList); }
         public bool GetStartMinimizeStatus() { return settingsList.misc.StartMinimized; }
-        public void SetStayOnTop(bool status) { settingsList.misc.StayOnTop = status; }
+        public void SetStayOnTop(bool status) { settingsList.misc.StayOnTop = status; EventHandlers.UpdateSettings(settingsList); }
         public bool GetStayOnTopStatus() { return settingsList.misc.StayOnTop; }
 
         #endregion;
@@ -144,6 +145,8 @@ namespace ToDo
             if (settingsList.userCommandKeywords.ContainsKey(newKeyword))
                 throw new RepeatCommandException("There is a repeat keyword already ");
             settingsList.userCommandKeywords.Add(newKeyword, commandType);
+
+            EventHandlers.UpdateSettings(settingsList);
         }
 
         /// <summary>
@@ -157,6 +160,8 @@ namespace ToDo
                 || keywordToRemove == "done" || keywordToRemove == "postpone")
                 throw new InvalidDeleteFlexiException("This is a default keyword and can't be removed");
             settingsList.userCommandKeywords.Remove(keywordToRemove);
+
+            EventHandlers.UpdateSettings(settingsList);
         }
 
         /// <summary>
@@ -194,6 +199,8 @@ namespace ToDo
             if (settingsList.userCommandKeywords.ContainsKey(newKeyword))
                 throw new RepeatCommandException("There is a repeat keyword already");
             settingsList.userContextKeywords.Add(newKeyword, contextType);
+
+            EventHandlers.UpdateSettings(settingsList);
         }
 
         /// <summary>
@@ -206,6 +213,8 @@ namespace ToDo
                 || keywordToRemove == "this" || keywordToRemove == "next" || keywordToRemove == "following" )
                     throw new InvalidDeleteFlexiException("This is a default keyword and can't be removed");
             settingsList.userContextKeywords.Remove(keywordToRemove);
+
+            EventHandlers.UpdateSettings(settingsList);
         }
 
         /// <summary>
@@ -226,14 +235,6 @@ namespace ToDo
         }
 
         #endregion
-
-        /// <summary>
-        /// Pushes new set of FlexiCommands into the StringParser
-        /// </summary>
-        public void AddCommandsToStringParser()
-        {
-            throw new NotImplementedException();
-        }
 
         #endregion
 

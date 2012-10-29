@@ -27,6 +27,7 @@ namespace ToDo
             stringParser = new StringParser();
             commandParser = new CommandParser(ref stringParser);
             taskList = storage.LoadTasksFromFile();
+            EventHandlers.UpdateSettingsHandler += UpdateSettings;
         }
 
         public string ProcessCommand(string input)
@@ -72,6 +73,11 @@ namespace ToDo
         public bool UpdateSettingsFile(SettingsList settings)
         {
             return storage.WriteSettingsToFile(settings);
+        }
+
+        private void UpdateSettings(object sender, EventArgs args)
+        {
+            UpdateSettingsFile((SettingsList)sender);
         }
 
     } 
