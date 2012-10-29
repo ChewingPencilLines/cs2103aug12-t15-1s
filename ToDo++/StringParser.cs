@@ -26,165 +26,29 @@ namespace ToDo
         const int START_INDEX = 0;
         const int END_INDEX = 1;
         static char[,] delimitingCharacters = { { '\'', '\'' }, { '\"', '\"' }, { '[', ']' }, { '(', ')' }, { '{', '}' } };
-        static Dictionary<string, CommandType> commandKeywords;
         static Dictionary<string, Month> monthKeywords;
         static List<string> timeSuffixes;
-
-        // ******************************************************************
-        // Getter Methods
-        // ******************************************************************
-
-        #region Getter Methods For Dictionaries & List
-        public static Dictionary<string, CommandType> getCommandKeywords()
-        {
-            return commandKeywords;
-        }
-        public static Dictionary<string, Month> getMonthKeywords()
-        {
-            return monthKeywords;
-        }
-        public static List<string> getTimeSuffixes()
-        {
-            return timeSuffixes;
-        }
-        #endregion
-
-        // ******************************************************************
-        // Regular Expressions
-        // ******************************************************************
-
-        #region Regex For Time & Date Parsing
-        // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
-        static Regex time_24HourFormat =
-            new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?$");
-        // matches the above but with AM and PM (case insensitive). colon/dot is optional.
-        static Regex time_12HourFormat =
-            new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<format>am|pm)$");
-        // checks day-month-year and month-day-year format; the formal takes precedence if the input matches both
-        static Regex date_numericFormat =
-            new Regex(@"^
-                        (?:
-                        (
-                        # DD/MM
-                        (?:
-                        ((?<day>(0?[1-9]|[12][0-9]|3[01]))
-                        (?<separator>[-/.]))?
-                        (?<month>(0?[1-9]|1[012]))
-                        )
-                        |
-                        # MM/DD
-                        (?:
-                        (?<month>(0?[1-9]|1[012]))
-                        (?<separator>[-/.])
-                        (?<day>(0?[1-9]|[12][0-9]|3[01]))
-                        )
-                        )
-                        # (YY)YY
-                        (?:(?(day)((\<separator>(?<year>(\d\d)?\d\d))?)
-                        |([-/.](?<year>\d\d\d\d))
-                        )
-                        ))
-                        $"
-            , RegexOptions.IgnorePatternWhitespace);
-
-        // checks day-month-year and month-day-year format; the formal takes precedence if the input matches both
-        // note that inputs such as "15th" will not result in a match; need to recheck later
-        static Regex date_alphabeticFormat =
-            new Regex(@"^
-                        (
-                        # DD/MM
-                        (?:
-                        ((?<day>(([23]?1(?:st)?)|(2?2(?:nd)?)|(2?3(?:rd)?)|([12]?[4-9](?:th)?)|([123]0(?:th)?)|(1[123](?:th)?)))\s)?
-                        (?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?))
-                        )
-                        |
-                        # MM/DD
-                        (?:
-                        (?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?))
-                        \s
-                        (?<day>(([23]?1(?:st)?)|(2?2(?:nd)?)|(2?3(?:rd)?)|([12]?[4-9](?:th)?)|([123][0](?:th)?)|(1[123](?:th)?)))
-                        ))
-                        # (YY)YY
-                        (?:(?(day)(\s(?<year>(\d\d)?\d\d))?|(\s(?<year>\d\d\d\d))))$"
-            , RegexOptions.IgnorePatternWhitespace);
-
-        static Regex date_daysWithSuffixes =
-             new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
-        
-        #endregion
-
-        // ******************************************************************
-        // Parser & Keyword Initialization
-        // ******************************************************************
+        static Regex time_24HourFormat, time_12HourFormat, date_numericFormat, date_alphabeticFormat, date_daysWithSuffixes;
 
         static StringParser()
         {
-            InitializeDefaultKeywords();
+            monthKeywords = StaticVariables.GetMonthKeywords();
+            timeSuffixes = StaticVariables.GetTimeSuffixes();
+            time_24HourFormat = StaticVariables.GetRegexTime24HourFormat();
+            time_12HourFormat = StaticVariables.GetRegexTime12HourFormat();
+            date_numericFormat = StaticVariables.GetRegexDateNumericFormat();
+            date_alphabeticFormat = StaticVariables.GetRegexDateAlphabeticFormat();
+            date_daysWithSuffixes = StaticVariables.GetRegexDateDaysWithSuffixes();
         }
-
-        #region Private Initialization Methods
-        private static void InitializeDefaultKeywords()
-        {
-            InitializeCommandKeywords();
-            InitializeMonthKeywords();
-            InitializeTimeSuffixes();
-        }
-
-        private static void InitializeTimeSuffixes()
-        {
-            timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
-        }
-
-        private static void InitializeCommandKeywords()
-        {
-            // todo: change to dictionary? has a constant look up time. should be faster
-            commandKeywords = new Dictionary<string, CommandType>();
-            commandKeywords.Add("add", CommandType.ADD);
-            commandKeywords.Add("delete", CommandType.DELETE);
-            commandKeywords.Add("display", CommandType.DISPLAY);
-            commandKeywords.Add("sort", CommandType.SORT);
-            commandKeywords.Add("search", CommandType.SEARCH);
-            commandKeywords.Add("modify", CommandType.MODIFY);
-            commandKeywords.Add("undo", CommandType.UNDO);
-            commandKeywords.Add("redo", CommandType.REDO);
-            commandKeywords.Add("done", CommandType.DONE);
-            commandKeywords.Add("postpone", CommandType.POSTPONE);
-            commandKeywords.Add("exit", CommandType.EXIT);
-        }
-
-        private static void InitializeMonthKeywords()
-        {
-            monthKeywords = new Dictionary<string, Month>();
-            monthKeywords.Add("jan", Month.JAN);
-            monthKeywords.Add("january", Month.JAN);
-            monthKeywords.Add("feb", Month.FEB);
-            monthKeywords.Add("february", Month.FEB);
-            monthKeywords.Add("mar", Month.MAR);
-            monthKeywords.Add("march", Month.MAR);
-            monthKeywords.Add("may", Month.MAY);
-            monthKeywords.Add("jun", Month.JUN);
-            monthKeywords.Add("june", Month.JUN);
-            monthKeywords.Add("jul", Month.JUL);
-            monthKeywords.Add("july", Month.JUL);
-            monthKeywords.Add("aug", Month.AUG);
-            monthKeywords.Add("august", Month.AUG);
-            monthKeywords.Add("sep", Month.SEP);
-            monthKeywords.Add("sept", Month.SEP);
-            monthKeywords.Add("september", Month.SEP);
-            monthKeywords.Add("oct", Month.OCT);
-            monthKeywords.Add("october", Month.OCT);
-            monthKeywords.Add("nov", Month.NOV);
-            monthKeywords.Add("november", Month.NOV);
-            monthKeywords.Add("dec", Month.DEC);
-            monthKeywords.Add("december", Month.DEC);
-        }
-        #endregion
 
         // ******************************************************************
         // Internal Methods
         // ******************************************************************
 
         #region Internal Methods
+        /*
+         * should move to staticvariables class
+         * 
         internal void AddUserCommand(string userCommand, CommandType commandType)
         {
             try
@@ -197,12 +61,15 @@ namespace ToDo
                 //Handle repeat keywords
                 //If the key is already added, dont add ignore! need to do a better implementation
             }
-        }
+        }*/
 
+        /*
+         * should move to static variables class
+         * 
         internal void ResetCommandKeywords()
         {
             InitializeCommandKeywords();
-        }
+        }*/
 
         /// <summary>
         /// This method searches the input string against the set delimiters'

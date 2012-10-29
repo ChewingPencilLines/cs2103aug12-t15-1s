@@ -78,6 +78,7 @@
     <Compile Include="Operations\OperationSearch.cs" />
     <Compile Include="Operations\OperationSort.cs" />
     <Compile Include="Operations\OperationUndo.cs" />
+    <Compile Include="StaticVariables.cs" />
     <Compile Include="TaskComparer.cs" />
     <Compile Include="UI\Components\InputBox.cs">
       <SubType>Component</SubType>
