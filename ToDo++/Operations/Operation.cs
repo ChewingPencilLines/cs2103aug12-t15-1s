@@ -7,7 +7,8 @@ using System.Diagnostics;
 namespace ToDo
 {
     // ******************************************************************
-    // Abstract definition for Operation
+    // Abstract definition for 
+
     // ******************************************************************
     public abstract class Operation
     {
