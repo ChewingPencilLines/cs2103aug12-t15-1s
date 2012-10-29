@@ -32,8 +32,8 @@ namespace ToDo
         public SettingInformation()
         {
             misc = new MiscSettings(false, false, false, 9);
-            userCommandKeywords = StaticVariables.GetCommandKeywords();
-            userContextKeywords = StaticVariables.GetContextKeywords();
+            userCommandKeywords = CustomDictionary.GetCommandKeywords();
+            userContextKeywords = CustomDictionary.GetContextKeywords();
         }
 
         public bool ContainsCommandKeyword(string userKeyword, CommandType commandType)

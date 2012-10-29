@@ -10,14 +10,6 @@ namespace ToDo
     // Abstract definition for task
     // ******************************************************************
 
-    public struct DateSpecificity
-    {
-        private bool day, month, year;
-        bool Day { get { return day; } set { day = value; }  }
-        bool Month { get { return month; } set { month = value; } }
-        bool Year { get { return year; } set { year = value; } }
-    }
-
     public abstract class Task
     {
         protected string taskName;

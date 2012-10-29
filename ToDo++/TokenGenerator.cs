@@ -137,63 +137,72 @@ namespace ToDo
         // might wish to change the catch case to flag the invalid date input
         public List<TokenDate> GenerateDateTokens(List<string> input)
         {
-            string dayString = String.Empty;
-            string monthString = String.Empty;
-            string yearString = String.Empty;
             int day = 0;
             int month = 0;
             int year = 0;
             int index = 0;
-            bool isSpecific = true;
-            List<TokenDate> dateTokens = new List<TokenDate>(); ;
+            List<TokenDate> dateTokens = new List<TokenDate>();
+
             foreach (string word in input)
             {
-                Match match;
+                DateSpecificity dateSpecificity = new DateSpecificity(true, true, true);
                 DateTime dateTime = new DateTime();
-                bool isMonthGiven = true;
                 if (CustomDictionary.IsValidDate(word.ToLower()))
                 {
-                    match = GetDateMatch(word.ToLower());
+                    string dayString = String.Empty;
+                    string monthString = String.Empty;
+                    string yearString = String.Empty;
+                    Match match = GetDateMatch(word.ToLower());
                     GetMatchTagValues(match, ref dayString, ref monthString, ref yearString);
                     ConvertMatchTagValuesToInts(dayString, monthString, yearString, ref day, ref month, ref year);
                     // no day input
                     if (day == 0)
                     {
-                        isSpecific = false;
+                        dateSpecificity.Day = false;
                         day = 1;
                     }
                     // no month input
                     if (month == 0)
                     {
+                        dateSpecificity.Month = false;
                         month = DateTime.Today.Month;
-                        isMonthGiven = false;
                     }
                     // no year input
                     if (year == 0)
                     {
-                        dateTime = TryParsingDate(dateTime, DateTime.Today.Year, month, day, true);
+                        dateSpecificity.Year = false;
+                        dateTime = TryParsingDate(DateTime.Today.Year, month, day, true);
                         if (DateTime.Compare(dateTime, DateTime.Today) < 0)
                         {
-                            if (isMonthGiven == false)
+                            if (dateSpecificity.Month == false)
                             {
-                                isMonthGiven = true;
-                                dateTime = TryParsingDate(dateTime, DateTime.Today.AddMonths(1).Year, DateTime.Today.AddMonths(1).Month, day, false);
+                                dateTime = TryParsingDate(DateTime.Today.AddMonths(1).Year, DateTime.Today.AddMonths(1).Month, day, false);
                             }
                             else
                             {
-                                dateTime = TryParsingDate(dateTime, DateTime.Today.AddYears(1).Year, month, day, false);
+                                dateTime = TryParsingDate(DateTime.Today.AddYears(1).Year, month, day, false);
                             }
                         }
                     }
                     else
                     {
-                        dateTime = TryParsingDate(dateTime, year, month, day, false);
+                        dateTime = TryParsingDate(year, month, day, false);
                     }
-                    TokenDate dateToken = new TokenDate(index, dateTime, isSpecific);
-                    dateTokens.Add(dateToken);
                 }
+                else if (CustomDictionary.monthKeywords.ContainsKey(word.ToLower()))
+                {
+                    dateSpecificity.Day = false;
+                    dateSpecificity.Year = false;
+                    month = ConvertToNumericMonth(word);
+                    dateTime = TryParsingDate(DateTime.Today.Year, month, day, false);
+                }
+                if (word.ToLower() == "today")
+                {
+                    dateTime = DateTime.Today;
+                }
+                TokenDate dateToken = new TokenDate(index, dateTime, dateSpecificity);
+                dateTokens.Add(dateToken);
                 index++;
-                isSpecific = true;
             }
             return dateTokens;
         }
@@ -476,8 +485,9 @@ namespace ToDo
             return monthInt;
         }
 
-        private DateTime TryParsingDate(DateTime date, int year, int month, int day, bool ignoreFailure)
+        private DateTime TryParsingDate(int year, int month, int day, bool ignoreFailure)
         {
+            DateTime date;
             try
             {
                 date = new DateTime(year, month, day);

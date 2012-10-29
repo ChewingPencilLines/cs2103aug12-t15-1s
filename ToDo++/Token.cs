@@ -6,6 +6,22 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
+    public struct DateSpecificity
+    {
+        private bool day;
+        private bool month;
+        private bool year;
+        public DateSpecificity(bool daySpecificity, bool monthSpecificity, bool yearSpecificity)
+        {
+            day = daySpecificity;
+            month = monthSpecificity;
+            year = yearSpecificity;
+        }
+        public bool Day { get { return day; } set { day = value; } }
+        public bool Month { get { return month; } set { month = value; } }
+        public bool Year { get { return year; } set { year = value; } }
+    }
+
     public class Token
     {        
         private int position;
