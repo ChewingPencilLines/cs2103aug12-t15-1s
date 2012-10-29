@@ -43,8 +43,6 @@ namespace ToDo
         public SettingsList()
         {
             misc = new MiscSettings(false, false, false, 9);
-            //userCommandKeywords = new Dictionary<string, CommandType>();
-            //userContextKeywords = new Dictionary<string, ContextType>();
             userCommandKeywords = StaticVariables.GetCommandKeywords();
             userContextKeywords = StaticVariables.GetContextKeywords();
         }
@@ -144,7 +142,7 @@ namespace ToDo
             if (settingsList.userContextKeywords.ContainsKey(newKeyword))
                 throw new RepeatCommandException("There is a repeat keyword already");
             if (settingsList.userCommandKeywords.ContainsKey(newKeyword))
-                throw new RepeatCommandException("There is a repeat keyword already");
+                throw new RepeatCommandException("There is a repeat keyword already ");
             settingsList.userCommandKeywords.Add(newKeyword, commandType);
         }
 
@@ -154,6 +152,10 @@ namespace ToDo
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
         public void RemoveCommandKeyword(string keywordToRemove)
         {
+            if (keywordToRemove == "add" || keywordToRemove == "remove" || keywordToRemove == "display" || keywordToRemove == "sort"
+                || keywordToRemove == "search" || keywordToRemove == "modify" || keywordToRemove == "undo" || keywordToRemove == "redo"
+                || keywordToRemove == "done" || keywordToRemove == "postpone")
+                throw new InvalidDeleteFlexiException("This is a default keyword and can't be removed");
             settingsList.userCommandKeywords.Remove(keywordToRemove);
         }
 
@@ -200,6 +202,9 @@ namespace ToDo
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
         public void RemoveContextKeyword(string keywordToRemove)
         {
+            if (keywordToRemove == "on" || keywordToRemove == "from" || keywordToRemove == "to" || keywordToRemove == "-"
+                || keywordToRemove == "this" || keywordToRemove == "next" || keywordToRemove == "following" )
+                    throw new InvalidDeleteFlexiException("This is a default keyword and can't be removed");
             settingsList.userContextKeywords.Remove(keywordToRemove);
         }
 
