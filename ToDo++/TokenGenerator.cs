@@ -12,126 +12,29 @@ namespace ToDo
 {
     public class TokenGenerator
     {
-        #region Regex For Time & Date Parsing
-        // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
-        static Regex time_24HourFormat =
-            new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?$");
-        // matches the above but with AM and PM (case insensitive). colon/dot is optional.
-        static Regex time_12HourFormat =
-            new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<format>am|pm)$");
-        // checks day-month-year and month-day-year format; the formal takes precedence if the input matches both
-        static Regex date_numericFormat =
-            new Regex(@"^
-                        (?:
-                        (
-                        # DD/MM
-                        (?:
-                        ((?<day>(0?[1-9]|[12][0-9]|3[01]))
-                        (?<separator>[-/.]))?
-                        (?<month>(0?[1-9]|1[012]))
-                        )
-                        |
-                        # MM/DD
-                        (?:
-                        (?<month>(0?[1-9]|1[012]))
-                        (?<separator>[-/.])
-                        (?<day>(0?[1-9]|[12][0-9]|3[01]))
-                        )
-                        )
-                        # (YY)YY
-                        (?:(?(day)((\<separator>(?<year>(\d\d)?\d\d))?)
-                        |([-/.](?<year>\d\d\d\d))
-                        )
-                        ))
-                        $"
-            , RegexOptions.IgnorePatternWhitespace);
-
-        // checks day-month-year and month-day-year format; the formal takes precedence if the input matches both
-        // note that inputs such as "15th" will not result in a match; need to recheck later
-        static Regex date_alphabeticFormat =
-            new Regex(@"^
-                        (
-                        # DD/MM
-                        (?:
-                        ((?<day>(([23]?1(?:st)?)|(2?2(?:nd)?)|(2?3(?:rd)?)|([12]?[4-9](?:th)?)|([123]0(?:th)?)|(1[123](?:th)?)))\s)?
-                        (?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?))
-                        )
-                        |
-                        # MM/DD
-                        (?:
-                        (?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?))
-                        \s
-                        (?<day>(([23]?1(?:st)?)|(2?2(?:nd)?)|(2?3(?:rd)?)|([12]?[4-9](?:th)?)|([123][0](?:th)?)|(1[123](?:th)?)))
-                        ))
-                        # (YY)YY
-                        (?:(?(day)(\s(?<year>(\d\d)?\d\d))?|(\s(?<year>\d\d\d\d))))$"
-            , RegexOptions.IgnorePatternWhitespace);
-
-        static Regex date_daysWithSuffixes =
-             new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
-
-        Regex isNumericalRange =
-            new Regex(@"^(?<start>\d?\d?\d)(\-(?<end>\d?\d?\d))?");
-
-        #endregion
-
         static Dictionary<string, CommandType> commandKeywords;
+        static Dictionary<string, Month> monthKeywords;
         static Dictionary<string, ContextType> contextKeywords;
         static Dictionary<string, DayOfWeek> dayKeywords;
-        static Dictionary<string, Month> monthKeywords;
-        static List<string> timeSpecificKeywords;
-        static List<string> timeGeneralKeywords;
-        static List<string> timeSuffixes;
+        static List<string> timeSuffixes, timeSpecificKeywords, timeGeneralKeywords;
+        static Regex time_24HourFormat, time_12HourFormat, date_numericFormat, date_alphabeticFormat, date_daysWithSuffixes, isNumericalRange;
 
         public TokenGenerator()
         {
-            commandKeywords = StringParser.getCommandKeywords();
-            monthKeywords = StringParser.getMonthKeywords();
-            timeSuffixes = StringParser.getTimeSuffixes();
-            InitializeDateTimeKeywords();
-            InitializeContextKeywords();
+            commandKeywords = StaticVariables.GetCommandKeywords();
+            monthKeywords = StaticVariables.GetMonthKeywords();
+            contextKeywords = StaticVariables.GetContextKeywords();
+            dayKeywords = StaticVariables.GetDayKeywords();
+            timeSuffixes = StaticVariables.GetTimeSuffixes();
+            timeSpecificKeywords = StaticVariables.GetTimeSpecificKeywords();
+            timeGeneralKeywords = StaticVariables.GetTimeGeneralKeywords();
+            time_24HourFormat = StaticVariables.GetRegexTime24HourFormat();
+            time_12HourFormat = StaticVariables.GetRegexTime12HourFormat();
+            date_numericFormat = StaticVariables.GetRegexDateNumericFormat();
+            date_alphabeticFormat = StaticVariables.GetRegexDateAlphabeticFormat();
+            date_daysWithSuffixes = StaticVariables.GetRegexDateDaysWithSuffixes();
+            isNumericalRange = StaticVariables.GetRegexIsNumericalRange();
         }
-
-        private static void InitializeDateTimeKeywords()
-        {
-            dayKeywords = new Dictionary<string, DayOfWeek>();
-            dayKeywords.Add("mon", DayOfWeek.Monday);
-            dayKeywords.Add("monday", DayOfWeek.Monday);
-            dayKeywords.Add("tue", DayOfWeek.Tuesday);
-            dayKeywords.Add("tues", DayOfWeek.Tuesday);
-            dayKeywords.Add("tuesday", DayOfWeek.Tuesday);
-            dayKeywords.Add("wed", DayOfWeek.Wednesday);
-            dayKeywords.Add("wednesday", DayOfWeek.Wednesday);
-            dayKeywords.Add("thur", DayOfWeek.Thursday);
-            dayKeywords.Add("thurs", DayOfWeek.Thursday);
-            dayKeywords.Add("thursday", DayOfWeek.Thursday);
-            dayKeywords.Add("fri", DayOfWeek.Friday);
-            dayKeywords.Add("friday", DayOfWeek.Friday);
-            dayKeywords.Add("sat", DayOfWeek.Saturday);
-            dayKeywords.Add("saturday", DayOfWeek.Saturday);
-            dayKeywords.Add("sun", DayOfWeek.Sunday);
-            dayKeywords.Add("sunday", DayOfWeek.Sunday);
-            dayKeywords.Add("weekend", DayOfWeek.Sunday);
-            dayKeywords.Add("tmr", DateTime.Today.AddDays(1).DayOfWeek);
-            dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
-            // NYI
-            timeSpecificKeywords = new List<string> { "noon", "midnight" };        // special case    
-            timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" }; // todo?
-        }
-
-        private static void InitializeContextKeywords()
-        {
-            contextKeywords = new Dictionary<string, ContextType>();
-            contextKeywords.Add("by", ContextType.DEADLINE);
-            contextKeywords.Add("on", ContextType.STARTTIME);
-            contextKeywords.Add("from", ContextType.STARTTIME);
-            contextKeywords.Add("to", ContextType.ENDTIME);
-            contextKeywords.Add("-", ContextType.ENDTIME);
-            contextKeywords.Add("this", ContextType.CURRENT);
-            contextKeywords.Add("next", ContextType.NEXT);
-            contextKeywords.Add("following", ContextType.FOLLOWING);
-        }
-
 
         // ******************************************************************
         // Public Methods
