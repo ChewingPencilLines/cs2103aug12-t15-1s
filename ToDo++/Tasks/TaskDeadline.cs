@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace ToDo.Tasks
+namespace ToDo
 {
-    public class TaskFloating : Task
+    class TaskFloating : Task
     {
         private struct IsSpecific
         {
