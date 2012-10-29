@@ -15,13 +15,16 @@ namespace ToDo
 
         private int? index;
         private string taskName;
-                
-        public OperationDelete(string taskName, int[] indexRange)
+        private DateTime? startTime = null, endTime = null;
+
+        public OperationDelete(string taskName, int[] indexRange, DateTime? startTime, DateTime? endTime)
         {
             if (indexRange == null) this.index = null;
             else this.index = indexRange[TokenCommand.START_INDEX] - 1;
             if (taskName == null) this.taskName = "";
             else this.taskName = taskName;
+            this.startTime = startTime;
+            this.endTime = endTime;
         }
 
         public override string Execute(List<Task> taskList, Storage storageXML)
@@ -32,7 +35,7 @@ namespace ToDo
             List<Task> searchResults;
             if (index == null)
             {
-                searchResults = SearchForTasks(taskList, taskName, true);
+                searchResults = SearchForTasks(taskList, taskName, true, startTime, endTime);
                 if (searchResults.Count == 0)
                 {
                     //check substring
