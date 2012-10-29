@@ -46,6 +46,7 @@ namespace ToDo
 
     public class TokenDate : Token
     {
+        private DateSpecificity dateSpecificity = new DateSpecificity();
         DateTime dateTime;
         Boolean specific;
         internal DateTime Value
@@ -56,11 +57,11 @@ namespace ToDo
         {
             get { return specific; }
         }
-        internal TokenDate(int position, DateTime date, Boolean specific_flag)
+        internal TokenDate(int position, DateTime date, DateSpecificity specificity)
             : base(position)
         {
             dateTime = date;
-            specific = specific_flag;
+            dateSpecificity = specificity;
         }
     }
 

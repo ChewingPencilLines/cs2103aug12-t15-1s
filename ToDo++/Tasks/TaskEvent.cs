@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace ToDo
 {
-    class TaskDeadline : Task
+    class TaskEvent : Task
     {
         private struct IsSpecific
         {
@@ -25,15 +25,25 @@ namespace ToDo
         }
 
         private IsSpecific isSpecific = new IsSpecific();
+
         private DateTime endTime;
         public DateTime EndTime
         {
             get { return endTime; }
             //set { endTime = value; }
         }
-        public TaskDeadline(string taskName, DateTime endTime, DateSpecificity startDateSpecificity, DateSpecificity endDateSpecificity, Boolean isDone = false, int forceID = -1)
+
+        private DateTime startTime;
+        public DateTime StartTime
+        {
+            get { return startTime; }
+            //set { startTime = value; }
+        }
+
+        public TaskEvent(string taskName, DateTime startTime, DateTime endTime, DateSpecificity startDateSpecificity, DateSpecificity endDateSpecificity, Boolean isDone = false, int forceID = -1)
             : base(taskName, isDone, forceID)
         {
+            this.startTime = startTime;
             this.endTime = endTime;
             isSpecific.startDate = startDateSpecificity;
             isSpecific.endDate = endDateSpecificity;
@@ -43,8 +53,9 @@ namespace ToDo
         {
             XElement task = new XElement("Task",
                             new XAttribute("id", id.ToString()),
-                            new XAttribute("type", "Deadline"),
+                            new XAttribute("type", "Event"),
                             new XElement("Name", taskName),
+                            new XElement("StartTime", startTime.ToString()),
                             new XElement("EndTime", endTime.ToString()),
                             new XElement("State", doneState.ToString())
                             );

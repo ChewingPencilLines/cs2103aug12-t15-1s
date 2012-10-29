@@ -83,9 +83,9 @@
     <Compile Include="Settings\SerializationExtensions.cs" />
     <Compile Include="Settings\SettingInformation.cs" />
     <Compile Include="TaskComparer.cs" />
+    <Compile Include="Tasks\TaskFloating.cs" />
     <Compile Include="Tasks\TaskDeadline.cs" />
     <Compile Include="Tasks\TaskEvent.cs" />
-    <Compile Include="Tasks\TaskFloating.cs" />
     <Compile Include="UI\Components\InputBox.cs">
       <SubType>Component</SubType>
     </Compile>
