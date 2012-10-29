@@ -171,7 +171,7 @@ namespace ToDo
                     newOperation = new OperationAdd(task);
                     break;
                 case CommandType.DELETE:
-                    newOperation = new OperationDelete(taskName, taskIndex);
+                    newOperation = new OperationDelete(taskName, taskIndex, startCombined, endCombined);
                     break;
                 case CommandType.DISPLAY:
                     newOperation = new OperationDisplay();
