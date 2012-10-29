@@ -22,6 +22,7 @@ namespace ToDo
         protected const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
         protected const string RESPONSE_UNDO_FAILURE = "Cannot undo last executed task!";
         protected const string RESPONSE_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
+        protected const string RESPONSE_MARKASUNDONE_SUCCESS = "Successfully marked \"{0}\" as undone.";
         protected const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         protected const string RESPONSE_INVALID_TASK_INDEX = "Invalid task index!";
         public const string REPONSE_INVALID_COMMAND = "Invalid command input!";
@@ -29,9 +30,9 @@ namespace ToDo
         
         // Containers for keeping track of executed operations
         protected static List<Task> lastListedTasks;
-        static Stack<Operation> undoStack;
+        protected static Stack<Operation> undoStack;
         static Stack<Operation> redoStack;
-        static Stack<Task> undoTask;
+        protected static Stack<Task> undoTask;
         protected Storage storageXML;
         protected bool successFlag;
 
@@ -45,12 +46,15 @@ namespace ToDo
 
         public abstract string Execute(List<Task> taskList, Storage storageXML);
 
+        public abstract string Undo(List<Task> taskList, Storage storageXML);
+
         protected string AddTask(Task taskToAdd, List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
             try
             {
                 taskList.Add(taskToAdd);
+                undoTask.Push(taskToAdd);
                 if (storageXML.AddTaskToFile(taskToAdd))
                 {
                     successFlag = true;
@@ -105,16 +109,17 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;
         }
 
-        protected string ModifyTask(ref Task taskToModify, Task newTaskName, ref List<Task> taskList, out bool successFlag)
+        protected string ModifyTask(ref Task taskToModify, Task newTask, ref List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToModify);
             taskList.Remove(taskToModify);
-            taskList.Add(newTaskName);
-            if (storageXML.RemoveTaskFromFile(taskToModify) && storageXML.AddTaskToFile(newTaskName))
+            taskList.Add(newTask);
+            undoTask.Push(newTask);
+            if (storageXML.RemoveTaskFromFile(taskToModify) && storageXML.AddTaskToFile(newTask))
             {
                 successFlag = true;
-                return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTaskName.TaskName);
+                return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
             }
             else
                 return RESPONSE_XML_READWRITE_FAIL;

@@ -29,6 +29,7 @@ namespace ToDo
 
         protected bool successFlag;
         public abstract string Execute(List<Task> taskList, Storage storageXML);
+        public abstract string Undo(List<Task> taskList, Storage strorageXML);
     }
     #endregion
 }

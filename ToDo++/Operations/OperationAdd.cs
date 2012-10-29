@@ -25,6 +25,12 @@ namespace ToDo
             if (successFlag) TrackOperation();
 
             return response;
-        }      
+        }
+
+        public override string Undo(List<Task> taskList, Storage storageXML)
+        {
+            Task task = undoTask.Pop();
+            return DeleteTask(task, taskList, out successFlag);
+        }
     }
 }

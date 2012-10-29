@@ -64,5 +64,12 @@ namespace ToDo
             if (successFlag) TrackOperation();
             return response;
         }
+
+        public override string Undo(List<Task> taskList, Storage storageXML)
+        {
+            Task taskToUndo = undoTask.Pop();
+            Task previousTask = undoTask.Pop();
+            return ModifyTask(ref taskToUndo, previousTask, ref taskList, out successFlag);
+        }
     }
 }
