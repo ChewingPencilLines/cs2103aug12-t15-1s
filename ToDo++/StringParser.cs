@@ -30,7 +30,7 @@ namespace ToDo
         static List<string> timeSuffixes;
         static Regex time_24HourFormat, time_12HourFormat, date_numericFormat, date_alphabeticFormat, date_daysWithSuffixes;
 
-        static StringParser()
+        public StringParser()
         {
             monthKeywords = StaticVariables.GetMonthKeywords();
             timeSuffixes = StaticVariables.GetTimeSuffixes();
@@ -381,44 +381,5 @@ namespace ToDo
             return date_alphabeticFormat.IsMatch(theDate);
         }
         #endregion
-
-        //Moved to token generation
-        /*
-        /// <summary>
-        /// This method checks to see if the command is followed by an index.
-        /// If it is, it merges the command with the index.
-        /// </summary>
-        /// <param name="input">The list of separated words</param>
-        /// <returns>List of string with command(s) merged with index(es)</returns>
-        private List<string> MergeCommandAndIndexKeywords(List<string> words)
-        {
-            List<string> output = new List<string>();
-            bool merged = false;
-            CommandType commandType;
-            for (int i = 0; i < words.Count; i++) // don't check last word
-            {
-                
-                if (commandKeywords.TryGetValue(words[i].ToLower(), out commandType) && i != words.Count)
-                {
-                    if ((commandType == CommandType.DELETE || commandType == CommandType.MODIFY || commandType == CommandType.DONE) && i + 1 < words.Count)
-                    {
-                        int convert;
-                        if (Int32.TryParse(words[i + 1], out convert))
-                        {
-                            output.Add(words[i] + " " + words[i + 1]);
-                            merged = true;
-                        }
-                    }
-                }
-                if (merged)
-                {
-                    i++;
-                    merged = false;
-                }
-                else output.Add(words[i]);
-            }
-            return output;
-        }
-        */
     }
 }
