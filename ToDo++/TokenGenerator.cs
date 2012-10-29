@@ -145,63 +145,74 @@ namespace ToDo
 
             foreach (string word in input)
             {
-                DateSpecificity dateSpecificity = new DateSpecificity(true, true, true);
+                DateSpecificity isSpecific = new DateSpecificity(true, true, true);
                 DateTime dateTime = new DateTime();
-                if (CustomDictionary.IsValidDate(word.ToLower()))
+                TokenDate dateToken = null;
+                if (CustomDictionary.IsValidDate(word.ToLower()) || word.ToLower() == "today")  //@jenna todo: remove magic word.
                 {
                     string dayString = String.Empty;
                     string monthString = String.Empty;
                     string yearString = String.Empty;
-                    Match match = GetDateMatch(word.ToLower());
-                    GetMatchTagValues(match, ref dayString, ref monthString, ref yearString);
-                    ConvertMatchTagValuesToInts(dayString, monthString, yearString, ref day, ref month, ref year);
+                    if (word.ToLower() == "today")
+                    {
+                        day = DateTime.Now.Day;
+                        month = DateTime.Now.Month;
+                        year = DateTime.Now.Year;
+                    }
+                    else
+                    {
+                        Match match = GetDateMatch(word.ToLower());
+                        GetMatchTagValues(match, ref dayString, ref monthString, ref yearString);
+                        ConvertDateStringsToInt(dayString, monthString, yearString, ref day, ref month, ref year);
+                    }
                     // no day input
                     if (day == 0)
                     {
-                        dateSpecificity.Day = false;
+                        isSpecific.Day = false;
                         day = 1;
                     }
                     // no month input
                     if (month == 0)
                     {
-                        dateSpecificity.Month = false;
+                        isSpecific.Month = false;
                         month = DateTime.Today.Month;
                     }
                     // no year input
                     if (year == 0)
                     {
-                        dateSpecificity.Year = false;
-                        dateTime = TryParsingDate(DateTime.Today.Year, month, day, true);
+                        isSpecific.Year = false;
+                        year = DateTime.Today.Year;
+                        dateTime = TryParsingDate(year, month, day, true);
                         if (DateTime.Compare(dateTime, DateTime.Today) < 0)
-                        {
-                            if (dateSpecificity.Month == false)
+                        {                            
+                            if (isSpecific.Month == false)
                             {
-                                dateTime = TryParsingDate(DateTime.Today.AddMonths(1).Year, DateTime.Today.AddMonths(1).Month, day, false);
+                                year = DateTime.Today.AddMonths(1).Year;
+                                month = DateTime.Today.AddMonths(1).Month;
                             }
                             else
                             {
-                                dateTime = TryParsingDate(DateTime.Today.AddYears(1).Year, month, day, false);
+                                year = DateTime.Today.AddMonths(1).Year;
                             }
                         }
                     }
-                    else
-                    {
-                        dateTime = TryParsingDate(year, month, day, false);
-                    }
+                    dateTime = TryParsingDate(year, month, day, false);
+                    dateToken = new TokenDate(index, dateTime, isSpecific);                    
                 }
                 else if (CustomDictionary.monthKeywords.ContainsKey(word.ToLower()))
                 {
-                    dateSpecificity.Day = false;
-                    dateSpecificity.Year = false;
+                    isSpecific.Day = false;
+                    isSpecific.Year = false;
                     month = ConvertToNumericMonth(word);
                     dateTime = TryParsingDate(DateTime.Today.Year, month, day, false);
+                    dateToken = new TokenDate(index, dateTime, isSpecific);                    
                 }
-                if (word.ToLower() == "today")
+                else if (word.ToLower() == "today") //@jenna todo: remove magic word.
                 {
                     dateTime = DateTime.Today;
+                    dateToken = new TokenDate(index, dateTime, isSpecific);                    
                 }
-                TokenDate dateToken = new TokenDate(index, dateTime, dateSpecificity);
-                dateTokens.Add(dateToken);
+                if (dateToken != null) dateTokens.Add(dateToken);
                 index++;
             }
             return dateTokens;
@@ -429,7 +440,7 @@ namespace ToDo
         /// <param name="dayInt">The output day integer</param>
         /// <param name="monthInt">The output month integer</param>
         /// <param name="yearInt">The output year integer</param>      
-        private void ConvertMatchTagValuesToInts(string dayString, string monthString, string yearString, ref int dayInt, ref int monthInt, ref int yearInt)
+        private void ConvertDateStringsToInt(string dayString, string monthString, string yearString, ref int dayInt, ref int monthInt, ref int yearInt)
         {
             dayString = RemoveSuffixesIfRequired(dayString);
             int.TryParse(dayString, out dayInt);

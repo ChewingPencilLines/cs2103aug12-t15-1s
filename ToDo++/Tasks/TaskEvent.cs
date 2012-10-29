@@ -8,23 +8,7 @@ namespace ToDo
 {
     class TaskEvent : Task
     {
-        private struct IsSpecific
-        {
-            public DateSpecificity startDate;
-            public DateSpecificity endDate;
-            DateSpecificity StartDate
-            {
-                get { return startDate; }
-                set { startDate = value; }
-            }
-            DateSpecificity EndDate
-            {
-                get { return endDate; }
-                set { endDate = value; }
-            }
-        }
-
-        private IsSpecific isSpecific = new IsSpecific();
+        public DateTimeSpecificity isSpecific;
 
         private DateTime endTime;
         public DateTime EndTime
@@ -40,13 +24,18 @@ namespace ToDo
             //set { startTime = value; }
         }
 
-        public TaskEvent(string taskName, DateTime startTime, DateTime endTime, DateSpecificity startDateSpecificity, DateSpecificity endDateSpecificity, Boolean isDone = false, int forceID = -1)
+        public TaskEvent(
+            string taskName,
+            DateTime startTime,
+            DateTime endTime,
+            DateTimeSpecificity isSpecific,
+            Boolean isDone = false,
+            int forceID = -1)
             : base(taskName, isDone, forceID)
         {
             this.startTime = startTime;
             this.endTime = endTime;
-            isSpecific.startDate = startDateSpecificity;
-            isSpecific.endDate = endDateSpecificity;
+            this.isSpecific = isSpecific;
         }
 
         public override XElement ToXElement()
@@ -57,6 +46,7 @@ namespace ToDo
                             new XElement("Name", taskName),
                             new XElement("StartTime", startTime.ToString()),
                             new XElement("EndTime", endTime.ToString()),
+                            isSpecific.ToXElement<DateTimeSpecificity>(),
                             new XElement("State", doneState.ToString())
                             );
             return task;

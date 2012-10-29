@@ -8,28 +8,24 @@ namespace ToDo
 {
     class TaskDeadline : Task
     {
-        private struct IsSpecific
-        {
-            public DateSpecificity endDate;
-            DateSpecificity EndDate
-            {
-                get { return endDate; }
-                set { endDate = value; }
-            }
-        }
+        public DateTimeSpecificity isSpecific;
 
-        private IsSpecific isSpecific = new IsSpecific();
         private DateTime endTime;
         public DateTime EndTime
         {
             get { return endTime; }
             //set { endTime = value; }
         }
-        public TaskDeadline(string taskName, DateTime endTime, DateSpecificity endDateSpecificity, Boolean isDone = false, int forceID = -1)
+        public TaskDeadline(
+            string taskName,
+            DateTime endTime,
+            DateTimeSpecificity endDateSpecificity,
+            Boolean isDone = false,
+            int forceID = -1)
             : base(taskName, isDone, forceID)
         {
             this.endTime = endTime;
-            isSpecific.endDate = endDateSpecificity;
+            isSpecific = endDateSpecificity;
         }
 
         public override XElement ToXElement()
