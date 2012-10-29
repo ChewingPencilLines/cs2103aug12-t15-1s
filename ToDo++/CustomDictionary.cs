@@ -10,29 +10,29 @@ using System.Diagnostics;
 
 namespace ToDo
 {
-    static class StaticVariables
+    static class CustomDictionary
     {
-        static Dictionary<string, CommandType> commandKeywords;
-        static Dictionary<string, Month> monthKeywords;
-        static Dictionary<string, ContextType> contextKeywords;
-        static Dictionary<string, DayOfWeek> dayKeywords;
-        static List<string> timeSpecificKeywords;
-        static List<string> timeGeneralKeywords;
-        static List<string> timeSuffixes;
+        static public Dictionary<string, CommandType> commandKeywords;
+        static public Dictionary<string, Month> monthKeywords;
+        static public Dictionary<string, ContextType> contextKeywords;
+        static public Dictionary<string, DayOfWeek> dayKeywords;
+        static public List<string> timeSpecificKeywords;
+        static public List<string> timeGeneralKeywords;
+        static public List<string> timeSuffixes;
 
         // ******************************************************************
         // Regular Expressions
         // ******************************************************************
 
-        #region Regex For Time & Date Parsing
+        #region Regexes For Time & Date Parsing
         // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
-        static Regex time_24HourFormat =
+        static public Regex time_24HourFormat =
             new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?$");
         // matches the above but with AM and PM (case insensitive). colon/dot is optional.
-        static Regex time_12HourFormat =
+        static public Regex time_12HourFormat =
             new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<format>am|pm)$");
         // checks day-month-year and month-day-year format; the formal takes precedence if the input matches both
-        static Regex date_numericFormat =
+        static public Regex date_numericFormat =
             new Regex(@"^
                         (?:
                         (
@@ -60,7 +60,7 @@ namespace ToDo
 
         // checks day-month-year and month-day-year format; the formal takes precedence if the input matches both
         // note that inputs such as "15th" will not result in a match; need to recheck later
-        static Regex date_alphabeticFormat =
+        static public Regex date_alphabeticFormat =
             new Regex(@"^
                         (
                         # DD/MM
@@ -79,14 +79,14 @@ namespace ToDo
                         (?:(?(day)(\s(?<year>(\d\d)?\d\d))?|(\s(?<year>\d\d\d\d))))$"
             , RegexOptions.IgnorePatternWhitespace);
 
-        static Regex date_daysWithSuffixes =
+        static public Regex date_daysWithSuffixes =
              new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
 
-        static Regex isNumericalRange =
+        static public Regex isNumericalRange =
             new Regex(@"^(?<start>\d?\d?\d)(\-(?<end>\d?\d?\d))?");
         #endregion
 
-        static StaticVariables()
+        static CustomDictionary()
         {
             InitializeCommandKeywords();
             InitializeMonthKeywords();
@@ -253,6 +253,34 @@ namespace ToDo
         public static Regex GetRegexIsNumericalRange()
         {
             return isNumericalRange;
+        }
+        #endregion
+
+        // ******************************************************************
+        // Auxilliary Methods
+        // ******************************************************************
+
+        #region Regex Comparison Methods
+        public static bool IsValidDate(string theDate)
+        {
+            return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate);
+        }
+
+        public static bool IsValidTime(string theTime)
+        {
+            return time_24HourFormat.IsMatch(theTime) || time_12HourFormat.IsMatch(theTime);
+        }
+
+        // Note that the following methods do not validate that the dates do actually exist.
+        // i.e. does not check for erroneous non-existent dates such as 31st feb
+        public static bool IsValidNumericDate(string theDate)
+        {
+            return date_numericFormat.IsMatch(theDate) || date_daysWithSuffixes.IsMatch(theDate.ToLower();
+        }
+
+        public static bool IsValidAlphabeticDate(string theDate)
+        {
+            return date_alphabeticFormat.IsMatch(theDate);
         }
         #endregion
     }
