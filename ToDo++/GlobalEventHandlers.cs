@@ -12,6 +12,6 @@ namespace ToDo
         public static void StayOnTop(bool status){ StayOnTopHandler(status, EventArgs.Empty);}
 
         public static event EventHandler UpdateSettingsHandler;
-        public static void UpdateSettings(SettingsList settingsList) { UpdateSettingsHandler(settingsList, EventArgs.Empty); }
+        public static void UpdateSettings(SettingInformation settingsList) { UpdateSettingsHandler(settingsList, EventArgs.Empty); }
     }
 }

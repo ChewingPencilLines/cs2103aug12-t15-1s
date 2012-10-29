@@ -1,89 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 
 namespace ToDo
 {
-
-    #region SettingsList
-
-    public class SettingsList
-    {
-        public struct MiscSettings
-        {
-            private bool loadOnStartup;
-            private bool startMinimized;
-            private bool stayOnTop;
-            private int textSize;
-
-            public bool LoadOnStartup { get { return loadOnStartup; } set { loadOnStartup = value; } }
-            public bool StartMinimized { get { return startMinimized; } set { startMinimized = value; } }
-            public bool StayOnTop { get { return stayOnTop; } set { stayOnTop = value; } }
-            public int TextSize { get { return textSize; } set { textSize = value; } }
-
-            public MiscSettings(bool _loadOnStartup, bool _startMinimized, bool _stayOnTop, int _textSize)
-            {
-                loadOnStartup = _loadOnStartup;
-                startMinimized = _startMinimized;
-                stayOnTop = _stayOnTop;
-                textSize = _textSize;
-            }
-        }
-
-        public MiscSettings misc;
-        public Dictionary<string, CommandType> userCommandKeywords;
-        public Dictionary<string, ContextType> userContextKeywords;
-
-        public SettingsList()
-        {
-            misc = new MiscSettings(false, false, false, 9);
-            userCommandKeywords = StaticVariables.GetCommandKeywords();
-            userContextKeywords = StaticVariables.GetContextKeywords();
-        }
-
-        public bool ContainsCommandKeyword(string userKeyword,CommandType commandType)
-        {
-            CommandType passed;
-            if (userCommandKeywords.TryGetValue(userKeyword, out passed))
-            {
-                if (passed == commandType)
-                    return true;
-                else 
-                    return false;
-            }
-            else
-                return false;
-        }
-
-        public bool ContainsContextKeyword(string userKeyword, ContextType commandType)
-        {
-            ContextType passed;
-            if (userContextKeywords.TryGetValue(userKeyword, out passed))
-            {
-                if (passed == commandType)
-                    return true;
-                else return false;
-            }
-            else
-                return false;
-        }
-    }
-
-    #endregion
-
     public class Settings
     {
         // ******************************************************************
         // Static Keyword Declarations
         // ******************************************************************
 
-        static SettingsList settingsList;
+        static SettingInformation settingInfo;
 
         public Settings()
         {
@@ -96,12 +21,12 @@ namespace ToDo
 
         private void InitializeSettings()
         {
-            settingsList = new SettingsList();
+            settingInfo = new SettingInformation();
         }
 
-        public void UpdateSettings(SettingsList updatedList)
+        public void UpdateSettings(SettingInformation updatedInfo)
         {
-            settingsList = updatedList;
+            settingInfo = updatedInfo;
             //settingsList.misc = updatedList.misc;
         }
 
@@ -111,14 +36,14 @@ namespace ToDo
 
         #region GettersSetters
 
-        public void SetTextSize(int size) { settingsList.misc.TextSize = size; EventHandlers.UpdateSettings(settingsList); }
-        public int GetTextSize() { return settingsList.misc.TextSize; }
-        public void SetLoadOnStartupStatus(bool status) { settingsList.misc.LoadOnStartup = status; EventHandlers.UpdateSettings(settingsList); }
-        public bool GetLoadOnStartupStatus() { return settingsList.misc.LoadOnStartup; }
-        public void SetStartMinimized(bool status) { settingsList.misc.StartMinimized = status; EventHandlers.UpdateSettings(settingsList); }
-        public bool GetStartMinimizeStatus() { return settingsList.misc.StartMinimized; }
-        public void SetStayOnTop(bool status) { settingsList.misc.StayOnTop = status; EventHandlers.UpdateSettings(settingsList); }
-        public bool GetStayOnTopStatus() { return settingsList.misc.StayOnTop; }
+        public void SetTextSize(int size) { settingInfo.misc.TextSize = size; EventHandlers.UpdateSettings(settingInfo); }
+        public int GetTextSize() { return settingInfo.misc.TextSize; }
+        public void SetLoadOnStartupStatus(bool status) { settingInfo.misc.LoadOnStartup = status; EventHandlers.UpdateSettings(settingInfo); }
+        public bool GetLoadOnStartupStatus() { return settingInfo.misc.LoadOnStartup; }
+        public void SetStartMinimized(bool status) { settingInfo.misc.StartMinimized = status; EventHandlers.UpdateSettings(settingInfo); }
+        public bool GetStartMinimizeStatus() { return settingInfo.misc.StartMinimized; }
+        public void SetStayOnTop(bool status) { settingInfo.misc.StayOnTop = status; EventHandlers.UpdateSettings(settingInfo); }
+        public bool GetStayOnTopStatus() { return settingInfo.misc.StayOnTop; }
 
         #endregion;
 
@@ -138,15 +63,15 @@ namespace ToDo
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
         public void AddCommandKeyword(string newKeyword, CommandType commandType)
         {
-            if (settingsList.ContainsCommandKeyword(newKeyword, commandType))
+            if (settingInfo.ContainsCommandKeyword(newKeyword, commandType))
                 throw new RepeatCommandException("There is such a command in the list already");
-            if (settingsList.userContextKeywords.ContainsKey(newKeyword))
+            if (settingInfo.userContextKeywords.ContainsKey(newKeyword))
                 throw new RepeatCommandException("There is a repeat keyword already");
-            if (settingsList.userCommandKeywords.ContainsKey(newKeyword))
+            if (settingInfo.userCommandKeywords.ContainsKey(newKeyword))
                 throw new RepeatCommandException("There is a repeat keyword already ");
-            settingsList.userCommandKeywords.Add(newKeyword, commandType);
+            settingInfo.userCommandKeywords.Add(newKeyword, commandType);
 
-            EventHandlers.UpdateSettings(settingsList);
+            EventHandlers.UpdateSettings(settingInfo);
         }
 
         /// <summary>
@@ -159,9 +84,9 @@ namespace ToDo
                 || keywordToRemove == "search" || keywordToRemove == "modify" || keywordToRemove == "undo" || keywordToRemove == "redo"
                 || keywordToRemove == "done" || keywordToRemove == "postpone")
                 throw new InvalidDeleteFlexiException("This is a default keyword and can't be removed");
-            settingsList.userCommandKeywords.Remove(keywordToRemove);
+            settingInfo.userCommandKeywords.Remove(keywordToRemove);
 
-            EventHandlers.UpdateSettings(settingsList);
+            EventHandlers.UpdateSettings(settingInfo);
         }
 
         /// <summary>
@@ -172,7 +97,7 @@ namespace ToDo
         public List<string> GetCommandKeywordList(CommandType commandType)
         {
             List<string> getCommands = new List<string>();
-            foreach(var pair in settingsList.userCommandKeywords){
+            foreach(var pair in settingInfo.userCommandKeywords){
                 if(pair.Value==commandType)
                     getCommands.Add(pair.Key);
             }
@@ -192,15 +117,15 @@ namespace ToDo
         /// <param name="commandString">Specify to which CommandType it is being added to</param>
         public void AddContextKeyword(string newKeyword, ContextType contextType)
         {
-            if (settingsList.ContainsContextKeyword(newKeyword, contextType))
+            if (settingInfo.ContainsContextKeyword(newKeyword, contextType))
                 throw new RepeatCommandException("There is such a command in the list already");
-            if (settingsList.userContextKeywords.ContainsKey(newKeyword))
+            if (settingInfo.userContextKeywords.ContainsKey(newKeyword))
                 throw new RepeatCommandException("There is a repeat keyword already");
-            if (settingsList.userCommandKeywords.ContainsKey(newKeyword))
+            if (settingInfo.userCommandKeywords.ContainsKey(newKeyword))
                 throw new RepeatCommandException("There is a repeat keyword already");
-            settingsList.userContextKeywords.Add(newKeyword, contextType);
+            settingInfo.userContextKeywords.Add(newKeyword, contextType);
 
-            EventHandlers.UpdateSettings(settingsList);
+            EventHandlers.UpdateSettings(settingInfo);
         }
 
         /// <summary>
@@ -212,9 +137,9 @@ namespace ToDo
             if (keywordToRemove == "on" || keywordToRemove == "from" || keywordToRemove == "to" || keywordToRemove == "-"
                 || keywordToRemove == "this" || keywordToRemove == "next" || keywordToRemove == "following" )
                     throw new InvalidDeleteFlexiException("This is a default keyword and can't be removed");
-            settingsList.userContextKeywords.Remove(keywordToRemove);
+            settingInfo.userContextKeywords.Remove(keywordToRemove);
 
-            EventHandlers.UpdateSettings(settingsList);
+            EventHandlers.UpdateSettings(settingInfo);
         }
 
         /// <summary>
@@ -225,7 +150,7 @@ namespace ToDo
         public List<string> GetContextKeywordList(ContextType contextType)
         {
             List<string> getCommands = new List<string>();
-            foreach (var pair in settingsList.userContextKeywords)
+            foreach (var pair in settingInfo.userContextKeywords)
             {
                 if (pair.Value == contextType)
                     getCommands.Add(pair.Key);

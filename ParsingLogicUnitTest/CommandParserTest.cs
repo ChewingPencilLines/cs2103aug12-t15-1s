@@ -64,9 +64,9 @@ namespace CommandParserTest
             testCmdParser = new CommandParser(ref testStrParser);
             Operation op1 = testCmdParser.ParseOperation("task do stuff add by 9 pm");
             Assert.IsTrue(op1 is OperationAdd);
-            Task task1 = ((OperationAdd)op1).NewTask;
-            Assert.IsTrue(task1.TaskName == "task do stuff");
-            Assert.IsTrue(task1 is TaskDeadline);
+            //Task task1 = ((OperationAdd)op1).NewTask;
+            //Assert.IsTrue(task1.TaskName == "task do stuff");
+            //Assert.IsTrue(task1 is TaskDeadline);
             TimeSpan deadline = ((TaskDeadline)task1).EndTime.TimeOfDay;
             Assert.IsTrue((deadline.Equals(new TimeSpan(21,0,0))));
             return;

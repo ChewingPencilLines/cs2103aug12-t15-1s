@@ -70,14 +70,14 @@ namespace ToDo
         /// </summary>
         /// <param name="settingsList"></param>
         /// <returns></returns>
-        public bool UpdateSettingsFile(SettingsList settings)
+        public bool UpdateSettingsFile(SettingInformation settings)
         {
             return storage.WriteSettingsToFile(settings);
         }
 
         private void UpdateSettings(object sender, EventArgs args)
         {
-            UpdateSettingsFile((SettingsList)sender);
+            UpdateSettingsFile((SettingInformation)sender);
         }
 
     } 

@@ -74,15 +74,15 @@ namespace ToDo
             return true;
         }
 
-        internal SettingsList LoadSettingsFromFile()
-        {            
-            SettingsList settingsList = new SettingsList();
+        internal SettingInformation LoadSettingsFromFile()
+        {
+            SettingInformation settingInfo = new SettingInformation();
             try
             {
                 using (StreamReader file = new StreamReader(settingsFile))
                 {
-                    XmlSerializer writer = new XmlSerializer(typeof(ToDo.SettingsList.MiscSettings));
-                    settingsList.misc = (ToDo.SettingsList.MiscSettings)writer.Deserialize(file);
+                    string xml = file.ReadToEnd();  
+                    settingInfo = xml.Deserialize<SettingInformation>();
                     file.Close();
                 }
             }
@@ -90,29 +90,32 @@ namespace ToDo
             catch (FileNotFoundException)
             {
                 AlertBox.Show("Settings file not found.\nNew file will be created");
-                WriteSettingsToFile(settingsList);
+                WriteSettingsToFile(settingInfo);
             }
-            catch (InvalidOperationException)
+            catch (System.Runtime.Serialization.SerializationException)
             {
                 AlertBox.Show("There was an error with the settings file, a new file will be created");
-                WriteSettingsToFile(settingsList);
+                WriteSettingsToFile(settingInfo);
             }
-            return settingsList;
+            return settingInfo;
         }
 
-        internal bool WriteSettingsToFile(SettingsList settingsList)
+        internal bool WriteSettingsToFile(SettingInformation settingInfo)
         {
             try
             {
+                /*
                 StreamWriter file = new StreamWriter(settingsFile);
-                XmlSerializer writer = new XmlSerializer(typeof(ToDo.SettingsList.MiscSettings));
+                XmlSerializer writer = new XmlSerializer(typeof(ToDo.SettingInformation.MiscSettings));
                 XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
                 ns.Add("", "");
-                writer.Serialize(file, settingsList.misc, ns);
+                writer.Serialize(file, settingInfo.misc, ns);*/
+                StreamWriter file = new StreamWriter(settingsFile);
+                file.Write(settingInfo.ToXML());
                 file.Close();
                 return true;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 AlertBox.Show("Failed to write to settings file!");
                 return false;

@@ -35,6 +35,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,6 +79,8 @@
     <Compile Include="Operations\OperationSearch.cs" />
     <Compile Include="Operations\OperationSort.cs" />
     <Compile Include="Operations\OperationUndo.cs" />
+    <Compile Include="Settings\SerializationExtensions.cs" />
+    <Compile Include="Settings\SettingInformation.cs" />
     <Compile Include="StaticVariables.cs" />
     <Compile Include="TaskComparer.cs" />
     <Compile Include="UI\Components\InputBox.cs">
