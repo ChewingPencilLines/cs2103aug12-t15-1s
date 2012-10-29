@@ -58,8 +58,12 @@ namespace ToDo
             }
             else
             {
-                Task taskToModify = lastListedTasks[oldIndex.Value];
-                response = ModifyTask(ref taskToModify, newTask, ref taskList, out successFlag);
+                if (oldIndex.Value >= 0 && oldIndex.Value < lastListedTasks.Count)
+                {
+                    Task taskToModify = lastListedTasks[oldIndex.Value];
+                    response = ModifyTask(ref taskToModify, newTask, ref taskList, out successFlag);
+                }
+                else response = RESPONSE_INVALID_TASK_INDEX;
             }
             if (successFlag) TrackOperation();
             return response;
