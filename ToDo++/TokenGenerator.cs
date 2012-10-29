@@ -381,6 +381,14 @@ namespace ToDo
             }
             return literalTokens;
         }
+
+        private void AddLiteralToken(ref string literal, int index, ref List<Token> literalTokens)
+        {
+            literal = literal.Trim();
+            TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
+            literalTokens.Add(literalToken);
+            literal = String.Empty;
+        }
         #endregion
 
         // ******************************************************************
@@ -547,14 +555,6 @@ namespace ToDo
                 if (token.Position == p) return token;
             }
             return null;
-        }
-
-        private void AddLiteralToken(ref string literal, int index, ref List<Token> literalTokens)
-        {
-            literal = literal.Trim();
-            TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
-            literalTokens.Add(literalToken);
-            literal = String.Empty;
         }
         #endregion
     }
