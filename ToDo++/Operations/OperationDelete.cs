@@ -35,7 +35,7 @@ namespace ToDo
             List<Task> searchResults;
             if (index == null)
             {
-                searchResults = SearchForTasks(taskList, taskName, true, startTime, endTime);
+                searchResults = SearchForTasks(taskList, taskName, false, startTime, endTime);
                 if (searchResults.Count == 0)
                 {
                     //check substring
