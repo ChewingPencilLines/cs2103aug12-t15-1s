@@ -7,12 +7,17 @@ namespace ToDo
     class OperationMarkAsDone : Operation
     {
         private int? index;
+        private int? endindex;
         private string doneString;
 
         public OperationMarkAsDone(int[] indexRange)
         {
             if (indexRange == null) this.index = null;
-            else this.index = indexRange[TokenCommand.START_INDEX] - 1;
+            else
+            {
+                this.index = indexRange[TokenCommand.START_INDEX] - 1;
+                this.endindex = indexRange[TokenCommand.END_INDEX] - 1;
+            }
             this.doneString = null;
         }
 
@@ -41,8 +46,12 @@ namespace ToDo
             }
             else if (doneString == null)
             {
-                Task taskToMarkAsDone = lastListedTasks[index.Value];
-                response = MarkAsDone(taskToMarkAsDone, out successFlag);
+                response = null;
+                for (int? i = index; i <= endindex; i++)
+                {
+                    Task taskToMarkAsDone = lastListedTasks[i.Value];
+                    response += MarkAsDone(taskToMarkAsDone, out successFlag) + '\n';
+                }
             }
             else
             {

@@ -74,12 +74,11 @@ namespace ToDo
                 }
                 else
                 {
-                    response = "";
+                    response = null;
                     for (int? i = index; i <= endindex; i++)
                     {
                         Task taskToDelete = lastListedTasks[i.Value];
-                        if (taskToDelete == null)
-                            return RESPONSE_DELETE_ALREADY;
+                        if (taskToDelete == null) response += RESPONSE_DELETE_ALREADY;
                         else response += DeleteTask(taskToDelete, taskList, out successFlag);
                         response += '\n';
                     }
