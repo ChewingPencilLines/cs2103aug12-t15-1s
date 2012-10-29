@@ -206,7 +206,12 @@ namespace ToDo
                     newOperation = new OperationUndo();
                     break;
                 case CommandType.DONE:
-                    if (taskName != null && taskName != "")
+                    if (startCombined != null)
+                    {
+                        newOperation=new OperationMarkAsDone(startCombined);
+                        break;
+                    }
+                    else if (taskName != null && taskName != "")
                     {
                         newOperation = new OperationMarkAsDone(taskName);
                         break;

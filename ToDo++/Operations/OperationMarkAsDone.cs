@@ -9,6 +9,7 @@ namespace ToDo
         private int? index;
         private int? endindex;
         private string doneString;
+        private DateTime? doneDate;
 
         public OperationMarkAsDone(int[] indexRange)
         {
@@ -27,11 +28,25 @@ namespace ToDo
             this.doneString = doneString;
         }
 
+        public OperationMarkAsDone(DateTime? doneDate)
+        {
+            this.doneDate = doneDate;
+        }
+
         public override string Execute(List<Task> taskList, Storage storageXML)
         {
             this.storageXML = storageXML;
             string response;
-            if (index.HasValue == false && doneString != null)
+            if (doneDate != null)
+            {
+                response = null;
+                List<Task> searchResults = SearchForTasks(taskList, doneString, false, doneDate, doneDate);
+                foreach(Task taskToDone in searchResults)
+                {
+                    response += MarkAsDone(taskToDone, out successFlag) + '\n';
+                }
+            }
+            else if (index.HasValue == false && doneString != null)
             {
                 List<Task> searchResults = SearchForTasks(taskList, doneString);
                 if (searchResults.Count == 1)
