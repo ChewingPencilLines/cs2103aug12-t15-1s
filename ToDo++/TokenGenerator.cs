@@ -148,7 +148,10 @@ namespace ToDo
                 DateSpecificity isSpecific = new DateSpecificity(true, true, true);
                 DateTime dateTime = new DateTime();
                 TokenDate dateToken = null;
-                if (CustomDictionary.IsValidDate(word.ToLower()) || word.ToLower() == "today")  //@jenna todo: remove magic word.
+                if ( CustomDictionary.IsValidDate(word.ToLower())
+                    || word.ToLower() == "today"                //@jenna todo: remove magic word.
+                    || CustomDictionary.monthKeywords.ContainsKey(word.ToLower())
+                    )  
                 {
                     string dayString = String.Empty;
                     string monthString = String.Empty;
@@ -157,6 +160,14 @@ namespace ToDo
                     {
                         day = DateTime.Now.Day;
                         month = DateTime.Now.Month;
+                        year = DateTime.Now.Year;
+                    }
+                    else if (CustomDictionary.monthKeywords.ContainsKey(word.ToLower()))
+                    {
+                        isSpecific.Day = false;
+                        isSpecific.Year = false;
+                        day = 1;
+                        month = ConvertToNumericMonth(word);
                         year = DateTime.Now.Year;
                     }
                     else
@@ -178,7 +189,7 @@ namespace ToDo
                         month = DateTime.Today.Month;
                     }
                     // no year input
-                    if (year == 0)
+                    if (year == 0 || isSpecific.Year == false)
                     {
                         isSpecific.Year = false;
                         year = DateTime.Today.Year;
@@ -187,32 +198,19 @@ namespace ToDo
                         {                            
                             if (isSpecific.Month == false)
                             {
-                                year = DateTime.Today.AddMonths(1).Year;
                                 month = DateTime.Today.AddMonths(1).Month;
+                                year = DateTime.Today.AddMonths(1).Year;                                                                    
                             }
-                            else
+                            else if (month != DateTime.Now.Month)                                
                             {
-                                year = DateTime.Today.AddMonths(1).Year;
+                                year = DateTime.Today.AddYears(1).Year;
                             }
                         }
                     }
                     dateTime = TryParsingDate(year, month, day, false);
-                    dateToken = new TokenDate(index, dateTime, isSpecific);                    
+                    dateToken = new TokenDate(index, dateTime, isSpecific);
+                    dateTokens.Add(dateToken);
                 }
-                else if (CustomDictionary.monthKeywords.ContainsKey(word.ToLower()))
-                {
-                    isSpecific.Day = false;
-                    isSpecific.Year = false;
-                    month = ConvertToNumericMonth(word);
-                    dateTime = TryParsingDate(DateTime.Today.Year, month, day, false);
-                    dateToken = new TokenDate(index, dateTime, isSpecific);                    
-                }
-                else if (word.ToLower() == "today") //@jenna todo: remove magic word.
-                {
-                    dateTime = DateTime.Today;
-                    dateToken = new TokenDate(index, dateTime, isSpecific);                    
-                }
-                if (dateToken != null) dateTokens.Add(dateToken);
                 index++;
             }
             return dateTokens;
