@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace ToDo.Tasks
+namespace ToDo
 {
-    public class TaskDeadline : Task
+    class TaskDeadline : Task
     {
         private struct IsSpecific
         {
