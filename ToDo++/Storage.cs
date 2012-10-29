@@ -199,6 +199,7 @@ namespace ToDo
             if ( task.Element("State").Value == "True" ) state = true;
             else state = false;
 
+            /*
             switch (type)
             {
                 case "Floating":
@@ -214,8 +215,10 @@ namespace ToDo
                     newTask = new TaskDeadline(taskName, endTime, state, id);
                     break;
             }
+             */
 
             return newTask;
+
         }
     }
 }
