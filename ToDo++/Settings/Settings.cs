@@ -43,8 +43,10 @@ namespace ToDo
         public SettingsList()
         {
             misc = new MiscSettings(false, false, false, 9);
-            userCommandKeywords = new Dictionary<string, CommandType>();
-            userContextKeywords = new Dictionary<string, ContextType>();
+            //userCommandKeywords = new Dictionary<string, CommandType>();
+            //userContextKeywords = new Dictionary<string, ContextType>();
+            userCommandKeywords = StaticVariables.GetCommandKeywords();
+            userContextKeywords = StaticVariables.GetContextKeywords();
         }
 
         public bool ContainsCommandKeyword(string userKeyword,CommandType commandType)
