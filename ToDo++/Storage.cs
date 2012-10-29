@@ -180,7 +180,8 @@ namespace ToDo
                 Task addTask = GenerateTaskFromXElement(task);
                 if (addTask == null)
                 {
-                    AlertBox.Show("Task storage file seems corrupted. Error reading from it!");
+                    CustomMessageBox.Show("Error!","Task storage file seems corrupted. Error reading from it! Create new file?");
+                    throw new NotImplementedException("To create handler for creating new file..");
                 }
                 taskList.Add(addTask);
             }
@@ -192,14 +193,13 @@ namespace ToDo
             Task newTask = null;
             string type = task.Attribute("type").Value;
             int id = Int32.Parse(task.Attribute("id").Value);
-            string taskName = task.Element("Name").Value;
+            string taskName = task.Element("Name").Value;            
             DateTime startTime, endTime;
+            DateTimeSpecificity isSpecific = task.Element("DateTimeSpecificity").FromXElement<DateTimeSpecificity>();
             bool state;
 
             if ( task.Element("State").Value == "True" ) state = true;
             else state = false;
-
-            /*
             switch (type)
             {
                 case "Floating":
@@ -207,15 +207,14 @@ namespace ToDo
                     break;
                 case "Deadline":
                     endTime = DateTime.Parse(task.Element("EndTime").Value);
-                    newTask = new TaskDeadline(taskName, endTime, state, id);
+                    newTask = new TaskDeadline(taskName, endTime, isSpecific, state, id);
                     break;
                 case "Event":
                     endTime = DateTime.Parse(task.Element("EndTime").Value);
                     startTime = DateTime.Parse(task.Element("StartTime").Value);
-                    newTask = new TaskDeadline(taskName, endTime, state, id);
+                    newTask = new TaskDeadline(taskName, endTime, isSpecific, state, id);
                     break;
             }
-             */
 
             return newTask;
 

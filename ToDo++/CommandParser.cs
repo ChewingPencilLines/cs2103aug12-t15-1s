@@ -37,9 +37,9 @@ namespace ToDo
             DateTime? startDate = null, endDate = null;
             DayOfWeek? startDay = null, endDay = null;
             DateTime? startCombined = null, endCombined = null;
+            DateTimeSpecificity isSpecific = new DateTimeSpecificity();
             string taskName = null;
             int[] taskIndex = null;
-            bool specificity = true;
 
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
@@ -79,12 +79,15 @@ namespace ToDo
                     {
                         case ContextType.STARTTIME:
                             startTime = ((TokenTime)token).Value;
+                            isSpecific.StartTime = ((TokenTime)token).IsSpecific;
                     	    break;
                         case ContextType.ENDTIME:
                             endTime = ((TokenTime)token).Value;
+                            isSpecific.EndTime = ((TokenTime)token).IsSpecific;
                     	    break;
                         case ContextType.DEADLINE:
                             endTime = ((TokenTime)token).Value;
+                            isSpecific.EndTime = ((TokenTime)token).IsSpecific;
                             break;
                         default:
                             Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenTime case!");
@@ -115,7 +118,6 @@ namespace ToDo
                 }
                 else if (token is TokenDate)
                 {
-                    specificity = ((TokenDate)token).IsSpecific;
                     switch (currentMode)
                     {
                         case ContextType.STARTTIME:
@@ -131,7 +133,8 @@ namespace ToDo
                         default:
                             Debug.Assert(false,"Fell through switch statement in GenerateOperation, TokenDay case!");
                             break;
-                    } 
+                    }
+
                 }
                 else if (token is TokenLiteral)
                 {
@@ -155,19 +158,26 @@ namespace ToDo
             else
                 endCombined = CombineDateAndTime(endTime, endDate, (DateTime)startCombined);
 
-            Operation newOperation = CreateOperation(commandType, startCombined, endCombined, taskName, taskIndex, specificity);
+            Operation newOperation = CreateOperation(commandType, startCombined, endCombined, isSpecific, taskName, taskIndex);
             return newOperation;
         }
 
         // Create operation based on derived values, and whether they have been used.
-        private static Operation CreateOperation(CommandType commandType, DateTime? startCombined, DateTime? endCombined, string taskName, int[] taskIndex, bool specificity)
+        private static Operation CreateOperation(
+            CommandType commandType,
+            DateTime? startCombined,
+            DateTime? endCombined,
+            DateTimeSpecificity isSpecific,
+            string taskName,
+            int[] taskIndex
+            )
         {
             Task task;
             Operation newOperation = null;
             switch (commandType)
             {
                 case CommandType.ADD:
-                    task = GenerateNewTask(taskName, startCombined, endCombined, specificity);
+                    task = GenerateNewTask(taskName, startCombined, endCombined, isSpecific);
                     newOperation = new OperationAdd(task);
                     break;
                 case CommandType.DELETE:
@@ -177,7 +187,7 @@ namespace ToDo
                     newOperation = new OperationDisplay();
                     break;
                 case CommandType.MODIFY:
-                    task = GenerateNewTask(taskName, startCombined, endCombined, specificity);
+                    task = GenerateNewTask(taskName, startCombined, endCombined, isSpecific);
                     if (taskName != null && taskIndex != null)
                     {
                         newOperation = new OperationModify(taskIndex[TokenCommand.START_INDEX],task);
@@ -267,21 +277,26 @@ namespace ToDo
             return combinedDT;
         }
 
-        private static Task GenerateNewTask(string taskName, DateTime? startTime, DateTime? endTime, bool specificity)
+        private static Task GenerateNewTask(
+            string taskName,
+            DateTime? startTime,
+            DateTime? endTime,
+            DateTimeSpecificity isSpecific
+            )
         {
-            if (!specificity)
-                endTime = new DateTime(((DateTime)startTime).Year, ((DateTime)startTime).Month, DateTime.DaysInMonth(((DateTime)startTime).Year, ((DateTime)startTime).Month));
+            //if (!specificity)
+            //    endTime = new DateTime(((DateTime)startTime).Year, ((DateTime)startTime).Month, DateTime.DaysInMonth(((DateTime)startTime).Year, ((DateTime)startTime).Month));
             if (startTime == null && endTime == null)
                 return new TaskFloating(taskName);
             else if (startTime == null && endTime != null)
-                return new TaskDeadline(taskName, (DateTime)endTime);
-            else if (startTime != null && endTime == null && specificity == true)
+                return new TaskDeadline(taskName, (DateTime)endTime, isSpecific);
+            else if (startTime != null && endTime == null && isSpecific.EndTime == true)
             {
                 AlertBox.Show("No specific end time given for timed event task!");
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, specificity); // note: set endTime as what for default?
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific); // note: set endTime as what for default?
             }
             else
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, specificity);
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
         }
 
         /// <summary>

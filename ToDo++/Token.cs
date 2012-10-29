@@ -6,22 +6,6 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    public struct DateSpecificity
-    {
-        private bool day;
-        private bool month;
-        private bool year;
-        public DateSpecificity(bool daySpecificity, bool monthSpecificity, bool yearSpecificity)
-        {
-            day = daySpecificity;
-            month = monthSpecificity;
-            year = yearSpecificity;
-        }
-        public bool Day { get { return day; } set { day = value; } }
-        public bool Month { get { return month; } set { month = value; } }
-        public bool Year { get { return year; } set { year = value; } }
-    }
-
     public class Token
     {        
         private int position;
@@ -62,22 +46,23 @@ namespace ToDo
 
     public class TokenDate : Token
     {
-        private DateSpecificity dateSpecificity = new DateSpecificity();
+        DateSpecificity isSpecific;
         DateTime dateTime;
-        Boolean specific;
+        internal DateSpecificity IsSpecific
+        {
+            get { return isSpecific; }
+            set { isSpecific = value; }
+        }
         internal DateTime Value
         {
             get { return dateTime; }
         }
-        internal Boolean IsSpecific
-        {
-            get { return specific; }
-        }
-        internal TokenDate(int position, DateTime date, DateSpecificity specificity)
+
+        internal TokenDate(int position, DateTime date, DateSpecificity isSpecific)
             : base(position)
         {
             dateTime = date;
-            dateSpecificity = specificity;
+            this.isSpecific = isSpecific;
         }
     }
 
