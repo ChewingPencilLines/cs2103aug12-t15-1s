@@ -14,13 +14,18 @@ namespace ToDo
         // i will also catch the "all" keyword, letting u allow all search hits to be deleted immediately.
 
         private int? index;
+        private int? endindex;
         private string taskName;
         private DateTime? startTime = null, endTime = null;
 
         public OperationDelete(string taskName, int[] indexRange, DateTime? startTime, DateTime? endTime)
         {
             if (indexRange == null) this.index = null;
-            else this.index = indexRange[TokenCommand.START_INDEX] - 1;
+            else
+            {
+                this.index = indexRange[TokenCommand.START_INDEX] - 1;
+                this.endindex = indexRange[TokenCommand.END_INDEX] - 1;
+            }
             if (taskName == null) this.taskName = "";
             else this.taskName = taskName;
             this.startTime = startTime;
@@ -56,10 +61,29 @@ namespace ToDo
             }
             else
             {
-                Task taskToDelete = lastListedTasks[index.Value];
-                if (taskToDelete == null)
-                    return RESPONSE_DELETE_ALREADY;
-                else response = DeleteTask(taskToDelete, taskList, out successFlag);
+                if (endindex == index)
+                {
+                    Task taskToDelete = lastListedTasks[index.Value];
+                    if (taskToDelete == null)
+                        return RESPONSE_DELETE_ALREADY;
+                    else response = DeleteTask(taskToDelete, taskList, out successFlag);
+                }
+                else if (endindex < 0 || endindex > lastListedTasks.Count - 1)
+                {
+                    return RESPONSE_INVALID_TASK_INDEX;
+                }
+                else
+                {
+                    response = "";
+                    for (int? i = index; i <= endindex; i++)
+                    {
+                        Task taskToDelete = lastListedTasks[i.Value];
+                        if (taskToDelete == null)
+                            return RESPONSE_DELETE_ALREADY;
+                        else response += DeleteTask(taskToDelete, taskList, out successFlag);
+                        response += '\n';
+                    }
+                }
             }
 
             if (successFlag) TrackOperation();
