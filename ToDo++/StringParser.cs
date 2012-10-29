@@ -26,19 +26,9 @@ namespace ToDo
         const int START_INDEX = 0;
         const int END_INDEX = 1;
         static char[,] delimitingCharacters = { { '\'', '\'' }, { '\"', '\"' }, { '[', ']' }, { '(', ')' }, { '{', '}' } };
-        static Dictionary<string, Month> monthKeywords;
-        static List<string> timeSuffixes;
-        static Regex time_24HourFormat, time_12HourFormat, date_numericFormat, date_alphabeticFormat, date_daysWithSuffixes;
 
         static StringParser()
         {
-            monthKeywords = StaticVariables.GetMonthKeywords();
-            timeSuffixes = StaticVariables.GetTimeSuffixes();
-            time_24HourFormat = StaticVariables.GetRegexTime24HourFormat();
-            time_12HourFormat = StaticVariables.GetRegexTime12HourFormat();
-            date_numericFormat = StaticVariables.GetRegexDateNumericFormat();
-            date_alphabeticFormat = StaticVariables.GetRegexDateAlphabeticFormat();
-            date_daysWithSuffixes = StaticVariables.GetRegexDateDaysWithSuffixes();
         }
 
         // ******************************************************************
@@ -46,31 +36,6 @@ namespace ToDo
         // ******************************************************************
 
         #region Internal Methods
-        /*
-         * should move to staticvariables class
-         * 
-        internal void AddUserCommand(string userCommand, CommandType commandType)
-        {
-            try
-            {
-                commandKeywords.Add(userCommand, commandType);
-
-            }
-            catch (Exception)
-            {
-                //Handle repeat keywords
-                //If the key is already added, dont add ignore! need to do a better implementation
-            }
-        }*/
-
-        /*
-         * should move to static variables class
-         * 
-        internal void ResetCommandKeywords()
-        {
-            InitializeCommandKeywords();
-        }*/
-
         /// <summary>
         /// This method searches the input string against the set delimiters'
         /// and return the positions of the delimiters as a list of integer pairs.
@@ -236,7 +201,7 @@ namespace ToDo
         /// <returns>True if the word is a time keyword, false if otherwise</returns>
         private bool CheckIfWordIsTimeKeyword(string word)
         {
-            foreach (string keyword in timeSuffixes)
+            foreach (string keyword in CustomDictionary.timeSuffixes)
             {
                 if (word.ToLower() == keyword)
                     return true;
@@ -262,7 +227,7 @@ namespace ToDo
             }
             frontHalf = input.ElementAt(position - 1);
             string mergedWord = String.Concat(frontHalf, backHalf);
-            if (IsValidTime(mergedWord))
+            if (CustomDictionary.IsValidTime(mergedWord))
             {
                 output.RemoveAt(output.Count - 1);
                 output.Add(mergedWord);
@@ -293,7 +258,7 @@ namespace ToDo
                     position++;
                     continue;
                 }
-                if (monthKeywords.ContainsKey(word.ToLower()))
+                if (CustomDictionary.monthKeywords.ContainsKey(word.ToLower()))
                 {
                     isWordAdded = MergeWord_IfValidAlphabeticDate(ref output, input, position, ref skipWords);
                 }
@@ -330,7 +295,7 @@ namespace ToDo
             int i = 1;
             // Backward check
             if ((position > 0) &&
-                (IsValidAlphabeticDate(input[position - 1] + " " + mergedWord.ToLower())))
+                (CustomDictionary.IsValidAlphabeticDate(input[position - 1] + " " + mergedWord.ToLower())))
             {
                 mergedWord = input[position - 1] + " " + mergedWord;
                 isWordUsed = true;
@@ -338,7 +303,7 @@ namespace ToDo
             // Forward check
             while (position + i < input.Count)
             {
-                if (IsValidAlphabeticDate(mergedWord.ToLower() + " " + input[position + i]))
+                if (CustomDictionary.IsValidAlphabeticDate(mergedWord.ToLower() + " " + input[position + i]))
                 {
                     mergedWord = mergedWord + " " + input[position + i];
                 }
@@ -358,67 +323,5 @@ namespace ToDo
             return true;
         }
         #endregion
-
-        // ******************************************************************
-        // Auxilliary Methods
-        // ******************************************************************
-
-        #region Comparison Methods For Regexes
-        private bool IsValidTime(string theTime)
-        {
-            return (time_24HourFormat.IsMatch(theTime) || time_12HourFormat.IsMatch(theTime));
-        }
-
-        // Note that the following methods do not validate that the dates do actually exist.
-        // i.e. does not check for erroneous non-existent dates such as 31st feb
-        public static bool IsValidNumericDate(string theDate)
-        {
-            return date_numericFormat.IsMatch(theDate) || date_daysWithSuffixes.IsMatch(theDate.ToLower());
-        }
-
-        public static bool IsValidAlphabeticDate(string theDate)
-        {
-            return date_alphabeticFormat.IsMatch(theDate);
-        }
-        #endregion
-
-        //Moved to token generation
-        /*
-        /// <summary>
-        /// This method checks to see if the command is followed by an index.
-        /// If it is, it merges the command with the index.
-        /// </summary>
-        /// <param name="input">The list of separated words</param>
-        /// <returns>List of string with command(s) merged with index(es)</returns>
-        private List<string> MergeCommandAndIndexKeywords(List<string> words)
-        {
-            List<string> output = new List<string>();
-            bool merged = false;
-            CommandType commandType;
-            for (int i = 0; i < words.Count; i++) // don't check last word
-            {
-                
-                if (commandKeywords.TryGetValue(words[i].ToLower(), out commandType) && i != words.Count)
-                {
-                    if ((commandType == CommandType.DELETE || commandType == CommandType.MODIFY || commandType == CommandType.DONE) && i + 1 < words.Count)
-                    {
-                        int convert;
-                        if (Int32.TryParse(words[i + 1], out convert))
-                        {
-                            output.Add(words[i] + " " + words[i + 1]);
-                            merged = true;
-                        }
-                    }
-                }
-                if (merged)
-                {
-                    i++;
-                    merged = false;
-                }
-                else output.Add(words[i]);
-            }
-            return output;
-        }
-        */
     }
 }

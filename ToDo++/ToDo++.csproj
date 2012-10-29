@@ -78,8 +78,11 @@
     <Compile Include="Operations\OperationSearch.cs" />
     <Compile Include="Operations\OperationSort.cs" />
     <Compile Include="Operations\OperationUndo.cs" />
-    <Compile Include="StaticVariables.cs" />
+    <Compile Include="CustomDictionary.cs" />
     <Compile Include="TaskComparer.cs" />
+    <Compile Include="Tasks\TaskDeadline.cs" />
+    <Compile Include="Tasks\TaskEvent.cs" />
+    <Compile Include="Tasks\TaskFloating.cs" />
     <Compile Include="UI\Components\InputBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -122,7 +125,7 @@
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="CustomExceptions.cs" />
     <Compile Include="StringParser.cs" />
-    <Compile Include="Task.cs" />
+    <Compile Include="Tasks\Task.cs" />
     <Compile Include="UI\Components\CustomMessageBox.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="UI\Components\DateTimeControl.cs">
@@ -230,6 +233,7 @@
       <Name>HotkeyLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

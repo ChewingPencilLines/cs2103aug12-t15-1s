@@ -12,28 +12,8 @@ namespace ToDo
 {
     public class TokenGenerator
     {
-        static Dictionary<string, CommandType> commandKeywords;
-        static Dictionary<string, Month> monthKeywords;
-        static Dictionary<string, ContextType> contextKeywords;
-        static Dictionary<string, DayOfWeek> dayKeywords;
-        static List<string> timeSuffixes, timeSpecificKeywords, timeGeneralKeywords;
-        static Regex time_24HourFormat, time_12HourFormat, date_numericFormat, date_alphabeticFormat, date_daysWithSuffixes, isNumericalRange;
-
         public TokenGenerator()
         {
-            commandKeywords = StaticVariables.GetCommandKeywords();
-            monthKeywords = StaticVariables.GetMonthKeywords();
-            contextKeywords = StaticVariables.GetContextKeywords();
-            dayKeywords = StaticVariables.GetDayKeywords();
-            timeSuffixes = StaticVariables.GetTimeSuffixes();
-            timeSpecificKeywords = StaticVariables.GetTimeSpecificKeywords();
-            timeGeneralKeywords = StaticVariables.GetTimeGeneralKeywords();
-            time_24HourFormat = StaticVariables.GetRegexTime24HourFormat();
-            time_12HourFormat = StaticVariables.GetRegexTime12HourFormat();
-            date_numericFormat = StaticVariables.GetRegexDateNumericFormat();
-            date_alphabeticFormat = StaticVariables.GetRegexDateAlphabeticFormat();
-            date_daysWithSuffixes = StaticVariables.GetRegexDateDaysWithSuffixes();
-            isNumericalRange = StaticVariables.GetRegexIsNumericalRange();
         }
 
         // ******************************************************************
@@ -78,7 +58,7 @@ namespace ToDo
             int[] userDefinedIndex = null;
             for (int i = 0; i < inputWords.Count; i++)
             {
-                if (commandKeywords.TryGetValue(inputWords[i].ToLower(), out commandType))
+                if (CustomDictionary.commandKeywords.TryGetValue(inputWords[i].ToLower(), out commandType))
                 {
                     // Check for numerical index ranges.
                     if ((commandType == CommandType.DELETE || commandType == CommandType.MODIFY || commandType == CommandType.DONE))
@@ -104,7 +84,7 @@ namespace ToDo
         private bool TryGetNumericalRange(string matchCheck, out int[] userDefinedIndex)
         {
             userDefinedIndex = null;
-            Match match = isNumericalRange.Match(matchCheck);
+            Match match = CustomDictionary.isNumericalRange.Match(matchCheck);
             bool matchSuccess = match.Success;
             if (matchSuccess)
             {
@@ -135,9 +115,9 @@ namespace ToDo
             int index = 0;
             foreach (string word in input)
             {
-                if (dayKeywords.ContainsKey(word))
+                if (CustomDictionary.dayKeywords.ContainsKey(word))
                 {
-                    dayKeywords.TryGetValue(word, out day);
+                    CustomDictionary.dayKeywords.TryGetValue(word, out day);
                     TokenDay dayToken = new TokenDay(index, day);
                     dayTokens.Add(dayToken);
                 }
@@ -171,7 +151,7 @@ namespace ToDo
                 Match match;
                 DateTime dateTime = new DateTime();
                 bool isMonthGiven = true;
-                if (IsValidDate(word.ToLower()))
+                if (CustomDictionary.IsValidDate(word.ToLower()))
                 {
                     match = GetDateMatch(word.ToLower());
                     GetMatchTagValues(match, ref dayString, ref monthString, ref yearString);
@@ -242,8 +222,8 @@ namespace ToDo
                 }
                 else
                 {
-                    match = time_12HourFormat.Match(word);
-                    if (!match.Success) match = time_24HourFormat.Match(word);
+                    match = CustomDictionary.time_12HourFormat.Match(word);
+                    if (!match.Success) match = CustomDictionary.time_24HourFormat.Match(word);
                     else Format_12Hour = true;
                     if (match.Success)
                     {
@@ -272,12 +252,12 @@ namespace ToDo
 
         private bool CheckIfIsValidTimeInWordFormat(string word)
         {
-            foreach (string timeSpecificKeyword in timeSpecificKeywords)
+            foreach (string timeSpecificKeyword in CustomDictionary.timeSpecificKeywords)
             {
                 if (word.ToLower() == timeSpecificKeyword)
                     return true;
             }
-            foreach (string timeGeneralKeyword in timeGeneralKeywords)
+            foreach (string timeGeneralKeyword in CustomDictionary.timeGeneralKeywords)
             {
                 if (word.ToLower() == timeGeneralKeyword)
                     return true;
@@ -336,7 +316,7 @@ namespace ToDo
             List<TokenContext> tokens = new List<TokenContext>();
             foreach (string word in input)
             {
-                if (contextKeywords.TryGetValue(word, out context))
+                if (CustomDictionary.contextKeywords.TryGetValue(word, out context))
                 {
                     object nextToken = GetTokenAtPosition(parsedTokens, index + 1);
                     if (nextToken is TokenDate || nextToken is TokenDay || nextToken is TokenTime)
@@ -381,6 +361,14 @@ namespace ToDo
             }
             return literalTokens;
         }
+
+        private void AddLiteralToken(ref string literal, int index, ref List<Token> literalTokens)
+        {
+            literal = literal.Trim();
+            TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
+            literalTokens.Add(literalToken);
+            literal = String.Empty;
+        }
         #endregion
 
         // ******************************************************************
@@ -388,11 +376,6 @@ namespace ToDo
         // ******************************************************************
 
         #region Private Helper Methods
-        private bool IsValidDate(string theDate)
-        {
-            return StringParser.IsValidNumericDate(theDate) || StringParser.IsValidAlphabeticDate(theDate);
-        }
-
         /// <summary>
         /// This method searches a string for a date match (alphabetic, numeric or just day with suffixes)
         /// and returns the match.
@@ -401,14 +384,14 @@ namespace ToDo
         /// <returns>The match found</returns>
         private Match GetDateMatch(string theWord)
         {
-            Match theMatch = date_numericFormat.Match(theWord);
+            Match theMatch = CustomDictionary.date_numericFormat.Match(theWord);
             if (!theMatch.Success)
             {
-                theMatch = date_alphabeticFormat.Match(theWord);
+                theMatch = CustomDictionary.date_alphabeticFormat.Match(theWord);
             }
             if (!theMatch.Success)
             {
-                theMatch = date_daysWithSuffixes.Match(theWord);
+                theMatch = CustomDictionary.date_daysWithSuffixes.Match(theWord);
             }
             return theMatch;
         }
@@ -485,7 +468,7 @@ namespace ToDo
             {
                 success = int.TryParse(month, out monthInt);
             }
-            else if (monthKeywords.TryGetValue(month, out monthType))
+            else if (CustomDictionary.monthKeywords.TryGetValue(month, out monthType))
             {
                 monthInt = (int)monthType;
             }
@@ -547,14 +530,6 @@ namespace ToDo
                 if (token.Position == p) return token;
             }
             return null;
-        }
-
-        private void AddLiteralToken(ref string literal, int index, ref List<Token> literalTokens)
-        {
-            literal = literal.Trim();
-            TokenLiteral literalToken = new TokenLiteral(index - 1, literal);
-            literalTokens.Add(literalToken);
-            literal = String.Empty;
         }
         #endregion
     }
