@@ -221,7 +221,7 @@ namespace ToDo
                 else if (this.selectedType == SelectedType.ContextSelected)
                     settings.RemoveContextKeyword(flexiCommand);
             }
-            catch (RepeatCommandException e)
+            catch (InvalidDeleteFlexiException e)
             {
                 AlertBox.Show(e.Message);
             }
@@ -263,6 +263,11 @@ namespace ToDo
 
             titleLabel.Text = title;
             descriptionLabel.Text = description;
+        }
+
+        private void PushFlexiCommandsToStringParser()
+        {
+
         }
 
 
