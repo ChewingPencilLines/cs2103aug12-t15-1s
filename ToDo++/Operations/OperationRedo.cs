@@ -13,10 +13,5 @@ namespace ToDo
         {
             throw new NotImplementedException();
         }
-
-        public override string Undo(List<Task> taskList, Storage storageXML)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
