@@ -46,7 +46,11 @@ namespace ToDo
 
         public abstract string Execute(List<Task> taskList, Storage storageXML);
 
-        public abstract string Undo(List<Task> taskList, Storage storageXML);
+        public virtual string Undo(List<Task> taskList, Storage storageXML)
+        {
+            Debug.Assert(false, "This operation should not be undoable!");
+            return null;
+        }
 
         protected string AddTask(Task taskToAdd, List<Task> taskList, out bool successFlag)
         {
