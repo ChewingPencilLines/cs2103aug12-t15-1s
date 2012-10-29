@@ -51,5 +51,18 @@ namespace ToDo
             if (successFlag) TrackOperation();
             return response;
         }
+
+        public override string Undo(List<Task> taskList, Storage storageXML)
+        {
+            Task task = undoTask.Pop();
+            task.State = false;
+            if (storageXML.MarkTaskAsDone(task))
+            {
+                successFlag = true;
+                return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
+            }
+            else
+                return RESPONSE_XML_READWRITE_FAIL;
+        }
     } 
 }

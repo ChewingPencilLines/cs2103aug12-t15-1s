@@ -8,7 +8,7 @@ namespace OperatingLogicUnitTest
     [TestClass]
     public class OperationHandlerTest
     {
-        OperationHandler testOpraHandler;
+      //  OperationHandler testOpraHandler;
 
         [TestMethod]
         public void TestMethod1()

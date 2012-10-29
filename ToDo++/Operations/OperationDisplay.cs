@@ -18,5 +18,10 @@ namespace ToDo
             response = GenerateDisplayString(taskList);
             return response;
         }
+
+        public override string Undo(List<Task> taskList, Storage storageXML)
+        {
+            return null;
+        }
     }
 }
