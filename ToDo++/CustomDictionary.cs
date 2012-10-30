@@ -20,6 +20,7 @@ namespace ToDo
         static public List<string> timeSpecificKeywords;
         static public List<string> timeGeneralKeywords;
         static public List<string> timeSuffixes;
+        static public List<CommandType> indexableCommandTypes;
 
         // ******************************************************************
         // Regular Expressions
@@ -102,7 +103,6 @@ namespace ToDo
         #region Initialization Methods
         private static void InitializeCommandKeywords()
         {
-            // todo: change to dictionary? has a constant look up time. should be faster
             commandKeywords = new Dictionary<string, CommandType>();
             commandKeywords.Add("add", CommandType.ADD);
             commandKeywords.Add("delete", CommandType.DELETE);
@@ -183,6 +183,12 @@ namespace ToDo
             contextKeywords.Add("this", ContextType.CURRENT);
             contextKeywords.Add("next", ContextType.NEXT);
             contextKeywords.Add("following", ContextType.FOLLOWING);
+        }
+
+        private static void InitializeIndexableCommandTypes()
+        {
+            indexableCommandTypes = new List<CommandType>
+            { CommandType.DELETE, CommandType.DONE, CommandType.MODIFY };
         }
         #endregion
 
@@ -282,6 +288,16 @@ namespace ToDo
         public static bool IsValidAlphabeticDate(string theDate)
         {
             return date_alphabeticFormat.IsMatch(theDate);
+        }
+
+        public static bool IsIndexableCommandType(CommandType commandType)
+        {
+            foreach (CommandType type in indexableCommandTypes)
+            {
+                if (commandType == type)
+                    return true;
+            }
+            return false;
         }
         #endregion
     }

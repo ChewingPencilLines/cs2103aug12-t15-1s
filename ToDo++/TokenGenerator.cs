@@ -61,18 +61,9 @@ namespace ToDo
                 if (CustomDictionary.commandKeywords.TryGetValue(inputWords[i].ToLower(), out commandType))
                 {
                     // Check for numerical index ranges.
-                    if ((commandType == CommandType.DELETE || commandType == CommandType.MODIFY || commandType == CommandType.DONE))
+                    if (CustomDictionary.IsIndexableCommandType(commandType))
                     {
-                        int j = 1;
-                        string matchCheck = "";
-                        bool success = true;
-                        while (success && i + j < inputWords.Count) // Don't check last word.
-                        {
-                            matchCheck += inputWords[i + j];
-                            success = TryGetNumericalRange(matchCheck, out userDefinedIndex);
-                            if (success) inputWords[i + j] = "";
-                            j++;
-                        }
+                        userDefinedIndex = CheckForNumericalIndex(i, ref inputWords);
                     }
                     TokenCommand commandToken = new TokenCommand(i, commandType, userDefinedIndex);
                     tokens.Add(commandToken);
@@ -81,6 +72,39 @@ namespace ToDo
             return tokens;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="inputWords"></param>
+        /// <param name="userDefinedIndex"></param>
+        private int[] CheckForNumericalIndex(int i, ref List<string> inputWords)
+        {
+            int[] userDefinedIndex = null;
+            int j = 1;
+            string matchCheck = "";
+            bool success = true;
+            while (success && i + j < inputWords.Count) // Don't check last word.
+            {
+                matchCheck += inputWords[i + j];
+                success = TryGetNumericalRange(matchCheck, out userDefinedIndex);
+                if (success)
+                {
+                    inputWords[i + j] = "";
+                }
+                j++;
+            }
+            return userDefinedIndex;
+        }
+
+        /// <summary>
+        /// Checks if the supplied string matchCheck represents a number of a numerical range.
+        /// If positive, the index or pair of indexes (respectively) is added to the
+        /// integer array.
+        /// </summary>
+        /// <param name="matchCheck">The string to be checked</param>
+        /// <param name="userDefinedIndex">The integer array to be updated</param>
+        /// <returns>Returns true if a numerical range is detected; false if otherwise</returns>
         private bool TryGetNumericalRange(string matchCheck, out int[] userDefinedIndex)
         {
             userDefinedIndex = null;
