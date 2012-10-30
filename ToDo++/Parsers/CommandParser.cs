@@ -188,21 +188,8 @@ namespace ToDo
                     break;
                 case CommandType.MODIFY:
                     task = GenerateNewTask(taskName, startCombined, endCombined, isSpecific);
-                    if (taskName != null && taskIndex != null)
-                    {
-                        newOperation = new OperationModify(taskIndex[TokenCommand.START_INDEX],task);
-                        break;
-                    }
-                    else if (taskName != null)
-                    {
-                        newOperation = new OperationModify(task);
-                        break;
-                    }
-                    else
-                    {
-                        newOperation = new OperationModify();
-                        break;
-                    }
+                    newOperation = new OperationModify(taskIndex,task);
+                    break;
                 case CommandType.SEARCH:                    
                     newOperation = new OperationSearch(taskName, startCombined, endCombined);
                     break;

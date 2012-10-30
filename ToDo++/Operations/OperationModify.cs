@@ -6,7 +6,7 @@ namespace ToDo
     {
         private int? oldIndex;
         private Task newTask;
-        
+ /*       
         public OperationModify(int Previous, Task Revised)
         {
             oldIndex = Previous - 1;
@@ -22,6 +22,14 @@ namespace ToDo
         {
             oldIndex = null;
             newTask = null;
+        }
+*/
+        public OperationModify(int[] indexRange, Task newTask)
+        {
+            if (indexRange == null) this.oldIndex = null;
+            else this.oldIndex = indexRange[TokenCommand.START_INDEX] - 1;
+            if (newTask.TaskName == null) this.newTask = null;
+            else this.newTask = newTask;
         }
 
         public override string Execute(List<Task> taskList, Storage storageXML)
