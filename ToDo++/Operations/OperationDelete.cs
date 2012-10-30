@@ -17,8 +17,9 @@ namespace ToDo
         private int? endindex;
         private string taskName;
         private DateTime? startTime = null, endTime = null;
+        private DateTimeSpecificity isSpecific;
 
-        public OperationDelete(string taskName, int[] indexRange, DateTime? startTime, DateTime? endTime)
+        public OperationDelete(string taskName, int[] indexRange, DateTime? startTime, DateTime? endTime, DateTimeSpecificity isSpecific)
         {
             if (indexRange == null) this.index = null;
             else
@@ -30,6 +31,7 @@ namespace ToDo
             else this.taskName = taskName;
             this.startTime = startTime;
             this.endTime = endTime;
+            this.isSpecific = isSpecific;
         }
 
         public override string Execute(List<Task> taskList, Storage storageXML)

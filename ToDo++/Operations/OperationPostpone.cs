@@ -12,8 +12,9 @@ namespace ToDo
         private int? endindex;
         private string taskName;
         private DateTime? oldTime = null, postponeTime = null;
+        private DateTimeSpecificity isSpecific;
 
-        public OperationPostpone(string taskName, int[] indexRange, DateTime? startTime, DateTime? postponeTime)
+        public OperationPostpone(string taskName, int[] indexRange, DateTime? startTime, DateTime? postponeTime, DateTimeSpecificity isSpecific)
         {
             if (indexRange == null) this.index = null;
             else
@@ -25,6 +26,7 @@ namespace ToDo
             else this.taskName = taskName;
             this.oldTime = startTime;
             this.postponeTime = postponeTime;
+            this.isSpecific = isSpecific;
         }
 
         public override string Execute(List<Task> taskList, Storage storageXML)

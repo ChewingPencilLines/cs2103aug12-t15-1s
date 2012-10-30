@@ -70,6 +70,7 @@
     <Compile Include="GlobalEventHandlers.cs" />
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\OperationAdd.cs" />
+    <Compile Include="Operations\OperationAttributes.cs" />
     <Compile Include="Operations\OperationDelete.cs" />
     <Compile Include="Operations\OperationDisplay.cs" />
     <Compile Include="Operations\OperationMarkAsDone.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="Operations\OperationSearch.cs" />
     <Compile Include="Operations\OperationSort.cs" />
     <Compile Include="Operations\OperationUndo.cs" />
-    <Compile Include="CustomDictionary.cs" />
+    <Compile Include="Parsers\CustomDictionary.cs" />
     <Compile Include="SerializationExtensions.cs" />
     <Compile Include="Settings\SettingInformation.cs" />
     <Compile Include="Tasks\Specificity.cs" />
@@ -108,7 +109,7 @@
     <Compile Include="UI\Components\StartingOptions.Designer.cs">
       <DependentUpon>StartingOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="TokenGenerator.cs" />
+    <Compile Include="Parsers\TokenGenerator.cs" />
     <Compile Include="UI\Components\AlertForm.cs">
       <SubType>Form</SubType>
     </Compile>

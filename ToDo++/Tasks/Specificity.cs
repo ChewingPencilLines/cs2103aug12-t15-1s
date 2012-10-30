@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    public class DateSpecificity
+    public class Specificity
     {
         private bool day;
         private bool month;
         private bool year;
-        public DateSpecificity()
+        public Specificity()
         {
             day = month = year = true;
         }
@@ -22,29 +22,29 @@ namespace ToDo
 
     public class DateTimeSpecificity
     {
-        private DateSpecificity startDate;
-        private DateSpecificity endDate;
+        private Specificity startDate;
+        private Specificity endDate;
         private bool startTime;
         private bool endTime;
         public DateTimeSpecificity()
         {
             startTime = endTime = true;
-            startDate = new DateSpecificity();
-            endDate = new DateSpecificity();
+            startDate = new Specificity();
+            endDate = new Specificity();
         }
-        public DateTimeSpecificity(bool startTime, bool endTime, DateSpecificity startDate, DateSpecificity endDate)
+        public DateTimeSpecificity(bool startTime, bool endTime, Specificity startDate, Specificity endDate)
         {
             this.startTime = startTime;
             this.endTime = endTime;
             this.startDate = startDate;
             this.endDate = endDate;
         }
-        public DateSpecificity StartDate
+        public Specificity StartDate
         {
             get { return startDate; }
             set { startDate = value; }
         }
-        public DateSpecificity EndDate
+        public Specificity EndDate
         {
             get { return endDate; }
             set { endDate = value; }

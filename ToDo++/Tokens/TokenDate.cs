@@ -8,9 +8,9 @@ namespace ToDo
 {
     public class TokenDate : Token
     {
-        DateSpecificity isSpecific;
+        Specificity isSpecific;
         DateTime dateTime;
-        internal DateSpecificity IsSpecific
+        internal Specificity IsSpecific
         {
             get { return isSpecific; }
             set { isSpecific = value; }
@@ -20,7 +20,7 @@ namespace ToDo
             get { return dateTime; }
         }
 
-        internal TokenDate(int position, DateTime date, DateSpecificity isSpecific)
+        internal TokenDate(int position, DateTime date, Specificity isSpecific)
             : base(position)
         {
             dateTime = date;

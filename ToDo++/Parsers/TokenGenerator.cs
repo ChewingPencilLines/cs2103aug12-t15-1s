@@ -167,18 +167,18 @@ namespace ToDo
 
             foreach (string word in input)
             {
-                DateSpecificity isSpecific = new DateSpecificity();
+                Specificity isSpecific = new Specificity();
                 DateTime dateTime = new DateTime();
                 TokenDate dateToken = null;
                 if ( CustomDictionary.IsValidDate(word.ToLower())
-                    || word.ToLower() == CustomDictionary.todayKeyword
+                    || CustomDictionary.IsToday(word.ToLower())
                     || CustomDictionary.monthKeywords.ContainsKey(word.ToLower())
                     )  
                 {
                     string dayString = String.Empty;
                     string monthString = String.Empty;
                     string yearString = String.Empty;
-                    if (word.ToLower() == CustomDictionary.todayKeyword)
+                    if (CustomDictionary.IsToday(word.ToLower()))
                     {
                         day = DateTime.Now.Day;
                         month = DateTime.Now.Month;

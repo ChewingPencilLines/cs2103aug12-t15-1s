@@ -34,7 +34,7 @@ namespace ToDo
         // Containers for keeping track of executed operations
         protected static List<Task> lastListedTasks;
         protected static Stack<Operation> undoStack;
-        static Stack<Operation> redoStack;
+        protected static Stack<Operation> redoStack;
         protected static Stack<Task> undoTask;
         protected Storage storageXML;
         protected bool successFlag;
@@ -141,55 +141,10 @@ namespace ToDo
                                  where ((task.TaskName.IndexOf(searchString) >= 0 && exact == false) ||
                                        (String.Compare(searchString, task.TaskName, true) == 0 && exact == true))
                                  select task).ToList();
-
-            // Search all tasks that end before EndTime or have deadlines before EndTime
-            if (startTime == null && endTime != null)
-            {
-                List<Task> tempList = new List<Task>();
-                tempList = filteredTasks.GetRange(0, filteredTasks.Count);
-                filteredTasks = (from task in tempList
-                                 where (task is TaskDeadline)
-                                 where (((TaskDeadline)task).EndTime <= endTime)
-                                 select task
-                                 ).ToList();
-                filteredTasks.AddRange((from task in tempList
-                                        where (task is TaskEvent)
-                                        where (((TaskEvent)task).EndTime <= endTime)
-                                        select task).ToList());
-            }
-
-            // Search all tasks that occur between StartTime and EndTime
-            else if (startTime != null && endTime != null)
-            {
-                List<Task> tempList = new List<Task>();
-                tempList = filteredTasks.GetRange(0, filteredTasks.Count);
-                filteredTasks = (from task in tempList
-                                 where (task is TaskDeadline)
-                                 where (((TaskDeadline)task).EndTime >= startTime)
-                                 where (((TaskDeadline)task).EndTime <= endTime)
+            if (!(startTime == null && endTime == null)) 
+                filteredTasks = (from task in filteredTasks
+                                 where task.IsWithinTime(startTime,endTime)
                                  select task).ToList();
-                filteredTasks.AddRange((from task in tempList
-                                        where (task is TaskEvent)
-                                        where (((TaskEvent)task).StartTime >= startTime)
-                                        where (((TaskEvent)task).EndTime <= endTime)
-                                        select task).ToList());
-            }
-
-            // Search all tasks that fall on the day of StartTime
-            else if (startTime != null && endTime == null)
-            {
-                List<Task> tempList = new List<Task>();
-                tempList = filteredTasks.GetRange(0, filteredTasks.Count);
-                filteredTasks = (from task in tempList
-                                 where (task is TaskDeadline)
-                                 where (((TaskDeadline)task).EndTime.Date == ((DateTime)startTime).Date)
-                                 select task).ToList();
-                filteredTasks.AddRange((from task in tempList
-                                        where (task is TaskEvent)
-                                        where (((TaskEvent)task).StartTime.Date <= ((DateTime)startTime).Date)
-                                        where (((TaskEvent)task).EndTime.Date >= ((DateTime)startTime).Date)
-                                        select task).ToList());
-            }
             return filteredTasks;
         }
 
