@@ -18,5 +18,15 @@ namespace ToDo
         {
             contextType = val;
         }
+
+        internal override void UpdateAttributes(OperationAttributes attrb)
+        {
+            if (Value == ContextType.CURRENT ||
+                Value == ContextType.NEXT ||
+                Value == ContextType.FOLLOWING
+                )
+                attrb.currentSpecifier = contextType;
+            else attrb.currentSpecifier = contextType;
+        }
     }
 }

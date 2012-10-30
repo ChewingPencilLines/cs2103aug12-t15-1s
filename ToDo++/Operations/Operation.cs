@@ -7,11 +7,13 @@ using System.Diagnostics;
 namespace ToDo
 {
     // ******************************************************************
-    // Abstract definition for 
-
+    // Abstract definition for Operation
     // ******************************************************************
     public abstract class Operation
     {
+        // ******************************************************************
+        // Feedback Strings -- To be moved to Response class
+        // ******************************************************************
         #region Feedback Strings
         protected const string RESPONSE_ADD_SUCCESS = "Added \"{0}\" successfully.";
         protected const string RESPONSE_ADD_FAILURE = "Failed to add task!";
@@ -36,7 +38,7 @@ namespace ToDo
         protected static Stack<Operation> undoStack;
         protected static Stack<Operation> redoStack;
         protected static Stack<Task> undoTask;
-        protected Storage storageXML;
+        protected Storage storageIO;
         protected bool successFlag;
 
         static Operation()
@@ -47,14 +49,33 @@ namespace ToDo
             undoTask = new Stack<Task>();
         }
 
-        public abstract string Execute(List<Task> taskList, Storage storageXML);
+        protected void TrackOperation()
+        {
+            undoStack.Push(this);
+            redoStack.Clear();
+        }
 
-        public virtual string Undo(List<Task> taskList, Storage storageXML)
+        public abstract string Execute(List<Task> taskList, Storage storageIO);
+
+
+        /// <summary>
+        /// Base Undo Operation Method. All undoable operations should be override this method.
+        /// This base method will throw an assertion if called.
+        /// </summary>
+        /// <param name="taskList">Current task list for task updates to be applied on.</param>
+        /// <param name="storageIO">Storage controller to write changes to file. </param>
+        /// <returns></returns>
+        public virtual string Undo(List<Task> taskList, Storage storageIO)
         {
             Debug.Assert(false, "This operation should not be undoable!");
             return null;
         }
 
+        // ******************************************************************
+        // Task Manipulation Methods
+        // ******************************************************************
+
+        #region Task Manipulation Methods
         protected string AddTask(Task taskToAdd, List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
@@ -62,7 +83,7 @@ namespace ToDo
             {
                 taskList.Add(taskToAdd);
                 undoTask.Push(taskToAdd);
-                if (storageXML.AddTaskToFile(taskToAdd))
+                if (storageIO.AddTaskToFile(taskToAdd))
                 {
                     successFlag = true;
                     return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.TaskName);
@@ -92,7 +113,7 @@ namespace ToDo
                 lastListedTasks[nullIndex] = null;
             }
 
-            if (storageXML.RemoveTaskFromFile(taskToDelete))
+            if (storageIO.RemoveTaskFromFile(taskToDelete))
             {
                 successFlag = true;
                 return String.Format(RESPONSE_DELETE_SUCCESS, taskToDelete.TaskName);
@@ -107,7 +128,7 @@ namespace ToDo
             undoTask.Push(taskToMarkAsDone);
             taskToMarkAsDone.State = true;
 
-            if (storageXML.MarkTaskAsDone(taskToMarkAsDone))
+            if (storageIO.MarkTaskAsDone(taskToMarkAsDone))
             {
                 successFlag = true;
                 return String.Format(RESPONSE_MARKASDONE_SUCCESS, taskToMarkAsDone.TaskName);
@@ -123,7 +144,7 @@ namespace ToDo
             taskList.Remove(taskToModify);
             taskList.Add(newTask);
             undoTask.Push(newTask);
-            if (storageXML.RemoveTaskFromFile(taskToModify) && storageXML.AddTaskToFile(newTask))
+            if (storageIO.RemoveTaskFromFile(taskToModify) && storageIO.AddTaskToFile(newTask))
             {
                 successFlag = true;
                 return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
@@ -147,13 +168,12 @@ namespace ToDo
                                  select task).ToList();
             return filteredTasks;
         }
+        #endregion
 
-        protected void TrackOperation()
-        {
-            undoStack.Push(this);
-            redoStack.Clear();
-        }
-        
+        // ******************************************************************
+        // Display Formatters -- to be moved to UI class
+        // ******************************************************************
+                
         #region Display Formatters
         protected string GenerateDisplayString(List<Task> tasksToDisplay)
         {

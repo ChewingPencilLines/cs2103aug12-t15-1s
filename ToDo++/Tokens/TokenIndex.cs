@@ -8,15 +8,28 @@ namespace ToDo
 {
     public class TokenIndex : Token
     {
-        string index;
-        internal string Value
+        int[] index;
+        bool isAll;
+
+        internal bool IsAll
+        {
+            get { return isAll; }
+            set { isAll = value; }
+        }
+        internal int[] Value
         {
             get { return index; }
         }
-        internal TokenIndex(int position, string val)
+        internal TokenIndex(int position, int[] val, bool isAll)
             : base(position)
         {
             index = val;
+            this.isAll = isAll;
+        }
+
+        internal override void UpdateAttributes(OperationAttributes attrb)
+        {
+            throw new NotImplementedException();
         }
     }
 }
