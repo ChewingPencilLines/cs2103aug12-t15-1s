@@ -255,7 +255,7 @@ namespace ToDo
             bool isTime = false;
             foreach (string word in input)
             {
-                if (CheckIfIsValidTimeInWordFormat(word))
+                if (CustomDictionary.CheckIfIsValidTimeInWordFormat(word))
                 {
                     specificity = GetDefaultTimeValues(word, ref hours);
                     isTime = true;
@@ -288,26 +288,6 @@ namespace ToDo
                 index++;
             }
             return timeTokens;
-        }
-
-        /// <summary>
-        /// Checks if a word matches a time specific or general keyword.
-        /// </summary>
-        /// <param name="word">The word to be checked</param>
-        /// <returns>True if a positive match is found; false if otherwise</returns>
-        private bool CheckIfIsValidTimeInWordFormat(string word)
-        {
-            foreach (string timeSpecificKeyword in CustomDictionary.timeSpecificKeywords)
-            {
-                if (word.ToLower() == timeSpecificKeyword)
-                    return true;
-            }
-            foreach (string timeGeneralKeyword in CustomDictionary.timeGeneralKeywords)
-            {
-                if (word.ToLower() == timeGeneralKeyword)
-                    return true;
-            }
-            return false;
         }
 
         /// <summary>

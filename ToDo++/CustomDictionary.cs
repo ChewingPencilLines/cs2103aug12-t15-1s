@@ -18,7 +18,9 @@ namespace ToDo
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, DayOfWeek> dayKeywords;
         static public List<string> timeSpecificKeywords;
-        static public List<string> timeGeneralKeywords;
+        //static public List<string> timeGeneralKeywords;
+        public enum timeGeneralKyeywords
+        { MORNING = 0, AFTERNOON, EVENING, NIGHT };
         static public List<string> timeSuffixes;
         static public List<CommandType> indexableCommandTypes;
 
@@ -170,7 +172,6 @@ namespace ToDo
             // NYI
             timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
             timeSpecificKeywords = new List<string> { "noon", "midnight" };        // special case    
-            timeGeneralKeywords = new List<string> { "morning", "afternoon", "evening", "night" }; // todo?
         }
 
         private static void InitializeContextKeywords()
@@ -223,10 +224,11 @@ namespace ToDo
             return timeSpecificKeywords;
         }
 
+        /*
         public static List<string> GetTimeGeneralKeywords()
         {
             return timeGeneralKeywords;
-        }
+        }*/
 
         public static List<string> GetTimeSuffixes()
         {
@@ -268,7 +270,7 @@ namespace ToDo
         // Auxilliary Methods
         // ******************************************************************
 
-        #region Regex Comparison Methods
+        #region Comparison Methods
         public static bool IsValidDate(string theDate)
         {
             return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate);
@@ -296,6 +298,51 @@ namespace ToDo
             foreach (CommandType type in indexableCommandTypes)
             {
                 if (commandType == type)
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if a word matches a time specific or general keyword.
+        /// </summary>
+        /// <param name="word">The word to be checked</param>
+        /// <returns>True if a positive match is found; false if otherwise</returns>
+        public static bool CheckIfIsValidTimeInWordFormat(string word)
+        {
+            foreach (string timeSpecificKeyword in CustomDictionary.timeSpecificKeywords)
+            {
+                if (word.ToLower() == timeSpecificKeyword)
+                    return true;
+            }
+            if (CheckIfIsTimeGeneralKeyword(word))
+                return true;
+            return false;
+        }
+
+        public static bool CheckIfIsTimeGeneralKeyword(string word)
+        {
+            switch (word.ToLower())
+            {
+                case "morning":
+                case "afternoon":
+                case "evening":
+                case "night":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary> This method checks if a word is a time keyword.
+        /// </summary>
+        /// <param name="word">The word to be checked</param>
+        /// <returns>True if the word is a time keyword, false if otherwise</returns>
+        public static bool CheckIfWordIsTimeSuffix(string word)
+        {
+            foreach (string keyword in timeSuffixes)
+            {
+                if (word.ToLower() == keyword)
                     return true;
             }
             return false;
