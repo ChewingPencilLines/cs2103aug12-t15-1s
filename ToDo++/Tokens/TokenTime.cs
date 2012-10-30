@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ToDo
 {
@@ -23,6 +22,28 @@ namespace ToDo
         {
             time = val;
             specific = specific_flag;
+        }
+
+        internal override void UpdateAttributes(OperationAttributes attrb)
+        {
+            switch (attrb.currentMode)
+            {
+                case ContextType.STARTTIME:
+                    attrb.startTime = Value;
+                    attrb.isSpecific.StartTime = IsSpecific;
+                    break;
+                case ContextType.ENDTIME:
+                    attrb.endTime = Value;
+                    attrb.isSpecific.EndTime = IsSpecific;
+                    break;
+                case ContextType.DEADLINE:
+                    attrb.endTime = Value;
+                    attrb.isSpecific.EndTime = IsSpecific;
+                    break;
+                default:
+                    Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenTime case!");
+                    break;
+            }
         }
     }
 }

@@ -29,5 +29,21 @@ namespace ToDo
             commandType = val;
             this.taskIndex = taskIndex;
         }
+
+        internal override void UpdateAttributes(OperationAttributes attrb)
+        {
+            if (attrb.commandType != CommandType.INVALID)
+            {
+                throw new MultipleCommandsException();
+            }
+            else
+            {
+                attrb.commandType = Value;
+                if (CustomDictionary.IsIndexableCommandType(commandType))
+                {
+                    attrb.taskIndex = TaskIndex;
+                }
+            }
+        }
     }
 }

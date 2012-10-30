@@ -32,39 +32,10 @@ namespace ToDo
         }
 
         // ******************************************************************
-        // Internal Methods
+        // Public Methods
         // ******************************************************************
 
         #region Internal Methods
-        /// <summary>
-        /// This method searches the input string against the set delimiters'
-        /// and return the positions of the delimiters as a list of integer pairs.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns>List containing all matching sets of delimiters as integer pairs</returns>
-        internal List<int[]> FindPositionOfDelimiters(string input)
-        {
-            List<int[]> indexOfDelimiters = new List<int[]>();
-            int startIndex = 0, endIndex = -1;
-            for (int i = 0; i < delimitingCharacters.GetLength(0); i++)
-            {
-                startIndex = 0;
-                endIndex = -1;
-                do
-                {
-                    startIndex = input.IndexOf(delimitingCharacters[i, START_INDEX], endIndex + 1);
-                    endIndex = input.IndexOf(delimitingCharacters[i, END_INDEX], startIndex + 1);
-                    if (startIndex >= 0 && endIndex > startIndex)
-                    {
-                        int[] index = new int[2] { startIndex, endIndex };
-                        indexOfDelimiters.Add(index);
-                    }
-                    else break;
-                } while (true);
-
-            }
-            return indexOfDelimiters;
-        }
 
         /// <summary>
         /// This method parses a string of words into a list of tokens, each containing a token representing the meaning of each word or substring.
@@ -73,8 +44,9 @@ namespace ToDo
         /// <param name="input">The string of words to be parsed</param>
         /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings</param>
         /// <returns>The list of tokens</returns>
-        internal List<Token> ParseStringIntoTokens(string input, List<int[]> indexOfDelimiters = null)
+        internal List<Token> ParseStringIntoTokens(string input)
         {
+            List<int[]> indexOfDelimiters = FindPositionOfDelimiters(input);
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
             TokenGenerator tokenGenerator = new TokenGenerator();
             return tokenGenerator.GenerateTokens(words);
@@ -165,7 +137,8 @@ namespace ToDo
             input = MergeDateWords(input);
             return input;
         }
-
+                
+        #region Time merging methods
         /// <summary>
         /// This method checks all words within an input list of words for valid times and returns a list of words
         /// where all times are merged as a single word.
@@ -221,7 +194,9 @@ namespace ToDo
             }
             else return false;
         }
+        #endregion
 
+        #region Date merging methods
         /// <summary>
         /// This method checks all words within an input list of words for valid date and returns a list of words
         /// where all dates are merged as a single word.
@@ -308,6 +283,75 @@ namespace ToDo
             numberOfWords = i - 1;
             return true;
         }
+        #endregion
+
+        #region Delimiter searching methods
+        /// <summary>
+        /// This method searches the input string against the set delimiters'
+        /// and return the positions of the delimiters as a list of integer pairs.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>List containing all matching sets of delimiters as integer pairs</returns>
+        private List<int[]> FindPositionOfDelimiters(string input)
+        {
+            List<int[]> indexOfDelimiters = new List<int[]>();
+            int startIndex = 0, endIndex = -1;
+            for (int i = 0; i < delimitingCharacters.GetLength(0); i++)
+            {
+                startIndex = 0;
+                endIndex = -1;
+                do
+                {
+                    startIndex = input.IndexOf(delimitingCharacters[i, START_INDEX], endIndex + 1);
+                    endIndex = input.IndexOf(delimitingCharacters[i, END_INDEX], startIndex + 1);
+                    if (startIndex >= 0 && endIndex > startIndex)
+                    {
+                        int[] index = new int[2] { startIndex, endIndex };
+                        indexOfDelimiters.Add(index);
+                    }
+                    else break;
+                } while (true);
+
+            }
+            return indexOfDelimiters;
+        }
+
+        private List<int[]> GetPositionsOfDelimiters(string input)
+        {
+            List<int[]> positionsOfDelimiters;
+            positionsOfDelimiters = FindPositionOfDelimiters(input);
+            SortIndexes(ref positionsOfDelimiters);
+            RemoveBadIndexes(ref positionsOfDelimiters);
+            return positionsOfDelimiters;
+        }
+
+        /// <summary>
+        /// This method checks each pair of indexes in a List and removes those
+        /// that overlaps with the previous pair.
+        /// </summary>
+        /// <param name="indexOfDelimiters"></param>
+        /// <returns></returns>
+        private void RemoveBadIndexes(ref List<int[]> indexOfDelimiters)
+        {
+            int previousEndIndex = -1;
+            List<int[]> indexesToRemove = new List<int[]>();
+            foreach (int[] set in indexOfDelimiters)
+            {
+                if (set[START_INDEX] < previousEndIndex)
+                    indexesToRemove.Add(set);
+                previousEndIndex = set[END_INDEX];
+            }
+            indexOfDelimiters.RemoveAll(x => indexesToRemove.Contains(x));
+        }
+
+        private void SortIndexes(ref List<int[]> indexOfDelimiters)
+        {
+            indexOfDelimiters = (from index in indexOfDelimiters
+                                 orderby index[0]
+                                 select index).ToList();
+        }
+        #endregion
+
         #endregion
     }
 }

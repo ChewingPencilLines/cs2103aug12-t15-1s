@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    public class Token
+    public abstract class Token
     {        
         private int position;
         internal Token(int position)
@@ -17,5 +17,6 @@ namespace ToDo
         {
             get { return position; }           
         }
+        internal abstract void UpdateAttributes(OperationAttributes attrb);
     }
 }
