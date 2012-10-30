@@ -237,7 +237,8 @@ namespace ToDo
                         break;
                     }
                 case CommandType.POSTPONE:
-                    throw new NotImplementedException();
+                    newOperation = new OperationPostpone(taskName, taskIndex, startCombined, endCombined);
+                    break;
                 case CommandType.EXIT:
                     System.Environment.Exit(0);
                     break;

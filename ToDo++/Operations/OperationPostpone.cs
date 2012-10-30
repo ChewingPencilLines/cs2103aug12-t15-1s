@@ -8,13 +8,23 @@ namespace ToDo
 {
     class OperationPostpone : Operation
     {
-        private int? oldIndex;
-        private Task postponedTask;
+        private int? index;
+        private int? endindex;
+        private string taskName;
+        private DateTime? oldTime = null, postponeTime = null;
 
-        public OperationPostpone(int Previous, Task Postponed)
+        public OperationPostpone(string taskName, int[] indexRange, DateTime? startTime, DateTime? postponeTime)
         {
-            oldIndex = Previous - 1;
-            postponedTask = Postponed;
+            if (indexRange == null) this.index = null;
+            else
+            {
+                this.index = indexRange[TokenCommand.START_INDEX] - 1;
+                this.endindex = indexRange[TokenCommand.END_INDEX] - 1;
+            }
+            if (taskName == null) this.taskName = "";
+            else this.taskName = taskName;
+            this.oldTime = startTime;
+            this.postponeTime = postponeTime;
         }
 
         public override string Execute(List<Task> taskList, Storage storageXML)
