@@ -15,12 +15,6 @@ namespace ToDo
         {
             day = month = year = true;
         }
-        public DateSpecificity(bool day, bool month, bool year)
-        {
-            this.day = day;
-            this.month = month;
-            this.year = year;
-        }
         public bool Day { get { return day; } set { day = value; } }
         public bool Month { get { return month; } set { month = value; } }
         public bool Year { get { return year; } set { year = value; } }
@@ -65,5 +59,5 @@ namespace ToDo
             get { return endTime; }
             set { endTime = value; }
         }
-    };
+    }
 }

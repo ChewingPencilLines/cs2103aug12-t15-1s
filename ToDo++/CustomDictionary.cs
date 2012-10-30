@@ -12,6 +12,7 @@ namespace ToDo
 {
     static class CustomDictionary
     {
+        static public string todayKeyword = "today";
         static public Dictionary<string, CommandType> commandKeywords;
         static public Dictionary<string, Month> monthKeywords;
         static public Dictionary<string, ContextType> contextKeywords;
