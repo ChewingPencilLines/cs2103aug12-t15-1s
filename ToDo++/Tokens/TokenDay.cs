@@ -23,17 +23,17 @@ namespace ToDo
             switch (attrb.currentMode)
             {
                 case ContextType.STARTTIME:
-                    attrb.startDay = Value;
+                    attrb.StartDay = Value;
                     // @ivan-todo: WarnUser if already determined startDate and startDay conflicts
-                    attrb.startDate = GetDateFromDay(attrb.currentSpecifier, (DayOfWeek)attrb.startDay);
+                    attrb.StartDateOnly = GetDateFromDay(attrb.currentSpecifier, (DayOfWeek)Value);
                     break;
                 case ContextType.ENDTIME:
-                    attrb.endDay = Value;
-                    attrb.endDate = GetDateFromDay(attrb.currentSpecifier, (DayOfWeek)attrb.endDay);
+                    attrb.EndDay = Value;
+                    attrb.EndDateOnly = GetDateFromDay(attrb.currentSpecifier, (DayOfWeek)Value);
                     break;
                 case ContextType.DEADLINE:
-                    attrb.endDay = Value;
-                    attrb.endDate = GetDateFromDay(attrb.currentSpecifier, (DayOfWeek)attrb.endDay);
+                    attrb.EndDay = Value;
+                    attrb.EndDateOnly = GetDateFromDay(attrb.currentSpecifier, (DayOfWeek)Value);
                     break;
                 default:
                     Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");

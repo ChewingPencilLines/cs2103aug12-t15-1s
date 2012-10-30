@@ -55,8 +55,8 @@ namespace ToDo
         private static Operation CreateOperation(OperationAttributes opAttributes)
         {            
             CommandType commandType = opAttributes.commandType;
-            DateTime? startCombined = opAttributes.startCombined;
-            DateTime? endCombined = opAttributes.endCombined;
+            DateTime? startCombined = opAttributes.startDateTime;
+            DateTime? endCombined = opAttributes.endDateTime;
             DateTimeSpecificity isSpecific = opAttributes.isSpecific;
             string taskName = opAttributes.taskName;
             int[] taskIndex = opAttributes.taskIndex;
