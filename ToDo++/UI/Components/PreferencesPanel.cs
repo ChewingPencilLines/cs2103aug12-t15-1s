@@ -14,8 +14,10 @@ namespace ToDo
         public void InitializeWithSettings(Settings settings)
         {
             this.settings = settings;
-            startingOptions.InitializeStartingOptions(settings);
+            startingOptionsControl.InitializeStartingOptions(settings);
             flexiCommandsControl.InitializeFlexiCommands(settings);
+            fontColorSettingsControl.InitializeFontColorControl(settings);
+            
             LoadPreferencesTree();
         }
 
@@ -54,9 +56,5 @@ namespace ToDo
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            FontBox.Show();
-        }
     }
 }

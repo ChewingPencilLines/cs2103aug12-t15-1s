@@ -52,10 +52,10 @@
         
         private static FontDialogToDo popUp = new FontDialogToDo();
 
-        internal static void Show()
+        internal static void Show(bool font, bool size, bool color)
         {
+            popUp.EnableDisableControls(font, size, color);
             popUp.ShowDialog();
-            
         }
 
         internal static void OnTop(bool val)

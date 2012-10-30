@@ -31,13 +31,13 @@
             this.preferencesTitle = new System.Windows.Forms.GroupBox();
             this.preferencesSelector = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.startingOptions = new ToDo.StartingOptions();
+            this.startingOptionsControl = new ToDo.StartingOptions();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.flexiCommandsControl = new ToDo.FlexiCommandsControl();
             this.fontPage = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.preferencesTree = new System.Windows.Forms.TreeView();
-            this.button1 = new System.Windows.Forms.Button();
+            this.fontColorSettingsControl = new ToDo.FontColorSettings();
             this.preferencesTitle.SuspendLayout();
             this.preferencesSelector.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -77,7 +77,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.SteelBlue;
-            this.tabPage1.Controls.Add(this.startingOptions);
+            this.tabPage1.Controls.Add(this.startingOptionsControl);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -85,13 +85,13 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Starting Options";
             // 
-            // startingOptions
+            // startingOptionsControl
             // 
-            this.startingOptions.BackColor = System.Drawing.Color.SteelBlue;
-            this.startingOptions.Location = new System.Drawing.Point(6, 6);
-            this.startingOptions.Name = "startingOptions";
-            this.startingOptions.Size = new System.Drawing.Size(273, 66);
-            this.startingOptions.TabIndex = 0;
+            this.startingOptionsControl.BackColor = System.Drawing.Color.SteelBlue;
+            this.startingOptionsControl.Location = new System.Drawing.Point(6, 6);
+            this.startingOptionsControl.Name = "startingOptionsControl";
+            this.startingOptionsControl.Size = new System.Drawing.Size(273, 66);
+            this.startingOptionsControl.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -118,7 +118,7 @@
             // fontPage
             // 
             this.fontPage.BackColor = System.Drawing.Color.SteelBlue;
-            this.fontPage.Controls.Add(this.button1);
+            this.fontPage.Controls.Add(this.fontColorSettingsControl);
             this.fontPage.Location = new System.Drawing.Point(4, 22);
             this.fontPage.Name = "fontPage";
             this.fontPage.Padding = new System.Windows.Forms.Padding(3);
@@ -152,15 +152,13 @@
             this.preferencesTree.TabIndex = 0;
             this.preferencesTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.preferencesTree_AfterSelect);
             // 
-            // button1
+            // fontColorSettingsControl
             // 
-            this.button1.Location = new System.Drawing.Point(111, 53);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(126, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Click Me to test";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.fontColorSettingsControl.BackColor = System.Drawing.Color.SteelBlue;
+            this.fontColorSettingsControl.Location = new System.Drawing.Point(3, 3);
+            this.fontColorSettingsControl.Name = "fontColorSettingsControl";
+            this.fontColorSettingsControl.Size = new System.Drawing.Size(326, 248);
+            this.fontColorSettingsControl.TabIndex = 0;
             // 
             // PreferencesPanel
             // 
@@ -189,9 +187,9 @@
         private CustomPanelControl preferencesSelector;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private StartingOptions startingOptions;
+        private StartingOptions startingOptionsControl;
         private FlexiCommandsControl flexiCommandsControl;
         private System.Windows.Forms.TabPage fontPage;
-        private System.Windows.Forms.Button button1;
+        private FontColorSettings fontColorSettingsControl;
     }
 }
