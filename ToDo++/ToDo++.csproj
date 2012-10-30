@@ -115,7 +115,7 @@
     <Compile Include="UI\Components\AlertForm.Designer.cs">
       <DependentUpon>AlertForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CommandParser.cs" />
+    <Compile Include="Parsers\CommandParser.cs" />
     <Compile Include="UI\Components\CustomPanelControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -134,7 +134,7 @@
     </Compile>
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="CustomExceptions.cs" />
-    <Compile Include="StringParser.cs" />
+    <Compile Include="Parsers\StringParser.cs" />
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="UI\Components\CustomMessageBox.cs" />
     <Compile Include="Tokens\Token.cs" />
