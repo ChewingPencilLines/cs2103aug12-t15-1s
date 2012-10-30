@@ -127,14 +127,12 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method searches an input list of -strings for all valid dates and generates a list of date tokens
+        /// This method searches an input list of strings for all valid dates and generates a list of date tokens
         /// corresponding to all the found matched date strings using regexes.
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of date tokens</returns>
 
-        // note: currently, the method just ignores invalid dates such as 30th feb
-        // might wish to change the catch case to flag the invalid date input
         public List<TokenDate> GenerateDateTokens(List<string> input)
         {
             int day = 0;
@@ -145,18 +143,18 @@ namespace ToDo
 
             foreach (string word in input)
             {
-                DateSpecificity isSpecific = new DateSpecificity(true, true, true);
+                DateSpecificity isSpecific = new DateSpecificity();
                 DateTime dateTime = new DateTime();
                 TokenDate dateToken = null;
                 if ( CustomDictionary.IsValidDate(word.ToLower())
-                    || word.ToLower() == "today"                //@jenna todo: remove magic word.
+                    || word.ToLower() == CustomDictionary.todayKeyword
                     || CustomDictionary.monthKeywords.ContainsKey(word.ToLower())
                     )  
                 {
                     string dayString = String.Empty;
                     string monthString = String.Empty;
                     string yearString = String.Empty;
-                    if (word.ToLower() == "today")
+                    if (word.ToLower() == CustomDictionary.todayKeyword)
                     {
                         day = DateTime.Now.Day;
                         month = DateTime.Now.Month;
@@ -268,6 +266,11 @@ namespace ToDo
             return timeTokens;
         }
 
+        /// <summary>
+        /// Checks if a word matches a time specific or general keyword.
+        /// </summary>
+        /// <param name="word">The word to be checked</param>
+        /// <returns>True if a positive match is found; false if otherwise</returns>
         private bool CheckIfIsValidTimeInWordFormat(string word)
         {
             foreach (string timeSpecificKeyword in CustomDictionary.timeSpecificKeywords)
@@ -283,6 +286,12 @@ namespace ToDo
             return false;
         }
 
+        /// <summary>
+        /// Retrieve the default hour values for general and specific time keywords.
+        /// </summary>
+        /// <param name="word">The time keyword</param>
+        /// <param name="hours">The hour value to be updated</param>
+        /// <returns>Returns true if the time keyword is specific; false if not</returns>
         private bool GetDefaultTimeValues(string word, ref int hours)
         {
             switch (word.ToLower())
