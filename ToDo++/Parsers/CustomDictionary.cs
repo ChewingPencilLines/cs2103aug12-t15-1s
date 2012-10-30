@@ -355,5 +355,17 @@ namespace ToDo
             return false;
         }
         #endregion
+
+        // ******************************************************************
+        // Updates Command and Context Keywords from FlexiCommands
+        // ******************************************************************
+
+        #region Update Dictionary With FlexiCommands
+        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords,Dictionary<string, ContextType> passedContextKeywords)
+        {
+            commandKeywords = passedCommandKeywords;
+            contextKeywords = passedContextKeywords;
+        }
+        #endregion
     }
 }
