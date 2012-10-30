@@ -32,14 +32,14 @@ namespace ToDo
             else this.newTask = newTask;
         }
 
-        public override string Execute(List<Task> taskList, Storage storageXML)
+        public override string Execute(List<Task> taskList, Storage storageIO)
         {
             /*
              *  when modify, if user key in nothing or only index or only task details
              *  after the commandtype, then all tasks will be shown.
              *  only when user input full information will modify operated.
              */
-            this.storageXML = storageXML;
+            this.storageIO = storageIO;
             string response;
             List<Task> searchResults;
 
@@ -87,7 +87,7 @@ namespace ToDo
             return response;
         }
 
-        public override string Undo(List<Task> taskList, Storage storageXML)
+        public override string Undo(List<Task> taskList, Storage storageIO)
         {
             Task taskToUndo = undoTask.Pop();
             Task previousTask = undoTask.Pop();

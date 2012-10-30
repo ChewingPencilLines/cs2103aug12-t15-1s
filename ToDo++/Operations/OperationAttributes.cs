@@ -8,7 +8,7 @@ namespace ToDo
 {
     class OperationAttributes
     {
-        // These properties are only used internally once set and hence cannot be get.
+        // The following properties are only used internally once set and hence cannot be "get".
         // Set as private to prevent confusion.
         private TimeSpan? startTime = null, endTime = null;
         private DateTime? startDateOnly = null, endDateOnly = null;
@@ -21,14 +21,21 @@ namespace ToDo
         public DayOfWeek? EndDay { set { endDay = value; } }
         public DayOfWeek? StartDay { set { startDay = value; } }
 
+        // The following attributes are used during derivation of Operation type and should not be otherwised used.
         public ContextType currentSpecifier = new ContextType();
         public ContextType currentMode = new ContextType();
-        public CommandType commandType = new CommandType();
 
+        // ******************************************************************
+        // Operation Attributes
+        // ******************************************************************
+
+        #region Attributes
+        public CommandType commandType = new CommandType();
         public DateTime? startDateTime = null, endDateTime = null;
         public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
         public string taskName = null;
         public int[] taskIndex = null;
+        #endregion
 
         public OperationAttributes()
         {

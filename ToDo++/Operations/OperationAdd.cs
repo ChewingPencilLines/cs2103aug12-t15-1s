@@ -13,9 +13,9 @@ namespace ToDo
             newTask = setTask;
         }
 
-        public override string Execute(List<Task> taskList, Storage storageXML)
+        public override string Execute(List<Task> taskList, Storage storageIO)
         {
-            this.storageXML = storageXML;
+            this.storageIO = storageIO;
             string response;
 
             if (newTask == null) return RESPONSE_ADD_FAILURE;
@@ -27,7 +27,7 @@ namespace ToDo
             return response;
         }
 
-        public override string Undo(List<Task> taskList, Storage storageXML)
+        public override string Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
             return DeleteTask(task, taskList, out successFlag);
