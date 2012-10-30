@@ -29,7 +29,64 @@ namespace ToDo
 
         public override string Execute(List<Task> taskList, Storage storageXML)
         {
-            throw new NotImplementedException();
+            this.storageXML = storageXML;
+            string response;
+
+            List<Task> searchResults;
+            if (index == null)
+            {
+                searchResults = SearchForTasks(taskList, taskName, false, oldTime);
+                if (searchResults.Count == 0)
+                {
+                    //check substring
+                    searchResults = SearchForTasks(taskList, taskName, false, oldTime);
+                    if (searchResults.Count == 0)
+                        response = RESPONSE_POSTPONE_FAILURE;
+                    else response = GenerateDisplayString(searchResults);
+                }
+                else if (searchResults.Count == 1)
+                {
+                   // response = DeleteTask(searchResults[0], taskList, out successFlag);
+                    throw new NotImplementedException();
+                }
+                else response = GenerateDisplayString(searchResults);
+            }
+            else if (index < 0 || index > lastListedTasks.Count - 1)
+            {
+                return RESPONSE_INVALID_TASK_INDEX;
+            }
+            else
+            {
+                if (endindex == index)
+                {
+                    Task taskToPostpone = lastListedTasks[index.Value];
+                    if (taskToPostpone == null)
+                        return RESPONSE_POSTPONE_FAILURE;
+                    else
+                        throw new NotImplementedException();
+                       // response = DeleteTask(taskToPostpone, taskList, out successFlag);
+                }
+                else if (endindex < 0 || endindex > lastListedTasks.Count - 1)
+                {
+                    return RESPONSE_INVALID_TASK_INDEX;
+                }
+                else
+                {
+                    response = null;
+                    for (int? i = index; i <= endindex; i++)
+                    {
+                        Task taskToPostpone = lastListedTasks[i.Value];
+                        if (taskToPostpone == null) response += RESPONSE_POSTPONE_FAILURE;
+                        else
+                            throw new NotImplementedException();
+                            //response += DeleteTask(taskToDelete, taskList, out successFlag);
+                        response += '\n';
+                    }
+                }
+            }
+
+            if (successFlag) TrackOperation();
+            return response;
         }
     }
 }
