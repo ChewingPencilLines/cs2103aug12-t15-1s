@@ -24,6 +24,11 @@
             return popUp.userInput;
         }
 
+        internal static void OnTop(bool val)
+        {
+            popUp.TopMost = val;
+        }
+
     }
 
     public static class AlertBox
@@ -35,6 +40,11 @@
             popUp.SetAlertText(alertText);
             popUp.ShowDialog();
         }
+
+        internal static void OnTop(bool val)
+        {
+            popUp.TopMost = val;
+        }
     }
 
     public static class FontBox
@@ -45,6 +55,11 @@
         internal static void Show()
         {
             popUp.ShowDialog();
+        }
+
+        internal static void OnTop(bool val)
+        {
+            popUp.TopMost = val;
         }
 
     }

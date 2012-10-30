@@ -42,10 +42,8 @@ namespace ToDo
         private void stayOnTopCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (firstLoad == true)
-            {
                 settings.SetStayOnTop(stayOnTopCheckBox.Checked);
-                EventHandlers.StayOnTop(stayOnTopCheckBox.Checked);
-            }
+            EventHandlers.StayOnTop(stayOnTopCheckBox.Checked);
         }
 
     }

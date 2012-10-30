@@ -417,7 +417,11 @@ namespace ToDo
 
         private void SetStayOnTop(object sender, EventArgs args)
         {
-            this.TopMost = Convert.ToBoolean(sender);
+            bool onTop = Convert.ToBoolean(sender);
+            this.TopMost = onTop;
+            CustomMessageBox.OnTop(onTop);
+            FontBox.OnTop(onTop);
+            AlertBox.OnTop(onTop);
         }
 
         #endregion
