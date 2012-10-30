@@ -86,6 +86,13 @@
     <Compile Include="Tasks\TaskFloating.cs" />
     <Compile Include="Tasks\TaskDeadline.cs" />
     <Compile Include="Tasks\TaskEvent.cs" />
+    <Compile Include="Tokens\TokenCommand.cs" />
+    <Compile Include="Tokens\TokenContext.cs" />
+    <Compile Include="Tokens\TokenDate.cs" />
+    <Compile Include="Tokens\TokenDay.cs" />
+    <Compile Include="Tokens\TokenIndex.cs" />
+    <Compile Include="Tokens\TokenLiteral.cs" />
+    <Compile Include="Tokens\TokenTime.cs" />
     <Compile Include="UI\Components\InputBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -130,7 +137,7 @@
     <Compile Include="StringParser.cs" />
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="UI\Components\CustomMessageBox.cs" />
-    <Compile Include="Token.cs" />
+    <Compile Include="Tokens\Token.cs" />
     <Compile Include="UI\Components\DateTimeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

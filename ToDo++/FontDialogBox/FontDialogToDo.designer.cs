@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Font = new System.Windows.Forms.Label();
+            this.font = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
@@ -43,14 +43,14 @@
             // 
             // Font
             // 
-            this.Font.AutoSize = true;
-            this.Font.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Font.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.Font.Location = new System.Drawing.Point(2, 12);
-            this.Font.Name = "Font";
-            this.Font.Size = new System.Drawing.Size(42, 20);
-            this.Font.TabIndex = 5;
-            this.Font.Text = "Font";
+            this.font.AutoSize = true;
+            this.font.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.font.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.font.Location = new System.Drawing.Point(2, 12);
+            this.font.Name = "Font";
+            this.font.Size = new System.Drawing.Size(42, 20);
+            this.font.TabIndex = 5;
+            this.font.Text = "Font";
             // 
             // label1
             // 
@@ -162,7 +162,7 @@
             this.groupBox1.Controls.Add(this.fontSelection);
             this.groupBox1.Controls.Add(this.sizeSelection);
             this.groupBox1.Controls.Add(this.colorSelection);
-            this.groupBox1.Controls.Add(this.Font);
+            this.groupBox1.Controls.Add(this.font);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(5, 2);
@@ -196,7 +196,7 @@
         private FontControl.CGFontCombo fontSelection;
         private ColorComboTestApp.ColorComboBox colorSelection;
         private SizeComboBox sizeSelection;
-        private System.Windows.Forms.Label Font;
+        private System.Windows.Forms.Label font;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button cancelButton;
