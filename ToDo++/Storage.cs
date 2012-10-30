@@ -187,7 +187,7 @@ namespace ToDo
                     }
                     taskList.Add(addTask);
                 }
-                catch (ArgumentNullException)
+                catch (NullReferenceException)
                 {
                     return null;
                 }                                
