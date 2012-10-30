@@ -10,15 +10,15 @@ namespace ToDo
     {
         public OperationUndo()
         { }
-        public override string Execute(List<Task> taskList, Storage storageXML)
+        public override string Execute(List<Task> taskList, Storage storageIO)
         {
             if (undoStack.Count == 0 || undoTask.Count == 0)
                 return RESPONSE_UNDO_FAILURE;
             Operation undoOp = Operation.undoStack.Pop();
-            return undoOp.Undo(taskList, storageXML);
+            return undoOp.Undo(taskList, storageIO);
         }
   
-        public override string Undo(List<Task> taskList, Storage storageXML)
+        public override string Undo(List<Task> taskList, Storage storageIO)
         {
             return null;
             //throw new NotImplementedException();

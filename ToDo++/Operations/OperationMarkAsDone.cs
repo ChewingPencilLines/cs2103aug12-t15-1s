@@ -46,9 +46,9 @@ namespace ToDo
             this.doneDate = doneDate;
         }
 
-        public override string Execute(List<Task> taskList, Storage storageXML)
+        public override string Execute(List<Task> taskList, Storage storageIO)
         {
-            this.storageXML = storageXML;
+            this.storageIO = storageIO;
             string response;
             if (doneDate != null)
             {
@@ -89,11 +89,11 @@ namespace ToDo
             return response;
         }
 
-        public override string Undo(List<Task> taskList, Storage storageXML)
+        public override string Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
             task.State = false;
-            if (storageXML.MarkTaskAsDone(task))
+            if (storageIO.MarkTaskAsDone(task))
             {
                 successFlag = true;
                 return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);

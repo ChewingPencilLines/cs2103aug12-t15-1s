@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ToDo
 {
@@ -25,6 +24,26 @@ namespace ToDo
         {
             dateTime = date;
             this.isSpecific = isSpecific;
+        }
+
+        internal override void UpdateAttributes(OperationAttributes attrb)
+        {
+            switch (attrb.currentMode)
+            {
+                case ContextType.STARTTIME:
+                    attrb.StartDateOnly = Value;
+                    // @ivan-todo: WarnUser if already determined startDate
+                    break;
+                case ContextType.ENDTIME:
+                    attrb.EndDateOnly = Value;
+                    break;
+                case ContextType.DEADLINE:
+                    attrb.EndDateOnly = Value;
+                    break;
+                default:
+                    Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");
+                    break;
+            }
         }
     }
 }

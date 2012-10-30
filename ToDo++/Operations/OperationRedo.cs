@@ -9,7 +9,7 @@ namespace ToDo
         public OperationRedo()
         { }
 
-        public override string Execute(List<Task> taskList, Storage storageXML)
+        public override string Execute(List<Task> taskList, Storage storageIO)
         {
             throw new NotImplementedException();
         }

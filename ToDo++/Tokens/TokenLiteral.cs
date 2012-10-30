@@ -18,5 +18,10 @@ namespace ToDo
         {
             literal = val;
         }
+
+        internal override void UpdateAttributes(OperationAttributes attrb)
+        {
+            attrb.taskName = Value;
+        }
     }
 }

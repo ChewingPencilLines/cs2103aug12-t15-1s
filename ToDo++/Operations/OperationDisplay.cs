@@ -9,9 +9,9 @@ namespace ToDo
         public OperationDisplay()
         { }
 
-        public override string Execute(List<Task> taskList, Storage storageXML)
+        public override string Execute(List<Task> taskList, Storage storageIO)
         {
-            this.storageXML = storageXML;
+            this.storageIO = storageIO;
             string response;
             // int numOfMatches;
             // return Search(out numOfMatches, taskList, "");            
