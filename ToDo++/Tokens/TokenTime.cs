@@ -29,15 +29,15 @@ namespace ToDo
             switch (attrb.currentMode)
             {
                 case ContextType.STARTTIME:
-                    attrb.startTime = Value;
+                    attrb.StartTime = Value;
                     attrb.isSpecific.StartTime = IsSpecific;
                     break;
                 case ContextType.ENDTIME:
-                    attrb.endTime = Value;
+                    attrb.EndTime = Value;
                     attrb.isSpecific.EndTime = IsSpecific;
                     break;
                 case ContextType.DEADLINE:
-                    attrb.endTime = Value;
+                    attrb.EndTime = Value;
                     attrb.isSpecific.EndTime = IsSpecific;
                     break;
                 default:
