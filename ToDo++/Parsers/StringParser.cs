@@ -180,7 +180,7 @@ namespace ToDo
             bool isWordAdded = false;
             foreach (string word in input)
             {
-                if (CheckIfWordIsTimeKeyword(word))
+                if (CustomDictionary.CheckIfWordIsTimeSuffix(word))
                 {
                     isWordAdded = MergeWord_IfValidTime(ref output, input, position);
                     if (isWordAdded) break;
@@ -193,20 +193,6 @@ namespace ToDo
                 position++;
             }
             return output;
-        }
-
-        /// <summary> This method checks if a word is a time keyword.
-        /// </summary>
-        /// <param name="word">The word to be checked</param>
-        /// <returns>True if the word is a time keyword, false if otherwise</returns>
-        private bool CheckIfWordIsTimeKeyword(string word)
-        {
-            foreach (string keyword in CustomDictionary.timeSuffixes)
-            {
-                if (word.ToLower() == keyword)
-                    return true;
-            }
-            return false;
         }
 
         /// <summary>
