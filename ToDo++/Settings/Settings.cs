@@ -27,7 +27,7 @@ namespace ToDo
         public void UpdateSettings(SettingInformation updatedInfo)
         {
             settingInfo = updatedInfo;
-            //settingsList.misc = updatedList.misc;
+            CustomDictionary.UpdateDictionary(settingInfo.userCommandKeywords,settingInfo.userContextKeywords);
         }
 
         // ******************************************************************
