@@ -202,7 +202,10 @@ namespace ToDo
             int id = Int32.Parse(task.Attribute("id").Value);
             string taskName = task.Element("Name").Value;            
             DateTime startTime, endTime;
-            DateTimeSpecificity isSpecific = task.Element("DateTimeSpecificity").FromXElement<DateTimeSpecificity>();
+            DateTimeSpecificity isSpecific = new DateTimeSpecificity();
+
+            XElement DTSpecElement = task.Element("DateTimeSpecificity");
+            if(DTSpecElement!= null)  isSpecific = DTSpecElement.FromXElement<DateTimeSpecificity>();
             bool state;
 
             if ( task.Element("State").Value == "True" ) state = true;
