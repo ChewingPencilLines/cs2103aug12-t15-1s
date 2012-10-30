@@ -216,26 +216,8 @@ namespace ToDo
                     newOperation = new OperationUndo();
                     break;
                 case CommandType.DONE:
-                    if (startCombined != null)
-                    {
-                        newOperation=new OperationMarkAsDone(startCombined);
-                        break;
-                    }
-                    else if (taskName != null && taskName != "")
-                    {
-                        newOperation = new OperationMarkAsDone(taskName);
-                        break;
-                    }
-                    else if (taskIndex != null)
-                    {
-                        newOperation = new OperationMarkAsDone(taskIndex);
-                        break;
-                    }
-                    else
-                    {
-                        newOperation = new OperationMarkAsDone("");
-                        break;
-                    }
+                    newOperation=new OperationMarkAsDone(taskName,taskIndex,startCombined);
+                    break;
                 case CommandType.POSTPONE:
                     newOperation = new OperationPostpone(taskName, taskIndex, startCombined, endCombined);
                     break;
