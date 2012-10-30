@@ -94,6 +94,7 @@ namespace ToDo
             InitializeMonthKeywords();
             InitializeContextKeywords();
             InitializeDateTimeKeywords();
+            InitializeIndexableCommandTypes();
         }
 
         // ******************************************************************
