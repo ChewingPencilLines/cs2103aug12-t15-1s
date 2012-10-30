@@ -413,6 +413,7 @@ namespace ToDo
         private void InitializeEventHandlers()
         {
             EventHandlers.StayOnTopHandler += SetStayOnTop;
+            EventHandlers.UpdateOutputBoxSettingsHandler += UpdateOutputBoxSettings;
         }
 
         private void SetStayOnTop(object sender, EventArgs args)
@@ -423,6 +424,12 @@ namespace ToDo
             FontBox.OnTop(onTop);
             AlertBox.OnTop(onTop);
         }
+
+        private void UpdateOutputBoxSettings(object sender, EventArgs args)
+        {
+            outputBox.InitializeWithSettings(logic.MainSettings);
+        }
+
 
         #endregion
 

@@ -15,6 +15,7 @@ namespace ToDo
         bool fontSelectionEnable; 
         bool sizeSelectionEnable;
         bool colorSelectionEnable;
+        bool confirmData;
 
         public FontDialogToDo()
         {
@@ -22,11 +23,26 @@ namespace ToDo
 
             this.fontSelection.SelectedIndexChanged += m_comboBox_SelectedIndexChanged;
             this.sizeSelection.RemoveDuplicate();
-            this.sizeSelection.SelectedItem = 8;
-            this.fontSelection.SelectedFontFamily = new FontFamily("Arial Black");
-            this.colorSelection.SelectedColor = Color.Cyan;
+            InitializeOptions("Arial Black", 8, Color.Cyan);
 
             SetFormattingForPreview();
+        }
+
+        #region Getters
+
+        public int GetSize() { return (int)this.sizeSelection.SelectedItem; }
+        public string GetFont() { return this.fontSelection.publicFont.GetName(0); }
+        public Color GetColor() { return this.colorSelection.SelectedColor; }
+
+        #endregion
+
+        #region FormattingInitializationFunctions
+
+        public void InitializeOptions(string font, int size, Color color)
+        {
+            this.sizeSelection.SelectedItem = size;
+            this.fontSelection.SelectedFontFamily = new FontFamily(font);
+            this.colorSelection.SelectedColor = color;
         }
 
         public void EnableDisableControls(bool font, bool size, bool color)
@@ -58,6 +74,8 @@ namespace ToDo
             }
         }
 
+        #endregion
+
         #region EventHandlersForOptions
 
         private void sizeComboBox1_SelectionChangeCommitted(object sender, EventArgs e)
@@ -77,6 +95,26 @@ namespace ToDo
         }
 
         #endregion
+
+        public bool CheckValidData()
+        {
+            if (confirmData == true)
+                return true;
+            else
+                return false;
+        }
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            confirmData = true;
+            this.Close();
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            confirmData = false;
+            this.Close();
+        }
 
 
     }
