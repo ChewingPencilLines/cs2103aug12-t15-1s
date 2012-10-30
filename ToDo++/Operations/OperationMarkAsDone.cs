@@ -10,7 +10,7 @@ namespace ToDo
         private int? endindex;
         private string doneString;
         private DateTime? doneDate;
-
+/*
         public OperationMarkAsDone(int[] indexRange)
         {
             if (indexRange == null) this.index = null;
@@ -30,6 +30,19 @@ namespace ToDo
 
         public OperationMarkAsDone(DateTime? doneDate)
         {
+            this.doneDate = doneDate;
+        }
+*/
+        public OperationMarkAsDone(string doneString, int[] indexRange, DateTime? doneDate)
+        {
+            if (indexRange == null) this.index = null;
+            else
+            {
+                this.index = indexRange[TokenCommand.START_INDEX] - 1;
+                this.endindex = indexRange[TokenCommand.END_INDEX] - 1;
+            }
+            if (doneString == "") this.doneString = null;
+            else this.doneString = doneString;
             this.doneDate = doneDate;
         }
 
