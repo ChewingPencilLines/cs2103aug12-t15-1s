@@ -12,6 +12,10 @@ namespace ToDo
 {
     public partial class FontDialogToDo : Form
     {
+        bool fontSelectionEnable; 
+        bool sizeSelectionEnable;
+        bool colorSelectionEnable;
+
         public FontDialogToDo()
         {
             InitializeComponent();
@@ -22,15 +26,21 @@ namespace ToDo
             this.fontSelection.SelectedFontFamily = new FontFamily("Arial Black");
             this.colorSelection.SelectedColor = Color.Cyan;
 
-            SetStuff();
+            SetFormattingForPreview();
         }
 
-        private void cgFontCombo1_FontChanged(object sender, EventArgs e)
+        public void EnableDisableControls(bool font, bool size, bool color)
         {
-            MessageBox.Show("aa");
+            this.fontSelectionEnable = font;
+            this.sizeSelectionEnable = size;
+            this.colorSelectionEnable = color;
+
+            this.fontSelection.Enabled = this.fontSelectionEnable;
+            this.sizeSelection.Enabled = this.sizeSelectionEnable;
+            this.colorSelection.Enabled = this.colorSelectionEnable;
         }
 
-        private void SetStuff()
+        private void SetFormattingForPreview()
         {
             int size = Convert.ToInt32(sizeSelection.SelectedItem.ToString());
             FontFamily temp = fontSelection.publicFont;
@@ -48,20 +58,26 @@ namespace ToDo
             }
         }
 
+        #region EventHandlersForOptions
+
         private void sizeComboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            SetStuff();
+            SetFormattingForPreview();
         }
 
         private void colorSelection_ColorChanged(object sender, ColorComboTestApp.ColorChangeArgs e)
         {
-            SetStuff();
+            SetFormattingForPreview();
         }
 
         private void m_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             fontSelection.publicFont = fontSelection.SelectedFontFamily;
-            SetStuff();
+            SetFormattingForPreview();
         }
+
+        #endregion
+
+
     }
 }

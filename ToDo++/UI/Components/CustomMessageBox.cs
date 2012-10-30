@@ -55,6 +55,7 @@
         internal static void Show()
         {
             popUp.ShowDialog();
+            
         }
 
         internal static void OnTop(bool val)
