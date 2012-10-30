@@ -11,4 +11,5 @@ namespace ToDo
     public class NothingSelectedException : Exception { public NothingSelectedException(string message) : base(message) { } }
     public class InvalidDateTimeException : Exception { public InvalidDateTimeException(string message) : base(message) { } }
     public class InvalidDeleteFlexiException : Exception { public InvalidDeleteFlexiException(string message) : base(message) { } }
+    public class TaskFileCorruptedException : Exception { public TaskFileCorruptedException(string message) : base(message) { } }
 }

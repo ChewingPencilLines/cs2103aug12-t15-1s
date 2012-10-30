@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace ToDo
 {
@@ -22,12 +23,18 @@ namespace ToDo
         public Logic()
         {
             mainSettings = new Settings();
+
             storage = new Storage("testfile.xml", "testsettings.xml");
+
             mainSettings.UpdateSettings(storage.LoadSettingsFromFile());
+            EventHandlers.UpdateSettingsHandler += UpdateSettings;
+
             stringParser = new StringParser();
             commandParser = new CommandParser(ref stringParser);
+
             taskList = storage.LoadTasksFromFile();
-            EventHandlers.UpdateSettingsHandler += UpdateSettings;
+            if (taskList == null) PromptUser_CreateNewTaskFile();
+
         }
 
         public string ProcessCommand(string input)
@@ -63,6 +70,21 @@ namespace ToDo
             string response;
             response = operation.Execute(taskList, storage);
             return response;
+        }
+
+        private void PromptUser_CreateNewTaskFile()
+        {
+            CustomMessageBox.Show("Error!", "Task storage file seems corrupted. Error reading from it! Create new file?");
+            DialogResult dialogResult = MessageBox.Show("Sure", "Create new task file?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                storage.CreateNewTaskFile();
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                AlertBox.Show("Exiting application..");
+                Application.Exit();
+            }
         }
 
         /// <summary>

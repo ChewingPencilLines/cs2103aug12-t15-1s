@@ -46,7 +46,7 @@ namespace ToDo
         }
 
         public static T FromXElement<T>(this XElement xElement)
-        {
+        {            
             using (var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes(xElement.ToString())))
             {
                 var xmlSerializer = new XmlSerializer(typeof(T));

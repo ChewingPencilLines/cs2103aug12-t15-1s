@@ -7,6 +7,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using System.Windows.Forms;
 
 namespace ToDo
 {
@@ -24,19 +25,19 @@ namespace ToDo
         public Storage(string taskStorageFile, string settingsFile)
         {
             this.taskStorageFile = taskStorageFile;
-            this.settingsFile = settingsFile;                        
-            if (!ValidateTaskFile(this.taskStorageFile))
-                CreateNewTaskFile(this.taskStorageFile);
+            this.settingsFile = settingsFile;            
+            if (!ValidateTaskFile())
+                CreateNewTaskFile();
         }
 
-        private bool ValidateTaskFile(string filename)
+        private bool ValidateTaskFile()
         {
             //check for well-formedness
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.ConformanceLevel = ConformanceLevel.Fragment;
             try
             {
-                using (XmlReader reader = XmlReader.Create(filename, settings))
+                using (XmlReader reader = XmlReader.Create(taskStorageFile, settings))
                 {
                     // check for "tasks" node
                     reader.MoveToContent();
@@ -52,14 +53,14 @@ namespace ToDo
             }            
         }
 
-        private bool CreateNewTaskFile(string filename)
+        internal bool CreateNewTaskFile()
         {
             try
             {
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml("<tasks>" +
                             "</tasks>");              
-                doc.Save(filename);                
+                doc.Save(taskStorageFile);                
             }
             catch (ArgumentNullException)
             {
@@ -175,15 +176,21 @@ namespace ToDo
             XDocument doc = XDocument.Load(taskStorageFile);
             IEnumerable<XElement> tasks =
                 (from task in doc.Root.Elements("Task") select task);
-            foreach(XElement task in tasks)
+            foreach (XElement task in tasks)
             {
-                Task addTask = GenerateTaskFromXElement(task);
-                if (addTask == null)
+                try
                 {
-                    CustomMessageBox.Show("Error!","Task storage file seems corrupted. Error reading from it! Create new file?");
-                    throw new NotImplementedException("To create handler for creating new file..");
+                    Task addTask = GenerateTaskFromXElement(task);
+                    if (addTask == null)
+                    {
+                        return null;
+                    }
+                    taskList.Add(addTask);
                 }
-                taskList.Add(addTask);
+                catch (ArgumentNullException)
+                {
+                    return null;
+                }                                
             }
             return taskList;
         }
