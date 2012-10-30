@@ -67,7 +67,7 @@ namespace ToDo
                     else
                     {
                         commandType = ((TokenCommand)token).Value;
-                        if (commandType == CommandType.DELETE || commandType == CommandType.MODIFY || commandType == CommandType.DONE)
+                        if (CustomDictionary.IsIndexableCommandType(commandType))
                         {
                             taskIndex = ((TokenCommand)token).TaskIndex;
                         }
