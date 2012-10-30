@@ -23,7 +23,12 @@ namespace ToDo
             get { return startTime; }
             //set { startTime = value; }
         }
-
+/*
+        public DateSpecificity DateSpecificity
+        {
+            get { return dateSpecificity; }
+        }
+        */
         public TaskEvent(
             string taskName,
             DateTime startTime,
