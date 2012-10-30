@@ -22,6 +22,8 @@ namespace ToDo
         protected const string RESPONSE_DISPLAY_NOTASK = "There are no tasks for display.";
         protected const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
         protected const string RESPONSE_UNDO_FAILURE = "Cannot undo last executed task!";
+        protected const string RESPONSE_POSTPONE_SUCCESS = "Postponed task \"{0}\" successfully.";
+        protected const string RESPONSE_POSTPONE_FAILURE = "No matching task found!";
         protected const string RESPONSE_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
         protected const string RESPONSE_MARKASUNDONE_SUCCESS = "Successfully marked \"{0}\" as undone.";
         protected const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
