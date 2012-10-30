@@ -61,6 +61,16 @@ namespace ToDo
                 if (oldIndex.Value >= 0 && oldIndex.Value < lastListedTasks.Count)
                 {
                     Task taskToModify = lastListedTasks[oldIndex.Value];
+                    if (taskToModify is TaskEvent && newTask is TaskFloating)
+                    {
+                        newTask = new TaskEvent(newTask.TaskName, ((TaskEvent)taskToModify).StartTime,
+                            ((TaskEvent)taskToModify).EndTime, ((TaskEvent)taskToModify).isSpecific);
+                    }
+                    else if (taskToModify is TaskDeadline && newTask is TaskFloating)
+                    {
+                        newTask = new TaskDeadline(newTask.TaskName, ((TaskDeadline)taskToModify).EndTime,
+                            ((TaskDeadline)taskToModify).isSpecific);
+                    }
                     response = ModifyTask(ref taskToModify, newTask, ref taskList, out successFlag);
                 }
                 else response = RESPONSE_INVALID_TASK_INDEX;
