@@ -23,5 +23,10 @@ namespace ToDo
                             );
             return task;
         }
+
+        public override bool IsWithinTime(DateTime? start, DateTime? end)
+        {
+            return false;
+        }
     }
 }

@@ -44,6 +44,8 @@ namespace ToDo
 
         public abstract XElement ToXElement();
 
+        public abstract bool IsWithinTime(DateTime? start, DateTime? end);
+
         public override int GetHashCode()
         {
             int newHashCode = Math.Abs(base.GetHashCode() ^ (int)DateTime.Now.ToBinary());

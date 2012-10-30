@@ -181,7 +181,7 @@ namespace ToDo
                     newOperation = new OperationAdd(task);
                     break;
                 case CommandType.DELETE:
-                    newOperation = new OperationDelete(taskName, taskIndex, startCombined, endCombined);
+                    newOperation = new OperationDelete(taskName, taskIndex, startCombined, endCombined, isSpecific);
                     break;
                 case CommandType.DISPLAY:
                     newOperation = new OperationDisplay();
@@ -190,8 +190,8 @@ namespace ToDo
                     task = GenerateNewTask(taskName, startCombined, endCombined, isSpecific);
                     newOperation = new OperationModify(taskIndex,task);
                     break;
-                case CommandType.SEARCH:                    
-                    newOperation = new OperationSearch(taskName, startCombined, endCombined);
+                case CommandType.SEARCH:
+                    newOperation = new OperationSearch(taskName, startCombined, endCombined, isSpecific);
                     break;
                 case CommandType.SORT:
                     newOperation = new OperationSort();
@@ -206,7 +206,7 @@ namespace ToDo
                     newOperation=new OperationMarkAsDone(taskName,taskIndex,startCombined);
                     break;
                 case CommandType.POSTPONE:
-                    newOperation = new OperationPostpone(taskName, taskIndex, startCombined, endCombined);
+                    newOperation = new OperationPostpone(taskName, taskIndex, startCombined, endCombined, isSpecific);
                     break;
                 case CommandType.EXIT:
                     System.Environment.Exit(0);
@@ -261,10 +261,7 @@ namespace ToDo
             else if (startTime == null && endTime != null)
                 return new TaskDeadline(taskName, (DateTime)endTime, isSpecific);
             else if (startTime != null && endTime == null && isSpecific.EndTime == true)
-            {
-                AlertBox.Show("No specific end time given for timed event task!");
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific); // note: set endTime as what for default?
-            }
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific); 
             else
                 return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
         }

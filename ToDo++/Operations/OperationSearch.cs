@@ -10,12 +10,14 @@ namespace ToDo
     {
         private string searchString = "";
         private DateTime? startTime = null, endTime = null;
+        private DateTimeSpecificity isSpecific;
 
-        public OperationSearch(string searchString, DateTime? startTime, DateTime? endTime)
+        public OperationSearch(string searchString, DateTime? startTime, DateTime? endTime, DateTimeSpecificity isSpecific)
         {
             this.searchString = searchString;
             this.startTime = startTime;
             this.endTime = endTime;
+            this.isSpecific = isSpecific;
         }
 
         public override string Execute(List<Task> taskList, Storage storageXML)

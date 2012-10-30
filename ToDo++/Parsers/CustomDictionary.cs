@@ -12,12 +12,12 @@ namespace ToDo
 {
     static class CustomDictionary
     {
-        static public string todayKeyword = "today";
         static public Dictionary<string, CommandType> commandKeywords;
         static public Dictionary<string, Month> monthKeywords;
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, DayOfWeek> dayKeywords;
         static public List<string> timeSpecificKeywords;
+        static public List<string> todayKeywords;
         //static public List<string> timeGeneralKeywords;
         public enum timeGeneralKyeywords
         { MORNING = 0, AFTERNOON, EVENING, NIGHT };
@@ -172,6 +172,7 @@ namespace ToDo
             // NYI
             timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
             timeSpecificKeywords = new List<string> { "noon", "midnight" };        // special case    
+            todayKeywords = new List<string> { "today" };
         }
 
         private static void InitializeContextKeywords()
@@ -271,6 +272,12 @@ namespace ToDo
         // ******************************************************************
 
         #region Comparison Methods
+        public static bool IsToday(string word)
+        {
+            if (todayKeywords.Exists(e => (e == word)))
+                return true;
+            else return false;
+        }
         public static bool IsValidDate(string theDate)
         {
             return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate);

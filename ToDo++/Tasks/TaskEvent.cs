@@ -23,12 +23,7 @@ namespace ToDo
             get { return startTime; }
             //set { startTime = value; }
         }
-/*
-        public DateSpecificity DateSpecificity
-        {
-            get { return dateSpecificity; }
-        }
-        */
+
         public TaskEvent(
             string taskName,
             DateTime startTime,
@@ -55,6 +50,25 @@ namespace ToDo
                             new XElement("State", doneState.ToString())
                             );
             return task;
+        }
+
+        public override bool IsWithinTime(DateTime? start, DateTime? end)
+        {
+            bool isWithinTime = true;
+            if (start != null)
+            {
+                if (end == null)
+                {
+                    if (startTime.Date > ((DateTime)start).Date) isWithinTime = false;
+                    if (endTime.Date < ((DateTime)start).Date) isWithinTime = false;
+                }
+                if (startTime < start) isWithinTime = false;
+            }
+            if (end != null)
+            {
+                if (endTime > end) isWithinTime = false;
+            }
+            return isWithinTime;
         }
     }
 }
