@@ -35,9 +35,9 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.flexiCommandsControl = new ToDo.FlexiCommandsControl();
             this.fontPage = new System.Windows.Forms.TabPage();
+            this.fontColorSettingsControl = new ToDo.FontColorSettings();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.preferencesTree = new System.Windows.Forms.TreeView();
-            this.fontColorSettingsControl = new ToDo.FontColorSettings();
             this.preferencesTitle.SuspendLayout();
             this.preferencesSelector.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -126,6 +126,17 @@
             this.fontPage.TabIndex = 2;
             this.fontPage.Text = "Font";
             // 
+            // fontColorSettingsControl
+            // 
+            this.fontColorSettingsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.fontColorSettingsControl.BackColor = System.Drawing.Color.SteelBlue;
+            this.fontColorSettingsControl.Location = new System.Drawing.Point(3, 3);
+            this.fontColorSettingsControl.Name = "fontColorSettingsControl";
+            this.fontColorSettingsControl.Size = new System.Drawing.Size(326, 248);
+            this.fontColorSettingsControl.TabIndex = 0;
+            // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -151,14 +162,6 @@
             this.preferencesTree.Size = new System.Drawing.Size(102, 283);
             this.preferencesTree.TabIndex = 0;
             this.preferencesTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.preferencesTree_AfterSelect);
-            // 
-            // fontColorSettingsControl
-            // 
-            this.fontColorSettingsControl.BackColor = System.Drawing.Color.SteelBlue;
-            this.fontColorSettingsControl.Location = new System.Drawing.Point(3, 3);
-            this.fontColorSettingsControl.Name = "fontColorSettingsControl";
-            this.fontColorSettingsControl.Size = new System.Drawing.Size(326, 248);
-            this.fontColorSettingsControl.TabIndex = 0;
             // 
             // PreferencesPanel
             // 

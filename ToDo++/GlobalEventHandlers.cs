@@ -13,5 +13,8 @@ namespace ToDo
 
         public static event EventHandler UpdateSettingsHandler;
         public static void UpdateSettings(SettingInformation settingsList) { UpdateSettingsHandler(settingsList, EventArgs.Empty); }
+
+        public static event EventHandler UpdateOutputBoxSettingsHandler;
+        public static void UpdateOutputBoxSettings() { UpdateOutputBoxSettingsHandler(null, EventArgs.Empty); }
     }
 }

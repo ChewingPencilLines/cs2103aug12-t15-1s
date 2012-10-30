@@ -1,4 +1,6 @@
-﻿namespace ToDo
+﻿using System.Drawing;
+
+namespace ToDo
 {
     public static class CustomMessageBox
     {
@@ -49,8 +51,25 @@
 
     public static class FontBox
     {
-        
+
         private static FontDialogToDo popUp = new FontDialogToDo();
+
+        internal static void InitializeOptions(string font, int size, Color color)
+        {
+            popUp.InitializeOptions(font, size, color);
+        }
+
+        internal static int GetSize() { return popUp.GetSize(); }
+        internal static string GetFont() { return popUp.GetFont(); }
+        internal static Color GetColor() { return popUp.GetColor(); }
+
+        internal static bool ConfirmHit()
+        {
+            if (popUp.CheckValidData())
+                return true;
+            else
+                return false;
+        }
 
         internal static void Show(bool font, bool size, bool color)
         {

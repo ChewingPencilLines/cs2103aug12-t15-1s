@@ -75,7 +75,7 @@ namespace ToDo
         /// </summary>
         /// <param name="userInput">What the User typed in the input box</param>
         /// <param name="systemOutput">What ToDo++ returns as an output</param>
-        public void DisplayCommand(string userInput,string systemOutput)
+        public void DisplayCommand(string userInput, string systemOutput)
         {
             int currentSize = settings.GetTextSize();
             SetFormat(Color.Blue, "User: ", currentSize);

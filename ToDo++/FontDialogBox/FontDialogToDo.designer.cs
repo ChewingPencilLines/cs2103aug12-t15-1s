@@ -41,13 +41,13 @@
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // Font
+            // font
             // 
             this.font.AutoSize = true;
             this.font.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.font.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.font.Location = new System.Drawing.Point(2, 12);
-            this.font.Name = "Font";
+            this.font.Name = "font";
             this.font.Size = new System.Drawing.Size(42, 20);
             this.font.TabIndex = 5;
             this.font.Text = "Font";
@@ -85,6 +85,7 @@
             this.cancelButton.TabIndex = 8;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = false;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // okButton
             // 
@@ -97,6 +98,7 @@
             this.okButton.TabIndex = 9;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = false;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // previewLabel
             // 
