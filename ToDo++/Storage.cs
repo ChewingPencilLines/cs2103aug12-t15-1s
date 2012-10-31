@@ -64,12 +64,12 @@ namespace ToDo
             }
             catch (ArgumentNullException)
             {
-                CustomMessageBox.Show("Error!", "Task filename was not set!");
+                UserInputBox.Show("Error!", "Task filename was not set!");
                 return false;
             }
             catch (InvalidOperationException)
             {
-                CustomMessageBox.Show("Error!", "Failed to create task file.");
+                UserInputBox.Show("Error!", "Failed to create task file.");
                 return false;
             }
             return true;
