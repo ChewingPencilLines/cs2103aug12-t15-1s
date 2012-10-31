@@ -14,7 +14,7 @@ namespace ToDo
         public DateTime EndTime
         {
             get { return endTime; }
-            //set { endTime = value; }
+            set { endTime = value; }
         }
         public TaskDeadline(
             string taskName,

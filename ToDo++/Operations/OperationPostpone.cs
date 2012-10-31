@@ -33,23 +33,28 @@ namespace ToDo
         {
             this.storageIO = storageIO;
             string response;
-
             List<Task> searchResults;
             if (index == null)
             {
-                searchResults = SearchForTasks(taskList, taskName, false, oldTime);
+                if (oldTime == null)
+                {
+                    searchResults = SearchForTasks(taskList, taskName);
+                    //filter floating tasks
+                    searchResults = (from task in searchResults
+                                     where (task is TaskEvent || task is TaskDeadline)
+                                     select task).ToList();
+                }
+                else
+                {
+                    searchResults = SearchForTasks(taskList, taskName, isSpecific.StartTime, oldTime);
+                }
                 if (searchResults.Count == 0)
                 {
-                    //check substring
-                    searchResults = SearchForTasks(taskList, taskName, false, oldTime);
-                    if (searchResults.Count == 0)
-                        response = RESPONSE_POSTPONE_FAILURE;
-                    else response = GenerateDisplayString(searchResults);
+                    response = RESPONSE_POSTPONE_FAILURE;
                 }
                 else if (searchResults.Count == 1)
                 {
-                   // response = DeleteTask(searchResults[0], taskList, out successFlag);
-                    throw new NotImplementedException();
+                    response = PostponeTask(searchResults[0], taskList, postponeTime, out successFlag);
                 }
                 else response = GenerateDisplayString(searchResults);
             }
@@ -65,8 +70,7 @@ namespace ToDo
                     if (taskToPostpone == null)
                         return RESPONSE_POSTPONE_FAILURE;
                     else
-                        throw new NotImplementedException();
-                       // response = DeleteTask(taskToPostpone, taskList, out successFlag);
+                        response = PostponeTask(taskToPostpone, taskList, postponeTime, out successFlag);
                 }
                 else if (endindex < 0 || endindex > lastListedTasks.Count - 1)
                 {
@@ -80,8 +84,7 @@ namespace ToDo
                         Task taskToPostpone = lastListedTasks[i.Value];
                         if (taskToPostpone == null) response += RESPONSE_POSTPONE_FAILURE;
                         else
-                            throw new NotImplementedException();
-                            //response += DeleteTask(taskToDelete, taskList, out successFlag);
+                            response += PostponeTask(taskToPostpone, taskList, postponeTime, out successFlag);
                         response += '\n';
                     }
                 }

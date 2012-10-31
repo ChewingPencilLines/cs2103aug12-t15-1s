@@ -137,7 +137,7 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;
         }
 
-        protected string ModifyTask(ref Task taskToModify, Task newTask, ref List<Task> taskList, out bool successFlag)
+        protected string ModifyTask(Task taskToModify, Task newTask, List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToModify);
@@ -148,6 +148,52 @@ namespace ToDo
             {
                 successFlag = true;
                 return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
+            }
+            else
+                return RESPONSE_XML_READWRITE_FAIL;
+        }
+
+        protected string PostponeTask(Task taskToPostpone, List<Task> taskList, DateTime? NewDate, out bool successFlag)
+        {
+            successFlag = false;
+            Task taskPostponed = taskToPostpone;
+            undoTask.Push(taskToPostpone);
+            taskList.Remove(taskToPostpone);
+            if (taskPostponed is TaskDeadline)
+            {
+                if (NewDate == null)
+                    ((TaskDeadline)taskPostponed).EndTime = ((TaskDeadline)taskPostponed).EndTime.AddDays(1);
+                else
+                    ((TaskDeadline)taskPostponed).EndTime = NewDate.Value;
+                taskList.Add(taskPostponed);
+                undoTask.Push(taskPostponed);
+            }
+            else if (taskPostponed is TaskEvent)
+            {
+                if (NewDate == null)
+                {
+                    ((TaskEvent)taskPostponed).EndTime = ((TaskEvent)taskPostponed).EndTime.AddDays(1);
+                    ((TaskEvent)taskPostponed).StartTime = ((TaskEvent)taskPostponed).StartTime.AddDays(1);
+                }
+                else
+                {
+                    DateTime OldDate = ((TaskEvent)taskPostponed).StartTime;
+                    ((TaskEvent)taskPostponed).EndTime += NewDate.Value - OldDate;
+                    ((TaskEvent)taskPostponed).StartTime = NewDate.Value;
+                }
+                taskList.Add(taskPostponed);
+                undoTask.Push(taskPostponed);
+            }
+            else
+            {
+                undoTask.Push(taskToPostpone);
+                taskList.Add(taskToPostpone);
+                return RESPONSE_POSTPONE_FAILURE;
+            }
+            if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
+            {
+                successFlag = true;
+                return String.Format(RESPONSE_POSTPONE_SUCCESS, taskPostponed.TaskName);
             }
             else
                 return RESPONSE_XML_READWRITE_FAIL;
@@ -168,6 +214,7 @@ namespace ToDo
                                  select task).ToList();
             return filteredTasks;
         }
+       
         #endregion
 
         // ******************************************************************

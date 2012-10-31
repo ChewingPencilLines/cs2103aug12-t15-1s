@@ -46,7 +46,7 @@ namespace ToDo
                 if (searchResults.Count == 0)
                 {
                     //check substring
-                    searchResults = SearchForTasks(taskList, taskName, false);
+                    searchResults = SearchForTasks(taskList, taskName);
                     if (searchResults.Count == 0)
                         response = RESPONSE_DELETE_FAILURE;
                     else response = GenerateDisplayString(searchResults);

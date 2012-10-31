@@ -79,7 +79,7 @@ namespace ToDo
                         newTask = new TaskDeadline(newTask.TaskName, ((TaskDeadline)taskToModify).EndTime,
                             ((TaskDeadline)taskToModify).isSpecific);
                     }
-                    response = ModifyTask(ref taskToModify, newTask, ref taskList, out successFlag);
+                    response = ModifyTask(taskToModify, newTask, taskList, out successFlag);
                 }
                 else response = RESPONSE_INVALID_TASK_INDEX;
             }
@@ -91,7 +91,7 @@ namespace ToDo
         {
             Task taskToUndo = undoTask.Pop();
             Task previousTask = undoTask.Pop();
-            return ModifyTask(ref taskToUndo, previousTask, ref taskList, out successFlag);
+            return ModifyTask(taskToUndo, previousTask, taskList, out successFlag);
         }
     }
 }
