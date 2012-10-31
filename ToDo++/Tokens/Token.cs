@@ -20,6 +20,7 @@ namespace ToDo
         {
             get { return position; }           
         }
+
         internal abstract void UpdateAttributes(OperationAttributes attrb);
 
         internal bool RequiresRange()
