@@ -14,14 +14,14 @@ namespace ToDo
         public DateTime EndTime
         {
             get { return endTime; }
-            //set { endTime = value; }
+            set { endTime = value; }
         }
 
         private DateTime startTime;
         public DateTime StartTime
         {
             get { return startTime; }
-            //set { startTime = value; }
+            set { startTime = value; }
         }
 
         public TaskEvent(
