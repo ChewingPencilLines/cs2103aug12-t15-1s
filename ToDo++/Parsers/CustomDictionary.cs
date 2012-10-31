@@ -191,7 +191,7 @@ namespace ToDo
         private static void InitializeIndexableCommandTypes()
         {
             indexableCommandTypes = new List<CommandType>
-            { CommandType.DELETE, CommandType.DONE, CommandType.MODIFY };
+            { CommandType.DELETE, CommandType.DONE, CommandType.MODIFY, CommandType.POSTPONE };
         }
         #endregion
 
