@@ -41,7 +41,7 @@ namespace ToDo
             tokens.AddRange(GenerateContextTokens(input, tokens));
             // must be done last. all non-hits are taken to be literals            
             tokens.AddRange(GenerateLiteralTokens(input, tokens));
-            DeconflictTokens(tokens);
+            DeconflictTokens(ref tokens);
             tokens.Sort(CompareByPosition);
             return tokens;
         }
@@ -541,6 +541,53 @@ namespace ToDo
             return date;
         }
 
+        private void DeconflictTokens(ref List<Token> tokens)
+        {
+            List<Token> deconflictedTokens = new List<Token>();
+            bool conflictRemains = true;
+
+            while (conflictRemains)
+            {
+                foreach (Token token in tokens)
+                {
+                    var matches = from eachToken in tokens
+                                  where token.Position == eachToken.Position
+                                  select eachToken;
+                    var remainingTokens = from eachToken in tokens
+                                          where !matches.Contains(eachToken)
+                                          select eachToken;
+                    if (matches.Count() > 1)
+                    {
+                        Token highestPriorityToken = GetHighestPriorityToken(matches, tokens);
+                        deconflictedTokens.Add(highestPriorityToken);
+                        deconflictedTokens.AddRange(remainingTokens);
+                        break;
+                    }
+                    if (tokens.Last() == token)
+                    {
+                        conflictRemains = false;
+                        deconflictedTokens = tokens;
+                    }
+                }
+                tokens = deconflictedTokens;
+            }
+            return;
+        }
+
+        private Token GetHighestPriorityToken(IEnumerable<Token> matches, List<Token> tokens)
+        {
+            Token highestPriorityToken = null;
+            
+            foreach (Token token in matches)
+            {
+                if (token.GetType() == typeof(TokenRange))
+                    highestPriorityToken = token;
+                else if (highestPriorityToken == null)
+                    highestPriorityToken = token;
+            }
+            return highestPriorityToken;
+        }
+
         /// <summary>
         /// This methods compares the 2 input tokens by their stored integer positions and
         /// returns a -1 if the first input token's position is smaller than the second.
@@ -561,11 +608,6 @@ namespace ToDo
                 Debug.Assert(false, "Two tokens with same position!");
                 return 0;
             }
-        }
-
-        private void DeconflictTokens(List<Token> tokens)
-        {
-            
         }
 
         /// <summary>
