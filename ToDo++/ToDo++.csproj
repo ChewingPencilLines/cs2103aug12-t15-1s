@@ -134,11 +134,11 @@
       <DependentUpon>FlexiCommandsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Logic.cs" />
-    <Compile Include="UI\Components\CustomPopUps\PopUpForm.cs">
+    <Compile Include="UI\Components\CustomPopUps\UserInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Components\CustomPopUps\PopUpForm.Designer.cs">
-      <DependentUpon>PopUpForm.cs</DependentUpon>
+    <Compile Include="UI\Components\CustomPopUps\UserInputForm.Designer.cs">
+      <DependentUpon>UserInputForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="CustomExceptions.cs" />
@@ -194,8 +194,8 @@
     <EmbeddedResource Include="UI\Components\PreferencesControllers\FlexiCommandsControl.resx">
       <DependentUpon>FlexiCommandsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Components\CustomPopUps\PopUpForm.resx">
-      <DependentUpon>PopUpForm.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Components\CustomPopUps\UserInputForm.resx">
+      <DependentUpon>UserInputForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\DateTimeControl.resx">
       <DependentUpon>DateTimeControl.cs</DependentUpon>

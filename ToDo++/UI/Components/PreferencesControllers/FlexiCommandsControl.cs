@@ -133,11 +133,7 @@ namespace ToDo
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            CustomMessageBox.Show("Add Command", "Enter your new command here");
-            if (CustomMessageBox.ValidData())
-                AddFlexiCommandToSettings(CustomMessageBox.GetInput());
-
-            UpdateFlexiCommandList();
+            ShowUserInputBox();
         }
 
         private void commandTree_AfterSelect(object sender, TreeViewEventArgs e)
@@ -168,7 +164,26 @@ namespace ToDo
             UpdateFlexiCommandList();
         }
 
+        private void commandTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            ShowUserInputBox();
+        }
+
+        private void contextTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            ShowUserInputBox();
+        }
+
         #endregion
+
+        private void ShowUserInputBox()
+        {
+            UserInputBox.Show("Add Command", "Enter your new command here");
+            if (UserInputBox.ValidData())
+                AddFlexiCommandToSettings(UserInputBox.GetInput());
+
+            UpdateFlexiCommandList();
+        }
 
         private void UpdateFlexiCommandList()
         {
@@ -259,10 +274,7 @@ namespace ToDo
             descriptionLabel.Text = description;
         }
 
-        private void PushFlexiCommandsToStringParser()
-        {
 
-        }
 
 
 
