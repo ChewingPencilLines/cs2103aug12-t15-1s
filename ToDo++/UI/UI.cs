@@ -410,12 +410,18 @@ namespace ToDo
 
         #region EventHandlers
 
+        /// <summary>
+        /// Adds Event Handlers relating to UI here
+        /// </summary>
         private void InitializeEventHandlers()
         {
             EventHandlers.StayOnTopHandler += SetStayOnTop;
             EventHandlers.UpdateOutputBoxSettingsHandler += UpdateOutputBoxSettings;
         }
 
+        /// <summary>
+        /// When event received, Form always stays on Top
+        /// </summary>
         private void SetStayOnTop(object sender, EventArgs args)
         {
             bool onTop = Convert.ToBoolean(sender);
@@ -425,6 +431,9 @@ namespace ToDo
             AlertBox.OnTop(onTop);
         }
 
+        /// <summary>
+        /// When event received, OutputBox updates itself with the latest settings
+        /// </summary>
         private void UpdateOutputBoxSettings(object sender, EventArgs args)
         {
             outputBox.InitializeWithSettings(logic.MainSettings);
