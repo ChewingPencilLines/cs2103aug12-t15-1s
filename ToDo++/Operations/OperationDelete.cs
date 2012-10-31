@@ -42,7 +42,7 @@ namespace ToDo
             List<Task> searchResults;
             if (index == null)
             {
-                searchResults = SearchForTasks(taskList, taskName, false, startTime, endTime);
+                searchResults = SearchForTasks(taskList, taskName, isSpecific.StartTime && isSpecific.EndTime, startTime, endTime);
                 if (searchResults.Count == 0)
                 {
                     //check substring
