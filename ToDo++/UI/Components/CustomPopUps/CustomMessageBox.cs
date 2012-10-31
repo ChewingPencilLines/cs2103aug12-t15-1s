@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace ToDo
 {
@@ -15,6 +16,7 @@ namespace ToDo
         {
             popUp.SetTitle(title, subTitle);
             popUp.SetUserInput("");
+            popUp.StartPosition = FormStartPosition.CenterParent;
             popUp.ShowDialog();
         }
 
@@ -61,6 +63,7 @@ namespace ToDo
         internal static void Show(string alertText)
         {
             popUp.SetAlertText(alertText);
+            popUp.StartPosition = FormStartPosition.CenterParent;
             popUp.ShowDialog();
         }
 
@@ -118,6 +121,7 @@ namespace ToDo
         internal static void Show(bool font, bool size, bool color)
         {
             popUp.EnableDisableControls(font, size, color);
+            popUp.StartPosition = FormStartPosition.CenterParent;
             popUp.ShowDialog();
         }
 
