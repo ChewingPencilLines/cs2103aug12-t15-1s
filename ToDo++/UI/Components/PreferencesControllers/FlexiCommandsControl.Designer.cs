@@ -50,6 +50,7 @@
             this.commandTree.Size = new System.Drawing.Size(111, 188);
             this.commandTree.TabIndex = 1;
             this.commandTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.commandTree_AfterSelect);
+            this.commandTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.commandTree_NodeMouseDoubleClick);
             // 
             // addButton
             // 
@@ -90,6 +91,7 @@
             this.contextTree.Size = new System.Drawing.Size(111, 188);
             this.contextTree.TabIndex = 10;
             this.contextTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.contextTree_AfterSelect);
+            this.contextTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.contextTree_NodeMouseDoubleClick);
             // 
             // groupBox1
             // 
