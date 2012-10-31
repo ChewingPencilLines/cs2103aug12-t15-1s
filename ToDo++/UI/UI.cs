@@ -426,7 +426,7 @@ namespace ToDo
         {
             bool onTop = Convert.ToBoolean(sender);
             this.TopMost = onTop;
-            CustomMessageBox.OnTop(onTop);
+            UserInputBox.OnTop(onTop);
             FontBox.OnTop(onTop);
             AlertBox.OnTop(onTop);
         }

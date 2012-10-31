@@ -10,12 +10,18 @@ namespace ToDo
             InitializeComponent();
         }
 
-        //public string alertText { get { return alertLabel.Text; } set { alertLabel.Text = alertText; } }
-
+        /// <summary>
+        /// This method sets the alert text that is to be displayed
+        /// </summary>
+        /// <param name="alertText">Alert Text to be displayed</param>
         public void SetAlertText(string alertText)
         {
             alertLabel.Text = alertText;
         }
+
+        // ******************************************************************
+        // Win32 Code to make this form draggable
+        // ******************************************************************
 
         #region MakeDraggable
 
@@ -33,9 +39,29 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        // Event Handlers for closing Alert
+        // ******************************************************************
+
+        #region EventHandlers&KeyboardCommands
+
+        //Okay Button to close Alert
         private void okButton_Click_1(object sender, EventArgs e)
         {
             this.Close();
         }
+
+        //Hit Enter to close Alert
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Enter))
+            {
+                this.Close();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        #endregion
     }
 }

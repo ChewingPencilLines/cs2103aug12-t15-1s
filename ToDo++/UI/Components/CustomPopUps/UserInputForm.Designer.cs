@@ -1,6 +1,6 @@
 ﻿namespace ToDo
 {
-    partial class PopUpForm
+    partial class UserInputForm
     {
         /// <summary>
         /// Required designer variable.

@@ -133,9 +133,9 @@ namespace ToDo
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            CustomMessageBox.Show("Add Command", "Enter your new command here");
-            if (CustomMessageBox.ValidData())
-                AddFlexiCommandToSettings(CustomMessageBox.GetInput());
+            UserInputBox.Show("Add Command", "Enter your new command here");
+            if (UserInputBox.ValidData())
+                AddFlexiCommandToSettings(UserInputBox.GetInput());
 
             UpdateFlexiCommandList();
         }
