@@ -10,19 +10,25 @@ using System.Diagnostics;
 
 namespace ToDo
 {
+    // ******************************************************************
+    // Enumerations
+    // ******************************************************************
+    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, EXIT, INVALID };
+    public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
+    public enum TimeRangeType { MORNING = 0, AFTERNOON, EVENING, NIGHT };
+    public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
+
     static class CustomDictionary
     {
-        static public Dictionary<string, CommandType> commandKeywords;
-        static public Dictionary<string, Month> monthKeywords;
+        static public Dictionary<string, CommandType> commandKeywords;        
         static public Dictionary<string, ContextType> contextKeywords;
-        static public Dictionary<string, DayOfWeek> dayKeywords;
+        static public Dictionary<string, TimeRangeType> timeRangeKeywords;
+        static public Dictionary<string, Month> monthKeywords;
+        static public Dictionary<string, DayOfWeek> dayKeywords;       
         static public List<string> timeSpecificKeywords;
-        static public List<string> todayKeywords;
-        //static public List<string> timeGeneralKeywords;
-        public enum timeGeneralKyeywords
-        { MORNING = 0, AFTERNOON, EVENING, NIGHT };
         static public List<string> timeSuffixes;
-        static public List<CommandType> indexableCommandTypes;
+        static public List<string> todayKeywords;
+        static public List<string> rangeAllKeywords;
 
         // ******************************************************************
         // Regular Expressions
@@ -93,10 +99,9 @@ namespace ToDo
         static CustomDictionary()
         {
             InitializeCommandKeywords();
-            InitializeMonthKeywords();
             InitializeContextKeywords();
+            InitializeMonthKeywords();
             InitializeDateTimeKeywords();
-            InitializeIndexableCommandTypes();
         }
 
         // ******************************************************************
@@ -118,6 +123,19 @@ namespace ToDo
             commandKeywords.Add("done", CommandType.DONE);
             commandKeywords.Add("postpone", CommandType.POSTPONE);
             commandKeywords.Add("exit", CommandType.EXIT);
+        }
+
+        private static void InitializeContextKeywords()
+        {
+            contextKeywords = new Dictionary<string, ContextType>();
+            contextKeywords.Add("by", ContextType.DEADLINE);
+            contextKeywords.Add("on", ContextType.STARTTIME);
+            contextKeywords.Add("from", ContextType.STARTTIME);
+            contextKeywords.Add("to", ContextType.ENDTIME);
+            contextKeywords.Add("-", ContextType.ENDTIME);
+            contextKeywords.Add("this", ContextType.CURRENT);
+            contextKeywords.Add("next", ContextType.NEXT);
+            contextKeywords.Add("following", ContextType.FOLLOWING);
         }
 
         private static void InitializeMonthKeywords()
@@ -170,28 +188,11 @@ namespace ToDo
             dayKeywords.Add("tmr", DateTime.Today.AddDays(1).DayOfWeek);
             dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
             // NYI
+            timeRangeKeywords = new Dictionary<string, TimeRangeType>();
             timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
-            timeSpecificKeywords = new List<string> { "noon", "midnight" };        // special case    
+            timeSpecificKeywords = new List<string> { "noon", "midnight" };
             todayKeywords = new List<string> { "today" };
-        }
-
-        private static void InitializeContextKeywords()
-        {
-            contextKeywords = new Dictionary<string, ContextType>();
-            contextKeywords.Add("by", ContextType.DEADLINE);
-            contextKeywords.Add("on", ContextType.STARTTIME);
-            contextKeywords.Add("from", ContextType.STARTTIME);
-            contextKeywords.Add("to", ContextType.ENDTIME);
-            contextKeywords.Add("-", ContextType.ENDTIME);
-            contextKeywords.Add("this", ContextType.CURRENT);
-            contextKeywords.Add("next", ContextType.NEXT);
-            contextKeywords.Add("following", ContextType.FOLLOWING);
-        }
-
-        private static void InitializeIndexableCommandTypes()
-        {
-            indexableCommandTypes = new List<CommandType>
-            { CommandType.DELETE, CommandType.DONE, CommandType.MODIFY, CommandType.POSTPONE };
+            rangeAllKeywords = new List<string> { "all" };
         }
         #endregion
 
@@ -298,16 +299,6 @@ namespace ToDo
         public static bool IsValidAlphabeticDate(string theDate)
         {
             return date_alphabeticFormat.IsMatch(theDate);
-        }
-
-        public static bool IsIndexableCommandType(CommandType commandType)
-        {
-            foreach (CommandType type in indexableCommandTypes)
-            {
-                if (commandType == type)
-                    return true;
-            }
-            return false;
         }
 
         /// <summary>

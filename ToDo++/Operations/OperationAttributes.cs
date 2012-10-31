@@ -34,7 +34,8 @@ namespace ToDo
         public DateTime? startDateTime = null, endDateTime = null;
         public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
         public string taskName = null;
-        public int[] taskIndex = null;
+        public int[] rangeIndexes = null;
+        public bool rangeIsAll = false;
         #endregion
 
         public OperationAttributes()

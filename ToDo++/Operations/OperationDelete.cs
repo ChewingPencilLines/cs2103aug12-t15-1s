@@ -24,8 +24,8 @@ namespace ToDo
             if (indexRange == null) this.index = null;
             else
             {
-                this.index = indexRange[TokenCommand.START_INDEX] - 1;
-                this.endindex = indexRange[TokenCommand.END_INDEX] - 1;
+                this.index = indexRange[TokenRange.START_INDEX] - 1;
+                this.endindex = indexRange[TokenRange.END_INDEX] - 1;
             }
             if (taskName == null) this.taskName = "";
             else this.taskName = taskName;

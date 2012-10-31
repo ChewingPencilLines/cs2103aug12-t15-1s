@@ -59,7 +59,7 @@ namespace ToDo
             DateTime? endCombined = opAttributes.endDateTime;
             DateTimeSpecificity isSpecific = opAttributes.isSpecific;
             string taskName = opAttributes.taskName;
-            int[] taskIndex = opAttributes.taskIndex;
+            int[] taskIndex = opAttributes.rangeIndexes;
 
             Task task;
             Operation newOperation = null;

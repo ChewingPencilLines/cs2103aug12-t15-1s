@@ -97,7 +97,7 @@
     <Compile Include="Tokens\TokenContext.cs" />
     <Compile Include="Tokens\TokenDate.cs" />
     <Compile Include="Tokens\TokenDay.cs" />
-    <Compile Include="Tokens\TokenIndex.cs" />
+    <Compile Include="Tokens\TokenRange.cs" />
     <Compile Include="Tokens\TokenLiteral.cs" />
     <Compile Include="Tokens\TokenTime.cs" />
     <Compile Include="UI\Components\InputBox.cs">

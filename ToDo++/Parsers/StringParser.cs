@@ -10,13 +10,6 @@ using System.Diagnostics;
 
 namespace ToDo
 {
-    // ******************************************************************
-    // Enumerations
-    // ******************************************************************
-    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, EXIT, INVALID };
-    public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
-    public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
-
     public class StringParser
     {
         // ******************************************************************
@@ -117,10 +110,30 @@ namespace ToDo
 
             // Add remaining words
             string remainingStr = input.Substring(processedIndex);
-            words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());
-            //words = MergeCommandAndIndexKeywords(words);
+            words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());            
             words = MergeDateAndTimeWords(words);
+            words = MergeRangeKeywords(words);
             return words;
+        }
+
+        private List<string> MergeRangeKeywords(List<string> words)
+        {               
+            int j = 1;
+            List<string> output = new List<string>();
+            for (int i = 0; i < words.Count; i++)
+            {
+                bool success = true;
+                string matchCheck = words[i];
+                while (i + j < words.Count)  // Don't check last word.
+                {
+                    success = CustomDictionary.isNumericalRange.IsMatch(matchCheck + words[i + j]);
+                    if (success) matchCheck += words[i + j];
+                    else break;
+                    j++;
+                }
+                output.Add(matchCheck);
+            }
+            return output;
         }
 
         /// <summary>
