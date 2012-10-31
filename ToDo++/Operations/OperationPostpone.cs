@@ -16,6 +16,15 @@ namespace ToDo
 
         public OperationPostpone(string taskName, int[] indexRange, DateTime? startTime, DateTime? postponeTime, DateTimeSpecificity isSpecific)
         {
+            this.oldTime = startTime;
+            this.postponeTime = postponeTime;
+
+            if ((indexRange != null || taskName != null) && postponeTime == null && startTime != null)
+            {
+                this.oldTime = postponeTime;
+                this.postponeTime = startTime;
+            }
+            this.isSpecific = isSpecific;
             if (indexRange == null) this.index = null;
             else
             {
@@ -24,9 +33,6 @@ namespace ToDo
             }
             if (taskName == null) this.taskName = "";
             else this.taskName = taskName;
-            this.oldTime = startTime;
-            this.postponeTime = postponeTime;
-            this.isSpecific = isSpecific;
         }
 
         public override string Execute(List<Task> taskList, Storage storageIO)
