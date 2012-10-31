@@ -74,7 +74,7 @@ namespace ToDo
 
         private void PromptUser_CreateNewTaskFile()
         {
-            CustomMessageBox.Show("Error!", "Task storage file seems corrupted. Error reading from it! Create new file?");
+            UserInputBox.Show("Error!", "Task storage file seems corrupted. Error reading from it! Create new file?");
             DialogResult dialogResult = MessageBox.Show("Sure", "Create new task file?", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
