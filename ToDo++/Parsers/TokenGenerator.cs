@@ -29,72 +29,78 @@ namespace ToDo
         /// <returns>List of tokens</returns>
         public List<Token> GenerateTokens(List<string> input)
         {
-            // make copy of string to be parsed.
-            List<string> parseString = new List<string>(input);
             List<Token> tokens = new List<Token>();
             // must be done first to catch index ranges.
-            tokens.AddRange(GenerateCommandTokens(parseString));
-            tokens.AddRange(GenerateDayTokens(parseString));
-            tokens.AddRange(GenerateDateTokens(parseString));
-            tokens.AddRange(GenerateTimeTokens(parseString));
+            tokens.AddRange(GenerateCommandTokens(input));
+            // must be done after generating command tokens
+            tokens.AddRange(GenerateRangeTokens(input, tokens));
+            tokens.AddRange(GenerateDayTokens(input));
+            tokens.AddRange(GenerateDateTokens(input));
+            tokens.AddRange(GenerateTimeTokens(input));            
             // must be done after generating day/date/time tokens.
-            tokens.AddRange(GenerateContextTokens(parseString, tokens));
+            tokens.AddRange(GenerateContextTokens(input, tokens));
             // must be done last. all non-hits are taken to be literals            
-            tokens.AddRange(GenerateLiteralTokens(parseString, tokens));
+            tokens.AddRange(GenerateLiteralTokens(input, tokens));
+            DeconflictTokens(tokens);
             tokens.Sort(CompareByPosition);
             return tokens;
         }
-
+        
         /// <summary>
         /// This method searches an input list of strings against the set list of command keywords and returns
         /// a list of tokens corresponding to the matched command keywords.
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of command tokens</returns>
-        public List<Token> GenerateCommandTokens(List<string> inputWords)
+        private List<Token> GenerateCommandTokens(List<string> inputWords)
         {
             CommandType commandType;
             List<Token> tokens = new List<Token>();
-            int[] userDefinedIndex = null;
-            for (int i = 0; i < inputWords.Count; i++)
+            int index = 0;
+            foreach (string word in inputWords)
             {
-                if (CustomDictionary.commandKeywords.TryGetValue(inputWords[i].ToLower(), out commandType))
-                {
-                    // Check for numerical index ranges.
-                    if (CustomDictionary.IsIndexableCommandType(commandType))
-                    {
-                        userDefinedIndex = CheckForNumericalIndex(i, ref inputWords);
-                    }
-                    TokenCommand commandToken = new TokenCommand(i, commandType, userDefinedIndex);
+                if (CustomDictionary.commandKeywords.TryGetValue(word.ToLower(), out commandType))
+                {                    
+                    TokenCommand commandToken = new TokenCommand(index, commandType);
                     tokens.Add(commandToken);
                 }
+                index++;
             }
             return tokens;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="inputWords"></param>
-        /// <param name="userDefinedIndex"></param>
-        private int[] CheckForNumericalIndex(int i, ref List<string> inputWords)
+        private List<Token> GenerateRangeTokens(List<string> inputWords, List<Token> parsedTokens)
         {
-            int[] userDefinedIndex = null;
-            int j = 1;
-            string matchCheck = "";
-            bool success = true;
-            while (success && i + j < inputWords.Count) // Don't check last word.
+            List<Token> rangeTokens = new List<Token>();
+
+            int index = 0;
+            foreach (string word in inputWords)
             {
-                matchCheck += inputWords[i + j];
-                success = TryGetNumericalRange(matchCheck, out userDefinedIndex);
-                if (success)
+                bool isAll = false;
+                int[] userDefinedIndex = null;
+                TokenRange rangeToken = null;
+                if (TryGetNumericalRange(word, out userDefinedIndex))
                 {
-                    inputWords[i + j] = "";
+                    var prevToken = from token in parsedTokens
+                                    where token.Position == index - 1 &&
+                                          token.RequiresRange()
+                                    select token;
+                    if (prevToken.Count() == 1)
+                    {
+                        rangeToken = new TokenRange(index, userDefinedIndex, isAll);
+                    }
                 }
-                j++;
+                else if (CheckIfAllKeyword(word))
+                {
+                    isAll = true;
+                    rangeToken = new TokenRange(index, userDefinedIndex, isAll);
+                }
+                if (rangeToken != null)
+                    rangeTokens.Add(rangeToken);
+                index++;
             }
-            return userDefinedIndex;
+
+            return rangeTokens;
         }
 
         /// <summary>
@@ -112,7 +118,7 @@ namespace ToDo
             bool matchSuccess = match.Success;
             if (matchSuccess)
             {
-                userDefinedIndex = new int[TokenCommand.RANGE];
+                userDefinedIndex = new int[TokenRange.RANGE];
                 int startIndex, endIndex;
                 Int32.TryParse(match.Groups["start"].Value, out startIndex);
                 if (match.Groups["end"].Success)
@@ -120,10 +126,19 @@ namespace ToDo
                     Int32.TryParse(match.Groups["end"].Value, out endIndex);
                 }
                 else endIndex = startIndex;
-                userDefinedIndex[TokenCommand.START_INDEX] = startIndex;
-                userDefinedIndex[TokenCommand.END_INDEX] = endIndex;
+                userDefinedIndex[TokenRange.START_INDEX] = startIndex;
+                userDefinedIndex[TokenRange.END_INDEX] = endIndex;
             }
             return matchSuccess;
+        }
+
+        private bool CheckIfAllKeyword(string word)
+        {
+            bool isAll;
+            if ((CustomDictionary.rangeAllKeywords.Where(e => e == word).Count()) >= 1)
+                isAll = true;
+            else isAll = false;
+            return isAll;
         }
 
         /// <summary>
@@ -546,6 +561,11 @@ namespace ToDo
                 Debug.Assert(false, "Two tokens with same position!");
                 return 0;
             }
+        }
+
+        private void DeconflictTokens(List<Token> tokens)
+        {
+            
         }
 
         /// <summary>

@@ -8,26 +8,18 @@ namespace ToDo
 {
     public class TokenCommand : Token
     {
-        public const int START_INDEX = 0;
-        public const int END_INDEX = 1;
-        public const int RANGE = 2;
+
         CommandType commandType;
-        int[] taskIndex;
 
         internal CommandType Value
         {
             get { return commandType; }
         }
-        internal int[] TaskIndex
-        {
-            get { return taskIndex; }
-        }
 
-        internal TokenCommand(int position, CommandType val, int[] taskIndex = null)
+        internal TokenCommand(int position, CommandType val)
             : base(position)
         {
             commandType = val;
-            this.taskIndex = taskIndex;
         }
 
         internal override void UpdateAttributes(OperationAttributes attrb)
@@ -39,11 +31,8 @@ namespace ToDo
             else
             {
                 attrb.commandType = Value;
-                if (CustomDictionary.IsIndexableCommandType(commandType))
-                {
-                    attrb.taskIndex = TaskIndex;
-                }
             }
         }
+
     }
 }
