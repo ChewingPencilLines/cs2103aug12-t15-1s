@@ -172,6 +172,7 @@
             this.outputBox.Size = new System.Drawing.Size(498, 236);
             this.outputBox.TabIndex = 7;
             this.outputBox.Text = "";
+            this.outputBox.MouseHover += new System.EventHandler(this.outputBox_MouseHover);
             // 
             // tabPage2
             // 
@@ -190,7 +191,7 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
+            this.preferencesPanel.Size = new System.Drawing.Size(495, 265);
             this.preferencesPanel.TabIndex = 0;
             // 
             // UI

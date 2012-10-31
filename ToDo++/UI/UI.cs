@@ -450,5 +450,10 @@ namespace ToDo
             Application.Exit();
         }
 
+        private void outputBox_MouseHover(object sender, EventArgs e)
+        {
+            
+        }
+
     }
 }
