@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace ToDo
 {
@@ -20,23 +21,26 @@ namespace ToDo
         public FontDialogToDo()
         {
             InitializeComponent();
-
-            this.fontSelection.SelectedIndexChanged += m_comboBox_SelectedIndexChanged;
-            this.sizeSelection.RemoveDuplicate();
-            InitializeOptions("Arial Black", 8, Color.Cyan);
-
+            InitializeFontDialog();
             SetFormattingForPreview();
         }
 
         #region Getters
 
-        public int GetSize() { return (int)this.sizeSelection.SelectedItem; }
-        public string GetFont() { return this.fontSelection.publicFont.GetName(0); }
-        public Color GetColor() { return this.colorSelection.SelectedColor; }
+        public int GetSize() { if (sizeSelectionEnable == false) { Debug.Assert(false, "Size Disabled"); } return (int)this.sizeSelection.SelectedItem; }
+        public string GetFont() { if (fontSelectionEnable == false) { Debug.Assert(false, "Font Disabled"); } return this.fontSelection.publicFont.GetName(0); }
+        public Color GetColor() { if (colorSelectionEnable == false) { Debug.Assert(false, "Color Disabled"); } return this.colorSelection.SelectedColor; }
 
         #endregion
 
         #region FormattingInitializationFunctions
+
+        private void InitializeFontDialog()
+        {
+            this.fontSelection.SelectedIndexChanged += m_comboBox_SelectedIndexChanged;
+            this.sizeSelection.RemoveDuplicate();
+            InitializeOptions("Arial Black", 8, Color.Cyan);
+        }
 
         public void InitializeOptions(string font, int size, Color color)
         {
