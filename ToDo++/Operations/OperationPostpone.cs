@@ -19,10 +19,13 @@ namespace ToDo
             this.oldTime = startTime;
             this.postponeTime = postponeTime;
 
+            //alter for only one date in command as the postpone date
             if ((indexRange != null || taskName != null) && postponeTime == null && startTime != null)
             {
                 this.oldTime = postponeTime;
                 this.postponeTime = startTime;
+                this.isSpecific.StartTime = isSpecific.EndTime;
+                this.isSpecific.EndTime = isSpecific.StartTime;
             }
             this.isSpecific = isSpecific;
             if (indexRange == null) this.index = null;
