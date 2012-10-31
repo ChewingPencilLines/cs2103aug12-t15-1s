@@ -58,6 +58,14 @@ namespace ToDo
         public void CombineDateTimes()
         {
             // Combine Date/Times
+            if (startTime == null)
+            {
+                isSpecific.StartTime = false;
+            }
+            if (endTime == null)
+            {
+                isSpecific.EndTime = false;
+            }
             startDateTime = CombineDateAndTime(startTime, startDateOnly, DateTime.Now);
             if (startDateTime == null)
                 endDateTime = CombineDateAndTime(endTime, endDateOnly, DateTime.Now);
@@ -90,8 +98,9 @@ namespace ToDo
             else if (time == null && date != null)
             {
                 combinedDT = date;
+
             }
-            if (limit > combinedDT) //throw new Exception("End DateTime set to later then limit or DateTime that is already over was set!");
+            if (limit > combinedDT)
                 //@ivan -> jenna wtf is this??
                 if (combinedDT != new DateTime(0001, 1, 1))
                     AlertBox.Show("Note that date specified is in the past.");
