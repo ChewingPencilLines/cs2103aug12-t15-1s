@@ -117,7 +117,7 @@ namespace ToDo
                 return new TaskFloating(taskName);
             else if (startTime == null && endTime != null)
                 return new TaskDeadline(taskName, (DateTime)endTime, isSpecific);
-            else if (startTime != null && endTime == null && isSpecific.EndTime == true)
+            else if (startTime != null && endTime == null)
                 return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific); 
             else
                 return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);

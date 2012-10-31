@@ -33,8 +33,11 @@ namespace ToDo
             commandParser = new CommandParser(ref stringParser);
 
             taskList = storage.LoadTasksFromFile();
-            if (taskList == null) PromptUser_CreateNewTaskFile();
-
+            while (taskList == null)
+            {
+                PromptUser_CreateNewTaskFile();
+                taskList = storage.LoadTasksFromFile();
+            }
         }
 
         public string ProcessCommand(string input)
@@ -74,7 +77,7 @@ namespace ToDo
 
         private void PromptUser_CreateNewTaskFile()
         {
-            UserInputBox.Show("Error!", "Task storage file seems corrupted. Error reading from it! Create new file?");
+            UserInputBox.Show("Error!", "Task storage file seems corrupted. Error reading from it!\r\n Create new file?");
             DialogResult dialogResult = MessageBox.Show("Sure", "Create new task file?", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {

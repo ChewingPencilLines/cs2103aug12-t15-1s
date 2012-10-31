@@ -19,7 +19,7 @@ namespace ToDo
                             new XAttribute("id", id.ToString()),
                             new XAttribute("type", "Floating"),
                             new XElement("Name", taskName),
-                            new XElement("State", doneState.ToString())
+                            new XElement("Done", doneState.ToString())
                             );
             return task;
         }

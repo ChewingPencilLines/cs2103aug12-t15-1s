@@ -47,7 +47,7 @@ namespace ToDo
                             new XElement("StartTime", startTime.ToString()),
                             new XElement("EndTime", endTime.ToString()),
                             isSpecific.ToXElement<DateTimeSpecificity>(),
-                            new XElement("State", doneState.ToString())
+                            new XElement("Done", doneState.ToString())
                             );
             return task;
         }

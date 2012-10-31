@@ -170,27 +170,42 @@ namespace ToDo
             return true;
         }
 
+        // To log exceptions
         internal List<Task> LoadTasksFromFile()
         {
             List<Task> taskList = new List<Task>();
-            XDocument doc = XDocument.Load(taskStorageFile);
-            IEnumerable<XElement> tasks =
-                (from task in doc.Root.Elements("Task") select task);
-            foreach (XElement task in tasks)
+            try
             {
-                try
+                XDocument doc = XDocument.Load(taskStorageFile);
+                IEnumerable<XElement> tasks =
+                    (from task in doc.Root.Elements("Task") select task);
+                foreach (XElement task in tasks)
                 {
-                    Task addTask = GenerateTaskFromXElement(task);
-                    if (addTask == null)
+                    try
                     {
+                        Task addTask = GenerateTaskFromXElement(task);
+                        if (addTask == null)
+                        {
+                            return null;
+                        }
+                        taskList.Add(addTask);
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        // Xelement is null?
                         return null;
                     }
-                    taskList.Add(addTask);
+                    catch (TaskFileCorruptedException)
+                    {
+                        // File structure corrupted
+                        return null;
+                    }
                 }
-                catch (ArgumentNullException)
-                {
-                    return null;
-                }                                
+            }
+            catch (Exception ex)
+            {
+                // File failed to load.
+                return null;
             }
             return taskList;
         }
@@ -198,34 +213,41 @@ namespace ToDo
         private Task GenerateTaskFromXElement(XElement task)
         {
             Task newTask = null;
-            string type = task.Attribute("type").Value;
-            int id = Int32.Parse(task.Attribute("id").Value);
-            string taskName = task.Element("Name").Value;            
-            DateTime startTime, endTime;
-            DateTimeSpecificity isSpecific = new DateTimeSpecificity();
 
-            XElement DTSpecElement = task.Element("DateTimeSpecificity");
-            if(DTSpecElement!= null)  isSpecific = DTSpecElement.FromXElement<DateTimeSpecificity>();
-            bool state;
-
-            if ( task.Element("State").Value == "True" ) state = true;
-            else state = false;
-            switch (type)
+            try
             {
-                case "Floating":
-                    newTask = new TaskFloating(taskName, state, id);
-                    break;
-                case "Deadline":
-                    endTime = DateTime.Parse(task.Element("EndTime").Value);
-                    newTask = new TaskDeadline(taskName, endTime, isSpecific, state, id);
-                    break;
-                case "Event":
-                    endTime = DateTime.Parse(task.Element("EndTime").Value);
-                    startTime = DateTime.Parse(task.Element("StartTime").Value);
-                    newTask = new TaskDeadline(taskName, endTime, isSpecific, state, id);
-                    break;
-            }
+                string type = task.Attribute("type").Value;
+                int id = Int32.Parse(task.Attribute("id").Value);
+                string taskName = task.Element("Name").Value;
+                DateTime startTime, endTime;
+                DateTimeSpecificity isSpecific = new DateTimeSpecificity();
 
+                XElement DTSpecElement = task.Element("DateTimeSpecificity");
+                if (DTSpecElement != null) isSpecific = DTSpecElement.FromXElement<DateTimeSpecificity>();
+                bool state;
+
+                if (task.Element("Done").Value == "True") state = true;
+                else state = false;
+                switch (type)
+                {
+                    case "Floating":
+                        newTask = new TaskFloating(taskName, state, id);
+                        break;
+                    case "Deadline":
+                        endTime = DateTime.Parse(task.Element("EndTime").Value);
+                        newTask = new TaskDeadline(taskName, endTime, isSpecific, state, id);
+                        break;
+                    case "Event":
+                        endTime = DateTime.Parse(task.Element("EndTime").Value);
+                        startTime = DateTime.Parse(task.Element("StartTime").Value);
+                        newTask = new TaskDeadline(taskName, endTime, isSpecific, state, id);
+                        break;
+                }
+            }
+            catch (NullReferenceException)
+            {
+                throw new TaskFileCorruptedException();
+            }
             return newTask;
 
         }

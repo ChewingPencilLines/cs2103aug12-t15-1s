@@ -35,7 +35,7 @@ namespace ToDo
                             new XAttribute("type", "Deadline"),
                             new XElement("Name", taskName),
                             new XElement("EndTime", endTime.ToString()),
-                            new XElement("State", doneState.ToString())
+                            new XElement("Done", doneState.ToString())
                             );
             return task;
         }
