@@ -26,7 +26,7 @@ namespace ToDo
                 Value == ContextType.FOLLOWING
                 )
                 attrb.currentSpecifier = contextType;
-            else attrb.currentSpecifier = contextType;
+            else attrb.currentMode = contextType;
         }
     }
 }
