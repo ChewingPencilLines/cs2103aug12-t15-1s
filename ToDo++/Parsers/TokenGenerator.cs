@@ -34,6 +34,7 @@ namespace ToDo
             tokens.AddRange(GenerateCommandTokens(input));
             // must be done after generating command tokens
             tokens.AddRange(GenerateIndexRangeTokens(input, tokens));
+            tokens.AddRange(GenerateTimeRangeTokens(input));
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
             tokens.AddRange(GenerateTimeTokens(input));            
@@ -71,14 +72,13 @@ namespace ToDo
 
         private List<Token> GenerateIndexRangeTokens(List<string> inputWords, List<Token> parsedTokens)
         {
-            List<Token> rangeTokens = new List<Token>();
-
+            List<Token> indexRangeTokens = new List<Token>();
             int index = 0;
             foreach (string word in inputWords)
             {
                 bool isAll = false;
                 int[] userDefinedIndex = null;
-                TokenIndexRange rangeToken = null;
+                TokenIndexRange indexRangeToken = null;
                 if (TryGetNumericalRange(word, out userDefinedIndex))
                 {
                     var prevToken = from token in parsedTokens
@@ -87,20 +87,52 @@ namespace ToDo
                                     select token;
                     if (prevToken.Count() == 1)
                     {
-                        rangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
+                        indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
                     }
                 }
                 else if (CheckIfAllKeyword(word))
                 {
                     isAll = true;
-                    rangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
+                    indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
                 }
-                if (rangeToken != null)
-                    rangeTokens.Add(rangeToken);
+                if (indexRangeToken != null)
+                    indexRangeTokens.Add(indexRangeToken);
                 index++;
             }
+            return indexRangeTokens;
+        }
 
-            return rangeTokens;
+        private List<Token> GenerateTimeRangeTokens(List<string> inputWords)
+        {
+            List<Token> timeRangeTokens = new List<Token>();
+            int index = 0;
+            foreach (string word in inputWords)
+            {
+                int userDefinedIndex = 0;
+                TimeRangeType timeRangeType;
+                TimeRangeKeywordsType timeRangeKeyword;
+                TokenTimeRange timeRangeToken = null;
+                if (index > 1 && CustomDictionary.IsTimeRange(word.ToLower()))
+                {
+                    if (int.TryParse(inputWords[index - 1], out userDefinedIndex))
+                    {
+                        string matchString = CustomDictionary.isTimeRange.Match(word.ToLower()).Value;
+                        if (!CustomDictionary.timeRangeType.TryGetValue(word, out timeRangeType))
+                        {
+                            throw new Exception("Something wrong with IsTimeRange regex etc.");
+                        }
+                        timeRangeToken = new TokenTimeRange(index, userDefinedIndex, timeRangeType);
+                    }
+                }
+                else if (CustomDictionary.timeRangeKeywords.TryGetValue(word.ToLower(), out timeRangeKeyword))
+                {
+                    timeRangeToken = new TokenTimeRange(index, timeRangeKeyword);
+                }
+                if (timeRangeToken != null)
+                    timeRangeTokens.Add(timeRangeToken);
+                index++;
+            }
+            return timeRangeTokens;
         }
 
         /// <summary>

@@ -24,28 +24,26 @@ namespace ToDo
         {
             get { return timeRange; }
         }
-        internal TokenTimeRange(int position, int val, TimeRangeType type, TimeRangeKeywordsType range)
+        internal TokenTimeRange(int position, int val, TimeRangeType type)
             : base(position)
         {
             index = val;
             timeRangeType = type;
+            timeRange = TimeRangeKeywordsType.DEFAULT;
+        }
+        internal TokenTimeRange(int position, TimeRangeKeywordsType range)
+            : base(position)
+        {
+            index = 0;
+            timeRangeType = TimeRangeType.NONE;
             timeRange = range;
         }
 
         internal override void UpdateAttributes(OperationAttributes attrb)
         {
-            if (index != null)
-            {
-                attrb.rangeIndexes[0] = index;
-            }
-            if (timeRangeType != null)
-            {
-                attrb.timeRangeType = timeRangeType;
-            }
-            if (timeRange != null)
-            {
-                attrb.timeRange = timeRange;
-            }
+            attrb.rangeIndexes[0] = index;
+            attrb.timeRangeType = timeRangeType;
+            attrb.timeRange = timeRange;
         }
     }
 }

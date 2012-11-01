@@ -18,7 +18,7 @@ namespace ToDo
     // unless otherwise stated in settings,
     // default: 8am to 10pm, morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
     public enum TimeRangeKeywordsType { DEFAULT = 0, MORNING, AFTERNOON, EVENING, NIGHT };
-    public enum TimeRangeType { HOUR, DAY, MONTH };
+    public enum TimeRangeType { NONE, HOUR, DAY, MONTH };
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
     static class CustomDictionary
@@ -26,6 +26,7 @@ namespace ToDo
         static public Dictionary<string, CommandType> commandKeywords;        
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
+        static public Dictionary<string, TimeRangeType> timeRangeType;
         static public Dictionary<string, Month> monthKeywords;
         static public Dictionary<string, DayOfWeek> dayKeywords;
         static public List<string> timeSpecificKeywords;
@@ -99,7 +100,7 @@ namespace ToDo
             new Regex(@"^(?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?$");
 
         static public Regex isTimeRange =
-            new Regex(@"^(h(ou)?rs?|days?|m(on)?ths?)$");
+            new Regex(@"^(h(?:ou)?r(?:s)?|day(?:s)?|m(?:on)?th(?:s)?)$");
         #endregion
 
         static CustomDictionary()
@@ -193,12 +194,23 @@ namespace ToDo
             dayKeywords.Add("weekend", DayOfWeek.Sunday);
             dayKeywords.Add("tmr", DateTime.Today.AddDays(1).DayOfWeek);
             dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
-
-            Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords = new Dictionary<string, TimeRangeKeywordsType>();
+            timeRangeKeywords = new Dictionary<string, TimeRangeKeywordsType>();
             timeRangeKeywords.Add("morning", TimeRangeKeywordsType.MORNING);
+            timeRangeKeywords.Add("morn", TimeRangeKeywordsType.MORNING);
             timeRangeKeywords.Add("afternoon", TimeRangeKeywordsType.AFTERNOON);
             timeRangeKeywords.Add("evening", TimeRangeKeywordsType.EVENING);
             timeRangeKeywords.Add("night", TimeRangeKeywordsType.NIGHT);
+            timeRangeType = new Dictionary<string, TimeRangeType>();
+            timeRangeType.Add("hours", TimeRangeType.HOUR);
+            timeRangeType.Add("hour", TimeRangeType.HOUR);
+            timeRangeType.Add("hrs", TimeRangeType.HOUR);
+            timeRangeType.Add("hr", TimeRangeType.HOUR);
+            timeRangeType.Add("days", TimeRangeType.DAY);
+            timeRangeType.Add("day", TimeRangeType.DAY);
+            timeRangeType.Add("months", TimeRangeType.MONTH);
+            timeRangeType.Add("month", TimeRangeType.MONTH);
+            timeRangeType.Add("mths", TimeRangeType.MONTH);
+            timeRangeType.Add("mth", TimeRangeType.MONTH);
             // NYI
             timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
             timeSpecificKeywords = new List<string> { "noon", "midnight" };
@@ -211,7 +223,6 @@ namespace ToDo
         // Getter Methods
         // ******************************************************************
 
-        
         #region Getter Methods For Dictionaries & List
         public static Dictionary<string, CommandType> GetCommandKeywords()
         {
@@ -223,7 +234,7 @@ namespace ToDo
             return contextKeywords;
         }
 
-        
+        /*
         public static Dictionary<string, Month> GetMonthKeywords()
         {
             return monthKeywords;
@@ -273,7 +284,7 @@ namespace ToDo
         {
             return isNumericalRange;
         }
-         
+         */
         #endregion
 
         // ******************************************************************
@@ -301,12 +312,17 @@ namespace ToDo
         // i.e. does not check for erroneous non-existent dates such as 31st feb
         public static bool IsValidNumericDate(string theDate)
         {
-            return date_numericFormat.IsMatch(theDate) || date_daysWithSuffixes.IsMatch(theDate.ToLower());
+            return date_numericFormat.IsMatch(theDate) || date_daysWithSuffixes.IsMatch(theDate);
         }
 
         public static bool IsValidAlphabeticDate(string theDate)
         {
             return date_alphabeticFormat.IsMatch(theDate);
+        }
+
+        public static bool IsTimeRange(string theWord)
+        {
+            return isTimeRange.IsMatch(theWord);
         }
 
         /// <summary>
