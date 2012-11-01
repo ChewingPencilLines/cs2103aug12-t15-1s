@@ -13,7 +13,7 @@ namespace ToDo
     // ******************************************************************
     // Enumerations
     // ******************************************************************
-    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, EXIT, INVALID };
+    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, SCHEDULE, EXIT, INVALID };
     public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
     // unless otherwise stated in settings,
     // default: 8am to 10pm, morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
@@ -97,7 +97,7 @@ namespace ToDo
              new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
 
         static public Regex isNumericalRange =
-            new Regex(@"^(?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?$");
+            new Regex(@"^(((?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?)|((?<start>\d?\d?\d)\-))$");
 
         static public Regex isTimeRange =
             new Regex(@"^(h(?:ou)?r(?:s)?|day(?:s)?|m(?:on)?th(?:s)?)$");
