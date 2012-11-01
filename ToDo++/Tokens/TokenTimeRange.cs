@@ -41,7 +41,7 @@ namespace ToDo
 
         internal override void UpdateAttributes(OperationAttributes attrb)
         {
-            attrb.rangeIndexes[0] = index;
+            attrb.timeRangeIndex = index;
             attrb.timeRangeType = timeRangeType;
             attrb.timeRange = timeRange;
         }
