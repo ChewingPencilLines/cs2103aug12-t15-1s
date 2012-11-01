@@ -171,7 +171,7 @@ namespace ToDo
         }
 
         // To log exceptions
-        internal List<Task> LoadTasksFromFile()
+        public List<Task> LoadTasksFromFile()
         {
             List<Task> taskList = new List<Task>();
             try

@@ -4,11 +4,11 @@ using System.Diagnostics;
 
 namespace ToDo
 {
-    class OperationAdd : Operation
+    public class OperationAdd : Operation
     {
         private Task newTask;
 
-        internal OperationAdd(Task setTask)
+        public OperationAdd(Task setTask)
         {
             newTask = setTask;
         }
