@@ -575,6 +575,10 @@ namespace ToDo
 
         private void DeconflictTokens(ref List<Token> tokens)
         {
+            if (tokens.Count == 0)
+            {
+                return;
+            }
             List<Token> deconflictedTokens = new List<Token>();
             bool conflictRemains = true;
 
