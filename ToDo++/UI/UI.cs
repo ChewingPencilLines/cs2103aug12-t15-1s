@@ -42,6 +42,25 @@ namespace ToDo
             InitializeEventHandlers();            //Adds Event Handlers
             InitializePreferencesPanel();
             this.ActiveControl = textInput;
+            //this.customPanelControl.SelectedIndex = 2;
+            PopulateListView();
+        }
+
+        private void PopulateListView()
+        {
+            List<Task> displayList = new List<Task>();
+            TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
+
+            List<ListViewGroup> groups = new List<ListViewGroup>();
+            groups.Add(new ListViewGroup(DateTime.Today.DayOfWeek.ToString()));
+            taskListView.Groups.Add(groups[0]);
+
+            ListViewItem taskItem = new ListViewItem(addTask.TaskName, groups[0]);
+            taskItem.SubItems.Add(addTask.StartTime.ToString(), Color.Chocolate, Color.White, new System.Drawing.Font("Arial",10));
+            taskItem.SubItems.Add(addTask.EndTime.ToString());
+
+            taskListView.Items.Add(taskItem);
+            taskListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
         }
 
         #endregion
@@ -248,7 +267,7 @@ namespace ToDo
 
         public void SwitchToToDoPanel()
         {
-            this.customPanelControl.SelectedIndex = 0;
+            this.customPanelControl.SelectedIndex = 2;
         }
 
         #endregion
