@@ -34,8 +34,6 @@ namespace ToDo
         public UI(Logic logic)
         {
             InitializeComponent();
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
-            splitContainerMain.SplitterDistance = 275;
             InitializeLogic(logic);               //Sets logic            
             InitializeSystemTray();               //Loads Code to place App in System Tray
             InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
@@ -45,27 +43,11 @@ namespace ToDo
             InitializePreferencesPanel();
             this.ActiveControl = textInput;
             //this.customPanelControl.SelectedIndex = 2;
-            PopulateListView();
-        }
-
-        private void PopulateListView()
-        {
-            List<Task> displayList = new List<Task>();
-            TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
-
-            List<ListViewGroup> groups = new List<ListViewGroup>();
-            groups.Add(new ListViewGroup(DateTime.Today.DayOfWeek.ToString()));
-            taskListView.Groups.Add(groups[0]);
-
-            ListViewItem taskItem = new ListViewItem(addTask.TaskName, groups[0]);
-            taskItem.SubItems.Add(addTask.StartTime.ToString(), Color.Chocolate, Color.White, new System.Drawing.Font("Arial",10));
-            taskItem.SubItems.Add(addTask.EndTime.ToString());
-
-            taskListView.Items.Add(taskItem);
-            taskListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.taskListViewControl.PopulateListView();
         }
 
         #endregion
+
 
         // ******************************************************************
         // Win32 Functions
@@ -145,16 +127,16 @@ namespace ToDo
             //If Window is Open
             if (notifyIcon_taskBar.Visible == false)
             {
-                this.Hide();
+                FadeOut();
                 notifyIcon_taskBar.Visible = true;
                 notifyIcon_taskBar.ShowBalloonTip(500);
             }
             //If Window is in tray
             else
             {
+                FadeIn();
                 notifyIcon_taskBar.Visible = false;
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
+                //this.WindowState = FormWindowState.Normal;
             }
         }
 
@@ -201,6 +183,12 @@ namespace ToDo
         /// Allows resizing of borderless form
         /// </summary>
         #region Resizing
+
+        private void UI_Resize(object sender, EventArgs e)
+        {
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+        }
+
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
@@ -231,6 +219,81 @@ namespace ToDo
             int nWidthEllipse, // height of ellipse
             int nHeightEllipse // width of ellipse
         );
+        #endregion
+
+        /// <summary>
+        /// Shadow Effect
+        /// </summary>
+        #region BadShadow
+
+        private const int CS_DROPSHADOW = 0x00020000;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                // add the drop shadow flag for automatically drawing
+                // a drop shadow around the form
+                CreateParams cp = base.CreateParams;
+                cp.ClassStyle |= CS_DROPSHADOW;
+                return cp;
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Form Fade In and Out Timers
+        /// </summary>
+        #region FormFadeInOut
+
+        Timer timer1 = new Timer();
+        Timer timer2 = new Timer();
+
+        private void IntializeTimers()
+        {
+            timer1 = new Timer();
+            timer2 = new Timer();
+        }
+
+        private void FadeOut()
+        {
+            timer1.Start();
+            timer1.Tick += new EventHandler(timerTickFadeOut);
+            timer1.Interval = 15;
+        }
+
+        private void FadeIn()
+        {
+            this.Show();
+            this.Opacity = 0;
+            timer2.Start();
+            timer2.Tick += new EventHandler(timerTickFadeIn);
+            timer2.Interval = 15;
+        }
+
+        void timerTickFadeOut(object sender, EventArgs e)
+        {
+            this.Opacity -= 0.07;
+
+            if (this.Opacity <= 0)
+            {
+                this.Hide();
+                timer1.Stop();
+                //timer1.Dispose();
+            }
+        }
+
+        void timerTickFadeIn(object sender, EventArgs e)
+        {
+            this.Opacity += 0.07;
+
+            if (this.Opacity >= 100)
+            {
+                timer2.Stop();
+                //timer2.Dispose();
+            }
+        }
+
         #endregion
         
         #endregion
@@ -278,14 +341,19 @@ namespace ToDo
 
         #region PanelSwitching
 
-        public void SwitchToSettingsPanel()
-        {
-            this.customPanelControl.SelectedIndex = 1;
-        }
-
-        public void SwitchToToDoPanel()
+        public void SwitchToConsolePanel()
         {
             this.customPanelControl.SelectedIndex = 2;
+        }
+
+        public void SwitchToTaskListPanel()
+        {
+            this.customPanelControl.SelectedIndex = 0;
+        }
+
+        public void SwitchToPreferences()
+        {
+            this.customPanelControl.SelectedIndex = 1;
         }
 
         #endregion
@@ -313,22 +381,7 @@ namespace ToDo
 
         }
 
-        int selected = 0;
-        private void preferencesButton_Click(object sender, EventArgs e)
-        {
-            if (selected == 0)
-            {
-                preferencesButton.Text = "ToDo";
-                SwitchToSettingsPanel();
-                selected = 1;
-            }
-            else
-            {
-                preferencesButton.Text = "Preferences";
-                SwitchToToDoPanel();
-                selected = 0;
-            }
-        }
+
 
         #endregion
 
@@ -442,10 +495,12 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Event Handlers
+        // Event Handlers for UI and Non-UI elements
         // ******************************************************************
 
         #region EventHandlers
+
+        #region NonUIHandlers
 
         /// <summary>
         /// Adds Event Handlers relating to UI here
@@ -476,6 +531,57 @@ namespace ToDo
             outputBox.InitializeWithSettings(logic.MainSettings);
         }
 
+        #endregion
+
+        #region ButtonEvents
+
+        private void loadButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            loadButton.SetMouseDown();
+        }
+
+
+        private void loadButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            loadButton.SetMouseUp();
+        }
+
+        private void consoleButon_MouseDown(object sender, MouseEventArgs e)
+        {
+            consoleButon.SetMouseDown();
+            //this.customPanelControl.SelectedIndex = 2;
+        }
+
+        int selected = 0;
+        private void consoleButon_MouseUp(object sender, MouseEventArgs e)
+        {
+            consoleButon.SetMouseUp();
+            if (selected == 0)
+            {
+                consoleButon.ButtonText = "TaskList";
+                SwitchToConsolePanel();
+                selected = 1;
+            }
+            else
+            {
+                consoleButon.ButtonText = "Console";
+                SwitchToTaskListPanel();
+                selected = 0;
+            }
+        }
+
+        private void preferencesButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            preferencesButton.SetMouseDown();
+        }
+
+        private void preferencesButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            preferencesButton.SetMouseUp();
+            SwitchToPreferences();
+        }
+
+        #endregion
 
         #endregion
 
@@ -487,15 +593,10 @@ namespace ToDo
             Application.Exit();
         }
 
-        private void outputBox_MouseHover(object sender, EventArgs e)
-        {
-            
-        }
 
-        private void UI_Resize(object sender, EventArgs e)
-        {
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
-        }
+
+
+
 
     }
 }
