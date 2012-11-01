@@ -24,7 +24,7 @@ namespace ToDo
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeType> timeRangeKeywords;
         static public Dictionary<string, Month> monthKeywords;
-        static public Dictionary<string, DayOfWeek> dayKeywords;       
+        static public Dictionary<string, DayOfWeek> dayKeywords;
         static public List<string> timeSpecificKeywords;
         static public List<string> timeSuffixes;
         static public List<string> todayKeywords;
@@ -189,6 +189,7 @@ namespace ToDo
             dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
             // NYI
             timeRangeKeywords = new Dictionary<string, TimeRangeType>();
+            //numericalTimeRangeKeywords = new List<string> { "from", "-" };
             timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
             timeSpecificKeywords = new List<string> { "noon", "midnight" };
             todayKeywords = new List<string> { "today" };
@@ -308,7 +309,7 @@ namespace ToDo
         /// <returns>True if a positive match is found; false if otherwise</returns>
         public static bool CheckIfIsValidTimeInWordFormat(string word)
         {
-            foreach (string timeSpecificKeyword in CustomDictionary.timeSpecificKeywords)
+            foreach (string timeSpecificKeyword in timeSpecificKeywords)
             {
                 if (word.ToLower() == timeSpecificKeyword)
                     return true;
@@ -330,6 +331,25 @@ namespace ToDo
                 default:
                     return false;
             }
+        }
+
+        public static bool IsPartOfValidNumericalTimeRange(List<string> words, int i)
+        {
+            if (words[i + 1] == "-"
+                && IsValidTime(words[i + 2]))
+            {
+                return true;
+            }
+            else if (i > 1)
+            {
+                if (words[i - 1] == "from"
+                    && words[i + 1] == "to"
+                    && IsValidTime(words[i + 2]))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary> This method checks if a word is a time keyword.
