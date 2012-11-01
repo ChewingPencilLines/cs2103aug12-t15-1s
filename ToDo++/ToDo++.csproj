@@ -234,6 +234,7 @@
   <ItemGroup>
     <None Include="Resources\applications.png" />
     <None Include="Resources\Alert.png" />
+    <Content Include="Resources\settings_icon.jpg" />
     <Content Include="UI\Components\CustomPopUps\FontDialogBox\CGFontCombo.bmp" />
     <Content Include="Resources\Cover.png" />
     <Content Include="Resources\Cover1.png" />
