@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace ToDo
 {
@@ -52,6 +53,8 @@ namespace ToDo
             else if (doneString == null)
             {
                 response = null;
+                Debug.Assert(index <= endindex);
+                Debug.Assert(endindex < taskList.Count);
                 for (int? i = index; i <= endindex; i++)
                 {
                     Task taskToMarkAsDone = lastListedTasks[i.Value];
