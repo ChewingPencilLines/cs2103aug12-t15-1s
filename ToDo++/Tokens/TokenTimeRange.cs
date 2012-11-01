@@ -38,8 +38,14 @@ namespace ToDo
             {
                 attrb.rangeIndexes[0] = index;
             }
-            attrb.timeRangeType = timeRangeType;
-            attrb.timeRange = timeRange;
+            if (timeRangeType != null)
+            {
+                attrb.timeRangeType = timeRangeType;
+            }
+            if (timeRange != null)
+            {
+                attrb.timeRange = timeRange;
+            }
         }
     }
 }
