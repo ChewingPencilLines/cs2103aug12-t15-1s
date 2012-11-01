@@ -35,7 +35,8 @@
             // date
             // 
             this.date.AutoSize = true;
-            this.date.BackColor = System.Drawing.Color.Aqua;
+            this.date.BackColor = System.Drawing.Color.White;
+            this.date.ForeColor = System.Drawing.Color.Black;
             this.date.Location = new System.Drawing.Point(12, 13);
             this.date.Name = "date";
             this.date.Size = new System.Drawing.Size(36, 13);
@@ -45,7 +46,8 @@
             // time
             // 
             this.time.AutoSize = true;
-            this.time.BackColor = System.Drawing.Color.Aqua;
+            this.time.BackColor = System.Drawing.Color.White;
+            this.time.ForeColor = System.Drawing.Color.Black;
             this.time.Location = new System.Drawing.Point(82, 13);
             this.time.Name = "time";
             this.time.Size = new System.Drawing.Size(33, 13);
