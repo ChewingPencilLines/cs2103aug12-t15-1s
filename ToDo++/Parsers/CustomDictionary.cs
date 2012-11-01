@@ -129,6 +129,7 @@ namespace ToDo
             commandKeywords.Add("redo", CommandType.REDO);
             commandKeywords.Add("done", CommandType.DONE);
             commandKeywords.Add("postpone", CommandType.POSTPONE);
+            commandKeywords.Add("schedule", CommandType.SCHEDULE);
             commandKeywords.Add("exit", CommandType.EXIT);
         }
 
