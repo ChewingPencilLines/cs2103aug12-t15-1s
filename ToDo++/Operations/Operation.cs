@@ -154,12 +154,14 @@ namespace ToDo
                 return RESPONSE_XML_READWRITE_FAIL;
         }
 
+        // todo: move search queries into the tasks themselves as methods.
         protected string PostponeTask(Task taskToPostpone, List<Task> taskList, DateTime? NewDate, out bool successFlag)
         {
             successFlag = false;
             Task taskPostponed = taskToPostpone;
             undoTask.Push(taskToPostpone);
             taskList.Remove(taskToPostpone);
+
             if (taskPostponed is TaskDeadline)
             {
                 if (NewDate == null)
@@ -191,6 +193,7 @@ namespace ToDo
                 taskList.Add(taskToPostpone);
                 return RESPONSE_POSTPONE_FAIL;
             }
+            //todo: create postpone function.
             if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
             {
                 successFlag = true;
@@ -199,8 +202,7 @@ namespace ToDo
             else
                 return RESPONSE_XML_READWRITE_FAIL;
         }
-
-        // todo: move search queries into the tasks themselves as methods.
+        
         protected List<Task> SearchForTasks(List<Task> taskList, string searchString, bool exact = false, DateTime? startTime = null, DateTime? endTime = null)
         {
             List<Task> filteredTasks = taskList;
