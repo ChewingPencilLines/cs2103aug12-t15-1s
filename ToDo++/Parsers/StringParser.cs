@@ -122,12 +122,17 @@ namespace ToDo
             List<string> output = new List<string>();
             for (int i = 0; i < words.Count; i++)
             {
-                bool success = true;
+                if (j > 1)
+                {
+                    j--;
+                    continue;
+                }
+                bool success = false;
                 string matchCheck = words[i];
                 while (i + j < words.Count)  // Don't check last word.
                 {
                     success = CustomDictionary.isNumericalRange.IsMatch(matchCheck + words[i + j]);
-                    if (success) matchCheck += words[i + j];
+                    if (success) matchCheck += " " + words[i + j];
                     else break;
                     j++;
                 }
