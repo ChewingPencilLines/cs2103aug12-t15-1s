@@ -83,7 +83,7 @@ namespace ToDo
                 {
                     var prevToken = from token in parsedTokens
                                     where token.Position == index - 1 &&
-                                          token.RequiresRange()
+                                          token.RequiresIndexRange()
                                     select token;
                     if (prevToken.Count() == 1)
                     {
@@ -121,7 +121,7 @@ namespace ToDo
                         {
                             throw new Exception("Something wrong with IsTimeRange regex etc.");
                         }
-                        timeRangeToken = new TokenTimeRange(index, userDefinedIndex, timeRangeType);
+                        timeRangeToken = new TokenTimeRange(index-1, userDefinedIndex, timeRangeType);
                     }
                 }
                 else if (CustomDictionary.timeRangeKeywords.TryGetValue(word.ToLower(), out timeRangeKeyword))
@@ -609,13 +609,25 @@ namespace ToDo
         private Token GetHighestPriorityToken(IEnumerable<Token> matches, List<Token> tokens)
         {
             Token highestPriorityToken = null;
-            
+
+            var match = from eachToken in tokens
+                        where eachToken.GetType() == typeof(TokenCommand)
+                        && eachToken.RequiresTimeRange()
+                        select eachToken;
             foreach (Token token in matches)
             {
                 if (token.GetType() == typeof(TokenIndexRange))
+                {
                     highestPriorityToken = token;
+                }
+                else if (match.Count() == 1 && token.GetType() == typeof(TokenTimeRange))
+                {
+                    highestPriorityToken = token;
+                }
                 else if (highestPriorityToken == null)
+                {
                     highestPriorityToken = token;
+                }
             }
             return highestPriorityToken;
         }

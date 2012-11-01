@@ -124,6 +124,11 @@ namespace ToDo
             {
                 bool success = true;
                 string matchCheck = words[i];
+                if (j > 1)
+                {
+                    j--;
+                    continue;
+                }
                 while (i + j < words.Count)  // Don't check last word.
                 {
                     success = CustomDictionary.isNumericalRange.IsMatch(matchCheck + words[i + j]);
