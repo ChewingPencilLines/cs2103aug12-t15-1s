@@ -33,7 +33,7 @@ namespace ToDo
             // must be done first to catch index ranges.
             tokens.AddRange(GenerateCommandTokens(input));
             // must be done after generating command tokens
-            tokens.AddRange(GenerateRangeTokens(input, tokens));
+            tokens.AddRange(GenerateIndexRangeTokens(input, tokens));
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
             tokens.AddRange(GenerateTimeTokens(input));            
@@ -69,7 +69,7 @@ namespace ToDo
             return tokens;
         }
 
-        private List<Token> GenerateRangeTokens(List<string> inputWords, List<Token> parsedTokens)
+        private List<Token> GenerateIndexRangeTokens(List<string> inputWords, List<Token> parsedTokens)
         {
             List<Token> rangeTokens = new List<Token>();
 
@@ -78,7 +78,7 @@ namespace ToDo
             {
                 bool isAll = false;
                 int[] userDefinedIndex = null;
-                TokenRange rangeToken = null;
+                TokenIndexRange rangeToken = null;
                 if (TryGetNumericalRange(word, out userDefinedIndex))
                 {
                     var prevToken = from token in parsedTokens
@@ -87,13 +87,13 @@ namespace ToDo
                                     select token;
                     if (prevToken.Count() == 1)
                     {
-                        rangeToken = new TokenRange(index, userDefinedIndex, isAll);
+                        rangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
                     }
                 }
                 else if (CheckIfAllKeyword(word))
                 {
                     isAll = true;
-                    rangeToken = new TokenRange(index, userDefinedIndex, isAll);
+                    rangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
                 }
                 if (rangeToken != null)
                     rangeTokens.Add(rangeToken);
@@ -118,7 +118,7 @@ namespace ToDo
             bool matchSuccess = match.Success;
             if (matchSuccess)
             {
-                userDefinedIndex = new int[TokenRange.RANGE];
+                userDefinedIndex = new int[TokenIndexRange.RANGE];
                 int startIndex, endIndex;
                 Int32.TryParse(match.Groups["start"].Value, out startIndex);
                 if (match.Groups["end"].Success)
@@ -126,8 +126,8 @@ namespace ToDo
                     Int32.TryParse(match.Groups["end"].Value, out endIndex);
                 }
                 else endIndex = startIndex;
-                userDefinedIndex[TokenRange.START_INDEX] = startIndex;
-                userDefinedIndex[TokenRange.END_INDEX] = endIndex;
+                userDefinedIndex[TokenIndexRange.START_INDEX] = startIndex;
+                userDefinedIndex[TokenIndexRange.END_INDEX] = endIndex;
             }
             return matchSuccess;
         }
@@ -580,7 +580,7 @@ namespace ToDo
             
             foreach (Token token in matches)
             {
-                if (token.GetType() == typeof(TokenRange))
+                if (token.GetType() == typeof(TokenIndexRange))
                     highestPriorityToken = token;
                 else if (highestPriorityToken == null)
                     highestPriorityToken = token;

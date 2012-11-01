@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    public class TokenRange : Token
+    public class TokenIndexRange : Token
     {
         public const int START_INDEX = 0;
         public const int END_INDEX = 1;
@@ -22,7 +22,7 @@ namespace ToDo
         {
             get { return indexes; }
         }
-        internal TokenRange(int position, int[] val, bool isAll)
+        internal TokenIndexRange(int position, int[] val, bool isAll)
             : base(position)
         {
             indexes = val;

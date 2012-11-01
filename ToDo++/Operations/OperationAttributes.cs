@@ -14,6 +14,7 @@ namespace ToDo
         private DateTime? startDateOnly = null, endDateOnly = null;
         private DayOfWeek? startDay = null, endDay = null;
 
+        // Setter methods
         public TimeSpan? EndTime  { set { endTime = value; } }
         public TimeSpan? StartTime { set { startTime = value; } }
         public DateTime? EndDateOnly { set { endDateOnly = value; } }
@@ -33,6 +34,8 @@ namespace ToDo
         public CommandType commandType = new CommandType();
         public DateTime? startDateTime = null, endDateTime = null;
         public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
+        public TimeRangeType? timeRangeType = new TimeRangeType();
+        public TimeRangeKeywordsType? timeRange = new TimeRangeKeywordsType();
         public string taskName = null;
         public int[] rangeIndexes = null;
         public bool rangeIsAll = false;
@@ -102,6 +105,7 @@ namespace ToDo
             }
             if (limit > combinedDT)
                 //@ivan -> jenna wtf is this??
+                //@jenna -> idk???!??! no idea why you test for 0001, 1, 1... is i do one meh?
                 if (combinedDT != new DateTime(0001, 1, 1))
                     AlertBox.Show("Note that date specified is in the past.");
             return combinedDT;

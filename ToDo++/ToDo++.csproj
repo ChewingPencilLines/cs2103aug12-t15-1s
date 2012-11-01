@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Response.cs" />
+    <Compile Include="Tokens\TokenTimeRange.cs" />
     <Compile Include="UI\Components\PreferencesControllers\FontColorSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -98,7 +99,7 @@
     <Compile Include="Tokens\TokenContext.cs" />
     <Compile Include="Tokens\TokenDate.cs" />
     <Compile Include="Tokens\TokenDay.cs" />
-    <Compile Include="Tokens\TokenRange.cs" />
+    <Compile Include="Tokens\TokenIndexRange.cs" />
     <Compile Include="Tokens\TokenLiteral.cs" />
     <Compile Include="Tokens\TokenTime.cs" />
     <Compile Include="UI\Components\InputBox.cs">

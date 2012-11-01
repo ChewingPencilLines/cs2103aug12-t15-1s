@@ -15,14 +15,17 @@ namespace ToDo
     // ******************************************************************
     public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, EXIT, INVALID };
     public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
-    public enum TimeRangeType { DEFAULT, MORNING = 0, AFTERNOON, EVENING, NIGHT };
+    // unless otherwise stated in settings,
+    // default: 8am to 10pm, morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
+    public enum TimeRangeKeywordsType { DEFAULT = 0, MORNING, AFTERNOON, EVENING, NIGHT };
+    public enum TimeRangeType { HOUR, DAY, MONTH };
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
     static class CustomDictionary
     {
         static public Dictionary<string, CommandType> commandKeywords;        
         static public Dictionary<string, ContextType> contextKeywords;
-        static public Dictionary<string, TimeRangeType> timeRangeKeywords;
+        static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
         static public Dictionary<string, Month> monthKeywords;
         static public Dictionary<string, DayOfWeek> dayKeywords;
         static public List<string> timeSpecificKeywords;
@@ -94,6 +97,9 @@ namespace ToDo
 
         static public Regex isNumericalRange =
             new Regex(@"^(?<start>\d?\d?\d)(\-(?<end>\d?\d?\d))?$");
+
+        static public Regex isTimeRange =
+            new Regex(@"^(h(ou)?rs?|days?|m(on)?ths?)$");
         #endregion
 
         static CustomDictionary()
@@ -188,8 +194,10 @@ namespace ToDo
             dayKeywords.Add("tmr", DateTime.Today.AddDays(1).DayOfWeek);
             dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
             // NYI
-            timeRangeKeywords = new Dictionary<string, TimeRangeType>();
-            //numericalTimeRangeKeywords = new List<string> { "from", "-" };
+            timeRangeKeywords.Add("morning", TimeRangeKeywordsType.MORNING);
+            timeRangeKeywords.Add("afternoon", TimeRangeKeywordsType.AFTERNOON);
+            timeRangeKeywords.Add("evening", TimeRangeKeywordsType.EVENING);
+            timeRangeKeywords.Add("night", TimeRangeKeywordsType.NIGHT);
             timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
             timeSpecificKeywords = new List<string> { "noon", "midnight" };
             todayKeywords = new List<string> { "today" };
