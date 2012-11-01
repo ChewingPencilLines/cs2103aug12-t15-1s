@@ -96,7 +96,7 @@ namespace ToDo
              new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
 
         static public Regex isNumericalRange =
-            new Regex(@"^(?<start>\d?\d?\d)(\-(?<end>\d?\d?\d))?$");
+            new Regex(@"^(?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?$");
 
         static public Regex isTimeRange =
             new Regex(@"^(h(ou)?rs?|days?|m(on)?ths?)$");
@@ -193,11 +193,13 @@ namespace ToDo
             dayKeywords.Add("weekend", DayOfWeek.Sunday);
             dayKeywords.Add("tmr", DateTime.Today.AddDays(1).DayOfWeek);
             dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
-            // NYI
+
+            Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords = new Dictionary<string, TimeRangeKeywordsType>();
             timeRangeKeywords.Add("morning", TimeRangeKeywordsType.MORNING);
             timeRangeKeywords.Add("afternoon", TimeRangeKeywordsType.AFTERNOON);
             timeRangeKeywords.Add("evening", TimeRangeKeywordsType.EVENING);
             timeRangeKeywords.Add("night", TimeRangeKeywordsType.NIGHT);
+            // NYI
             timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
             timeSpecificKeywords = new List<string> { "noon", "midnight" };
             todayKeywords = new List<string> { "today" };
@@ -209,20 +211,22 @@ namespace ToDo
         // Getter Methods
         // ******************************************************************
 
+        
         #region Getter Methods For Dictionaries & List
         public static Dictionary<string, CommandType> GetCommandKeywords()
         {
             return commandKeywords;
         }
 
-        public static Dictionary<string, Month> GetMonthKeywords()
-        {
-            return monthKeywords;
-        }
-
         public static Dictionary<string, ContextType> GetContextKeywords()
         {
             return contextKeywords;
+        }
+
+        
+        public static Dictionary<string, Month> GetMonthKeywords()
+        {
+            return monthKeywords;
         }
 
         public static Dictionary<string, DayOfWeek> GetDayKeywords()
@@ -234,12 +238,6 @@ namespace ToDo
         {
             return timeSpecificKeywords;
         }
-
-        /*
-        public static List<string> GetTimeGeneralKeywords()
-        {
-            return timeGeneralKeywords;
-        }*/
 
         public static List<string> GetTimeSuffixes()
         {
@@ -275,6 +273,7 @@ namespace ToDo
         {
             return isNumericalRange;
         }
+         
         #endregion
 
         // ******************************************************************
