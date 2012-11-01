@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    class OperationDelete : Operation
+    public class OperationDelete : Operation
     {
 
         // @ivan -> alice: not good enough. needs to be able to delete by range of index / dates.
