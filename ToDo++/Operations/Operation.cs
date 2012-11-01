@@ -161,6 +161,10 @@ namespace ToDo
             Task taskPostponed = taskToPostpone;
             undoTask.Push(taskToPostpone);
             taskList.Remove(taskToPostpone);
+            //if (taskToPostpone.Postpone(newStartTime, newEndTime))
+            {
+
+            }
 
             if (taskPostponed is TaskDeadline)
             {
@@ -189,6 +193,7 @@ namespace ToDo
             }
             else
             {
+                //???
                 undoTask.Push(taskToPostpone);
                 taskList.Add(taskToPostpone);
                 return RESPONSE_POSTPONE_FAIL;
