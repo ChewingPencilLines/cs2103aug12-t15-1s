@@ -38,6 +38,7 @@ namespace ToDo
         public TimeRangeKeywordsType? timeRange = new TimeRangeKeywordsType();
         public string taskName = null;
         public int[] rangeIndexes = null;
+        public int timeRangeIndex;
         public bool rangeIsAll = false;
         #endregion
 
@@ -76,7 +77,7 @@ namespace ToDo
                 endDateTime = CombineDateAndTime(endTime, endDateOnly, (DateTime)startDateTime);
         }
 
-        private static DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)
+        private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)
         {
             DateTime? combinedDT = null;
             // Time defined but not date
@@ -106,8 +107,10 @@ namespace ToDo
             if (limit > combinedDT)
                 //@ivan -> jenna wtf is this??
                 //@jenna -> idk???!??! no idea why you test for 0001, 1, 1... is i do one meh?
-                if (combinedDT != new DateTime(0001, 1, 1))
-                    AlertBox.Show("Note that date specified is in the past.");
+                if (combinedDT != new DateTime(0001, 1, 1)
+                    && this.commandType != CommandType.SEARCH
+                    && this.commandType != CommandType.DISPLAY)
+                    AlertBox.Show("Note that date specified is past.");
             return combinedDT;
         }
     }
