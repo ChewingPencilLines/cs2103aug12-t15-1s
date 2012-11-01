@@ -118,25 +118,52 @@ namespace ToDo
 
         private List<string> MergeRangeKeywords(List<string> words)
         {               
-            int j = 1;
+            int skipWords = 1;
             List<string> output = new List<string>();
             for (int i = 0; i < words.Count; i++)
             {
-                if (j > 1)
+                if (skipWords > 1)
                 {
-                    j--;
+                    skipWords--;
                     continue;
                 }
-                bool success = false;
-                string matchCheck = words[i];
-                while (i + j < words.Count)  // Don't check last word.
+                string mergedString = words[i];
+                if (CustomDictionary.IsValidTime(words[i]))
                 {
-                    success = CustomDictionary.isNumericalRange.IsMatch(matchCheck + words[i + j]);
-                    if (success) matchCheck += " " + words[i + j];
-                    else break;
-                    j++;
+                    if (i < words.Count-2
+                        && CustomDictionary.IsPartOfValidNumericalTimeRange(words, i))
+                    {
+                        if (words[i - 1] == "from")
+                        {
+                            output.RemoveAt(output.Count-1);
+                            mergedString = words[i] + " to " + words[i + 2];
+                        }
+                        else
+                        {
+                            mergedString += "-" + words[i + 2];
+                        }
+                        skipWords = 3;
+                    }
                 }
-                output.Add(matchCheck);
+                else
+                {
+                    bool success = false;
+                    while (i + skipWords < words.Count)  // Don't check last word.
+                    {
+                        success = CustomDictionary.isNumericalRange.IsMatch(mergedString + words[i + skipWords]);
+                        if (success) mergedString += words[i + skipWords];
+                        else break;
+                        skipWords++;
+                    }
+                }
+                if (mergedString == String.Empty)
+                {
+                    output.Add(words[i]);
+                }
+                else
+                {
+                    output.Add(mergedString);
+                }
             }
             return output;
         }
