@@ -15,7 +15,7 @@ namespace ToDo
     // ******************************************************************
     public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, EXIT, INVALID };
     public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
-    public enum TimeRangeType { MORNING = 0, AFTERNOON, EVENING, NIGHT };
+    public enum TimeRangeType { DEFAULT, MORNING = 0, AFTERNOON, EVENING, NIGHT };
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
     static class CustomDictionary
@@ -93,7 +93,7 @@ namespace ToDo
              new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
 
         static public Regex isNumericalRange =
-            new Regex(@"^(?<start>\d?\d?\d)(\-(?<end>\d?\d?\d))?");
+            new Regex(@"^(?<start>\d?\d?\d)(\-(?<end>\d?\d?\d))?$");
         #endregion
 
         static CustomDictionary()

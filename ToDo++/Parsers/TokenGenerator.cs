@@ -266,10 +266,10 @@ namespace ToDo
             Match match;
             int index = 0, hours = 0, minutes = 0, seconds = 0;
             bool specificity = true;
-            bool Format_12Hour = false;
-            bool isTime = false;
+            bool Format_12Hour = false;            
             foreach (string word in input)
             {
+                bool isTime = false;
                 if (CustomDictionary.CheckIfIsValidTimeInWordFormat(word))
                 {
                     specificity = GetDefaultTimeValues(word, ref hours);

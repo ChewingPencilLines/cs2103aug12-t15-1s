@@ -12,7 +12,7 @@ namespace ToDo
         private int? endindex;
         private string taskName;
         private DateTime? oldTime = null, postponeTime = null;
-        private DateTimeSpecificity isSpecific;
+        private DateTimeSpecificity isSpecific = new DateTimeSpecificity();
 
         public OperationPostpone(string taskName, int[] indexRange, DateTime? startTime, DateTime? postponeTime, DateTimeSpecificity isSpecific)
         {

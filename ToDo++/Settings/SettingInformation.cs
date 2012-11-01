@@ -10,7 +10,7 @@ namespace ToDo
             private bool startMinimized;
             private bool stayOnTop;
             private int textSize;
-
+            
             public bool LoadOnStartup { get { return loadOnStartup; } set { loadOnStartup = value; } }
             public bool StartMinimized { get { return startMinimized; } set { startMinimized = value; } }
             public bool StayOnTop { get { return stayOnTop; } set { stayOnTop = value; } }

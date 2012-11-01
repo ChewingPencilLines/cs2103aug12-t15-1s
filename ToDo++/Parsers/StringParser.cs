@@ -25,7 +25,7 @@ namespace ToDo
         }
 
         // ******************************************************************
-        // Public Methods
+        // Public Methods   
         // ******************************************************************
 
         #region Internal Methods
@@ -118,52 +118,20 @@ namespace ToDo
 
         private List<string> MergeRangeKeywords(List<string> words)
         {               
-            int skipWords = 1;
+            int j = 1;
             List<string> output = new List<string>();
             for (int i = 0; i < words.Count; i++)
             {
-                if (skipWords > 1)
+                bool success = true;
+                string matchCheck = words[i];
+                while (i + j < words.Count)  // Don't check last word.
                 {
-                    skipWords--;
-                    continue;
+                    success = CustomDictionary.isNumericalRange.IsMatch(matchCheck + words[i + j]);
+                    if (success) matchCheck += words[i + j];
+                    else break;
+                    j++;
                 }
-                string mergedString = words[i];
-                if (CustomDictionary.IsValidTime(words[i]))
-                {
-                    if (i < words.Count-2
-                        && CustomDictionary.IsPartOfValidNumericalTimeRange(words, i))
-                    {
-                        if (words[i - 1] == "from")
-                        {
-                            output.RemoveAt(output.Count-1);
-                            mergedString = words[i] + " to " + words[i + 2];
-                        }
-                        else
-                        {
-                            mergedString += "-" + words[i + 2];
-                        }
-                        skipWords = 3;
-                    }
-                }
-                else
-                {
-                    bool success = false;
-                    while (i + skipWords < words.Count)  // Don't check last word.
-                    {
-                        success = CustomDictionary.isNumericalRange.IsMatch(mergedString + words[i + skipWords]);
-                        if (success) mergedString += words[i + skipWords];
-                        else break;
-                        skipWords++;
-                    }
-                }
-                if (mergedString == String.Empty)
-                {
-                    output.Add(words[i]);
-                }
-                else
-                {
-                    output.Add(mergedString);
-                }
+                output.Add(matchCheck);
             }
             return output;
         }
