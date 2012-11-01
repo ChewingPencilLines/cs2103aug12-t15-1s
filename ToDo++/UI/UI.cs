@@ -34,7 +34,9 @@ namespace ToDo
         public UI(Logic logic)
         {
             InitializeComponent();
-            InitializeLogic(logic);               //Sets logic
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+            splitContainerMain.SplitterDistance = 275;
+            InitializeLogic(logic);               //Sets logic            
             InitializeSystemTray();               //Loads Code to place App in System Tray
             InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
             InitializeMenu();                     //Loads the Menu
@@ -210,11 +212,27 @@ namespace ToDo
         private void UI_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);            
         }
 
         #endregion
 
+        /// <summary>
+        /// Creates rounded edge
+        /// </summary>
+        #region Rounded Edge
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn
+        (
+            int nLeftRect, // x-coordinate of upper-left corner
+            int nTopRect, // y-coordinate of upper-left corner
+            int nRightRect, // x-coordinate of lower-right corner
+            int nBottomRect, // y-coordinate of lower-right corner
+            int nWidthEllipse, // height of ellipse
+            int nHeightEllipse // width of ellipse
+        );
+        #endregion
+        
         #endregion
 
         // ******************************************************************
@@ -472,6 +490,11 @@ namespace ToDo
         private void outputBox_MouseHover(object sender, EventArgs e)
         {
             
+        }
+
+        private void UI_Resize(object sender, EventArgs e)
+        {
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
         }
 
     }

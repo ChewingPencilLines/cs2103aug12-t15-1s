@@ -86,10 +86,10 @@
             this.customPanelControl.Controls.Add(this.tabPage1);
             this.customPanelControl.Controls.Add(this.tabPage2);
             this.customPanelControl.Controls.Add(this.taskDisplay);
-            this.customPanelControl.Location = new System.Drawing.Point(5, 48);
+            this.customPanelControl.Location = new System.Drawing.Point(6, 50);
             this.customPanelControl.Name = "customPanelControl";
             this.customPanelControl.SelectedIndex = 0;
-            this.customPanelControl.Size = new System.Drawing.Size(509, 333);
+            this.customPanelControl.Size = new System.Drawing.Size(509, 328);
             this.customPanelControl.TabIndex = 12;
             // 
             // tabPage1
@@ -100,7 +100,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(501, 307);
+            this.tabPage1.Size = new System.Drawing.Size(501, 302);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             // 
@@ -111,9 +111,9 @@
             this.textInput.BackColor = System.Drawing.Color.DarkGray;
             this.textInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textInput.Location = new System.Drawing.Point(3, 278);
+            this.textInput.Location = new System.Drawing.Point(-4, 273);
             this.textInput.Name = "textInput";
-            this.textInput.Size = new System.Drawing.Size(507, 19);
+            this.textInput.Size = new System.Drawing.Size(505, 19);
             this.textInput.TabIndex = 0;
             this.textInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
             this.textInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textInput_PreviewKeyDown);
@@ -125,10 +125,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputBox.BackColor = System.Drawing.Color.DarkGray;
             this.outputBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.outputBox.Location = new System.Drawing.Point(3, 0);
+            this.outputBox.Location = new System.Drawing.Point(-4, 0);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(498, 272);
+            this.outputBox.Size = new System.Drawing.Size(509, 267);
             this.outputBox.TabIndex = 7;
             this.outputBox.Text = "";
             this.outputBox.MouseHover += new System.EventHandler(this.outputBox_MouseHover);
@@ -140,7 +140,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(501, 307);
+            this.tabPage2.Size = new System.Drawing.Size(501, 302);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Preferences";
             // 
@@ -155,12 +155,12 @@
             // 
             // taskDisplay
             // 
-            this.taskDisplay.BackColor = System.Drawing.Color.DarkGray;
+            this.taskDisplay.BackColor = System.Drawing.Color.DimGray;
             this.taskDisplay.Controls.Add(this.splitContainerMain);
             this.taskDisplay.Location = new System.Drawing.Point(4, 22);
             this.taskDisplay.Name = "taskDisplay";
             this.taskDisplay.Padding = new System.Windows.Forms.Padding(3);
-            this.taskDisplay.Size = new System.Drawing.Size(501, 307);
+            this.taskDisplay.Size = new System.Drawing.Size(501, 302);
             this.taskDisplay.TabIndex = 2;
             this.taskDisplay.Text = "TaskDisplay";
             // 
@@ -175,12 +175,15 @@
             // splitContainerMain.Panel1
             // 
             this.splitContainerMain.Panel1.Controls.Add(this.taskListView);
+            this.splitContainerMain.Panel1MinSize = 1;
             // 
             // splitContainerMain.Panel2
             // 
             this.splitContainerMain.Panel2.Controls.Add(this.textBox1);
-            this.splitContainerMain.Size = new System.Drawing.Size(495, 301);
-            this.splitContainerMain.SplitterDistance = 260;
+            this.splitContainerMain.Panel2MinSize = 1;
+            this.splitContainerMain.Size = new System.Drawing.Size(495, 296);
+            this.splitContainerMain.SplitterDistance = 275;
+            this.splitContainerMain.SplitterWidth = 2;
             this.splitContainerMain.TabIndex = 0;
             // 
             // taskListView
@@ -194,7 +197,7 @@
             this.taskListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.taskListView.Location = new System.Drawing.Point(0, 0);
             this.taskListView.Name = "taskListView";
-            this.taskListView.Size = new System.Drawing.Size(495, 260);
+            this.taskListView.Size = new System.Drawing.Size(495, 275);
             this.taskListView.TabIndex = 0;
             this.taskListView.UseCompatibleStateImageBehavior = false;
             this.taskListView.View = System.Windows.Forms.View.Details;
@@ -218,14 +221,13 @@
             // 
             // textBox1
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.BackColor = System.Drawing.Color.DimGray;
+            this.textBox1.BackColor = System.Drawing.Color.DarkGray;
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(0, 16);
+            this.textBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.textBox1.Location = new System.Drawing.Point(0, 2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(495, 16);
+            this.textBox1.Size = new System.Drawing.Size(495, 17);
             this.textBox1.TabIndex = 0;
             // 
             // UI
@@ -243,6 +245,7 @@
             this.Name = "UI";
             this.Text = "ToDo++";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UI_MouseDown);
+            this.Resize += new System.EventHandler(this.UI_Resize);
             this.customPanelControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
