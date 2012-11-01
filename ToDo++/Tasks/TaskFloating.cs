@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace ToDo
 {
-    class TaskFloating : Task
+    public class TaskFloating : Task
     {
         public TaskFloating(string taskName, Boolean isDone = false, int forceID = -1)
             : base(taskName, isDone, forceID)
