@@ -22,6 +22,35 @@ namespace OperatingLogicUnitTest
             OperationAdd Op = new OperationAdd(task);
             result = Op.Execute(taskList, storagetest);
             Assert.AreEqual(result, "Added \"test\" successfully.");
+
+            return;
+        }
+
+        [TestMethod]
+        public void OperationDeleteTest()
+        {
+            string result;
+            storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
+            taskList = storagetest.LoadTasksFromFile();
+            int[] index= new int[2];
+            index[0] = -1;
+            OperationDelete Op = new OperationDelete("", index, null, null, null);
+            result = Op.Execute(taskList, storagetest);
+            Assert.AreEqual(result, "Invalid task index!");
+            return;
+        }
+
+        [TestMethod]
+        public void OperationUndoAddTest()
+        {
+            string result;
+            storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
+            taskList = storagetest.LoadTasksFromFile();
+            OperationAdd Op = new OperationAdd(task);
+            result = Op.Execute(taskList, storagetest);
+            Assert.AreEqual(result, "Added \"test\" successfully.");
+            result = Op.Undo(taskList,storagetest);
+            Assert.AreEqual(result, "Deleted task \"test\" successfully.");
             return;
         }
     }
