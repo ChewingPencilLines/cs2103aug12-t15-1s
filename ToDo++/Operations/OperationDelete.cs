@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ToDo
 {
@@ -63,6 +64,7 @@ namespace ToDo
             }
             else
             {
+                Debug.Assert(endindex >= index);
                 if (endindex == index)
                 {
                     Task taskToDelete = lastListedTasks[index.Value];
