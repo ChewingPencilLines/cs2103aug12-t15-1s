@@ -96,6 +96,14 @@ namespace ToDo
         public override string Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
+            redoTask.Push(task);
+            return AddTask(task, taskList, out successFlag);
+        }
+
+        public override string Redo(List<Task> taskList, Storage storageIO)
+        {
+            Task task = redoTask.Pop();
+            undoTask.Push(task);
             return AddTask(task, taskList, out successFlag);
         }
     }
