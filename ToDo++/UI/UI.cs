@@ -35,8 +35,6 @@ namespace ToDo
         {
             InitializeComponent();
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
-            splitContainerMain.SplitterDistance = 275;
-            taskListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             InitializeLogic(logic);               //Sets logic            
             InitializeSystemTray();               //Loads Code to place App in System Tray
             InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
@@ -294,7 +292,7 @@ namespace ToDo
 
         }
 
-        int selected = 0;
+        int selected = 0;/*
         private void preferencesButton_Click(object sender, EventArgs e)
         {
             if (selected == 0)
@@ -309,7 +307,7 @@ namespace ToDo
                 SwitchToToDoPanel();
                 selected = 0;
             }
-        }
+        }*/
 
         #endregion
 
@@ -477,69 +475,7 @@ namespace ToDo
             List<Task> displayList = new List<Task>();
             TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
             displayList.Add(addTask);
-            Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);
-            RefreshTaskListView(testResponse);
-        }
-        private void RefreshTaskListView(Response response)
-        {
-            List<Task> tasks = response.TasksToBeDisplayed;
-
-            switch (response.FormatType)
-            {
-                case Format.DEFAULT:
-                    /* Do not delete.
-                    List<Task> mostRecentTasks = 
-                        (from task in tasks                                     
-                        where task.IsWithinTime(DateTime.Today, DateTime.Today.AddDays(7))
-                        select task).ToList();
-                    mostRecentTasks.Sort(Task.CompareByDateTime);
-                    // 10 = MAX_TASKS
-                    mostRecentTasks = mostRecentTasks.GetRange(0, 10);
-                     */
-
-                    var groupNames = from task in tasks
-                                     where !(task is TaskFloating)
-                                     select task.GetDay().ToString();
-
-                    foreach (Task task in tasks)
-                    {
-                        string groupName;
-                        if (!(task is TaskFloating))
-                        {
-                            // sort by group
-                            groupName = task.GetDay().ToString();
-                        }
-                        else groupName = "Floating";
-
-                        ListViewGroup groupToAdd = new ListViewGroup(groupName);
-
-                        
-                        // check if group exists already
-                        bool groupExists = false;
-                        foreach (ListViewGroup group in taskListView.Groups)
-                        {
-                            if (group.Header == groupName)
-                            {
-                                groupExists = true;
-                                groupToAdd = group;
-                                break;
-                            }
-                        }
-                        if (!groupExists)
-                        {
-                            taskListView.Groups.Add(groupToAdd);
-                        }
-
-                        // Add item
-                        ListViewItem taskItem = new ListViewItem(task.TaskName, groupToAdd);
-                        taskItem.SubItems.Add("asd", Color.Chocolate, Color.White, new System.Drawing.Font("Arial", 10));
-                        taskItem.SubItems.Add("dsa".ToString());
-                        taskListView.Items.Add(taskItem);
-                    }
-                    break;
-                default:
-                    break;
-            }
+            Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);            
         }
     }
 }

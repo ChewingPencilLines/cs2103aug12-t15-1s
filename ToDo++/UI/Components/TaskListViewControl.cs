@@ -17,21 +17,70 @@ namespace ToDo
 {
     class TaskListViewControl:ListView
     {
-        public void PopulateListView()
+        public TaskListViewControl()
         {
-            List<Task> displayList = new List<Task>();
-            TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
-
-            List<ListViewGroup> groups = new List<ListViewGroup>();
-            groups.Add(new ListViewGroup(DateTime.Today.DayOfWeek.ToString()));
-            this.Groups.Add(groups[0]);
-
-            ListViewItem taskItem = new ListViewItem(addTask.TaskName, groups[0]);
-            taskItem.SubItems.Add(addTask.StartTime.ToString(), Color.Chocolate, Color.White, new System.Drawing.Font("Arial", 10));
-            taskItem.SubItems.Add(addTask.EndTime.ToString());
-
-            this.Items.Add(taskItem);
             this.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+        }
+        private void RefreshTaskListView(Response response)
+        {
+            List<Task> tasks = response.TasksToBeDisplayed;
+
+            switch (response.FormatType)
+            {
+                case Format.DEFAULT:
+                    /* Do not delete.
+                    List<Task> mostRecentTasks = 
+                        (from task in tasks                                     
+                        where task.IsWithinTime(DateTime.Today, DateTime.Today.AddDays(7))
+                        select task).ToList();
+                    mostRecentTasks.Sort(Task.CompareByDateTime);
+                    // 10 = MAX_TASKS
+                    mostRecentTasks = mostRecentTasks.GetRange(0, 10);
+                     */
+
+                    var groupNames = from task in tasks
+                                     where !(task is TaskFloating)
+                                     select task.GetDay().ToString();
+
+                    foreach (Task task in tasks)
+                    {
+                        string groupName;
+                        if (!(task is TaskFloating))
+                        {
+                            // sort by group
+                            groupName = task.GetDay().ToString();
+                        }
+                        else groupName = "Floating";
+
+                        ListViewGroup groupToAdd = new ListViewGroup(groupName);
+
+
+                        // check if group exists already
+                        bool groupExists = false;
+                        foreach (ListViewGroup group in this.Groups)
+                        {
+                            if (group.Header == groupName)
+                            {
+                                groupExists = true;
+                                groupToAdd = group;
+                                break;
+                            }
+                        }
+                        if (!groupExists)
+                        {
+                            this.Groups.Add(groupToAdd);
+                        }
+
+                        // Add item
+                        ListViewItem taskItem = new ListViewItem(task.TaskName, groupToAdd);
+                        taskItem.SubItems.Add("asd", Color.Chocolate, Color.White, new System.Drawing.Font("Arial", 10));
+                        taskItem.SubItems.Add("dsa".ToString());
+                        this.Items.Add(taskItem);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
