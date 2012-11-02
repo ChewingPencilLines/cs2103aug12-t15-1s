@@ -41,8 +41,13 @@ namespace ToDo
             InitializeEventHandlers();            //Adds Event Handlers
             InitializePreferencesPanel();
             IntializeTopMenu();
-            this.ActiveControl = textInput;
-        
+            InitializeTaskListView();
+            this.ActiveControl = textInput;        
+        }
+
+        private void InitializeTaskListView()
+        {
+            taskListViewControl.Initialize();
         }
         #endregion
 
@@ -523,7 +528,8 @@ namespace ToDo
                 List<Task> displayList = new List<Task>();
                 TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
                 displayList.Add(addTask);
-                addTask = new TaskEvent("test task 2", new DateTime(2012, 12, 31), new DateTime(2013, 1, 1), new DateTimeSpecificity());
+                addTask = new TaskEvent("test task 2222222222222222222222222 222222222222222222222222", new DateTime(2012, 12, 31), new DateTime(2013, 1, 1), new DateTimeSpecificity());
+                addTask.DoneState = true;
                 displayList.Add(addTask);
                 Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);
                 taskListViewControl.UpdateDisplay(testResponse);
@@ -627,9 +633,15 @@ namespace ToDo
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
         }
 
-        private void taskListViewControl_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        private void taskListViewControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (e.IsSelected) e.Item.Selected = false;
+            taskListViewControl.SelectedItem = null;
+        }
+
+        private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)
+        {
+            // Row index should not change even if doing a column sort.
+            e.Item.SubItems[1].Text = "[" + e.RowIndex.ToString() + "]";
         }
     }
 }
