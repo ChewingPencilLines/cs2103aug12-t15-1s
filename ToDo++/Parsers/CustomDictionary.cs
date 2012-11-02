@@ -18,7 +18,8 @@ namespace ToDo
     // unless otherwise stated in settings,
     // default: 8am to 10pm, morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
     public enum TimeRangeKeywordsType { DEFAULT = 0, MORNING, AFTERNOON, EVENING, NIGHT };
-    public enum TimeRangeType { NONE, HOUR, DAY, MONTH };
+    // default should be hours (1 hour), unless otherwise stated in settings
+    public enum TimeRangeType { DEFAULT, HOUR, DAY, MONTH };
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
     static class CustomDictionary
@@ -27,6 +28,8 @@ namespace ToDo
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
         static public Dictionary<string, TimeRangeType> timeRangeType;
+        static public Dictionary<TimeRangeKeywordsType, int> timeRangeKeywordsStartTime;
+        static public Dictionary<TimeRangeKeywordsType, int> timeRangeKeywordsEndTime;
         static public Dictionary<string, Month> monthKeywords;
         static public Dictionary<string, DayOfWeek> dayKeywords;
         static public List<string> timeSpecificKeywords;
@@ -109,6 +112,7 @@ namespace ToDo
             InitializeContextKeywords();
             InitializeMonthKeywords();
             InitializeDateTimeKeywords();
+            InitializeTimeRangeKeywords();
         }
 
         // ******************************************************************
@@ -195,6 +199,15 @@ namespace ToDo
             dayKeywords.Add("weekend", DayOfWeek.Sunday);
             dayKeywords.Add("tmr", DateTime.Today.AddDays(1).DayOfWeek);
             dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
+            // NYI
+            timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
+            timeSpecificKeywords = new List<string> { "noon", "midnight" };
+            todayKeywords = new List<string> { "today" };
+            rangeAllKeywords = new List<string> { "all" };
+        }
+
+        private static void InitializeTimeRangeKeywords()
+        {
             timeRangeKeywords = new Dictionary<string, TimeRangeKeywordsType>();
             timeRangeKeywords.Add("morning", TimeRangeKeywordsType.MORNING);
             timeRangeKeywords.Add("morn", TimeRangeKeywordsType.MORNING);
@@ -212,11 +225,18 @@ namespace ToDo
             timeRangeType.Add("month", TimeRangeType.MONTH);
             timeRangeType.Add("mths", TimeRangeType.MONTH);
             timeRangeType.Add("mth", TimeRangeType.MONTH);
-            // NYI
-            timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
-            timeSpecificKeywords = new List<string> { "noon", "midnight" };
-            todayKeywords = new List<string> { "today" };
-            rangeAllKeywords = new List<string> { "all" };
+            timeRangeKeywordsStartTime = new Dictionary<TimeRangeKeywordsType, int>();
+            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.DEFAULT, 8);
+            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.MORNING, 5);
+            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.AFTERNOON, 12);
+            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.EVENING, 17);
+            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.NIGHT, 22);
+            timeRangeKeywordsEndTime = new Dictionary<TimeRangeKeywordsType, int>();
+            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.DEFAULT, 22);
+            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.MORNING, 12);
+            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.AFTERNOON, 17);
+            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.EVENING, 22);
+            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.NIGHT, 5);
         }
         #endregion
 

@@ -35,15 +35,24 @@ namespace ToDo
             : base(position)
         {
             index = 0;
-            timeRangeType = TimeRangeType.NONE;
+            timeRangeType = TimeRangeType.DEFAULT;
             timeRange = range;
         }
 
         internal override void UpdateAttributes(OperationAttributes attrb)
         {
-            attrb.timeRangeIndex = index;
-            attrb.timeRangeType = timeRangeType;
-            attrb.timeRange = timeRange;
+            if (attrb.timeRangeIndex == 0)
+            {
+                attrb.timeRangeIndex = index;
+            }
+            if (attrb.timeRangeType == TimeRangeType.DEFAULT)
+            {
+                attrb.timeRangeType = timeRangeType;
+            }
+            if (attrb.timeRange == TimeRangeKeywordsType.DEFAULT)
+            {
+                attrb.timeRange = timeRange;
+            }
         }
     }
 }

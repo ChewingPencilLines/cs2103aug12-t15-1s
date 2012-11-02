@@ -27,6 +27,7 @@ namespace ToDo
         protected const string RESPONSE_POSTPONE_SUCCESS = "Postponed task \"{0}\" successfully.";
         protected const string RESPONSE_POSTPONE_FAIL = "Cannot postpone floating tasks!";
         protected const string RESPONSE_POSTPONE_FAILURE = "No matching task found!";
+        protected const string RESPONSE_SCHEDULE_FAILURE = "Failed to schedule task!";
         protected const string RESPONSE_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
         protected const string RESPONSE_MARKASUNDONE_SUCCESS = "Successfully marked \"{0}\" as undone.";
         protected const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
