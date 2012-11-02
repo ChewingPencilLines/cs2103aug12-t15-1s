@@ -18,6 +18,7 @@ namespace ToDo
 {
     public partial class UI : Form
     {
+        
 
         // ******************************************************************
         // Constructors.
@@ -44,6 +45,25 @@ namespace ToDo
             this.ActiveControl = textInput;
             //this.customPanelControl.SelectedIndex = 2;
             this.taskListViewControl.PopulateListView();
+
+          
+        }
+
+        private void ShowTool()
+        {
+            ToolTip toolTip1 = new ToolTip();
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 1000;
+            toolTip1.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip1.ShowAlways = true;
+
+            Point x = new Point(100, 100);
+
+            IWin32Window win = this;
+            toolTip1.Show("String", win, x);
+            
+            toolTip1.Hide(win);
         }
 
         #endregion
@@ -533,6 +553,7 @@ namespace ToDo
 
         #endregion
 
+        /*
         #region ButtonEvents
 
         private void loadButton_MouseDown(object sender, MouseEventArgs e)
@@ -582,6 +603,7 @@ namespace ToDo
         }
 
         #endregion
+         * */
 
         #endregion
 

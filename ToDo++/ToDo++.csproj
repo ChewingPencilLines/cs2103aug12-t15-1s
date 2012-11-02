@@ -46,24 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomButton.cs">
+    <Compile Include="UI\Components\CustomButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CustomButton.Designer.cs">
+    <Compile Include="UI\Components\CustomButton.Designer.cs">
       <DependentUpon>CustomButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="GrayBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GrayBar.Designer.cs">
-      <DependentUpon>GrayBar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GroupBoxBlack.cs">
+    <Compile Include="UI\Components\GroupBoxBlack.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Response.cs" />
-    <Compile Include="TaskListViewControl.cs">
+    <Compile Include="UI\Components\TaskListViewControl.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Components\TopMenuControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Components\TopMenuControl.Designer.cs">
+      <DependentUpon>TopMenuControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Components\PreferencesControllers\FontColorSettings.cs">
       <SubType>UserControl</SubType>
@@ -188,11 +188,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
-    <EmbeddedResource Include="CustomButton.resx">
+    <EmbeddedResource Include="UI\Components\CustomButton.resx">
       <DependentUpon>CustomButton.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GrayBar.resx">
-      <DependentUpon>GrayBar.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Components\TopMenuControl.resx">
+      <DependentUpon>TopMenuControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\PreferencesControllers\FontColorSettings.resx">
       <DependentUpon>FontColorSettings.cs</DependentUpon>
@@ -261,7 +261,13 @@
     <None Include="Resources\BlackBar1.png" />
     <None Include="Resources\bevelLeft.png" />
     <None Include="Resources\bevelRight.png" />
+    <None Include="Resources\gear.png" />
+    <None Include="Resources\gearButton.png" />
+    <None Include="Resources\minimizeButton.png" />
+    <None Include="Resources\closeButton.png" />
+    <None Include="Resources\questionButton.png" />
     <Content Include="Resources\settings_icon.jpg" />
+    <None Include="Resources\upButton.png" />
     <Content Include="UI\Components\CustomPopUps\FontDialogBox\CGFontCombo.bmp" />
     <Content Include="Resources\Cover.png" />
     <Content Include="Resources\Cover1.png" />

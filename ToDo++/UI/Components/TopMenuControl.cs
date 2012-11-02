@@ -10,11 +10,15 @@ using System.Windows.Forms;
 
 namespace ToDo
 {
-    public partial class GrayBar : UserControl
+    public partial class TopMenuControl : UserControl
     {
-        public GrayBar()
+        public TopMenuControl()
         {
             InitializeComponent();
+        }
+
+        private void questionButton_MouseDown(object sender, MouseEventArgs e)
+        {
           
         }
     }
