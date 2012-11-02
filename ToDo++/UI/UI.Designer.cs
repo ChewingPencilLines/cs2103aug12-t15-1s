@@ -54,7 +54,7 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.textInput = new ToDo.InputBox();
-            this.topMenuControl1 = new ToDo.TopMenuControl();
+            this.topMenuControl = new ToDo.TopMenuControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.customPanelControl.SuspendLayout();
@@ -175,7 +175,7 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
+            this.preferencesPanel.Size = new System.Drawing.Size(495, 280);
             this.preferencesPanel.TabIndex = 0;
             // 
             // taskDisplay
@@ -207,7 +207,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(186, 275);
+            this.outputBox.Size = new System.Drawing.Size(495, 275);
             this.outputBox.TabIndex = 28;
             this.outputBox.Text = "";
             // 
@@ -344,14 +344,14 @@
             this.textInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
             this.textInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textInput_PreviewKeyDown);
             // 
-            // topMenuControl1
+            // topMenuControl
             // 
-            this.topMenuControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.topMenuControl1.BackColor = System.Drawing.Color.DimGray;
-            this.topMenuControl1.Location = new System.Drawing.Point(336, 0);
-            this.topMenuControl1.Name = "topMenuControl1";
-            this.topMenuControl1.Size = new System.Drawing.Size(182, 31);
-            this.topMenuControl1.TabIndex = 17;
+            this.topMenuControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.topMenuControl.BackColor = System.Drawing.Color.DimGray;
+            this.topMenuControl.Location = new System.Drawing.Point(336, 0);
+            this.topMenuControl.Name = "topMenuControl";
+            this.topMenuControl.Size = new System.Drawing.Size(182, 31);
+            this.topMenuControl.TabIndex = 17;
             // 
             // UI
             // 
@@ -362,7 +362,7 @@
             this.ClientSize = new System.Drawing.Size(522, 385);
             this.Controls.Add(this.customPanelControl);
             this.Controls.Add(this.textInput);
-            this.Controls.Add(this.topMenuControl1);
+            this.Controls.Add(this.topMenuControl);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -415,7 +415,7 @@
         private System.Windows.Forms.ColumnHeader EndDate;
         private OutputBox outputBox;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private TopMenuControl topMenuControl1;
+        private TopMenuControl topMenuControl;
     }
 }
 

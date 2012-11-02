@@ -45,7 +45,6 @@
             this.questionButton.Size = new System.Drawing.Size(35, 30);
             this.questionButton.TabIndex = 4;
             this.questionButton.UseVisualStyleBackColor = true;
-            this.questionButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.questionButton_MouseDown);
             // 
             // closeButton
             // 
@@ -57,6 +56,7 @@
             this.closeButton.Size = new System.Drawing.Size(35, 30);
             this.closeButton.TabIndex = 3;
             this.closeButton.UseVisualStyleBackColor = true;
+            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
             // minButton
             // 
@@ -68,6 +68,7 @@
             this.minButton.Size = new System.Drawing.Size(35, 30);
             this.minButton.TabIndex = 2;
             this.minButton.UseVisualStyleBackColor = true;
+            this.minButton.Click += new System.EventHandler(this.minButton_Click);
             // 
             // updownButton
             // 
@@ -79,6 +80,7 @@
             this.updownButton.Size = new System.Drawing.Size(35, 30);
             this.updownButton.TabIndex = 1;
             this.updownButton.UseVisualStyleBackColor = true;
+            this.updownButton.Click += new System.EventHandler(this.updownButton_Click);
             // 
             // settingsButton
             // 
