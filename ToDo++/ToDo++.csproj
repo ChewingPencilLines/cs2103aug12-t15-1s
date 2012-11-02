@@ -148,20 +148,8 @@
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="UI\Components\CustomPopUps\CustomMessageBox.cs" />
     <Compile Include="Tokens\Token.cs" />
-    <Compile Include="UI\Components\DateTimeControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Components\DateTimeControl.Designer.cs">
-      <DependentUpon>DateTimeControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\Components\OutputBox.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Components\TimeDateControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Components\TimeDateControl.Designer.cs">
-      <DependentUpon>TimeDateControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\UI.cs">
       <SubType>Form</SubType>
@@ -198,12 +186,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\CustomPopUps\UserInputForm.resx">
       <DependentUpon>UserInputForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Components\DateTimeControl.resx">
-      <DependentUpon>DateTimeControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Components\TimeDateControl.resx">
-      <DependentUpon>TimeDateControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\UI.resx">
       <DependentUpon>UI.cs</DependentUpon>

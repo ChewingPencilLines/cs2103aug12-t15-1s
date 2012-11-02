@@ -44,7 +44,7 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.userInputBox = new ToDo.InputBox();
             this.customPanelControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -150,7 +150,7 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
+            this.preferencesPanel.Size = new System.Drawing.Size(495, 296);
             this.preferencesPanel.TabIndex = 0;
             // 
             // taskDisplay
@@ -179,10 +179,10 @@
             // 
             // splitContainerMain.Panel2
             // 
-            this.splitContainerMain.Panel2.Controls.Add(this.textBox1);
+            this.splitContainerMain.Panel2.Controls.Add(this.userInputBox);
             this.splitContainerMain.Panel2MinSize = 1;
             this.splitContainerMain.Size = new System.Drawing.Size(495, 296);
-            this.splitContainerMain.SplitterDistance = 275;
+            this.splitContainerMain.SplitterDistance = 267;
             this.splitContainerMain.SplitterWidth = 2;
             this.splitContainerMain.TabIndex = 0;
             // 
@@ -197,7 +197,7 @@
             this.taskListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.taskListView.Location = new System.Drawing.Point(0, 0);
             this.taskListView.Name = "taskListView";
-            this.taskListView.Size = new System.Drawing.Size(495, 275);
+            this.taskListView.Size = new System.Drawing.Size(495, 267);
             this.taskListView.TabIndex = 0;
             this.taskListView.UseCompatibleStateImageBehavior = false;
             this.taskListView.View = System.Windows.Forms.View.Details;
@@ -219,16 +219,17 @@
             this.columnHeader3.Text = "End Date";
             this.columnHeader3.Width = 125;
             // 
-            // textBox1
+            // userInputBox
             // 
-            this.textBox1.BackColor = System.Drawing.Color.DarkGray;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.textBox1.Location = new System.Drawing.Point(0, 2);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(495, 17);
-            this.textBox1.TabIndex = 0;
+            this.userInputBox.BackColor = System.Drawing.Color.DarkGray;
+            this.userInputBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.userInputBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.userInputBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.userInputBox.Location = new System.Drawing.Point(0, 10);
+            this.userInputBox.Name = "userInputBox";
+            this.userInputBox.Size = new System.Drawing.Size(495, 17);
+            this.userInputBox.TabIndex = 0;
+            this.userInputBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.userInputBox_KeyPress);
             // 
             // UI
             // 
@@ -271,12 +272,12 @@
         private PreferencesPanel preferencesPanel;
         private System.Windows.Forms.TabPage taskDisplay;
         private System.Windows.Forms.SplitContainer splitContainerMain;
-        private System.Windows.Forms.ListView taskListView;
         private InputBox textInput;
+        private System.Windows.Forms.TextBox userInputBox;
+        private System.Windows.Forms.ListView taskListView;
         private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
     }
 }
 
