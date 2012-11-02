@@ -34,7 +34,7 @@ namespace ToDo
         public UI(Logic logic)
         {
             InitializeComponent();
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+            //Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
             InitializeLogic(logic);               //Sets logic            
             InitializeSystemTray();               //Loads Code to place App in System Tray
             InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
@@ -212,6 +212,24 @@ namespace ToDo
         );
         #endregion
 
+        /// <summary>
+        /// Creates Shadow
+        /// </summary>
+        #region Shadow
+
+        private const int CS_DROPSHADOW = 0x20000;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ClassStyle |= CS_DROPSHADOW;
+                return cp;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         // ******************************************************************
@@ -270,13 +288,17 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Enables the Custom Scrollbar used in Preferences
+        // Prepare Preferences Panel
         // ******************************************************************
+
+        #region PreparePrefereces
 
         private void InitializePreferencesPanel()
         {
             preferencesPanel.InitializeWithSettings(logic.MainSettings);
         }
+
+        #endregion
 
         // ******************************************************************
         // Prepare the Menu Bar
@@ -476,6 +498,11 @@ namespace ToDo
             TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
             displayList.Add(addTask);
             Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);            
+        }
+
+        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
