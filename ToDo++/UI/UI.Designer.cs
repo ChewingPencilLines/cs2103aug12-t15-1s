@@ -37,6 +37,8 @@
             this.customPanelControl = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.taskListViewControl = new ToDo.TaskListViewControl();
+            this.bufferCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.taskIndexCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.taskNameCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.taskDoneStateCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -129,6 +131,8 @@
             // 
             // taskListViewControl
             // 
+            this.taskListViewControl.AllColumns.Add(this.bufferCol);
+            this.taskListViewControl.AllColumns.Add(this.taskIndexCol);
             this.taskListViewControl.AllColumns.Add(this.taskNameCol);
             this.taskListViewControl.AllColumns.Add(taskDateTimeCol);
             this.taskListViewControl.AllColumns.Add(this.taskDoneStateCol);
@@ -138,6 +142,8 @@
             this.taskListViewControl.BackColor = System.Drawing.Color.LightGray;
             this.taskListViewControl.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.taskListViewControl.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.bufferCol,
+            this.taskIndexCol,
             this.taskNameCol,
             taskDateTimeCol,
             this.taskDoneStateCol});
@@ -149,21 +155,39 @@
             this.taskListViewControl.TabIndex = 17;
             this.taskListViewControl.UseCompatibleStateImageBehavior = false;
             this.taskListViewControl.View = System.Windows.Forms.View.Details;
+            this.taskListViewControl.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.taskListViewControl_FormatRow);
+            this.taskListViewControl.SelectedIndexChanged += new System.EventHandler(this.taskListViewControl_SelectedIndexChanged);
+            // 
+            // bufferCol
+            // 
+            this.bufferCol.CellPadding = null;
+            this.bufferCol.Width = 10;
+            // 
+            // taskIndexCol
+            // 
+            this.taskIndexCol.CellPadding = null;
+            this.taskIndexCol.Width = 30;
             // 
             // taskNameCol
             // 
             this.taskNameCol.AspectName = "TaskName";
             this.taskNameCol.CellPadding = null;
+            this.taskNameCol.FillsFreeSpace = true;
+            this.taskNameCol.Width = 213;
+            this.taskNameCol.WordWrap = true;
             // 
             // taskDateTimeCol
             // 
             taskDateTimeCol.AspectName = "GetTimeString";
             taskDateTimeCol.CellPadding = null;
+            taskDateTimeCol.FillsFreeSpace = true;
+            taskDateTimeCol.Width = 199;
             // 
             // taskDoneStateCol
             // 
             this.taskDoneStateCol.AspectName = "DoneState";
             this.taskDoneStateCol.CellPadding = null;
+            this.taskDoneStateCol.CellVerticalAlignment = System.Drawing.StringAlignment.Far;
             // 
             // tabPage2
             // 
@@ -344,9 +368,9 @@
             this.textInput.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textInput.ForeColor = System.Drawing.Color.White;
-            this.textInput.Location = new System.Drawing.Point(7, 360);
+            this.textInput.Location = new System.Drawing.Point(11, 360);
             this.textInput.Name = "textInput";
-            this.textInput.Size = new System.Drawing.Size(509, 19);
+            this.textInput.Size = new System.Drawing.Size(501, 19);
             this.textInput.TabIndex = 0;
             this.textInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
             this.textInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textInput_PreviewKeyDown);
@@ -423,6 +447,8 @@
         private TaskListViewControl taskListViewControl;
         private BrightIdeasSoftware.OLVColumn taskNameCol;
         private BrightIdeasSoftware.OLVColumn taskDoneStateCol;
+        private BrightIdeasSoftware.OLVColumn taskIndexCol;
+        private BrightIdeasSoftware.OLVColumn bufferCol;
     }
 }
 

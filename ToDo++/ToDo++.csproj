@@ -196,6 +196,9 @@
     <EmbeddedResource Include="UI\Components\CustomPopUps\UserInputForm.resx">
       <DependentUpon>UserInputForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Components\TaskListViewControl.resx">
+      <DependentUpon>TaskListViewControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\TopMenuControl.resx">
       <DependentUpon>TopMenuControl.cs</DependentUpon>
     </EmbeddedResource>
