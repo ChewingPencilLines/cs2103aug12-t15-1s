@@ -13,4 +13,5 @@ namespace ToDo
     public class InvalidDeleteFlexiException : Exception { public InvalidDeleteFlexiException(string message) : base(message) { } }
     public class MultipleCommandsException : Exception { public MultipleCommandsException() : base() { } }
     public class TaskFileCorruptedException : Exception { public TaskFileCorruptedException() : base() { } }
+    public class TaskHasNoDayException : Exception { public TaskHasNoDayException() : base() { } }
 }
