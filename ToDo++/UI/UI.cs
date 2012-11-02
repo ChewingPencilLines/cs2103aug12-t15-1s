@@ -42,9 +42,15 @@ namespace ToDo
             InitializeOutputBox();                //Loads Output Box    
             InitializeEventHandlers();            //Adds Event Handlers
             InitializePreferencesPanel();
+            IntializeTopMenu();
             this.ActiveControl = textInput;
         }
         #endregion
+
+        private void IntializeTopMenu()
+        {
+            topMenuControl.InitializeWithUI(this);
+        }
 
         // ******************************************************************
         // Win32 Functions
@@ -116,7 +122,7 @@ namespace ToDo
         }
 
         //Calling this Minimizes or Maximizes the application into system tray depending on state
-        private void MinimiseMaximiseTray()
+        public void MinimiseMaximiseTray()
         {
             notifyIcon_taskBar.BalloonTipTitle = "ToDo++";
             notifyIcon_taskBar.BalloonTipText = "Hit Alt+Q to bring it up";
@@ -124,7 +130,7 @@ namespace ToDo
             //If Window is Open
             if (notifyIcon_taskBar.Visible == false)
             {
-                this.Hide();
+                FadeOut();
                 notifyIcon_taskBar.Visible = true;
                 notifyIcon_taskBar.ShowBalloonTip(500);
             }
@@ -132,7 +138,7 @@ namespace ToDo
             else
             {
                 notifyIcon_taskBar.Visible = false;
-                this.Show();
+                FadeIn();
                 this.WindowState = FormWindowState.Normal;
             }
         }
@@ -225,6 +231,129 @@ namespace ToDo
                 CreateParams cp = base.CreateParams;
                 cp.ClassStyle |= CS_DROPSHADOW;
                 return cp;
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Form Fade In and Out Timers
+        /// </summary>
+        #region FormFadeInOut
+
+        Timer timer1 = new Timer();
+        Timer timer2 = new Timer();
+
+        private void IntializeTimers()
+        {
+            timer1 = new Timer();
+            timer2 = new Timer();
+        }
+
+        private void FadeOut()
+        {
+            timer1.Start();
+            timer1.Tick += new EventHandler(timerTickFadeOut);
+            timer1.Interval = 15;
+        }
+
+        private void FadeIn()
+        {
+            this.Show();
+            this.Opacity = 0;
+            timer2.Start();
+            timer2.Tick += new EventHandler(timerTickFadeIn);
+            timer2.Interval = 15;
+        }
+
+        void timerTickFadeOut(object sender, EventArgs e)
+        {
+            this.Opacity -= 0.07;
+
+            if (this.Opacity <= 0)
+            {
+                this.Hide();
+                timer1.Stop();
+                //timer1.Dispose();
+            }
+        }
+
+        void timerTickFadeIn(object sender, EventArgs e)
+        {
+            this.Opacity += 0.07;
+
+            if (this.Opacity >= 100)
+            {
+                timer2.Stop();
+                //timer2.Dispose();
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Collapse Expand
+        /// </summary>
+        #region CollapseExpand
+
+        Timer timerC = new Timer();
+        Timer timerE = new Timer();
+        int currHeight;
+        int prevHeight;
+        int state = 0;
+
+        public void CollapseExpand()
+        {
+            if (state == 0)
+            {
+                this.StartCollapseTimer();
+                state = 1;
+            }
+            else
+            {
+                this.StartExpandTimer();
+                state = 0;
+            }
+        }
+
+        private void StartCollapseTimer()
+        {
+            currHeight = this.Height;
+            prevHeight = this.Height;
+            timerC.Start();
+            timerC.Tick += new EventHandler(timerTickCollapse);
+            timerC.Interval = 7;
+        }
+
+        private void StartExpandTimer()
+        {
+            currHeight = 60;
+            timerE.Start();
+            timerE.Tick += new EventHandler(timerTickExpand);
+            timerE.Interval = 7;
+        }
+
+
+        void timerTickCollapse(object sender, EventArgs e)
+        {
+            this.Height -= 30;
+            currHeight -= 30;
+
+            if (this.Height <= 60 || currHeight <= 60)
+            {
+                timerC.Stop();
+                timerC.Dispose();
+            }
+        }
+
+        void timerTickExpand(object sender, EventArgs e)
+        {
+            this.Height += 30;
+            currHeight += 30;
+
+            if (this.Height >= prevHeight || currHeight >= prevHeight)
+            {
+                timerE.Stop();
             }
         }
 
@@ -476,7 +605,7 @@ namespace ToDo
         /// <summary>
         /// Exit the Application
         /// </summary>
-        public static void Exit()
+        public void Exit()
         {
             Application.Exit();
         }
