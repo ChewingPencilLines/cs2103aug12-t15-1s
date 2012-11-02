@@ -49,6 +49,11 @@ namespace ToDo
                 else
                     return date.DayOfWeek.ToString();
             };
+            this.AllColumns.Find(e => e.AspectName == "DoneState").AspectToStringConverter = delegate(object state)
+            {
+                if ((bool)state == true) return "[DONE]";
+                else return String.Empty;
+            };
         }
 
         public void UpdateDisplay(Response response)
