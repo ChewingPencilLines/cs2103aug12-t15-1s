@@ -38,7 +38,7 @@
             this.taskListViewControl = new ToDo.TaskListViewControl();
             this.Task = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.StartDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.EndDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Done = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.preferencesPanel = new ToDo.PreferencesPanel();
             this.taskDisplay = new System.Windows.Forms.TabPage();
@@ -135,8 +135,8 @@
             this.taskListViewControl.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Task,
             this.StartDate,
-            this.EndDate});
-            this.taskListViewControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Done});
+            this.taskListViewControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.taskListViewControl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.taskListViewControl.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.taskListViewControl.Location = new System.Drawing.Point(3, 3);
@@ -145,18 +145,19 @@
             this.taskListViewControl.TabIndex = 17;
             this.taskListViewControl.UseCompatibleStateImageBehavior = false;
             this.taskListViewControl.View = System.Windows.Forms.View.Details;
+            this.taskListViewControl.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.taskListViewControl_ItemSelectionChanged);
             // 
             // Task
             // 
-            this.Task.Width = 136;
+            this.Task.Width = 250;
             // 
             // StartDate
             // 
-            this.StartDate.Width = 176;
+            this.StartDate.Width = 400;
             // 
-            // EndDate
+            // Done
             // 
-            this.EndDate.Width = 164;
+            this.Done.Width = 50;
             // 
             // tabPage2
             // 
@@ -412,7 +413,7 @@
         private TaskListViewControl taskListViewControl;
         private System.Windows.Forms.ColumnHeader Task;
         private System.Windows.Forms.ColumnHeader StartDate;
-        private System.Windows.Forms.ColumnHeader EndDate;
+        private System.Windows.Forms.ColumnHeader Done;
         private OutputBox outputBox;
         private System.Windows.Forms.PictureBox pictureBox2;
         private TopMenuControl topMenuControl;
