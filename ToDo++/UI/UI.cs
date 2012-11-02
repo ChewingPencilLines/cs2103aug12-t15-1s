@@ -33,7 +33,6 @@ namespace ToDo
         public UI(Logic logic)
         {
             InitializeComponent();
-            //Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
             InitializeLogic(logic);               //Sets logic            
             InitializeSystemTray();               //Loads Code to place App in System Tray
             InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
@@ -43,6 +42,7 @@ namespace ToDo
             InitializePreferencesPanel();
             IntializeTopMenu();
             this.ActiveControl = textInput;
+        
         }
         #endregion
 
@@ -631,6 +631,5 @@ namespace ToDo
         {
             if (e.IsSelected) e.Item.Selected = false;
         }
-
     }
 }
