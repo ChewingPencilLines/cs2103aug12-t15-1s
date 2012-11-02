@@ -16,6 +16,7 @@ namespace ToDo
             get { return endTime; }
             set { endTime = value; }
         }
+
         public TaskDeadline(
             string taskName,
             DateTime endTime,
@@ -26,6 +27,11 @@ namespace ToDo
         {
             this.endTime = endTime;
             isSpecific = endDateSpecificity;
+        }
+        
+        public override DayOfWeek GetDay()
+        {
+            return endTime.DayOfWeek;
         }
 
         public override XElement ToXElement()

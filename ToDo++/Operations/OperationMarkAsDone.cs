@@ -16,8 +16,8 @@ namespace ToDo
             if (indexRange == null) this.index = null;
             else
             {
-                this.index = indexRange[TokenRange.START_INDEX] - 1;
-                this.endindex = indexRange[TokenRange.END_INDEX] - 1;
+                this.index = indexRange[TokenIndexRange.START_INDEX] - 1;
+                this.endindex = indexRange[TokenIndexRange.END_INDEX] - 1;
             }
             if (doneString == "") this.doneString = null;
             else this.doneString = doneString;

@@ -44,12 +44,10 @@ namespace ToDo
             {
                 case 0:
                     preferencesSelector.SelectedIndex = 0;
-                    preferencesTitle.Text = "Starting Options";
                     break;
 
                 case 1:
                     preferencesSelector.SelectedIndex = 1;
-                    preferencesTitle.Text = "FlexiCommands";
                     break;
 
                 case 2:

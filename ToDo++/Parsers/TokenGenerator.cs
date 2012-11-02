@@ -33,7 +33,8 @@ namespace ToDo
             // must be done first to catch index ranges.
             tokens.AddRange(GenerateCommandTokens(input));
             // must be done after generating command tokens
-            tokens.AddRange(GenerateRangeTokens(input, tokens));
+            tokens.AddRange(GenerateIndexRangeTokens(input, tokens));
+            tokens.AddRange(GenerateTimeRangeTokens(input));
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
             tokens.AddRange(GenerateTimeTokens(input));            
@@ -69,38 +70,69 @@ namespace ToDo
             return tokens;
         }
 
-        private List<Token> GenerateRangeTokens(List<string> inputWords, List<Token> parsedTokens)
+        private List<Token> GenerateIndexRangeTokens(List<string> inputWords, List<Token> parsedTokens)
         {
-            List<Token> rangeTokens = new List<Token>();
-
+            List<Token> indexRangeTokens = new List<Token>();
             int index = 0;
             foreach (string word in inputWords)
             {
                 bool isAll = false;
                 int[] userDefinedIndex = null;
-                TokenRange rangeToken = null;
+                TokenIndexRange indexRangeToken = null;
                 if (TryGetNumericalRange(word, out userDefinedIndex))
                 {
                     var prevToken = from token in parsedTokens
                                     where token.Position == index - 1 &&
-                                          token.RequiresRange()
+                                          token.RequiresIndexRange()
                                     select token;
                     if (prevToken.Count() == 1)
                     {
-                        rangeToken = new TokenRange(index, userDefinedIndex, isAll);
+                        indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
                     }
                 }
                 else if (CheckIfAllKeyword(word))
                 {
                     isAll = true;
-                    rangeToken = new TokenRange(index, userDefinedIndex, isAll);
+                    indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
                 }
-                if (rangeToken != null)
-                    rangeTokens.Add(rangeToken);
+                if (indexRangeToken != null)
+                    indexRangeTokens.Add(indexRangeToken);
                 index++;
             }
+            return indexRangeTokens;
+        }
 
-            return rangeTokens;
+        private List<Token> GenerateTimeRangeTokens(List<string> inputWords)
+        {
+            List<Token> timeRangeTokens = new List<Token>();
+            int index = 0;
+            foreach (string word in inputWords)
+            {
+                int userDefinedIndex = 0;
+                TimeRangeType timeRangeType;
+                TimeRangeKeywordsType timeRangeKeyword;
+                TokenTimeRange timeRangeToken = null;
+                if (index > 1 && CustomDictionary.IsTimeRange(word.ToLower()))
+                {
+                    if (int.TryParse(inputWords[index - 1], out userDefinedIndex))
+                    {
+                        string matchString = CustomDictionary.isTimeRange.Match(word.ToLower()).Value;
+                        if (!CustomDictionary.timeRangeType.TryGetValue(word, out timeRangeType))
+                        {
+                            throw new Exception("Something wrong with IsTimeRange regex etc.");
+                        }
+                        timeRangeToken = new TokenTimeRange(index-1, userDefinedIndex, timeRangeType);
+                    }
+                }
+                else if (CustomDictionary.timeRangeKeywords.TryGetValue(word.ToLower(), out timeRangeKeyword))
+                {
+                    timeRangeToken = new TokenTimeRange(index, timeRangeKeyword);
+                }
+                if (timeRangeToken != null)
+                    timeRangeTokens.Add(timeRangeToken);
+                index++;
+            }
+            return timeRangeTokens;
         }
 
         /// <summary>
@@ -118,7 +150,7 @@ namespace ToDo
             bool matchSuccess = match.Success;
             if (matchSuccess)
             {
-                userDefinedIndex = new int[TokenRange.RANGE];
+                userDefinedIndex = new int[TokenIndexRange.RANGE];
                 int startIndex, endIndex;
                 Int32.TryParse(match.Groups["start"].Value, out startIndex);
                 if (match.Groups["end"].Success)
@@ -126,8 +158,8 @@ namespace ToDo
                     Int32.TryParse(match.Groups["end"].Value, out endIndex);
                 }
                 else endIndex = startIndex;
-                userDefinedIndex[TokenRange.START_INDEX] = startIndex;
-                userDefinedIndex[TokenRange.END_INDEX] = endIndex;
+                userDefinedIndex[TokenIndexRange.START_INDEX] = startIndex;
+                userDefinedIndex[TokenIndexRange.END_INDEX] = endIndex;
             }
             return matchSuccess;
         }
@@ -543,6 +575,10 @@ namespace ToDo
 
         private void DeconflictTokens(ref List<Token> tokens)
         {
+            if (tokens.Count == 0)
+            {
+                return;
+            }
             List<Token> deconflictedTokens = new List<Token>();
             bool conflictRemains = true;
 
@@ -577,13 +613,25 @@ namespace ToDo
         private Token GetHighestPriorityToken(IEnumerable<Token> matches, List<Token> tokens)
         {
             Token highestPriorityToken = null;
-            
+
+            var match = from eachToken in tokens
+                        where eachToken.GetType() == typeof(TokenCommand)
+                        && eachToken.RequiresTimeRange()
+                        select eachToken;
             foreach (Token token in matches)
             {
-                if (token.GetType() == typeof(TokenRange))
+                if (token.GetType() == typeof(TokenIndexRange))
+                {
                     highestPriorityToken = token;
+                }
+                else if (match.Count() == 1 && token.GetType() == typeof(TokenTimeRange))
+                {
+                    highestPriorityToken = token;
+                }
                 else if (highestPriorityToken == null)
+                {
                     highestPriorityToken = token;
+                }
             }
             return highestPriorityToken;
         }

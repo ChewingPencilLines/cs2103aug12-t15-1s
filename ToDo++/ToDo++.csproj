@@ -46,25 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UI\Components\CustomButton.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Components\CustomButton.Designer.cs">
-      <DependentUpon>CustomButton.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Components\GroupBoxBlack.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Operations\OperationSchedule.cs" />
     <Compile Include="Response.cs" />
-    <Compile Include="UI\Components\TaskListViewControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Components\TopMenuControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Components\TopMenuControl.Designer.cs">
-      <DependentUpon>TopMenuControl.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Tokens\TokenTimeRange.cs" />
     <Compile Include="UI\Components\PreferencesControllers\FontColorSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -116,7 +100,7 @@
     <Compile Include="Tokens\TokenContext.cs" />
     <Compile Include="Tokens\TokenDate.cs" />
     <Compile Include="Tokens\TokenDay.cs" />
-    <Compile Include="Tokens\TokenRange.cs" />
+    <Compile Include="Tokens\TokenIndexRange.cs" />
     <Compile Include="Tokens\TokenLiteral.cs" />
     <Compile Include="Tokens\TokenTime.cs" />
     <Compile Include="UI\Components\InputBox.cs">
@@ -164,20 +148,8 @@
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="UI\Components\CustomPopUps\CustomMessageBox.cs" />
     <Compile Include="Tokens\Token.cs" />
-    <Compile Include="UI\Components\DateTimeControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Components\DateTimeControl.Designer.cs">
-      <DependentUpon>DateTimeControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\Components\OutputBox.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Components\TimeDateControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Components\TimeDateControl.Designer.cs">
-      <DependentUpon>TimeDateControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\UI.cs">
       <SubType>Form</SubType>
@@ -188,12 +160,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
-    <EmbeddedResource Include="UI\Components\CustomButton.resx">
-      <DependentUpon>CustomButton.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Components\TopMenuControl.resx">
-      <DependentUpon>TopMenuControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\PreferencesControllers\FontColorSettings.resx">
       <DependentUpon>FontColorSettings.cs</DependentUpon>
     </EmbeddedResource>
@@ -220,12 +186,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\CustomPopUps\UserInputForm.resx">
       <DependentUpon>UserInputForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Components\DateTimeControl.resx">
-      <DependentUpon>DateTimeControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Components\TimeDateControl.resx">
-      <DependentUpon>TimeDateControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\UI.resx">
       <DependentUpon>UI.cs</DependentUpon>
@@ -258,16 +218,7 @@
   <ItemGroup>
     <None Include="Resources\applications.png" />
     <None Include="Resources\Alert.png" />
-    <None Include="Resources\BlackBar1.png" />
-    <None Include="Resources\bevelLeft.png" />
-    <None Include="Resources\bevelRight.png" />
-    <None Include="Resources\gear.png" />
-    <None Include="Resources\gearButton.png" />
-    <None Include="Resources\minimizeButton.png" />
-    <None Include="Resources\closeButton.png" />
-    <None Include="Resources\questionButton.png" />
     <Content Include="Resources\settings_icon.jpg" />
-    <None Include="Resources\upButton.png" />
     <Content Include="UI\Components\CustomPopUps\FontDialogBox\CGFontCombo.bmp" />
     <Content Include="Resources\Cover.png" />
     <Content Include="Resources\Cover1.png" />

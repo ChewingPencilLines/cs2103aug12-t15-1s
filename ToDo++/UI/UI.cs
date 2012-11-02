@@ -18,7 +18,6 @@ namespace ToDo
 {
     public partial class UI : Form
     {
-        
 
         // ******************************************************************
         // Constructors.
@@ -35,6 +34,9 @@ namespace ToDo
         public UI(Logic logic)
         {
             InitializeComponent();
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+            splitContainerMain.SplitterDistance = 275;
+            taskListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             InitializeLogic(logic);               //Sets logic            
             InitializeSystemTray();               //Loads Code to place App in System Tray
             InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
@@ -43,31 +45,8 @@ namespace ToDo
             InitializeEventHandlers();            //Adds Event Handlers
             InitializePreferencesPanel();
             this.ActiveControl = textInput;
-            //this.customPanelControl.SelectedIndex = 2;
-            this.taskListViewControl.PopulateListView();
-
-          
         }
-
-        private void ShowTool()
-        {
-            ToolTip toolTip1 = new ToolTip();
-            toolTip1.AutoPopDelay = 5000;
-            toolTip1.InitialDelay = 1000;
-            toolTip1.ReshowDelay = 500;
-            // Force the ToolTip text to be displayed whether or not the form is active.
-            toolTip1.ShowAlways = true;
-
-            Point x = new Point(100, 100);
-
-            IWin32Window win = this;
-            toolTip1.Show("String", win, x);
-            
-            toolTip1.Hide(win);
-        }
-
         #endregion
-
 
         // ******************************************************************
         // Win32 Functions
@@ -147,16 +126,16 @@ namespace ToDo
             //If Window is Open
             if (notifyIcon_taskBar.Visible == false)
             {
-                FadeOut();
+                this.Hide();
                 notifyIcon_taskBar.Visible = true;
                 notifyIcon_taskBar.ShowBalloonTip(500);
             }
             //If Window is in tray
             else
             {
-                FadeIn();
                 notifyIcon_taskBar.Visible = false;
-                //this.WindowState = FormWindowState.Normal;
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
             }
         }
 
@@ -203,12 +182,6 @@ namespace ToDo
         /// Allows resizing of borderless form
         /// </summary>
         #region Resizing
-
-        private void UI_Resize(object sender, EventArgs e)
-        {
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
-        }
-
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
@@ -220,7 +193,7 @@ namespace ToDo
         private void UI_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);            
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         }
 
         #endregion
@@ -241,81 +214,6 @@ namespace ToDo
         );
         #endregion
 
-        /// <summary>
-        /// Shadow Effect
-        /// </summary>
-        #region BadShadow
-
-        private const int CS_DROPSHADOW = 0x00020000;
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                // add the drop shadow flag for automatically drawing
-                // a drop shadow around the form
-                CreateParams cp = base.CreateParams;
-                cp.ClassStyle |= CS_DROPSHADOW;
-                return cp;
-            }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Form Fade In and Out Timers
-        /// </summary>
-        #region FormFadeInOut
-
-        Timer timer1 = new Timer();
-        Timer timer2 = new Timer();
-
-        private void IntializeTimers()
-        {
-            timer1 = new Timer();
-            timer2 = new Timer();
-        }
-
-        private void FadeOut()
-        {
-            timer1.Start();
-            timer1.Tick += new EventHandler(timerTickFadeOut);
-            timer1.Interval = 15;
-        }
-
-        private void FadeIn()
-        {
-            this.Show();
-            this.Opacity = 0;
-            timer2.Start();
-            timer2.Tick += new EventHandler(timerTickFadeIn);
-            timer2.Interval = 15;
-        }
-
-        void timerTickFadeOut(object sender, EventArgs e)
-        {
-            this.Opacity -= 0.07;
-
-            if (this.Opacity <= 0)
-            {
-                this.Hide();
-                timer1.Stop();
-                //timer1.Dispose();
-            }
-        }
-
-        void timerTickFadeIn(object sender, EventArgs e)
-        {
-            this.Opacity += 0.07;
-
-            if (this.Opacity >= 100)
-            {
-                timer2.Stop();
-                //timer2.Dispose();
-            }
-        }
-
-        #endregion
-        
         #endregion
 
         // ******************************************************************
@@ -361,19 +259,14 @@ namespace ToDo
 
         #region PanelSwitching
 
-        public void SwitchToConsolePanel()
-        {
-            this.customPanelControl.SelectedIndex = 2;
-        }
-
-        public void SwitchToTaskListPanel()
-        {
-            this.customPanelControl.SelectedIndex = 0;
-        }
-
-        public void SwitchToPreferences()
+        public void SwitchToSettingsPanel()
         {
             this.customPanelControl.SelectedIndex = 1;
+        }
+
+        public void SwitchToToDoPanel()
+        {
+            this.customPanelControl.SelectedIndex = 2;
         }
 
         #endregion
@@ -401,7 +294,22 @@ namespace ToDo
 
         }
 
-
+        int selected = 0;
+        private void preferencesButton_Click(object sender, EventArgs e)
+        {
+            if (selected == 0)
+            {
+                preferencesButton.Text = "ToDo";
+                SwitchToSettingsPanel();
+                selected = 1;
+            }
+            else
+            {
+                preferencesButton.Text = "Preferences";
+                SwitchToToDoPanel();
+                selected = 0;
+            }
+        }
 
         #endregion
 
@@ -452,13 +360,6 @@ namespace ToDo
             textInput.Clear();
         }
 
-        /// <summary>
-        /// When Go Button Clicked
-        /// </summary>
-        private void button_go_Click(object sender, EventArgs e)
-        {
-            ProcessText();
-        }
 
         /// <summary>
         /// When Enter Button Pressed
@@ -515,12 +416,10 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Event Handlers for UI and Non-UI elements
+        // Event Handlers
         // ******************************************************************
 
         #region EventHandlers
-
-        #region NonUIHandlers
 
         /// <summary>
         /// Adds Event Handlers relating to UI here
@@ -551,59 +450,6 @@ namespace ToDo
             outputBox.InitializeWithSettings(logic.MainSettings);
         }
 
-        #endregion
-
-        /*
-        #region ButtonEvents
-
-        private void loadButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            loadButton.SetMouseDown();
-        }
-
-
-        private void loadButton_MouseUp(object sender, MouseEventArgs e)
-        {
-            loadButton.SetMouseUp();
-        }
-
-        private void consoleButon_MouseDown(object sender, MouseEventArgs e)
-        {
-            consoleButon.SetMouseDown();
-            //this.customPanelControl.SelectedIndex = 2;
-        }
-
-        int selected = 0;
-        private void consoleButon_MouseUp(object sender, MouseEventArgs e)
-        {
-            consoleButon.SetMouseUp();
-            if (selected == 0)
-            {
-                consoleButon.ButtonText = "TaskList";
-                SwitchToConsolePanel();
-                selected = 1;
-            }
-            else
-            {
-                consoleButon.ButtonText = "Console";
-                SwitchToTaskListPanel();
-                selected = 0;
-            }
-        }
-
-        private void preferencesButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            preferencesButton.SetMouseDown();
-        }
-
-        private void preferencesButton_MouseUp(object sender, MouseEventArgs e)
-        {
-            preferencesButton.SetMouseUp();
-            SwitchToPreferences();
-        }
-
-        #endregion
-         * */
 
         #endregion
 
@@ -615,10 +461,85 @@ namespace ToDo
             Application.Exit();
         }
 
+        private void outputBox_MouseHover(object sender, EventArgs e)
+        {
 
+        }
 
+        private void UI_Resize(object sender, EventArgs e)
+        {
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+        }
 
+        private void userInputBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
 
+            List<Task> displayList = new List<Task>();
+            TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
+            displayList.Add(addTask);
+            Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);
+            RefreshTaskListView(testResponse);
+        }
+        private void RefreshTaskListView(Response response)
+        {
+            List<Task> tasks = response.TasksToBeDisplayed;
 
+            switch (response.FormatType)
+            {
+                case Format.DEFAULT:
+                    /* Do not delete.
+                    List<Task> mostRecentTasks = 
+                        (from task in tasks                                     
+                        where task.IsWithinTime(DateTime.Today, DateTime.Today.AddDays(7))
+                        select task).ToList();
+                    mostRecentTasks.Sort(Task.CompareByDateTime);
+                    // 10 = MAX_TASKS
+                    mostRecentTasks = mostRecentTasks.GetRange(0, 10);
+                     */
+
+                    var groupNames = from task in tasks
+                                     where !(task is TaskFloating)
+                                     select task.GetDay().ToString();
+
+                    foreach (Task task in tasks)
+                    {
+                        string groupName;
+                        if (!(task is TaskFloating))
+                        {
+                            // sort by group
+                            groupName = task.GetDay().ToString();
+                        }
+                        else groupName = "Floating";
+
+                        ListViewGroup groupToAdd = new ListViewGroup(groupName);
+
+                        
+                        // check if group exists already
+                        bool groupExists = false;
+                        foreach (ListViewGroup group in taskListView.Groups)
+                        {
+                            if (group.Header == groupName)
+                            {
+                                groupExists = true;
+                                groupToAdd = group;
+                                break;
+                            }
+                        }
+                        if (!groupExists)
+                        {
+                            taskListView.Groups.Add(groupToAdd);
+                        }
+
+                        // Add item
+                        ListViewItem taskItem = new ListViewItem(task.TaskName, groupToAdd);
+                        taskItem.SubItems.Add("asd", Color.Chocolate, Color.White, new System.Drawing.Font("Arial", 10));
+                        taskItem.SubItems.Add("dsa".ToString());
+                        taskListView.Items.Add(taskItem);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

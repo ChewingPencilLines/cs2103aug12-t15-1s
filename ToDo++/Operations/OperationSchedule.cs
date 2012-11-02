@@ -1,32 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ToDo
 {
-    public class OperationAdd : Operation
+    public class OperationSchedule : Operation
     {
         private Task newTask;
-        public OperationAdd(Task setTask)
+        public OperationSchedule(Task setTask)
         {
             newTask = setTask;
         }
         public override string Execute(List<Task> taskList, Storage storageIO)
         {
-            this.storageIO = storageIO;
             string response;
-
             if (newTask == null)
             {
-                return RESPONSE_ADD_FAILURE;
+                return RESPONSE_SCHEDULE_FAILURE;
             }
-            response = AddTask(newTask, taskList, out successFlag);
-
-            if (successFlag) TrackOperation();
-
-            return response;
+            //todo
+            return "stub";
         }
-
         public override string Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
