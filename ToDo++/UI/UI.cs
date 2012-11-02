@@ -378,15 +378,7 @@ namespace ToDo
             outputBox.DisplayCommand(input, output);
             textInput.Clear();
         }
-
-        /// <summary>
-        /// When Go Button Clicked
-        /// </summary>
-        private void button_go_Click(object sender, EventArgs e)
-        {
-            ProcessText();
-        }
-
+        
         /// <summary>
         /// When Enter Button Pressed
         /// </summary>
@@ -495,6 +487,11 @@ namespace ToDo
         private void UI_Resize(object sender, EventArgs e)
         {
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+        }
+
+        private void userInputBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            
         }
 
     }
