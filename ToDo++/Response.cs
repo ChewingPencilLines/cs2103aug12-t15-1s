@@ -36,13 +36,27 @@ namespace ToDo
         const string STRING_UNDEFINED = "Undefined feedback string!";
         #endregion
 
+        Format formatType;
         string feedbackString = null;
         List<Task> tasksToBeDisplayed;
 
+        public Format FormatType
+        {
+            get { return formatType; }
+        }
+        public string FeedbackString
+        {
+            get { return feedbackString; }
+        }        
+        public List<Task> TasksToBeDisplayed
+        {
+            get { return tasksToBeDisplayed; }
+        }
 
         public Response(Result resultType, Format formatType, Type operationType = null, List<Task> tasks = null)
         {
-            tasksToBeDisplayed = tasks;
+            this.formatType = formatType;
+            this.tasksToBeDisplayed = tasks;
             SetFeedbackString(resultType, operationType);            
         }
 
@@ -104,11 +118,6 @@ namespace ToDo
             {
                 feedbackString = STRING_UNDEFINED;
             }
-        }
-
-        public string GetFeedbackString()
-        {
-            return feedbackString;
         }
     }
 }
