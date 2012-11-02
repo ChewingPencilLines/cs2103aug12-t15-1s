@@ -79,19 +79,14 @@ namespace ToDo
         public override string GetTimeString()
         {
             string timeString = "";
-
-            if (StartTime == EndTime)
-                timeString += "At ";
-            else
-                timeString += "From ";
-
+            
             if (isSpecific.StartDate.Day) timeString += startTime.ToString("d MMM");
             if (startTime.Year != DateTime.Now.Year) timeString += " " + startTime.Year;
             if (isSpecific.StartTime) timeString += ", " + startTime.ToShortTimeString();
 
             if (startTime != EndTime)
             {
-                timeString += " To ";
+                timeString += " -- ";
                 if (isSpecific.EndDate.Day) timeString += endTime.ToString("d MMM");
                 if (endTime.Year != DateTime.Now.Year) timeString += " " + endTime.Year;
                 if (isSpecific.EndTime) timeString += ", " + endTime.ToShortTimeString();
