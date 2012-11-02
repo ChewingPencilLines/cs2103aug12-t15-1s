@@ -13,15 +13,15 @@ namespace ToDo
         private DateTime endTime;
         public DateTime EndTime
         {
-            get { return endTime; }
             set { endTime = value; }
+            get { return endTime; }
         }
 
         private DateTime startTime;
         public DateTime StartTime
         {
-            get { return startTime; }
             set { startTime = value; }
+            get { return startTime; }         
         }
 
         public TaskEvent(
@@ -50,6 +50,11 @@ namespace ToDo
                             new XElement("Done", doneState.ToString())
                             );
             return task;
+        }
+
+        public override DayOfWeek GetDay()
+        {
+            return startTime.DayOfWeek;
         }
 
         public override bool IsWithinTime(DateTime? start, DateTime? end)

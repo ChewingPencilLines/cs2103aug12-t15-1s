@@ -13,16 +13,23 @@ namespace ToDo
     // ******************************************************************
     // Enumerations
     // ******************************************************************
-    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, EXIT, INVALID };
+    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, SCHEDULE, EXIT, INVALID };
     public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
-    public enum TimeRangeType { DEFAULT, MORNING = 0, AFTERNOON, EVENING, NIGHT };
+    // unless otherwise stated in settings,
+    // default: 8am to 10pm, morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
+    public enum TimeRangeKeywordsType { DEFAULT = 0, MORNING, AFTERNOON, EVENING, NIGHT };
+    // default should be hours (1 hour), unless otherwise stated in settings
+    public enum TimeRangeType { DEFAULT, HOUR, DAY, MONTH };
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
     static class CustomDictionary
     {
         static public Dictionary<string, CommandType> commandKeywords;        
         static public Dictionary<string, ContextType> contextKeywords;
-        static public Dictionary<string, TimeRangeType> timeRangeKeywords;
+        static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
+        static public Dictionary<string, TimeRangeType> timeRangeType;
+        static public Dictionary<TimeRangeKeywordsType, int> timeRangeKeywordsStartTime;
+        static public Dictionary<TimeRangeKeywordsType, int> timeRangeKeywordsEndTime;
         static public Dictionary<string, Month> monthKeywords;
         static public Dictionary<string, DayOfWeek> dayKeywords;
         static public List<string> timeSpecificKeywords;
@@ -93,7 +100,10 @@ namespace ToDo
              new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
 
         static public Regex isNumericalRange =
-            new Regex(@"^(?<start>\d?\d?\d)(\-(?<end>\d?\d?\d))?$");
+            new Regex(@"^(((?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?)|((?<start>\d?\d?\d)\-))$");
+
+        static public Regex isTimeRange =
+            new Regex(@"^(h(?:ou)?r(?:s)?|day(?:s)?|m(?:on)?th(?:s)?)$");
         #endregion
 
         static CustomDictionary()
@@ -102,6 +112,7 @@ namespace ToDo
             InitializeContextKeywords();
             InitializeMonthKeywords();
             InitializeDateTimeKeywords();
+            InitializeTimeRangeKeywords();
         }
 
         // ******************************************************************
@@ -122,6 +133,7 @@ namespace ToDo
             commandKeywords.Add("redo", CommandType.REDO);
             commandKeywords.Add("done", CommandType.DONE);
             commandKeywords.Add("postpone", CommandType.POSTPONE);
+            commandKeywords.Add("schedule", CommandType.SCHEDULE);
             commandKeywords.Add("exit", CommandType.EXIT);
         }
 
@@ -188,12 +200,43 @@ namespace ToDo
             dayKeywords.Add("tmr", DateTime.Today.AddDays(1).DayOfWeek);
             dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
             // NYI
-            timeRangeKeywords = new Dictionary<string, TimeRangeType>();
-            //numericalTimeRangeKeywords = new List<string> { "from", "-" };
             timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
             timeSpecificKeywords = new List<string> { "noon", "midnight" };
             todayKeywords = new List<string> { "today" };
             rangeAllKeywords = new List<string> { "all" };
+        }
+
+        private static void InitializeTimeRangeKeywords()
+        {
+            timeRangeKeywords = new Dictionary<string, TimeRangeKeywordsType>();
+            timeRangeKeywords.Add("morning", TimeRangeKeywordsType.MORNING);
+            timeRangeKeywords.Add("morn", TimeRangeKeywordsType.MORNING);
+            timeRangeKeywords.Add("afternoon", TimeRangeKeywordsType.AFTERNOON);
+            timeRangeKeywords.Add("evening", TimeRangeKeywordsType.EVENING);
+            timeRangeKeywords.Add("night", TimeRangeKeywordsType.NIGHT);
+            timeRangeType = new Dictionary<string, TimeRangeType>();
+            timeRangeType.Add("hours", TimeRangeType.HOUR);
+            timeRangeType.Add("hour", TimeRangeType.HOUR);
+            timeRangeType.Add("hrs", TimeRangeType.HOUR);
+            timeRangeType.Add("hr", TimeRangeType.HOUR);
+            timeRangeType.Add("days", TimeRangeType.DAY);
+            timeRangeType.Add("day", TimeRangeType.DAY);
+            timeRangeType.Add("months", TimeRangeType.MONTH);
+            timeRangeType.Add("month", TimeRangeType.MONTH);
+            timeRangeType.Add("mths", TimeRangeType.MONTH);
+            timeRangeType.Add("mth", TimeRangeType.MONTH);
+            timeRangeKeywordsStartTime = new Dictionary<TimeRangeKeywordsType, int>();
+            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.DEFAULT, 8);
+            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.MORNING, 5);
+            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.AFTERNOON, 12);
+            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.EVENING, 17);
+            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.NIGHT, 22);
+            timeRangeKeywordsEndTime = new Dictionary<TimeRangeKeywordsType, int>();
+            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.DEFAULT, 22);
+            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.MORNING, 12);
+            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.AFTERNOON, 17);
+            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.EVENING, 22);
+            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.NIGHT, 5);
         }
         #endregion
 
@@ -207,14 +250,15 @@ namespace ToDo
             return commandKeywords;
         }
 
-        public static Dictionary<string, Month> GetMonthKeywords()
-        {
-            return monthKeywords;
-        }
-
         public static Dictionary<string, ContextType> GetContextKeywords()
         {
             return contextKeywords;
+        }
+
+        /*
+        public static Dictionary<string, Month> GetMonthKeywords()
+        {
+            return monthKeywords;
         }
 
         public static Dictionary<string, DayOfWeek> GetDayKeywords()
@@ -226,12 +270,6 @@ namespace ToDo
         {
             return timeSpecificKeywords;
         }
-
-        /*
-        public static List<string> GetTimeGeneralKeywords()
-        {
-            return timeGeneralKeywords;
-        }*/
 
         public static List<string> GetTimeSuffixes()
         {
@@ -267,6 +305,7 @@ namespace ToDo
         {
             return isNumericalRange;
         }
+         */
         #endregion
 
         // ******************************************************************
@@ -294,12 +333,17 @@ namespace ToDo
         // i.e. does not check for erroneous non-existent dates such as 31st feb
         public static bool IsValidNumericDate(string theDate)
         {
-            return date_numericFormat.IsMatch(theDate) || date_daysWithSuffixes.IsMatch(theDate.ToLower());
+            return date_numericFormat.IsMatch(theDate) || date_daysWithSuffixes.IsMatch(theDate);
         }
 
         public static bool IsValidAlphabeticDate(string theDate)
         {
             return date_alphabeticFormat.IsMatch(theDate);
+        }
+
+        public static bool IsTimeRange(string theWord)
+        {
+            return isTimeRange.IsMatch(theWord);
         }
 
         /// <summary>

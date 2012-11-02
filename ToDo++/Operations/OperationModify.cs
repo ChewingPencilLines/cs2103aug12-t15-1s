@@ -27,7 +27,7 @@ namespace ToDo
         public OperationModify(int[] indexRange, Task newTask)
         {
             if (indexRange == null) this.oldIndex = null;
-            else this.oldIndex = indexRange[TokenRange.START_INDEX] - 1;
+            else this.oldIndex = indexRange[TokenIndexRange.START_INDEX] - 1;
             if (newTask.TaskName == null) this.newTask = null;
             else this.newTask = newTask;
         }

@@ -14,6 +14,7 @@ namespace ToDo
         private DateTime? startDateOnly = null, endDateOnly = null;
         private DayOfWeek? startDay = null, endDay = null;
 
+        // Setter methods
         public TimeSpan? EndTime  { set { endTime = value; } }
         public TimeSpan? StartTime { set { startTime = value; } }
         public DateTime? EndDateOnly { set { endDateOnly = value; } }
@@ -33,8 +34,11 @@ namespace ToDo
         public CommandType commandType = new CommandType();
         public DateTime? startDateTime = null, endDateTime = null;
         public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
+        public TimeRangeType? timeRangeType = new TimeRangeType();
+        public TimeRangeKeywordsType? timeRange = new TimeRangeKeywordsType();
         public string taskName = null;
         public int[] rangeIndexes = null;
+        public int timeRangeIndex;
         public bool rangeIsAll = false;
         #endregion
 
@@ -73,7 +77,7 @@ namespace ToDo
                 endDateTime = CombineDateAndTime(endTime, endDateOnly, (DateTime)startDateTime);
         }
 
-        private static DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)
+        private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)
         {
             DateTime? combinedDT = null;
             // Time defined but not date
@@ -102,8 +106,11 @@ namespace ToDo
             }
             if (limit > combinedDT)
                 //@ivan -> jenna wtf is this??
-                if (combinedDT != new DateTime(0001, 1, 1))
-                    AlertBox.Show("Note that date specified is in the past.");
+                //@jenna -> idk???!??! no idea why you test for 0001, 1, 1... is i do one meh?
+                if (combinedDT != new DateTime(0001, 1, 1)
+                    && this.commandType != CommandType.SEARCH
+                    && this.commandType != CommandType.DISPLAY)
+                    AlertBox.Show("Note that date specified is past.");
             return combinedDT;
         }
     }

@@ -53,10 +53,11 @@ namespace ToDo
                     return CommandType.DONE;
                 case "POSTPONE":
                     return CommandType.POSTPONE;
+                case "SCHEDULE":
+                    return CommandType.SCHEDULE;
                 case "EXIT":
                     return CommandType.EXIT;
             }
-
             return CommandType.INVALID;
         }
 
