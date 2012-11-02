@@ -128,7 +128,7 @@ namespace ToDo
         {
             successFlag = false;
             undoTask.Push(taskToMarkAsDone);
-            taskToMarkAsDone.State = true;
+            taskToMarkAsDone.DoneState = true;
 
             if (storageIO.MarkTaskAsDone(taskToMarkAsDone))
             {
@@ -263,7 +263,7 @@ namespace ToDo
             {
                 taskString += ShowEvent((TaskEvent)task);
             }
-            if (task.State)
+            if (task.DoneState)
                 taskString += " [DONE]";
             return taskString;
         }

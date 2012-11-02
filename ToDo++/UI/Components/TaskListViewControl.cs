@@ -17,19 +17,19 @@ namespace ToDo
 {
     class TaskListViewControl:ListView
     {
-
         public TaskListViewControl()
         {
-            this.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            //this.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;            
         }
-        private void RefreshTaskListView(Response response)
+
+        public void UpdateDisplay(Response response)
         {
             List<Task> tasks = response.TasksToBeDisplayed;
 
             switch (response.FormatType)
             {
                 case Format.DEFAULT:
-                    /* Do not delete.
+                    /* Do not delete. Move to logic class for setting default screen.
                     List<Task> mostRecentTasks = 
                         (from task in tasks                                     
                         where task.IsWithinTime(DateTime.Today, DateTime.Today.AddDays(7))
@@ -55,7 +55,6 @@ namespace ToDo
 
                         ListViewGroup groupToAdd = new ListViewGroup(groupName);
 
-
                         // check if group exists already
                         bool groupExists = false;
                         foreach (ListViewGroup group in this.Groups)
@@ -67,6 +66,7 @@ namespace ToDo
                                 break;
                             }
                         }
+                        // add if it doesnt
                         if (!groupExists)
                         {
                             this.Groups.Add(groupToAdd);
@@ -74,14 +74,30 @@ namespace ToDo
 
                         // Add item
                         ListViewItem taskItem = new ListViewItem(task.TaskName, groupToAdd);
-                        taskItem.SubItems.Add("asd", Color.Chocolate, Color.White, new System.Drawing.Font("Arial", 10));
-                        taskItem.SubItems.Add("dsa".ToString());
+                        taskItem.SubItems.Add(task.GetTimeString());
+                        if(task.DoneState == true)
+                        taskItem.SubItems.Add("[DONE]".ToString());
                         this.Items.Add(taskItem);
                     }
                     break;
                 default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// Capture CTRL+ to prevent resize of all columns.
+        /// </summary>
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyValue == 107 && e.Modifiers == Keys.Control)
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                base.OnKeyDown(e);
+            } //if
         }
     }
 }

@@ -28,7 +28,7 @@ namespace ToDo
             this.endTime = endTime;
             isSpecific = endDateSpecificity;
         }
-        
+
         public override DayOfWeek GetDay()
         {
             return endTime.DayOfWeek;
@@ -50,18 +50,27 @@ namespace ToDo
         {
             bool isWithinTime = true;
             if (start != null)
-            {                
+            {
                 if (end == null)
                 {
                     if (endTime.Date != ((DateTime)start).Date) isWithinTime = false;
                 }
-                if (endTime < start) isWithinTime = false;                
+                if (endTime < start) isWithinTime = false;
             }
             if (end != null)
-            {                
+            {
                 if (endTime > end) isWithinTime = false;
             }
             return isWithinTime;
+        }
+
+        public override string GetTimeString()
+        {
+            string timeString = "By ";
+            if (isSpecific.EndDate.Day) timeString += endTime.ToString("d MMM");
+            if (endTime.Year != DateTime.Now.Year) timeString += " " + endTime.Year;
+            if (isSpecific.EndTime) timeString += ", " + endTime.ToShortTimeString();
+            return timeString;
         }
     }
 }

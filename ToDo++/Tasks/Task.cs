@@ -20,7 +20,7 @@ namespace ToDo
         }
 
         protected Boolean doneState;
-        public Boolean State
+        public Boolean DoneState
         {
             get { return doneState; }
             set { doneState = value; }
@@ -59,10 +59,19 @@ namespace ToDo
 
         public static int CompareByDateTime(Task a, Task b)
         {
+            // A [DONE] task always sorts after an undone task.
+            if (a.DoneState == true && b.DoneState == false)
+                return 1;
+            else if (b.DoneState == true && a.DoneState == false)
+                return -1;
+
+            // If they have the same state, continue sort by DateTime.
             if (a is TaskFloating)
+            {
                 if (b is TaskFloating)
                     return 0;
                 else return -1;
+            }
             else if (b is TaskFloating)
                 return 1;
 
@@ -80,10 +89,9 @@ namespace ToDo
             return DateTime.Compare(aDT, bDT);
         }
 
-        public virtual DateTime? GetStartTime()
+        public virtual string GetTimeString()
         {
-            return null;
+            return String.Empty;
         }
-
     }
 }

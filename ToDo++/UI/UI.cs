@@ -13,7 +13,6 @@ using Microsoft.Win32;
 using System.Windows.Forms.VisualStyles;
 using System.Runtime.InteropServices;
 
-
 namespace ToDo
 {
     public partial class UI : Form
@@ -519,7 +518,15 @@ namespace ToDo
             {
                 e.Handled = true;
                 textInput.AddToList(textInput.Text);
-                ProcessText();
+                //ProcessText();
+
+                List<Task> displayList = new List<Task>();
+                TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
+                displayList.Add(addTask);
+                addTask = new TaskEvent("test task 2", new DateTime(2012, 12, 31), new DateTime(2013, 1, 1), new DateTimeSpecificity());
+                displayList.Add(addTask);
+                Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);
+                taskListViewControl.UpdateDisplay(testResponse);
             }
 
         }
@@ -620,18 +627,10 @@ namespace ToDo
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
         }
 
-        private void userInputBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void taskListViewControl_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-
-            List<Task> displayList = new List<Task>();
-            TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
-            displayList.Add(addTask);
-            Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);            
+            if (e.IsSelected) e.Item.Selected = false;
         }
 
-        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
     }
 }
