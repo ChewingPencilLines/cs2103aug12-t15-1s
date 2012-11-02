@@ -24,6 +24,7 @@ namespace ToDo
         protected const string RESPONSE_DISPLAY_NOTASK = "There are no tasks for display.";
         protected const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
         protected const string RESPONSE_UNDO_FAILURE = "Cannot undo last executed task!";
+        protected const string RESPONSE_REDO_FAILURE = "Cannot redo last undone task!";
         protected const string RESPONSE_POSTPONE_SUCCESS = "Postponed task \"{0}\" successfully.";
         protected const string RESPONSE_POSTPONE_FAIL = "Cannot postpone floating tasks!";
         protected const string RESPONSE_POSTPONE_FAILURE = "No matching task found!";
@@ -40,6 +41,7 @@ namespace ToDo
         protected static Stack<Operation> undoStack;
         protected static Stack<Operation> redoStack;
         protected static Stack<Task> undoTask;
+        protected static Stack<Task> redoTask;
         protected Storage storageIO;
         protected bool successFlag;
 
@@ -49,6 +51,7 @@ namespace ToDo
             undoStack = new Stack<Operation>();
             redoStack = new Stack<Operation>();
             undoTask = new Stack<Task>();
+            redoTask = new Stack<Task>();
         }
 
         protected void TrackOperation()
@@ -70,6 +73,12 @@ namespace ToDo
         public virtual string Undo(List<Task> taskList, Storage storageIO)
         {
             Debug.Assert(false, "This operation should not be undoable!");
+            return null;
+        }
+
+        public virtual string Redo(List<Task> taskList, Storage storageIO)
+        {
+            Debug.Assert(false, "This operation should not be redoable!");
             return null;
         }
 

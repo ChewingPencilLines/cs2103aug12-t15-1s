@@ -72,7 +72,22 @@ namespace ToDo
         public override string Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
+            redoTask.Push(task);
             task.DoneState = false;
+            if (storageIO.MarkTaskAsDone(task))
+            {
+                successFlag = true;
+                return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
+            }
+            else
+                return RESPONSE_XML_READWRITE_FAIL;
+        }
+
+        public override string Redo(List<Task> taskList, Storage storageIO)
+        {
+            Task task = redoTask.Pop();
+            undoTask.Push(task);
+            task.DoneState = true;
             if (storageIO.MarkTaskAsDone(task))
             {
                 successFlag = true;
