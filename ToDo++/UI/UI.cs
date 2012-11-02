@@ -524,17 +524,27 @@ namespace ToDo
                 e.Handled = true;
                 textInput.AddToList(textInput.Text);
                 //ProcessText();
-
-                List<Task> displayList = new List<Task>();
-                TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
-                displayList.Add(addTask);
-                addTask = new TaskEvent("test task 2222222222222222222222222 222222222222222222222222", new DateTime(2012, 12, 31), new DateTime(2013, 1, 1), new DateTimeSpecificity());
-                addTask.DoneState = true;
-                displayList.Add(addTask);
-                Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);
-                taskListViewControl.UpdateDisplay(testResponse);
+                TaskDisplayTestDriver();
             }
+        }
 
+        private void TaskDisplayTestDriver()
+        {
+            List<Task> displayList = new List<Task>();
+            Task addTask;
+            addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
+            displayList.Add(addTask);
+            addTask = new TaskEvent("test task 2", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
+            displayList.Add(addTask);
+            addTask = new TaskEvent("this is a super long test task. who writes this sort of tasks??", new DateTime(2012, 12, 31), new DateTime(2013, 1, 1), new DateTimeSpecificity());            
+            displayList.Add(addTask);
+            addTask = new TaskDeadline("deaddddline is near. =[", new DateTime(2013, 1, 1), new DateTimeSpecificity());
+            addTask.DoneState = true;
+            displayList.Add(addTask);            
+            addTask = new TaskFloating("floating task test");
+            displayList.Add(addTask);
+            Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);
+            taskListViewControl.UpdateDisplay(testResponse);
         }
 
         /// <summary>

@@ -16,7 +16,8 @@ namespace ToDo
         internal void Initialize()
         {
             EmptyListMsg = "You have no tasks in your ToDo++ list.\r\nClick on the ? icon above to find out how to get started!";
-            this.RowHeight = 32;   
+            this.RowHeight = 32;
+            this.ShowItemToolTips = true;
             this.HeaderStyle = ColumnHeaderStyle.None;
             OLVColumn defaultCol = this.AllColumns.Find(e => e.AspectName == "TaskName");            
             this.AlwaysGroupByColumn = defaultCol;
@@ -29,22 +30,26 @@ namespace ToDo
                 }
                 else if (task is TaskEvent)
                 {
-                    return ((TaskEvent)task).StartTime;
+                    return ((TaskEvent)task).StartTime.Date;
                 }
-                else if (task is TaskEvent)
+                else if (task is TaskDeadline)
                 {
-                    return ((TaskEvent)task).EndTime;
+                    return ((TaskDeadline)task).EndTime.Date;
                 }
                 else
                 {
-                    Trace.Fail("object is not a task object!");
+                    Trace.Fail("TaskListViewControl failed to initialize: Object is not a task object!");
                     return null;
                 }
             };
             defaultCol.GroupKeyToTitleConverter = delegate(object groupKey)
             {
+                if (groupKey == null)
+                    return "Other Tasks";
                 DateTime date = (DateTime)groupKey;
-                if (date.Date > DateTime.Now.Date.AddDays(6))
+                if (date == DateTime.Now.Date)
+                    return "Today";
+                else if (date > DateTime.Now.Date.AddDays(6))
                     return date.ToString("D");
                 else
                     return date.DayOfWeek.ToString();
