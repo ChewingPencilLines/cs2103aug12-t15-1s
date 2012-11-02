@@ -36,7 +36,6 @@
             // 
             this.dateObject.AutoSize = true;
             this.dateObject.BackColor = System.Drawing.Color.Transparent;
-            this.dateObject.ForeColor = System.Drawing.Color.White;
             this.dateObject.Location = new System.Drawing.Point(3, 6);
             this.dateObject.Name = "dateObject";
             this.dateObject.Size = new System.Drawing.Size(59, 13);
@@ -47,7 +46,6 @@
             // 
             this.timeLabel.AutoSize = true;
             this.timeLabel.BackColor = System.Drawing.Color.Transparent;
-            this.timeLabel.ForeColor = System.Drawing.Color.White;
             this.timeLabel.Location = new System.Drawing.Point(68, 6);
             this.timeLabel.Name = "timeLabel";
             this.timeLabel.Size = new System.Drawing.Size(52, 13);
@@ -58,7 +56,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = System.Drawing.Color.Aqua;
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.dateObject);
             this.Name = "TimeDateControl";
