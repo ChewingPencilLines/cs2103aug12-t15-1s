@@ -34,6 +34,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.topMenuControl1 = new ToDo.TopMenuControl();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.customPanelControl = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.taskListViewControl = new ToDo.TaskListViewControl();
@@ -57,6 +58,10 @@
             this.textInput = new ToDo.InputBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.customPanelControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -109,18 +114,36 @@
             this.topMenuControl1.Size = new System.Drawing.Size(182, 31);
             this.topMenuControl1.TabIndex = 17;
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.BackColor = System.Drawing.Color.Transparent;
+            this.splitContainer1.Location = new System.Drawing.Point(7, 37);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.BackColor = System.Drawing.Color.Transparent;
+            this.splitContainer1.Panel1.Controls.Add(this.customPanelControl);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.BackColor = System.Drawing.Color.Transparent;
+            this.splitContainer1.Panel2.Controls.Add(this.textInput);
+            this.splitContainer1.Size = new System.Drawing.Size(509, 348);
+            this.splitContainer1.SplitterDistance = 319;
+            this.splitContainer1.TabIndex = 18;
+            // 
             // customPanelControl
             // 
-            this.customPanelControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.customPanelControl.Controls.Add(this.tabPage1);
             this.customPanelControl.Controls.Add(this.tabPage2);
             this.customPanelControl.Controls.Add(this.taskDisplay);
-            this.customPanelControl.Location = new System.Drawing.Point(7, 37);
+            this.customPanelControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.customPanelControl.Location = new System.Drawing.Point(0, 0);
             this.customPanelControl.Name = "customPanelControl";
             this.customPanelControl.SelectedIndex = 0;
-            this.customPanelControl.Size = new System.Drawing.Size(509, 318);
+            this.customPanelControl.Size = new System.Drawing.Size(509, 319);
             this.customPanelControl.TabIndex = 12;
             // 
             // tabPage1
@@ -130,26 +153,25 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(501, 292);
+            this.tabPage1.Size = new System.Drawing.Size(501, 293);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             // 
             // taskListViewControl
             // 
-            this.taskListViewControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.taskListViewControl.BackColor = System.Drawing.Color.Gainsboro;
             this.taskListViewControl.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.taskListViewControl.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Task,
             this.StartDate,
             this.EndDate});
+            this.taskListViewControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.taskListViewControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.taskListViewControl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.taskListViewControl.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.taskListViewControl.Location = new System.Drawing.Point(3, 3);
             this.taskListViewControl.Name = "taskListViewControl";
-            this.taskListViewControl.Size = new System.Drawing.Size(495, 289);
+            this.taskListViewControl.Size = new System.Drawing.Size(495, 287);
             this.taskListViewControl.TabIndex = 17;
             this.taskListViewControl.UseCompatibleStateImageBehavior = false;
             this.taskListViewControl.View = System.Windows.Forms.View.Details;
@@ -173,7 +195,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(501, 292);
+            this.tabPage2.Size = new System.Drawing.Size(142, 293);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Preferences";
             // 
@@ -183,7 +205,7 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
+            this.preferencesPanel.Size = new System.Drawing.Size(136, 287);
             this.preferencesPanel.TabIndex = 0;
             // 
             // taskDisplay
@@ -203,7 +225,7 @@
             this.taskDisplay.Location = new System.Drawing.Point(4, 22);
             this.taskDisplay.Name = "taskDisplay";
             this.taskDisplay.Padding = new System.Windows.Forms.Padding(3);
-            this.taskDisplay.Size = new System.Drawing.Size(501, 292);
+            this.taskDisplay.Size = new System.Drawing.Size(142, 293);
             this.taskDisplay.TabIndex = 2;
             this.taskDisplay.Text = "Task Display";
             // 
@@ -215,7 +237,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(186, 275);
+            this.outputBox.Size = new System.Drawing.Size(136, 275);
             this.outputBox.TabIndex = 28;
             this.outputBox.Text = "";
             // 
@@ -223,7 +245,7 @@
             // 
             this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(200, -31477);
+            this.textBox3.Location = new System.Drawing.Point(200, -32768);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(0, 20);
             this.textBox3.TabIndex = 24;
@@ -236,7 +258,7 @@
             this.inputBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.inputBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.inputBox2.ForeColor = System.Drawing.Color.White;
-            this.inputBox2.Location = new System.Drawing.Point(0, -31791);
+            this.inputBox2.Location = new System.Drawing.Point(0, -32768);
             this.inputBox2.Name = "inputBox2";
             this.inputBox2.Size = new System.Drawing.Size(0, 19);
             this.inputBox2.TabIndex = 22;
@@ -248,7 +270,7 @@
             this.textBox2.BackColor = System.Drawing.Color.Black;
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(0, -32248);
+            this.textBox2.Location = new System.Drawing.Point(0, -32768);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(0, 19);
             this.textBox2.TabIndex = 21;
@@ -260,7 +282,7 @@
             this.textBox1.BackColor = System.Drawing.Color.Black;
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(0, -32703);
+            this.textBox1.Location = new System.Drawing.Point(0, -32768);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(0, 19);
             this.textBox1.TabIndex = 19;
@@ -283,7 +305,7 @@
             this.pictureBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox7.BackColor = System.Drawing.Color.Black;
-            this.pictureBox7.Location = new System.Drawing.Point(391, -30326);
+            this.pictureBox7.Location = new System.Drawing.Point(391, -31856);
             this.pictureBox7.Name = "pictureBox7";
             this.pictureBox7.Size = new System.Drawing.Size(0, 50);
             this.pictureBox7.TabIndex = 27;
@@ -294,7 +316,7 @@
             this.pictureBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox6.BackColor = System.Drawing.Color.Black;
-            this.pictureBox6.Location = new System.Drawing.Point(224, -30310);
+            this.pictureBox6.Location = new System.Drawing.Point(224, -31840);
             this.pictureBox6.Name = "pictureBox6";
             this.pictureBox6.Size = new System.Drawing.Size(0, 50);
             this.pictureBox6.TabIndex = 26;
@@ -306,7 +328,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox5.BackColor = System.Drawing.Color.Black;
             this.pictureBox5.Enabled = false;
-            this.pictureBox5.Location = new System.Drawing.Point(-3, -31795);
+            this.pictureBox5.Location = new System.Drawing.Point(-3, -32768);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(0, 5);
             this.pictureBox5.TabIndex = 23;
@@ -338,16 +360,15 @@
             // 
             // textInput
             // 
-            this.textInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.textInput.BackColor = System.Drawing.Color.Gray;
             this.textInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textInput.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textInput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textInput.ForeColor = System.Drawing.Color.White;
-            this.textInput.Location = new System.Drawing.Point(11, 360);
+            this.textInput.Location = new System.Drawing.Point(0, 0);
             this.textInput.Name = "textInput";
-            this.textInput.Size = new System.Drawing.Size(501, 19);
+            this.textInput.Size = new System.Drawing.Size(509, 19);
             this.textInput.TabIndex = 0;
             this.textInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
             this.textInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textInput_PreviewKeyDown);
@@ -357,12 +378,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.Gray;
+            this.BackColor = System.Drawing.Color.Gainsboro;
             this.ClientSize = new System.Drawing.Size(522, 385);
             this.Controls.Add(this.topMenuControl1);
             this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.customPanelControl);
-            this.Controls.Add(this.textInput);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -373,6 +393,11 @@
             this.Resize += new System.EventHandler(this.UI_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.customPanelControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -384,7 +409,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -415,6 +439,7 @@
         private OutputBox outputBox;
         private System.Windows.Forms.PictureBox pictureBox2;
         private TopMenuControl topMenuControl1;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
 
