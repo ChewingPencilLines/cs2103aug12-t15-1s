@@ -30,15 +30,15 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
+            BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.customPanelControl = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.taskListViewControl = new ToDo.TaskListViewControl();
-            this.Task = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.StartDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Done = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.taskNameCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.taskDoneStateCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.preferencesPanel = new ToDo.PreferencesPanel();
             this.taskDisplay = new System.Windows.Forms.TabPage();
@@ -55,10 +55,12 @@
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.textInput = new ToDo.InputBox();
             this.topMenuControl = new ToDo.TopMenuControl();
+            taskDateTimeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.customPanelControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.taskListViewControl)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.taskDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
@@ -108,7 +110,7 @@
             this.customPanelControl.Controls.Add(this.tabPage1);
             this.customPanelControl.Controls.Add(this.tabPage2);
             this.customPanelControl.Controls.Add(this.taskDisplay);
-            this.customPanelControl.Location = new System.Drawing.Point(7, 36);
+            this.customPanelControl.Location = new System.Drawing.Point(7, 37);
             this.customPanelControl.Name = "customPanelControl";
             this.customPanelControl.SelectedIndex = 0;
             this.customPanelControl.Size = new System.Drawing.Size(509, 312);
@@ -127,37 +129,41 @@
             // 
             // taskListViewControl
             // 
+            this.taskListViewControl.AllColumns.Add(this.taskNameCol);
+            this.taskListViewControl.AllColumns.Add(taskDateTimeCol);
+            this.taskListViewControl.AllColumns.Add(this.taskDoneStateCol);
             this.taskListViewControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.taskListViewControl.BackColor = System.Drawing.Color.LightGray;
             this.taskListViewControl.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.taskListViewControl.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Task,
-            this.StartDate,
-            this.Done});
+            this.taskNameCol,
+            taskDateTimeCol,
+            this.taskDoneStateCol});
             this.taskListViewControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.taskListViewControl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.taskListViewControl.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.taskListViewControl.Location = new System.Drawing.Point(3, 3);
             this.taskListViewControl.Name = "taskListViewControl";
             this.taskListViewControl.Size = new System.Drawing.Size(495, 280);
             this.taskListViewControl.TabIndex = 17;
             this.taskListViewControl.UseCompatibleStateImageBehavior = false;
             this.taskListViewControl.View = System.Windows.Forms.View.Details;
-            this.taskListViewControl.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.taskListViewControl_ItemSelectionChanged);
             // 
-            // Task
+            // taskNameCol
             // 
-            this.Task.Width = 250;
+            this.taskNameCol.AspectName = "TaskName";
+            this.taskNameCol.CellPadding = null;
             // 
-            // StartDate
+            // taskDateTimeCol
             // 
-            this.StartDate.Width = 400;
+            taskDateTimeCol.AspectName = "GetTimeString";
+            taskDateTimeCol.CellPadding = null;
             // 
-            // Done
+            // taskDoneStateCol
             // 
-            this.Done.Width = 50;
+            this.taskDoneStateCol.AspectName = "DoneState";
+            this.taskDoneStateCol.CellPadding = null;
             // 
             // tabPage2
             // 
@@ -176,7 +182,7 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(495, 280);
+            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
             this.preferencesPanel.TabIndex = 0;
             // 
             // taskDisplay
@@ -208,7 +214,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(495, 275);
+            this.outputBox.Size = new System.Drawing.Size(186, 275);
             this.outputBox.TabIndex = 28;
             this.outputBox.Text = "";
             // 
@@ -377,6 +383,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.customPanelControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.taskListViewControl)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.taskDisplay.ResumeLayout(false);
             this.taskDisplay.PerformLayout();
@@ -410,13 +417,12 @@
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.PictureBox pictureBox6;
         private System.Windows.Forms.PictureBox pictureBox7;
-        private TaskListViewControl taskListViewControl;
-        private System.Windows.Forms.ColumnHeader Task;
-        private System.Windows.Forms.ColumnHeader StartDate;
-        private System.Windows.Forms.ColumnHeader Done;
         private OutputBox outputBox;
         private System.Windows.Forms.PictureBox pictureBox2;
         private TopMenuControl topMenuControl;
+        private TaskListViewControl taskListViewControl;
+        private BrightIdeasSoftware.OLVColumn taskNameCol;
+        private BrightIdeasSoftware.OLVColumn taskDoneStateCol;
     }
 }
 

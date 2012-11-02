@@ -12,14 +12,13 @@ using Hotkeys;
 using Microsoft.Win32;
 using System.Windows.Forms.VisualStyles;
 using System.Runtime.InteropServices;
-
+using BrightIdeasSoftware;
 namespace ToDo
 {
-    class TaskListViewControl:ListView
+    class TaskListViewControl:ObjectListView
     {
         public TaskListViewControl()
         {
-            //this.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;            
         }
 
         public void UpdateDisplay(Response response)
@@ -38,47 +37,7 @@ namespace ToDo
                     // 10 = MAX_TASKS
                     mostRecentTasks = mostRecentTasks.GetRange(0, 10);
                      */
-
-                    var groupNames = from task in tasks
-                                     where !(task is TaskFloating)
-                                     select task.GetDay().ToString();
-
-                    foreach (Task task in tasks)
-                    {
-                        string groupName;
-                        if (!(task is TaskFloating))
-                        {
-                            // sort by group
-                            groupName = task.GetDay().ToString();
-                        }
-                        else groupName = "Floating";
-
-                        ListViewGroup groupToAdd = new ListViewGroup(groupName);
-
-                        // check if group exists already
-                        bool groupExists = false;
-                        foreach (ListViewGroup group in this.Groups)
-                        {
-                            if (group.Header == groupName)
-                            {
-                                groupExists = true;
-                                groupToAdd = group;
-                                break;
-                            }
-                        }
-                        // add if it doesnt
-                        if (!groupExists)
-                        {
-                            this.Groups.Add(groupToAdd);
-                        }
-
-                        // Add item
-                        ListViewItem taskItem = new ListViewItem(task.TaskName, groupToAdd);
-                        taskItem.SubItems.Add(task.GetTimeString());
-                        if(task.DoneState == true)
-                        taskItem.SubItems.Add("[DONE]".ToString());
-                        this.Items.Add(taskItem);
-                    }
+                    this.SetObjects(tasks);
                     break;
                 default:
                     break;
@@ -99,5 +58,6 @@ namespace ToDo
                 base.OnKeyDown(e);
             } //if
         }
+
     }
 }
