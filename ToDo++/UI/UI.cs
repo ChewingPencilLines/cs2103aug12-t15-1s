@@ -36,6 +36,7 @@ namespace ToDo
             InitializeComponent();
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
             splitContainerMain.SplitterDistance = 275;
+            taskListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             InitializeLogic(logic);               //Sets logic            
             InitializeSystemTray();               //Loads Code to place App in System Tray
             InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
@@ -44,27 +45,7 @@ namespace ToDo
             InitializeEventHandlers();            //Adds Event Handlers
             InitializePreferencesPanel();
             this.ActiveControl = textInput;
-            //this.customPanelControl.SelectedIndex = 2;
-            PopulateListView();
         }
-
-        private void PopulateListView()
-        {
-            List<Task> displayList = new List<Task>();
-            TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
-
-            List<ListViewGroup> groups = new List<ListViewGroup>();
-            groups.Add(new ListViewGroup(DateTime.Today.DayOfWeek.ToString()));
-            taskListView.Groups.Add(groups[0]);
-
-            ListViewItem taskItem = new ListViewItem(addTask.TaskName, groups[0]);
-            taskItem.SubItems.Add(addTask.StartTime.ToString(), Color.Chocolate, Color.White, new System.Drawing.Font("Arial",10));
-            taskItem.SubItems.Add(addTask.EndTime.ToString());
-
-            taskListView.Items.Add(taskItem);
-            taskListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-        }
-
         #endregion
 
         // ******************************************************************
@@ -212,7 +193,7 @@ namespace ToDo
         private void UI_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);            
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         }
 
         #endregion
@@ -232,7 +213,7 @@ namespace ToDo
             int nHeightEllipse // width of ellipse
         );
         #endregion
-        
+
         #endregion
 
         // ******************************************************************
@@ -378,7 +359,8 @@ namespace ToDo
             outputBox.DisplayCommand(input, output);
             textInput.Clear();
         }
-        
+
+
         /// <summary>
         /// When Enter Button Pressed
         /// </summary>
@@ -481,7 +463,7 @@ namespace ToDo
 
         private void outputBox_MouseHover(object sender, EventArgs e)
         {
-            
+
         }
 
         private void UI_Resize(object sender, EventArgs e)
@@ -491,8 +473,73 @@ namespace ToDo
 
         private void userInputBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            
-        }
 
+            List<Task> displayList = new List<Task>();
+            TaskEvent addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
+            displayList.Add(addTask);
+            Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);
+            RefreshTaskListView(testResponse);
+        }
+        private void RefreshTaskListView(Response response)
+        {
+            List<Task> tasks = response.TasksToBeDisplayed;
+
+            switch (response.FormatType)
+            {
+                case Format.DEFAULT:
+                    /* Do not delete.
+                    List<Task> mostRecentTasks = 
+                        (from task in tasks                                     
+                        where task.IsWithinTime(DateTime.Today, DateTime.Today.AddDays(7))
+                        select task).ToList();
+                    mostRecentTasks.Sort(Task.CompareByDateTime);
+                    // 10 = MAX_TASKS
+                    mostRecentTasks = mostRecentTasks.GetRange(0, 10);
+                     */
+
+                    var groupNames = from task in tasks
+                                     where !(task is TaskFloating)
+                                     select task.GetDay().ToString();
+
+                    foreach (Task task in tasks)
+                    {
+                        string groupName;
+                        if (!(task is TaskFloating))
+                        {
+                            // sort by group
+                            groupName = task.GetDay().ToString();
+                        }
+                        else groupName = "Floating";
+
+                        ListViewGroup groupToAdd = new ListViewGroup(groupName);
+
+                        
+                        // check if group exists already
+                        bool groupExists = false;
+                        foreach (ListViewGroup group in taskListView.Groups)
+                        {
+                            if (group.Header == groupName)
+                            {
+                                groupExists = true;
+                                groupToAdd = group;
+                                break;
+                            }
+                        }
+                        if (!groupExists)
+                        {
+                            taskListView.Groups.Add(groupToAdd);
+                        }
+
+                        // Add item
+                        ListViewItem taskItem = new ListViewItem(task.TaskName, groupToAdd);
+                        taskItem.SubItems.Add("asd", Color.Chocolate, Color.White, new System.Drawing.Font("Arial", 10));
+                        taskItem.SubItems.Add("dsa".ToString());
+                        taskListView.Items.Add(taskItem);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
