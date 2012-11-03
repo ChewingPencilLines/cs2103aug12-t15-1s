@@ -58,5 +58,10 @@ namespace ToDo
         {
             ui.Exit();
         }
+
+        private void settingsButton_Click(object sender, EventArgs e)
+        {
+            ui.SwitchToSettingsPanel();
+        }
     }
 }

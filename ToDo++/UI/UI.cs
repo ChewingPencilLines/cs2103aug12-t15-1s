@@ -306,29 +306,28 @@ namespace ToDo
         /// </summary>
         #region CollapseExpand
 
-        int state = 0;
+        int collapseExpandState = 0;
         int setHeight;
         int prevHeight;
 
         public void StartCollapserExpander()
         {
-            if (state == 0)
+            if (collapseExpandState == 0)
             {
                 setHeight = this.Height;
                 prevHeight = this.Height;
                 timerCollpaser.Enabled = true;
                 timerExpander.Enabled = false;
-                state = 1;
+                collapseExpandState = 1;
             }
             else
             {
                 setHeight = 60;
                 timerCollpaser.Enabled = false;
                 timerExpander.Enabled = true;
-                state = 0;
+                this.MaximumSize = new System.Drawing.Size(1000, 1000);
+                collapseExpandState = 0;
             }
-
-
         }
 
         private void timerCollpaser_Tick(object sender, EventArgs e)
@@ -337,6 +336,7 @@ namespace ToDo
             if (setHeight <= 60)
             {
                 timerCollpaser.Enabled = false;
+                this.MaximumSize = new System.Drawing.Size(1000, 60);
             }
             this.Height = setHeight;
         }
@@ -400,11 +400,19 @@ namespace ToDo
 
         public void SwitchToSettingsPanel()
         {
+            if (collapseExpandState == 1)
+            {
+                StartCollapserExpander();
+            }
             this.customPanelControl.SelectedIndex = 1;
         }
 
         public void SwitchToToDoPanel()
         {
+            if (collapseExpandState == 1)
+            {
+                StartCollapserExpander();
+            }
             this.customPanelControl.SelectedIndex = 2;
         }
 
