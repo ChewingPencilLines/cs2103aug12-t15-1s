@@ -35,10 +35,10 @@ namespace ToDo
             this.isSpecific = isSpecific;
         }
 
-        public override string Execute(List<Task> taskList, Storage storageIO)
+        public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
-            string response;
+            Response response = null;
 
             List<Task> searchResults;
             if (index == null)
@@ -93,14 +93,14 @@ namespace ToDo
             return response;
         }
 
-        public override string Undo(List<Task> taskList, Storage storageIO)
+        public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
             redoTask.Push(task);
             return AddTask(task, taskList, out successFlag);
         }
 
-        public override string Redo(List<Task> taskList, Storage storageIO)
+        public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             Task task = redoTask.Pop();
             undoTask.Push(task);

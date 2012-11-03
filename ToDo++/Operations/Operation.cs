@@ -60,7 +60,7 @@ namespace ToDo
             redoStack.Clear();
         }
 
-        public abstract string Execute(List<Task> taskList, Storage storageIO);
+        public abstract Response Execute(List<Task> taskList, Storage storageIO);
 
 
         /// <summary>
@@ -70,13 +70,13 @@ namespace ToDo
         /// <param name="taskList">Current task list for task updates to be applied on.</param>
         /// <param name="storageIO">Storage controller to write changes to file. </param>
         /// <returns></returns>
-        public virtual string Undo(List<Task> taskList, Storage storageIO)
+        public virtual Response Undo(List<Task> taskList, Storage storageIO)
         {
             Debug.Assert(false, "This operation should not be undoable!");
             return null;
         }
 
-        public virtual string Redo(List<Task> taskList, Storage storageIO)
+        public virtual Response Redo(List<Task> taskList, Storage storageIO)
         {
             Debug.Assert(false, "This operation should not be redoable!");
             return null;
@@ -87,7 +87,7 @@ namespace ToDo
         // ******************************************************************
 
         #region Task Manipulation Methods
-        protected string AddTask(Task taskToAdd, List<Task> taskList, out bool successFlag)
+        protected Response AddTask(Task taskToAdd, List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
             try
@@ -97,19 +97,22 @@ namespace ToDo
                 if (storageIO.AddTaskToFile(taskToAdd))
                 {
                     successFlag = true;
-                    return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.TaskName);
+                    return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), lastListedTasks);
+                    //  return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.TaskName);
                 }
                 else
-                    return RESPONSE_XML_READWRITE_FAIL;
+                    return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationAdd), lastListedTasks);
+                  //  return RESPONSE_XML_READWRITE_FAIL;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return RESPONSE_ADD_FAILURE + "\r\nThe following exception occured: " + e.ToString();
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd), lastListedTasks); 
+                //return RESPONSE_ADD_FAILURE + "\r\nThe following exception occured: " + e.ToString();
             }
         }
 
-        protected string DeleteTask(Task taskToDelete, List<Task> taskList, out bool successFlag)
+        protected Response DeleteTask(Task taskToDelete, List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
 
@@ -127,13 +130,15 @@ namespace ToDo
             if (storageIO.RemoveTaskFromFile(taskToDelete))
             {
                 successFlag = true;
-                return String.Format(RESPONSE_DELETE_SUCCESS, taskToDelete.TaskName);
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationDelete), lastListedTasks); 
+               // return String.Format(RESPONSE_DELETE_SUCCESS, taskToDelete.TaskName);
             }
             else
-                return RESPONSE_XML_READWRITE_FAIL;
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationDelete), lastListedTasks);
+               //return RESPONSE_XML_READWRITE_FAIL;
         }
 
-        protected string MarkAsDone(Task taskToMarkAsDone, out bool successFlag)
+        protected Response MarkAsDone(Task taskToMarkAsDone, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToMarkAsDone);
@@ -142,13 +147,15 @@ namespace ToDo
             if (storageIO.MarkTaskAsDone(taskToMarkAsDone))
             {
                 successFlag = true;
-                return String.Format(RESPONSE_MARKASDONE_SUCCESS, taskToMarkAsDone.TaskName);
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationMarkAsDone), lastListedTasks);
+                //return String.Format(RESPONSE_MARKASDONE_SUCCESS, taskToMarkAsDone.TaskName);
             }
             else
-                return RESPONSE_XML_READWRITE_FAIL;
+                //return RESPONSE_XML_READWRITE_FAIL;
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationMarkAsDone), lastListedTasks);
         }
 
-        protected string ModifyTask(Task taskToModify, Task newTask, List<Task> taskList, out bool successFlag)
+        protected Response ModifyTask(Task taskToModify, Task newTask, List<Task> taskList, out bool successFlag)
         {
             successFlag = false;
             undoTask.Push(taskToModify);
@@ -158,10 +165,13 @@ namespace ToDo
             if (storageIO.RemoveTaskFromFile(taskToModify) && storageIO.AddTaskToFile(newTask))
             {
                 successFlag = true;
-                return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
+               // return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify), lastListedTasks);
+
             }
             else
-                return RESPONSE_XML_READWRITE_FAIL;
+              //  return RESPONSE_XML_READWRITE_FAIL;
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationModify), lastListedTasks);
         }
 
         // todo: move search queries into the tasks themselves as methods.

@@ -9,14 +9,14 @@ namespace ToDo
         public OperationDisplay()
         { }
 
-        public override string Execute(List<Task> taskList, Storage storageIO)
+        public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
-            string response;
+          //  Response response;
             // int numOfMatches;
             // return Search(out numOfMatches, taskList, "");            
-            response = GenerateDisplayString(taskList);
-            return response;
+            //response = GenerateDisplayString(taskList);
+            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), taskList);
         }
     }
 }
