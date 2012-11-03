@@ -42,14 +42,23 @@ namespace ToDo
             InitializePreferencesPanel();
             IntializeTopMenu();
             InitializeTaskListView();
-            this.ActiveControl = textInput;        
+            IntializeTinyAlert();
+
+            this.ActiveControl = textInput;
+        }
+
+        #endregion
+
+        private void IntializeTinyAlert()
+        {
+            TinyAlertView.SetUI(this);
+            TinyAlertView.SetTiming(5);
         }
 
         private void InitializeTaskListView()
         {
             taskListViewControl.Initialize();
         }
-        #endregion
 
         private void IntializeTopMenu()
         {
@@ -135,6 +144,7 @@ namespace ToDo
             if (notifyIcon_taskBar.Visible == false)
             {
                 StartFadeOut();
+                TinyAlertView.DismissEarly();
                 notifyIcon_taskBar.Visible = true;
                 notifyIcon_taskBar.ShowBalloonTip(500);
             }
@@ -621,6 +631,8 @@ namespace ToDo
         private void UI_Resize(object sender, EventArgs e)
         {
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+            //TinyAlertView.Location = new Point(this.Right, this.Bottom - 10);
+            TinyAlertView.SetLocation();
         }
 
         private void taskListViewControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -632,6 +644,16 @@ namespace ToDo
         {
             // Row index should not change even if doing a column sort.
             e.Item.SubItems[1].Text = "[" + e.RowIndex.ToString() + "]";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            TinyAlertView.Show(TinyAlertView.StateTinyAlert.ALERT,"Added this item to List");
+        }
+
+        private void UI_Move(object sender, EventArgs e)
+        {
+            TinyAlertView.SetLocation();
         }
 
 

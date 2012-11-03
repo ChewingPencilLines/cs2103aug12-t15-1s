@@ -61,6 +61,7 @@
             this.timerExpander = new System.Windows.Forms.Timer(this.components);
             this.timerFadeIn = new System.Windows.Forms.Timer(this.components);
             this.timerFadeOut = new System.Windows.Forms.Timer(this.components);
+            this.button1 = new System.Windows.Forms.Button();
             taskDateTimeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -408,6 +409,16 @@
             this.timerFadeOut.Interval = 15;
             this.timerFadeOut.Tick += new System.EventHandler(this.timerFadeOut_Tick);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(212, 5);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 21);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -415,6 +426,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(522, 385);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.customPanelControl);
             this.Controls.Add(this.textInput);
             this.Controls.Add(this.topMenuControl);
@@ -426,6 +438,7 @@
             this.Name = "UI";
             this.Text = "ToDo++";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UI_MouseDown);
+            this.Move += new System.EventHandler(this.UI_Move);
             this.Resize += new System.EventHandler(this.UI_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -477,6 +490,7 @@
         private System.Windows.Forms.Timer timerExpander;
         private System.Windows.Forms.Timer timerFadeIn;
         private System.Windows.Forms.Timer timerFadeOut;
+        private System.Windows.Forms.Button button1;
     }
 }
 
