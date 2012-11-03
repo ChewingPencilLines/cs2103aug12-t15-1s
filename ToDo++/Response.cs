@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    enum Result { SUCCESS, FAILURE, INVALID_TASK, INVALID_COMMAND, XML_READWRITE_FAIL };
-    enum Format { DEFAULT, NAME, DATETIME };
-    class Response
+    public enum Result { SUCCESS, FAILURE, INVALID_TASK, INVALID_COMMAND, XML_READWRITE_FAIL };
+    public enum Format { DEFAULT, NAME, DATETIME };
+    public class Response
     {
         // ******************************************************************
         // Feedback Strings

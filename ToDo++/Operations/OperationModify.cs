@@ -32,7 +32,7 @@ namespace ToDo
             else this.newTask = newTask;
         }
 
-        public override string Execute(List<Task> taskList, Storage storageIO)
+        public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             /*
              *  when modify, if user key in nothing or only index or only task details
@@ -40,28 +40,32 @@ namespace ToDo
              *  only when user input full information will modify operated.
              */
             this.storageIO = storageIO;
-            string response;
+            Response response;
             List<Task> searchResults;
 
             if (oldIndex.HasValue == false && newTask == null)
             {
-                response = GenerateDisplayString(taskList);
+                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), lastListedTasks);
+               // response = GenerateDisplayString(taskList);
             }
             else if (oldIndex.HasValue == false && newTask != null)
             {
                 searchResults = SearchForTasks(taskList, newTask.TaskName);
-                response = GenerateDisplayString(searchResults);
+               // response = GenerateDisplayString(searchResults);
+                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), searchResults);
             }
             else if (oldIndex.HasValue == true && (oldIndex < 0 || oldIndex > taskList.Count - 1))
             {
                 if (newTask != null)
                 {
                     searchResults = SearchForTasks(taskList, newTask.TaskName);
-                    response = GenerateDisplayString(searchResults);
+                   // response = GenerateDisplayString(searchResults);
+                    return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), searchResults);
                 }
                 else
                 {
-                    response = GenerateDisplayString(taskList);
+                    return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), lastListedTasks);
+                  //  response = GenerateDisplayString(taskList);
                 }
             }
             else
@@ -81,13 +85,14 @@ namespace ToDo
                     }
                     response = ModifyTask(taskToModify, newTask, taskList, out successFlag);
                 }
-                else response = RESPONSE_INVALID_TASK_INDEX;
+                else //response = RESPONSE_INVALID_TASK_INDEX;
+                    return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), lastListedTasks);
             }
             if (successFlag) TrackOperation();
             return response;
         }
 
-        public override string Undo(List<Task> taskList, Storage storageIO)
+        public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             Task taskToUndo = undoTask.Pop();
             Task previousTask = undoTask.Pop();
@@ -96,7 +101,7 @@ namespace ToDo
             return ModifyTask(taskToUndo, previousTask, taskList, out successFlag);
         }
 
-        public override string Redo(List<Task> taskList, Storage storageIO)
+        public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             Task taskToUndo = redoTask.Pop();
             Task previousTask = redoTask.Pop();

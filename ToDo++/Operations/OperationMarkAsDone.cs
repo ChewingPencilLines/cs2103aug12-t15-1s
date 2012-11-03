@@ -24,17 +24,17 @@ namespace ToDo
             this.doneDate = doneDate;
         }
 
-        public override string Execute(List<Task> taskList, Storage storageIO)
+        public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
-            string response;
+            Response response;
             if (doneDate != null)
             {
                 response = null;
                 List<Task> searchResults = SearchForTasks(taskList, doneString, false, doneDate, doneDate);
                 foreach(Task taskToDone in searchResults)
                 {
-                    response += MarkAsDone(taskToDone, out successFlag) + '\n';
+                    response = MarkAsDone(taskToDone, out successFlag);
                 }
             }
             else if (index.HasValue == false && doneString != null)
@@ -42,13 +42,15 @@ namespace ToDo
                 List<Task> searchResults = SearchForTasks(taskList, doneString);
                 if (searchResults.Count == 1)
                 {
-                    response = MarkAsDone(lastListedTasks[0], out successFlag);
+                    return MarkAsDone(lastListedTasks[0], out successFlag);
                 }
-                else response = GenerateDisplayString(searchResults);
+                else //response = GenerateDisplayString(searchResults);
+                    return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), searchResults);
             }
             else if (index < 0 || index > taskList.Count - 1)
             {
-                return RESPONSE_INVALID_TASK_INDEX;
+                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), lastListedTasks);
+               // return RESPONSE_INVALID_TASK_INDEX;
             }
             else if (doneString == null)
             {
@@ -58,18 +60,19 @@ namespace ToDo
                 for (int? i = index; i <= endindex; i++)
                 {
                     Task taskToMarkAsDone = lastListedTasks[i.Value];
-                    response += MarkAsDone(taskToMarkAsDone, out successFlag) + '\n';
+                    response = MarkAsDone(taskToMarkAsDone, out successFlag);
                 }
             }
             else
             {
-                return REPONSE_INVALID_COMMAND;
+               // return REPONSE_INVALID_COMMAND;
+                return new Response(Result.INVALID_COMMAND, Format.DEFAULT, this.GetType(), lastListedTasks);
             }
             if (successFlag) TrackOperation();
             return response;
         }
 
-        public override string Undo(List<Task> taskList, Storage storageIO)
+        public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
             redoTask.Push(task);
@@ -77,13 +80,15 @@ namespace ToDo
             if (storageIO.MarkTaskAsDone(task))
             {
                 successFlag = true;
-                return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
+                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), lastListedTasks);
+              //  return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
             }
             else
-                return RESPONSE_XML_READWRITE_FAIL;
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, this.GetType(), lastListedTasks);
+                //return RESPONSE_XML_READWRITE_FAIL;
         }
 
-        public override string Redo(List<Task> taskList, Storage storageIO)
+        public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             Task task = redoTask.Pop();
             undoTask.Push(task);
@@ -91,10 +96,12 @@ namespace ToDo
             if (storageIO.MarkTaskAsDone(task))
             {
                 successFlag = true;
-                return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
+                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), lastListedTasks);
+               // return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
             }
             else
-                return RESPONSE_XML_READWRITE_FAIL;
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, this.GetType(), lastListedTasks);
+              //  return RESPONSE_XML_READWRITE_FAIL;
         }
     } 
 }

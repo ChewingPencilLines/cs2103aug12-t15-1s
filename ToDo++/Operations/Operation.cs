@@ -97,6 +97,7 @@ namespace ToDo
                 if (storageIO.AddTaskToFile(taskToAdd))
                 {
                     successFlag = true;
+                    lastListedTasks.Add(taskToAdd);
                     return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), lastListedTasks);
                     //  return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.TaskName);
                 }
@@ -130,6 +131,7 @@ namespace ToDo
             if (storageIO.RemoveTaskFromFile(taskToDelete))
             {
                 successFlag = true;
+                lastListedTasks.Remove(taskToDelete);
                 return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationDelete), lastListedTasks); 
                // return String.Format(RESPONSE_DELETE_SUCCESS, taskToDelete.TaskName);
             }
@@ -165,6 +167,8 @@ namespace ToDo
             if (storageIO.RemoveTaskFromFile(taskToModify) && storageIO.AddTaskToFile(newTask))
             {
                 successFlag = true;
+                lastListedTasks.Remove(taskToModify);
+                lastListedTasks.Add(newTask);
                // return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify), lastListedTasks);
 
