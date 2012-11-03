@@ -68,7 +68,7 @@ namespace ToDo
                 }
                 else if (searchResults.Count == 1)
                 {
-                    return DeleteTask(searchResults[0], taskList, out successFlag);
+                    return DeleteTask(searchResults[0], taskList);
                 }
                 else
                 {
@@ -84,7 +84,7 @@ namespace ToDo
                     if (taskToDelete == null)
                         // invalid task, already deleted
                         response = new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
-                    else response = DeleteTask(taskToDelete, taskList, out successFlag);
+                    else response = DeleteTask(taskToDelete, taskList);
                 }
                 else
                 {
@@ -97,7 +97,7 @@ namespace ToDo
                         else
                         {
                             // this is a hack. delete task range properly!
-                            response = DeleteTask(taskToDelete, taskList, out successFlag);
+                            response = DeleteTask(taskToDelete, taskList);
                             if (!response.IsSuccessful()) return response;
                         }
                     }
@@ -112,14 +112,14 @@ namespace ToDo
         {
             Task task = undoTask.Pop();
             redoTask.Push(task);
-            return AddTask(task, taskList, out successFlag);
+            return AddTask(task, taskList);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             Task task = redoTask.Pop();
             undoTask.Push(task);
-            return AddTask(task, taskList, out successFlag);
+            return AddTask(task, taskList);
         }
     }
 }

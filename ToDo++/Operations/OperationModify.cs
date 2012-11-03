@@ -82,13 +82,13 @@ namespace ToDo
                         newTask = new TaskDeadline(newTask.TaskName, ((TaskDeadline)taskToModify).EndTime,
                             ((TaskDeadline)taskToModify).isSpecific);
                     }
-                    response = ModifyTask(taskToModify, newTask, taskList, out successFlag);
+                    response = ModifyTask(taskToModify, newTask, taskList);
                 }
                 else
                     response = new Response(Result.INVALID_TASK, Format.DEFAULT);
             }
 
-            if (successFlag) TrackOperation();
+            if (response.IsSuccessful()) TrackOperation();
             return response;
         }
 
@@ -98,7 +98,7 @@ namespace ToDo
             Task previousTask = undoTask.Pop();
             redoTask.Push(taskToUndo);
             redoTask.Push(previousTask);
-            return ModifyTask(taskToUndo, previousTask, taskList, out successFlag);
+            return ModifyTask(taskToUndo, previousTask, taskList);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
@@ -107,7 +107,7 @@ namespace ToDo
             Task previousTask = redoTask.Pop();
             undoTask.Push(taskToUndo);
             undoTask.Push(previousTask);
-            return ModifyTask(taskToUndo, previousTask, taskList, out successFlag);
+            return ModifyTask(taskToUndo, previousTask, taskList);
         }
     }
 }
