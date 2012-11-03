@@ -507,9 +507,10 @@ namespace ToDo
         private void ProcessText()
         {
             string input = textInput.Text;
-            string output = logic.ProcessCommand(input);
+            Response output = logic.ProcessCommand(input);
             //outputBox.SetOutputSize(logic.MainSettings.GetTextSize());
-            outputBox.DisplayCommand(input, output);
+            //outputBox.DisplayCommand(input, output);
+            taskListViewControl.UpdateDisplay(output);
             textInput.Clear();
         }
 
@@ -523,8 +524,8 @@ namespace ToDo
             {
                 e.Handled = true;
                 textInput.AddToList(textInput.Text);
-                //ProcessText();
-                TaskDisplayTestDriver();
+                ProcessText();
+                //TaskDisplayTestDriver();
             }
         }
 

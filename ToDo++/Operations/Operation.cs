@@ -87,6 +87,31 @@ namespace ToDo
         // ******************************************************************
 
         #region Task Manipulation Methods
+
+
+        public Response AddTaskWithResponse(Task taskToAdd, List<Task> taskList, out bool successFlag)
+        {
+            successFlag = false;
+            try
+            {
+                taskList.Add(taskToAdd);
+                undoTask.Push(taskToAdd);
+                if (storageIO.AddTaskToFile(taskToAdd))
+                {
+                    successFlag = true;
+                    lastListedTasks.Add(taskToAdd);
+                    return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), lastListedTasks);
+                }
+                else
+                    return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+                return new Response(Result.EXCEPTION_FAILURE, Format.DEFAULT);
+            }
+        }
+
         protected string AddTask(Task taskToAdd, List<Task> taskList, out bool successFlag)
         {
             successFlag = false;

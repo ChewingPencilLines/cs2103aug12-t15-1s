@@ -40,7 +40,7 @@ namespace ToDo
             }
         }
 
-        public string ProcessCommand(string input)
+        public Response ProcessCommand(string input)
         {
             Operation operation = null;
             try
@@ -51,7 +51,7 @@ namespace ToDo
             {
                 AlertBox.Show(e.Message);
             }
-            if (operation == null) return Operation.REPONSE_INVALID_COMMAND;
+            if (operation == null) return new Response(Result.INVALID_COMMAND);
             else return ExecuteCommand(operation);
         }
 
@@ -68,10 +68,12 @@ namespace ToDo
             }
         }
 
-        private string ExecuteCommand(Operation operation)
+        private Response ExecuteCommand(Operation operation)
         {
-            string response;
-            response = operation.Execute(taskList, storage);
+            Response response = new Response(Result.INVALID_COMMAND);
+            if (operation is OperationAdd)
+                response = ((OperationAdd)operation).ExecuteWithResponse(taskList, storage);
+            //response = operation.Execute(taskList, storage);
             return response;
         }
 

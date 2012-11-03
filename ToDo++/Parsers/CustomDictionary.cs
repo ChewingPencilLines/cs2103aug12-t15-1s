@@ -147,6 +147,7 @@ namespace ToDo
             contextKeywords.Add("-", ContextType.ENDTIME);
             contextKeywords.Add("this", ContextType.CURRENT);
             contextKeywords.Add("next", ContextType.NEXT);
+            contextKeywords.Add("nxt", ContextType.NEXT);
             contextKeywords.Add("following", ContextType.FOLLOWING);
         }
 

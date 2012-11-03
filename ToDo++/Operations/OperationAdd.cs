@@ -27,6 +27,23 @@ namespace ToDo
             return response;
         }
 
+        public Response ExecuteWithResponse(List<Task> taskList, Storage storageIO)
+        {
+            
+            this.storageIO = storageIO;
+            Response response;
+
+            if (newTask == null)
+            {
+                return new Response(Result.FAILURE,Format.DEFAULT,this.GetType());
+            }
+            response = AddTaskWithResponse(newTask, taskList, out successFlag);
+
+            if (successFlag) TrackOperation();
+
+            return response;
+        }
+
         public override string Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
