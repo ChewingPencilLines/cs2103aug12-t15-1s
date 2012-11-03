@@ -5,9 +5,11 @@ using System.Diagnostics;
 using BrightIdeasSoftware;
 namespace ToDo
 {
-    class TaskListViewControl:ObjectListView
+    class TaskListViewControl : ObjectListView
     {
         List<Task> displayedTasks;
+        OLVColumn defaultCol;
+
         public TaskListViewControl()
         {
             displayedTasks = null;
@@ -19,48 +21,19 @@ namespace ToDo
             this.RowHeight = 32;
             this.ShowItemToolTips = true;
             this.HeaderStyle = ColumnHeaderStyle.None;
-            OLVColumn defaultCol = this.AllColumns.Find(e => e.AspectName == "TaskName");            
-            this.AlwaysGroupByColumn = defaultCol;
-            defaultCol.WordWrap = true;
-            defaultCol.GroupKeyGetter = delegate(object task)
-            {
-                if (task is TaskFloating)
-                {
-                    return null;
-                }
-                else if (task is TaskEvent)
-                {
-                    return ((TaskEvent)task).StartTime.Date;
-                }
-                else if (task is TaskDeadline)
-                {
-                    return ((TaskDeadline)task).EndTime.Date;
-                }
-                else
-                {
-                    Trace.Fail("TaskListViewControl failed to initialize: Object is not a task object!");
-                    return null;
-                }
-            };
-            defaultCol.GroupKeyToTitleConverter = delegate(object groupKey)
-            {
-                if (groupKey == null)
-                    return "Other Tasks";
-                DateTime date = (DateTime)groupKey;
-                if (date == DateTime.Now.Date)
-                    return "Today";
-                else if (date > DateTime.Now.Date.AddDays(6))
-                    return date.ToString("D");
-                else
-                    return date.DayOfWeek.ToString();
-            };
+
             this.AllColumns.Find(e => e.AspectName == "DoneState").AspectToStringConverter = delegate(object state)
             {
                 if ((bool)state == true) return "[DONE]";
                 else return String.Empty;
             };
-        }
 
+            defaultCol = this.AllColumns.Find(e => e.AspectName == "TaskName");    
+            this.AlwaysGroupByColumn = defaultCol;
+            defaultCol.WordWrap = true;
+            SetGroupingByDateTime();                      
+        }
+        
         public void UpdateDisplay(Response response)
         {
             displayedTasks = response.TasksToBeDisplayed;
@@ -78,14 +51,26 @@ namespace ToDo
                     mostRecentTasks = mostRecentTasks.GetRange(0, 10);
                      */
                     displayedTasks.Sort(Task.CompareByDateTime);
-                    this.SetObjects(displayedTasks);                    
+                    SetGroupingByDateTime();
                     //this.AutoResizeColumns();
-                    break;                  
-                default:
+                    break;
+                case Format.DATETIME: 
+                    SetGroupingByDateTime();
+                    break;
+                case Format.NAME:
+                    displayedTasks.Sort(Task.CompareByName);
+                    defaultCol.UseInitialLetterForGroup = true;
+                    defaultCol.GroupKeyGetter = null;
+                    defaultCol.GroupKeyToTitleConverter = null;
+                    break;                
+                case Format.DO_NOTHING:
+                    break;
+                default:                    
                     break;
             }
+            this.SetObjects(displayedTasks);
         }
-        
+
         /// <summary>
         /// Capture CTRL+ to prevent resize of all columns.
         /// </summary>
@@ -107,12 +92,101 @@ namespace ToDo
             this.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
-
         }
 
         private void TaskListViewControl_FormatRow(object sender, FormatRowEventArgs e)
         {
             e.Item.SubItems[1].Text = e.RowIndex.ToString();
         }
+        
+
+        // 
+        // Grouping Delegates
+        //
+        //
+
+        #region Group By Date/Time
+        private void SetGroupingByDateTime()
+        {
+            defaultCol.GroupKeyGetter = GroupKeyByDateTime;
+            defaultCol.GroupKeyToTitleConverter = GenerateGroupFromKeyDateTime;
+        }
+
+        private object GroupKeyByDateTime(object task)
+        {
+            if (task is TaskFloating)
+            {
+                return null;
+            }
+            else if (task is TaskEvent)
+            {
+                return ((TaskEvent)task).StartTime.Date;
+            }
+            else if (task is TaskDeadline)
+            {
+                return ((TaskDeadline)task).EndTime.Date;
+            }
+            else
+            {
+                Trace.Fail("TaskListViewControl failed to initialize: Object is not a task object!");
+                return null;
+            }
+        }
+
+        private string GenerateGroupFromKeyDateTime(object groupKey)
+        {
+            if (groupKey == null)
+                return "Other Tasks";
+            DateTime date = (DateTime)groupKey;
+            if (date == DateTime.Now.Date)
+                return "Today";
+            else if (date > DateTime.Now.Date.AddDays(6))
+                return date.ToString("D");
+            else
+                return date.DayOfWeek.ToString();
+        }
+        #endregion
+
+        #region Group By Name
+
+        private void SetGroupingByName()
+        {
+            defaultCol.GroupKeyGetter = GroupKeyByName;
+            defaultCol.GroupKeyToTitleConverter = GenerateGroupFromKeyName;
+        }
+
+        private object GroupKeyByName(object task)
+        {
+            if (task is TaskFloating)
+            {
+                return null;
+            }
+            else if (task is TaskEvent)
+            {
+                return ((TaskEvent)task).StartTime.Date;
+            }
+            else if (task is TaskDeadline)
+            {
+                return ((TaskDeadline)task).EndTime.Date;
+            }
+            else
+            {
+                Trace.Fail("TaskListViewControl failed to initialize: Object is not a task object!");
+                return null;
+            }
+        }
+        private string GenerateGroupFromKeyName(object groupKey)
+        {
+            if (groupKey == null)
+                return "Other Tasks";
+            DateTime date = (DateTime)groupKey;
+            if (date == DateTime.Now.Date)
+                return "Today";
+            else if (date > DateTime.Now.Date.AddDays(6))
+                return date.ToString("D");
+            else
+                return date.DayOfWeek.ToString();
+        }
+#endregion
     }
 }

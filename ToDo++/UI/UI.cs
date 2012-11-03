@@ -524,8 +524,8 @@ namespace ToDo
             {
                 e.Handled = true;
                 textInput.AddToList(textInput.Text);
-                ProcessText();
-                //TaskDisplayTestDriver();
+                //ProcessText();
+                TaskDisplayTestDriver();
             }
         }
 
@@ -544,7 +544,7 @@ namespace ToDo
             displayList.Add(addTask);            
             addTask = new TaskFloating("floating task test");
             displayList.Add(addTask);
-            Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);
+            Response testResponse = new Response(Result.SUCCESS, Format.NAME, typeof(OperationAdd), displayList);
             taskListViewControl.UpdateDisplay(testResponse);
         }
 

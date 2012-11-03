@@ -57,6 +57,7 @@ namespace ToDo
             return newHashCode;
         }
 
+        // Need to handle exceptions (null?)
         public static int CompareByDateTime(Task a, Task b)
         {
             // A [DONE] task always sorts after an undone task.
@@ -92,6 +93,19 @@ namespace ToDo
         public virtual string GetTimeString()
         {
             return String.Empty;
+        }
+
+        internal static int CompareByName(Task x, Task y)
+        {
+            try
+            {
+                // NYI
+                return 0;
+            }
+            catch (Exception e)
+            {
+                return 0;
+            }
         }
     }
 }
