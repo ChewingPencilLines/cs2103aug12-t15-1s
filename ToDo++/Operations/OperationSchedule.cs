@@ -13,17 +13,18 @@ namespace ToDo
         {
             newTask = setTask;
         }
-        public override string Execute(List<Task> taskList, Storage storageIO)
+        public override Response Execute(List<Task> taskList, Storage storageIO)
         {
-            string response;
+            Response response = null;
             if (newTask == null)
             {
-                return RESPONSE_SCHEDULE_FAILURE;
+                //return RESPONSE_SCHEDULE_FAILURE;
+                return new Response(Result.FAILURE,Format.DEFAULT, this.GetType(), lastListedTasks);
             }
             //todo
-            return "stub";
+            return response;// "stub";
         }
-        public override string Undo(List<Task> taskList, Storage storageIO)
+        public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
             return DeleteTask(task, taskList, out successFlag);

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    public enum Result { SUCCESS, FAILURE, INVALID_TASK, INVALID_COMMAND, XML_READWRITE_FAIL, EXCEPTION_FAILURE };
-    public enum Format { DEFAULT, NAME, DATETIME, DO_NOTHING };
+    public enum Result { SUCCESS, FAILURE, INVALID_TASK, INVALID_COMMAND, XML_READWRITE_FAIL };
+    public enum Format { DEFAULT, NAME, DATETIME };
     public class Response
     {
         // ******************************************************************
@@ -53,7 +53,7 @@ namespace ToDo
             get { return tasksToBeDisplayed; }
         }
 
-        public Response(Result resultType, Format formatType = Format.DEFAULT, Type operationType = null, List<Task> tasks = null)
+        public Response(Result resultType, Format formatType, Type operationType = null, List<Task> tasks = null)
         {
             this.formatType = formatType;
             this.tasksToBeDisplayed = tasks;

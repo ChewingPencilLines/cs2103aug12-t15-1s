@@ -35,10 +35,10 @@ namespace ToDo
             this.isSpecific = isSpecific;
         }
 
-        public override string Execute(List<Task> taskList, Storage storageIO)
+        public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
-            string response;
+            Response response = null;
 
             List<Task> searchResults;
             if (index == null)
@@ -49,18 +49,20 @@ namespace ToDo
                     //check substring
                     searchResults = SearchForTasks(taskList, taskName);
                     if (searchResults.Count == 0)
-                        response = RESPONSE_DELETE_FAILURE;
-                    else response = GenerateDisplayString(searchResults);
+                        //  response = RESPONSE_DELETE_FAILURE;
+                        return new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), lastListedTasks);
+                    else// response = GenerateDisplayString(searchResults);
+                        return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), searchResults);
                 }
                 else if (searchResults.Count == 1)
                 {
                     response = DeleteTask(searchResults[0], taskList, out successFlag);
                 }
-                else response = GenerateDisplayString(searchResults);
+                else return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), searchResults);
             }
             else if (index < 0 || index > lastListedTasks.Count - 1)
             {
-                return RESPONSE_INVALID_TASK_INDEX;
+                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), lastListedTasks);
             }
             else
             {
@@ -69,22 +71,25 @@ namespace ToDo
                 {
                     Task taskToDelete = lastListedTasks[index.Value];
                     if (taskToDelete == null)
-                        return RESPONSE_DELETE_ALREADY;
+                       // return RESPONSE_DELETE_ALREADY;
+                        return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), lastListedTasks);
                     else response = DeleteTask(taskToDelete, taskList, out successFlag);
                 }
                 else if (endindex < 0 || endindex > lastListedTasks.Count - 1)
                 {
-                    return RESPONSE_INVALID_TASK_INDEX;
+                    return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), lastListedTasks);
+                    //return RESPONSE_INVALID_TASK_INDEX;
                 }
                 else
                 {
                     response = null;
+                    //should the result be failure when exists fail in the index range but other succeed?
                     for (int? i = index; i <= endindex; i++)
                     {
                         Task taskToDelete = lastListedTasks[i.Value];
-                        if (taskToDelete == null) response += RESPONSE_DELETE_ALREADY;
-                        else response += DeleteTask(taskToDelete, taskList, out successFlag);
-                        response += '\n';
+                        if (taskToDelete == null)
+                            response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), lastListedTasks);
+                        else response = DeleteTask(taskToDelete, taskList, out successFlag);                      
                     }
                 }
             }
@@ -93,14 +98,14 @@ namespace ToDo
             return response;
         }
 
-        public override string Undo(List<Task> taskList, Storage storageIO)
+        public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
             redoTask.Push(task);
             return AddTask(task, taskList, out successFlag);
         }
 
-        public override string Redo(List<Task> taskList, Storage storageIO)
+        public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             Task task = redoTask.Pop();
             undoTask.Push(task);

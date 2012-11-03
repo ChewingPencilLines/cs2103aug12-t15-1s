@@ -508,12 +508,21 @@ namespace ToDo
         {
             string input = textInput.Text;
             Response output = logic.ProcessCommand(input);
+            string outputstring = GenerateDisplayString(output);
             //outputBox.SetOutputSize(logic.MainSettings.GetTextSize());
-            //outputBox.DisplayCommand(input, output);
-            taskListViewControl.UpdateDisplay(output);
+            outputBox.DisplayCommand(input, outputstring);
             textInput.Clear();
         }
 
+        /// <summary>
+        /// move display stuff into ui class.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private string GenerateDisplayString(Response output)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// When Enter Button Pressed
@@ -544,7 +553,7 @@ namespace ToDo
             displayList.Add(addTask);            
             addTask = new TaskFloating("floating task test");
             displayList.Add(addTask);
-            Response testResponse = new Response(Result.SUCCESS, Format.NAME, typeof(OperationAdd), displayList);
+            Response testResponse = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), displayList);
             taskListViewControl.UpdateDisplay(testResponse);
         }
 
