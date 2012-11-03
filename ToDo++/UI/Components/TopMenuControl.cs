@@ -34,13 +34,13 @@ namespace ToDo
         {
             if (state == 0)
             {
-                ui.CollapseExpand();
+                ui.StartCollapserExpander();
                 updownButton.Image = Properties.Resources.downButton;
                 state = 1;
             }
             else
             {
-                ui.CollapseExpand();
+                ui.StartCollapserExpander();
                 updownButton.Image = Properties.Resources.upButton;
                 state = 0;
             }
