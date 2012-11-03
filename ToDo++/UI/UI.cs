@@ -42,6 +42,7 @@ namespace ToDo
             InitializePreferencesPanel();
             IntializeTopMenu();
             InitializeTaskListView();
+            taskListViewControl.UpdateDisplay(logic.GetDefaultView());
             this.ActiveControl = textInput;        
         }
 
@@ -508,20 +509,10 @@ namespace ToDo
         {
             string input = textInput.Text;
             Response output = logic.ProcessCommand(input);
-            string outputstring = GenerateDisplayString(output);
             //outputBox.SetOutputSize(logic.MainSettings.GetTextSize());
-            outputBox.DisplayCommand(input, outputstring);
+            //outputBox.DisplayCommand(input, outputstring);
+            taskListViewControl.UpdateDisplay(output);
             textInput.Clear();
-        }
-
-        /// <summary>
-        /// move display stuff into ui class.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private string GenerateDisplayString(Response output)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -533,8 +524,8 @@ namespace ToDo
             {
                 e.Handled = true;
                 textInput.AddToList(textInput.Text);
-                //ProcessText();
-                TaskDisplayTestDriver();
+                ProcessText();
+                //TaskDisplayTestDriver();
             }
         }
 

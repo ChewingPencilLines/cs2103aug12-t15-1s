@@ -105,5 +105,10 @@ namespace ToDo
             UpdateSettingsFile((SettingInformation)sender);
         }
 
+
+        internal Response GetDefaultView()
+        {
+            return new Response(Result.SUCCESS, Format.DO_NOTHING, null, taskList);
+        }
     } 
 }
