@@ -507,12 +507,22 @@ namespace ToDo
         private void ProcessText()
         {
             string input = textInput.Text;
-            string output = logic.ProcessCommand(input);
+            Response output = logic.ProcessCommand(input);
+            string outputstring = GenerateDisplayString(output);
             //outputBox.SetOutputSize(logic.MainSettings.GetTextSize());
-            outputBox.DisplayCommand(input, output);
+            outputBox.DisplayCommand(input, outputstring);
             textInput.Clear();
         }
 
+        /// <summary>
+        /// move display stuff into ui class.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private string GenerateDisplayString(Response output)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// When Enter Button Pressed
