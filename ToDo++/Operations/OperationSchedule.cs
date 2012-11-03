@@ -27,7 +27,7 @@ namespace ToDo
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
-            return DeleteTask(task, taskList, out successFlag);
+            return DeleteTask(task, taskList);
         }
     }
 }

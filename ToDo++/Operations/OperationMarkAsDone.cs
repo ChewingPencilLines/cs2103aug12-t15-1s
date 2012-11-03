@@ -34,7 +34,7 @@ namespace ToDo
                 List<Task> searchResults = SearchForTasks(taskList, doneString, false, doneDate, doneDate);
                 foreach(Task taskToDone in searchResults)
                 {
-                    response = MarkAsDone(taskToDone, out successFlag);
+                    response = MarkAsDone(taskToDone);
                 }
             }
             else if (index.HasValue == false && doneString != null)
@@ -42,7 +42,7 @@ namespace ToDo
                 List<Task> searchResults = SearchForTasks(taskList, doneString);
                 if (searchResults.Count == 1)
                 {
-                    response = MarkAsDone(currentListedTasks[0], out successFlag);
+                    response = MarkAsDone(currentListedTasks[0]);
                 }
                 else
                 {
@@ -62,7 +62,7 @@ namespace ToDo
                 for (int? i = index; i <= endindex; i++)
                 {
                     Task taskToMarkAsDone =  currentListedTasks[i.Value];
-                    response = MarkAsDone(taskToMarkAsDone, out successFlag);
+                    response = MarkAsDone(taskToMarkAsDone);
                 }
             }
             else
@@ -81,7 +81,6 @@ namespace ToDo
             task.DoneState = false;
             if (storageIO.MarkTaskAsDone(task))
             {
-                successFlag = true;
                 return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
               //  return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
             }
@@ -97,7 +96,6 @@ namespace ToDo
             task.DoneState = true;
             if (storageIO.MarkTaskAsDone(task))
             {
-                successFlag = true;
                 return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
                // return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
             }

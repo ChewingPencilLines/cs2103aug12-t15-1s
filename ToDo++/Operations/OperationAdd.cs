@@ -21,9 +21,9 @@ namespace ToDo
                 return new Response(Result.FAILURE, Format.DEFAULT, this.GetType(),  currentListedTasks);
                // return RESPONSE_ADD_FAILURE;
             }
-            response = AddTask(newTask, taskList, out successFlag);
+            response = AddTask(newTask, taskList);
 
-            if (successFlag) TrackOperation();
+            if (response.IsSuccessful()) TrackOperation();
 
             return response;
         }
@@ -32,14 +32,14 @@ namespace ToDo
         {
             Task task = undoTask.Pop();
             redoTask.Push(task);
-            return DeleteTask(task, taskList, out successFlag);
+            return DeleteTask(task, taskList);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             Task task = redoTask.Pop();
             undoTask.Push(task);
-            return DeleteTask(task, taskList, out successFlag);
+            return DeleteTask(task, taskList);
         }
     }
 }

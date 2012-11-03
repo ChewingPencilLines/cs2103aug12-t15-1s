@@ -18,7 +18,7 @@ namespace ToDo
         protected static Stack<Task> undoTask;
         protected static Stack<Task> redoTask;
         protected Storage storageIO;
-        protected bool successFlag;
+   //     protected bool successFlag;
 
         static Operation()
         {
@@ -62,16 +62,16 @@ namespace ToDo
         // ******************************************************************
 
         #region Task Manipulation Methods
-        protected Response AddTask(Task taskToAdd, List<Task> taskList, out bool successFlag)
+        protected Response AddTask(Task taskToAdd, List<Task> taskList)
         {
-            successFlag = false;
+          //  successFlag = false;
             try
             {
                 taskList.Add(taskToAdd);
                 undoTask.Push(taskToAdd);
                 if (storageIO.AddTaskToFile(taskToAdd))
                 {
-                    successFlag = true;
+                  //  successFlag = true;
                     currentListedTasks.Add(taskToAdd);
                     return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks);
                     //  return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.TaskName);
@@ -88,9 +88,9 @@ namespace ToDo
             }
         }
 
-        protected Response DeleteTask(Task taskToDelete, List<Task> taskList, out bool successFlag)
+        protected Response DeleteTask(Task taskToDelete, List<Task> taskList)
         {
-            successFlag = false;
+            //successFlag = false;
 
             // Remove tasks and push to undo stack.
             undoTask.Push(taskToDelete);
@@ -101,7 +101,7 @@ namespace ToDo
 
             if (storageIO.RemoveTaskFromFile(taskToDelete))
             {
-                successFlag = true;
+              //  successFlag = true;
                 currentListedTasks.Remove(taskToDelete);
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationDelete),  currentListedTasks);                
             }
@@ -109,15 +109,15 @@ namespace ToDo
                 return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationDelete),  currentListedTasks);
         }
 
-        protected Response MarkAsDone(Task taskToMarkAsDone, out bool successFlag)
+        protected Response MarkAsDone(Task taskToMarkAsDone)
         {
-            successFlag = false;
+           // successFlag = false;
             undoTask.Push(taskToMarkAsDone);
             taskToMarkAsDone.DoneState = true;
 
             if (storageIO.MarkTaskAsDone(taskToMarkAsDone))
             {
-                successFlag = true;
+               // successFlag = true;
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationMarkAsDone),  currentListedTasks);
                 //return String.Format(RESPONSE_MARKASDONE_SUCCESS, taskToMarkAsDone.TaskName);
             }
@@ -126,16 +126,16 @@ namespace ToDo
                 return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationMarkAsDone),  currentListedTasks);
         }
 
-        protected Response ModifyTask(Task taskToModify, Task newTask, List<Task> taskList, out bool successFlag)
+        protected Response ModifyTask(Task taskToModify, Task newTask, List<Task> taskList)
         {
-            successFlag = false;
+           // successFlag = false;
             undoTask.Push(taskToModify);
             taskList.Remove(taskToModify);
             taskList.Add(newTask);
             undoTask.Push(newTask);
             if (storageIO.RemoveTaskFromFile(taskToModify) && storageIO.AddTaskToFile(newTask))
             {
-                successFlag = true;
+               // successFlag = true;
                  currentListedTasks.Remove(taskToModify);
                  currentListedTasks.Add(newTask);
                // return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
@@ -148,9 +148,9 @@ namespace ToDo
         }
 
         // todo: move search queries into the tasks themselves as methods.
-        protected Response PostponeTask(Task taskToPostpone, List<Task> taskList, DateTime? NewDate, out bool successFlag)
+        protected Response PostponeTask(Task taskToPostpone, List<Task> taskList, DateTime? NewDate)
         {
-            successFlag = false;
+           // successFlag = false;
             Task taskPostponed = taskToPostpone;
             undoTask.Push(taskToPostpone);
             taskList.Remove(taskToPostpone);
@@ -194,7 +194,7 @@ namespace ToDo
             //todo: create postpone function.
             if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
             {
-                successFlag = true;
+               // successFlag = true;
                 return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType());
             }
             else
