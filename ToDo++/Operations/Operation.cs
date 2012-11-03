@@ -162,7 +162,7 @@ namespace ToDo
         {
             successFlag = false;
             undoTask.Push(taskToMarkAsDone);
-            taskToMarkAsDone.DoneState = true;
+            taskToMarkAsDone.DoneState = true; // should be taskToMarkAsDone.MarkAsDone();
 
             if (storageIO.MarkTaskAsDone(taskToMarkAsDone))
             {
