@@ -40,10 +40,8 @@ namespace ToDo
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
-            throw new NotImplementedException();
-            /*
             this.storageIO = storageIO;
-            string response;
+            Response response;
             List<Task> searchResults;
             if (index == null)
             {
@@ -61,49 +59,58 @@ namespace ToDo
                 }
                 if (searchResults.Count == 0)
                 {
-                    response = RESPONSE_POSTPONE_FAILURE;
+                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                  //  response = RESPONSE_POSTPONE_FAILURE;
                 }
                 else if (searchResults.Count == 1)
                 {
-                    response = PostponeTask(searchResults[0], taskList, postponeTime, out successFlag);
+                    response = PostponeTask(searchResults[0], taskList, postponeTime);
                 }
-                else response = GenerateDisplayString(searchResults);
+                else
+                {
+                    currentListedTasks = searchResults;
+                    response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
+                }
             }
-            else if (index < 0 || index > lastListedTasks.Count - 1)
+            else if (index < 0 || index > currentListedTasks.Count - 1)
             {
-                return RESPONSE_INVALID_TASK_INDEX;
+                return new Response(Result.INVALID_TASK, Format.DEFAULT);
             }
             else
             {
                 if (endindex == index)
                 {
-                    Task taskToPostpone = lastListedTasks[index.Value];
+                    Task taskToPostpone = currentListedTasks[index.Value];
                     if (taskToPostpone == null)
-                        return RESPONSE_POSTPONE_FAILURE;
+                        response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
                     else
-                        response = PostponeTask(taskToPostpone, taskList, postponeTime, out successFlag);
+                        response = PostponeTask(taskToPostpone, taskList, postponeTime);
                 }
-                else if (endindex < 0 || endindex > lastListedTasks.Count - 1)
+                else if (endindex < 0 || endindex > currentListedTasks.Count - 1)
                 {
-                    return RESPONSE_INVALID_TASK_INDEX;
+                    return new Response(Result.INVALID_TASK, Format.DEFAULT);
                 }
                 else
                 {
                     response = null;
                     for (int? i = index; i <= endindex; i++)
                     {
-                        Task taskToPostpone = lastListedTasks[i.Value];
-                        if (taskToPostpone == null) response += RESPONSE_POSTPONE_FAILURE;
+                        Task taskToPostpone = currentListedTasks[i.Value];
+
+                        if (taskToPostpone == null) 
+                            response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
                         else
-                            response += PostponeTask(taskToPostpone, taskList, postponeTime, out successFlag);
-                        response += '\n';
+                        {
+                            // this is a hack. delete task range properly!
+                            response = PostponeTask(taskToPostpone, taskList, postponeTime); 
+                            if (!response.IsSuccessful()) return response;
+                        }
                     }
                 }
             }
 
-            if (successFlag) TrackOperation();
+            if (response.IsSuccessful()) TrackOperation();
             return response;
-             */ 
         }
     }
 }

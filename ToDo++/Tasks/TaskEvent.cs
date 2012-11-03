@@ -13,14 +13,14 @@ namespace ToDo
         private DateTime endTime;
         public DateTime EndTime
         {
-            set { endTime = value; }
+          //  set { endTime = value; }
             get { return endTime; }
         }
 
         private DateTime startTime;
         public DateTime StartTime
         {
-            set { startTime = value; }
+          //  set { startTime = value; }
             get { return startTime; }         
         }
 
@@ -101,7 +101,20 @@ namespace ToDo
         public string test()
         {
             return String.Empty;
-        }        
+        }
+
+        public override Task Postpone(DateTime? NewDate)
+        {
+            TaskEvent result;
+            if (NewDate == null)
+                result= new TaskEvent(this.taskName, this.startTime.AddDays(1),this.endTime.AddDays(1), this.isSpecific, this.doneState);           
+            else
+            {
+                DateTime NewEnd = this.endTime + (NewDate.Value - this.startTime);
+                result = new TaskEvent(this.taskName, NewDate.Value, NewEnd, this.isSpecific, this.doneState);  
+            }
+            return result;
+        }
     
     }
 }
