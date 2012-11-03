@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace ToDo
 {
     public enum Result { SUCCESS, FAILURE, INVALID_TASK, INVALID_COMMAND, XML_READWRITE_FAIL, EXCEPTION_FAILURE };
-    public enum Format { DEFAULT, NAME, DATETIME, DO_NOTHING};
+    public enum Format { DEFAULT, NAME, DO_NOTHING};
     public class Response
     {
         // ******************************************************************
         // Feedback Strings
         // ******************************************************************
         #region Feedback Strings
-        const string STRING_ADD_SUCCESS = "Added \"{0}\" successfully.";
+        const string STRING_ADD_SUCCESS = "Added new task \"{0}\" successfully.";
         const string STRING_ADD_FAILURE = "Failed to add task!";
         const string STRING_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
         const string STRING_DELETE_FAILURE = "No matching task found!";

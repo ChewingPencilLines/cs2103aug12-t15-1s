@@ -17,6 +17,7 @@ namespace ToDo
         private int startIndex;
         private int endIndex;
         private bool hasIndex;
+        private bool isAll;
         private string taskName;
         private DateTime? startTime = null, endTime = null;
         private DateTimeSpecificity isSpecific;
