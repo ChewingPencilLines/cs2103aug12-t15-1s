@@ -125,8 +125,10 @@ namespace ToDo
             commandKeywords = new Dictionary<string, CommandType>();
             commandKeywords.Add("add", CommandType.ADD);
             commandKeywords.Add("delete", CommandType.DELETE);
-            commandKeywords.Add("display", CommandType.DISPLAY);
+            commandKeywords.Add("default", CommandType.DISPLAY);
             commandKeywords.Add("sort", CommandType.SORT);
+            commandKeywords.Add("show", CommandType.SEARCH);
+            commandKeywords.Add("display", CommandType.SEARCH);
             commandKeywords.Add("search", CommandType.SEARCH);
             commandKeywords.Add("modify", CommandType.MODIFY);
             commandKeywords.Add("undo", CommandType.UNDO);

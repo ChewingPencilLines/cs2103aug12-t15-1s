@@ -51,7 +51,7 @@ namespace ToDo
             {
                 AlertBox.Show(e.Message);
             }
-            if (operation == null) return null;//Operation.REPONSE_INVALID_COMMAND;
+            if (operation == null) return new Response(Result.INVALID_COMMAND);
             else return ExecuteCommand(operation);
         }
 
@@ -108,7 +108,7 @@ namespace ToDo
 
         internal Response GetDefaultView()
         {
-            return new Response(Result.SUCCESS, Format.DO_NOTHING, null, taskList);
+            return new OperationDisplayDefault().Execute(taskList, storage);
         }
     } 
 }

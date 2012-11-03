@@ -37,7 +37,7 @@ namespace ToDo
         #endregion
         
         // Containers for keeping track of executed operations
-        protected static List<Task> lastListedTasks;
+        protected static List<Task>  currentListedTasks;
         protected static Stack<Operation> undoStack;
         protected static Stack<Operation> redoStack;
         protected static Stack<Task> undoTask;
@@ -47,7 +47,7 @@ namespace ToDo
 
         static Operation()
         {
-            lastListedTasks = new List<Task>();
+            currentListedTasks = new List<Task>();
             undoStack = new Stack<Operation>();
             redoStack = new Stack<Operation>();
             undoTask = new Stack<Task>();
@@ -97,18 +97,18 @@ namespace ToDo
                 if (storageIO.AddTaskToFile(taskToAdd))
                 {
                     successFlag = true;
-                    lastListedTasks.Add(taskToAdd);
-                    return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd), lastListedTasks);
+                     currentListedTasks.Add(taskToAdd);
+                    return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks);
                     //  return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.TaskName);
                 }
                 else
-                    return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationAdd), lastListedTasks);
+                    return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks);
                   //  return RESPONSE_XML_READWRITE_FAIL;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd), lastListedTasks); 
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks); 
                 //return RESPONSE_ADD_FAILURE + "\r\nThe following exception occured: " + e.ToString();
             }
         }
@@ -121,23 +121,26 @@ namespace ToDo
             undoTask.Push(taskToDelete);
             taskList.Remove(taskToDelete);
 
+            /*
             // Adjust list to null references to deleted tasks without changing order.
-            int nullIndex = lastListedTasks.IndexOf(taskToDelete);
-            if (nullIndex >= 0 && nullIndex < lastListedTasks.Count)
+            int nullIndex =  currentListedTasks.IndexOf(taskToDelete);
+            if (nullIndex >= 0 && nullIndex <  currentListedTasks.Count)
             {
-                lastListedTasks[nullIndex] = null;
+                 currentListedTasks[nullIndex] = null;
             }
+             * */
+
+            // Can just remove task from currentListedTask with new UI
+            currentListedTasks.Remove(taskToDelete);
 
             if (storageIO.RemoveTaskFromFile(taskToDelete))
             {
                 successFlag = true;
-                lastListedTasks.Remove(taskToDelete);
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationDelete), lastListedTasks); 
-               // return String.Format(RESPONSE_DELETE_SUCCESS, taskToDelete.TaskName);
+                currentListedTasks.Remove(taskToDelete);
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationDelete),  currentListedTasks);                
             }
             else
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationDelete), lastListedTasks);
-               //return RESPONSE_XML_READWRITE_FAIL;
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationDelete),  currentListedTasks);
         }
 
         protected Response MarkAsDone(Task taskToMarkAsDone, out bool successFlag)
@@ -149,12 +152,12 @@ namespace ToDo
             if (storageIO.MarkTaskAsDone(taskToMarkAsDone))
             {
                 successFlag = true;
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationMarkAsDone), lastListedTasks);
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationMarkAsDone),  currentListedTasks);
                 //return String.Format(RESPONSE_MARKASDONE_SUCCESS, taskToMarkAsDone.TaskName);
             }
             else
                 //return RESPONSE_XML_READWRITE_FAIL;
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationMarkAsDone), lastListedTasks);
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationMarkAsDone),  currentListedTasks);
         }
 
         protected Response ModifyTask(Task taskToModify, Task newTask, List<Task> taskList, out bool successFlag)
@@ -167,15 +170,15 @@ namespace ToDo
             if (storageIO.RemoveTaskFromFile(taskToModify) && storageIO.AddTaskToFile(newTask))
             {
                 successFlag = true;
-                lastListedTasks.Remove(taskToModify);
-                lastListedTasks.Add(newTask);
+                 currentListedTasks.Remove(taskToModify);
+                 currentListedTasks.Add(newTask);
                // return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify), lastListedTasks);
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify),  currentListedTasks);
 
             }
             else
               //  return RESPONSE_XML_READWRITE_FAIL;
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationModify), lastListedTasks);
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationModify),  currentListedTasks);
         }
 
         // todo: move search queries into the tasks themselves as methods.
@@ -267,7 +270,7 @@ namespace ToDo
                 displayString += GetTaskInformation(task);
                 index++;
             }
-            lastListedTasks = new List<Task>(tasksToDisplay);
+             currentListedTasks = new List<Task>(tasksToDisplay);
             return displayString;
         }
 

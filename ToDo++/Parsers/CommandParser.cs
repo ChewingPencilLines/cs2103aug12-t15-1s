@@ -73,7 +73,7 @@ namespace ToDo
                     newOperation = new OperationDelete(taskName, taskIndex, startCombined, endCombined, isSpecific);
                     break;
                 case CommandType.DISPLAY:
-                    newOperation = new OperationDisplay();
+                    newOperation = new OperationDisplayDefault();
                     break;
                 case CommandType.MODIFY:
                     task = GenerateNewTask(taskName, startCombined, endCombined, isSpecific);

@@ -37,24 +37,16 @@ namespace ToDo
         public void UpdateDisplay(Response response)
         {
             displayedTasks = response.TasksToBeDisplayed;
-
+            if (displayedTasks == null) return;
             switch (response.FormatType)
             {
                 case Format.DEFAULT:
-                    /* Do not delete. Move to logic class for setting default screen.
-                    List<Task> mostRecentTasks = 
-                        (from task in tasks                                     
-                        where task.IsWithinTime(DateTime.Today, DateTime.Today.AddDays(7))
-                        select task).ToList();
-                    mostRecentTasks.Sort(Task.CompareByDateTime);
-                    // 10 = MAX_TASKS
-                    mostRecentTasks = mostRecentTasks.GetRange(0, 10);
-                     */
                     displayedTasks.Sort(Task.CompareByDateTime);
                     SetGroupingByDateTime();
                     //this.AutoResizeColumns();
                     break;
-                case Format.DATETIME: 
+                case Format.DATETIME:
+                    displayedTasks.Sort(Task.CompareByDateTime);
                     SetGroupingByDateTime();
                     break;
                 case Format.NAME:

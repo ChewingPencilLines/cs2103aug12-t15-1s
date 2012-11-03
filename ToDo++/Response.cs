@@ -95,7 +95,7 @@ namespace ToDo
                         feedbackString = STRING_REDO_FAILURE;
                     break;
                 case Result.INVALID_TASK:
-                    if (operationType == typeof(OperationDisplay) ||
+                    if (operationType == typeof(OperationDisplayDefault) ||
                         operationType == typeof(OperationSearch))
                         feedbackString = STRING_DISPLAY_NO_TASK;
                     else if (operationType == typeof(OperationDelete))

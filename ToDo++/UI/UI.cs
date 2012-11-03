@@ -512,7 +512,7 @@ namespace ToDo
             //outputBox.SetOutputSize(logic.MainSettings.GetTextSize());
             //outputBox.DisplayCommand(input, outputstring);
             taskListViewControl.UpdateDisplay(output);
-            textInput.Clear();
+            textInput.Text = output.FeedbackString;
         }
 
         /// <summary>
@@ -652,7 +652,7 @@ namespace ToDo
         private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)
         {
             // Row index should not change even if doing a column sort.
-            e.Item.SubItems[1].Text = "[" + e.RowIndex.ToString() + "]";
+            e.Item.SubItems[1].Text = "[" + (e.RowIndex+1).ToString() + "]";
         }
     }
 }
