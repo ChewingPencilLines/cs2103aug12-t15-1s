@@ -11,31 +11,6 @@ namespace ToDo
     // ******************************************************************
     public abstract class Operation
     {
-        // ******************************************************************
-        // Feedback Strings -- To be moved to Response class
-        // ******************************************************************
-        #region Feedback Strings
-        protected const string RESPONSE_ADD_SUCCESS = "Added \"{0}\" successfully.";
-        protected const string RESPONSE_ADD_FAILURE = "Failed to add task!";
-        protected const string RESPONSE_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
-        protected const string RESPONSE_DELETE_FAILURE = "No matching task found!";
-        protected const string RESPONSE_DELETE_ALREADY = "Task has already been deleted!";
-        protected const string RESPONSE_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
-        protected const string RESPONSE_DISPLAY_NOTASK = "There are no tasks for display.";
-        protected const string RESPONSE_UNDO_SUCCESS = "Removed task successfully.";
-        protected const string RESPONSE_UNDO_FAILURE = "Cannot undo last executed task!";
-        protected const string RESPONSE_REDO_FAILURE = "Cannot redo last undone task!";
-        protected const string RESPONSE_POSTPONE_SUCCESS = "Postponed task \"{0}\" successfully.";
-        protected const string RESPONSE_POSTPONE_FAIL = "Cannot postpone floating tasks!";
-        protected const string RESPONSE_POSTPONE_FAILURE = "No matching task found!";
-        protected const string RESPONSE_SCHEDULE_FAILURE = "Failed to schedule task!";
-        protected const string RESPONSE_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
-        protected const string RESPONSE_MARKASUNDONE_SUCCESS = "Successfully marked \"{0}\" as undone.";
-        protected const string RESPONSE_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
-        protected const string RESPONSE_INVALID_TASK_INDEX = "Invalid task index!";
-        public const string REPONSE_INVALID_COMMAND = "Invalid command input!";
-        #endregion
-        
         // Containers for keeping track of executed operations
         protected static List<Task>  currentListedTasks;
         protected static Stack<Operation> undoStack;
@@ -97,7 +72,7 @@ namespace ToDo
                 if (storageIO.AddTaskToFile(taskToAdd))
                 {
                     successFlag = true;
-                     currentListedTasks.Add(taskToAdd);
+                    currentListedTasks.Add(taskToAdd);
                     return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks);
                     //  return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.TaskName);
                 }
@@ -173,7 +148,7 @@ namespace ToDo
         }
 
         // todo: move search queries into the tasks themselves as methods.
-        protected string PostponeTask(Task taskToPostpone, List<Task> taskList, DateTime? NewDate, out bool successFlag)
+        protected Response PostponeTask(Task taskToPostpone, List<Task> taskList, DateTime? NewDate, out bool successFlag)
         {
             successFlag = false;
             Task taskPostponed = taskToPostpone;
@@ -214,16 +189,16 @@ namespace ToDo
                 //???
                 undoTask.Push(taskToPostpone);
                 taskList.Add(taskToPostpone);
-                return RESPONSE_POSTPONE_FAIL;
+                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
             }
             //todo: create postpone function.
             if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
             {
                 successFlag = true;
-                return String.Format(RESPONSE_POSTPONE_SUCCESS, taskPostponed.TaskName);
+                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType());
             }
             else
-                return RESPONSE_XML_READWRITE_FAIL;
+                return new Response(Result.XML_READWRITE_FAIL);
         }
         
         protected List<Task> SearchForTasks(List<Task> taskList, string searchString, bool exact = false, DateTime? startTime = null, DateTime? endTime = null)
@@ -241,78 +216,6 @@ namespace ToDo
             return filteredTasks;
         }
 
-        #endregion
-
-        // ******************************************************************
-        // Display Formatters -- to be moved to UI class
-        // ******************************************************************
-                
-        #region Display Formatters
-        protected string GenerateDisplayString(List<Task> tasksToDisplay)
-        {
-            string displayString = "";
-            if (tasksToDisplay.Count == 0)
-                return RESPONSE_DISPLAY_NOTASK;
-            int index = 1;
-            foreach (Task task in tasksToDisplay)
-            {
-                displayString += "\r\n";
-                displayString += index;
-                displayString += GetTaskInformation(task);
-                index++;
-            }
-             currentListedTasks = new List<Task>(tasksToDisplay);
-            return displayString;
-        }
-
-        private string GetTaskInformation(Task task)
-        {
-            string taskString = String.Empty;
-            if (task is TaskFloating)
-            {
-                taskString += ShowFloating((TaskFloating)task);
-            }
-            else if (task is TaskDeadline)
-            {
-                taskString += ShowDeadline((TaskDeadline)task);
-            }
-            else if (task is TaskEvent)
-            {
-                taskString += ShowEvent((TaskEvent)task);
-            }
-            if (task.DoneState)
-                taskString += " [DONE]";
-            return taskString;
-        }
-
-        private string ShowFloating(TaskFloating task)
-        {
-            string feedback;
-            feedback = ". " + task.TaskName;
-            return feedback;
-        }
-
-        private string ShowDeadline(TaskDeadline task)
-        {
-            string feedback;
-            feedback = ". " + task.TaskName;
-
-            feedback += (" BY: " + ((TaskDeadline)task).EndTime);
-            return feedback;
-        }
-
-        private string ShowEvent(TaskEvent task)
-        {
-            string feedback;
-            feedback = ". " + task.TaskName;
-
-            DateTime startTime = ((TaskEvent)task).StartTime;
-            DateTime endTime = ((TaskEvent)task).EndTime;
-            feedback += (" AT: " + startTime.ToString());
-            if (startTime != endTime && endTime != null)
-                feedback += (" TO: " + endTime.ToString());
-            return feedback;
-        }
         #endregion
     }
 }

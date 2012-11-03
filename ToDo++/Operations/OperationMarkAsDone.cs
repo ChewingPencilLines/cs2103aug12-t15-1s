@@ -42,15 +42,17 @@ namespace ToDo
                 List<Task> searchResults = SearchForTasks(taskList, doneString);
                 if (searchResults.Count == 1)
                 {
-                    return MarkAsDone(currentListedTasks[0], out successFlag);
+                    response = MarkAsDone(currentListedTasks[0], out successFlag);
                 }
-                else //response = GenerateDisplayString(searchResults);
-                    return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), searchResults);
+                else
+                {
+                    currentListedTasks = searchResults;
+                    response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
+                }
             }
             else if (index < 0 || index > taskList.Count - 1)
             {
-                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(),  currentListedTasks);
-               // return RESPONSE_INVALID_TASK_INDEX;
+                response = new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(),  currentListedTasks);
             }
             else if (doneString == null)
             {
@@ -68,7 +70,7 @@ namespace ToDo
                // return REPONSE_INVALID_COMMAND;
                 return new Response(Result.INVALID_COMMAND, Format.DEFAULT, this.GetType(),  currentListedTasks);
             }
-            if (successFlag) TrackOperation();
+            if (response.IsSuccessful()) TrackOperation();
             return response;
         }
 

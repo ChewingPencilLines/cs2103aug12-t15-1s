@@ -59,11 +59,11 @@ namespace ToDo
                     //check substring
                     searchResults = SearchForTasks(taskList, taskName);
                     if (searchResults.Count == 0)
-                        return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                        response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
                     else
                     {
                         currentListedTasks = searchResults;
-                        return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
+                        response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                     }
                 }
                 else if (searchResults.Count == 1)
@@ -73,7 +73,7 @@ namespace ToDo
                 else
                 {
                     currentListedTasks = searchResults;
-                    return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
+                    response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                 }
             }
             else
@@ -83,7 +83,7 @@ namespace ToDo
                     Task taskToDelete =  currentListedTasks[startIndex];
                     if (taskToDelete == null)
                         // invalid task, already deleted
-                        return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
+                        response = new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
                     else response = DeleteTask(taskToDelete, taskList, out successFlag);
                 }
                 else
@@ -98,13 +98,13 @@ namespace ToDo
                         {
                             // this is a hack. delete task range properly!
                             response = DeleteTask(taskToDelete, taskList, out successFlag);
-                            if (!response.isSuccess()) return response;
+                            if (!response.IsSuccessful()) return response;
                         }
                     }
                 }
             }
 
-            if (successFlag) TrackOperation();
+            if (response.IsSuccessful()) TrackOperation();
             return response;
         }
 

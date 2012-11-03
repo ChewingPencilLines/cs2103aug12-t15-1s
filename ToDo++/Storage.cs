@@ -148,6 +148,9 @@ namespace ToDo
                         let attr = node.Attribute("id")
                         where attr != null && attr.Value == taskToDelete.ID.ToString()
                         select node;
+
+            if (task == null) return false;
+
             task.ToList().ForEach(x => x.Remove());
 
             doc.Save(taskStorageFile);
@@ -164,7 +167,17 @@ namespace ToDo
                        where attr != null && attr.Value == taskToMarkAsDone.ID.ToString()
                        select node;
 
-            task.First().Element("State").ReplaceNodes("True");
+            if (task == null) return false;
+
+            try
+            {
+                task.First().Element("Done").ReplaceNodes("True");
+            }
+            catch (Exception)
+            {
+                // log: failed to find node.
+                return false;
+            }
 
             doc.Save(taskStorageFile);
             return true;
