@@ -120,16 +120,7 @@ namespace ToDo
             // Remove tasks and push to undo stack.
             undoTask.Push(taskToDelete);
             taskList.Remove(taskToDelete);
-
-            /*
-            // Adjust list to null references to deleted tasks without changing order.
-            int nullIndex =  currentListedTasks.IndexOf(taskToDelete);
-            if (nullIndex >= 0 && nullIndex <  currentListedTasks.Count)
-            {
-                 currentListedTasks[nullIndex] = null;
-            }
-             * */
-
+            
             // Can just remove task from currentListedTask with new UI
             currentListedTasks.Remove(taskToDelete);
 
@@ -249,7 +240,7 @@ namespace ToDo
                                  select task).ToList();
             return filteredTasks;
         }
-       
+
         #endregion
 
         // ******************************************************************

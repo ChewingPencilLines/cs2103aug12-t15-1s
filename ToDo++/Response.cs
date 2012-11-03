@@ -36,6 +36,7 @@ namespace ToDo
         const string STRING_UNDEFINED = "Undefined feedback string!";
         #endregion
 
+        Result result;
         Format formatType;
         string feedbackString = null;
         List<Task> tasksToBeDisplayed;
@@ -57,7 +58,13 @@ namespace ToDo
         
             this.formatType = formatType;
             this.tasksToBeDisplayed = tasks;
+            this.result = resultType;
             SetFeedbackString(resultType, operationType);            
+        }
+        public bool isSuccess()
+        {
+            if (result == Result.SUCCESS) return true;
+            else return false;
         }
 
         private void SetFeedbackString(Result resultType, Type operationType)

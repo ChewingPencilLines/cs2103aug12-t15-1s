@@ -14,19 +14,21 @@ namespace ToDo
         // work on letting it search by dates first. i will get range of index detected soon.
         // i will also catch the "all" keyword, letting u allow all search hits to be deleted immediately.
 
-        private int? index;
-        private int? endindex;
+        private int startIndex;
+        private int endIndex;
+        private bool hasIndex;
         private string taskName;
         private DateTime? startTime = null, endTime = null;
         private DateTimeSpecificity isSpecific;
 
         public OperationDelete(string taskName, int[] indexRange, DateTime? startTime, DateTime? endTime, DateTimeSpecificity isSpecific)
         {
-            if (indexRange == null) this.index = null;
+            if (indexRange == null) hasIndex = false;            
             else
             {
-                this.index = indexRange[TokenIndexRange.START_INDEX] - 1;
-                this.endindex = indexRange[TokenIndexRange.END_INDEX] - 1;
+                hasIndex = true;
+                this.startIndex = indexRange[TokenIndexRange.START_INDEX] - 1;
+                this.endIndex = indexRange[TokenIndexRange.END_INDEX] - 1;
             }
             if (taskName == null) this.taskName = "";
             else this.taskName = taskName;
@@ -41,7 +43,14 @@ namespace ToDo
             Response response = null;
 
             List<Task> searchResults;
-            if (index == null)
+            
+            // Invalid index ranges
+            if (endIndex < startIndex)
+                return new Response(Result.INVALID_TASK, Format.DEFAULT);
+            else if (startIndex < 0 || endIndex > currentListedTasks.Count - 1)
+                return new Response(Result.INVALID_TASK, Format.DEFAULT);
+
+            if (hasIndex == false)
             {
                 searchResults = SearchForTasks(taskList, taskName, isSpecific.StartTime && isSpecific.EndTime, startTime, endTime);
                 if (searchResults.Count == 0)
@@ -58,7 +67,7 @@ namespace ToDo
                 }
                 else if (searchResults.Count == 1)
                 {
-                    response = DeleteTask(searchResults[0], taskList, out successFlag);
+                    return DeleteTask(searchResults[0], taskList, out successFlag);
                 }
                 else
                 {
@@ -66,36 +75,30 @@ namespace ToDo
                     return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                 }
             }
-            else if (index < 0 || index >  currentListedTasks.Count - 1)
-            {
-                // siginifies invalid index
-                return new Response(Result.INVALID_TASK, Format.DEFAULT);
-            }
             else
             {
-                Debug.Assert(endindex >= index);
-                if (endindex == index)
+                if (endIndex == startIndex)
                 {
-                    Task taskToDelete =  currentListedTasks[index.Value];
+                    Task taskToDelete =  currentListedTasks[startIndex];
                     if (taskToDelete == null)
                         // invalid task, already deleted
                         return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
                     else response = DeleteTask(taskToDelete, taskList, out successFlag);
                 }
-                else if (endindex < 0 || endindex >  currentListedTasks.Count - 1)
-                {
-                    return new Response(Result.INVALID_TASK, Format.DEFAULT);
-                }
                 else
                 {
-                    response = null;
-                    //should the result be failure when exists fail in the index range but other succeed?
-                    for (int? i = index; i <= endindex; i++)
+                    response = new Response(Result.INVALID_TASK, Format.DEFAULT);
+                    for (int i = startIndex; i <= endIndex; i++)
                     {
-                        Task taskToDelete =  currentListedTasks[i.Value];
+                        Task taskToDelete =  currentListedTasks[i];
                         if (taskToDelete == null)
-                            response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(),  currentListedTasks);
-                        else response = DeleteTask(taskToDelete, taskList, out successFlag);                      
+                            response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
+                        else
+                        {
+                            // this is a hack. delete task range properly!
+                            response = DeleteTask(taskToDelete, taskList, out successFlag);
+                            if (!response.isSuccess()) return response;
+                        }
                     }
                 }
             }

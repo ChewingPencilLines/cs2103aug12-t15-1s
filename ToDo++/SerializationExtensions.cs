@@ -38,9 +38,11 @@ namespace ToDo
             {
                 using (TextWriter streamWriter = new StreamWriter(memoryStream))
                 {
+                    XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+                    namespaces.Add(string.Empty, string.Empty);
                     var xmlSerializer = new XmlSerializer(typeof(T));
-                    xmlSerializer.Serialize(streamWriter, obj);
-                    return XElement.Parse(Encoding.ASCII.GetString(memoryStream.ToArray()));
+                    xmlSerializer.Serialize(streamWriter, obj, namespaces);
+                    return XElement.Parse(Encoding.ASCII.GetString(memoryStream.ToArray()));                    
                 }
             }
         }
