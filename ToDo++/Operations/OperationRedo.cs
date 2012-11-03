@@ -9,10 +9,11 @@ namespace ToDo
         public OperationRedo()
         { }
 
-        public override string Execute(List<Task> taskList, Storage storageIO)
+        public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             if (redoStack.Count == 0 || redoTask.Count == 0)
-                return RESPONSE_REDO_FAILURE;
+                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), lastListedTasks);
+               // return RESPONSE_REDO_FAILURE;
             Operation redoOp = Operation.redoStack.Pop();
             return redoOp.Redo(taskList, storageIO);
         }

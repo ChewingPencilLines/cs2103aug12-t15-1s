@@ -20,14 +20,13 @@ namespace ToDo
             this.isSpecific = isSpecific;
         }
 
-        public override string Execute(List<Task> taskList, Storage storageIO)
+        public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
-            string response;
-
             List<Task> searchResults = SearchForTasks(taskList, searchString, false, startTime, endTime);
-            response = GenerateDisplayString(searchResults);
-            return response;
+         //   response = GenerateDisplayString(searchResults);
+         //   return response;
+            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), lastListedTasks);
         }
     }   
 }

@@ -11,14 +11,15 @@ namespace ToDo
         {
             newTask = setTask;
         }
-        public override string Execute(List<Task> taskList, Storage storageIO)
+        public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
-            string response;
+            Response response;
 
             if (newTask == null)
             {
-                return RESPONSE_ADD_FAILURE;
+                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), lastListedTasks);
+               // return RESPONSE_ADD_FAILURE;
             }
             response = AddTask(newTask, taskList, out successFlag);
 
@@ -27,31 +28,14 @@ namespace ToDo
             return response;
         }
 
-        public Response ExecuteWithResponse(List<Task> taskList, Storage storageIO)
-        {
-            
-            this.storageIO = storageIO;
-            Response response;
-
-            if (newTask == null)
-            {
-                return new Response(Result.FAILURE,Format.DEFAULT,this.GetType());
-            }
-            response = AddTaskWithResponse(newTask, taskList, out successFlag);
-
-            if (successFlag) TrackOperation();
-
-            return response;
-        }
-
-        public override string Undo(List<Task> taskList, Storage storageIO)
+        public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();
             redoTask.Push(task);
             return DeleteTask(task, taskList, out successFlag);
         }
 
-        public override string Redo(List<Task> taskList, Storage storageIO)
+        public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             Task task = redoTask.Pop();
             undoTask.Push(task);

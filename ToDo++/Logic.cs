@@ -51,7 +51,7 @@ namespace ToDo
             {
                 AlertBox.Show(e.Message);
             }
-            if (operation == null) return new Response(Result.INVALID_COMMAND);
+            if (operation == null) return null;//Operation.REPONSE_INVALID_COMMAND;
             else return ExecuteCommand(operation);
         }
 
@@ -70,10 +70,8 @@ namespace ToDo
 
         private Response ExecuteCommand(Operation operation)
         {
-            Response response = new Response(Result.INVALID_COMMAND);
-            if (operation is OperationAdd)
-                response = ((OperationAdd)operation).ExecuteWithResponse(taskList, storage);
-            //response = operation.Execute(taskList, storage);
+            Response response;
+            response = operation.Execute(taskList, storage);
             return response;
         }
 
