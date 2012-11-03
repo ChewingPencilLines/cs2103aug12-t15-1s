@@ -107,5 +107,10 @@ namespace ToDo
                 return 0;
             }
         }
+
+        public virtual Task Postpone(DateTime? NewDate)
+        {
+            return null;
+        }
     }
 }

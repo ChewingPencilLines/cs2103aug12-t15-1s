@@ -28,5 +28,10 @@ namespace ToDo
         {
             return false;
         }
+
+        public override Task Postpone(DateTime? NewDate)
+        {
+            return base.Postpone(NewDate);
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace ToDo
         public DateTime EndTime
         {
             get { return endTime; }
-            set { endTime = value; }
+         //   set { endTime = value; }
         }
 
         public TaskDeadline(
@@ -71,6 +71,16 @@ namespace ToDo
             if (endTime.Year != DateTime.Now.Year) timeString += " " + endTime.Year;
             if (isSpecific.EndTime) timeString += ", " + endTime.ToShortTimeString();
             return timeString;
+        }
+
+        public override Task Postpone(DateTime? NewDate)
+        {
+            TaskDeadline result;
+            if (NewDate == null)
+                result = new TaskDeadline(this.taskName, this.endTime.AddDays(1), this.isSpecific, this.doneState);
+            else
+                result = new TaskDeadline(this.taskName, NewDate.Value, this.isSpecific, this.doneState);
+            return result;
         }
     }
 }

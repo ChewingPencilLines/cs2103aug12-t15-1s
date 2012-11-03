@@ -151,51 +151,22 @@ namespace ToDo
         protected Response PostponeTask(Task taskToPostpone, List<Task> taskList, DateTime? NewDate)
         {
            // successFlag = false;
-            Task taskPostponed = taskToPostpone;
-            undoTask.Push(taskToPostpone);
-            taskList.Remove(taskToPostpone);
-            //if (taskToPostpone.Postpone(newStartTime, newEndTime))
+            Task taskPostponed = taskToPostpone.Postpone(NewDate);
+            if (taskPostponed == null)
             {
-
-            }
-
-            if (taskPostponed is TaskDeadline)
-            {
-                if (NewDate == null)
-                    ((TaskDeadline)taskPostponed).EndTime = ((TaskDeadline)taskPostponed).EndTime.AddDays(1);
-                else
-                    ((TaskDeadline)taskPostponed).EndTime = NewDate.Value;
-                taskList.Add(taskPostponed);
-                undoTask.Push(taskPostponed);
-            }
-            else if (taskPostponed is TaskEvent)
-            {
-                if (NewDate == null)
-                {
-                    ((TaskEvent)taskPostponed).EndTime = ((TaskEvent)taskPostponed).EndTime.AddDays(1);
-                    ((TaskEvent)taskPostponed).StartTime = ((TaskEvent)taskPostponed).StartTime.AddDays(1);
-                }
-                else
-                {
-                    DateTime OldDate = ((TaskEvent)taskPostponed).StartTime;
-                    ((TaskEvent)taskPostponed).EndTime += NewDate.Value - OldDate;
-                    ((TaskEvent)taskPostponed).StartTime = NewDate.Value;
-                }
-                taskList.Add(taskPostponed);
-                undoTask.Push(taskPostponed);
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationPostpone));   
             }
             else
             {
-                //???
                 undoTask.Push(taskToPostpone);
-                taskList.Add(taskToPostpone);
-                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                taskList.Remove(taskToPostpone);
+                taskList.Add(taskPostponed);
+                undoTask.Push(taskPostponed);
             }
-            //todo: create postpone function.
             if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
             {
                // successFlag = true;
-                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType());
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationPostpone));
             }
             else
                 return new Response(Result.XML_READWRITE_FAIL);
