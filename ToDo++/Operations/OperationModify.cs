@@ -46,13 +46,13 @@ namespace ToDo
             if (oldIndex.HasValue == false && newTask == null)
             {
                 currentListedTasks = taskList;
-                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
+                response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
             }
             else if (oldIndex.HasValue == false && newTask != null)
             {
                 searchResults = SearchForTasks(taskList, newTask.TaskName);
                 currentListedTasks = searchResults;
-                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
+                response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
             }
             else if (oldIndex.HasValue == true && (oldIndex < 0 || oldIndex > taskList.Count - 1))
             {
@@ -60,11 +60,11 @@ namespace ToDo
                 {
                     searchResults = SearchForTasks(taskList, newTask.TaskName);
                     currentListedTasks = searchResults;
-                    return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
+                    response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                 }
                 else
                 {
-                    return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
+                    response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
                 }
             }
             else
@@ -85,8 +85,9 @@ namespace ToDo
                     response = ModifyTask(taskToModify, newTask, taskList, out successFlag);
                 }
                 else
-                    return new Response(Result.INVALID_TASK, Format.DEFAULT);
+                    response = new Response(Result.INVALID_TASK, Format.DEFAULT);
             }
+
             if (successFlag) TrackOperation();
             return response;
         }

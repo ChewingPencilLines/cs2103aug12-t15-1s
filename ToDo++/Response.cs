@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    public enum Result { SUCCESS, FAILURE, INVALID_TASK, INVALID_COMMAND, XML_READWRITE_FAIL, EXCEPTION_FAILURE };
+    public enum Result { SUCCESS, FAILURE, INVALID_TASK, INVALID_COMMAND, XML_READWRITE_FAIL, TASK_MISSING_FROM_FILE, EXCEPTION_FAILURE };
     public enum Format { DEFAULT, NAME, DO_NOTHING};
     public class Response
     {
@@ -61,7 +61,7 @@ namespace ToDo
             this.result = resultType;
             SetFeedbackString(resultType, operationType);            
         }
-        public bool isSuccess()
+        public bool IsSuccessful()
         {
             if (result == Result.SUCCESS) return true;
             else return false;
