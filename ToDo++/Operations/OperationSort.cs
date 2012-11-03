@@ -15,14 +15,14 @@ namespace ToDo
             this.storageIO = storageIO;
            // string response;
 
-            List<Task> sortedTasks = (from task in lastListedTasks
+            List<Task> sortedTasks = (from task in  currentListedTasks
                                orderby task.TaskName
                                select task).ToList();
            // response = GenerateDisplayString(sortedTasks);
 
             TrackOperation();
 
-            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), lastListedTasks);
+            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
            // return response;
         }
     }

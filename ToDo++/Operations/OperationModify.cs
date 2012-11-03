@@ -45,34 +45,33 @@ namespace ToDo
 
             if (oldIndex.HasValue == false && newTask == null)
             {
-                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), lastListedTasks);
-               // response = GenerateDisplayString(taskList);
+                currentListedTasks = taskList;
+                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
             }
             else if (oldIndex.HasValue == false && newTask != null)
             {
                 searchResults = SearchForTasks(taskList, newTask.TaskName);
-               // response = GenerateDisplayString(searchResults);
-                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), searchResults);
+                currentListedTasks = searchResults;
+                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
             }
             else if (oldIndex.HasValue == true && (oldIndex < 0 || oldIndex > taskList.Count - 1))
             {
                 if (newTask != null)
                 {
                     searchResults = SearchForTasks(taskList, newTask.TaskName);
-                   // response = GenerateDisplayString(searchResults);
-                    return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), searchResults);
+                    currentListedTasks = searchResults;
+                    return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                 }
                 else
                 {
-                    return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), lastListedTasks);
-                  //  response = GenerateDisplayString(taskList);
+                    return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
                 }
             }
             else
             {
-                if (oldIndex.Value >= 0 && oldIndex.Value < lastListedTasks.Count)
+                if (oldIndex.Value >= 0 && oldIndex.Value <  currentListedTasks.Count)
                 {
-                    Task taskToModify = lastListedTasks[oldIndex.Value];
+                    Task taskToModify =  currentListedTasks[oldIndex.Value];
                     if (taskToModify is TaskEvent && newTask is TaskFloating)
                     {
                         newTask = new TaskEvent(newTask.TaskName, ((TaskEvent)taskToModify).StartTime,
@@ -85,8 +84,8 @@ namespace ToDo
                     }
                     response = ModifyTask(taskToModify, newTask, taskList, out successFlag);
                 }
-                else //response = RESPONSE_INVALID_TASK_INDEX;
-                    return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), lastListedTasks);
+                else
+                    return new Response(Result.INVALID_TASK, Format.DEFAULT);
             }
             if (successFlag) TrackOperation();
             return response;

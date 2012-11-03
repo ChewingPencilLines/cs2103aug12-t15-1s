@@ -19,7 +19,7 @@ namespace ToDo
             if (newTask == null)
             {
                 //return RESPONSE_SCHEDULE_FAILURE;
-                return new Response(Result.FAILURE,Format.DEFAULT, this.GetType(), lastListedTasks);
+                return new Response(Result.FAILURE,Format.DEFAULT, this.GetType(),  currentListedTasks);
             }
             //todo
             return response;// "stub";

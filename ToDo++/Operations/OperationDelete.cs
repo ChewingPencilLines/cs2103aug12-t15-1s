@@ -49,36 +49,42 @@ namespace ToDo
                     //check substring
                     searchResults = SearchForTasks(taskList, taskName);
                     if (searchResults.Count == 0)
-                        //  response = RESPONSE_DELETE_FAILURE;
-                        return new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), lastListedTasks);
-                    else// response = GenerateDisplayString(searchResults);
-                        return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), searchResults);
+                        return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                    else
+                    {
+                        currentListedTasks = searchResults;
+                        return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
+                    }
                 }
                 else if (searchResults.Count == 1)
                 {
                     response = DeleteTask(searchResults[0], taskList, out successFlag);
                 }
-                else return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), searchResults);
+                else
+                {
+                    currentListedTasks = searchResults;
+                    return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
+                }
             }
-            else if (index < 0 || index > lastListedTasks.Count - 1)
+            else if (index < 0 || index >  currentListedTasks.Count - 1)
             {
-                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), lastListedTasks);
+                // siginifies invalid index
+                return new Response(Result.INVALID_TASK, Format.DEFAULT);
             }
             else
             {
                 Debug.Assert(endindex >= index);
                 if (endindex == index)
                 {
-                    Task taskToDelete = lastListedTasks[index.Value];
+                    Task taskToDelete =  currentListedTasks[index.Value];
                     if (taskToDelete == null)
-                       // return RESPONSE_DELETE_ALREADY;
-                        return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), lastListedTasks);
+                        // invalid task, already deleted
+                        return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
                     else response = DeleteTask(taskToDelete, taskList, out successFlag);
                 }
-                else if (endindex < 0 || endindex > lastListedTasks.Count - 1)
+                else if (endindex < 0 || endindex >  currentListedTasks.Count - 1)
                 {
-                    return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), lastListedTasks);
-                    //return RESPONSE_INVALID_TASK_INDEX;
+                    return new Response(Result.INVALID_TASK, Format.DEFAULT);
                 }
                 else
                 {
@@ -86,9 +92,9 @@ namespace ToDo
                     //should the result be failure when exists fail in the index range but other succeed?
                     for (int? i = index; i <= endindex; i++)
                     {
-                        Task taskToDelete = lastListedTasks[i.Value];
+                        Task taskToDelete =  currentListedTasks[i.Value];
                         if (taskToDelete == null)
-                            response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), lastListedTasks);
+                            response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(),  currentListedTasks);
                         else response = DeleteTask(taskToDelete, taskList, out successFlag);                      
                     }
                 }

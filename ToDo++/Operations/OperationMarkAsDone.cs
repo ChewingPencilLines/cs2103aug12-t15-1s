@@ -42,14 +42,14 @@ namespace ToDo
                 List<Task> searchResults = SearchForTasks(taskList, doneString);
                 if (searchResults.Count == 1)
                 {
-                    return MarkAsDone(lastListedTasks[0], out successFlag);
+                    return MarkAsDone(currentListedTasks[0], out successFlag);
                 }
                 else //response = GenerateDisplayString(searchResults);
                     return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), searchResults);
             }
             else if (index < 0 || index > taskList.Count - 1)
             {
-                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), lastListedTasks);
+                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(),  currentListedTasks);
                // return RESPONSE_INVALID_TASK_INDEX;
             }
             else if (doneString == null)
@@ -59,14 +59,14 @@ namespace ToDo
                 Debug.Assert(endindex < taskList.Count);
                 for (int? i = index; i <= endindex; i++)
                 {
-                    Task taskToMarkAsDone = lastListedTasks[i.Value];
+                    Task taskToMarkAsDone =  currentListedTasks[i.Value];
                     response = MarkAsDone(taskToMarkAsDone, out successFlag);
                 }
             }
             else
             {
                // return REPONSE_INVALID_COMMAND;
-                return new Response(Result.INVALID_COMMAND, Format.DEFAULT, this.GetType(), lastListedTasks);
+                return new Response(Result.INVALID_COMMAND, Format.DEFAULT, this.GetType(),  currentListedTasks);
             }
             if (successFlag) TrackOperation();
             return response;
@@ -80,11 +80,11 @@ namespace ToDo
             if (storageIO.MarkTaskAsDone(task))
             {
                 successFlag = true;
-                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), lastListedTasks);
+                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
               //  return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
             }
             else
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, this.GetType(), lastListedTasks);
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, this.GetType(),  currentListedTasks);
                 //return RESPONSE_XML_READWRITE_FAIL;
         }
 
@@ -96,11 +96,11 @@ namespace ToDo
             if (storageIO.MarkTaskAsDone(task))
             {
                 successFlag = true;
-                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), lastListedTasks);
+                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
                // return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
             }
             else
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, this.GetType(), lastListedTasks);
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, this.GetType(),  currentListedTasks);
               //  return RESPONSE_XML_READWRITE_FAIL;
         }
     } 
