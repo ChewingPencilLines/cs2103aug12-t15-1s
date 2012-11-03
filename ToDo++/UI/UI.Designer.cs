@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             BrightIdeasSoftware.OLVColumn taskDateTimeCol;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -57,6 +57,10 @@
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.textInput = new ToDo.InputBox();
             this.topMenuControl = new ToDo.TopMenuControl();
+            this.timerCollpaser = new System.Windows.Forms.Timer(this.components);
+            this.timerExpander = new System.Windows.Forms.Timer(this.components);
+            this.timerFadeIn = new System.Windows.Forms.Timer(this.components);
+            this.timerFadeOut = new System.Windows.Forms.Timer(this.components);
             taskDateTimeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -71,6 +75,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
+            // 
+            // taskDateTimeCol
+            // 
+            taskDateTimeCol.AspectName = "GetTimeString";
+            taskDateTimeCol.CellPadding = null;
+            taskDateTimeCol.FillsFreeSpace = true;
+            taskDateTimeCol.Width = 199;
             // 
             // notifyIcon_taskBar
             // 
@@ -176,13 +187,6 @@
             this.taskNameCol.Width = 213;
             this.taskNameCol.WordWrap = true;
             // 
-            // taskDateTimeCol
-            // 
-            taskDateTimeCol.AspectName = "GetTimeString";
-            taskDateTimeCol.CellPadding = null;
-            taskDateTimeCol.FillsFreeSpace = true;
-            taskDateTimeCol.Width = 199;
-            // 
             // taskDoneStateCol
             // 
             this.taskDoneStateCol.AspectName = "DoneState";
@@ -206,7 +210,7 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
+            this.preferencesPanel.Size = new System.Drawing.Size(495, 280);
             this.preferencesPanel.TabIndex = 0;
             // 
             // taskDisplay
@@ -238,7 +242,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(186, 275);
+            this.outputBox.Size = new System.Drawing.Size(495, 275);
             this.outputBox.TabIndex = 28;
             this.outputBox.Text = "";
             // 
@@ -384,6 +388,26 @@
             this.topMenuControl.Size = new System.Drawing.Size(182, 31);
             this.topMenuControl.TabIndex = 17;
             // 
+            // timerCollpaser
+            // 
+            this.timerCollpaser.Interval = 5;
+            this.timerCollpaser.Tick += new System.EventHandler(this.timerCollpaser_Tick);
+            // 
+            // timerExpander
+            // 
+            this.timerExpander.Interval = 5;
+            this.timerExpander.Tick += new System.EventHandler(this.timerExpander_Tick);
+            // 
+            // timerFadeIn
+            // 
+            this.timerFadeIn.Interval = 15;
+            this.timerFadeIn.Tick += new System.EventHandler(this.timerFadeIn_Tick);
+            // 
+            // timerFadeOut
+            // 
+            this.timerFadeOut.Interval = 15;
+            this.timerFadeOut.Tick += new System.EventHandler(this.timerFadeOut_Tick);
+            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -449,6 +473,10 @@
         private BrightIdeasSoftware.OLVColumn taskDoneStateCol;
         private BrightIdeasSoftware.OLVColumn taskIndexCol;
         private BrightIdeasSoftware.OLVColumn bufferCol;
+        private System.Windows.Forms.Timer timerCollpaser;
+        private System.Windows.Forms.Timer timerExpander;
+        private System.Windows.Forms.Timer timerFadeIn;
+        private System.Windows.Forms.Timer timerFadeOut;
     }
 }
 

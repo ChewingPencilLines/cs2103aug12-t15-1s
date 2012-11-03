@@ -134,7 +134,7 @@ namespace ToDo
             //If Window is Open
             if (notifyIcon_taskBar.Visible == false)
             {
-                FadeOut();
+                StartFadeOut();
                 notifyIcon_taskBar.Visible = true;
                 notifyIcon_taskBar.ShowBalloonTip(500);
             }
@@ -142,7 +142,7 @@ namespace ToDo
             else
             {
                 notifyIcon_taskBar.Visible = false;
-                FadeIn();
+                StartFadeIn();
                 this.WindowState = FormWindowState.Normal;
             }
         }
@@ -245,53 +245,49 @@ namespace ToDo
         /// </summary>
         #region FormFadeInOut
 
-        Timer timer1 = new Timer();
-        Timer timer2 = new Timer();
+        double i = 1;
 
-        private void IntializeTimers()
+        public void StartFadeOut()
         {
-            timer1 = new Timer();
-            timer2 = new Timer();
+            timerFadeIn.Enabled = false;
+            timerFadeOut.Enabled = true;
         }
 
-        private void FadeOut()
-        {
-            timer1.Start();
-            timer1.Tick += new EventHandler(timerTickFadeOut);
-            timer1.Interval = 15;
-        }
-
-        private void FadeIn()
+        public void StartFadeIn()
         {
             this.Show();
-            this.Opacity = 0;
-            timer2.Start();
-            timer2.Tick += new EventHandler(timerTickFadeIn);
-            timer2.Interval = 15;
+            timerFadeIn.Enabled = true;//start the Fade In Effect
+            timerFadeOut.Enabled = false;
         }
 
-        void timerTickFadeOut(object sender, EventArgs e)
+        private void timerFadeIn_Tick(object sender, EventArgs e)
         {
-            this.Opacity -= 0.07;
+            i += 0.05;
+            if (i >= 1)
+            {//if form is full visible we execute the Fade Out Effect
+                this.Opacity = 1;
+                timerFadeIn.Enabled = false;//stop the Fade In Effect
+                //timerFadeOut.Enabled = true;//start the Fade Out Effect
+                return;
+            }
+            this.Opacity = i;
+        }
 
-            if (this.Opacity <= 0)
-            {
+        private void timerFadeOut_Tick(object sender, EventArgs e)
+        {
+            i -= 0.05;
+            if (i <= 0.01)
+            {//if form is invisible we execute the Fade In Effect again
+                this.Opacity = 0.0;
+                //timerFadeIn.Enabled = true;//start the Fade In Effect
+                timerFadeOut.Enabled = false;//stop the Fade Out Effect
                 this.Hide();
-                timer1.Stop();
-                //timer1.Dispose();
+                return;
             }
+            this.Opacity = i;
         }
 
-        void timerTickFadeIn(object sender, EventArgs e)
-        {
-            this.Opacity += 0.07;
 
-            if (this.Opacity >= 100)
-            {
-                timer2.Stop();
-                //timer2.Dispose();
-            }
-        }
 
         #endregion
 
@@ -300,65 +296,49 @@ namespace ToDo
         /// </summary>
         #region CollapseExpand
 
-        Timer timerC = new Timer();
-        Timer timerE = new Timer();
-        int currHeight;
-        int prevHeight;
         int state = 0;
+        int setHeight;
+        int prevHeight;
 
-        public void CollapseExpand()
+        public void StartCollapserExpander()
         {
             if (state == 0)
             {
-                this.StartCollapseTimer();
+                setHeight = this.Height;
+                prevHeight = this.Height;
+                timerCollpaser.Enabled = true;
+                timerExpander.Enabled = false;
                 state = 1;
             }
             else
             {
-                this.StartExpandTimer();
+                setHeight = 60;
+                timerCollpaser.Enabled = false;
+                timerExpander.Enabled = true;
                 state = 0;
             }
+
+
         }
 
-        private void StartCollapseTimer()
+        private void timerCollpaser_Tick(object sender, EventArgs e)
         {
-            currHeight = this.Height;
-            prevHeight = this.Height;
-            timerC.Start();
-            timerC.Tick += new EventHandler(timerTickCollapse);
-            timerC.Interval = 7;
-        }
-
-        private void StartExpandTimer()
-        {
-            currHeight = 60;
-            timerE.Start();
-            timerE.Tick += new EventHandler(timerTickExpand);
-            timerE.Interval = 7;
-        }
-
-
-        void timerTickCollapse(object sender, EventArgs e)
-        {
-            this.Height -= 30;
-            currHeight -= 30;
-
-            if (this.Height <= 60 || currHeight <= 60)
+            setHeight -= 20;
+            if (setHeight <= 60)
             {
-                timerC.Stop();
-                timerC.Dispose();
+                timerCollpaser.Enabled = false;
             }
+            this.Height = setHeight;
         }
 
-        void timerTickExpand(object sender, EventArgs e)
+        private void timerExpander_Tick(object sender, EventArgs e)
         {
-            this.Height += 30;
-            currHeight += 30;
-
-            if (this.Height >= prevHeight || currHeight >= prevHeight)
+            setHeight += 20;
+            if (setHeight >= prevHeight)
             {
-                timerE.Stop();
+                timerExpander.Enabled = false;
             }
+            this.Height = setHeight;
         }
 
         #endregion
@@ -653,5 +633,9 @@ namespace ToDo
             // Row index should not change even if doing a column sort.
             e.Item.SubItems[1].Text = "[" + e.RowIndex.ToString() + "]";
         }
+
+
+
+
     }
 }
