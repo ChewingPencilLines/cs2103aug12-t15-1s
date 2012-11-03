@@ -45,10 +45,6 @@ namespace ToDo
                     SetGroupingByDateTime();
                     //this.AutoResizeColumns();
                     break;
-                case Format.DATETIME:
-                    displayedTasks.Sort(Task.CompareByDateTime);
-                    SetGroupingByDateTime();
-                    break;
                 case Format.NAME:
                     displayedTasks.Sort(Task.CompareByName);
                     defaultCol.UseInitialLetterForGroup = true;
@@ -57,7 +53,8 @@ namespace ToDo
                     break;                
                 case Format.DO_NOTHING:
                     break;
-                default:                    
+                default:
+                    Trace.Fail("Some case in UpdateDisplay in TaskListViewControl was not accounted for..!");
                     break;
             }
             this.SetObjects(displayedTasks);
@@ -94,7 +91,6 @@ namespace ToDo
 
         // 
         // Grouping Delegates
-        //
         //
 
         #region Group By Date/Time
@@ -138,47 +134,5 @@ namespace ToDo
                 return date.DayOfWeek.ToString();
         }
         #endregion
-
-        #region Group By Name
-
-        private void SetGroupingByName()
-        {
-            defaultCol.GroupKeyGetter = GroupKeyByName;
-            defaultCol.GroupKeyToTitleConverter = GenerateGroupFromKeyName;
-        }
-
-        private object GroupKeyByName(object task)
-        {
-            if (task is TaskFloating)
-            {
-                return null;
-            }
-            else if (task is TaskEvent)
-            {
-                return ((TaskEvent)task).StartTime.Date;
-            }
-            else if (task is TaskDeadline)
-            {
-                return ((TaskDeadline)task).EndTime.Date;
-            }
-            else
-            {
-                Trace.Fail("TaskListViewControl failed to initialize: Object is not a task object!");
-                return null;
-            }
-        }
-        private string GenerateGroupFromKeyName(object groupKey)
-        {
-            if (groupKey == null)
-                return "Other Tasks";
-            DateTime date = (DateTime)groupKey;
-            if (date == DateTime.Now.Date)
-                return "Today";
-            else if (date > DateTime.Now.Date.AddDays(6))
-                return date.ToString("D");
-            else
-                return date.DayOfWeek.ToString();
-        }
-#endregion
     }
 }

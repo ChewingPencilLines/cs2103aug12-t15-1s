@@ -87,9 +87,13 @@ namespace ToDo
             if (startTime != EndTime)
             {
                 timeString += " -- ";
-                if (isSpecific.EndDate.Day) timeString += endTime.ToString("d MMM");
-                if (endTime.Year != DateTime.Now.Year) timeString += " " + endTime.Year;
-                if (isSpecific.EndTime) timeString += ", " + endTime.ToShortTimeString();
+                if (StartTime.Date != EndTime.Date)
+                {
+                    if (isSpecific.EndDate.Day) timeString += endTime.ToString("d MMM");
+                    if (endTime.Year != DateTime.Now.Year) timeString += " " + endTime.Year;
+                    if (isSpecific.EndTime) timeString += ", ";
+                }
+                if (isSpecific.EndTime) timeString +=  endTime.ToShortTimeString();
             }
             return timeString;
         }

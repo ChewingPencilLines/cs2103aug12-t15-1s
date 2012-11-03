@@ -8,24 +8,6 @@ namespace ToDo
 {
     class OperationAttributes
     {
-        // The following properties are only used internally once set and hence cannot be "get".
-        // Set as private to prevent confusion.
-        private TimeSpan? startTime = null, endTime = null;
-        private DateTime? startDateOnly = null, endDateOnly = null;
-        private DayOfWeek? startDay = null, endDay = null;
-
-        // Setter methods
-        public TimeSpan? EndTime  { set { endTime = value; } }
-        public TimeSpan? StartTime { set { startTime = value; } }
-        public DateTime? EndDateOnly { set { endDateOnly = value; } }
-        public DateTime? StartDateOnly { set { startDateOnly = value; } }
-        public DayOfWeek? EndDay { set { endDay = value; } }
-        public DayOfWeek? StartDay { set { startDay = value; } }
-
-        // The following attributes are used during derivation of Operation type and should not be otherwised used.
-        public ContextType currentSpecifier = new ContextType();
-        public ContextType currentMode = new ContextType();
-
         // ******************************************************************
         // Operation Attributes
         // ******************************************************************
@@ -40,6 +22,30 @@ namespace ToDo
         public int[] rangeIndexes = null;
         public int timeRangeIndex;
         public bool rangeIsAll = false;
+        #endregion
+
+        // ******************************************************************
+        // Properties For Operation Generation
+        // ******************************************************************
+
+        #region Properties For Operation Generation (Hidden)
+        // The following properties are only used internally once set and hence cannot be "get".
+        // Set as private to prevent confusion.
+        private TimeSpan? startTime = null, endTime = null;
+        private DateTime? startDateOnly = null, endDateOnly = null;
+        private DayOfWeek? startDay = null, endDay = null;
+
+        // Setter methods
+        public TimeSpan? EndTime { set { endTime = value; } }
+        public TimeSpan? StartTime { set { startTime = value; } }
+        public DateTime? EndDateOnly { set { endDateOnly = value; } }
+        public DateTime? StartDateOnly { set { startDateOnly = value; } }
+        public DayOfWeek? EndDay { set { endDay = value; } }
+        public DayOfWeek? StartDay { set { startDay = value; } }
+
+        // The following attributes are used during derivation of Operation type and should not be otherwised used.
+        public ContextType currentSpecifier = new ContextType();
+        public ContextType currentMode = new ContextType();
         #endregion
 
         public OperationAttributes()
@@ -69,6 +75,20 @@ namespace ToDo
             if (endTime == null)
             {
                 isSpecific.EndTime = false;
+            }
+            // If only one date is specified, we assume both dates is that date.
+            if (isSpecific.StartTime && isSpecific.EndTime)
+            {
+                if (startDateOnly == null && endDateOnly != null)
+                {
+                    startDateOnly = endDateOnly;
+                    isSpecific.StartDate = isSpecific.EndDate;
+                }
+                else if(startDateOnly != null && endDateOnly == null)
+                {
+                    endDateOnly = startDateOnly;
+                    isSpecific.EndDate = isSpecific.StartDate;
+                }
             }
             startDateTime = CombineDateAndTime(startTime, startDateOnly, DateTime.Now);
             if (startDateTime == null)

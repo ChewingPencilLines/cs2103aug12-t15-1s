@@ -240,7 +240,7 @@ namespace ToDo
                     case "Event":
                         endTime = DateTime.Parse(task.Element("EndTime").Value);
                         startTime = DateTime.Parse(task.Element("StartTime").Value);
-                        newTask = new TaskDeadline(taskName, endTime, isSpecific, state, id);
+                        newTask = new TaskEvent(taskName, startTime, endTime, isSpecific, state, id);
                         break;
                 }
             }
