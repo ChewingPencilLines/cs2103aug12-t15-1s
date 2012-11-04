@@ -55,11 +55,11 @@ namespace ToDo
 
             if (!hasIndex && !isAll)
             {
-                searchResults = SearchForTasks(taskList, taskName, isSpecific.StartTime && isSpecific.EndTime, startTime, endTime);
+                searchResults = SearchForTasks(taskList, taskName, isSpecific, isSpecific.StartTime && isSpecific.EndTime, startTime, endTime);
                 if (searchResults.Count == 0)
                 {
                     //check substring
-                    searchResults = SearchForTasks(taskList, taskName);
+                    searchResults = SearchForTasks(taskList, taskName, isSpecific);
                     if (searchResults.Count == 0)
                         response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
                     else
@@ -104,7 +104,7 @@ namespace ToDo
                 else
                 {
                     response = new Response(Result.INVALID_TASK, Format.DEFAULT);
-                    for (int i = startIndex; i <= endIndex; i++)
+                    for (int i = startIndex; i < endIndex; i++)
                     {
                         Task taskToDelete = currentListedTasks[i];
                         if (taskToDelete == null)

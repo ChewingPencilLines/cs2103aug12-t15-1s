@@ -57,15 +57,24 @@ namespace ToDo
             return startTime.DayOfWeek;
         }
 
-        public override bool IsWithinTime(DateTime? start, DateTime? end)
+        public override bool IsWithinTime(DateTimeSpecificity isSpecific, DateTime? start, DateTime? end)
         {
             bool isWithinTime = true;
             if (start != null)
             {
                 if (end == null)
                 {
-                    if (startTime.Date > ((DateTime)start).Date) isWithinTime = false;
-                    if (endTime.Date < ((DateTime)start).Date) isWithinTime = false;
+                    if (startTime.Date > ((DateTime)start).Date
+                        && (isSpecific.StartDate.Day
+                            || (!isSpecific.StartDate.Month && endTime.Date.Month != ((DateTime)start).Month)
+                            || (!isSpecific.StartDate.Year && endTime.Date.Year != ((DateTime)start).Year)))
+                    {
+                        isWithinTime = false;
+                    }
+                    if (endTime.Date < ((DateTime)start).Date)
+                    {
+                        isWithinTime = false;
+                    }
                 }
                 if (startTime < start) isWithinTime = false;
             }

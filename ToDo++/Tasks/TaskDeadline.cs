@@ -46,17 +46,22 @@ namespace ToDo
             return task;
         }
 
-        public override bool IsWithinTime(DateTime? start, DateTime? end)
+        public override bool IsWithinTime(DateTimeSpecificity isSpecific, DateTime? start, DateTime? end)
         {
             bool isWithinTime = true;
             if (start != null)
             {
                 if (end == null)
                 {
-                    if (endTime.Date != ((DateTime)start).Date) isWithinTime = false;
+                    if ((endTime.Date != ((DateTime)start) && isSpecific.StartDate.Day)
+                        || (!isSpecific.StartDate.Month && endTime.Date.Month != ((DateTime)start).Month)
+                        || (!isSpecific.StartDate.Year && endTime.Date.Year != ((DateTime)start).Year))
+                    {
+                        isWithinTime = false;
+                    }
                 }
                 if (endTime < start) isWithinTime = false;
-            }
+            }   
             if (end != null)
             {
                 if (endTime > end) isWithinTime = false;

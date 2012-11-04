@@ -32,13 +32,16 @@ namespace ToDo
             {
                 case ContextType.STARTTIME:
                     attrb.StartDateOnly = Value;
+                    attrb.isSpecific.StartDate = IsSpecific;
                     // @ivan-todo: WarnUser if already determined startDate
                     break;
                 case ContextType.ENDTIME:
                     attrb.EndDateOnly = Value;
+                    attrb.isSpecific.EndDate = IsSpecific;
                     break;
                 case ContextType.DEADLINE:
                     attrb.EndDateOnly = Value;
+                    attrb.isSpecific.EndDate = IsSpecific;
                     break;
                 default:
                     Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");

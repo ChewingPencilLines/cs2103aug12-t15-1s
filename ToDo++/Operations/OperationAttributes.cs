@@ -58,7 +58,7 @@ namespace ToDo
         public void SetSearchTime()
         {
             // If searching only for a single time, assume it's the end time.
-            if (commandType == CommandType.SEARCH && startTime != null && endTime == null && endDateOnly == null)
+            if (startTime != null && endTime == null && endDateOnly == null)
             {
                 endTime = startTime;
                 startTime = null;
