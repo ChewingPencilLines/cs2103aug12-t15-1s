@@ -52,7 +52,7 @@ namespace ToDo
                     defaultCol.GroupKeyGetter = null;
                     defaultCol.GroupKeyToTitleConverter = null;
                     break;
-                case Format.DO_NOTHING:
+                case Format.DONE_STATE:
                     break;
                 default:
                     Trace.Fail("Some case in UpdateDisplay in TaskListViewControl was not accounted for..!");

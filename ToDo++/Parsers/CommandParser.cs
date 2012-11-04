@@ -42,7 +42,7 @@ namespace ToDo
                 }
             }
 
-            if (opAttributes.commandType == CommandType.SEARCH) opAttributes.SetSearchTime();
+            opAttributes.SetSearchTime();
             opAttributes.CombineDateTimes();
             Operation newOperation = CreateOperation(opAttributes);
             return newOperation;
