@@ -78,7 +78,7 @@
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.alertLabel);
             this.Controls.Add(this.pictureBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "AlertForm";
             this.Text = "Alert!";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

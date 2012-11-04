@@ -29,22 +29,14 @@
         private void InitializeComponent()
         {
             this.commandTree = new System.Windows.Forms.TreeView();
-            this.addButton = new System.Windows.Forms.Button();
-            this.removeButton = new System.Windows.Forms.Button();
             this.contextTree = new System.Windows.Forms.TreeView();
             this.descriptionLabel = new System.Windows.Forms.RichTextBox();
             this.titleLabel = new System.Windows.Forms.Label();
             this.listedFlexiCommands = new System.Windows.Forms.ListBox();
             this.grouper1 = new CodeVendor.Controls.Grouper();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.removeButton = new ToDo.RoundButton();
+            this.addButton = new ToDo.RoundButton();
             this.grouper1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.SuspendLayout();
             // 
             // commandTree
@@ -58,34 +50,6 @@
             this.commandTree.TabIndex = 1;
             this.commandTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.commandTree_AfterSelect);
             this.commandTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.commandTree_NodeMouseDoubleClick);
-            // 
-            // addButton
-            // 
-            this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addButton.BackColor = System.Drawing.Color.Black;
-            this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.addButton.ForeColor = System.Drawing.Color.Gainsboro;
-            this.addButton.Location = new System.Drawing.Point(12, 223);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(150, 25);
-            this.addButton.TabIndex = 4;
-            this.addButton.Text = "Add";
-            this.addButton.UseVisualStyleBackColor = false;
-            this.addButton.Click += new System.EventHandler(this.addButton_Click);
-            // 
-            // removeButton
-            // 
-            this.removeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.removeButton.BackColor = System.Drawing.Color.Black;
-            this.removeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.removeButton.ForeColor = System.Drawing.Color.Gainsboro;
-            this.removeButton.Location = new System.Drawing.Point(249, 223);
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(150, 25);
-            this.removeButton.TabIndex = 5;
-            this.removeButton.Text = "Remove";
-            this.removeButton.UseVisualStyleBackColor = false;
-            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
             // 
             // contextTree
             // 
@@ -167,69 +131,43 @@
             this.grouper1.Size = new System.Drawing.Size(408, 64);
             this.grouper1.TabIndex = 14;
             // 
-            // pictureBox2
+            // removeButton
             // 
-            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pictureBox2.Image = global::ToDo.Properties.Resources.bezelR;
-            this.pictureBox2.Location = new System.Drawing.Point(3, 224);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(10, 23);
-            this.pictureBox2.TabIndex = 16;
-            this.pictureBox2.TabStop = false;
+            this.removeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.removeButton.ButtonText = "Remove";
+            this.removeButton.Location = new System.Drawing.Point(233, 223);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(183, 29);
+            this.removeButton.TabIndex = 16;
+            this.removeButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.removeButton_MouseDown);
+            this.removeButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.removeButton_MouseUp);
             // 
-            // pictureBox1
+            // addButton
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pictureBox1.Image = global::ToDo.Properties.Resources.bezelL;
-            this.pictureBox1.Location = new System.Drawing.Point(161, 224);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(13, 23);
-            this.pictureBox1.TabIndex = 15;
-            this.pictureBox1.TabStop = false;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox3.Image = global::ToDo.Properties.Resources.bezelR;
-            this.pictureBox3.Location = new System.Drawing.Point(240, 224);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(10, 23);
-            this.pictureBox3.TabIndex = 17;
-            this.pictureBox3.TabStop = false;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox4.Image = global::ToDo.Properties.Resources.bezelL;
-            this.pictureBox4.Location = new System.Drawing.Point(398, 224);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(13, 23);
-            this.pictureBox4.TabIndex = 18;
-            this.pictureBox4.TabStop = false;
+            this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.addButton.ButtonText = "Add";
+            this.addButton.Location = new System.Drawing.Point(2, 223);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(177, 29);
+            this.addButton.TabIndex = 15;
+            this.addButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.addButton_MouseDown);
+            this.addButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.addButton_MouseUp);
             // 
             // FlexiCommandsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.Controls.Add(this.pictureBox4);
-            this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.removeButton);
+            this.Controls.Add(this.addButton);
             this.Controls.Add(this.grouper1);
             this.Controls.Add(this.descriptionLabel);
             this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.contextTree);
-            this.Controls.Add(this.removeButton);
-            this.Controls.Add(this.addButton);
             this.Controls.Add(this.commandTree);
             this.Name = "FlexiCommandsControl";
             this.Size = new System.Drawing.Size(414, 253);
             this.grouper1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -238,16 +176,12 @@
         #endregion
 
         private System.Windows.Forms.TreeView commandTree;
-        private System.Windows.Forms.Button addButton;
-        private System.Windows.Forms.Button removeButton;
         private System.Windows.Forms.TreeView contextTree;
         private System.Windows.Forms.RichTextBox descriptionLabel;
         private System.Windows.Forms.Label titleLabel;
         private System.Windows.Forms.ListBox listedFlexiCommands;
         private CodeVendor.Controls.Grouper grouper1;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.PictureBox pictureBox4;
+        private RoundButton addButton;
+        private RoundButton removeButton;
     }
 }
