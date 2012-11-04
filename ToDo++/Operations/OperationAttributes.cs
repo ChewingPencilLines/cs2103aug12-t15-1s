@@ -16,11 +16,12 @@ namespace ToDo
         public CommandType commandType = new CommandType();
         public DateTime? startDateTime = null, endDateTime = null;
         public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
-        public TimeRangeType? timeRangeType = new TimeRangeType();
-        public TimeRangeKeywordsType? timeRange = new TimeRangeKeywordsType();
+        public TimeRangeType timeRangeType = TimeRangeType.DEFAULT;
+        public TimeRangeKeywordsType timeRangeOne = TimeRangeKeywordsType.NONE;
+        public TimeRangeKeywordsType timeRangeTwo = TimeRangeKeywordsType.NONE;
         public string taskName = null;
         public int[] rangeIndexes = null;
-        public int timeRangeIndex;
+        public int timeRangeIndex = 0;
         public bool rangeIsAll = false;
         #endregion
 
@@ -77,6 +78,56 @@ namespace ToDo
             }
         }
 
+        public void SetScheduleTime()
+        {
+            if (timeRangeOne != TimeRangeKeywordsType.NONE)
+            {
+                int startTimeHour, endTimeHour;
+                // getting values from specified time range keywords
+                CustomDictionary.timeRangeKeywordsStartTime.TryGetValue(timeRangeOne, out startTimeHour);
+                if (timeRangeTwo != TimeRangeKeywordsType.NONE)
+                {
+                    CustomDictionary.timeRangeKeywordsEndTime.TryGetValue(timeRangeTwo, out endTimeHour);
+                }
+                else
+                {
+                    CustomDictionary.timeRangeKeywordsEndTime.TryGetValue(timeRangeOne, out endTimeHour);
+                }
+                // pick the correct start time and end time if other times were
+                // specified beyond the time range keywords i.e. by time tokens
+                if (startTime == null && endTime == null)
+                {
+                    startTime = new TimeSpan(startTimeHour, 0, 0);
+                    endTime = new TimeSpan(endTimeHour, 0, 0);
+                }
+                else if (startTime != null && endTime == null)
+                {
+                    if (((TimeSpan)startTime).Hours < endTimeHour
+                        && ((TimeSpan)startTime).Hours > startTimeHour)
+                    {
+                        endTime = startTime;
+                        startTime = new TimeSpan(startTimeHour, 0, 0);
+                    }
+                    else
+                    {
+                        // warn user that specified time is not within specified time range
+                    }
+                }
+                else
+                {
+                    if (!(((TimeSpan)startTime).Hours < endTimeHour
+                        && ((TimeSpan)startTime).Hours > startTimeHour
+                        && ((TimeSpan)endTime).Hours < endTimeHour
+                        && ((TimeSpan)endTime).Hours > startTimeHour))
+                    {
+                        // warn user that specified time is not within specified time range
+                    }
+                }
+            }
+            // start time and end time will stil be null if there is no time token &
+            // no time range token i.e. both are NONE
+        }
+
         public void CombineDateTimes()
         {
             // Combine Date/Times
@@ -96,7 +147,7 @@ namespace ToDo
                     startDateOnly = endDateOnly;
                     isSpecific.StartDate = isSpecific.EndDate;
                 }
-                else if(startDateOnly != null && endDateOnly == null)
+                else if (startDateOnly != null && endDateOnly == null)
                 {
                     endDateOnly = startDateOnly;
                     isSpecific.EndDate = isSpecific.StartDate;

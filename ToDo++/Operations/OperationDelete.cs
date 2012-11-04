@@ -44,11 +44,13 @@ namespace ToDo
         {
             this.storageIO = storageIO;
             Response response = null;
-
             List<Task> searchResults;
             
+            // todo: should different between nothing to delete vs. invalid index range
+            if (currentListedTasks.Count == 0)
+                return new Response(Result.INVALID_COMMAND, Format.DEFAULT);
             // Invalid index ranges
-            if (endIndex < startIndex)
+            else if (endIndex < startIndex)
                 return new Response(Result.INVALID_TASK, Format.DEFAULT);
             else if (startIndex < 0 || endIndex > currentListedTasks.Count - 1)
                 return new Response(Result.INVALID_TASK, Format.DEFAULT);

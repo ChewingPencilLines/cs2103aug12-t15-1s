@@ -41,8 +41,14 @@ namespace ToDo
                     WarnUserOfMultipleCommands();
                 }
             }
-
-            opAttributes.SetSearchTime();
+            if (opAttributes.commandType == CommandType.SEARCH)
+            {
+                opAttributes.SetSearchTime();
+            }
+            if (opAttributes.commandType == CommandType.SCHEDULE)
+            {
+                opAttributes.SetScheduleTime();
+            }
             opAttributes.CombineDateTimes();
             Operation newOperation = CreateOperation(opAttributes);
             return newOperation;
@@ -59,8 +65,7 @@ namespace ToDo
             string taskName = opAttributes.taskName;
             int[] taskIndex = opAttributes.rangeIndexes;
             int timeRangeIndex = opAttributes.timeRangeIndex;
-            TimeRangeKeywordsType? timeRange = opAttributes.timeRange;
-            TimeRangeType? timeRangeType = opAttributes.timeRangeType;
+            TimeRangeType timeRangeType = opAttributes.timeRangeType;
 
             Task task;
             Operation newOperation = null;
@@ -93,15 +98,15 @@ namespace ToDo
                     newOperation = new OperationUndo();
                     break;
                 case CommandType.DONE:
-                    newOperation=new OperationMarkAsDone(taskName,taskIndex,startCombined);
+                    newOperation = new OperationMarkAsDone(taskName,taskIndex,startCombined);
                     break;
                 case CommandType.POSTPONE:
                     newOperation = new OperationPostpone(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll);
                     break;
                 case CommandType.SCHEDULE:
-                    //todo: make use of overloaded GenerateNewTask method
+                    // task contains the search datetime parameters
                     task = GenerateNewTask(taskName, startCombined, endCombined, isSpecific);
-                    newOperation = new OperationSchedule(task);
+                    newOperation = new OperationSchedule(task, timeRangeIndex, timeRangeType);
                     break;
                 case CommandType.EXIT:
                     System.Environment.Exit(0);
@@ -124,48 +129,10 @@ namespace ToDo
             else if (startTime == null && endTime != null)
                 return new TaskDeadline(taskName, (DateTime)endTime, isSpecific);
             else if (startTime != null && endTime == null)
-            {
-                isSpecific.EndDate = new Specificity(isSpecific.StartDate);
-                isSpecific.EndTime = isSpecific.StartTime;
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific);
-            }
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific); 
             else
                 return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
         }
-
-        /*
-        //overloading for schedule op
-        private static Task GenerateNewTask(
-            string taskName,
-            TimeRangeType timeRangeType,
-            TimeRangeKeywordsType timeRange,
-            int timeRangeIndex,
-            DateTime? userDefinedStartTime,
-            DateTime? userDefinedEndTime,
-            DateTimeSpecificity isUserDefinedDateTimeSpecific
-            )
-        {
-            //if there is no time span indicated i.e. 3 days etc., get default 
-            //getting task duration
-            if (timeRangeIndex == 0 && timeRangeType == TimeRangeType.DEFAULT)
-            {
-                // todo: get default time range settings
-                // for now, just take it to be 1 hour long
-                timeRangeIndex = 1;
-                timeRangeType = TimeRangeType.HOUR;
-            }
-            //getting search time range
-            int timeRangeStartTime;
-            int timeRangeEndTime;
-            CustomDictionary.timeRangeKeywordsStartTime.TryGetValue(timeRange, out timeRangeStartTime);
-            CustomDictionary.timeRangeKeywordsStartTime.TryGetValue(timeRange, out timeRangeEndTime);
-            //todo: check that range > span, else return failure message
-            //todo: loop through all tasks to find earliest possible fitting time
-            //if cannot find, return failure message
-            //otherwise, DateTimeSpecificity isSpecific = new DateTimeSpecificity();
-            //return GenerateNewTask(taskName, startTime, endTime, isSpecific) --- definitely specific
-        }
-        */
 
         private static void WarnUserOfMultipleCommands()
         {

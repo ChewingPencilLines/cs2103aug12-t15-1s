@@ -51,8 +51,14 @@ namespace ToDo
             {
                 AlertBox.Show(e.Message);
             }
-            if (operation == null) return new Response(Result.INVALID_COMMAND);
-            else return ExecuteCommand(operation);
+            if (operation == null)
+            {
+                return new Response(Result.INVALID_COMMAND);
+            }
+            else
+            {
+                return ExecuteCommand(operation);
+            }
         }
 
         private Operation ParseCommand(string command)

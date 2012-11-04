@@ -78,14 +78,14 @@ namespace ToDo
 
             DateTime aDT, bDT;
             if (a is TaskEvent)
-                aDT = ((TaskEvent)a).StartTime;
+                aDT = ((TaskEvent)a).StartDateTime;
             else
-                aDT = ((TaskDeadline)a).EndTime;
+                aDT = ((TaskDeadline)a).EndDateTime;
 
             if (b is TaskEvent)
-                bDT = ((TaskEvent)b).StartTime;
+                bDT = ((TaskEvent)b).StartDateTime;
             else
-                bDT = ((TaskDeadline)b).EndTime;
+                bDT = ((TaskDeadline)b).EndDateTime;
 
             return DateTime.Compare(aDT, bDT);
         }
