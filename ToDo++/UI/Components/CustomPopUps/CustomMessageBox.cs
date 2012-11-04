@@ -140,7 +140,7 @@ namespace ToDo
     {
         private static TinyAlert tinyAlert = new TinyAlert();
         private static UI ui;
-        public enum StateTinyAlert { SUCCESS,FAILURE,ALERT };
+        public enum StateTinyAlert { SUCCESS, FAILURE, WARNING };
 
         internal static void SetUI(UI uiPass)
         {
@@ -159,7 +159,7 @@ namespace ToDo
                     tinyAlert.SetColorText(Color.Maroon, Color.White, response);
                     break;
 
-                case StateTinyAlert.ALERT:
+                case StateTinyAlert.WARNING:
                     tinyAlert.SetColorText(Color.Orange, Color.White, response);
                     break;
 

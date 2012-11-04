@@ -47,7 +47,7 @@ namespace ToDo
                 }
                 else
                 {
-                    currentListedTasks = searchResults;
+                    currentListedTasks = new List<Task>(searchResults);
                     response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
                 }
             }

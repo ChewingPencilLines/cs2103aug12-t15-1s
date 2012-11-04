@@ -29,14 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             BrightIdeasSoftware.OLVColumn taskDateTimeCol;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.timerCollpaser = new System.Windows.Forms.Timer(this.components);
             this.timerExpander = new System.Windows.Forms.Timer(this.components);
             this.timerFadeIn = new System.Windows.Forms.Timer(this.components);
             this.timerFadeOut = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.customPanelControl = new ToDo.CustomPanelControl();
@@ -77,6 +76,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
+            // taskDateTimeCol
+            // 
+            taskDateTimeCol.AspectName = "GetTimeString";
+            taskDateTimeCol.CellPadding = null;
+            taskDateTimeCol.FillsFreeSpace = true;
+            taskDateTimeCol.Width = 199;
+            // 
             // notifyIcon_taskBar
             // 
             this.notifyIcon_taskBar.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon_taskBar.Icon")));
@@ -103,16 +109,6 @@
             // 
             this.timerFadeOut.Interval = 15;
             this.timerFadeOut.Tick += new System.EventHandler(this.timerFadeOut_Tick);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(212, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 21);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // pictureBox2
             // 
@@ -192,6 +188,8 @@
             this.taskListViewControl.View = System.Windows.Forms.View.Details;
             this.taskListViewControl.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.taskListViewControl_FormatRow);
             this.taskListViewControl.SelectedIndexChanged += new System.EventHandler(this.taskListViewControl_SelectedIndexChanged);
+            this.taskListViewControl.MouseLeave += new System.EventHandler(this.taskListViewControl_MouseLeave);
+            this.taskListViewControl.MouseHover += new System.EventHandler(this.taskListViewControl_MouseHover);
             // 
             // bufferCol
             // 
@@ -210,13 +208,6 @@
             this.taskNameCol.FillsFreeSpace = true;
             this.taskNameCol.Width = 213;
             this.taskNameCol.WordWrap = true;
-            // 
-            // taskDateTimeCol
-            // 
-            taskDateTimeCol.AspectName = "GetTimeString";
-            taskDateTimeCol.CellPadding = null;
-            taskDateTimeCol.FillsFreeSpace = true;
-            taskDateTimeCol.Width = 199;
             // 
             // taskDoneStateCol
             // 
@@ -241,7 +232,7 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
+            this.preferencesPanel.Size = new System.Drawing.Size(495, 280);
             this.preferencesPanel.TabIndex = 0;
             // 
             // taskDisplay
@@ -273,7 +264,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(186, 275);
+            this.outputBox.Size = new System.Drawing.Size(495, 275);
             this.outputBox.TabIndex = 28;
             this.outputBox.Text = "";
             // 
@@ -426,9 +417,8 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(522, 385);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.customPanelControl);
             this.Controls.Add(this.textInput);
+            this.Controls.Add(this.customPanelControl);
             this.Controls.Add(this.topMenuControl);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
@@ -490,7 +480,6 @@
         private System.Windows.Forms.Timer timerExpander;
         private System.Windows.Forms.Timer timerFadeIn;
         private System.Windows.Forms.Timer timerFadeOut;
-        private System.Windows.Forms.Button button1;
     }
 }
 
