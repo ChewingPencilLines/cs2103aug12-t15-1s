@@ -22,7 +22,7 @@ namespace ToDo
 
             TrackOperation();
 
-            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
+            return new Response(Result.SUCCESS, Format.NAME, this.GetType(),  currentListedTasks);
            // return response;
         }
     }

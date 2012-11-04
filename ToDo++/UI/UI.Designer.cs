@@ -205,11 +205,14 @@
             // bufferCol
             // 
             this.bufferCol.CellPadding = null;
+            this.bufferCol.MinimumWidth = 10;
             this.bufferCol.Width = 10;
             // 
             // taskIndexCol
             // 
             this.taskIndexCol.CellPadding = null;
+            this.taskIndexCol.MaximumWidth = 50;
+            this.taskIndexCol.MinimumWidth = 35;
             this.taskIndexCol.Width = 35;
             // 
             // taskNameCol
