@@ -10,10 +10,10 @@ namespace ToDo
     {
         public DateTimeSpecificity isSpecific;
 
-        private DateTime endTime;
-        public DateTime EndTime
+        private DateTime endDateTime;
+        public DateTime EndDateTime
         {
-            get { return endTime; }
+            get { return endDateTime; }
          //   set { endTime = value; }
         }
 
@@ -25,13 +25,13 @@ namespace ToDo
             int forceID = -1)
             : base(taskName, isDone, forceID)
         {
-            this.endTime = endTime;
+            this.endDateTime = endTime;
             isSpecific = endDateSpecificity;
         }
 
         public override DayOfWeek GetDay()
         {
-            return endTime.DayOfWeek;
+            return endDateTime.DayOfWeek;
         }
 
         public override XElement ToXElement()
@@ -40,7 +40,7 @@ namespace ToDo
                             new XAttribute("id", id.ToString()),
                             new XAttribute("type", "Deadline"),
                             new XElement("Name", taskName),
-                            new XElement("EndTime", endTime.ToString()),
+                            new XElement("EndTime", endDateTime.ToString()),
                             new XElement("Done", doneState.ToString())
                             );
             return task;
@@ -72,7 +72,7 @@ namespace ToDo
                         startCompare = new DateTime(startCompare.Year, startCompare.Month, 1);
                 }
 
-                if (endTime > startCompare && end != null)
+                if (endDateTime > startCompare && end != null)
                     isWithinTime = false;
             }
             if (end != null)
@@ -97,7 +97,7 @@ namespace ToDo
                     endCompare = endCompare.AddMinutes(-1);
                 }
 
-                if (endTime > endCompare)
+                if (endDateTime > endCompare)
                     isWithinTime = false;
             }
             return isWithinTime;
@@ -107,10 +107,10 @@ namespace ToDo
         public override string GetTimeString()
         {
             string timeString = "By ";
-            if (isSpecific.EndDate.Day) timeString += endTime.ToString("d ");
-            timeString += endTime.ToString("MMM");
-            if (endTime.Year != DateTime.Now.Year) timeString += " " + endTime.Year;
-            if (isSpecific.EndTime) timeString += ", " + endTime.ToShortTimeString();
+            if (isSpecific.EndDate.Day) timeString += endDateTime.ToString("d ");
+            timeString += endDateTime.ToString("MMM");
+            if (endDateTime.Year != DateTime.Now.Year) timeString += " " + endDateTime.Year;
+            if (isSpecific.EndTime) timeString += ", " + endDateTime.ToShortTimeString();
             return timeString;
         }
 
@@ -118,7 +118,7 @@ namespace ToDo
         {
             TaskDeadline result;
             if (NewDate == null)
-                result = new TaskDeadline(this.taskName, this.endTime.AddDays(1), this.isSpecific, this.doneState);
+                result = new TaskDeadline(this.taskName, this.endDateTime.AddDays(1), this.isSpecific, this.doneState);
             else
                 result = new TaskDeadline(this.taskName, NewDate.Value, this.isSpecific, this.doneState);
             return result;

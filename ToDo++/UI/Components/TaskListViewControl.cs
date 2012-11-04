@@ -114,7 +114,7 @@ namespace ToDo
                 if (checkTask.isSpecific.StartDate.Day == false)
                     return null;
                 else
-                    return checkTask.StartTime.Date;
+                    return checkTask.StartDateTime.Date;
             }
             else if (task is TaskDeadline)
             {
@@ -122,7 +122,7 @@ namespace ToDo
 
                 if (checkTask.isSpecific.EndDate.Day == false)
                     return null;
-                return checkTask.EndTime.Date;
+                return checkTask.EndDateTime.Date;
             }
             else
             {
