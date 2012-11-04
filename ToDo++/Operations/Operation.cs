@@ -27,7 +27,6 @@ namespace ToDo
             redoStack = new Stack<Operation>();
             undoTask = new Stack<Task>();
             redoTask = new Stack<Task>();
-            Response.InitializeDisplayList(ref currentListedTasks);
         }
 
         protected void TrackOperation()
@@ -36,9 +35,13 @@ namespace ToDo
             redoStack.Clear();
         }
 
+        public static void UpdateCurrentListedTasks(List<Task> tasks)
+        {
+            currentListedTasks = tasks;
+        }
+
         public abstract Response Execute(List<Task> taskList, Storage storageIO);
-
-
+        
         /// <summary>
         /// Base Undo Operation Method. All undoable operations should be override this method.
         /// This base method will throw an assertion if called.

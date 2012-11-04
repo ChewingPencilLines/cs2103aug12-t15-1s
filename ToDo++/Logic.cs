@@ -110,5 +110,10 @@ namespace ToDo
         {
             return new OperationDisplayDefault().Execute(taskList, storage);
         }
+
+        internal void UpdateLastDisplayedTasksList(List<Task> displayedList)
+        {
+            Operation.UpdateCurrentListedTasks(displayedList);
+        }
     } 
 }
