@@ -28,12 +28,12 @@ namespace ToDo
                 else return String.Empty;
             };
 
-            defaultCol = this.AllColumns.Find(e => e.AspectName == "TaskName");    
+            defaultCol = this.AllColumns.Find(e => e.AspectName == "TaskName");
             this.AlwaysGroupByColumn = defaultCol;
             defaultCol.WordWrap = true;
-            SetGroupingByDateTime();                      
+            SetGroupingByDateTime();
         }
-        
+
         public void UpdateDisplay(Response response)
         {
             displayedTasks = response.TasksToBeDisplayed;
@@ -50,7 +50,7 @@ namespace ToDo
                     defaultCol.UseInitialLetterForGroup = true;
                     defaultCol.GroupKeyGetter = null;
                     defaultCol.GroupKeyToTitleConverter = null;
-                    break;                
+                    break;
                 case Format.DO_NOTHING:
                     break;
                 default:
@@ -87,7 +87,7 @@ namespace ToDo
         {
             e.Item.SubItems[1].Text = e.RowIndex.ToString();
         }
-        
+
 
         // 
         // Grouping Delegates
@@ -108,11 +108,20 @@ namespace ToDo
             }
             else if (task is TaskEvent)
             {
-                return ((TaskEvent)task).StartTime.Date;
+                TaskEvent checkTask = (TaskEvent)task;
+
+                if (checkTask.isSpecific.StartDate.Day == false)
+                    return null;
+                else
+                    return checkTask.StartTime.Date;
             }
             else if (task is TaskDeadline)
             {
-                return ((TaskDeadline)task).EndTime.Date;
+                TaskDeadline checkTask = (TaskDeadline)task;
+
+                if (checkTask.isSpecific.EndDate.Day == false)
+                    return null;
+                return checkTask.EndTime.Date;
             }
             else
             {

@@ -15,6 +15,18 @@ namespace ToDo
         {
             day = month = year = true;
         }
+        public Specificity(Specificity copy)
+        {
+            this.day = copy.day;
+            this.month = copy.month;
+            this.year = copy.year;
+        }
+        public Specificity(bool d, bool m, bool y)
+        {
+            this.day = d;
+            this.month = m;
+            this.year = y;
+        }
         public bool Day { get { return day; } set { day = value; } }
         public bool Month { get { return month; } set { month = value; } }
         public bool Year { get { return year; } set { year = value; } }

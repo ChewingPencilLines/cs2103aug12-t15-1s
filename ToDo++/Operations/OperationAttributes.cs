@@ -63,6 +63,14 @@ namespace ToDo
                 endTime = startTime;
                 startTime = null;
             }
+
+            // If searching for a single date, assume the range is that date.
+            if (startDateOnly != null && endDateOnly == null && startTime == null && endTime == null)
+            {
+                endDateOnly = startDateOnly;
+                isSpecific.EndDate = isSpecific.StartDate;
+                isSpecific.EndTime = isSpecific.StartTime;
+            }
         }
 
         public void CombineDateTimes()
