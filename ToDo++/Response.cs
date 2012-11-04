@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ToDo
 {
     public enum Result { SUCCESS, FAILURE, INVALID_TASK, INVALID_COMMAND, XML_READWRITE_FAIL, TASK_MISSING_FROM_FILE, EXCEPTION_FAILURE };
-    public enum Format { DEFAULT, NAME, DONE_STATE};
+    public enum Format { DEFAULT, NAME, DONE_STATE, DATE};
     public class Response
     {
         // ******************************************************************
