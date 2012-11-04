@@ -416,7 +416,7 @@ namespace ToDo
             {
                 StartCollapserExpander();
             }
-            this.customPanelControl.SelectedIndex = 2;
+            this.customPanelControl.SelectedIndex = 0;
         }
 
         #endregion
