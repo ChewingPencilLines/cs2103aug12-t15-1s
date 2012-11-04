@@ -22,7 +22,8 @@ namespace ToDo
         private DateTime? startTime = null, endTime = null;
         private DateTimeSpecificity isSpecific;
 
-        public OperationDelete(string taskName, int[] indexRange, DateTime? startTime, DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll)
+        public OperationDelete(string taskName, int[] indexRange, DateTime? startTime,
+            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll)
         {
             if (indexRange == null) hasIndex = false;            
             else
