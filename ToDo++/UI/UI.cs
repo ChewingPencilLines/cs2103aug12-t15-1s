@@ -649,13 +649,13 @@ namespace ToDo
 
         private void taskListViewControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            taskListViewControl.SelectedItem = null;
+            //taskListViewControl.SelectedItem = null;
         }
 
         private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)
         {
             // Row index should not change even if doing a column sort.
-            e.Item.SubItems[1].Text = "[" + (e.RowIndex+1).ToString() + "]";
+            e.Item.SubItems[1].Text = "[" + (e.DisplayIndex+1).ToString() + "]";
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -39,7 +39,7 @@ namespace ToDo
         Result result;
         Format formatType;
         string feedbackString = null;
-        List<Task> tasksToBeDisplayed;
+        static List<Task> tasksToBeDisplayed;
 
         public Format FormatType
         {
@@ -53,13 +53,16 @@ namespace ToDo
         {
             get { return tasksToBeDisplayed; }
         }
-        public Response(Result resultType, Format formatType = Format.DEFAULT, Type operationType = null, List<Task> tasks = null)
-        {
-        
+        public Response(Result resultType, Format formatType = Format.DEFAULT, Type operationType = null)
+        {        
             this.formatType = formatType;
-            this.tasksToBeDisplayed = tasks;
+            //this.tasksToBeDisplayed = tasks;
             this.result = resultType;
             SetFeedbackString(resultType, operationType);            
+        }
+        public static void InitializeDisplayList(ref List<Task> currentDisplayList)
+        {
+            tasksToBeDisplayed = currentDisplayList;
         }
         public bool IsSuccessful()
         {
