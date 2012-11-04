@@ -96,7 +96,7 @@ namespace ToDo
                     newOperation=new OperationMarkAsDone(taskName,taskIndex,startCombined);
                     break;
                 case CommandType.POSTPONE:
-                    newOperation = new OperationPostpone(taskName, taskIndex, startCombined, endCombined, isSpecific);
+                    newOperation = new OperationPostpone(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll);
                     break;
                 case CommandType.SCHEDULE:
                     //todo: make use of overloaded GenerateNewTask method

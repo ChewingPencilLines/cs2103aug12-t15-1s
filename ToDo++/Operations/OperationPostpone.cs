@@ -10,11 +10,13 @@ namespace ToDo
     {
         private int? index;
         private int? endindex;
+        private bool isAll;
         private string taskName;
         private DateTime? oldTime = null, postponeTime = null;
         private DateTimeSpecificity isSpecific = new DateTimeSpecificity();
 
-        public OperationPostpone(string taskName, int[] indexRange, DateTime? startTime, DateTime? postponeTime, DateTimeSpecificity isSpecific)
+        public OperationPostpone(string taskName, int[] indexRange, DateTime? startTime,
+            DateTime? postponeTime, DateTimeSpecificity isSpecific,bool isAll)
         {
             this.oldTime = startTime;
             this.postponeTime = postponeTime;
@@ -36,6 +38,8 @@ namespace ToDo
             }
             if (taskName == null) this.taskName = "";
             else this.taskName = taskName;
+            this.isAll = isAll;
+
         }
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
@@ -57,6 +61,7 @@ namespace ToDo
                 {
                     searchResults = SearchForTasks(taskList, taskName, isSpecific.StartTime, oldTime);
                 }
+
                 if (searchResults.Count == 0)
                 {
                     response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
@@ -68,13 +73,25 @@ namespace ToDo
                 }
                 else
                 {
-                    currentListedTasks = searchResults;
-                    response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
+                    if (isAll)
+                    {
+                        response = null;
+                        foreach (Task task in searchResults)
+                        {
+                            response = PostponeTask(task, taskList, postponeTime);
+                            if (!response.IsSuccessful()) return response;
+                        }
+                    }
+                    else
+                    {
+                        currentListedTasks = searchResults;
+                        response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
+                    }
                 }
             }
             else if (index < 0 || index > currentListedTasks.Count - 1)
             {
-                return new Response(Result.INVALID_TASK, Format.DEFAULT);
+                response = new Response(Result.INVALID_TASK, Format.DEFAULT);
             }
             else
             {
@@ -88,7 +105,7 @@ namespace ToDo
                 }
                 else if (endindex < 0 || endindex > currentListedTasks.Count - 1)
                 {
-                    return new Response(Result.INVALID_TASK, Format.DEFAULT);
+                    response = new Response(Result.INVALID_TASK, Format.DEFAULT);
                 }
                 else
                 {
@@ -108,7 +125,6 @@ namespace ToDo
                     }
                 }
             }
-
             if (response.IsSuccessful()) TrackOperation();
             return response;
         }
