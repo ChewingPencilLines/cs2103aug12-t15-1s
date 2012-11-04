@@ -35,9 +35,13 @@ namespace ToDo
             redoStack.Clear();
         }
 
+        public static void UpdateCurrentListedTasks(List<Task> tasks)
+        {
+            currentListedTasks = tasks;
+        }
+
         public abstract Response Execute(List<Task> taskList, Storage storageIO);
-
-
+        
         /// <summary>
         /// Base Undo Operation Method. All undoable operations should be override this method.
         /// This base method will throw an assertion if called.

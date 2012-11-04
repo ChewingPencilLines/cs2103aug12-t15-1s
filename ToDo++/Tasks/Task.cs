@@ -71,10 +71,10 @@ namespace ToDo
             {
                 if (b is TaskFloating)
                     return a.TaskName.CompareTo(b.TaskName);
-                else return -1;
+                else return 1;
             }
             else if (b is TaskFloating)
-                return 1;
+                return -1;
 
             DateTime aDT, bDT;
             if (a is TaskEvent)
@@ -97,15 +97,11 @@ namespace ToDo
 
         internal static int CompareByName(Task x, Task y)
         {
-            try
-            {
-                // NYI
-                return 0;
-            }
-            catch (Exception e)
-            {
-                return 0;
-            }
+            int compare = x.TaskName.CompareTo(y.TaskName);
+            if (compare == 0)
+                return CompareByDateTime(x, y);
+            else
+                return compare;
         }
 
         public virtual Task Postpone(DateTime? NewDate)
