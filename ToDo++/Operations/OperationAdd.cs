@@ -22,9 +22,10 @@ namespace ToDo
                // return RESPONSE_ADD_FAILURE;
             }
             response = AddTask(newTask, taskList);
-
-            if (response.IsSuccessful()) TrackOperation();
-
+            if (response.IsSuccessful())
+            {
+                TrackOperation();
+            }
             return response;
         }
 

@@ -125,7 +125,10 @@ namespace ToDo
                     }
                 }
             }
-            if (response.IsSuccessful()) TrackOperation();
+            if (response.IsSuccessful())
+            {
+                TrackOperation();
+            }
             return response;
         }
     }

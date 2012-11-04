@@ -113,7 +113,7 @@ namespace ToDo
                         // warn user that specified time is not within specified time range
                     }
                 }
-                else
+                else if (startTime != null && endTime != null)
                 {
                     if (!(((TimeSpan)startTime).Hours < endTimeHour
                         && ((TimeSpan)startTime).Hours > startTimeHour
@@ -123,6 +123,10 @@ namespace ToDo
                         // warn user that specified time is not within specified time range
                     }
                 }
+            }
+            if (startDateOnly == null)
+            {
+                startDateOnly = DateTime.Today;
             }
             // start time and end time will stil be null if there is no time token &
             // no time range token i.e. both are NONE

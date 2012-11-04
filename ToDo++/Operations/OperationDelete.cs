@@ -46,7 +46,7 @@ namespace ToDo
             Response response = null;
             List<Task> searchResults;
             
-            // todo: should different between nothing to delete vs. invalid index range
+            // todo: should differentiate between nothing to delete vs. invalid index range
             if (currentListedTasks.Count == 0)
                 return new Response(Result.INVALID_COMMAND, Format.DEFAULT);
             // Invalid index ranges
@@ -122,7 +122,10 @@ namespace ToDo
                 }
             }
 
-            if (response.IsSuccessful()) TrackOperation();
+            if (response.IsSuccessful())
+            {
+                TrackOperation();
+            }
             return response;
         }
 

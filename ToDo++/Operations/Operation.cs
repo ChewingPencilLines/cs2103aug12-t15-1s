@@ -169,7 +169,7 @@ namespace ToDo
                                  select task).ToList();
             if (!(startTime == null && endTime == null)) 
                 filteredTasks = (from task in filteredTasks
-                                 where task.IsWithinTime(isSpecific, startTime,endTime)
+                                 where task.IsWithinTime(isSpecific, startTime, endTime)
                                  select task).ToList();
             return filteredTasks;
         }

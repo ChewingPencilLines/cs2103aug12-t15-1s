@@ -88,7 +88,10 @@ namespace ToDo
                     response = new Response(Result.INVALID_TASK, Format.DEFAULT);
             }
 
-            if (response.IsSuccessful()) TrackOperation();
+            if (response.IsSuccessful())
+            {
+                TrackOperation();
+            }
             return response;
         }
 

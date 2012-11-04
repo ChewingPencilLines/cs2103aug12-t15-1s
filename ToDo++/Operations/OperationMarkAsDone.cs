@@ -71,7 +71,10 @@ namespace ToDo
                // return REPONSE_INVALID_COMMAND;
                 return new Response(Result.INVALID_COMMAND, Format.DEFAULT, this.GetType(),  currentListedTasks);
             }
-            if (response.IsSuccessful()) TrackOperation();
+            if (response.IsSuccessful())
+            {
+                TrackOperation();
+            }
             return response;
         }
 

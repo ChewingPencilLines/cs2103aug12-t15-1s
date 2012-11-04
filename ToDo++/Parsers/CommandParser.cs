@@ -104,9 +104,7 @@ namespace ToDo
                     newOperation = new OperationPostpone(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll);
                     break;
                 case CommandType.SCHEDULE:
-                    // task contains the search datetime parameters
-                    task = GenerateNewTask(taskName, startCombined, endCombined, isSpecific);
-                    newOperation = new OperationSchedule(task, timeRangeIndex, timeRangeType);
+                    newOperation = new OperationSchedule(taskName, (DateTime)startCombined, endCombined, isSpecific, timeRangeIndex, timeRangeType);
                     break;
                 case CommandType.EXIT:
                     System.Environment.Exit(0);
