@@ -44,8 +44,8 @@ namespace ToDo
             InitializePreferencesPanel();
             IntializeTopMenu();
             InitializeTaskListView();
-            this.MouseWheel += new MouseEventHandler(ScrollIfOverDisplay);
             this.ActiveControl = textInput;
+            this.MouseWheel += new MouseEventHandler(ScrollIfOverDisplay);
         }
 
         #endregion
@@ -668,27 +668,35 @@ namespace ToDo
             TinyAlertView.SetLocation();
         }
 
-        private void taskListViewControl_MouseHover(object sender, EventArgs e)
+        private void taskListViewControl_BeforeSorting(object sender, BrightIdeasSoftware.BeforeSortingEventArgs e)
+        {
+            e.GroupByOrder = SortOrder.None;
+        }
+
+        private void taskListViewControl_MouseEnter(object sender, EventArgs e)
         {
             MouseIsOverDisplayList = true;
-        }
+            taskListViewControl.Focus();
+        }   
 
         private void taskListViewControl_MouseLeave(object sender, EventArgs e)
         {
             MouseIsOverDisplayList = false;
         }
 
-        private void ScrollIfOverDisplay(object sender, EventArgs e)
-        {
-            if (MouseIsOverDisplayList)
-            {
-                taskListViewControl.Focus();
-            }
+        private void SelectTextInput(object sender, KeyPressEventArgs e)
+        {            
+            textInput.Text += e.KeyChar;
+            textInput.Focus();
+            textInput.DeselectAll();
+            textInput.Select(textInput.TextLength, 0);
+            e.Handled = true;
         }
 
-        private void taskListViewControl_BeforeSorting(object sender, BrightIdeasSoftware.BeforeSortingEventArgs e)
+        private void ScrollIfOverDisplay(object sender, MouseEventArgs e)
         {
-            e.GroupByOrder = SortOrder.None;
-        }        
+            if (MouseIsOverDisplayList)
+                taskListViewControl.Focus();
+        }
     }
 }
