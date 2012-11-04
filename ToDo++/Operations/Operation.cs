@@ -64,34 +64,28 @@ namespace ToDo
         #region Task Manipulation Methods
         protected Response AddTask(Task taskToAdd, List<Task> taskList)
         {
-          //  successFlag = false;
             try
             {
                 taskList.Add(taskToAdd);
                 undoTask.Push(taskToAdd);
                 if (storageIO.AddTaskToFile(taskToAdd))
                 {
-                  //  successFlag = true;
-                    //currentListedTasks.Add(taskToAdd);
+                    currentListedTasks.Add(taskToAdd);
                     return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks);
-                    //  return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.TaskName);
                 }
                 else
                     return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks);
-                  //  return RESPONSE_XML_READWRITE_FAIL;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
                 return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks); 
-                //return RESPONSE_ADD_FAILURE + "\r\nThe following exception occured: " + e.ToString();
+                //log this: return RESPONSE_ADD_FAILURE + "\r\nThe following exception occured: " + e.ToString();
             }
         }
 
         protected Response DeleteTask(Task taskToDelete, List<Task> taskList)
         {
-            //successFlag = false;
-
             // Remove tasks and push to undo stack.
             undoTask.Push(taskToDelete);
             taskList.Remove(taskToDelete);
@@ -101,7 +95,6 @@ namespace ToDo
 
             if (storageIO.RemoveTaskFromFile(taskToDelete))
             {
-              //  successFlag = true;
                 currentListedTasks.Remove(taskToDelete);
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationDelete),  currentListedTasks);                
             }
@@ -111,13 +104,11 @@ namespace ToDo
 
         protected Response MarkAsDone(Task taskToMarkAsDone)
         {
-           // successFlag = false;
             undoTask.Push(taskToMarkAsDone);
             taskToMarkAsDone.DoneState = true;
 
             if (storageIO.MarkTaskAsDone(taskToMarkAsDone))
             {
-               // successFlag = true;
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationMarkAsDone),  currentListedTasks);
                 //return String.Format(RESPONSE_MARKASDONE_SUCCESS, taskToMarkAsDone.TaskName);
             }
@@ -128,14 +119,12 @@ namespace ToDo
 
         protected Response ModifyTask(Task taskToModify, Task newTask, List<Task> taskList)
         {
-           // successFlag = false;
             undoTask.Push(taskToModify);
             taskList.Remove(taskToModify);
             taskList.Add(newTask);
             undoTask.Push(newTask);
             if (storageIO.RemoveTaskFromFile(taskToModify) && storageIO.AddTaskToFile(newTask))
             {
-               // successFlag = true;
                  currentListedTasks.Remove(taskToModify);
                  currentListedTasks.Add(newTask);
                // return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
@@ -150,7 +139,6 @@ namespace ToDo
         // todo: move search queries into the tasks themselves as methods.
         protected Response PostponeTask(Task taskToPostpone, List<Task> taskList, DateTime? NewDate)
         {
-           // successFlag = false;
             Task taskPostponed = taskToPostpone.Postpone(NewDate);
             if (taskPostponed == null)
             {
@@ -165,7 +153,6 @@ namespace ToDo
             }
             if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
             {
-               // successFlag = true;
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationPostpone));
             }
             else

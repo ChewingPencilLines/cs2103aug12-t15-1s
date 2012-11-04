@@ -10,10 +10,10 @@ namespace ToDo
     {
         public DateTimeSpecificity isSpecific;
 
-        private DateTime endDateTime;
-        public DateTime EndDateTime
+        private DateTime endTime;
+        public DateTime EndTime
         {
-            get { return endDateTime; }
+            get { return endTime; }
          //   set { endTime = value; }
         }
 
@@ -25,13 +25,13 @@ namespace ToDo
             int forceID = -1)
             : base(taskName, isDone, forceID)
         {
-            this.endDateTime = endTime;
+            this.endTime = endTime;
             isSpecific = endDateSpecificity;
         }
 
         public override DayOfWeek GetDay()
         {
-            return endDateTime.DayOfWeek;
+            return endTime.DayOfWeek;
         }
 
         public override XElement ToXElement()
@@ -40,41 +40,77 @@ namespace ToDo
                             new XAttribute("id", id.ToString()),
                             new XAttribute("type", "Deadline"),
                             new XElement("Name", taskName),
-                            new XElement("EndTime", endDateTime.ToString()),
+                            new XElement("EndTime", endTime.ToString()),
                             new XElement("Done", doneState.ToString())
                             );
             return task;
         }
 
-        public override bool IsWithinTime(DateTimeSpecificity isSpecific, DateTime? start, DateTime? end)
+        public override bool IsWithinTime(DateTimeSpecificity compareIsSpecific, DateTime? start, DateTime? end)
         {
             bool isWithinTime = true;
+            DateTime startCompare, endCompare;
+
+            // Start search
             if (start != null)
             {
-                if (end == null)
+                startCompare = (DateTime)start;
+
+                // If comparision is not specific to Day/Month, extend search range
+                if (!isSpecific.StartDate.Day)
                 {
-                    if ((endDateTime.Date != ((DateTime)start) && isSpecific.StartDate.Day)
-                        || (!isSpecific.StartDate.Month && endDateTime.Date.Month != ((DateTime)start).Month)
-                        || (!isSpecific.StartDate.Year && endDateTime.Date.Year != ((DateTime)start).Year))
-                    {
-                        isWithinTime = false;
-                    }
+                    if (!isSpecific.StartDate.Month)
+                        startCompare = new DateTime(startCompare.Year, 1, 1);
+                    else
+                        startCompare = new DateTime(startCompare.Year, startCompare.Month, 1);
                 }
-                if (endDateTime < start) isWithinTime = false;
-            }   
+                if (!compareIsSpecific.StartDate.Day)
+                {
+                    if (!compareIsSpecific.StartDate.Month)
+                        startCompare = new DateTime(startCompare.Year, 1, 1);
+                    else
+                        startCompare = new DateTime(startCompare.Year, startCompare.Month, 1);
+                }
+
+                if (endTime > startCompare && end != null)
+                    isWithinTime = false;
+            }
             if (end != null)
             {
-                if (endDateTime > end) isWithinTime = false;
+                endCompare = (DateTime)end;
+
+                // Extend compare range if task dates are not specific
+                if (!isSpecific.EndDate.Day)
+                {
+                    if (!isSpecific.EndDate.Month)
+                        endCompare = new DateTime(endCompare.Year + 1, 1, 1);
+                    else
+                        endCompare = new DateTime(endCompare.Year, endCompare.Month + 1, 1);
+                    endCompare = endCompare.AddMinutes(-1);
+                }
+                if (!compareIsSpecific.EndDate.Day)
+                {
+                    if (!compareIsSpecific.EndDate.Month)
+                        endCompare = new DateTime(endCompare.Year + 1, 1, 1);
+                    else
+                        endCompare = new DateTime(endCompare.Year, endCompare.Month + 1, 1);
+                    endCompare = endCompare.AddMinutes(-1);
+                }
+
+                if (endTime > endCompare)
+                    isWithinTime = false;
             }
             return isWithinTime;
         }
 
+
         public override string GetTimeString()
         {
             string timeString = "By ";
-            if (isSpecific.EndDate.Day) timeString += endDateTime.ToString("d MMM");
-            if (endDateTime.Year != DateTime.Now.Year) timeString += " " + endDateTime.Year;
-            if (isSpecific.EndTime) timeString += ", " + endDateTime.ToShortTimeString();
+            if (isSpecific.EndDate.Day) timeString += endTime.ToString("d ");
+            timeString += endTime.ToString("MMM");
+            if (endTime.Year != DateTime.Now.Year) timeString += " " + endTime.Year;
+            if (isSpecific.EndTime) timeString += ", " + endTime.ToShortTimeString();
             return timeString;
         }
 
@@ -82,7 +118,7 @@ namespace ToDo
         {
             TaskDeadline result;
             if (NewDate == null)
-                result = new TaskDeadline(this.taskName, this.endDateTime.AddDays(1), this.isSpecific, this.doneState);
+                result = new TaskDeadline(this.taskName, this.endTime.AddDays(1), this.isSpecific, this.doneState);
             else
                 result = new TaskDeadline(this.taskName, NewDate.Value, this.isSpecific, this.doneState);
             return result;

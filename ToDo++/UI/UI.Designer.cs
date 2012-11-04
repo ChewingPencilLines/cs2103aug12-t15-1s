@@ -32,8 +32,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
+            this.timerCollpaser = new System.Windows.Forms.Timer(this.components);
+            this.timerExpander = new System.Windows.Forms.Timer(this.components);
+            this.timerFadeIn = new System.Windows.Forms.Timer(this.components);
+            this.timerFadeOut = new System.Windows.Forms.Timer(this.components);
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.textInput = new ToDo.InputBox();
             this.customPanelControl = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.taskListViewControl = new ToDo.TaskListViewControl();
@@ -55,7 +60,6 @@
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.textInput = new ToDo.InputBox();
             this.topMenuControl = new ToDo.TopMenuControl();
             taskDateTimeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -78,6 +82,26 @@
             this.notifyIcon_taskBar.Text = "notifyIcon";
             this.notifyIcon_taskBar.Visible = true;
             this.notifyIcon_taskBar.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
+            // 
+            // timerCollpaser
+            // 
+            this.timerCollpaser.Interval = 1;
+            this.timerCollpaser.Tick += new System.EventHandler(this.timerCollpaser_Tick);
+            // 
+            // timerExpander
+            // 
+            this.timerExpander.Interval = 1;
+            this.timerExpander.Tick += new System.EventHandler(this.timerExpander_Tick);
+            // 
+            // timerFadeIn
+            // 
+            this.timerFadeIn.Interval = 15;
+            this.timerFadeIn.Tick += new System.EventHandler(this.timerFadeIn_Tick);
+            // 
+            // timerFadeOut
+            // 
+            this.timerFadeOut.Interval = 15;
+            this.timerFadeOut.Tick += new System.EventHandler(this.timerFadeOut_Tick);
             // 
             // pictureBox2
             // 
@@ -103,6 +127,22 @@
             this.pictureBox1.Size = new System.Drawing.Size(522, 355);
             this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;
+            // 
+            // textInput
+            // 
+            this.textInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textInput.BackColor = System.Drawing.Color.Gray;
+            this.textInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textInput.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textInput.ForeColor = System.Drawing.Color.White;
+            this.textInput.Location = new System.Drawing.Point(11, 360);
+            this.textInput.Name = "textInput";
+            this.textInput.Size = new System.Drawing.Size(501, 19);
+            this.textInput.TabIndex = 0;
+            this.textInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
+            this.textInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textInput_PreviewKeyDown);
             // 
             // customPanelControl
             // 
@@ -155,18 +195,25 @@
             this.taskListViewControl.TabIndex = 17;
             this.taskListViewControl.UseCompatibleStateImageBehavior = false;
             this.taskListViewControl.View = System.Windows.Forms.View.Details;
+            this.taskListViewControl.BeforeSorting += new System.EventHandler<BrightIdeasSoftware.BeforeSortingEventArgs>(this.taskListViewControl_BeforeSorting);
             this.taskListViewControl.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.taskListViewControl_FormatRow);
             this.taskListViewControl.SelectedIndexChanged += new System.EventHandler(this.taskListViewControl_SelectedIndexChanged);
+            this.taskListViewControl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SelectTextInput);
+            this.taskListViewControl.MouseEnter += new System.EventHandler(this.taskListViewControl_MouseEnter);
+            this.taskListViewControl.MouseLeave += new System.EventHandler(this.taskListViewControl_MouseLeave);
             // 
             // bufferCol
             // 
             this.bufferCol.CellPadding = null;
+            this.bufferCol.MinimumWidth = 10;
             this.bufferCol.Width = 10;
             // 
             // taskIndexCol
             // 
             this.taskIndexCol.CellPadding = null;
-            this.taskIndexCol.Width = 30;
+            this.taskIndexCol.MaximumWidth = 50;
+            this.taskIndexCol.MinimumWidth = 35;
+            this.taskIndexCol.Width = 35;
             // 
             // taskNameCol
             // 
@@ -191,7 +238,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.BackColor = System.Drawing.Color.White;
+            this.tabPage2.BackColor = System.Drawing.Color.Gainsboro;
             this.tabPage2.Controls.Add(this.preferencesPanel);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -202,7 +249,7 @@
             // 
             // preferencesPanel
             // 
-            this.preferencesPanel.BackColor = System.Drawing.Color.White;
+            this.preferencesPanel.BackColor = System.Drawing.Color.Gainsboro;
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
@@ -359,22 +406,6 @@
             this.pictureBox3.TabIndex = 18;
             this.pictureBox3.TabStop = false;
             // 
-            // textInput
-            // 
-            this.textInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textInput.BackColor = System.Drawing.Color.Gray;
-            this.textInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textInput.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textInput.ForeColor = System.Drawing.Color.White;
-            this.textInput.Location = new System.Drawing.Point(11, 360);
-            this.textInput.Name = "textInput";
-            this.textInput.Size = new System.Drawing.Size(501, 19);
-            this.textInput.TabIndex = 0;
-            this.textInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
-            this.textInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textInput_PreviewKeyDown);
-            // 
             // topMenuControl
             // 
             this.topMenuControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -391,8 +422,8 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(522, 385);
-            this.Controls.Add(this.customPanelControl);
             this.Controls.Add(this.textInput);
+            this.Controls.Add(this.customPanelControl);
             this.Controls.Add(this.topMenuControl);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
@@ -401,7 +432,9 @@
             this.MinimumSize = new System.Drawing.Size(522, 60);
             this.Name = "UI";
             this.Text = "ToDo++";
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SelectTextInput);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UI_MouseDown);
+            this.Move += new System.EventHandler(this.UI_Move);
             this.Resize += new System.EventHandler(this.UI_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -449,6 +482,10 @@
         private BrightIdeasSoftware.OLVColumn taskDoneStateCol;
         private BrightIdeasSoftware.OLVColumn taskIndexCol;
         private BrightIdeasSoftware.OLVColumn bufferCol;
+        private System.Windows.Forms.Timer timerCollpaser;
+        private System.Windows.Forms.Timer timerExpander;
+        private System.Windows.Forms.Timer timerFadeIn;
+        private System.Windows.Forms.Timer timerFadeOut;
     }
 }
 

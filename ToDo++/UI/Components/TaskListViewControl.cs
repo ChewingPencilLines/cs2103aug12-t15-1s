@@ -28,16 +28,17 @@ namespace ToDo
                 else return String.Empty;
             };
 
-            defaultCol = this.AllColumns.Find(e => e.AspectName == "TaskName");    
+            defaultCol = this.AllColumns.Find(e => e.AspectName == "TaskName");
             this.AlwaysGroupByColumn = defaultCol;
             defaultCol.WordWrap = true;
-            SetGroupingByDateTime();                      
+            SetGroupingByDateTime();
         }
-        
+
         public void UpdateDisplay(Response response)
         {
-            displayedTasks = response.TasksToBeDisplayed;
+            displayedTasks = response.TasksToBeDisplayed;  
             if (displayedTasks == null) return;
+
             switch (response.FormatType)
             {
                 case Format.DEFAULT:
@@ -50,13 +51,13 @@ namespace ToDo
                     defaultCol.UseInitialLetterForGroup = true;
                     defaultCol.GroupKeyGetter = null;
                     defaultCol.GroupKeyToTitleConverter = null;
-                    break;                
-                case Format.DO_NOTHING:
+                    break;
+                case Format.DONE_STATE:
                     break;
                 default:
                     Trace.Fail("Some case in UpdateDisplay in TaskListViewControl was not accounted for..!");
                     break;
-            }
+            }            
             this.SetObjects(displayedTasks);
         }
 
@@ -87,7 +88,7 @@ namespace ToDo
         {
             e.Item.SubItems[1].Text = e.RowIndex.ToString();
         }
-        
+
 
         // 
         // Grouping Delegates
@@ -108,11 +109,20 @@ namespace ToDo
             }
             else if (task is TaskEvent)
             {
-                return ((TaskEvent)task).StartDateTime.Date;
+                TaskEvent checkTask = (TaskEvent)task;
+
+                if (checkTask.isSpecific.StartDate.Day == false)
+                    return null;
+                else
+                    return checkTask.StartTime.Date;
             }
             else if (task is TaskDeadline)
             {
-                return ((TaskDeadline)task).EndDateTime.Date;
+                TaskDeadline checkTask = (TaskDeadline)task;
+
+                if (checkTask.isSpecific.EndDate.Day == false)
+                    return null;
+                return checkTask.EndTime.Date;
             }
             else
             {

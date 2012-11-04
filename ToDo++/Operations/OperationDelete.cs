@@ -66,7 +66,7 @@ namespace ToDo
                         response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
                     else
                     {
-                        currentListedTasks = searchResults;
+                        currentListedTasks = new List<Task>(searchResults);
                         response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                     }
                 }
@@ -76,7 +76,7 @@ namespace ToDo
                 }
                 else
                 {
-                    currentListedTasks = searchResults;
+                    currentListedTasks = new List<Task>(searchResults);
                     response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                 }
             }

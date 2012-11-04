@@ -25,7 +25,7 @@ namespace ToDo
 
             mostRecentTasks.AddRange(from task in taskList where task is TaskFloating select task);
 
-            currentListedTasks = mostRecentTasks;
+            currentListedTasks = new List<Task>(mostRecentTasks);
 
             return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
         }

@@ -58,11 +58,23 @@ namespace ToDo
 
         public void SetSearchTime()
         {
+            if (commandType == CommandType.SEARCH
+                || commandType == CommandType.DELETE
+                || commandType == CommandType.DONE
+                || commandType == CommandType.MODIFY)
             // If searching only for a single time, assume it's the end time.
             if (startTime != null && endTime == null && endDateOnly == null)
             {
                 endTime = startTime;
                 startTime = null;
+            }
+
+            // If searching for a single date, assume the range is that date.
+            if (startDateOnly != null && endDateOnly == null && startTime == null && endTime == null)
+            {
+                endDateOnly = startDateOnly;
+                isSpecific.EndDate = isSpecific.StartDate;
+                isSpecific.EndTime = isSpecific.StartTime;
             }
         }
 
@@ -174,13 +186,13 @@ namespace ToDo
             {
                 combinedDT = date;
             }
+            /*
             if (limit > combinedDT)
-                //@ivan -> jenna wtf is this??
-                //@jenna -> idk???!??! no idea why you test for 0001, 1, 1... is i do one meh?
                 if (combinedDT != new DateTime(0001, 1, 1)
-                    && this.commandType != CommandType.SEARCH
-                    && this.commandType != CommandType.DISPLAY)
+                    && this.commandType == CommandType.ADD
+                    && this.commandType == CommandType.SCHEDULE)
                     AlertBox.Show("Note that date specified is past.");
+            */
             return combinedDT;
         }
     }

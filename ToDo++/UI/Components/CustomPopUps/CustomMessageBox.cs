@@ -135,4 +135,57 @@ namespace ToDo
         }
 
     }
+
+    public static class TinyAlertView
+    {
+        private static TinyAlert tinyAlert = new TinyAlert();
+        private static UI ui;
+        public enum StateTinyAlert { SUCCESS, FAILURE, WARNING };
+
+        internal static void SetUI(UI uiPass)
+        {
+            ui = uiPass;
+        }
+
+        internal static void Show(StateTinyAlert state, string response)
+        {
+            switch (state)
+            {
+                case StateTinyAlert.SUCCESS:
+                    tinyAlert.SetColorText(Color.Green, Color.White, response);
+                    break;
+
+                case StateTinyAlert.FAILURE:
+                    tinyAlert.SetColorText(Color.Maroon, Color.White, response);
+                    break;
+
+                case StateTinyAlert.WARNING:
+                    tinyAlert.SetColorText(Color.Orange, Color.White, response);
+                    break;
+
+            }
+            tinyAlert.ShowInTaskbar = false;
+            tinyAlert.ShowDisplay();
+            ui.BringToFront();
+            SetLocation();
+        }
+
+        internal static void SetLocation()
+        {
+            tinyAlert.Location = new Point(ui.Left, ui.Bottom +5);
+        }
+
+        internal static void SetTiming(int time)
+        {
+            tinyAlert.SetTiming(time);
+        }
+
+        internal static void DismissEarly()
+        {
+            tinyAlert.Dismiss();
+        }
+
+        
+    }
+
 }
