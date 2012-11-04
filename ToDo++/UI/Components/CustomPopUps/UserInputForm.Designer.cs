@@ -37,7 +37,7 @@
             // 
             // userInputBox
             // 
-            this.userInputBox.BackColor = System.Drawing.Color.PaleTurquoise;
+            this.userInputBox.BackColor = System.Drawing.Color.Silver;
             this.userInputBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.userInputBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.userInputBox.Location = new System.Drawing.Point(4, 47);
@@ -47,10 +47,10 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.BackColor = System.Drawing.Color.RoyalBlue;
+            this.cancelButton.BackColor = System.Drawing.Color.WhiteSmoke;
             this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cancelButton.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.cancelButton.ForeColor = System.Drawing.Color.DimGray;
             this.cancelButton.Location = new System.Drawing.Point(4, 73);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(138, 23);
@@ -61,10 +61,10 @@
             // 
             // confirmButton
             // 
-            this.confirmButton.BackColor = System.Drawing.Color.RoyalBlue;
+            this.confirmButton.BackColor = System.Drawing.Color.WhiteSmoke;
             this.confirmButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.confirmButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.confirmButton.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.confirmButton.ForeColor = System.Drawing.Color.DimGray;
             this.confirmButton.Location = new System.Drawing.Point(148, 73);
             this.confirmButton.Name = "confirmButton";
             this.confirmButton.Size = new System.Drawing.Size(133, 23);
@@ -95,20 +95,21 @@
             this.subtitleLabel.TabIndex = 4;
             this.subtitleLabel.Text = "Description of your choice here";
             // 
-            // PopUpForm
+            // UserInputForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.BackColor = System.Drawing.Color.DimGray;
             this.ClientSize = new System.Drawing.Size(284, 101);
             this.Controls.Add(this.subtitleLabel);
             this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.confirmButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.userInputBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "PopUpForm";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "UserInputForm";
             this.Text = "Pop Up";
+            this.Resize += new System.EventHandler(this.UserInputForm_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();
 

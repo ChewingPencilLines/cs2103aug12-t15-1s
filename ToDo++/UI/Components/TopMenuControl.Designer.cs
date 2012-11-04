@@ -92,6 +92,7 @@
             this.settingsButton.Size = new System.Drawing.Size(35, 30);
             this.settingsButton.TabIndex = 0;
             this.settingsButton.UseVisualStyleBackColor = true;
+            this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
             // 
             // TopMenuControl
             // 

@@ -29,11 +29,11 @@ namespace ToDo
         private void LoadPreferencesTree()
         {
             preferencesTree.Nodes.Clear();
-            TreeNode treeNode = new TreeNode("Starting Options");
+            TreeNode treeNode = new TreeNode("Starting");
             preferencesTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("FlexiCommands");
             preferencesTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("Font Options");
+            treeNode = new TreeNode("Font");
             preferencesTree.Nodes.Add(treeNode);
         }
 

@@ -32,6 +32,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
+            this.timerCollpaser = new System.Windows.Forms.Timer(this.components);
+            this.timerExpander = new System.Windows.Forms.Timer(this.components);
+            this.timerFadeIn = new System.Windows.Forms.Timer(this.components);
+            this.timerFadeOut = new System.Windows.Forms.Timer(this.components);
+            this.button1 = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.customPanelControl = new ToDo.CustomPanelControl();
@@ -78,6 +83,36 @@
             this.notifyIcon_taskBar.Text = "notifyIcon";
             this.notifyIcon_taskBar.Visible = true;
             this.notifyIcon_taskBar.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
+            // 
+            // timerCollpaser
+            // 
+            this.timerCollpaser.Interval = 1;
+            this.timerCollpaser.Tick += new System.EventHandler(this.timerCollpaser_Tick);
+            // 
+            // timerExpander
+            // 
+            this.timerExpander.Interval = 1;
+            this.timerExpander.Tick += new System.EventHandler(this.timerExpander_Tick);
+            // 
+            // timerFadeIn
+            // 
+            this.timerFadeIn.Interval = 15;
+            this.timerFadeIn.Tick += new System.EventHandler(this.timerFadeIn_Tick);
+            // 
+            // timerFadeOut
+            // 
+            this.timerFadeOut.Interval = 15;
+            this.timerFadeOut.Tick += new System.EventHandler(this.timerFadeOut_Tick);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(212, 5);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 21);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // pictureBox2
             // 
@@ -191,7 +226,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.BackColor = System.Drawing.Color.White;
+            this.tabPage2.BackColor = System.Drawing.Color.Gainsboro;
             this.tabPage2.Controls.Add(this.preferencesPanel);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -202,7 +237,7 @@
             // 
             // preferencesPanel
             // 
-            this.preferencesPanel.BackColor = System.Drawing.Color.White;
+            this.preferencesPanel.BackColor = System.Drawing.Color.Gainsboro;
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
@@ -391,6 +426,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(522, 385);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.customPanelControl);
             this.Controls.Add(this.textInput);
             this.Controls.Add(this.topMenuControl);
@@ -402,6 +438,7 @@
             this.Name = "UI";
             this.Text = "ToDo++";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UI_MouseDown);
+            this.Move += new System.EventHandler(this.UI_Move);
             this.Resize += new System.EventHandler(this.UI_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -449,6 +486,11 @@
         private BrightIdeasSoftware.OLVColumn taskDoneStateCol;
         private BrightIdeasSoftware.OLVColumn taskIndexCol;
         private BrightIdeasSoftware.OLVColumn bufferCol;
+        private System.Windows.Forms.Timer timerCollpaser;
+        private System.Windows.Forms.Timer timerExpander;
+        private System.Windows.Forms.Timer timerFadeIn;
+        private System.Windows.Forms.Timer timerFadeOut;
+        private System.Windows.Forms.Button button1;
     }
 }
 

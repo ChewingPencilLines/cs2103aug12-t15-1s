@@ -34,13 +34,13 @@ namespace ToDo
         {
             if (state == 0)
             {
-                ui.CollapseExpand();
+                ui.StartCollapserExpander();
                 updownButton.Image = Properties.Resources.downButton;
                 state = 1;
             }
             else
             {
-                ui.CollapseExpand();
+                ui.StartCollapserExpander();
                 updownButton.Image = Properties.Resources.upButton;
                 state = 0;
             }
@@ -57,6 +57,11 @@ namespace ToDo
         private void closeButton_Click(object sender, EventArgs e)
         {
             ui.Exit();
+        }
+
+        private void settingsButton_Click(object sender, EventArgs e)
+        {
+            ui.SwitchToSettingsPanel();
         }
     }
 }
