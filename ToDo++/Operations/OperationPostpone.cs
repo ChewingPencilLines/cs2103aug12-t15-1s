@@ -51,7 +51,7 @@ namespace ToDo
             {
                 if (oldTime == null)
                 {
-                    searchResults = SearchForTasks(taskList, taskName);
+                    searchResults = SearchForTasks(taskList, taskName, isSpecific);
                     //filter floating tasks
                     searchResults = (from task in searchResults
                                      where (task is TaskEvent || task is TaskDeadline)
@@ -59,7 +59,7 @@ namespace ToDo
                 }
                 else
                 {
-                    searchResults = SearchForTasks(taskList, taskName, isSpecific.StartTime, oldTime);
+                    searchResults = SearchForTasks(taskList, taskName, isSpecific, isSpecific.StartTime, oldTime);
                 }
 
                 if (searchResults.Count == 0)

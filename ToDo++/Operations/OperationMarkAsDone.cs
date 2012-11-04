@@ -26,12 +26,13 @@ namespace ToDo
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
+            DateTimeSpecificity isSpecific = new DateTimeSpecificity();
             this.storageIO = storageIO;
             Response response;
             if (doneDate != null)
             {
                 response = null;
-                List<Task> searchResults = SearchForTasks(taskList, doneString, false, doneDate, doneDate);
+                List<Task> searchResults = SearchForTasks(taskList, doneString, isSpecific, false, doneDate, doneDate);
                 foreach(Task taskToDone in searchResults)
                 {
                     response = MarkAsDone(taskToDone);
@@ -39,7 +40,7 @@ namespace ToDo
             }
             else if (index.HasValue == false && doneString != null)
             {
-                List<Task> searchResults = SearchForTasks(taskList, doneString);
+                List<Task> searchResults = SearchForTasks(taskList, doneString, isSpecific);
                 if (searchResults.Count == 1)
                 {
                     response = MarkAsDone(currentListedTasks[0]);
