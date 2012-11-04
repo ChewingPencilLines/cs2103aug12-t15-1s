@@ -51,7 +51,7 @@ namespace ToDo
             else if (startIndex < 0 || endIndex > currentListedTasks.Count - 1)
                 return new Response(Result.INVALID_TASK, Format.DEFAULT);
 
-            if (hasIndex == false)
+            if (!hasIndex && !isAll)
             {
                 searchResults = SearchForTasks(taskList, taskName, isSpecific.StartTime && isSpecific.EndTime, startTime, endTime);
                 if (searchResults.Count == 0)
@@ -68,7 +68,7 @@ namespace ToDo
                 }
                 else if (searchResults.Count == 1)
                 {
-                    return DeleteTask(searchResults[0], taskList);
+                    response = DeleteTask(searchResults[0], taskList);
                 }
                 else
                 {
@@ -76,11 +76,24 @@ namespace ToDo
                     response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                 }
             }
+            else if (isAll)
+            {
+                foreach(Task task in currentListedTasks)
+                {
+                    if (task == null)
+                        response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
+                    else
+                    {
+                        response = DeleteTask(task, taskList);
+                        if (!response.IsSuccessful()) return response;
+                    }
+                }
+            }
             else
             {
                 if (endIndex == startIndex)
                 {
-                    Task taskToDelete =  currentListedTasks[startIndex];
+                    Task taskToDelete = currentListedTasks[startIndex];
                     if (taskToDelete == null)
                         // invalid task, already deleted
                         response = new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
@@ -91,7 +104,7 @@ namespace ToDo
                     response = new Response(Result.INVALID_TASK, Format.DEFAULT);
                     for (int i = startIndex; i <= endIndex; i++)
                     {
-                        Task taskToDelete =  currentListedTasks[i];
+                        Task taskToDelete = currentListedTasks[i];
                         if (taskToDelete == null)
                             response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
                         else
