@@ -36,8 +36,11 @@ namespace ToDo
 
         public void UpdateDisplay(Response response)
         {
-            displayedTasks = response.TasksToBeDisplayed;
-            if (displayedTasks == null) return;
+            if (displayedTasks == null)
+                if (response.TasksToBeDisplayed == null) 
+                    return;
+            else displayedTasks = response.TasksToBeDisplayed;   
+
             switch (response.FormatType)
             {
                 case Format.DEFAULT:
@@ -56,7 +59,7 @@ namespace ToDo
                 default:
                     Trace.Fail("Some case in UpdateDisplay in TaskListViewControl was not accounted for..!");
                     break;
-            }
+            }            
             this.SetObjects(displayedTasks);
         }
 
