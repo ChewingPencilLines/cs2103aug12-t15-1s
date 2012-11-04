@@ -20,6 +20,7 @@ namespace ToDo
     public enum TimeRangeKeywordsType { DEFAULT = 0, MORNING, AFTERNOON, EVENING, NIGHT };
     // default should be hours (1 hour), unless otherwise stated in settings
     public enum TimeRangeType { DEFAULT, HOUR, DAY, MONTH };
+    public enum SortType { DEFAULT, NAME, DATE, DONESTATE };
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
     static class CustomDictionary
@@ -32,6 +33,7 @@ namespace ToDo
         static public Dictionary<TimeRangeKeywordsType, int> timeRangeKeywordsEndTime;
         static public Dictionary<string, Month> monthKeywords;
         static public Dictionary<string, DayOfWeek> dayKeywords;
+        static public Dictionary<string, SortType> sortTypeKeywords;
         static public List<string> timeSpecificKeywords;
         static public List<string> timeSuffixes;
         static public List<string> todayKeywords;
@@ -113,6 +115,7 @@ namespace ToDo
             InitializeMonthKeywords();
             InitializeDateTimeKeywords();
             InitializeTimeRangeKeywords();
+            InitializeSortTypeKeywords();
         }
 
         // ******************************************************************
@@ -241,6 +244,15 @@ namespace ToDo
             timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.EVENING, 22);
             timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.NIGHT, 5);
         }
+
+        private static void InitializeSortTypeKeywords()
+        {
+            sortTypeKeywords = new Dictionary<string, SortType>();
+            sortTypeKeywords.Add("name", SortType.NAME);
+            sortTypeKeywords.Add("date", SortType.DATE);
+            sortTypeKeywords.Add("donestate", SortType.DONESTATE);
+        }
+
         #endregion
 
         // ******************************************************************
@@ -256,6 +268,11 @@ namespace ToDo
         public static Dictionary<string, ContextType> GetContextKeywords()
         {
             return contextKeywords;
+        }
+
+        public static Dictionary<string, SortType> GetSortTypeKeywords()
+        {
+            return sortTypeKeywords;
         }
 
         /*
@@ -374,6 +391,19 @@ namespace ToDo
                 case "afternoon":
                 case "evening":
                 case "night":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static bool CheckIfIsSortTypeKeyword(string word)
+        {
+            switch (word.ToLower())
+            {
+                case "name":
+                case "date":
+                case "donestate":
                     return true;
                 default:
                     return false;

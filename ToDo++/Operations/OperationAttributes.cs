@@ -18,6 +18,7 @@ namespace ToDo
         public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
         public TimeRangeType? timeRangeType = new TimeRangeType();
         public TimeRangeKeywordsType? timeRange = new TimeRangeKeywordsType();
+        public SortType? sortType = new SortType();
         public string taskName = null;
         public int[] rangeIndexes = null;
         public int timeRangeIndex;
@@ -53,6 +54,7 @@ namespace ToDo
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
             currentSpecifier = ContextType.CURRENT;
+            sortType = SortType.DEFAULT;
         }
 
         public void SetSearchTime()
