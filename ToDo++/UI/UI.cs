@@ -26,12 +26,14 @@ namespace ToDo
 
         private Hotkeys.GlobalHotkey ghk;       //Global Hotkey to Minimize to System Tray
         Logic logic;                            //Instance of Logic that handles Data structure and File Operations
+        bool MouseIsOverDisplayList;
 
         /// <summary>
         /// Creates a new instance of the Main Program (UI) and loads the various Classes
         /// </summary>
         public UI(Logic logic)
         {
+            IntializeTinyAlert();
             InitializeComponent();
             InitializeLogic(logic);               //Sets logic            
             InitializeSystemTray();               //Loads Code to place App in System Tray
@@ -42,11 +44,7 @@ namespace ToDo
             InitializePreferencesPanel();
             IntializeTopMenu();
             InitializeTaskListView();
-            IntializeTinyAlert();
-            taskListViewControl.UpdateDisplay(logic.GetDefaultView());
-            IntializeTinyAlert();
-
-
+            this.MouseWheel += new MouseEventHandler(ScrollIfOverDisplay);
             this.ActiveControl = textInput;
         }
 
@@ -61,6 +59,7 @@ namespace ToDo
         private void InitializeTaskListView()
         {
             taskListViewControl.Initialize();
+            taskListViewControl.UpdateDisplay(logic.GetDefaultView());
         }
 
         private void IntializeTopMenu()
@@ -509,10 +508,12 @@ namespace ToDo
         {
             string input = textInput.Text;
             Response output = logic.ProcessCommand(input);
-            //outputBox.SetOutputSize(logic.MainSettings.GetTextSize());
-            //outputBox.DisplayCommand(input, outputstring);
             taskListViewControl.UpdateDisplay(output);
-            textInput.Text = output.FeedbackString;
+            if (output.IsSuccessful())
+                TinyAlertView.Show(TinyAlertView.StateTinyAlert.SUCCESS, output.FeedbackString);
+            else 
+                TinyAlertView.Show(TinyAlertView.StateTinyAlert.FAILURE, output.FeedbackString);
+            textInput.Clear();
         }
 
         /// <summary>
@@ -659,7 +660,7 @@ namespace ToDo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            TinyAlertView.Show(TinyAlertView.StateTinyAlert.ALERT,"Added this item to List");
+            TinyAlertView.Show(TinyAlertView.StateTinyAlert.WARNING,"Added this item to List");
         }
 
         private void UI_Move(object sender, EventArgs e)
@@ -667,8 +668,22 @@ namespace ToDo
             TinyAlertView.SetLocation();
         }
 
+        private void taskListViewControl_MouseHover(object sender, EventArgs e)
+        {
+            MouseIsOverDisplayList = true;
+        }
 
+        private void taskListViewControl_MouseLeave(object sender, EventArgs e)
+        {
+            MouseIsOverDisplayList = false;
+        }
 
-
+        private void ScrollIfOverDisplay(object sender, EventArgs e)
+        {
+            if (MouseIsOverDisplayList)
+            {
+                taskListViewControl.Focus();
+            }
+        }        
     }
 }

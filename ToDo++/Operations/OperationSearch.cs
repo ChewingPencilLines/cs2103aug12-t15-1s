@@ -24,7 +24,7 @@ namespace ToDo
         {
             this.storageIO = storageIO;
             List<Task> searchResults = SearchForTasks(taskList, searchString, isSpecific, false, startTime, endTime);
-            currentListedTasks = searchResults;
+            currentListedTasks = new List<Task>(searchResults);
             return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
         }
     }   

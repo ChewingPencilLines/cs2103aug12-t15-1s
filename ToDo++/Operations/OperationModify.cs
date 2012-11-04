@@ -45,7 +45,7 @@ namespace ToDo
             DateTimeSpecificity isSpecific = new DateTimeSpecificity();
             if (oldIndex.HasValue == false && newTask == null)
             {
-                currentListedTasks = taskList;
+                currentListedTasks = new List<Task>(taskList);
                 response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
             }
             else if (oldIndex.HasValue == false && newTask != null)
@@ -59,7 +59,7 @@ namespace ToDo
                 if (newTask != null)
                 {
                     searchResults = SearchForTasks(taskList, newTask.TaskName, isSpecific);
-                    currentListedTasks = searchResults;
+                    currentListedTasks = new List<Task>(searchResults);
                     response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                 }
                 else

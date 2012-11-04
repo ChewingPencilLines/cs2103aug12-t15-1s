@@ -72,7 +72,7 @@ namespace ToDo
                 if (storageIO.AddTaskToFile(taskToAdd))
                 {
                   //  successFlag = true;
-                    //currentListedTasks.Add(taskToAdd);
+                    currentListedTasks.Add(taskToAdd);
                     return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks);
                     //  return String.Format(RESPONSE_ADD_SUCCESS, taskToAdd.TaskName);
                 }
