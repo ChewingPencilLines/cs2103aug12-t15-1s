@@ -41,13 +41,13 @@ namespace ToDo
                     WarnUserOfMultipleCommands();
                 }
             }
-            if (opAttributes.commandType == CommandType.SEARCH)
-            {
-                opAttributes.SetSearchTime();
-            }
             if (opAttributes.commandType == CommandType.SCHEDULE)
             {
                 opAttributes.SetScheduleTime();
+            }
+            else
+            {
+                opAttributes.SetSearchTime();
             }
             opAttributes.CombineDateTimes();
             Operation newOperation = CreateOperation(opAttributes);
