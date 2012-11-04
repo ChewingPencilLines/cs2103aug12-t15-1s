@@ -66,6 +66,7 @@ namespace ToDo
             int[] taskIndex = opAttributes.rangeIndexes;
             int timeRangeIndex = opAttributes.timeRangeIndex;
             TimeRangeType timeRangeType = opAttributes.timeRangeType;
+            SortType? sortType = opAttributes.sortType;
 
             Task task;
             Operation newOperation = null;
@@ -89,7 +90,7 @@ namespace ToDo
                     newOperation = new OperationSearch(taskName, startCombined, endCombined, isSpecific);
                     break;
                 case CommandType.SORT:
-                    newOperation = new OperationSort();
+                    newOperation = new OperationSort(sortType);
                     break; 
                 case CommandType.REDO:
                     newOperation = new OperationRedo();

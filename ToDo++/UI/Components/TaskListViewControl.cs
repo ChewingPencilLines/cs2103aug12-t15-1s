@@ -34,10 +34,10 @@ namespace ToDo
             SetGroupingByDateTime();
         }
 
-        public void UpdateDisplay(Response response)
+        public List<Task> UpdateDisplay(Response response)
         {
             displayedTasks = response.TasksToBeDisplayed;  
-            if (displayedTasks == null) return;
+            if (displayedTasks == null) return null;
 
             switch (response.FormatType)
             {
@@ -59,6 +59,17 @@ namespace ToDo
                     break;
             }            
             this.SetObjects(displayedTasks);
+
+            Task reorderedTask = null;
+            List<Task> reorderedList = new List<Task>();
+            for (int i = 0; i < this.Items.Count; i++ )
+            {
+                reorderedTask = (Task)this.GetNthItemInDisplayOrder(i).RowObject;
+                reorderedList.Add(reorderedTask);
+            }
+            displayedTasks = reorderedList;
+
+            return reorderedList;
         }
 
         /// <summary>
