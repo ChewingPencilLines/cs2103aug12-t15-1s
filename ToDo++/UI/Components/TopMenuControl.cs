@@ -59,9 +59,19 @@ namespace ToDo
             ui.Exit();
         }
 
+        int settingsState = 0;
         private void settingsButton_Click(object sender, EventArgs e)
         {
-            ui.SwitchToSettingsPanel();
+            if (settingsState == 0)
+            {
+                ui.SwitchToSettingsPanel();
+                settingsState = 1;
+            }
+            else
+            {
+                ui.SwitchToToDoPanel();
+                settingsState = 0;
+            }
         }
     }
 }

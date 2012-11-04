@@ -54,8 +54,7 @@ namespace ToDo
             get { return tasksToBeDisplayed; }
         }
         public Response(Result resultType, Format formatType = Format.DEFAULT, Type operationType = null, List<Task> tasks = null)
-        {
-        
+        {        
             this.formatType = formatType;
             this.tasksToBeDisplayed = tasks;
             this.result = resultType;
