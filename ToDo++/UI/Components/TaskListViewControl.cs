@@ -59,6 +59,15 @@ namespace ToDo
                     break;
             }            
             this.SetObjects(displayedTasks);
+
+            Task reorderedTask = null;
+            List<Task> reorderedList = new List<Task>();
+            for (int i = 0; i < this.Items.Count; i++ )
+            {
+                reorderedTask = (Task)this.GetNthItemInDisplayOrder(i).RowObject;
+                reorderedList.Add(reorderedTask);
+            }
+            displayedTasks = reorderedList;
         }
 
         /// <summary>
