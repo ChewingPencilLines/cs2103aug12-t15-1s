@@ -134,14 +134,14 @@ namespace ToDo
             else if (time == null && date != null)
             {
                 combinedDT = date;
-
             }
             /*
             if (limit > combinedDT)
                 if (combinedDT != new DateTime(0001, 1, 1)
-                    && this.commandType == CommandType.ADD)
+                    && this.commandType == CommandType.ADD
+                    && this.commandType == CommandType.SCHEDULE)
                     AlertBox.Show("Note that date specified is past.");
-            */                        
+            */
             return combinedDT;
         }
     }
