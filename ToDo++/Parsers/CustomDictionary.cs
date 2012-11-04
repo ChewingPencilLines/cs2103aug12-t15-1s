@@ -17,9 +17,9 @@ namespace ToDo
     public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
     // unless otherwise stated in settings,
     // default: 8am to 10pm, morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
-    public enum TimeRangeKeywordsType { DEFAULT = 0, MORNING, AFTERNOON, EVENING, NIGHT };
+    public enum TimeRangeKeywordsType { DEFAULT = 0, MORNING, AFTERNOON, EVENING, NIGHT, NONE };
     // default should be hours (1 hour), unless otherwise stated in settings
-    public enum TimeRangeType { DEFAULT, HOUR, DAY, MONTH };
+    public enum TimeRangeType { DEFAULT = 0, HOUR, DAY, MONTH };
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
     static class CustomDictionary
@@ -409,6 +409,26 @@ namespace ToDo
             {
                 if (word.ToLower() == keyword)
                     return true;
+            }
+            return false;
+        }
+
+        public static bool AreTimeRangesConsecutive(ref TimeRangeKeywordsType timeRangeOne, ref TimeRangeKeywordsType timeRangeTwo)
+        {
+            // make timeRangeOne the earlier of the 2 time ranges
+            if (timeRangeOne > timeRangeTwo)
+            {
+                TimeRangeKeywordsType temp;
+                temp = timeRangeTwo;
+                timeRangeTwo = timeRangeOne;
+                timeRangeOne = temp;
+            }
+            int timeRangeTwoStartTime, timeRangeOneEndTime;
+            timeRangeKeywordsStartTime.TryGetValue(timeRangeOne, out timeRangeTwoStartTime);
+            timeRangeKeywordsEndTime.TryGetValue(timeRangeTwo, out timeRangeOneEndTime);
+            if (timeRangeTwoStartTime == timeRangeOneEndTime)
+            {
+                return true;
             }
             return false;
         }

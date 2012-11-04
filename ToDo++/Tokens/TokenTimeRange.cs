@@ -29,7 +29,7 @@ namespace ToDo
         {
             index = val;
             timeRangeType = type;
-            timeRange = TimeRangeKeywordsType.DEFAULT;
+            timeRange = TimeRangeKeywordsType.NONE;
         }
         internal TokenTimeRange(int position, TimeRangeKeywordsType range)
             : base(position)
@@ -41,17 +41,47 @@ namespace ToDo
 
         internal override void UpdateAttributes(OperationAttributes attrb)
         {
-            if (attrb.timeRangeIndex == 0)
+            if (index != 0)
             {
-                attrb.timeRangeIndex = index;
+                if (attrb.timeRangeIndex == 0)
+                {
+                    attrb.timeRangeIndex = index;
+                }
+                else
+                {
+                    // todo: warn user of multiple inputs
+                    // can consider extending functionality in the future to take in multiple time spans i.e. 4 months 6 days
+                }
             }
-            if (attrb.timeRangeType == TimeRangeType.DEFAULT)
+            if (timeRangeType != TimeRangeType.DEFAULT)
             {
-                attrb.timeRangeType = timeRangeType;
+                if (attrb.timeRangeType == TimeRangeType.DEFAULT)
+                {
+                    attrb.timeRangeType = timeRangeType;
+                }
+                else
+                {
+                    // todo: warn user of multiple inputs
+                    // can consider extending functionality in the future to take in multiple time spans i.e. 4 months 6 days
+                }
             }
-            if (attrb.timeRange == TimeRangeKeywordsType.DEFAULT)
+            if (timeRange != TimeRangeKeywordsType.NONE)
             {
-                attrb.timeRange = timeRange;
+                if (attrb.timeRangeOne == TimeRangeKeywordsType.NONE)
+                {
+                    attrb.timeRangeOne = timeRange;
+                }
+                else if (CustomDictionary.AreTimeRangesConsecutive(ref attrb.timeRangeOne, ref timeRange)
+                    && (attrb.timeRangeTwo == TimeRangeKeywordsType.NONE || attrb.timeRangeTwo == timeRange))
+                {
+                        attrb.timeRangeTwo = timeRange;
+                }
+                else
+                {
+                    // todo: reject non-consecutive inputs
+                    // also reject more than double inputs for time ranges i.e. morning afternoon evening
+                    // can consider extending functionality in the future to take in multiple consecutives
+                }
             }
         }
     }

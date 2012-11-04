@@ -74,12 +74,12 @@ namespace ToDo
                     Task taskToModify =  currentListedTasks[oldIndex.Value];
                     if (taskToModify is TaskEvent && newTask is TaskFloating)
                     {
-                        newTask = new TaskEvent(newTask.TaskName, ((TaskEvent)taskToModify).StartTime,
-                            ((TaskEvent)taskToModify).EndTime, ((TaskEvent)taskToModify).isSpecific);
+                        newTask = new TaskEvent(newTask.TaskName, ((TaskEvent)taskToModify).StartDateTime,
+                            ((TaskEvent)taskToModify).EndDateTime, ((TaskEvent)taskToModify).isSpecific);
                     }
                     else if (taskToModify is TaskDeadline && newTask is TaskFloating)
                     {
-                        newTask = new TaskDeadline(newTask.TaskName, ((TaskDeadline)taskToModify).EndTime,
+                        newTask = new TaskDeadline(newTask.TaskName, ((TaskDeadline)taskToModify).EndDateTime,
                             ((TaskDeadline)taskToModify).isSpecific);
                     }
                     response = ModifyTask(taskToModify, newTask, taskList);

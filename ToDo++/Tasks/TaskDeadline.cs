@@ -10,10 +10,10 @@ namespace ToDo
     {
         public DateTimeSpecificity isSpecific;
 
-        private DateTime endTime;
-        public DateTime EndTime
+        private DateTime endDateTime;
+        public DateTime EndDateTime
         {
-            get { return endTime; }
+            get { return endDateTime; }
          //   set { endTime = value; }
         }
 
@@ -25,13 +25,13 @@ namespace ToDo
             int forceID = -1)
             : base(taskName, isDone, forceID)
         {
-            this.endTime = endTime;
+            this.endDateTime = endTime;
             isSpecific = endDateSpecificity;
         }
 
         public override DayOfWeek GetDay()
         {
-            return endTime.DayOfWeek;
+            return endDateTime.DayOfWeek;
         }
 
         public override XElement ToXElement()
@@ -40,7 +40,7 @@ namespace ToDo
                             new XAttribute("id", id.ToString()),
                             new XAttribute("type", "Deadline"),
                             new XElement("Name", taskName),
-                            new XElement("EndTime", endTime.ToString()),
+                            new XElement("EndTime", endDateTime.ToString()),
                             new XElement("Done", doneState.ToString())
                             );
             return task;
@@ -53,18 +53,18 @@ namespace ToDo
             {
                 if (end == null)
                 {
-                    if ((endTime.Date != ((DateTime)start) && isSpecific.StartDate.Day)
-                        || (!isSpecific.StartDate.Month && endTime.Date.Month != ((DateTime)start).Month)
-                        || (!isSpecific.StartDate.Year && endTime.Date.Year != ((DateTime)start).Year))
+                    if ((endDateTime.Date != ((DateTime)start) && isSpecific.StartDate.Day)
+                        || (!isSpecific.StartDate.Month && endDateTime.Date.Month != ((DateTime)start).Month)
+                        || (!isSpecific.StartDate.Year && endDateTime.Date.Year != ((DateTime)start).Year))
                     {
                         isWithinTime = false;
                     }
                 }
-                if (endTime < start) isWithinTime = false;
+                if (endDateTime < start) isWithinTime = false;
             }   
             if (end != null)
             {
-                if (endTime > end) isWithinTime = false;
+                if (endDateTime > end) isWithinTime = false;
             }
             return isWithinTime;
         }
@@ -72,9 +72,9 @@ namespace ToDo
         public override string GetTimeString()
         {
             string timeString = "By ";
-            if (isSpecific.EndDate.Day) timeString += endTime.ToString("d MMM");
-            if (endTime.Year != DateTime.Now.Year) timeString += " " + endTime.Year;
-            if (isSpecific.EndTime) timeString += ", " + endTime.ToShortTimeString();
+            if (isSpecific.EndDate.Day) timeString += endDateTime.ToString("d MMM");
+            if (endDateTime.Year != DateTime.Now.Year) timeString += " " + endDateTime.Year;
+            if (isSpecific.EndTime) timeString += ", " + endDateTime.ToShortTimeString();
             return timeString;
         }
 
@@ -82,7 +82,7 @@ namespace ToDo
         {
             TaskDeadline result;
             if (NewDate == null)
-                result = new TaskDeadline(this.taskName, this.endTime.AddDays(1), this.isSpecific, this.doneState);
+                result = new TaskDeadline(this.taskName, this.endDateTime.AddDays(1), this.isSpecific, this.doneState);
             else
                 result = new TaskDeadline(this.taskName, NewDate.Value, this.isSpecific, this.doneState);
             return result;

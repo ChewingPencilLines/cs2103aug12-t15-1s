@@ -108,11 +108,11 @@ namespace ToDo
             }
             else if (task is TaskEvent)
             {
-                return ((TaskEvent)task).StartTime.Date;
+                return ((TaskEvent)task).StartDateTime.Date;
             }
             else if (task is TaskDeadline)
             {
-                return ((TaskDeadline)task).EndTime.Date;
+                return ((TaskDeadline)task).EndDateTime.Date;
             }
             else
             {
