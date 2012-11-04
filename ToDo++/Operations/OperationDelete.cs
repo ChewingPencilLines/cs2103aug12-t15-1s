@@ -55,11 +55,11 @@ namespace ToDo
 
             if (!hasIndex && !isAll)
             {
-                searchResults = SearchForTasks(taskList, taskName, isSpecific.StartTime && isSpecific.EndTime, startTime, endTime);
+                searchResults = SearchForTasks(taskList, taskName, isSpecific, isSpecific.StartTime && isSpecific.EndTime, startTime, endTime);
                 if (searchResults.Count == 0)
                 {
                     //check substring
-                    searchResults = SearchForTasks(taskList, taskName);
+                    searchResults = SearchForTasks(taskList, taskName, isSpecific);
                     if (searchResults.Count == 0)
                         response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
                     else
@@ -80,8 +80,9 @@ namespace ToDo
             }
             else if (isAll)
             {
-                foreach(Task task in currentListedTasks)
+                for (int i = currentListedTasks.Count-1; i >= 0; i--)
                 {
+                    Task task = currentListedTasks[i];
                     if (task == null)
                         response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
                     else
