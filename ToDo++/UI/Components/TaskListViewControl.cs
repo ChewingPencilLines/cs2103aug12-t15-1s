@@ -36,10 +36,8 @@ namespace ToDo
 
         public void UpdateDisplay(Response response)
         {
-            if (displayedTasks == null)
-                if (response.TasksToBeDisplayed == null) 
-                    return;
-            else displayedTasks = response.TasksToBeDisplayed;   
+            displayedTasks = response.TasksToBeDisplayed;  
+            if (displayedTasks == null) return;
 
             switch (response.FormatType)
             {
