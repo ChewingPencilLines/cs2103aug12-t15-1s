@@ -166,7 +166,7 @@
             // taskIndexCol
             // 
             this.taskIndexCol.CellPadding = null;
-            this.taskIndexCol.Width = 30;
+            this.taskIndexCol.Width = 35;
             // 
             // taskNameCol
             // 
