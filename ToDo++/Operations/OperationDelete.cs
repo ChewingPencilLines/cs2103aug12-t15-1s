@@ -104,7 +104,7 @@ namespace ToDo
                 else
                 {
                     response = new Response(Result.INVALID_TASK, Format.DEFAULT);
-                    for (int i = startIndex; i <= endIndex; i++)
+                    for (int i = endIndex; i >= startIndex; i--)
                     {
                         Task taskToDelete = currentListedTasks[i];
                         if (taskToDelete == null)
