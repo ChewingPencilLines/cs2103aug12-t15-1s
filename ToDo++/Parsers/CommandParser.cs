@@ -55,6 +55,7 @@ namespace ToDo
             DateTime? startCombined = opAttributes.startDateTime;
             DateTime? endCombined = opAttributes.endDateTime;
             DateTimeSpecificity isSpecific = opAttributes.isSpecific;
+            bool isAll = opAttributes.rangeIsAll;
             string taskName = opAttributes.taskName;
             int[] taskIndex = opAttributes.rangeIndexes;
             int timeRangeIndex = opAttributes.timeRangeIndex;
@@ -70,7 +71,7 @@ namespace ToDo
                     newOperation = new OperationAdd(task);
                     break;
                 case CommandType.DELETE:
-                    newOperation = new OperationDelete(taskName, taskIndex, startCombined, endCombined, isSpecific);
+                    newOperation = new OperationDelete(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll);
                     break;
                 case CommandType.DISPLAY:
                     newOperation = new OperationDisplayDefault();
