@@ -124,7 +124,11 @@ namespace ToDo
             else if (startTime == null && endTime != null)
                 return new TaskDeadline(taskName, (DateTime)endTime, isSpecific);
             else if (startTime != null && endTime == null)
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific); 
+            {
+                isSpecific.EndDate = new Specificity(isSpecific.StartDate);
+                isSpecific.EndTime = isSpecific.StartTime;
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific);
+            }
             else
                 return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
         }
