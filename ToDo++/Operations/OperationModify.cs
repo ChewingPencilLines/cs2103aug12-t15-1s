@@ -42,7 +42,7 @@ namespace ToDo
             this.storageIO = storageIO;
             Response response;
             List<Task> searchResults;
-
+            DateTimeSpecificity isSpecific = new DateTimeSpecificity();
             if (oldIndex.HasValue == false && newTask == null)
             {
                 currentListedTasks = taskList;
@@ -50,7 +50,7 @@ namespace ToDo
             }
             else if (oldIndex.HasValue == false && newTask != null)
             {
-                searchResults = SearchForTasks(taskList, newTask.TaskName);
+                searchResults = SearchForTasks(taskList, newTask.TaskName, isSpecific);
                 currentListedTasks = searchResults;
                 response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
             }
@@ -58,7 +58,7 @@ namespace ToDo
             {
                 if (newTask != null)
                 {
-                    searchResults = SearchForTasks(taskList, newTask.TaskName);
+                    searchResults = SearchForTasks(taskList, newTask.TaskName, isSpecific);
                     currentListedTasks = searchResults;
                     response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                 }

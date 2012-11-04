@@ -23,7 +23,7 @@ namespace ToDo
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
-            List<Task> searchResults = SearchForTasks(taskList, searchString, false, startTime, endTime);
+            List<Task> searchResults = SearchForTasks(taskList, searchString, isSpecific, false, startTime, endTime);
             currentListedTasks = searchResults;
             return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
         }

@@ -44,7 +44,7 @@ namespace ToDo
 
         public abstract XElement ToXElement();
 
-        public abstract bool IsWithinTime(DateTime? start, DateTime? end);
+        public abstract bool IsWithinTime(DateTimeSpecificity isSpecific, DateTime? start, DateTime? end);
 
         public virtual DayOfWeek GetDay()
         {

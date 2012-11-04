@@ -172,7 +172,7 @@ namespace ToDo
                 return new Response(Result.XML_READWRITE_FAIL);
         }
         
-        protected List<Task> SearchForTasks(List<Task> taskList, string searchString, bool exact = false, DateTime? startTime = null, DateTime? endTime = null)
+        protected List<Task> SearchForTasks(List<Task> taskList, string searchString, DateTimeSpecificity isSpecific, bool exact = false, DateTime? startTime = null, DateTime? endTime = null)
         {
             List<Task> filteredTasks = taskList;
             if (searchString != null)
@@ -182,7 +182,7 @@ namespace ToDo
                                  select task).ToList();
             if (!(startTime == null && endTime == null)) 
                 filteredTasks = (from task in filteredTasks
-                                 where task.IsWithinTime(startTime,endTime)
+                                 where task.IsWithinTime(isSpecific, startTime,endTime)
                                  select task).ToList();
             return filteredTasks;
         }
