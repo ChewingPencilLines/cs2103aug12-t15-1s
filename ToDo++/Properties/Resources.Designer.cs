@@ -83,6 +83,26 @@ namespace ToDo.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap bevelLeft {
+            get {
+                object obj = ResourceManager.GetObject("bevelLeft", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap bevelRight {
+            get {
+                object obj = ResourceManager.GetObject("bevelRight", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap bezelL {
             get {
                 object obj = ResourceManager.GetObject("bezelL", resourceCulture);
