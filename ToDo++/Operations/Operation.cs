@@ -27,6 +27,7 @@ namespace ToDo
             redoStack = new Stack<Operation>();
             undoTask = new Stack<Task>();
             redoTask = new Stack<Task>();
+            Response.InitializeDisplayList(ref currentListedTasks);
         }
 
         protected void TrackOperation()
