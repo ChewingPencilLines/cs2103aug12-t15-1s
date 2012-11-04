@@ -684,6 +684,11 @@ namespace ToDo
             {
                 taskListViewControl.Focus();
             }
+        }
+
+        private void taskListViewControl_BeforeSorting(object sender, BrightIdeasSoftware.BeforeSortingEventArgs e)
+        {
+            e.GroupByOrder = SortOrder.None;
         }        
     }
 }

@@ -70,7 +70,7 @@ namespace ToDo
             if (a is TaskFloating)
             {
                 if (b is TaskFloating)
-                    return 0;
+                    return a.TaskName.CompareTo(b.TaskName);
                 else return -1;
             }
             else if (b is TaskFloating)

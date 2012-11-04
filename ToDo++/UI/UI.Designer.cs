@@ -186,6 +186,7 @@
             this.taskListViewControl.TabIndex = 17;
             this.taskListViewControl.UseCompatibleStateImageBehavior = false;
             this.taskListViewControl.View = System.Windows.Forms.View.Details;
+            this.taskListViewControl.BeforeSorting += new System.EventHandler<BrightIdeasSoftware.BeforeSortingEventArgs>(this.taskListViewControl_BeforeSorting);
             this.taskListViewControl.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.taskListViewControl_FormatRow);
             this.taskListViewControl.SelectedIndexChanged += new System.EventHandler(this.taskListViewControl_SelectedIndexChanged);
             this.taskListViewControl.MouseLeave += new System.EventHandler(this.taskListViewControl_MouseLeave);
