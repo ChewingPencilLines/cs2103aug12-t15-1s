@@ -59,7 +59,8 @@ namespace ToDo
         private void InitializeTaskListView()
         {
             taskListViewControl.Initialize();
-            taskListViewControl.UpdateDisplay(logic.GetDefaultView());
+            List<Task> displayedList = taskListViewControl.UpdateDisplay(logic.GetDefaultView());
+            logic.UpdateLastDisplayedTasksList(displayedList);
         }
 
         private void IntializeTopMenu()
@@ -415,7 +416,7 @@ namespace ToDo
             {
                 StartCollapserExpander();
             }
-            this.customPanelControl.SelectedIndex = 2;
+            this.customPanelControl.SelectedIndex = 0;
         }
 
         #endregion
@@ -483,7 +484,7 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Set logic
+        // Pair Logic with UI
         // ******************************************************************
 
         #region PrepareLogic
@@ -499,7 +500,7 @@ namespace ToDo
         // Code that interacts with logic and returns an output goes here
         // ******************************************************************
 
-        #region TextInput
+        #region LogicControl
 
         /// <summary>
         /// Passes an the user text to Logic, which processes it and returns an output to be displayed
@@ -508,12 +509,14 @@ namespace ToDo
         {
             string input = textInput.Text;
             Response output = logic.ProcessCommand(input);
-            taskListViewControl.UpdateDisplay(output);
+            List<Task> displayedList = taskListViewControl.UpdateDisplay(output);
             if (output.IsSuccessful())
                 TinyAlertView.Show(TinyAlertView.StateTinyAlert.SUCCESS, output.FeedbackString);
             else 
                 TinyAlertView.Show(TinyAlertView.StateTinyAlert.FAILURE, output.FeedbackString);
             textInput.Clear();
+
+            logic.UpdateLastDisplayedTasksList(displayedList);
         }
 
         /// <summary>
@@ -530,6 +533,8 @@ namespace ToDo
             }
         }
 
+        /*
+        // deprecated -- was used to unit test new UI implementation
         private void TaskDisplayTestDriver()
         {
             List<Task> displayList = new List<Task>();
@@ -548,6 +553,7 @@ namespace ToDo
             Response testResponse = new Response(Result.SUCCESS, Format.NAME, typeof(OperationAdd), displayList);
             taskListViewControl.UpdateDisplay(testResponse);
         }
+        */
 
         /// <summary>
         /// When Up/Down Keys Pressed
@@ -569,10 +575,10 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Keyboard Commands
+        // Shortcut Keys (Hotkeys)
         // ******************************************************************
 
-        #region KeyboardCommands
+        #region Hotkeys
 
         /// <summary>
         /// Holds all Shortcut Keys
@@ -635,11 +641,6 @@ namespace ToDo
             Application.Exit();
         }
 
-        private void outputBox_MouseHover(object sender, EventArgs e)
-        {
-
-        }
-
         private void UI_Resize(object sender, EventArgs e)
         {
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
@@ -649,18 +650,13 @@ namespace ToDo
 
         private void taskListViewControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            taskListViewControl.SelectedItem = null;
+            //taskListViewControl.SelectedItem = null;
         }
 
         private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)
         {
             // Row index should not change even if doing a column sort.
-            e.Item.SubItems[1].Text = "[" + (e.RowIndex+1).ToString() + "]";
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            TinyAlertView.Show(TinyAlertView.StateTinyAlert.WARNING,"Added this item to List");
+            e.Item.SubItems[1].Text = "[" + (e.DisplayIndex+1).ToString() + "]";
         }
 
         private void UI_Move(object sender, EventArgs e)
