@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -60,6 +61,7 @@
     </Compile>
     <Compile Include="Operations\OperationSchedule.cs" />
     <Compile Include="Response.cs" />
+    <Compile Include="Tokens\TokenSortType.cs" />
     <Compile Include="Tokens\TokenTimeRange.cs" />
     <Compile Include="UI\Components\PreferencesControllers\FontColorSettings.cs">
       <SubType>UserControl</SubType>

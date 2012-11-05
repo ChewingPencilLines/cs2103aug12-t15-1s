@@ -44,12 +44,16 @@ namespace ToDo
             {
                 if (isSpecific.StartDate.Day)
                 {
-                    endDateTime = startDateTime.AddDays(1).AddMinutes(-1);
+                    endDateTime = startDateTime.AddDays(1);
                 }
                 else
                 {
-                    endDateTime = startDateTime.AddMonths(1).AddMinutes(-1);
+                    endDateTime = startDateTime.AddMonths(1);
                 }
+            }
+            if (!isTimeSpanSpecified)
+            {
+                startDateTime = startDateTime.AddHours(DateTime.Now.AddHours(1).Hour);
             }
             switch (timeRangeType)
             {
