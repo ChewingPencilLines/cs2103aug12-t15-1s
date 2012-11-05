@@ -110,10 +110,17 @@ namespace ToDo
             else if (searchResults.Count == 1 && !(taskName == null || taskName == ""))
                 response = DeleteTask(searchResults[0], taskList);
             
-            // If all keyword is used, delete all in search results.
+            // If all keyword is used, delete all in search results if not searching empty string.
+            // If not, delete all currently displayed tasks.
             else if (isAll)
-                response = DeleteAllSearchResults(searchResults, taskList);
+            {
+                if (taskName == "" || taskName == null)
+                    response = DeleteAllDisplayedTasks(taskList);
+                else
+                    response = DeleteAllSearchResults(searchResults, taskList);
+            }
             
+            // If not, display search results.
             else
                 response = DisplaySearchResults(searchResults);
 
@@ -141,7 +148,7 @@ namespace ToDo
 
         private Response DeleteAllSearchResults(List<Task> searchResults, List<Task> taskList)
         {
-            Response response = null;
+            Response response = null;            
             foreach (Task task in searchResults)
             {
                 if (currentListedTasks.Contains(task))
