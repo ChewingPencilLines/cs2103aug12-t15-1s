@@ -14,7 +14,10 @@ namespace ToDo
             if (redoStack.Count == 0 || redoTask.Count == 0)
                 return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
             Operation redoOp = Operation.redoStack.Pop();
-            return redoOp.Redo(taskList, storageIO);
+            Response result = redoOp.Redo(taskList, storageIO);
+            if (result.IsSuccessful())
+                undoStack.Push(redoOp);
+            return result;
         }
     }
 }

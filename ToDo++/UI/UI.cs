@@ -492,6 +492,7 @@ namespace ToDo
         private void InitializeLogic(Logic logic)
         {
             this.logic = logic;
+            logic.SetUI(this);
         }
 
         #endregion
@@ -729,6 +730,11 @@ namespace ToDo
         {
             if (MouseIsOverDisplayList)
                 taskListViewControl.Focus();
+        }
+
+        internal void SetMessageTaskListIsEmpty(bool empty)
+        {
+            taskListViewControl.SetMessageTaskListIsEmpty(empty);
         }
     }
 }

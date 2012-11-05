@@ -20,16 +20,18 @@ namespace ToDo
             Response response;
             switch (sortType)
             {
-                // sorting is done On-The-Fly in display control.
+                // sorting is done On-The-Fly in TaskListViewControl.
                 case SortType.NAME:                    
-                    response = new Response(Result.SUCCESS, Format.NAME, this.GetType());
+                    response = new Response(Result.SUCCESS, Format.NAME, this.GetType(), currentListedTasks);
                     break;
                 case SortType.DONE_STATE:
-                    response=new Response(Result.SUCCESS,Format.DONE_STATE, this.GetType());
+                    response = new Response(Result.SUCCESS, Format.DONE_STATE, this.GetType(), currentListedTasks);
                     break;
-                case SortType.DEFAULT:
+                case SortType.DATE_TIME:
+                    response = new Response(Result.SUCCESS, Format.DATE_TIME, this.GetType(), currentListedTasks);
+                    break;
                 default:
-                    response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType());
+                    response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
                     break;
             }
             return response;

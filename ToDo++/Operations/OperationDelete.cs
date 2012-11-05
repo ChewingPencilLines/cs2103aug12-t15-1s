@@ -18,6 +18,7 @@ namespace ToDo
         private int endIndex;
         private bool hasIndex;
         private bool isAll;
+        private bool searchForIsDone;
         private string taskName;
         private DateTime? startTime = null, endTime = null;
         private DateTimeSpecificity isSpecific;
@@ -29,7 +30,7 @@ namespace ToDo
 
         #region Constructors
         public OperationDelete(string taskName, int[] indexRange, DateTime? startTime,
-            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll)
+            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, bool searchForIsDone)
         {
             if (indexRange == null) hasIndex = false;            
             else
@@ -44,6 +45,7 @@ namespace ToDo
             this.endTime = endTime;
             this.isSpecific = isSpecific;
             this.isAll = isAll;
+            this.searchForIsDone = searchForIsDone;
         }
         #endregion
 
@@ -94,23 +96,38 @@ namespace ToDo
             List<Task> searchResults = new List<Task>();
             Response response = null;
 
-            searchResults = SearchForTasks(taskList, taskName, isSpecific, isSpecific.StartTime && isSpecific.EndTime, startTime, endTime);
-            if (searchResults.Count == 0)
-                response = TrySearchBySubstring(ref searchResults, taskList);
+            searchResults = SearchForTasks(
+                taskList, taskName, isSpecific, 
+                isSpecific.StartTime && isSpecific.EndTime,
+                startTime, endTime, searchForIsDone
+                );
 
-            else if (searchResults.Count == 1)
+            // If no results and not trying to display all, try non-exact search.
+            if (searchResults.Count == 0 && !isAll)
+                response = TrySearchNonExact(ref searchResults, taskList);
+            
+            // If only one result and is searching by name, delete immediately.
+            else if (searchResults.Count == 1 && !(taskName == null || taskName == ""))
                 response = DeleteTask(searchResults[0], taskList);
-
+            
+            // If all keyword is used, delete all in search results if not searching empty string.
+            // If not, delete all currently displayed tasks.
             else if (isAll)
-                response = DeleteAllDisplayedTasks(searchResults, taskList);
-
+            {
+                if (taskName == "" || taskName == null)
+                    response = DeleteAllDisplayedTasks(taskList);
+                else
+                    response = DeleteAllSearchResults(searchResults, taskList);
+            }
+            
+            // If not, display search results.
             else
                 response = DisplaySearchResults(searchResults);
 
             return response;
         }
 
-        private Response TrySearchBySubstring(ref List<Task> searchResults, List<Task> taskList)
+        private Response TrySearchNonExact(ref List<Task> searchResults, List<Task> taskList)
         {
             Response response = null;
             searchResults = SearchForTasks(taskList, taskName, isSpecific);
@@ -120,15 +137,18 @@ namespace ToDo
             else
             {
                 currentListedTasks = new List<Task>(searchResults);
-                response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
-            }
 
+                string[] args;
+                SetArgumentsForFeedbackString(out args, taskName, startTime, endTime, searchForIsDone, isAll);
+                response =
+                    new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, args);
+            }
             return response;
         }
 
-        private Response DeleteAllDisplayedTasks(List<Task> searchResults, List<Task> taskList)
+        private Response DeleteAllSearchResults(List<Task> searchResults, List<Task> taskList)
         {
-            Response response = null;
+            Response response = null;            
             foreach (Task task in searchResults)
             {
                 if (currentListedTasks.Contains(task))
@@ -143,8 +163,14 @@ namespace ToDo
         private Response DisplaySearchResults(List<Task> searchResults)
         {
             currentListedTasks = new List<Task>(searchResults);
-            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
+
+            string[] args;
+            SetArgumentsForFeedbackString(out args, taskName, startTime, endTime, searchForIsDone, isAll);
+
+            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, args);
         }
+
+
         #endregion
 
         // ******************************************************************
@@ -178,7 +204,7 @@ namespace ToDo
         private Response DeleteMultipleTasks(List<Task> taskList)
         {
             Response response = null;
-            response = new Response(Result.INVALID_TASK, Format.DEFAULT);
+            response = new Response(Result.INVALID_TASK);
             for (int i = endIndex; i >= startIndex; i--)
             {
                 Task taskToDelete = currentListedTasks[i];
@@ -228,14 +254,22 @@ namespace ToDo
         {
             Task task = undoTask.Pop();
             redoTask.Push(task);
-            return AddTask(task, taskList);
+            Response response = AddTask(task, taskList);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             Task task = redoTask.Pop();
             undoTask.Push(task);
-            return AddTask(task, taskList);
+            Response response = DeleteTask(task, taskList);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
         }
         #endregion
     }
