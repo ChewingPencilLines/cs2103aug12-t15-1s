@@ -16,8 +16,8 @@ namespace ToDo
     public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, SCHEDULE, EXIT, INVALID };
     public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
     // unless otherwise stated in settings,
-    // default: 8am to 10pm, morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
-    public enum TimeRangeKeywordsType { DEFAULT = 0, MORNING, AFTERNOON, EVENING, NIGHT, NONE };
+    // morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
+    public enum TimeRangeKeywordsType { MORNING, AFTERNOON, EVENING, NIGHT, NONE };
     // default should be hours (1 hour), unless otherwise stated in settings
     public enum TimeRangeType { DEFAULT = 0, HOUR, DAY, MONTH };
     public enum SortType { DEFAULT, NAME, DATE_TIME, DONE_STATE };
@@ -25,7 +25,9 @@ namespace ToDo
 
     static class CustomDictionary
     {
-        static public Dictionary<string, CommandType> commandKeywords;        
+        static public TimeRangeType defaultTimeRangeType = TimeRangeType.HOUR;
+        static public int defaultTimeRangeIndex = 1;
+        static public Dictionary<string, CommandType> commandKeywords;
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
         static public Dictionary<string, TimeRangeType> timeRangeType;
@@ -46,10 +48,10 @@ namespace ToDo
         #region Regexes For Time & Date Parsing
         // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
         static public Regex time_24HourFormat =
-            new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9])\s?(h(ou)?rs?)?$");
+            new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9]) (h(ou)?rs?)?$");
         // matches the above but with AM and PM (case insensitive). colon/dot is optional.
         static public Regex time_12HourFormat =
-            new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])?\s?(?<format>am|pm)$");
+            new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])? (?<format>am|pm)$");
         // checks day-month-year and month-day-year format; the formal takes precedence if the input matches both
         static public Regex date_numericFormat =
             new Regex(@"^
@@ -105,7 +107,7 @@ namespace ToDo
             new Regex(@"^(((?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?)|((?<start>\d?\d?\d)\-))$");
 
         static public Regex isTimeRange =
-            new Regex(@"^(h(?:ou)?r(?:s)?|day(?:s)?|m(?:on)?th(?:s)?)$");
+               new Regex(@"^(?<index>(\d*) )?(?<type>(h(?:ou)?r(?:s)?|day(?:s)?|m(?:on)?th(?:s)?))$");
         #endregion
 
         static CustomDictionary()
@@ -232,13 +234,11 @@ namespace ToDo
             timeRangeType.Add("mths", TimeRangeType.MONTH);
             timeRangeType.Add("mth", TimeRangeType.MONTH);
             timeRangeKeywordsStartTime = new Dictionary<TimeRangeKeywordsType, int>();
-            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.DEFAULT, 8);
             timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.MORNING, 5);
             timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.AFTERNOON, 12);
             timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.EVENING, 17);
             timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.NIGHT, 22);
             timeRangeKeywordsEndTime = new Dictionary<TimeRangeKeywordsType, int>();
-            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.DEFAULT, 22);
             timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.MORNING, 12);
             timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.AFTERNOON, 17);
             timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.EVENING, 22);
@@ -283,6 +283,16 @@ namespace ToDo
         public static Dictionary<string, SortType> GetSortTypeKeywords()
         {
             return sortTypeKeywords;
+        }
+
+        public static Dictionary<TimeRangeKeywordsType, int> GetTimeRangeStartTime()
+        {
+            return timeRangeKeywordsStartTime;
+        }
+
+        public static Dictionary<TimeRangeKeywordsType, int> GetTimeRangeEndTime()
+        {
+            return timeRangeKeywordsEndTime;
         }
 
         /*
@@ -479,12 +489,15 @@ namespace ToDo
         // ******************************************************************
 
         #region Update Dictionary With FlexiCommands
-        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords, Dictionary<string, TimeRangeType> passedTimeRangeType)
+        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords,
+            Dictionary<string, TimeRangeType> passedTimeRangeType, Dictionary<TimeRangeKeywordsType, int> passedTimeRangeStartTime, Dictionary<TimeRangeKeywordsType, int> passedTimeRangeEndTime)
         {
             commandKeywords = passedCommandKeywords;
             contextKeywords = passedContextKeywords;
             timeRangeKeywords = passedTimeRangeKeywords;
             timeRangeType = passedTimeRangeType;
+            timeRangeKeywordsStartTime = passedTimeRangeStartTime;
+            timeRangeKeywordsEndTime = passedTimeRangeEndTime;
         }
         #endregion
     }

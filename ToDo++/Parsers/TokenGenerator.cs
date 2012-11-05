@@ -452,10 +452,7 @@ namespace ToDo
             List<Token> literalTokens = new List<Token>();
             foreach (Token token in parsedTokens)
             {
-                if (token.GetType() != typeof(TokenTimeRange))
-                {
-                    input[token.Position] = null;
-                }
+                input[token.Position] = null;
             }
             int index = 0;
             string literal = String.Empty;

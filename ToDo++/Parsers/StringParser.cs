@@ -239,7 +239,7 @@ namespace ToDo
                 return false;
             }
             frontHalf = input.ElementAt(position - 1);
-            string mergedWord = String.Concat(frontHalf, backHalf);
+            string mergedWord = String.Concat(frontHalf, " ", backHalf);
             if (CustomDictionary.IsValidTime(mergedWord))
             {
                 output.RemoveAt(output.Count - 1);
