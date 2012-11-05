@@ -23,6 +23,7 @@ namespace ToDo
     class TaskListViewControl : ObjectListView
     {
         const string MESSAGE_EMPTY_LIST = "You have no tasks in your ToDo++ list.\r\nClick on the ? icon above to find out how to get started!";
+        const string MESSAGE_NO_TASKS = "No tasks to display!";
         const string MESSAGE_STYLE_DONE = "[DONE]";
         const string COL_NAME_TASK_NAME = "TaskName";
         const string COL_NAME_DONE_STATE = "DoneState";        
@@ -88,6 +89,14 @@ namespace ToDo
             List<Task> reorderedList = GenerateReorderedList();
 
             return reorderedList;
+        }
+
+        public void SetMessageTaskListIsEmpty(bool empty)
+        {
+            if(empty)
+                EmptyListMsg = MESSAGE_EMPTY_LIST;
+            else
+                EmptyListMsg = MESSAGE_NO_TASKS;
         }
 
         private void SetGroupingByName()

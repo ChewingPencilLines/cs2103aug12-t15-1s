@@ -34,6 +34,7 @@ namespace ToDo
             tokens.AddRange(GenerateCommandTokens(input));
             // must be done after generating command tokens
             tokens.AddRange(GenerateIndexRangeTokens(input, tokens));
+            tokens.AddRange(GenerateSortTypeTokens(input, tokens));
             tokens.AddRange(GenerateTimeRangeTokens(input));
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
@@ -45,6 +46,31 @@ namespace ToDo
             DeconflictTokens(ref tokens);
             tokens.Sort(CompareByPosition);
             return tokens;
+        }
+
+        private List<Token> GenerateSortTypeTokens(List<string> input, List<Token> tokens)
+        {
+            SortType sortType;
+            int index = 0;
+
+            List<Token> sortTokens = new List<Token>();
+            foreach (string word in input)
+            {
+                if (CustomDictionary.sortTypeKeywords.TryGetValue(word.ToLower(), out sortType) && index != 0)
+                {
+                    if(tokens[index-1] is TokenCommand)
+                    {
+                        if (((TokenCommand)tokens[index-1]).Value == CommandType.SORT)
+                        {
+                            TokenSortType sortTypeToken = new TokenSortType(index, sortType);
+                            sortTokens.Add(sortTypeToken);
+                        }
+                    }
+                }
+                index++;
+            }
+            return sortTokens;
+
         }
         
         /// <summary>
@@ -112,24 +138,25 @@ namespace ToDo
                 TimeRangeType timeRangeType;
                 TimeRangeKeywordsType timeRangeKeyword;
                 TokenTimeRange timeRangeToken = null;
-                if (index > 1 && CustomDictionary.IsTimeRange(word.ToLower()))
+                if (CustomDictionary.IsTimeRange(word.ToLower()))
                 {
-                    if (int.TryParse(inputWords[index - 1], out userDefinedIndex))
+                    Match match = CustomDictionary.isTimeRange.Match(word.ToLower());
+                    Int32.TryParse(match.Groups["index"].Value, out userDefinedIndex);
+                    string matchString = match.Groups["type"].Value;
+                    if (!CustomDictionary.timeRangeType.TryGetValue(matchString, out timeRangeType))
                     {
-                        string matchString = CustomDictionary.isTimeRange.Match(word.ToLower()).Value;
-                        if (!CustomDictionary.timeRangeType.TryGetValue(word, out timeRangeType))
-                        {
-                            throw new Exception("Something wrong with IsTimeRange regex etc.");
-                        }
-                        timeRangeToken = new TokenTimeRange(index-1, userDefinedIndex, timeRangeType);
+                        throw new Exception("Something wrong with IsTimeRange regex etc.");
                     }
+                        timeRangeToken = new TokenTimeRange(index, userDefinedIndex, timeRangeType);
                 }
                 else if (CustomDictionary.timeRangeKeywords.TryGetValue(word.ToLower(), out timeRangeKeyword))
                 {
                     timeRangeToken = new TokenTimeRange(index, timeRangeKeyword);
                 }
                 if (timeRangeToken != null)
+                {
                     timeRangeTokens.Add(timeRangeToken);
+                }
                 index++;
             }
             return timeRangeTokens;
@@ -302,28 +329,31 @@ namespace ToDo
             foreach (string word in input)
             {
                 bool isTime = false;
-                if (CustomDictionary.CheckIfIsValidTimeInWordFormat(word))
+                match = CustomDictionary.time_12HourFormat.Match(word);
+                if (!match.Success)
                 {
-                    specificity = GetDefaultTimeValues(word, ref hours);
-                    isTime = true;
+                    match = CustomDictionary.time_24HourFormat.Match(word);
                 }
                 else
                 {
-                    match = CustomDictionary.time_12HourFormat.Match(word);
-                    if (!match.Success) match = CustomDictionary.time_24HourFormat.Match(word);
-                    else Format_12Hour = true;
-                    if (match.Success)
+                    Format_12Hour = true;
+                }
+                if (match.Success)
+                {
+                    isTime = true;
+                    string strHours = match.Groups["hours"].Value;
+                    string strMinutes = match.Groups["minutes"].Value;    
+                    if (strHours.Length != 0)  
                     {
-                        isTime = true;
-                        string strHours = match.Groups["hours"].Value;
-                        string strMinutes = match.Groups["minutes"].Value;
-                        if (strHours.Length != 0)
+                        hours = Int32.Parse(strHours);
+                        if (Format_12Hour)
                         {
-                            hours = Int32.Parse(strHours);
-                            if (Format_12Hour) hours = ConvertTo24HoursFormat(match.Groups["format"].Value, hours);
+                            hours = ConvertTo24HoursFormat(match.Groups["format"].Value, hours);
                         }
-                        if (strMinutes.Length != 0)
-                            minutes = Int32.Parse(strMinutes);
+                    }
+                    if (strMinutes.Length != 0)
+                    {
+                        minutes = Int32.Parse(strMinutes);
                     }
                 }
                 if (isTime)
@@ -337,6 +367,7 @@ namespace ToDo
             return timeTokens;
         }
 
+        /*
         /// <summary>
         /// Retrieve the default hour values for general and specific time keywords.
         /// </summary>
@@ -370,7 +401,7 @@ namespace ToDo
                     Debug.Assert(false, "Control fell to default case statement in GetDefaultTimeValues. Assumption is that only hard-coded words are allowed currently.");
                     return false;
             }
-        }
+        }*/
 
         private int ConvertTo24HoursFormat(string format, int hours)
         {
@@ -421,7 +452,10 @@ namespace ToDo
             List<Token> literalTokens = new List<Token>();
             foreach (Token token in parsedTokens)
             {
-                input[token.Position] = null;
+                if (token.GetType() != typeof(TokenTimeRange))
+                {
+                    input[token.Position] = null;
+                }
             }
             int index = 0;
             string literal = String.Empty;
@@ -613,10 +647,8 @@ namespace ToDo
         private Token GetHighestPriorityToken(IEnumerable<Token> matches, List<Token> tokens)
         {
             Token highestPriorityToken = null;
-
             var match = from eachToken in tokens
-                        where eachToken.GetType() == typeof(TokenCommand)
-                        && eachToken.RequiresTimeRange()
+                        where eachToken.RequiresTimeRange()
                         select eachToken;
             foreach (Token token in matches)
             {
@@ -624,7 +656,11 @@ namespace ToDo
                 {
                     highestPriorityToken = token;
                 }
-                else if (match.Count() == 1 && token.GetType() == typeof(TokenTimeRange))
+                else if (!(match.Count() == 1 || token.GetType() == typeof(TokenTimeRange)))
+                {
+                    highestPriorityToken = token;
+                }
+                else if (token.GetType() == typeof(TokenSortType))
                 {
                     highestPriorityToken = token;
                 }

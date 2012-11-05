@@ -11,6 +11,7 @@ namespace ToDo
         CommandParser commandParser;
         StringParser stringParser;
         Settings mainSettings;
+        UI ui;
 
         public Settings MainSettings
         {
@@ -40,6 +41,12 @@ namespace ToDo
             }
         }
 
+
+        internal void SetUI(UI ui)
+        {
+            this.ui = ui;
+        }
+
         public Response ProcessCommand(string input)
         {
             Operation operation = null;
@@ -51,13 +58,24 @@ namespace ToDo
             {
                 AlertBox.Show(e.Message);
             }
+            catch (MultipleCommandsException e)
+            {
+                AlertBox.Show(@"Invalid input.\r\n
+                            Multiple commands were entered that could not be resolved.\r\n
+                            Use delimiting characters if reserved keywords are required in your task name.");
+            }
             if (operation == null)
             {
                 return new Response(Result.INVALID_COMMAND);
             }
             else
             {
-                return ExecuteCommand(operation);
+                Response feedback = ExecuteCommand(operation);
+                if (taskList.Count == 0)
+                    ui.SetMessageTaskListIsEmpty(true);
+                else
+                    ui.SetMessageTaskListIsEmpty(false);
+                return feedback;
             }
         }
 
@@ -121,5 +139,6 @@ namespace ToDo
         {
             Operation.UpdateCurrentListedTasks(displayedList);
         }
+
     } 
 }
