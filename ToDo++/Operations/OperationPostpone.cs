@@ -22,7 +22,7 @@ namespace ToDo
             this.postponeTime = postponeTime;
 
             //alter for only one date in command as the postpone date
-            if ((indexRange != null || taskName != null) && postponeTime == null && startTime != null)
+            if ((indexRange != null || taskName != null|| isAll ==true) && postponeTime == null && startTime != null)
             {
                 this.oldTime = postponeTime;
                 this.postponeTime = startTime;
