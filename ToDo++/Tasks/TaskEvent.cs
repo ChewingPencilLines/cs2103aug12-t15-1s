@@ -77,7 +77,7 @@ namespace ToDo
                         startCompare = new DateTime(startCompare.Year, startCompare.Month, 1);
                 }
 
-                if (startDateTime < startCompare)
+                if (endDateTime < startCompare)
                     isWithinTime = false;
             }
             if (end != null)

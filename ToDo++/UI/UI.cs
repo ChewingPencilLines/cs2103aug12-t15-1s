@@ -667,6 +667,7 @@ namespace ToDo
 
             if (task == null) return; // log exception
 
+            // Task is done!
             if (task.DoneState == true)
             {
                 ColorSubItems(row, Color.Green);
@@ -677,6 +678,7 @@ namespace ToDo
                 // Task is over time limit!
                 if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
                     ColorSubItems(row, Color.Red);
+                // Task is within the next 24 hrs!
                 else if (task.IsWithinTime(new DateTimeSpecificity(), DateTime.Now, DateTime.Now.AddDays(1)))
                     ColorSubItems(row, Color.OrangeRed);
             }
