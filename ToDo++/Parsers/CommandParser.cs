@@ -121,14 +121,21 @@ namespace ToDo
             DateTimeSpecificity isSpecific
             )
         {
-            //if (!specificity)
-            //    endTime = new DateTime(((DateTime)startTime).Year, ((DateTime)startTime).Month, DateTime.DaysInMonth(((DateTime)startTime).Year, ((DateTime)startTime).Month));
             if (startTime == null && endTime == null)
                 return new TaskFloating(taskName);
             else if (startTime == null && endTime != null)
                 return new TaskDeadline(taskName, (DateTime)endTime, isSpecific);
             else if (startTime != null && endTime == null)
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific); 
+            {
+                // If endTime is not specified set endTime based on startTime.
+                endTime = startTime;
+                if (!isSpecific.StartTime)
+                {
+                    endTime = ((DateTime)endTime).AddDays(1);
+                    endTime = ((DateTime)endTime).AddMinutes(-1);
+                }
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific);
+            }
             else
                 return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
         }
