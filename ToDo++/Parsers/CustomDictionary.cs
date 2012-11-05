@@ -16,8 +16,8 @@ namespace ToDo
     public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, SCHEDULE, EXIT, INVALID };
     public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
     // unless otherwise stated in settings,
-    // morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
-    public enum TimeRangeKeywordsType { MORNING, AFTERNOON, EVENING, NIGHT, NONE };
+    // default: 8am to 10pm, morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
+    public enum TimeRangeKeywordsType { DEFAULT = 0, MORNING, AFTERNOON, EVENING, NIGHT, NONE };
     // default should be hours (1 hour), unless otherwise stated in settings
     public enum TimeRangeType { DEFAULT = 0, HOUR, DAY, MONTH };
     public enum SortType { DEFAULT, NAME, DATE_TIME, DONE_STATE };
@@ -25,8 +25,6 @@ namespace ToDo
 
     static class CustomDictionary
     {
-        static public TimeRangeType defaultTimeRangeType = TimeRangeType.HOUR;
-        static public int defaultTimeRangeIndex = 1;
         static public Dictionary<string, CommandType> commandKeywords;        
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
@@ -107,7 +105,7 @@ namespace ToDo
             new Regex(@"^(((?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?)|((?<start>\d?\d?\d)\-))$");
 
         static public Regex isTimeRange =
-               new Regex(@"^(?<index>(\d*) )?(?<type>(h(?:ou)?r(?:s)?|day(?:s)?|m(?:on)?th(?:s)?))$");
+            new Regex(@"^(h(?:ou)?r(?:s)?|day(?:s)?|m(?:on)?th(?:s)?)$");
         #endregion
 
         static CustomDictionary()
@@ -234,11 +232,13 @@ namespace ToDo
             timeRangeType.Add("mths", TimeRangeType.MONTH);
             timeRangeType.Add("mth", TimeRangeType.MONTH);
             timeRangeKeywordsStartTime = new Dictionary<TimeRangeKeywordsType, int>();
+            timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.DEFAULT, 8);
             timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.MORNING, 5);
             timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.AFTERNOON, 12);
             timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.EVENING, 17);
             timeRangeKeywordsStartTime.Add(TimeRangeKeywordsType.NIGHT, 22);
             timeRangeKeywordsEndTime = new Dictionary<TimeRangeKeywordsType, int>();
+            timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.DEFAULT, 22);
             timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.MORNING, 12);
             timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.AFTERNOON, 17);
             timeRangeKeywordsEndTime.Add(TimeRangeKeywordsType.EVENING, 22);
@@ -283,6 +283,16 @@ namespace ToDo
         public static Dictionary<string, SortType> GetSortTypeKeywords()
         {
             return sortTypeKeywords;
+        }
+
+        public static Dictionary<TimeRangeKeywordsType, int> GetTimeRangeStartTime()
+        {
+            return timeRangeKeywordsStartTime;
+        }
+
+        public static Dictionary<TimeRangeKeywordsType, int> GetTimeRangeEndTime()
+        {
+            return timeRangeKeywordsEndTime;
         }
 
         /*
@@ -479,12 +489,15 @@ namespace ToDo
         // ******************************************************************
 
         #region Update Dictionary With FlexiCommands
-        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords, Dictionary<string, TimeRangeType> passedTimeRangeType)
+        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords, 
+            Dictionary<string, TimeRangeType> passedTimeRangeType,Dictionary<TimeRangeKeywordsType, int> passedTimeRangeStartTime,Dictionary<TimeRangeKeywordsType, int> passedTimeRangeEndTime)
         {
             commandKeywords = passedCommandKeywords;
             contextKeywords = passedContextKeywords;
             timeRangeKeywords = passedTimeRangeKeywords;
             timeRangeType = passedTimeRangeType;
+            timeRangeKeywordsStartTime = passedTimeRangeStartTime;
+            timeRangeKeywordsEndTime = passedTimeRangeEndTime;
         }
         #endregion
     }
