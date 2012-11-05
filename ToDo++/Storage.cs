@@ -157,6 +157,31 @@ namespace ToDo
 
             return true;            
         }
+
+        internal bool ModifyTask(Task oldTask, Task newTask)
+        {
+            XDocument doc = XDocument.Load(taskStorageFile);
+
+            var task = from node in doc.Descendants("Task")
+                       let attr = node.Attribute("id")
+                       where attr != null && attr.Value == oldTask.ID.ToString()
+                       select node;
+
+            if (task == null) return false;
+
+            try
+            {
+                task.First().ReplaceWith(newTask);
+            }
+            catch (Exception)
+            {
+                // log: failed to find node.
+                return false;
+            }
+
+            doc.Save(taskStorageFile);
+            return true;
+        }
                
         internal bool MarkTaskAs(Task taskToMarkAsDone, bool done)
         {
