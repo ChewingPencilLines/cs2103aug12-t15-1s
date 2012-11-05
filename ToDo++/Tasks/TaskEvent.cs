@@ -102,7 +102,7 @@ namespace ToDo
                     endCompare = new DateTime(endCompare.Year, endCompare.Month, endCompare.Day, 23, 59, 0);
                 }
 
-                if (endDateTime > endCompare) 
+                if (startDateTime > endCompare) 
                     isWithinTime = false;
             }
             return isWithinTime;

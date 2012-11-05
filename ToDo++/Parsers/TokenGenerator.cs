@@ -654,6 +654,10 @@ namespace ToDo
                 {
                     highestPriorityToken = token;
                 }
+                else if (token.GetType() == typeof(TokenSortType))
+                {
+                    highestPriorityToken = token;
+                }
                 else if (highestPriorityToken == null)
                 {
                     highestPriorityToken = token;

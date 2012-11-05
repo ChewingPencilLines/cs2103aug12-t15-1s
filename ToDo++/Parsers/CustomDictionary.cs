@@ -25,7 +25,6 @@ namespace ToDo
 
     static class CustomDictionary
     {
-        // Encapsulation?
         static public Dictionary<string, CommandType> commandKeywords;        
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
