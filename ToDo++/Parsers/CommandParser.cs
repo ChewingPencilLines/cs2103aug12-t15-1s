@@ -38,9 +38,11 @@ namespace ToDo
                 }
                 catch (MultipleCommandsException)
                 {
-                    WarnUserOfMultipleCommands();
+                    ResolveMultipleCommands();
                 }
             }
+            // implement?: 
+            // ReleaseUnusedTokens();
             if (opAttributes.commandType == CommandType.SCHEDULE)
             {
                 opAttributes.SetScheduleTime();
@@ -140,7 +142,7 @@ namespace ToDo
                 return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
         }
 
-        private static void WarnUserOfMultipleCommands()
+        private static void ResolveMultipleCommands()
         {
             AlertBox.Show("Invalid input.\r\nMultiple commands were entered.");
             throw new NotImplementedException("Multiple commands were issued. Functionality NYI.");

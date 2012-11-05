@@ -20,11 +20,12 @@ namespace ToDo
     public enum TimeRangeKeywordsType { DEFAULT = 0, MORNING, AFTERNOON, EVENING, NIGHT, NONE };
     // default should be hours (1 hour), unless otherwise stated in settings
     public enum TimeRangeType { DEFAULT = 0, HOUR, DAY, MONTH };
-    public enum SortType { DEFAULT, NAME, DONE_STATE };
+    public enum SortType { DEFAULT, NAME, DATE_TIME, DONE_STATE };
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
     static class CustomDictionary
     {
+        // Encapsulation?
         static public Dictionary<string, CommandType> commandKeywords;        
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
@@ -249,7 +250,7 @@ namespace ToDo
         {
             sortTypeKeywords = new Dictionary<string, SortType>();
             sortTypeKeywords.Add("name", SortType.NAME);
-            sortTypeKeywords.Add("date", SortType.DEFAULT);
+            sortTypeKeywords.Add("date", SortType.DATE_TIME);
             sortTypeKeywords.Add("done", SortType.DONE_STATE);
         }
 
