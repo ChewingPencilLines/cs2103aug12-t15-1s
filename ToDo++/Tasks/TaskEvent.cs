@@ -68,16 +68,10 @@ namespace ToDo
                 startCompare = (DateTime)start;
 
                 // If comparision is not specific to Day/Month, extend search range
-                if (!isSpecific.StartDate.Day)
+                if ((!isSpecific.StartDate.Day && !isSpecific.StartTime ||
+                    (!compareIsSpecific.StartDate.Day && !compareIsSpecific.StartTime)))
                 {                    
                     if (!isSpecific.StartDate.Month)
-                        startCompare = new DateTime(startCompare.Year, 1, 1);
-                    else
-                        startCompare = new DateTime(startCompare.Year, startCompare.Month, 1);
-                }
-                if (!compareIsSpecific.StartDate.Day)
-                {
-                    if (!compareIsSpecific.StartDate.Month)
                         startCompare = new DateTime(startCompare.Year, 1, 1);
                     else
                         startCompare = new DateTime(startCompare.Year, startCompare.Month, 1);
@@ -90,22 +84,22 @@ namespace ToDo
             {
                 endCompare = (DateTime)end;
 
-                // Extend compare range if task dates are not specific
-                if (!isSpecific.EndDate.Day)
-                {                 
-                    if (!isSpecific.EndDate.Month)
-                        endCompare = new DateTime(endCompare.Year+1, 1, 1);
-                    else
-                        endCompare = new DateTime(endCompare.Year, endCompare.Month+1, 1);
-                    endCompare = endCompare.AddMinutes(-1);
-                }
-                if (!compareIsSpecific.EndDate.Day)
+                // Extend compare range if task dates are not specific                
+                if ((!isSpecific.EndDate.Day && !isSpecific.EndTime ||
+                    (!compareIsSpecific.EndDate.Day && !compareIsSpecific.EndTime)))
                 {
-                    if (!compareIsSpecific.EndDate.Month)
+                    if (!isSpecific.EndDate.Month)
                         endCompare = new DateTime(endCompare.Year + 1, 1, 1);
                     else
-                        endCompare = new DateTime(endCompare.Year, endCompare.Month + 1, 1);
+                    {
+                        endCompare = endCompare.AddMonths(1);
+                        endCompare = new DateTime(endCompare.Year, endCompare.Month, 1);
+                    }
                     endCompare = endCompare.AddMinutes(-1);
+                }
+                else if (!compareIsSpecific.EndTime && compareIsSpecific.StartDate.Day == true)
+                {
+                    endCompare = new DateTime(endCompare.Year, endCompare.Month, endCompare.Day, 23, 59, 0);
                 }
 
                 if (endDateTime > endCompare) 

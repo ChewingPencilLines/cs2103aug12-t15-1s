@@ -648,15 +648,16 @@ namespace ToDo
             TinyAlertView.SetLocation();
         }
 
-        private void taskListViewControl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //taskListViewControl.SelectedItem = null;
-        }
-
         private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)
         {
-            // Row index should not change even if doing a column sort.
+            // Display index -will- change if doing a column sort.
             e.Item.SubItems[1].Text = "[" + (e.DisplayIndex+1).ToString() + "]";
+
+            Task task = (Task) e.Item.RowObject;
+            if (task == null) return;
+
+            if(task.DoneState == true)
+                e.Item.ForeColor = Color.Green;
         }
 
         private void UI_Move(object sender, EventArgs e)
@@ -693,6 +694,39 @@ namespace ToDo
         {
             if (MouseIsOverDisplayList)
                 taskListViewControl.Focus();
+        }
+
+        private void taskListViewControl_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        {
+            if (e.ColumnIndex != 3) return;
+
+            Task task = (Task)e.Item.RowObject;
+
+            if (task == null) return; // log exception
+
+            if (task.DoneState == true)
+            {
+                return;
+            }
+
+            else if (task is TaskDeadline)
+            {
+                // Task is over time limit!
+                if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
+                    e.SubItem.ForeColor = Color.Red;
+                // Task is deadline but not over
+                else 
+                    e.SubItem.ForeColor = Color.OrangeRed;
+            }
+
+            else if (task is TaskEvent)
+            {
+                // Task is over!
+                if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
+                    e.SubItem.ForeColor = Color.PaleVioletRed;
+            }
+
+            return;
         }
     }
 }

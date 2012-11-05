@@ -55,7 +55,7 @@ namespace ToDo
             else if (startIndex < 0 || endIndex > currentListedTasks.Count - 1)
                 return new Response(Result.INVALID_TASK, Format.DEFAULT);
 
-            if (!hasIndex && !isAll)
+            if (!hasIndex)
             {
                 searchResults = SearchForTasks(taskList, taskName, isSpecific, isSpecific.StartTime && isSpecific.EndTime, startTime, endTime);
                 if (searchResults.Count == 0)
@@ -74,27 +74,24 @@ namespace ToDo
                 {
                     response = DeleteTask(searchResults[0], taskList);
                 }
+                else if (isAll)
+                {
+                    foreach (Task task in searchResults)
+                    {
+                        if (currentListedTasks.Contains(task))
+                            currentListedTasks.Remove(task);
+                        response = DeleteTask(task, taskList);
+                        if (!response.IsSuccessful()) return response;
+                    }
+                    response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
+                }
                 else
                 {
                     currentListedTasks = new List<Task>(searchResults);
                     response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                 }
             }
-            else if (isAll)
-            {
-                for (int i = currentListedTasks.Count-1; i >= 0; i--)
-                {
-                    Task task = currentListedTasks[i];
-                    if (task == null)
-                        response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
-                    else
-                    {
-                        response = DeleteTask(task, taskList);
-                        if (!response.IsSuccessful()) return response;
-                    }
-                }
-            }
-            else
+            else if (hasIndex)
             {
                 if (endIndex == startIndex)
                 {
@@ -121,6 +118,22 @@ namespace ToDo
                     }
                 }
             }
+            else if (isAll)
+            {
+                for (int i = currentListedTasks.Count - 1; i >= 0; i--)
+                {
+                    Task task = currentListedTasks[i];
+                    if (task == null)
+                        response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
+                    else
+                    {
+                        response = DeleteTask(task, taskList);
+                        if (!response.IsSuccessful()) return response;
+                    }
+                }
+            }
+            else
+                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
 
             if (response.IsSuccessful())
             {
