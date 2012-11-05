@@ -18,8 +18,7 @@ namespace ToDo
 
             if (newTask == null)
             {
-                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType(),  currentListedTasks);
-               // return RESPONSE_ADD_FAILURE;
+                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
             }
             response = AddTask(newTask, taskList);
             if (response.IsSuccessful())

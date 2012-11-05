@@ -75,14 +75,15 @@ namespace ToDo
                 if (storageIO.AddTaskToFile(taskToAdd))
                 {
                     currentListedTasks.Add(taskToAdd);
-                    return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks);
+
+                    return GenerateSuccessResponse(taskToAdd);
                 }
                 else
                     return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.ToString());
+                Debug.WriteLine(e.ToString()); // <- this is not logging.
                 return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd),  currentListedTasks); 
                 //log this: return RESPONSE_ADD_FAILURE + "\r\nThe following exception occured: " + e.ToString();
             }
@@ -94,16 +95,15 @@ namespace ToDo
             undoTask.Push(taskToDelete);
             taskList.Remove(taskToDelete);
             
-            // Can just remove task from currentListedTask with new UI
             currentListedTasks.Remove(taskToDelete);
 
             if (storageIO.RemoveTaskFromFile(taskToDelete))
             {
-                currentListedTasks.Remove(taskToDelete);
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationDelete),  currentListedTasks);                
+                return GenerateSuccessResponse(taskToDelete);
             }
             else
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationDelete),  currentListedTasks);
+                return GenerateXMLFailureResponse();
+                
         }
 
         protected Response MarkAsDone(Task taskToMarkAsDone)
@@ -113,12 +113,10 @@ namespace ToDo
 
             if (storageIO.MarkTaskAsDone(taskToMarkAsDone))
             {
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationMarkAsDone),  currentListedTasks);
-                //return String.Format(RESPONSE_MARKASDONE_SUCCESS, taskToMarkAsDone.TaskName);
+                return GenerateSuccessResponse(taskToMarkAsDone);
             }
             else
-                //return RESPONSE_XML_READWRITE_FAIL;
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationMarkAsDone),  currentListedTasks);
+                return GenerateXMLFailureResponse();
         }
 
         protected Response ModifyTask(Task taskToModify, Task newTask, List<Task> taskList)
@@ -131,16 +129,13 @@ namespace ToDo
             {
                  currentListedTasks.Remove(taskToModify);
                  currentListedTasks.Add(newTask);
-               // return String.Format(RESPONSE_MODIFY_SUCCESS, taskToModify.TaskName, newTask.TaskName);
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify),  currentListedTasks);
 
             }
-            else
-              //  return RESPONSE_XML_READWRITE_FAIL;
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationModify),  currentListedTasks);
+            else 
+                return GenerateXMLFailureResponse();
         }
 
-        // todo: move search queries into the tasks themselves as methods.
         protected Response PostponeTask(Task taskToPostpone, List<Task> taskList, DateTime? NewDate)
         {
             Task taskPostponed = taskToPostpone.Postpone(NewDate);
@@ -176,6 +171,18 @@ namespace ToDo
                                  where task.IsWithinTime(isSpecific, startTime, endTime)
                                  select task).ToList();
             return filteredTasks;
+        }
+
+        private Response GenerateSuccessResponse(Task task)
+        {
+            string[] args = new string[1];
+            args[0] = task.TaskName;
+            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks, args);
+        }
+
+        private Response GenerateXMLFailureResponse()
+        {
+            return new Response(Result.XML_READWRITE_FAIL);
         }
 
         #endregion
