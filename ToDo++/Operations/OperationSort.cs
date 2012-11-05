@@ -20,7 +20,7 @@ namespace ToDo
             Response response;
             switch (sortType)
             {
-                // sorting is done On-The-Fly in display control.
+                // sorting is done On-The-Fly in TaskListViewControl.
                 case SortType.NAME:                    
                     response = new Response(Result.SUCCESS, Format.NAME, this.GetType(), currentListedTasks);
                     break;
