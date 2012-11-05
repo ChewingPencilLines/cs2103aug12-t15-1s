@@ -11,7 +11,21 @@ namespace ToDo
         private int? endindex;
         private string doneString;
         private DateTime? doneDate;
-        public OperationMarkAsDone(string doneString, int[] indexRange, DateTime? doneDate)
+        private bool isAll;
+
+        /// <summary>
+        /// This is the base constructor for the MarkAsDone operation.
+        /// There are three ways to execute this operation in the following priorities.
+        /// By using a single date to mark all tasks on that date.
+        /// by searching the task name against a string,
+        /// and by using the current display index of the task.
+        /// </summary>
+        /// <param name="doneString">The name of the task to mark as done. Can be a substring of it.</param>
+        /// <param name="indexRange">The display index of the task to be marked.</param>
+        /// <param name="doneDate">The date in which to mark all tasks as done.</param>
+        /// <param name="isAll">If this boolean is true, the current displayed tasks will all be marked as done.</param>
+        /// <returns></returns>
+        public OperationMarkAsDone(string doneString, int[] indexRange, DateTime? doneDate, bool isAll)
         {
             if (indexRange == null) this.index = null;
             else
@@ -22,6 +36,7 @@ namespace ToDo
             if (doneString == "") this.doneString = null;
             else this.doneString = doneString;
             this.doneDate = doneDate;
+            this.isAll = isAll;
         }
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
@@ -55,16 +70,25 @@ namespace ToDo
             {
                 response = new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(),  currentListedTasks);
             }
-            else if (doneString == null)
+            else if (index != null)
             {
                 response = null;
                 Debug.Assert(index <= endindex);
-                Debug.Assert(endindex < taskList.Count);
+                Debug.Assert(endindex < currentListedTasks.Count);
                 for (int? i = index; i <= endindex; i++)
                 {
                     Task taskToMarkAsDone =  currentListedTasks[i.Value];
                     response = MarkAsDone(taskToMarkAsDone);
                 }
+            }
+            else if (isAll)
+            {
+                foreach (Task task in currentListedTasks)
+                {
+                    response = MarkAsDone(task);
+                    if (!response.IsSuccessful()) return response;
+                }
+                response = new Response(Result.SUCCESS_MULTIPLE, Format.DEFAULT, this.GetType(), currentListedTasks);
             }
             else
             {
