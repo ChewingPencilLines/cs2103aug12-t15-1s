@@ -35,8 +35,6 @@ namespace ToDo
         public Dictionary<string, ContextType> userContextKeywords;
         public Dictionary<string, TimeRangeKeywordsType> userTimeRangeKeywordsType;
         public Dictionary<string, TimeRangeType> userTimeRangeType;
-        public Dictionary<TimeRangeKeywordsType, int> userTimeRangeKeywordsStartTime;
-        public Dictionary<TimeRangeKeywordsType, int> userTimeRangeKeywordsEndTime;
 
         public SettingInformation()
         {
@@ -45,8 +43,6 @@ namespace ToDo
             userContextKeywords = CustomDictionary.GetContextKeywords();
             userTimeRangeKeywordsType = CustomDictionary.GetTimeRangeKeywordKeywords();
             userTimeRangeType = CustomDictionary.GetTimeRangeKeywords();
-            userTimeRangeKeywordsStartTime = CustomDictionary.GetTimeRangeStartTime();
-            userTimeRangeKeywordsEndTime = CustomDictionary.GetTimeRangeEndTime();
         }
 
         public bool ContainsFlexiCommandKeyword(string userKeyword, Enum flexiCommandType)
