@@ -11,6 +11,7 @@ namespace ToDo
         private int? endindex;
         private string doneString;
         private DateTime? doneDate;
+        private DateTime? doneDateEnd;
         private bool isAll;
 
         /// <summary>
@@ -36,6 +37,10 @@ namespace ToDo
             if (doneString == "") this.doneString = null;
             else this.doneString = doneString;
             this.doneDate = doneDate;
+            if(doneDate != null)
+                this.doneDateEnd = ((DateTime)doneDate).AddDays(1).AddMinutes(-1);
+            else 
+                this.doneDateEnd = null;
             this.isAll = isAll;
         }
 
@@ -47,28 +52,50 @@ namespace ToDo
             if (doneDate != null)
             {
                 response = null;
-                List<Task> searchResults = SearchForTasks(taskList, doneString, isSpecific, false, doneDate, ((DateTime)doneDate).AddDays(1).AddMinutes(-1));
-                foreach(Task taskToDone in searchResults)
+                List<Task> searchResults = SearchForTasks(taskList, doneString, isSpecific, false, doneDate, doneDateEnd);
+                if (searchResults.Count == 0)
                 {
-                    response = MarkAsDone(taskToDone);
+                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                }
+                else
+                {
+                    foreach (Task taskToDone in searchResults)
+                    {
+                        response = MarkAsDone(taskToDone);
+                    }
                 }
             }
             else if (index.HasValue == false && doneString != null)
             {
-                List<Task> searchResults = SearchForTasks(taskList, doneString, isSpecific);
+                List<Task> searchResults = SearchForTasks(taskList, doneString, isSpecific, true);
                 if (searchResults.Count == 1)
                 {
                     response = MarkAsDone(currentListedTasks[0]);
                 }
-                else
+                else if (searchResults.Count > 0)
                 {
                     currentListedTasks = new List<Task>(searchResults);
-                    response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
+                    string[] args;
+                    this.SetArgumentsForFeedbackString(out args, doneString, doneDate, doneDateEnd, false, false);
+                    response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, args);
+                }
+                else
+                {
+                    searchResults = SearchForTasks(taskList, doneString, isSpecific, false);
+                    if (searchResults.Count > 0)
+                    {
+                        currentListedTasks = new List<Task>(searchResults);
+                        string[] args;
+                        this.SetArgumentsForFeedbackString(out args, doneString, doneDate, doneDateEnd, false, false);
+                        response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, args);
+                    }
+                    else
+                        response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
                 }
             }
             else if (index < 0 || index > taskList.Count - 1)
             {
-                response = new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(),  currentListedTasks);
+                response = new Response(Result.INVALID_TASK, Format.DEFAULT);
             }
             else if (index != null)
             {
@@ -92,8 +119,7 @@ namespace ToDo
             }
             else
             {
-               // return REPONSE_INVALID_COMMAND;
-                return new Response(Result.INVALID_COMMAND, Format.DEFAULT, this.GetType(),  currentListedTasks);
+                response = new Response(Result.INVALID_COMMAND, Format.DEFAULT, this.GetType(),  currentListedTasks);
             }
             if (response.IsSuccessful())
             {
@@ -107,14 +133,12 @@ namespace ToDo
             Task task = undoTask.Pop();
             redoTask.Push(task);
             task.DoneState = false;
-            if (storageIO.MarkTaskAsDone(task))
+            if (storageIO.MarkTaskAs(task, false))
             {
-                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
-              //  return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo),  currentListedTasks);
             }
             else
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, this.GetType(),  currentListedTasks);
-                //return RESPONSE_XML_READWRITE_FAIL;
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
@@ -122,14 +146,12 @@ namespace ToDo
             Task task = redoTask.Pop();
             undoTask.Push(task);
             task.DoneState = true;
-            if (storageIO.MarkTaskAsDone(task))
+            if (storageIO.MarkTaskAs(task, true))
             {
-                return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks);
-               // return String.Format(RESPONSE_MARKASUNDONE_SUCCESS, task.TaskName);
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
             }
             else
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, this.GetType(),  currentListedTasks);
-              //  return RESPONSE_XML_READWRITE_FAIL;
+                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
         }
     } 
 }

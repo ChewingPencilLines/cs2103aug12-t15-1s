@@ -158,7 +158,7 @@ namespace ToDo
             return true;            
         }
                
-        internal bool MarkTaskAsDone(Task taskToMarkAsDone)
+        internal bool MarkTaskAs(Task taskToMarkAsDone, bool done)
         {
             XDocument doc = XDocument.Load(taskStorageFile);
 
@@ -171,7 +171,10 @@ namespace ToDo
 
             try
             {
-                task.First().Element("Done").ReplaceNodes("True");
+                if(done)
+                    task.First().Element("Done").ReplaceNodes("True");
+                else
+                    task.First().Element("Done").ReplaceNodes("False");
             }
             catch (Exception)
             {

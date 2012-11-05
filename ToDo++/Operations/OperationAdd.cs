@@ -32,14 +32,22 @@ namespace ToDo
         {
             Task task = undoTask.Pop();
             redoTask.Push(task);
-            return DeleteTask(task, taskList);
+            Response response = DeleteTask(task, taskList);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             Task task = redoTask.Pop();
             undoTask.Push(task);
-            return DeleteTask(task, taskList);
+            Response response = AddTask(task, taskList);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
         }
     }
 }

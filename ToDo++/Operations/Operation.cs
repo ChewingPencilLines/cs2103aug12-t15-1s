@@ -111,7 +111,7 @@ namespace ToDo
             undoTask.Push(taskToMarkAsDone);
             taskToMarkAsDone.DoneState = true;
 
-            if (storageIO.MarkTaskAsDone(taskToMarkAsDone))
+            if (storageIO.MarkTaskAs(taskToMarkAsDone, true))
             {
                 return GenerateSuccessResponse(taskToMarkAsDone);
             }

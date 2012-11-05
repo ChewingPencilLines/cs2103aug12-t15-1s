@@ -18,7 +18,7 @@ namespace ToDo
         const string STRING_ADD_FAILURE = "Failed to add task!";
         const string STRING_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
         const string STRING_DELETE_SUCCESS_MULTI = "Deleted all tasks successfully.";
-        const string STRING_DELETE_FAILURE = "No matching task found!";
+        const string STRING_DELETE_FAILURE = "No matching tasks found!";
         const string STRING_DELETE_INVALID_TASK = "No task to delete!";
         const string STRING_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
         const string STRING_MODIFY_FAILURE = "Failed to modify task..!";
@@ -35,7 +35,8 @@ namespace ToDo
         const string STRING_POSTPONE_FAILURE = "No matching task found!";
         const string STRING_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
         const string STRING_MARKASDONE_SUCCESS_MULTI = "Successfully marked all tasks as done.";
-        const string STRING_MARKASDONE_FAILURE = "Failed to mark task as done..!";
+        const string STRING_MARKASDONE_FAILURE = "No matching tasks found!";
+        const string STRING_MARKASDONE_INVALID_TASK = "Cannot mark this task as done!";
         const string STRING_MARKASUNDONE_SUCCESS = "Successfully marked \"{0}\" as undone."; // Not implemented.
         const string STRING_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string STRING_CALLED_INVALID_TASK_INDEX = "Invalid task index!";
@@ -148,6 +149,8 @@ namespace ToDo
                             feedbackString = STRING_DELETE_INVALID_TASK;
                         else if (operationType == typeof(OperationPostpone))
                             feedbackString = STRING_POSTPONE_INVALID_TASK;
+                        else if (operationType == typeof(OperationMarkAsDone))
+                            feedbackString = STRING_MARKASDONE_INVALID_TASK;
                         else
                             feedbackString = STRING_CALLED_INVALID_TASK_INDEX;
                         break;
