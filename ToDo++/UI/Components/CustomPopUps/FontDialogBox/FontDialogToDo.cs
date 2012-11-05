@@ -92,7 +92,7 @@ namespace ToDo
         {
             this.fontSelection.SelectedIndexChanged += m_comboBox_SelectedIndexChanged;
             this.sizeSelection.RemoveDuplicate();
-            InitializeOptions("Arial", 8, Color.White);
+            InitializeOptions("Arial Black", 8, Color.White);
         }
 
         /// <summary>
