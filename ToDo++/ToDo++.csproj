@@ -61,6 +61,7 @@
     </Compile>
     <Compile Include="Operations\OperationSchedule.cs" />
     <Compile Include="Response.cs" />
+    <Compile Include="Tokens\TokenSortType.cs" />
     <Compile Include="Tokens\TokenTimeRange.cs" />
     <Compile Include="UI\Components\PreferencesControllers\FontColorSettings.cs">
       <SubType>UserControl</SubType>

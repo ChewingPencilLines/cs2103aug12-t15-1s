@@ -34,6 +34,7 @@ namespace ToDo
             tokens.AddRange(GenerateCommandTokens(input));
             // must be done after generating command tokens
             tokens.AddRange(GenerateIndexRangeTokens(input, tokens));
+            tokens.AddRange(GenerateSortTypeTokens(input, tokens));
             tokens.AddRange(GenerateTimeRangeTokens(input));
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
@@ -45,6 +46,31 @@ namespace ToDo
             DeconflictTokens(ref tokens);
             tokens.Sort(CompareByPosition);
             return tokens;
+        }
+
+        private List<Token> GenerateSortTypeTokens(List<string> input, List<Token> tokens)
+        {
+            SortType sortType;
+            int index = 0;
+
+            List<Token> sortTokens = new List<Token>();
+            foreach (string word in input)
+            {
+                if (CustomDictionary.sortTypeKeywords.TryGetValue(word.ToLower(), out sortType) && index != 0)
+                {
+                    if(tokens[index-1] is TokenCommand)
+                    {
+                        if (((TokenCommand)tokens[index-1]).Value == CommandType.SORT)
+                        {
+                            TokenSortType sortTypeToken = new TokenSortType(index, sortType);
+                            sortTokens.Add(sortTypeToken);
+                        }
+                    }
+                }
+                index++;
+            }
+            return sortTokens;
+
         }
         
         /// <summary>
