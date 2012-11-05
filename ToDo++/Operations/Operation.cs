@@ -111,7 +111,7 @@ namespace ToDo
             undoTask.Push(taskToMarkAsDone);
             taskToMarkAsDone.DoneState = true;
 
-            if (storageIO.MarkTaskAsDone(taskToMarkAsDone))
+            if (storageIO.MarkTaskAs(taskToMarkAsDone, true))
             {
                 return GenerateSuccessResponse(taskToMarkAsDone);
             }
@@ -158,7 +158,15 @@ namespace ToDo
                 return new Response(Result.XML_READWRITE_FAIL);
         }
         
-        protected List<Task> SearchForTasks(List<Task> taskList, string searchString, DateTimeSpecificity isSpecific, bool exact = false, DateTime? startTime = null, DateTime? endTime = null)
+        protected List<Task> SearchForTasks(
+            List<Task> taskList,
+            string searchString,
+            DateTimeSpecificity isSpecific,
+            bool exact = false,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            bool searchForIsDone = false
+            )
         {
             List<Task> filteredTasks = taskList;
             if (searchString != null)
@@ -169,6 +177,10 @@ namespace ToDo
             if (!(startTime == null && endTime == null)) 
                 filteredTasks = (from task in filteredTasks
                                  where task.IsWithinTime(isSpecific, startTime, endTime)
+                                 select task).ToList();
+            if (searchForIsDone)
+                filteredTasks = (from task in filteredTasks
+                                 where task.DoneState == true
                                  select task).ToList();
             return filteredTasks;
         }
@@ -183,6 +195,24 @@ namespace ToDo
         private Response GenerateXMLFailureResponse()
         {
             return new Response(Result.XML_READWRITE_FAIL);
+        }
+
+        protected void SetArgumentsForFeedbackString(out string[] criteria, string searchString, DateTime? startTime, DateTime? endTime, bool searchForIsDone, bool isAll)
+        {
+            criteria = new string[Response.SEARCH_PARAM_NUM];
+            criteria[Response.SEARCH_PARAM_ALL] = "";
+            criteria[Response.SEARCH_PARAM_DONE] = "";
+            criteria[Response.SEARCH_PARAM_SEARCH_STRING] = "";
+
+            if (searchForIsDone == true)
+                criteria[Response.SEARCH_PARAM_DONE] = "[DONE] ";
+            if (isAll == true)
+                criteria[Response.SEARCH_PARAM_ALL] = "all ";
+
+            if (searchString != "" && searchString != null)
+                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " matching \"" + searchString + "\"";
+            if (startTime != null || endTime != null)
+                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " with time constraints";
         }
 
         #endregion

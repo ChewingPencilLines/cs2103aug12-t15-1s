@@ -112,11 +112,12 @@ namespace ToDo
             string remainingStr = input.Substring(processedIndex);
             words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());            
             words = MergeDateAndTimeWords(words);
-            words = MergeRangeKeywords(words);
+            words = MergeNumericalRangeWords(words);
+            words = MergeTimeRangeWords(words);
             return words;
         }
 
-        private List<string> MergeRangeKeywords(List<string> words)
+        private List<string> MergeNumericalRangeWords(List<string> words)
         {               
             int j = 1;
             List<string> output = new List<string>();
@@ -132,11 +133,43 @@ namespace ToDo
                 while (i + j < words.Count)  // Don't check last word.
                 {
                     success = CustomDictionary.isNumericalRange.IsMatch(matchCheck + words[i + j]);
-                    if (success) matchCheck += words[i + j];
+                    if (success)
+                    {
+                        matchCheck += words[i + j];
+                    }
                     else break;
                     j++;
                 }
                 output.Add(matchCheck);
+            }
+            return output;
+        }
+
+        private List<string> MergeTimeRangeWords(List<string> words)
+        {
+            List<string> output = new List<string>();
+            int index = 0;
+            foreach (string word in words)
+            {
+                string mergedWord = null;
+                int userDefinedIndex = 0;
+                if (index > 1 && CustomDictionary.IsTimeRange(word.ToLower()))
+                {
+                    if (int.TryParse(words[index - 1], out userDefinedIndex))
+                    {
+                        mergedWord = String.Concat(words[index - 1], " ", word);
+                    }
+                }
+                if (mergedWord != null)
+                {
+                    output.RemoveAt(output.Count-1);
+                    output.Add(mergedWord);
+                }
+                else
+                {
+                    output.Add(word);
+                }
+                index++;
             }
             return output;
         }
@@ -174,7 +207,10 @@ namespace ToDo
                 if (CustomDictionary.CheckIfWordIsTimeSuffix(word))
                 {
                     isWordAdded = MergeWord_IfValidTime(ref output, input, position);
-                    if (isWordAdded) break;
+                    if (isWordAdded)
+                    {
+                        break;
+                    }
                 }
                 if (!isWordAdded)
                 {
