@@ -28,7 +28,7 @@ namespace ToDo
         public void UpdateSettings(SettingInformation updatedInfo)
         {
             settingInfo = updatedInfo;
-            CustomDictionary.UpdateDictionary(settingInfo.userCommandKeywords,settingInfo.userContextKeywords,settingInfo.userTimeRangeKeywordsType,settingInfo.userTimeRangeType);
+            CustomDictionary.UpdateDictionary(settingInfo.userCommandKeywords,settingInfo.userContextKeywords,settingInfo.userTimeRangeKeywordsType,settingInfo.userTimeRangeType,settingInfo.userTimeRangeKeywordsStartTime,settingInfo.userTimeRangeKeywordsEndTime);
         }
 
         // ******************************************************************
@@ -262,7 +262,15 @@ namespace ToDo
 
         #endregion
 
+        #region TimeDictionary
 
+        public void SetTimeRange(TimeRangeKeywordsType timeRange, int startTime, int endTime)
+        {
+            settingInfo.userTimeRangeKeywordsStartTime[timeRange] = startTime;
+            settingInfo.userTimeRangeKeywordsEndTime[timeRange] = endTime;
+        }
+
+        #endregion
 
 
         #endregion

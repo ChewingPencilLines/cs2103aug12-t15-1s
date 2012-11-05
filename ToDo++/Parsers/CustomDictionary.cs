@@ -27,7 +27,7 @@ namespace ToDo
     {
         static public TimeRangeType defaultTimeRangeType = TimeRangeType.HOUR;
         static public int defaultTimeRangeIndex = 1;
-        static public Dictionary<string, CommandType> commandKeywords;        
+        static public Dictionary<string, CommandType> commandKeywords;
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
         static public Dictionary<string, TimeRangeType> timeRangeType;
@@ -285,6 +285,16 @@ namespace ToDo
             return sortTypeKeywords;
         }
 
+        public static Dictionary<TimeRangeKeywordsType, int> GetTimeRangeStartTime()
+        {
+            return timeRangeKeywordsStartTime;
+        }
+
+        public static Dictionary<TimeRangeKeywordsType, int> GetTimeRangeEndTime()
+        {
+            return timeRangeKeywordsEndTime;
+        }
+
         /*
         public static Dictionary<string, Month> GetMonthKeywords()
         {
@@ -479,12 +489,15 @@ namespace ToDo
         // ******************************************************************
 
         #region Update Dictionary With FlexiCommands
-        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords, Dictionary<string, TimeRangeType> passedTimeRangeType)
+        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords,
+            Dictionary<string, TimeRangeType> passedTimeRangeType, Dictionary<TimeRangeKeywordsType, int> passedTimeRangeStartTime, Dictionary<TimeRangeKeywordsType, int> passedTimeRangeEndTime)
         {
             commandKeywords = passedCommandKeywords;
             contextKeywords = passedContextKeywords;
             timeRangeKeywords = passedTimeRangeKeywords;
             timeRangeType = passedTimeRangeType;
+            timeRangeKeywordsStartTime = passedTimeRangeStartTime;
+            timeRangeKeywordsEndTime = passedTimeRangeEndTime;
         }
         #endregion
     }
