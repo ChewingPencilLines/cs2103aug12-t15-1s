@@ -75,7 +75,6 @@ namespace ToDo
                 if (storageIO.AddTaskToFile(taskToAdd))
                 {
                     currentListedTasks.Add(taskToAdd);
-
                     return GenerateSuccessResponse(taskToAdd);
                 }
                 else
