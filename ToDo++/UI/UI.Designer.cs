@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
+            BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.timerCollpaser = new System.Windows.Forms.Timer(this.components);
             this.timerExpander = new System.Windows.Forms.Timer(this.components);
@@ -75,13 +75,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
-            // 
-            // taskDateTimeCol
-            // 
-            taskDateTimeCol.AspectName = "GetTimeString";
-            taskDateTimeCol.CellPadding = null;
-            taskDateTimeCol.FillsFreeSpace = true;
-            taskDateTimeCol.Width = 199;
             // 
             // notifyIcon_taskBar
             // 
@@ -204,7 +197,6 @@
             this.taskListViewControl.UseCompatibleStateImageBehavior = false;
             this.taskListViewControl.View = System.Windows.Forms.View.Details;
             this.taskListViewControl.BeforeSorting += new System.EventHandler<BrightIdeasSoftware.BeforeSortingEventArgs>(this.taskListViewControl_BeforeSorting);
-            this.taskListViewControl.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.taskListViewControl_FormatCell);
             this.taskListViewControl.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.taskListViewControl_FormatRow);
             this.taskListViewControl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SelectTextInput);
             this.taskListViewControl.MouseEnter += new System.EventHandler(this.taskListViewControl_MouseEnter);
@@ -230,6 +222,13 @@
             this.taskNameCol.FillsFreeSpace = true;
             this.taskNameCol.Width = 213;
             this.taskNameCol.WordWrap = true;
+            // 
+            // taskDateTimeCol
+            // 
+            taskDateTimeCol.AspectName = "GetTimeString";
+            taskDateTimeCol.CellPadding = null;
+            taskDateTimeCol.FillsFreeSpace = true;
+            taskDateTimeCol.Width = 199;
             // 
             // taskDoneStateCol
             // 
