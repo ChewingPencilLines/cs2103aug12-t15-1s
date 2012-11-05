@@ -18,7 +18,7 @@ namespace ToDo
         public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
         public TimeRangeType timeRangeType = TimeRangeType.DEFAULT;
         public TimeRangeKeywordsType timeRangeOne = TimeRangeKeywordsType.NONE;
-        public SortType? sortType = new SortType();
+        public SortType sortType = new SortType();
         public TimeRangeKeywordsType timeRangeTwo = TimeRangeKeywordsType.NONE;
         public string taskName = null;
         public int[] rangeIndexes = null;

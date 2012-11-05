@@ -66,7 +66,7 @@ namespace ToDo
             int[] taskIndex = opAttributes.rangeIndexes;
             int timeRangeIndex = opAttributes.timeRangeIndex;
             TimeRangeType timeRangeType = opAttributes.timeRangeType;
-            SortType? sortType = opAttributes.sortType;
+            SortType sortType = opAttributes.sortType;
 
             Task task;
             Operation newOperation = null;

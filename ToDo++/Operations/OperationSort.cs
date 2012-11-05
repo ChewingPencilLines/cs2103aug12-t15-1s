@@ -7,9 +7,9 @@ namespace ToDo
 {
     class OperationSort : Operation
     {
-        private SortType? sortType;
+        private SortType sortType;
 
-        public OperationSort(SortType? sortType)
+        public OperationSort(SortType sortType)
         {
             this.sortType = sortType;
         }
