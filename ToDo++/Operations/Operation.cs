@@ -35,6 +35,14 @@ namespace ToDo
             redoStack.Clear();
         }
 
+        private void TrackTask(List<Task> taskList, Task task, bool isAdd)
+        {
+            if (isAdd) taskList.Add(task);
+            else taskList.Remove(task);
+              
+            undoTask.Push(task);
+        }
+
         public static void UpdateCurrentListedTasks(List<Task> tasks)
         {
             currentListedTasks = tasks;
@@ -70,8 +78,7 @@ namespace ToDo
         {
             try
             {
-                taskList.Add(taskToAdd);
-                undoTask.Push(taskToAdd);
+                TrackTask(taskList, taskToAdd, true); 
                 bool success = storageIO.AddTaskToFile(taskToAdd);
                 if (success)
                 {
@@ -91,10 +98,7 @@ namespace ToDo
 
         protected Response DeleteTask(Task taskToDelete, List<Task> taskList)
         {
-            // Remove tasks and push to undo stack.
-            undoTask.Push(taskToDelete);
-            taskList.Remove(taskToDelete);
-            
+            TrackTask(taskList, taskToDelete, false);
             currentListedTasks.Remove(taskToDelete);
 
             if (storageIO.RemoveTaskFromFile(taskToDelete))
@@ -121,18 +125,16 @@ namespace ToDo
 
         protected Response ModifyTask(Task taskToModify, Task newTask, List<Task> taskList)
         {
-            undoTask.Push(taskToModify);
-            taskList.Remove(taskToModify);
-            taskList.Add(newTask);
-            undoTask.Push(newTask);
+            TrackTask(taskList, taskToModify, false);
+            TrackTask(taskList, newTask, true);
+
             if (storageIO.ModifyTask(taskToModify, newTask))
             {
-                 currentListedTasks.Remove(taskToModify);
-                 currentListedTasks.Add(newTask);
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify),  currentListedTasks);
-
+                currentListedTasks.Remove(taskToModify);
+                currentListedTasks.Add(newTask);
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify), currentListedTasks);
             }
-            else 
+            else
                 return GenerateXMLFailureResponse();
         }
 
@@ -215,6 +217,7 @@ namespace ToDo
                 criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " with time constraints";
         }
 
+        
         #endregion
     }
 }
