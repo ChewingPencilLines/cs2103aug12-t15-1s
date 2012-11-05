@@ -38,6 +38,7 @@ namespace ToDo
 
         Result result;
         Format formatType;
+        string[] args;
         string feedbackString = null;
         List<Task> tasksToBeDisplayed;
 
@@ -53,13 +54,21 @@ namespace ToDo
         {
             get { return tasksToBeDisplayed; }
         }
-        public Response(Result resultType, Format formatType = Format.DEFAULT, Type operationType = null, List<Task> tasks = null)
+        public Response(
+            Result resultType,
+            Format formatType = Format.DEFAULT,
+            Type operationType = null,
+            List<Task> tasks = null,
+            params string[] args
+            )
         {        
             this.formatType = formatType;
             this.tasksToBeDisplayed = tasks;
             this.result = resultType;
+            this.args = args;
             SetFeedbackString(resultType, operationType);            
         }
+
         public bool IsSuccessful()
         {
             if (result == Result.SUCCESS) return true;
@@ -72,7 +81,7 @@ namespace ToDo
             {
                 case Result.SUCCESS:
                     if (operationType == typeof(OperationAdd))
-                        feedbackString = STRING_ADD_SUCCESS;
+                        feedbackString = String.Format(STRING_ADD_SUCCESS, args);
                     if (operationType == typeof(OperationDelete))
                         feedbackString = STRING_DELETE_SUCCESS;
                     if (operationType == typeof(OperationModify))

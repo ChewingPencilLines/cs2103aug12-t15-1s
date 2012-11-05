@@ -52,6 +52,7 @@ namespace ToDo
         // ******************************************************************
 
         #region ExecuteOperation
+
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
@@ -143,7 +144,7 @@ namespace ToDo
         private Response DisplaySearchResults(List<Task> searchResults)
         {
             currentListedTasks = new List<Task>(searchResults);
-            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks); return response;
+            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
         }
         #endregion
 
