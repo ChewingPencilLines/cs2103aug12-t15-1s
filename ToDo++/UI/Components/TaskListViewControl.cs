@@ -40,9 +40,10 @@ namespace ToDo
         }
 
         public List<Task> UpdateDisplay(Response response)
-        {
+        {                        
+            if (response.TasksToBeDisplayed == null) return displayedTasks; // don't update display list.
+
             displayedTasks = response.TasksToBeDisplayed;  
-            if (displayedTasks == null) return null;
 
             switch (response.FormatType)
             {
@@ -62,10 +63,9 @@ namespace ToDo
                     Trace.Fail("Some case in UpdateDisplay in TaskListViewControl was not accounted for..!");
                     break;
             }            
+
             this.SetObjects(displayedTasks);
             
-
-
             List<Task> reorderedList = GenerateReorderedList();
 
             return reorderedList;

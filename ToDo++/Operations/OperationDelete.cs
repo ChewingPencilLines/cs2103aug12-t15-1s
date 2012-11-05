@@ -58,9 +58,8 @@ namespace ToDo
             this.storageIO = storageIO;
             Response response = null;
 
-            // todo: should differentiate between nothing to delete vs. invalid index range
             if (currentListedTasks.Count == 0)
-                return new Response(Result.INVALID_COMMAND, Format.DEFAULT);
+                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
             // Invalid index ranges
             else if (endIndex < startIndex)
                 return new Response(Result.INVALID_TASK, Format.DEFAULT);
@@ -137,7 +136,7 @@ namespace ToDo
                 response = DeleteTask(task, taskList);
                 if (!response.IsSuccessful()) return response;
             }
-            response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
+            response = new Response(Result.SUCCESS_MULTIPLE, Format.DEFAULT, this.GetType(), currentListedTasks);
             return response;
         }
 
@@ -191,7 +190,7 @@ namespace ToDo
                     if (!response.IsSuccessful()) return response;
                 }
             }
-            return response;
+            return new Response(Result.SUCCESS_MULTIPLE, Format.DEFAULT, this.GetType(), currentListedTasks);
         }
         #endregion DeleteByIndex
 
