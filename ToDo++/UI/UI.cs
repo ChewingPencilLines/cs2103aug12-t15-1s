@@ -648,16 +648,42 @@ namespace ToDo
             TinyAlertView.SetLocation();
         }
 
-        private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)
+        private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs row)
         {
             // Display index -will- change if doing a column sort.
-            e.Item.SubItems[1].Text = "[" + (e.DisplayIndex+1).ToString() + "]";
+            row.Item.SubItems[1].Text = "[" + (row.DisplayIndex+1).ToString() + "]";
 
-            Task task = (Task) e.Item.RowObject;
-            if (task == null) return;
+            Task task = (Task) row.Item.RowObject;
 
-            if(task.DoneState == true)
-                e.Item.ForeColor = Color.Green;
+            if (task == null) return; // log exception
+
+            if (task.DoneState == true)
+            {
+                 ColorSubItems(row, Color.Green);
+            }
+
+            else if (task is TaskDeadline)
+            {
+                // Task is over time limit!
+                if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
+                    ColorSubItems(row, Color.Red);
+                else
+                    ColorSubItems(row, Color.OrangeRed);
+            }
+
+            else if (task is TaskEvent)
+            {
+                // Task is over!
+                if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
+                    ColorSubItems(row, Color.MediumVioletRed);
+            }
+        }
+
+        private static void ColorSubItems(BrightIdeasSoftware.FormatRowEventArgs row, Color newColor)
+        {
+            int numOfCol = row.Item.SubItems.Count;
+            for (int i = 2; i < numOfCol; i++)
+                row.Item.GetSubItem(i).ForeColor = newColor;
         }
 
         private void UI_Move(object sender, EventArgs e)
@@ -694,39 +720,6 @@ namespace ToDo
         {
             if (MouseIsOverDisplayList)
                 taskListViewControl.Focus();
-        }
-
-        private void taskListViewControl_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
-        {
-            if (e.ColumnIndex != 3) return;
-
-            Task task = (Task)e.Item.RowObject;
-
-            if (task == null) return; // log exception
-
-            if (task.DoneState == true)
-            {
-                return;
-            }
-
-            else if (task is TaskDeadline)
-            {
-                // Task is over time limit!
-                if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
-                    e.SubItem.ForeColor = Color.Red;
-                // Task is deadline but not over
-                else 
-                    e.SubItem.ForeColor = Color.OrangeRed;
-            }
-
-            else if (task is TaskEvent)
-            {
-                // Task is over!
-                if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
-                    e.SubItem.ForeColor = Color.PaleVioletRed;
-            }
-
-            return;
         }
     }
 }
