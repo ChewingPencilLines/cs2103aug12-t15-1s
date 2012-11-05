@@ -25,6 +25,8 @@ namespace ToDo
 
     static class CustomDictionary
     {
+        static public int defaultTimeRangeIndex = 1;
+        static public TimeRangeType defaultTimeRangeType = TimeRangeType.HOUR;
         static public Dictionary<string, CommandType> commandKeywords;        
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
@@ -105,7 +107,7 @@ namespace ToDo
             new Regex(@"^(((?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?)|((?<start>\d?\d?\d)\-))$");
 
         static public Regex isTimeRange =
-            new Regex(@"^(h(?:ou)?r(?:s)?|day(?:s)?|m(?:on)?th(?:s)?)$");
+            new Regex(@"^(?<index>(\d*) )?(?<type>(h(?:ou)?r(?:s)?|day(?:s)?|m(?:on)?th(?:s)?))$");
         #endregion
 
         static CustomDictionary()
