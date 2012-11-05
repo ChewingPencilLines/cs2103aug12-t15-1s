@@ -26,7 +26,14 @@ namespace ToDo
         {
             if (attrb.commandType != CommandType.INVALID)
             {
-                throw new MultipleCommandsException();
+                CommandType cmd1 = attrb.commandType;
+                CommandType cmd2 = commandType;
+                if (cmd1 == CommandType.DONE || cmd2 == CommandType.DONE)
+                {
+                    if (cmd1 == CommandType.DELETE || cmd1 == CommandType.SEARCH)
+                        attrb.sortType = SortType.DONE_STATE;
+                }
+                else throw new MultipleCommandsException();
             }
             else
             {

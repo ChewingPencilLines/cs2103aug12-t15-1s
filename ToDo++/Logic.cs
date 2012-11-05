@@ -51,6 +51,12 @@ namespace ToDo
             {
                 AlertBox.Show(e.Message);
             }
+            catch (MultipleCommandsException e)
+            {
+                AlertBox.Show(@"Invalid input.\r\n
+                            Multiple commands were entered that could not be resolved.\r\n
+                            Use delimiting characters if reserved keywords are required in your task name.");
+            }
             if (operation == null)
             {
                 return new Response(Result.INVALID_COMMAND);

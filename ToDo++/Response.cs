@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ToDo
 {
     public enum Result { SUCCESS, SUCCESS_MULTIPLE, FAILURE, INVALID_TASK, INVALID_COMMAND, XML_READWRITE_FAIL, TASK_MISSING_FROM_FILE, EXCEPTION_FAILURE };
-    public enum Format { DEFAULT, NAME, DATE_TIME, DONE_STATE };
+    public enum Format { DEFAULT, NAME, DATE_TIME, DONE_STATE };    
     public class Response
     {
         // ******************************************************************
@@ -23,7 +23,7 @@ namespace ToDo
         const string STRING_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
         const string STRING_MODIFY_FAILURE = "Failed to modify task..!";
         const string STRING_DISPLAY_NO_TASK = "There are no tasks for display.";
-        const string STRING_SEARCH_SUCCESS = "Showing tasks matching \"{0}\"";
+        const string STRING_SEARCH_SUCCESS = "Showing {0}tasks{1}.";
         const string STRING_SORT_SUCCESS = "Sorting by {0}.";
         const string STRING_UNDO_SUCCESS = "Undid last operation.";
         const string STRING_UNDO_FAILURE = "Cannot undo last executed operation!";
@@ -41,6 +41,16 @@ namespace ToDo
         const string STRING_CALLED_INVALID_TASK_INDEX = "Invalid task index!";
         const string STRING_INVALID_COMMAND = "Invalid command input!";
         const string STRING_UNDEFINED = "Undefined feedback string!";
+        #endregion
+
+        #region Parameter indices
+        public const int MODIFY_PARAM_OLD_TASK = 0;
+        public const int MODIFY_PARAM_NEW_TASK = 1;
+        public const int MODIFY_PARAM_NUM = 2;
+        public const int SEARCH_PARAM_DONE = 0;
+        public const int SEARCH_PARAM_ALL = 0;
+        public const int SEARCH_PARAM_SEARCH_STRING = 1;
+        public const int SEARCH_PARAM_NUM = 2;
         #endregion
 
         Result result;
@@ -106,25 +116,7 @@ namespace ToDo
                         if (operationType == typeof(OperationRedo))
                             feedbackString = STRING_REDO_SUCCESS;
                         if (operationType == typeof(OperationSort))
-                        {
-                            string sortTypeString = "";
-                            switch (formatType)
-                            {
-                                case Format.NAME:
-                                    sortTypeString = "Name";
-                                    break;
-                                case Format.DATE_TIME:
-                                    sortTypeString = "Date";
-                                    break;
-                                case Format.DONE_STATE:
-                                    sortTypeString = "[DONE] state";
-                                    break;
-                                default:
-                                    sortTypeString = "the same as before";
-                                    break;
-                            }
-                            feedbackString = String.Format(STRING_SORT_SUCCESS, sortTypeString);
-                        }
+                            feedbackString = GetSortTypeString();
                         break;
                     case Result.SUCCESS_MULTIPLE:
                         if (operationType == typeof(OperationDelete))
@@ -179,6 +171,27 @@ namespace ToDo
             {
                 feedbackString = STRING_UNDEFINED;
             }
+        }
+
+        private string GetSortTypeString()
+        {
+            string sortTypeString = "";
+            switch (formatType)
+            {
+                case Format.NAME:
+                    sortTypeString = "Name";
+                    break;
+                case Format.DATE_TIME:
+                    sortTypeString = "Date";
+                    break;
+                case Format.DONE_STATE:
+                    sortTypeString = "[DONE] state";
+                    break;
+                default:
+                    sortTypeString = "the same as before";
+                    break;
+            }
+            return String.Format(STRING_SORT_SUCCESS, sortTypeString);
         }
     }
 }

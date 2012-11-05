@@ -32,7 +32,7 @@ namespace ToDo
             if (doneDate != null)
             {
                 response = null;
-                List<Task> searchResults = SearchForTasks(taskList, doneString, isSpecific, false, doneDate, doneDate);
+                List<Task> searchResults = SearchForTasks(taskList, doneString, isSpecific, false, doneDate, ((DateTime)doneDate).AddDays(1).AddMinutes(-1));
                 foreach(Task taskToDone in searchResults)
                 {
                     response = MarkAsDone(taskToDone);
