@@ -15,7 +15,6 @@ namespace ToDo
         {
             this.storageIO = storageIO;
             Response response;
-
             if (newTask == null)
             {
                 return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());

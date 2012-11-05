@@ -72,7 +72,8 @@ namespace ToDo
             {
                 taskList.Add(taskToAdd);
                 undoTask.Push(taskToAdd);
-                if (storageIO.AddTaskToFile(taskToAdd))
+                bool success = storageIO.AddTaskToFile(taskToAdd);
+                if (success)
                 {
                     currentListedTasks.Add(taskToAdd);
                     return GenerateSuccessResponse(taskToAdd);
