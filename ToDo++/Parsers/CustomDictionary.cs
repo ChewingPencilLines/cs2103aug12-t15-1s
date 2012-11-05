@@ -270,6 +270,16 @@ namespace ToDo
             return contextKeywords;
         }
 
+        public static Dictionary<string, TimeRangeKeywordsType> GetTimeRangeKeywordKeywords()
+        {
+            return timeRangeKeywords;
+        }
+
+        public static Dictionary<string, TimeRangeType> GetTimeRangeKeywords()
+        {
+            return timeRangeType;
+        }
+
         public static Dictionary<string, SortType> GetSortTypeKeywords()
         {
             return sortTypeKeywords;
@@ -469,10 +479,12 @@ namespace ToDo
         // ******************************************************************
 
         #region Update Dictionary With FlexiCommands
-        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords,Dictionary<string, ContextType> passedContextKeywords)
+        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords, Dictionary<string, TimeRangeType> passedTimeRangeType)
         {
             commandKeywords = passedCommandKeywords;
             contextKeywords = passedContextKeywords;
+            timeRangeKeywords = passedTimeRangeKeywords;
+            timeRangeType = passedTimeRangeType;
         }
         #endregion
     }

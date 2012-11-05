@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System;
+using System.Windows.Forms;
 
 namespace ToDo
 {
@@ -31,39 +33,79 @@ namespace ToDo
         public MiscSettings misc;
         public Dictionary<string, CommandType> userCommandKeywords;
         public Dictionary<string, ContextType> userContextKeywords;
+        public Dictionary<string, TimeRangeKeywordsType> userTimeRangeKeywordsType;
+        public Dictionary<string, TimeRangeType> userTimeRangeType;
 
         public SettingInformation()
         {
             misc = new MiscSettings(false, false, false, 9,"Arial");
             userCommandKeywords = CustomDictionary.GetCommandKeywords();
             userContextKeywords = CustomDictionary.GetContextKeywords();
+            userTimeRangeKeywordsType = CustomDictionary.GetTimeRangeKeywordKeywords();
+            userTimeRangeType = CustomDictionary.GetTimeRangeKeywords();
         }
 
-        public bool ContainsCommandKeyword(string userKeyword, CommandType commandType)
+        public bool ContainsFlexiCommandKeyword(string userKeyword, Enum flexiCommandType)
         {
-            CommandType passed;
-            if (userCommandKeywords.TryGetValue(userKeyword, out passed))
+            string flexiType = flexiCommandType.GetType().ToString();
+            switch (flexiType)
             {
-                if (passed == commandType)
-                    return true;
-                else
-                    return false;
-            }
-            else
-                return false;
-        }
+                case "ToDo.CommandType":
+                    {
+                        CommandType passed;
+                        if (userCommandKeywords.TryGetValue(userKeyword, out passed))
+                        {
+                            if (passed == (CommandType)flexiCommandType)
+                                return true;
+                            else
+                                return false;
+                        }
+                        else
+                            return false;
+                    }
 
-        public bool ContainsContextKeyword(string userKeyword, ContextType commandType)
-        {
-            ContextType passed;
-            if (userContextKeywords.TryGetValue(userKeyword, out passed))
-            {
-                if (passed == commandType)
-                    return true;
-                else return false;
+                case "ToDo.ContextType":
+                    {
+                        ContextType passed;
+                        if (userContextKeywords.TryGetValue(userKeyword, out passed))
+                        {
+                            if (passed == (ContextType)flexiCommandType)
+                                return true;
+                            else return false;
+                        }
+                        else
+                            return false;
+                    }
+
+                case "ToDo.TimeRangeKeywordsType":
+                    {
+                        TimeRangeKeywordsType passed;
+                        if (userTimeRangeKeywordsType.TryGetValue(userKeyword, out passed))
+                        {
+                            if (passed == (TimeRangeKeywordsType)flexiCommandType)
+                                return true;
+                            else return false;
+                        }
+                        else
+                            return false;
+                    }
+
+                case "ToDo.TimeRangeType":
+                    {
+                        TimeRangeType passed;
+                        if (userTimeRangeType.TryGetValue(userKeyword, out passed))
+                        {
+                            if (passed == (TimeRangeType)flexiCommandType)
+                                return true;
+                            else return false;
+                        }
+                        else
+                            return false;
+                    }
             }
-            else
-                return false;
+
+
+            return false;
         }
 
         public string ToXML()

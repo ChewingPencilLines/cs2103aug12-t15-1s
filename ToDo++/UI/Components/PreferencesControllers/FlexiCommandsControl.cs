@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using BrightIdeasSoftware;
 
 namespace ToDo
 {
+
+
     public partial class FlexiCommandsControl : UserControl
     {
         Settings settings;
         CommandType selectedCommand;
         ContextType selectedContext;
         SelectedType selectedType;
+        TimeRangeKeywordsType selectedTimeRangeKeywordType;
+        TimeRangeType selectedTimeRangeType;
         List<string> selectedFlexiCommands;
 
         public void InitializeFlexiCommands(Settings settings)
@@ -21,13 +26,16 @@ namespace ToDo
         public FlexiCommandsControl()
         {
             InitializeComponent();
-            LoadCommandList();
             LoadContextList();
+            LoadTimeKeywordRangeList();
+            LoadTimeRangeList();
+            LoadCommandList();
         }
+
 
         #region ConversionStringToEnum
 
-        public enum SelectedType { CommandSelected = 1, ContextSelected };
+        public enum SelectedType { CommandSelected = 1, ContextSelected, TimeRangeKeywordsSelected, TimeRangeSelected };
 
         private CommandType ConvertStringToCommand(string command)
         {
@@ -82,6 +90,38 @@ namespace ToDo
             return ContextType.DEADLINE;
         }
 
+        private TimeRangeKeywordsType ConvertStringToTimeRangeKeyword(string context)
+        {
+            switch (context)
+            {
+                case "MORNING":
+                    return TimeRangeKeywordsType.MORNING;
+                case "AFTERNOON":
+                    return TimeRangeKeywordsType.AFTERNOON;
+                case "EVENING":
+                    return TimeRangeKeywordsType.EVENING;
+                case "NIGHT":
+                    return TimeRangeKeywordsType.NIGHT;
+            }
+
+            return TimeRangeKeywordsType.NONE;
+        }
+
+        private TimeRangeType ConvertStringToTimeRange(string context)
+        {
+            switch (context)
+            {
+                case "DAY":
+                    return TimeRangeType.DAY;
+                case "HOUR":
+                    return TimeRangeType.HOUR;
+                case "MONTH":
+                    return TimeRangeType.MONTH;
+            }
+
+            return TimeRangeType.DEFAULT;
+        }
+
         #endregion
 
         #region LoadTreeLists
@@ -128,6 +168,30 @@ namespace ToDo
             contextTree.Nodes.Add(treeNode);
         }
 
+        private void LoadTimeKeywordRangeList()
+        {
+            timeRangeKeywordTree.Nodes.Clear();
+            TreeNode treeNode = new TreeNode("MORNING");
+            timeRangeKeywordTree.Nodes.Add(treeNode);
+            treeNode = new TreeNode("AFTERNOON");
+            timeRangeKeywordTree.Nodes.Add(treeNode);
+            treeNode = new TreeNode("EVENING");
+            timeRangeKeywordTree.Nodes.Add(treeNode);
+            treeNode = new TreeNode("NIGHT");
+            timeRangeKeywordTree.Nodes.Add(treeNode);
+        }
+
+        private void LoadTimeRangeList()
+        {
+            timeRangeTree.Nodes.Clear();
+            TreeNode treeNode = new TreeNode("HOUR");
+            timeRangeTree.Nodes.Add(treeNode);
+            treeNode = new TreeNode("DAY");
+            timeRangeTree.Nodes.Add(treeNode);
+            treeNode = new TreeNode("MONTH");
+            timeRangeTree.Nodes.Add(treeNode);
+        }
+
         #endregion
 
         #region EventHandlersForButtons
@@ -158,6 +222,9 @@ namespace ToDo
         private void commandTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
             this.contextTree.SelectedNode = null;
+            this.timeRangeKeywordTree.SelectedNode = null;
+            this.timeRangeTree.SelectedNode = null;
+
             this.selectedType = SelectedType.CommandSelected;
             string selected = commandTree.SelectedNode.Text;
             this.selectedCommand = ConvertStringToCommand(selected);
@@ -169,9 +236,43 @@ namespace ToDo
         private void contextTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
             this.commandTree.SelectedNode = null;
+            this.timeRangeKeywordTree.SelectedNode = null;
+            this.timeRangeTree.SelectedNode = null;
+
+            this.commandTree.SelectedNode = null;
             this.selectedType = SelectedType.ContextSelected;
             string selected = contextTree.SelectedNode.Text;
             this.selectedContext = ConvertStringToContext(selected);
+
+            UpdateFlexiCommandList();
+            UpdateDescription();
+        }
+
+        private void timeRangeKeywordTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            this.commandTree.SelectedNode = null;
+            this.contextTree.SelectedNode = null;
+            this.timeRangeTree.SelectedNode = null;
+
+            this.commandTree.SelectedNode = null;
+            this.selectedType = SelectedType.TimeRangeKeywordsSelected;
+            string selected = timeRangeKeywordTree.SelectedNode.Text;
+            this.selectedTimeRangeKeywordType = ConvertStringToTimeRangeKeyword(selected);
+
+            UpdateFlexiCommandList();
+            UpdateDescription();
+        }
+
+        private void timeRangeTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            this.contextTree.SelectedNode = null;
+            this.commandTree.SelectedNode = null;
+            this.timeRangeKeywordTree.SelectedNode = null;
+
+            this.commandTree.SelectedNode = null;
+            this.selectedType = SelectedType.TimeRangeSelected;
+            string selected = timeRangeTree.SelectedNode.Text;
+            this.selectedTimeRangeType = ConvertStringToTimeRange(selected);
 
             UpdateFlexiCommandList();
             UpdateDescription();
@@ -204,13 +305,25 @@ namespace ToDo
             if (this.selectedType == SelectedType.CommandSelected)
             {
                 this.selectedFlexiCommands.Clear();
-                foreach (string command in settings.GetCommandKeywordList(this.selectedCommand))
+                foreach (string command in settings.GetFlexiKeywordList(this.selectedCommand))
                     this.selectedFlexiCommands.Add(command);
             }
             else if(this.selectedType==SelectedType.ContextSelected)
             {
                 this.selectedFlexiCommands.Clear();
-                foreach (string flexiCommand in settings.GetContextKeywordList(this.selectedContext))
+                foreach (string flexiCommand in settings.GetFlexiKeywordList(this.selectedContext))
+                    this.selectedFlexiCommands.Add(flexiCommand);
+            }
+            else if (this.selectedType == SelectedType.TimeRangeKeywordsSelected)
+            {
+                this.selectedFlexiCommands.Clear();
+                foreach (string flexiCommand in settings.GetFlexiKeywordList(this.selectedTimeRangeKeywordType))
+                    this.selectedFlexiCommands.Add(flexiCommand);
+            }
+            else if (this.selectedType == SelectedType.TimeRangeSelected)
+            {
+                this.selectedFlexiCommands.Clear();
+                foreach (string flexiCommand in settings.GetFlexiKeywordList(this.selectedTimeRangeType))
                     this.selectedFlexiCommands.Add(flexiCommand);
             }
 
@@ -223,9 +336,13 @@ namespace ToDo
             try
             {
                 if (this.selectedType == SelectedType.CommandSelected)
-                    settings.AddCommandKeyword(flexiCommand, this.selectedCommand);
+                    settings.AddFlexiKeyword(flexiCommand, this.selectedCommand);
                 else if (this.selectedType == SelectedType.ContextSelected)
-                    settings.AddContextKeyword(flexiCommand, this.selectedContext);
+                    settings.AddFlexiKeyword(flexiCommand, this.selectedContext);
+                else if (this.selectedType == SelectedType.TimeRangeKeywordsSelected)
+                    settings.AddFlexiKeyword(flexiCommand, this.selectedTimeRangeKeywordType);
+                else if (this.selectedType == SelectedType.TimeRangeSelected)
+                    settings.AddFlexiKeyword(flexiCommand, this.selectedTimeRangeType);
             }
             catch (RepeatCommandException e)
             {
@@ -239,9 +356,13 @@ namespace ToDo
             try
             {
                 if (this.selectedType == SelectedType.CommandSelected)
-                    settings.RemoveCommandKeyword(flexiCommand);
+                    settings.RemoveFlexiKeyword(flexiCommand, selectedCommand);
                 else if (this.selectedType == SelectedType.ContextSelected)
-                    settings.RemoveContextKeyword(flexiCommand);
+                    settings.RemoveFlexiKeyword(flexiCommand,selectedContext);
+                else if (this.selectedType == SelectedType.TimeRangeKeywordsSelected)
+                    settings.RemoveFlexiKeyword(flexiCommand, selectedTimeRangeKeywordType);
+                else if (this.selectedType == SelectedType.TimeRangeSelected)
+                    settings.RemoveFlexiKeyword(flexiCommand, selectedTimeRangeType);
             }
             catch (InvalidDeleteFlexiException e)
             {
@@ -287,5 +408,13 @@ namespace ToDo
             descriptionLabel.Text = description;
         }
 
+
+
+    }
+
+    public class FlexiList
+    {
+        public string columnType;
+        public string flexiCommand;
     }
 }

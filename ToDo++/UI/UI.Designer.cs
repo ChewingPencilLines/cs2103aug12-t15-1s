@@ -134,7 +134,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textInput.BackColor = System.Drawing.Color.Gray;
             this.textInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textInput.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textInput.Cursor = System.Windows.Forms.Cursors.Hand;
             this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textInput.ForeColor = System.Drawing.Color.White;
             this.textInput.Location = new System.Drawing.Point(11, 360);

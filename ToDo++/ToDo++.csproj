@@ -281,6 +281,10 @@
       <Project>{5B85E2D7-2005-4496-B5D7-59C68A1EC91D}</Project>
       <Name>CustomControls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FlatTabControl\FlatTabControl.csproj">
+      <Project>{96002CA1-D295-4ED5-9B08-92346C1BFA18}</Project>
+      <Name>FlatTabControl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Grouper\CodeVendor.Controls.csproj">
       <Project>{D5D88EB0-23B9-46CE-B23C-C6245ECF023C}</Project>
       <Name>CodeVendor.Controls</Name>
