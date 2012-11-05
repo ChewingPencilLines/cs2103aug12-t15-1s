@@ -40,6 +40,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.timeRangeTree = new System.Windows.Forms.TreeView();
+            this.zzzzRangeBar1 = new Zzzz.ZzzzRangeBar();
             this.removeButton = new ToDo.RoundButton();
             this.addButton = new ToDo.RoundButton();
             this.grouper1.SuspendLayout();
@@ -190,6 +191,7 @@
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabPage3.Controls.Add(this.zzzzRangeBar1);
             this.tabPage3.Controls.Add(this.timeRangeTree);
             this.tabPage3.Controls.Add(this.timeRangeKeywordTree);
             this.tabPage3.Location = new System.Drawing.Point(4, 25);
@@ -210,6 +212,25 @@
             this.timeRangeTree.Size = new System.Drawing.Size(111, 68);
             this.timeRangeTree.TabIndex = 18;
             this.timeRangeTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.timeRangeTree_AfterSelect);
+            // 
+            // zzzzRangeBar1
+            // 
+            this.zzzzRangeBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.zzzzRangeBar1.DivisionNum = 10;
+            this.zzzzRangeBar1.HeightOfBar = 8;
+            this.zzzzRangeBar1.HeightOfMark = 24;
+            this.zzzzRangeBar1.HeightOfTick = 6;
+            this.zzzzRangeBar1.InnerColor = System.Drawing.Color.Black;
+            this.zzzzRangeBar1.Location = new System.Drawing.Point(2, 96);
+            this.zzzzRangeBar1.Name = "zzzzRangeBar1";
+            this.zzzzRangeBar1.Orientation = Zzzz.ZzzzRangeBar.RangeBarOrientation.horizontal;
+            this.zzzzRangeBar1.RangeMaximum = 5;
+            this.zzzzRangeBar1.RangeMinimum = 3;
+            this.zzzzRangeBar1.ScaleOrientation = Zzzz.ZzzzRangeBar.TopBottomOrientation.bottom;
+            this.zzzzRangeBar1.Size = new System.Drawing.Size(144, 27);
+            this.zzzzRangeBar1.TabIndex = 19;
+            this.zzzzRangeBar1.TotalMaximum = 10;
+            this.zzzzRangeBar1.TotalMinimum = 0;
             // 
             // removeButton
             // 
@@ -272,5 +293,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TreeView timeRangeTree;
+        private Zzzz.ZzzzRangeBar zzzzRangeBar1;
     }
 }
