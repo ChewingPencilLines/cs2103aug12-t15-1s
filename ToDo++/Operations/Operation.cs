@@ -125,7 +125,7 @@ namespace ToDo
             taskList.Remove(taskToModify);
             taskList.Add(newTask);
             undoTask.Push(newTask);
-            if (storageIO.RemoveTaskFromFile(taskToModify) && storageIO.AddTaskToFile(newTask))
+            if (storageIO.ModifyTask(taskToModify, newTask))
             {
                  currentListedTasks.Remove(taskToModify);
                  currentListedTasks.Add(newTask);
