@@ -58,7 +58,7 @@ namespace ToDo
 
         private void InitializeTaskListView()
         {
-            taskListViewControl.Initialize();
+            taskListViewControl.InitializeWithSettings(logic.MainSettings);
             List<Task> displayedList = taskListViewControl.UpdateDisplay(logic.GetDefaultView());
             logic.UpdateLastDisplayedTasksList(displayedList);
         }
@@ -607,7 +607,7 @@ namespace ToDo
         private void InitializeEventHandlers()
         {
             EventHandlers.StayOnTopHandler += SetStayOnTop;
-            EventHandlers.UpdateOutputBoxSettingsHandler += UpdateOutputBoxSettings;
+            EventHandlers.UpdateUIHandler += UpdateUI;
         }
 
         /// <summary>
@@ -623,11 +623,11 @@ namespace ToDo
         }
 
         /// <summary>
-        /// When event received, OutputBox updates itself with the latest settings
+        /// When event received, UI updates itself with the latest settings
         /// </summary>
-        private void UpdateOutputBoxSettings(object sender, EventArgs args)
+        private void UpdateUI(object sender, EventArgs args)
         {
-            outputBox.InitializeWithSettings(logic.MainSettings);
+            taskListViewControl.InitializeWithSettings(logic.MainSettings);
         }
 
 

@@ -3,6 +3,21 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Diagnostics;
 using BrightIdeasSoftware;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+using Microsoft.Win32;
+using System.Windows.Forms.VisualStyles;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+
 namespace ToDo
 {
     class TaskListViewControl : ObjectListView
@@ -14,14 +29,18 @@ namespace ToDo
 
         List<Task> displayedTasks;
         OLVColumn defaultCol;
+        private Settings settings;
 
         public TaskListViewControl()
         {
             displayedTasks = null;
         }
 
-        internal void Initialize()
+        internal void InitializeWithSettings(Settings settings)
         {
+            this.settings = settings;
+            this.SetFormatting(settings.GetTextSize(), settings.GetFontSelection());
+
             EmptyListMsg = MESSAGE_EMPTY_LIST;
             this.RowHeight = 32;
             this.ShowItemToolTips = true;
@@ -119,6 +138,11 @@ namespace ToDo
             e.Item.SubItems[1].Text = e.RowIndex.ToString();
         }
 
+        private void SetFormatting(int size,string fontName)
+        {
+            Font x = new Font(fontName, size, FontStyle.Regular);
+            this.Font = x;
+        }
 
         // 
         // Grouping Delegates

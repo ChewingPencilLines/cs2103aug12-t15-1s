@@ -44,6 +44,8 @@ namespace ToDo
         public bool GetStartMinimizeStatus() { return settingInfo.misc.StartMinimized; }
         public void SetStayOnTop(bool status) { settingInfo.misc.StayOnTop = status; EventHandlers.UpdateSettings(settingInfo); }
         public bool GetStayOnTopStatus() { return settingInfo.misc.StayOnTop; }
+        public void SetFontSelection(string font) { settingInfo.misc.FontSelection = font; EventHandlers.UpdateSettings(settingInfo); }
+        public string GetFontSelection() { return settingInfo.misc.FontSelection; }
 
         #endregion;
 

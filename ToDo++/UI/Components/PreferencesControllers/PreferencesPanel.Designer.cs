@@ -166,7 +166,7 @@
             // 
             // fontPage
             // 
-            this.fontPage.BackColor = System.Drawing.Color.SteelBlue;
+            this.fontPage.BackColor = System.Drawing.Color.Gainsboro;
             this.fontPage.Controls.Add(this.fontColorSettingsControl);
             this.fontPage.Location = new System.Drawing.Point(4, 22);
             this.fontPage.Name = "fontPage";
@@ -177,13 +177,11 @@
             // 
             // fontColorSettingsControl
             // 
-            this.fontColorSettingsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.fontColorSettingsControl.BackColor = System.Drawing.Color.SteelBlue;
+            this.fontColorSettingsControl.BackColor = System.Drawing.Color.Gainsboro;
+            this.fontColorSettingsControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fontColorSettingsControl.Location = new System.Drawing.Point(3, 3);
             this.fontColorSettingsControl.Name = "fontColorSettingsControl";
-            this.fontColorSettingsControl.Size = new System.Drawing.Size(326, 248);
+            this.fontColorSettingsControl.Size = new System.Drawing.Size(393, 263);
             this.fontColorSettingsControl.TabIndex = 0;
             // 
             // PreferencesPanel

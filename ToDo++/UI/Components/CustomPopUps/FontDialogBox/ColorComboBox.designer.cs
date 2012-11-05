@@ -36,6 +36,7 @@
             this.button.Appearance = System.Windows.Forms.Appearance.Button;
             this.button.Extended = false;
             this.button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.button.Location = new System.Drawing.Point(0, 0);
             this.button.Name = "button";
             this.button.SelectedColor = System.Drawing.Color.Black;

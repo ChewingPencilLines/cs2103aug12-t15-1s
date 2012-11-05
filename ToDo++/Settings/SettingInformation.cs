@@ -10,18 +10,21 @@ namespace ToDo
             private bool startMinimized;
             private bool stayOnTop;
             private int textSize;
+            private string fontSelection;
             
             public bool LoadOnStartup { get { return loadOnStartup; } set { loadOnStartup = value; } }
             public bool StartMinimized { get { return startMinimized; } set { startMinimized = value; } }
             public bool StayOnTop { get { return stayOnTop; } set { stayOnTop = value; } }
             public int TextSize { get { return textSize; } set { textSize = value; } }
+            public string FontSelection { get { return fontSelection; } set { fontSelection = value; } }
 
-            public MiscSettings(bool _loadOnStartup, bool _startMinimized, bool _stayOnTop, int _textSize)
+            public MiscSettings(bool _loadOnStartup, bool _startMinimized, bool _stayOnTop, int _textSize,string _fontSelection)
             {
                 loadOnStartup = _loadOnStartup;
                 startMinimized = _startMinimized;
                 stayOnTop = _stayOnTop;
                 textSize = _textSize;
+                fontSelection = _fontSelection;
             }
         }
 
@@ -31,7 +34,7 @@ namespace ToDo
 
         public SettingInformation()
         {
-            misc = new MiscSettings(false, false, false, 9);
+            misc = new MiscSettings(false, false, false, 9,"Arial");
             userCommandKeywords = CustomDictionary.GetCommandKeywords();
             userContextKeywords = CustomDictionary.GetContextKeywords();
         }
