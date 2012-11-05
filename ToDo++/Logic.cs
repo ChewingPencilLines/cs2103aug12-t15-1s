@@ -11,6 +11,7 @@ namespace ToDo
         CommandParser commandParser;
         StringParser stringParser;
         Settings mainSettings;
+        UI ui;
 
         public Settings MainSettings
         {
@@ -40,6 +41,12 @@ namespace ToDo
             }
         }
 
+
+        internal void SetUI(UI ui)
+        {
+            this.ui = ui;
+        }
+
         public Response ProcessCommand(string input)
         {
             Operation operation = null;
@@ -63,7 +70,12 @@ namespace ToDo
             }
             else
             {
-                return ExecuteCommand(operation);
+                Response feedback = ExecuteCommand(operation);
+                if (taskList.Count == 0)
+                    ui.SetMessageTaskListIsEmpty(true);
+                else
+                    ui.SetMessageTaskListIsEmpty(false);
+                return feedback;
             }
         }
 
@@ -127,5 +139,6 @@ namespace ToDo
         {
             Operation.UpdateCurrentListedTasks(displayedList);
         }
+
     } 
 }

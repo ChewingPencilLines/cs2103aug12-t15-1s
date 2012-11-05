@@ -66,13 +66,18 @@ namespace ToDo
             }            
 
             this.SetObjects(displayedTasks);
-
-            if (displayedTasks.Count == 0)
-                EmptyListMsg = MESSAGE_NO_TASKS;
-
+            
             List<Task> reorderedList = GenerateReorderedList();
 
             return reorderedList;
+        }
+
+        public void SetMessageTaskListIsEmpty(bool empty)
+        {
+            if(empty)
+                EmptyListMsg = MESSAGE_EMPTY_LIST;
+            else
+                EmptyListMsg = MESSAGE_NO_TASKS;
         }
 
         private void SetGroupingByName()
