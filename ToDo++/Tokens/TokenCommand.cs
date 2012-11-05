@@ -8,6 +8,11 @@ namespace ToDo
 {
     public class TokenCommand : Token
     {
+        static private List<CommandType> indexRangeableCommandTypes
+            = new List<CommandType> { CommandType.DELETE, CommandType.DONE, CommandType.MODIFY, CommandType.POSTPONE };
+
+        static private List<CommandType> timeRangeableCommandTypes
+            = new List<CommandType> { CommandType.SCHEDULE, CommandType.POSTPONE };
 
         CommandType commandType;
 
@@ -39,6 +44,25 @@ namespace ToDo
             {
                 attrb.commandType = Value;
             }
+        }
+
+        internal override bool RequiresIndexRange()
+        {
+            if (indexRangeableCommandTypes.Contains(Value))
+                return true;
+            else
+                return false;
+        }
+
+        internal override bool RequiresTimeRange()
+        {
+            if (this.GetType() == typeof(TokenCommand))
+            {
+                TokenCommand token = (TokenCommand)this;
+                if (timeRangeableCommandTypes.Contains(token.Value))
+                    return true;
+            }
+            return false;
         }
 
     }
