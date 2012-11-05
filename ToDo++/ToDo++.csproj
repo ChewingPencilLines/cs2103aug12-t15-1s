@@ -279,6 +279,10 @@
     <None Include="Resources\tempImage.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Backup\RANGE\ZzzzRangeBar\ZzzzRangeBar.csproj">
+      <Project>{A47E495C-A50B-47E3-9148-D788B4E9C652}</Project>
+      <Name>ZzzzRangeBar</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CustomControls\CustomControls.csproj">
       <Project>{5B85E2D7-2005-4496-B5D7-59C68A1EC91D}</Project>
       <Name>CustomControls</Name>
