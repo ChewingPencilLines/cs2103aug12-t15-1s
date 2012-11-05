@@ -8,12 +8,6 @@ namespace ToDo
 {
     public abstract class Token
     {
-        static private List<CommandType> indexRangeableCommandTypes
-            = new List<CommandType> { CommandType.DELETE, CommandType.DONE, CommandType.MODIFY, CommandType.POSTPONE };
-
-        static private List<CommandType> timeRangeableCommandTypes
-            = new List<CommandType> { CommandType.SCHEDULE, CommandType.POSTPONE};
-
         private int position;
         internal Token(int position)
         {
@@ -26,25 +20,13 @@ namespace ToDo
 
         internal abstract void UpdateAttributes(OperationAttributes attrb);
 
-        internal bool RequiresIndexRange()
-        {
-            if(this.GetType() == typeof(TokenCommand))
-            {
-                TokenCommand token = (TokenCommand)this;
-                if (indexRangeableCommandTypes.Contains(token.Value))
-                    return true;
-            }
+        internal virtual bool RequiresIndexRange()
+        {            
             return false;
         }
 
-        internal bool RequiresTimeRange()
+        internal virtual bool RequiresTimeRange()
         {
-            if (this.GetType() == typeof(TokenCommand))
-            {
-                TokenCommand token = (TokenCommand)this;
-                if (timeRangeableCommandTypes.Contains(token.Value))
-                    return true;
-            }
             return false;
         }
     }

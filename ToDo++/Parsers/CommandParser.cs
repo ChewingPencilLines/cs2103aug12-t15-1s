@@ -32,14 +32,7 @@ namespace ToDo
             OperationAttributes opAttributes = new OperationAttributes();
             foreach (Token token in tokens)
             {
-                try
-                {
-                    token.UpdateAttributes(opAttributes);
-                }
-                catch (MultipleCommandsException)
-                {
-                    ResolveMultipleCommands();
-                }
+               token.UpdateAttributes(opAttributes);
             }
             // implement?: 
             // ReleaseUnusedTokens();
@@ -64,6 +57,7 @@ namespace ToDo
             DateTime? endCombined = opAttributes.endDateTime;
             DateTimeSpecificity isSpecific = opAttributes.isSpecific;
             bool isAll = opAttributes.rangeIsAll;
+            bool searchForIsDone = opAttributes.sortType == SortType.DONE_STATE ? true : false;
             string taskName = opAttributes.taskName;
             int[] taskIndex = opAttributes.rangeIndexes;
             int timeRangeIndex = opAttributes.timeRangeIndex;
@@ -79,7 +73,7 @@ namespace ToDo
                     newOperation = new OperationAdd(task);
                     break;
                 case CommandType.DELETE:
-                    newOperation = new OperationDelete(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll);
+                    newOperation = new OperationDelete(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll, searchForIsDone);
                     break;
                 case CommandType.DISPLAY:
                     newOperation = new OperationDisplayDefault();
@@ -89,7 +83,7 @@ namespace ToDo
                     newOperation = new OperationModify(taskIndex,task);
                     break;
                 case CommandType.SEARCH:
-                    newOperation = new OperationSearch(taskName, startCombined, endCombined, isSpecific);
+                    newOperation = new OperationSearch(taskName, startCombined, endCombined, isSpecific, isAll, searchForIsDone);
                     break;
                 case CommandType.SORT:
                     newOperation = new OperationSort(sortType);
@@ -101,7 +95,7 @@ namespace ToDo
                     newOperation = new OperationUndo();
                     break;
                 case CommandType.DONE:
-                    newOperation = new OperationMarkAsDone(taskName,taskIndex,startCombined);
+                    newOperation = new OperationMarkAsDone(taskName,taskIndex,startCombined, isAll);
                     break;
                 case CommandType.POSTPONE:
                     newOperation = new OperationPostpone(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll);
@@ -141,11 +135,5 @@ namespace ToDo
             else
                 return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
         }
-
-        private static void ResolveMultipleCommands()
-        {
-            AlertBox.Show("Invalid input.\r\nMultiple commands were entered.");
-            throw new NotImplementedException("Multiple commands were issued. Functionality NYI.");
-        }  
     }
 }
