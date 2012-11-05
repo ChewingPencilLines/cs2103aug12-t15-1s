@@ -151,10 +151,13 @@ namespace ToDo
                 taskList.Remove(taskToPostpone);
                 taskList.Add(taskPostponed);
                 undoTask.Push(taskPostponed);
+                currentListedTasks.Remove(taskToPostpone);
+                currentListedTasks.Add(taskPostponed);
             }
             if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
             {
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationPostpone));
+                return GenerateSuccessResponse(taskPostponed);
+                //return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationPostpone),currentListedTasks);
             }
             else
                 return new Response(Result.XML_READWRITE_FAIL);
