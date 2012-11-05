@@ -7,6 +7,11 @@ namespace ToDo
 {
     class TaskListViewControl : ObjectListView
     {
+        const string EMPTY_LIST_MESSAGE = "You have no tasks in your ToDo++ list.\r\nClick on the ? icon above to find out how to get started!";
+        const string COL_NAME_TASK_NAME = "TaskName";
+        const string COL_NAME_DONE_STATE = "DoneState";
+        
+
         List<Task> displayedTasks;
         OLVColumn defaultCol;
 
@@ -17,18 +22,18 @@ namespace ToDo
 
         internal void Initialize()
         {
-            EmptyListMsg = "You have no tasks in your ToDo++ list.\r\nClick on the ? icon above to find out how to get started!";
+            EmptyListMsg = EMPTY_LIST_MESSAGE;
             this.RowHeight = 32;
             this.ShowItemToolTips = true;
             this.HeaderStyle = ColumnHeaderStyle.None;
 
-            this.AllColumns.Find(e => e.AspectName == "DoneState").AspectToStringConverter = delegate(object state)
+            this.AllColumns.Find(e => e.AspectName == COL_NAME_DONE_STATE).AspectToStringConverter = delegate(object state)
             {
                 if ((bool)state == true) return "[DONE]";
                 else return String.Empty;
             };
 
-            defaultCol = this.AllColumns.Find(e => e.AspectName == "TaskName");
+            defaultCol = this.AllColumns.Find(e => e.AspectName == COL_NAME_TASK_NAME);
             this.AlwaysGroupByColumn = defaultCol;
             defaultCol.WordWrap = true;
             SetGroupingByDateTime();
@@ -59,16 +64,24 @@ namespace ToDo
                     break;
             }            
             this.SetObjects(displayedTasks);
+            
 
+
+            List<Task> reorderedList = GenerateReorderedList();
+
+            return reorderedList;
+        }
+
+        private List<Task> GenerateReorderedList()
+        {
             Task reorderedTask = null;
             List<Task> reorderedList = new List<Task>();
-            for (int i = 0; i < this.Items.Count; i++ )
+            for (int i = 0; i < this.Items.Count; i++)
             {
                 reorderedTask = (Task)this.GetNthItemInDisplayOrder(i).RowObject;
                 reorderedList.Add(reorderedTask);
             }
             displayedTasks = reorderedList;
-
             return reorderedList;
         }
 

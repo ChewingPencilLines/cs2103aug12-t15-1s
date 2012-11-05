@@ -17,34 +17,21 @@ namespace ToDo
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
-            List<Task> sortedTasks;
             Response response;
             switch (sortType)
             {
-                case SortType.NAME:
-                    sortedTasks = (from task in currentListedTasks
-                               orderby task.TaskName
-                               select task).ToList();
-                    response = new Response(Result.SUCCESS, Format.NAME, this.GetType(), sortedTasks);
+                // sorting is done On-The-Fly in display control.
+                case SortType.NAME:                    
+                    response = new Response(Result.SUCCESS, Format.NAME, this.GetType());
                     break;
-                case SortType.DATE:
-                    //@alice->ivan: change sortedtasks correspondingly
-                    sortedTasks = currentListedTasks; 
-                    response=new Response(Result.SUCCESS,Format.DATE, this.GetType(), sortedTasks);
-                    break;
-                case SortType.DONESTATE:
-                    sortedTasks = currentListedTasks; 
-                    response=new Response(Result.SUCCESS,Format.DONE_STATE, this.GetType(), sortedTasks);
+                case SortType.DONE_STATE:
+                    response=new Response(Result.SUCCESS,Format.DONE_STATE, this.GetType());
                     break;
                 case SortType.DEFAULT:
                 default:
-                    sortedTasks = (from task in currentListedTasks
-                               orderby task.ID
-                               select task).ToList();
-                    response=new Response(Result.SUCCESS,Format.DEFAULT, this.GetType(), sortedTasks);
+                    response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType());
                     break;
             }
-            TrackOperation();
             return response;
         }
     }

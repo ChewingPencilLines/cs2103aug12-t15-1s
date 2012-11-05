@@ -64,19 +64,21 @@ namespace ToDo
                 || commandType == CommandType.DELETE
                 || commandType == CommandType.DONE
                 || commandType == CommandType.MODIFY)
-            // If searching only for a single time, assume it's the end time.
-            if (startTime != null && endTime == null && endDateOnly == null)
             {
-                endTime = startTime;
-                startTime = null;
-            }
+                // If searching only for a single time, assume it's the end time.
+                if (startTime != null && endTime == null && endDateOnly == null)
+                {
+                    endTime = startTime;
+                    isSpecific.EndTime = isSpecific.StartTime;
+                    startTime = null;
+                }
 
-            // If searching for a single date, assume the range is that date.
-            if (startDateOnly != null && endDateOnly == null && startTime == null && endTime == null)
-            {
-                endDateOnly = startDateOnly;
-                isSpecific.EndDate = isSpecific.StartDate;
-                isSpecific.EndTime = isSpecific.StartTime;
+                // If searching for a single date, assume the range is that date.
+                if (startDateOnly != null && endDateOnly == null)
+                {
+                    endDateOnly = startDateOnly;
+                    isSpecific.EndDate = isSpecific.StartDate;
+                }
             }
         }
 
@@ -148,17 +150,20 @@ namespace ToDo
             // If only one date is specified, we assume both dates is that date.
             if (isSpecific.StartTime && isSpecific.EndTime)
             {
+                // assign start date to end date
                 if (startDateOnly == null && endDateOnly != null)
                 {
                     startDateOnly = endDateOnly;
                     isSpecific.StartDate = isSpecific.EndDate;
                 }
+                // assign end date to start date
                 else if (startDateOnly != null && endDateOnly == null)
                 {
                     endDateOnly = startDateOnly;
                     isSpecific.EndDate = isSpecific.StartDate;
                 }
             }
+
             startDateTime = CombineDateAndTime(startTime, startDateOnly, DateTime.Now);
             if (startDateTime == null)
                 endDateTime = CombineDateAndTime(endTime, endDateOnly, DateTime.Now);
