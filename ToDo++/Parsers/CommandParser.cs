@@ -36,11 +36,8 @@ namespace ToDo
             }
             // implement?: 
             // ReleaseUnusedTokens();
-            if (opAttributes.commandType == CommandType.SCHEDULE)
-            {
-                opAttributes.SetScheduleTime();
-            }
-            else
+            opAttributes.SetScheduleTime();
+            if (opAttributes.commandType != CommandType.SCHEDULE)
             {
                 opAttributes.SetSearchTime();
             }
