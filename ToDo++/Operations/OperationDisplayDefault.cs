@@ -27,7 +27,7 @@ namespace ToDo
 
             currentListedTasks = new List<Task>(mostRecentTasks);
 
-            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
+            return new Response(Result.SUCCESS, Format.DATE_TIME, this.GetType(), currentListedTasks);
         }
     }
 }

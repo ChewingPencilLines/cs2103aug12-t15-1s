@@ -650,16 +650,25 @@ namespace ToDo
 
         private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs row)
         {
-            // Display index -will- change if doing a column sort.
-            row.Item.SubItems[1].Text = "[" + (row.DisplayIndex+1).ToString() + "]";
+            SetRowIndex(row);
+            ColorRows(row);
+        }
 
-            Task task = (Task) row.Item.RowObject;
+        private static void SetRowIndex(BrightIdeasSoftware.FormatRowEventArgs row)
+        {
+            // Display index -will- change if doing a column sort.
+            row.Item.SubItems[1].Text = "[" + (row.DisplayIndex + 1).ToString() + "]";
+        }
+
+        private static void ColorRows(BrightIdeasSoftware.FormatRowEventArgs row)
+        {
+            Task task = (Task)row.Item.RowObject;
 
             if (task == null) return; // log exception
 
             if (task.DoneState == true)
             {
-                 ColorSubItems(row, Color.Green);
+                ColorSubItems(row, Color.Green);
             }
 
             else if (task is TaskDeadline)
@@ -667,7 +676,7 @@ namespace ToDo
                 // Task is over time limit!
                 if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
                     ColorSubItems(row, Color.Red);
-                else
+                else if (task.IsWithinTime(new DateTimeSpecificity(), DateTime.Now, DateTime.Now.AddDays(1)))
                     ColorSubItems(row, Color.OrangeRed);
             }
 

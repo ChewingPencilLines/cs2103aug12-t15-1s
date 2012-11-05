@@ -7,10 +7,10 @@ namespace ToDo
 {
     class TaskListViewControl : ObjectListView
     {
-        const string EMPTY_LIST_MESSAGE = "You have no tasks in your ToDo++ list.\r\nClick on the ? icon above to find out how to get started!";
+        const string MESSAGE_EMPTY_LIST = "You have no tasks in your ToDo++ list.\r\nClick on the ? icon above to find out how to get started!";
+        const string MESSAGE_STYLE_DONE = "[DONE]";
         const string COL_NAME_TASK_NAME = "TaskName";
-        const string COL_NAME_DONE_STATE = "DoneState";
-        
+        const string COL_NAME_DONE_STATE = "DoneState";        
 
         List<Task> displayedTasks;
         OLVColumn defaultCol;
@@ -22,14 +22,14 @@ namespace ToDo
 
         internal void Initialize()
         {
-            EmptyListMsg = EMPTY_LIST_MESSAGE;
+            EmptyListMsg = MESSAGE_EMPTY_LIST;
             this.RowHeight = 32;
             this.ShowItemToolTips = true;
             this.HeaderStyle = ColumnHeaderStyle.None;
 
             this.AllColumns.Find(e => e.AspectName == COL_NAME_DONE_STATE).AspectToStringConverter = delegate(object state)
             {
-                if ((bool)state == true) return "[DONE]";
+                if ((bool)state == true) return MESSAGE_STYLE_DONE;
                 else return String.Empty;
             };
 
@@ -47,15 +47,14 @@ namespace ToDo
             switch (response.FormatType)
             {
                 case Format.DEFAULT:
-                    displayedTasks.Sort(Task.CompareByDateTime);
-                    SetGroupingByDateTime();
-                    //this.AutoResizeColumns();
                     break;
                 case Format.NAME:
                     displayedTasks.Sort(Task.CompareByName);
-                    defaultCol.UseInitialLetterForGroup = true;
-                    defaultCol.GroupKeyGetter = null;
-                    defaultCol.GroupKeyToTitleConverter = null;
+                    SetGroupingByName();
+                    break;
+                case Format.DATE_TIME:
+                    displayedTasks.Sort(Task.CompareByDateTime);
+                    SetGroupingByDateTime();
                     break;
                 case Format.DONE_STATE:
                     break;
@@ -70,6 +69,13 @@ namespace ToDo
             List<Task> reorderedList = GenerateReorderedList();
 
             return reorderedList;
+        }
+
+        private void SetGroupingByName()
+        {
+            defaultCol.UseInitialLetterForGroup = true;
+            defaultCol.GroupKeyGetter = null;
+            defaultCol.GroupKeyToTitleConverter = null;
         }
 
         private List<Task> GenerateReorderedList()
