@@ -149,6 +149,8 @@ namespace ToDo
             commandTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("POSTPONE");
             commandTree.Nodes.Add(treeNode);
+            treeNode = new TreeNode("SCHEDULE");
+            commandTree.Nodes.Add(treeNode);
         }
 
         private void LoadContextList()
