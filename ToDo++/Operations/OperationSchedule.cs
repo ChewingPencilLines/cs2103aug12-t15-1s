@@ -33,26 +33,25 @@ namespace ToDo
             retrieveParameters();
             // check that range > span, else return failure response
             // (error response should be different from if no fitting slot can be found)
+            TimeSpan span = ((DateTime)endDateTime) - startDateTime;
             switch (timeRangeType)
             {
                 case TimeRangeType.HOUR:
-                    int numberOfConsecutiveHours = ((DateTime)endDateTime).Hour - startDateTime.Hour;
-                    if (timeRangeIndex > numberOfConsecutiveHours)
+                    if (timeRangeIndex > span.TotalHours)
                     {
-                        // error
+                        return response;
                     }
                     break;
                 case TimeRangeType.DAY:
-                    TimeSpan span = ((DateTime)endDateTime) - startDateTime;
                     if (timeRangeIndex > span.TotalDays)
                     {
-                        //error
+                        return response;
                     }
                     break;
                 case TimeRangeType.MONTH:
                     if (startDateTime.AddMonths(timeRangeIndex) > ((DateTime)endDateTime))
                     {
-                        // error
+                        return response;
                     }
                     break;
                 default:
@@ -76,23 +75,22 @@ namespace ToDo
                         tryEndTime = tryStartTime.AddHours(timeRangeIndex);
                         break;
                     case TimeRangeType.DAY:
-                        copyTryStartTime = tryStartTime;
                         numberOfSetsToLoop = timeRangeIndex;
                         break;
                     case TimeRangeType.MONTH:
-                        TimeSpan span = tryStartTime.AddMonths(timeRangeIndex) - tryStartTime;
-                        copyTryStartTime = tryStartTime;
+                        span = tryStartTime.AddMonths(timeRangeIndex) - tryStartTime;
                         numberOfSetsToLoop = (int)span.TotalDays;
                         break;
                 }
+                copyTryStartTime = tryStartTime;
                 List<Task> searchResults = new List<Task>();
                 for (int i = 0; i < numberOfSetsToLoop; i++)
                 {
+                    if (i > 0) tryStartTime = tryStartTime.AddDays(1);
                     if (tryEndTime <= tryStartTime)
                         tryEndTime = tryStartTime.AddDays(1).Add(((DateTime)endDateTime).TimeOfDay);
                     searchResults = SearchForTasks(taskList, null, searchSpecificity, false, tryStartTime, tryEndTime);
                     if (searchResults.Count != 0) break;
-                    if (i < numberOfSetsToLoop-1) tryStartTime = tryStartTime.AddDays(1);
                 }
                 // once fitting time is found, change its start and end datetime then
                 // add the task; return success response
