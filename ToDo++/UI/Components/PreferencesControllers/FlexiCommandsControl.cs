@@ -60,6 +60,8 @@ namespace ToDo
                     return CommandType.REDO;
                 case "DONE":
                     return CommandType.DONE;
+                case "UNDONE":
+                    return CommandType.UNDONE;
                 case "POSTPONE":
                     return CommandType.POSTPONE;
                 case "SCHEDULE":
@@ -147,6 +149,8 @@ namespace ToDo
             treeNode = new TreeNode("REDO");
             commandTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("DONE");
+            commandTree.Nodes.Add(treeNode);
+            treeNode = new TreeNode("UNDONE");
             commandTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("POSTPONE");
             commandTree.Nodes.Add(treeNode);

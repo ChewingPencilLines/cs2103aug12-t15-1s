@@ -44,7 +44,8 @@
             this.questionButton.Name = "questionButton";
             this.questionButton.Size = new System.Drawing.Size(35, 30);
             this.questionButton.TabIndex = 4;
-            this.questionButton.UseVisualStyleBackColor = true;
+            this.questionButton.UseVisualStyleBackColor = false;
+            this.questionButton.MouseEnter += new System.EventHandler(this.questionButton_MouseEnter);
             // 
             // closeButton
             // 
