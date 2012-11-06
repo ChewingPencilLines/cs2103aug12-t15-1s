@@ -145,6 +145,8 @@ namespace ToDo
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
+            SetMembers(taskList, storageIO);
+
             Task task = undoTask.Pop();
             redoTask.Push(task);
             task.DoneState = false;
@@ -158,6 +160,7 @@ namespace ToDo
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
+            SetMembers(taskList, storageIO);
             Task task = redoTask.Pop();
             undoTask.Push(task);
             task.DoneState = true;
