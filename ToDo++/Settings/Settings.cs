@@ -270,6 +270,9 @@ namespace ToDo
             settingInfo.userTimeRangeKeywordsEndTime[timeRange] = endTime;
         }
 
+        public int GetStartTime(TimeRangeKeywordsType timeRange) { return settingInfo.userTimeRangeKeywordsStartTime[timeRange]; }
+        public int GetEndTime(TimeRangeKeywordsType timeRange) { return settingInfo.userTimeRangeKeywordsEndTime[timeRange]; }
+
         #endregion
 
 

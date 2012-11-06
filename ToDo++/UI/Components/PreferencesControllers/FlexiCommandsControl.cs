@@ -30,6 +30,7 @@ namespace ToDo
             LoadTimeKeywordRangeList();
             LoadTimeRangeList();
             LoadCommandList();
+            this.rangeController.Enabled = false;
         }
 
 
@@ -224,6 +225,7 @@ namespace ToDo
             this.contextTree.SelectedNode = null;
             this.timeRangeKeywordTree.SelectedNode = null;
             this.timeRangeTree.SelectedNode = null;
+            this.rangeController.Enabled = false;
 
             this.selectedType = SelectedType.CommandSelected;
             string selected = commandTree.SelectedNode.Text;
@@ -238,6 +240,7 @@ namespace ToDo
             this.commandTree.SelectedNode = null;
             this.timeRangeKeywordTree.SelectedNode = null;
             this.timeRangeTree.SelectedNode = null;
+            this.rangeController.Enabled = false;
 
             this.commandTree.SelectedNode = null;
             this.selectedType = SelectedType.ContextSelected;
@@ -253,6 +256,7 @@ namespace ToDo
             this.commandTree.SelectedNode = null;
             this.contextTree.SelectedNode = null;
             this.timeRangeTree.SelectedNode = null;
+            this.rangeController.Enabled = true;
 
             this.commandTree.SelectedNode = null;
             this.selectedType = SelectedType.TimeRangeKeywordsSelected;
@@ -261,6 +265,7 @@ namespace ToDo
 
             UpdateFlexiCommandList();
             UpdateDescription();
+            UpdateTimeRangeUI();
         }
 
         private void timeRangeTree_AfterSelect(object sender, TreeViewEventArgs e)
@@ -268,6 +273,7 @@ namespace ToDo
             this.contextTree.SelectedNode = null;
             this.commandTree.SelectedNode = null;
             this.timeRangeKeywordTree.SelectedNode = null;
+            this.rangeController.Enabled = false;
 
             this.commandTree.SelectedNode = null;
             this.selectedType = SelectedType.TimeRangeSelected;
@@ -329,6 +335,12 @@ namespace ToDo
 
             foreach (string flexiCommand in this.selectedFlexiCommands)
                 listedFlexiCommands.Items.Add(flexiCommand);
+        }
+
+        private void UpdateTimeRangeUI()
+        {
+            this.rangeController.RangeMinimum = this.settings.GetStartTime(selectedTimeRangeKeywordType);
+            this.rangeController.RangeMaximum = this.settings.GetEndTime(selectedTimeRangeKeywordType);
         }
 
         private void AddFlexiCommandToSettings(string flexiCommand)
@@ -408,13 +420,13 @@ namespace ToDo
             descriptionLabel.Text = description;
         }
 
+        private void rangeController_RangeChanged(object sender, EventArgs e)
+        {
+            MessageBox.Show(rangeController.RangeMinimum.ToString());
+            MessageBox.Show(rangeController.RangeMaximum.ToString());
+        }
 
 
-    }
 
-    public class FlexiList
-    {
-        public string columnType;
-        public string flexiCommand;
     }
 }
