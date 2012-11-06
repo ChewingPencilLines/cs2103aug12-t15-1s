@@ -13,9 +13,10 @@ namespace ToDo
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
-            DateTimeSpecificity isSpecific = new DateTimeSpecificity();
-            this.storageIO = storageIO;
+            SetMembers(taskList, storageIO);
 
+            DateTimeSpecificity isSpecific = new DateTimeSpecificity();
+            
             List<Task> mostRecentTasks =
                 (from task in taskList
                  where task.IsWithinTime(isSpecific, DateTime.Today, DateTime.Today.AddDays(7))

@@ -27,7 +27,7 @@ namespace ToDo
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
-            this.storageIO = storageIO;
+            SetMembers(taskList, storageIO);
             // default response: failure to schedule task i.e. cannot find fitting slot
             Response response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             retrieveParameters();
@@ -96,7 +96,7 @@ namespace ToDo
                     if (i > 0) tryStartTime = tryStartTime.AddDays(1);
                     if (tryEndTime <= tryStartTime)
                         tryEndTime = tryStartTime.AddDays(1).Add(((DateTime)endDateTime).TimeOfDay);
-                    searchResults = SearchForTasks(taskList, null, searchSpecificity, false, tryStartTime, tryEndTime);
+                    searchResults = SearchForTasks(null, searchSpecificity, false, tryStartTime, tryEndTime);
                     if (searchResults.Count != 0) break;
                 }
                 // once fitting time is found, change its start and end datetime then
@@ -106,7 +106,7 @@ namespace ToDo
                     if (tryEndTime > endDateTime)
                         break;
                     TaskEvent newTask = new TaskEvent(taskName, copyTryStartTime, tryEndTime.AddSeconds(-1), searchSpecificity);
-                    response = AddTask(newTask, taskList);
+                    response = AddTask(newTask);
                     if (response.IsSuccessful())
                     {
                         TrackOperation();
@@ -180,8 +180,9 @@ namespace ToDo
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
+            SetMembers(taskList, storageIO);
             Task task = undoTask.Pop();
-            return DeleteTask(task, taskList);
+            return DeleteTask(task);
         }
     }
 }
