@@ -428,15 +428,82 @@ namespace ToDo
                         break;
                 }
             }
+            else if (this.selectedType == SelectedType.TimeRangeKeywordsSelected)
+            {
+                title = timeRangeKeywordTree.SelectedNode.Text;
+                titleLabel.Text = title;
+                switch (selectedTimeRangeKeywordType)
+                {
+                    default:
+                        UpdateTimeRangeDescription();
+                        return;
+                }
+            }
 
             titleLabel.Text = title;
             descriptionLabel.Text = description;
         }
 
+        private void UpdateTimeRangeDescription()
+        {
+            descriptionLabel.Clear();
+            SetFormat(Color.Black, "MORNING: ", 9,FontStyle.Regular);
+            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.MORNING).ToString(), 9,FontStyle.Regular);
+            SetFormat(Color.Gray, "-", 9, FontStyle.Regular);
+            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.MORNING).ToString(), 9, FontStyle.Regular);
+            SetFormat(Color.Gray, "\n", 9, FontStyle.Regular);
+            SetFormat(Color.Black, "AFTERNOON: ", 9, FontStyle.Regular);
+            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.AFTERNOON).ToString(), 9, FontStyle.Regular);
+            SetFormat(Color.Gray, "-", 9, FontStyle.Regular);
+            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.AFTERNOON).ToString(), 9, FontStyle.Regular);
+            SetFormat(Color.Gray, "\n", 9, FontStyle.Regular);
+            SetFormat(Color.Black, "EVENING: ", 9, FontStyle.Regular);
+            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.EVENING).ToString(), 9, FontStyle.Regular);
+            SetFormat(Color.Gray, "-", 9, FontStyle.Regular);
+            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.EVENING).ToString(), 9, FontStyle.Regular);
+            SetFormat(Color.Gray, "\n", 9, FontStyle.Regular);
+            SetFormat(Color.Black, "NIGHT: ", 9, FontStyle.Regular);
+            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.NIGHT).ToString(), 9, FontStyle.Regular);
+            SetFormat(Color.Gray, "-", 9, FontStyle.Regular);
+            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.NIGHT).ToString(), 9, FontStyle.Regular);
+            SetFormat(Color.Gray, "\n", 9, FontStyle.Regular);
+        }
+
+        #region FormattingControl
+
+        /// <summary>
+        /// Set Formatting of Text to be set into OutputBox
+        /// </summary>
+        public void SetFormat(Color color, string text, int size,FontStyle fontStyle)
+        {
+            RichTextBox box = descriptionLabel;
+            int start = box.TextLength;
+            box.AppendText(text);
+            int end = box.TextLength;
+
+            box.Select(start, end - start + 1);
+            box.SelectionColor = color;
+            box.SelectionFont = new Font("Tahoma", size,fontStyle);
+            box.SelectionLength = 0;
+        }
+
+        #endregion
+
         private void rangeController_RangeChanged(object sender, EventArgs e)
         {
-
+            if (this.selectedTimeRangeKeywordType == TimeRangeKeywordsType.NIGHT)
+            {
+                settings.SetTimeRange(selectedTimeRangeKeywordType, rangeController.RangeMaximum, rangeController.RangeMinimum);
+                UpdateDescription();
+            }
+            else
+            {
+                settings.SetTimeRange(selectedTimeRangeKeywordType, rangeController.RangeMinimum, rangeController.RangeMaximum);
+                UpdateDescription();
+            }
         }
+
+
 
 
 

@@ -177,6 +177,8 @@ namespace ToDo
                         || keywordToRemove == "night")
                             throw new InvalidDeleteFlexiException("This is a default keyword and can't be removed");
                         settingInfo.userTimeRangeKeywordsType.Remove(keywordToRemove);
+
+                        EventHandlers.UpdateSettings(settingInfo);
                         break;
                     }
 
@@ -187,6 +189,8 @@ namespace ToDo
                         || keywordToRemove == "mnth" || keywordToRemove == "mths")
                             throw new InvalidDeleteFlexiException("This is a default keyword and can't be removed");
                         settingInfo.userTimeRangeType.Remove(keywordToRemove);
+
+                        EventHandlers.UpdateSettings(settingInfo);
                         break;
                     }
             }
@@ -239,7 +243,6 @@ namespace ToDo
                         }
 
                         return getCommands;
-                        break;
                     }
 
                 case "ToDo.TimeRangeType":
@@ -253,7 +256,6 @@ namespace ToDo
                         }
 
                         return getCommands;
-                        break;
                     }
             }
 
@@ -268,6 +270,7 @@ namespace ToDo
         {
             settingInfo.userTimeRangeKeywordsStartTime[timeRange] = startTime;
             settingInfo.userTimeRangeKeywordsEndTime[timeRange] = endTime;
+            EventHandlers.UpdateSettings(settingInfo);
         }
 
         public int GetStartTime(TimeRangeKeywordsType timeRange) { return settingInfo.userTimeRangeKeywordsStartTime[timeRange]; }

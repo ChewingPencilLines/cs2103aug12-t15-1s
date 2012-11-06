@@ -39,8 +39,8 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.timeRangeTree = new System.Windows.Forms.TreeView();
             this.rangeController = new Zzzz.ZzzzRangeBar();
+            this.timeRangeTree = new System.Windows.Forms.TreeView();
             this.removeButton = new ToDo.RoundButton();
             this.addButton = new ToDo.RoundButton();
             this.grouper1.SuspendLayout();
@@ -85,7 +85,7 @@
             this.descriptionLabel.ForeColor = System.Drawing.Color.Black;
             this.descriptionLabel.Location = new System.Drawing.Point(159, 58);
             this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(243, 58);
+            this.descriptionLabel.Size = new System.Drawing.Size(243, 77);
             this.descriptionLabel.TabIndex = 13;
             this.descriptionLabel.Text = "Please go ahead and select a command to see it\'s description";
             // 
@@ -201,18 +201,6 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Timing";
             // 
-            // timeRangeTree
-            // 
-            this.timeRangeTree.BackColor = System.Drawing.Color.Gainsboro;
-            this.timeRangeTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.timeRangeTree.ForeColor = System.Drawing.Color.Black;
-            this.timeRangeTree.LineColor = System.Drawing.Color.Gainsboro;
-            this.timeRangeTree.Location = new System.Drawing.Point(-14, 67);
-            this.timeRangeTree.Name = "timeRangeTree";
-            this.timeRangeTree.Size = new System.Drawing.Size(111, 68);
-            this.timeRangeTree.TabIndex = 18;
-            this.timeRangeTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.timeRangeTree_AfterSelect);
-            // 
             // rangeController
             // 
             this.rangeController.DivisionNum = 23;
@@ -231,6 +219,19 @@
             this.rangeController.TabIndex = 19;
             this.rangeController.TotalMaximum = 23;
             this.rangeController.TotalMinimum = 0;
+            this.rangeController.RangeChanged += new Zzzz.ZzzzRangeBar.RangeChangedEventHandler(this.rangeController_RangeChanged);
+            // 
+            // timeRangeTree
+            // 
+            this.timeRangeTree.BackColor = System.Drawing.Color.Gainsboro;
+            this.timeRangeTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.timeRangeTree.ForeColor = System.Drawing.Color.Black;
+            this.timeRangeTree.LineColor = System.Drawing.Color.Gainsboro;
+            this.timeRangeTree.Location = new System.Drawing.Point(-14, 67);
+            this.timeRangeTree.Name = "timeRangeTree";
+            this.timeRangeTree.Size = new System.Drawing.Size(111, 68);
+            this.timeRangeTree.TabIndex = 18;
+            this.timeRangeTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.timeRangeTree_AfterSelect);
             // 
             // removeButton
             // 
