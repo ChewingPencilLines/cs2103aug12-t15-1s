@@ -158,6 +158,7 @@ namespace ToDo
                 notifyIcon_taskBar.Visible = false;
                 StartFadeIn();
                 this.WindowState = FormWindowState.Normal;
+                this.ActiveControl = textInput;
             }
         }
 
