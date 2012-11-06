@@ -9,10 +9,7 @@ namespace ToDo
     public class TokenContext : Token
     {
         ContextType contextType;
-        internal ContextType Value
-        {
-            get { return contextType; }
-        }
+
         internal TokenContext(int position, ContextType val)
             : base(position)
         {
@@ -21,9 +18,9 @@ namespace ToDo
 
         internal override void UpdateAttributes(OperationAttributes attrb)
         {
-            if (Value == ContextType.CURRENT ||
-                Value == ContextType.NEXT ||
-                Value == ContextType.FOLLOWING
+            if (contextType == ContextType.CURRENT ||
+                contextType == ContextType.NEXT ||
+                contextType == ContextType.FOLLOWING
                 )
                 attrb.currentSpecifier = contextType;
             else attrb.currentMode = contextType;

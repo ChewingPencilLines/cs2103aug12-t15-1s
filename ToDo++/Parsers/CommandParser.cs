@@ -15,7 +15,7 @@ namespace ToDo
         const int END_INDEX = 1;
         StringParser stringParser;
 
-        public CommandParser(ref StringParser stringParser)
+        public CommandParser(StringParser stringParser)
         {
             this.stringParser = stringParser;
         }
@@ -37,98 +37,9 @@ namespace ToDo
             // implement?: 
             // ReleaseUnusedTokens();
             opAttributes.SetTimes();
-            Operation newOperation = CreateOperation(opAttributes);
+            Operation newOperation = opAttributes.CreateOperation();
             return newOperation;
         }
 
-        // Create operation based on derived values, and whether they have been used.
-        private static Operation CreateOperation(OperationAttributes opAttributes)
-        {            
-            CommandType commandType = opAttributes.commandType;
-            DateTime? startCombined = opAttributes.startDateTime;
-            DateTime? endCombined = opAttributes.endDateTime;
-            DateTimeSpecificity isSpecific = opAttributes.isSpecific;
-            bool isAll = opAttributes.rangeIsAll;
-            string taskName = opAttributes.taskName;
-            int[] taskIndex = opAttributes.rangeIndexes;
-            int timeRangeIndex = opAttributes.timeRangeIndex;
-            TimeRangeType timeRangeType = opAttributes.timeRangeType;
-            SortType sortType = opAttributes.sortType;
-            SearchType searchType = opAttributes.searchDone;
-
-            Task task;
-            Operation newOperation = null;
-            switch (commandType)
-            {
-                case CommandType.ADD:
-                    task = GenerateNewTask(taskName, startCombined, endCombined, isSpecific);
-                    newOperation = new OperationAdd(task);
-                    break;
-                case CommandType.DELETE:
-                    newOperation = new OperationDelete(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll, searchType);
-                    break;
-                case CommandType.DISPLAY:
-                    newOperation = new OperationDisplayDefault();
-                    break;
-                case CommandType.MODIFY:
-                    task = GenerateNewTask(taskName, startCombined, endCombined, isSpecific);
-                    newOperation = new OperationModify(taskIndex,task);
-                    break;
-                case CommandType.SEARCH:
-                    newOperation = new OperationSearch(taskName, startCombined, endCombined, isSpecific, isAll, searchType);
-                    break;
-                case CommandType.SORT:
-                    newOperation = new OperationSort(sortType);
-                    break; 
-                case CommandType.REDO:
-                    newOperation = new OperationRedo();
-                    break;
-                case CommandType.UNDO:
-                    newOperation = new OperationUndo();
-                    break;
-                case CommandType.DONE:
-                    newOperation = new OperationMarkAsDone(taskName,taskIndex,startCombined, isAll);
-                    break;
-                case CommandType.UNDONE:
-                    newOperation = new OperationMarkAsUndone(taskName,taskIndex,startCombined, isAll);
-                    break;
-                case CommandType.POSTPONE:
-                    newOperation = new OperationPostpone(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll);
-                    break;
-                case CommandType.SCHEDULE:
-                    newOperation = new OperationSchedule(taskName, (DateTime)startCombined, endCombined, isSpecific, timeRangeIndex, timeRangeType);
-                    break;
-                case CommandType.EXIT:
-                    System.Environment.Exit(0);
-                    break;
-            }
-            return newOperation;
-        }
-
-        private static Task GenerateNewTask(
-            string taskName,
-            DateTime? startTime,
-            DateTime? endTime,
-            DateTimeSpecificity isSpecific
-            )
-        {
-            if (startTime == null && endTime == null)
-                return new TaskFloating(taskName);
-            else if (startTime == null && endTime != null)
-                return new TaskDeadline(taskName, (DateTime)endTime, isSpecific);
-            else if (startTime != null && endTime == null)
-            {
-                // If endTime is not specified set endTime based on startTime.
-                endTime = startTime;
-                if (!isSpecific.StartTime)
-                {
-                    endTime = ((DateTime)endTime).AddDays(1);
-                    endTime = ((DateTime)endTime).AddMinutes(-1);
-                }
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific);
-            }
-            else
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
-        }
     }
 }
