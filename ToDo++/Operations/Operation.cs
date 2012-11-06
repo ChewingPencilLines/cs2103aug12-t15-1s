@@ -35,6 +35,14 @@ namespace ToDo
             redoStack.Clear();
         }
 
+        private void TrackTask(List<Task> taskList, Task task, bool isAdd)
+        {
+            if (isAdd) taskList.Add(task);
+            else taskList.Remove(task);
+              
+            undoTask.Push(task);
+        }
+
         public static void UpdateCurrentListedTasks(List<Task> tasks)
         {
             currentListedTasks = tasks;
@@ -70,9 +78,9 @@ namespace ToDo
         {
             try
             {
-                taskList.Add(taskToAdd);
-                undoTask.Push(taskToAdd);
-                if (storageIO.AddTaskToFile(taskToAdd))
+                TrackTask(taskList, taskToAdd, true); 
+                bool success = storageIO.AddTaskToFile(taskToAdd);
+                if (success)
                 {
                     currentListedTasks.Add(taskToAdd);
                     return GenerateSuccessResponse(taskToAdd);
@@ -90,10 +98,7 @@ namespace ToDo
 
         protected Response DeleteTask(Task taskToDelete, List<Task> taskList)
         {
-            // Remove tasks and push to undo stack.
-            undoTask.Push(taskToDelete);
-            taskList.Remove(taskToDelete);
-            
+            TrackTask(taskList, taskToDelete, false);
             currentListedTasks.Remove(taskToDelete);
 
             if (storageIO.RemoveTaskFromFile(taskToDelete))
@@ -120,18 +125,16 @@ namespace ToDo
 
         protected Response ModifyTask(Task taskToModify, Task newTask, List<Task> taskList)
         {
-            undoTask.Push(taskToModify);
-            taskList.Remove(taskToModify);
-            taskList.Add(newTask);
-            undoTask.Push(newTask);
-            if (storageIO.RemoveTaskFromFile(taskToModify) && storageIO.AddTaskToFile(newTask))
-            {
-                 currentListedTasks.Remove(taskToModify);
-                 currentListedTasks.Add(newTask);
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify),  currentListedTasks);
+            TrackTask(taskList, taskToModify, false);
+            TrackTask(taskList, newTask, true);
 
+            if (storageIO.ModifyTask(taskToModify, newTask))
+            {
+                currentListedTasks.Remove(taskToModify);
+                currentListedTasks.Add(newTask);
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify), currentListedTasks);
             }
-            else 
+            else
                 return GenerateXMLFailureResponse();
         }
 
@@ -148,10 +151,13 @@ namespace ToDo
                 taskList.Remove(taskToPostpone);
                 taskList.Add(taskPostponed);
                 undoTask.Push(taskPostponed);
+                currentListedTasks.Remove(taskToPostpone);
+                currentListedTasks.Add(taskPostponed);
             }
             if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
             {
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationPostpone));
+                return GenerateSuccessResponse(taskPostponed);
+                //return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationPostpone),currentListedTasks);
             }
             else
                 return new Response(Result.XML_READWRITE_FAIL);
@@ -164,7 +170,7 @@ namespace ToDo
             bool exact = false,
             DateTime? startTime = null,
             DateTime? endTime = null,
-            bool searchForIsDone = false
+            SearchType searchDone = SearchType.NONE
             )
         {
             List<Task> filteredTasks = taskList;
@@ -177,9 +183,16 @@ namespace ToDo
                 filteredTasks = (from task in filteredTasks
                                  where task.IsWithinTime(isSpecific, startTime, endTime)
                                  select task).ToList();
-            if (searchForIsDone)
-                filteredTasks = (from task in filteredTasks
-                                 where task.DoneState == true
+
+            bool doneMatch;
+            if (searchDone == SearchType.DONE)
+                doneMatch = true;
+            else if (searchDone == SearchType.UNDONE)
+                doneMatch = false;
+            else return filteredTasks; // don't sort anymore.
+                
+            filteredTasks = (from task in filteredTasks
+                                 where task.DoneState == doneMatch
                                  select task).ToList();
             return filteredTasks;
         }
@@ -196,15 +209,17 @@ namespace ToDo
             return new Response(Result.XML_READWRITE_FAIL);
         }
 
-        protected void SetArgumentsForFeedbackString(out string[] criteria, string searchString, DateTime? startTime, DateTime? endTime, bool searchForIsDone, bool isAll)
+        protected void SetArgumentsForFeedbackString(out string[] criteria, string searchString, DateTime? startTime, DateTime? endTime, SearchType searchDone, bool isAll)
         {
             criteria = new string[Response.SEARCH_PARAM_NUM];
             criteria[Response.SEARCH_PARAM_ALL] = "";
             criteria[Response.SEARCH_PARAM_DONE] = "";
             criteria[Response.SEARCH_PARAM_SEARCH_STRING] = "";
 
-            if (searchForIsDone == true)
+            if (searchDone == SearchType.DONE)
                 criteria[Response.SEARCH_PARAM_DONE] = "[DONE] ";
+            else if (searchDone == SearchType.UNDONE)
+                criteria[Response.SEARCH_PARAM_DONE] = "undone ";
             if (isAll == true)
                 criteria[Response.SEARCH_PARAM_ALL] = "all ";
 
@@ -214,6 +229,7 @@ namespace ToDo
                 criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " with time constraints";
         }
 
+        
         #endregion
     }
 }

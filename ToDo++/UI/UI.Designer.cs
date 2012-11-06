@@ -32,8 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
-            this.timerCollpaser = new System.Windows.Forms.Timer(this.components);
-            this.timerExpander = new System.Windows.Forms.Timer(this.components);
+            this.timerCollapse = new System.Windows.Forms.Timer(this.components);
+            this.timerExpand = new System.Windows.Forms.Timer(this.components);
             this.timerFadeIn = new System.Windows.Forms.Timer(this.components);
             this.timerFadeOut = new System.Windows.Forms.Timer(this.components);
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -85,13 +85,13 @@
             // 
             // timerCollpaser
             // 
-            this.timerCollpaser.Interval = 1;
-            this.timerCollpaser.Tick += new System.EventHandler(this.timerCollpaser_Tick);
+            this.timerCollapse.Interval = 1;
+            this.timerCollapse.Tick += new System.EventHandler(this.timerCollapse_Tick);
             // 
             // timerExpander
             // 
-            this.timerExpander.Interval = 1;
-            this.timerExpander.Tick += new System.EventHandler(this.timerExpander_Tick);
+            this.timerExpand.Interval = 1;
+            this.timerExpand.Tick += new System.EventHandler(this.timerExpand_Tick);
             // 
             // timerFadeIn
             // 
@@ -482,8 +482,8 @@
         private BrightIdeasSoftware.OLVColumn taskDoneStateCol;
         private BrightIdeasSoftware.OLVColumn taskIndexCol;
         private BrightIdeasSoftware.OLVColumn bufferCol;
-        private System.Windows.Forms.Timer timerCollpaser;
-        private System.Windows.Forms.Timer timerExpander;
+        private System.Windows.Forms.Timer timerCollapse;
+        private System.Windows.Forms.Timer timerExpand;
         private System.Windows.Forms.Timer timerFadeIn;
         private System.Windows.Forms.Timer timerFadeOut;
     }

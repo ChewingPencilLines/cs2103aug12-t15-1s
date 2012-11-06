@@ -9,7 +9,7 @@ namespace ToDo
     public class TokenCommand : Token
     {
         static private List<CommandType> indexRangeableCommandTypes
-            = new List<CommandType> { CommandType.DELETE, CommandType.DONE, CommandType.MODIFY, CommandType.POSTPONE };
+            = new List<CommandType> { CommandType.DELETE, CommandType.DONE, CommandType.UNDONE, CommandType.MODIFY, CommandType.POSTPONE };
 
         static private List<CommandType> timeRangeableCommandTypes
             = new List<CommandType> { CommandType.SCHEDULE, CommandType.POSTPONE };
@@ -31,13 +31,13 @@ namespace ToDo
         {
             if (attrb.commandType != CommandType.INVALID)
             {
-                CommandType cmd1 = attrb.commandType;
-                CommandType cmd2 = commandType;
-                if (cmd1 == CommandType.DONE || cmd2 == CommandType.DONE)
+                if (Value == CommandType.DONE)
                 {
-                    if (cmd1 == CommandType.DELETE || cmd1 == CommandType.SEARCH)
-                        attrb.sortType = SortType.DONE_STATE;
+                    attrb.searchDone = SearchType.DONE;
+                    attrb.sortType = SortType.DONE_STATE;
                 }
+                else if (Value == CommandType.UNDONE)
+                    attrb.searchDone = SearchType.UNDONE;
                 else throw new MultipleCommandsException();
             }
             else
