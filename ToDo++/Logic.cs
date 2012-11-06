@@ -72,11 +72,12 @@ namespace ToDo
             {
                 Response feedback = ExecuteCommand(operation);
 
-             //@alice->all:temporarily commented for unit test. just uncommented when needed.
-            /*    if (taskList.Count == 0)
+                if (ui == null) return feedback;
+ 
+                if (taskList.Count == 0)
                     ui.SetMessageTaskListIsEmpty(true);
                 else
-                    ui.SetMessageTaskListIsEmpty(false);*/
+                    ui.SetMessageTaskListIsEmpty(false);
                 return feedback;
             }
         }
