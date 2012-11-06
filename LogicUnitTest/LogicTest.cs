@@ -17,6 +17,17 @@ namespace LogicUnitTest
             Response result;
             result = logic.ProcessCommand("add milk");
             Assert.AreEqual(result.FeedbackString, "Added new task \"milk\" successfully.");
+            logic.ProcessCommand("delete milk");
+            return;
+        }
+
+        [TestMethod]
+        public void DeleteByNameTest()
+        {
+            Response result;
+            logic.ProcessCommand("add abcd");
+            result = logic.ProcessCommand("delete abcd");
+            Assert.AreEqual(result.FeedbackString, "Deleted task \"abcd\" successfully.");
             logic.ProcessCommand("delete all");
             return;
         }
@@ -30,18 +41,7 @@ namespace LogicUnitTest
             result = logic.ProcessCommand("delete all");
             Assert.AreEqual(result.FeedbackString, "Deleted all tasks successfully.");
             return;
-        }
-
-        [TestMethod]
-        public void DeleteByNameTest()
-        {
-            Response result;
-            logic.ProcessCommand("add aa");
-            result = logic.ProcessCommand("delete a");
-            Assert.AreEqual(result.FeedbackString, "Deleted task \"aa\" successfully.");
-            logic.ProcessCommand("delete all");
-            return;
-        }
+        } 
 
         [TestMethod]
         public void DeleteByNameMultipleResultTest()
@@ -68,12 +68,14 @@ namespace LogicUnitTest
         }
 
         [TestMethod]
-        public void DeleteByDateTest()
+        public void DeleteByIndexTest()
         {
             Response result;
-            logic.ProcessCommand("add aa today");
-            result = logic.ProcessCommand("delete today");
-            Assert.AreEqual(result.FeedbackString, "Deleted task \"aa\" successfully.");
+            logic.ProcessCommand("add cd");
+            logic.ProcessCommand("add cde");
+            result = logic.ProcessCommand("delete c");
+            result = logic.ProcessCommand("delete 1");
+            Assert.AreEqual(result.FeedbackString, "Deleted task \"cd\" successfully.");
             logic.ProcessCommand("delete all");
             return;
         }
