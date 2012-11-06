@@ -26,8 +26,8 @@ namespace ToDo
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
-            this.storageIO = storageIO;
-            List<Task> searchResults = SearchForTasks(taskList, searchString, isSpecific, false, startTime, endTime, searchDone);
+            SetMembers(taskList, storageIO);
+            List<Task> searchResults = SearchForTasks(searchString, isSpecific, false, startTime, endTime, searchDone);
             currentListedTasks = new List<Task>(searchResults);
 
             string[] criteria;
