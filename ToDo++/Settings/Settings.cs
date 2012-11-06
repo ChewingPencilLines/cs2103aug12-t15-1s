@@ -151,7 +151,7 @@ namespace ToDo
                     {
                         if (keywordToRemove == "add" || keywordToRemove == "remove" || keywordToRemove == "display" || keywordToRemove == "sort"
                         || keywordToRemove == "search" || keywordToRemove == "modify" || keywordToRemove == "undo" || keywordToRemove == "redo"
-                        || keywordToRemove == "done" || keywordToRemove == "postpone")
+                        || keywordToRemove == "done" || keywordToRemove == "undone" || keywordToRemove == "postpone")
                             throw new InvalidDeleteFlexiException("This is a default keyword and can't be removed");
                         settingInfo.userCommandKeywords.Remove(keywordToRemove);
 
