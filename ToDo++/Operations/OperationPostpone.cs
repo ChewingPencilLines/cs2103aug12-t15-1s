@@ -47,8 +47,6 @@ namespace ToDo
                 this.isSpecific.StartTime = isSpecific.EndTime;
                 this.isSpecific.EndTime = isSpecific.StartTime;
             }
-           
-
         }
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
@@ -106,7 +104,7 @@ namespace ToDo
             {
                 if (endIndex == startIndex)
                 {
-                    Task taskToPostpone = currentListedTasks[startIndex.Value];
+                    Task taskToPostpone = currentListedTasks[startIndex];
                     if (taskToPostpone == null)
                         response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
                     else
@@ -119,9 +117,9 @@ namespace ToDo
                 else
                 {
                     response = null;
-                    for (int? i = startIndex; i <= endIndex; i++)
+                    for (int i = startIndex; i <= endIndex; i++)
                     {
-                        Task taskToPostpone = currentListedTasks[i.Value];
+                        Task taskToPostpone = currentListedTasks[i];
 
                         if (taskToPostpone == null) 
                             response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
