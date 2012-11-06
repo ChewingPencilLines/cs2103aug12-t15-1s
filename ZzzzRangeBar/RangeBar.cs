@@ -87,8 +87,8 @@ namespace Zzzz
 						
 		private Color colorInner = Color.LightGreen;
 		private Color colorRange = Color.FromKnownColor(KnownColor.Control);
-		private Color colorShadowLight = Color.FromKnownColor(KnownColor.ControlLightLight);
-		private Color colorShadowDark = Color.FromKnownColor(KnownColor.ControlDarkDark);
+		private Color colorShadowLight = Color.FromKnownColor(KnownColor.ControlDarkDark);
+        private Color colorShadowDark = Color.FromKnownColor(KnownColor.ControlDarkDark);
 		private int sizeShadow = 1;
 		private double Minimum = 0;
 		private double Maximum = 10;
