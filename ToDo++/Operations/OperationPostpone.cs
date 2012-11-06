@@ -74,7 +74,6 @@ namespace ToDo
             return response;
         }
 
-
         private Response PostponeBySearch(List<Task> taskList)
         {
             Response response;
@@ -103,40 +102,15 @@ namespace ToDo
         {
             Response response;
             if (endIndex == startIndex)
-            {
-                Task taskToPostpone = currentListedTasks[startIndex];
-                if (taskToPostpone == null)
-                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
-                else
-                    response = PostponeTask(taskToPostpone, taskList, postponeTime);
-            }
+                response = PostponeSingleTask(taskList);
             else if (endIndex < 0 || endIndex > currentListedTasks.Count - 1)
-            {
                 response = new Response(Result.INVALID_TASK, Format.DEFAULT);
-            }
             else
                 response = PostponeMultipleTasks(taskList);
 
             return response;
         }
-
-        private List<Task> GenerateSearchResult(List<Task> taskList)
-        {
-            if (oldTime == null)
-                return SearchTimedTasks(taskList);
-            else
-                return SearchForTasks(taskList, taskName, isSpecific, isSpecific.StartTime, oldTime);
-        }
-
-        private List<Task> SearchTimedTasks(List<Task> taskList)
-        {
-            List<Task> searchResults = SearchForTasks(taskList, taskName, isSpecific);
-            //filter floating tasks
-            return (from task in searchResults
-                    where (task is TaskEvent || task is TaskDeadline)
-                    select task).ToList();
-        }
-
+       
         private Response PostponeAllTasks(List<Task> taskList, List<Task> searchResults)
         {
             Response response = null;
@@ -146,6 +120,15 @@ namespace ToDo
                 if (!response.IsSuccessful()) return response;
             }
             return response;
+        }
+
+        private Response PostponeSingleTask(List<Task> taskList)
+        {
+            Task taskToPostpone = currentListedTasks[startIndex];
+            if (taskToPostpone == null)
+                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+            else
+                return PostponeTask(taskToPostpone, taskList, postponeTime);
         }
 
         private Response PostponeMultipleTasks(List<Task> taskList)
@@ -167,6 +150,49 @@ namespace ToDo
                 }
             }
             return response;
+        }
+
+        private List<Task> GenerateSearchResult(List<Task> taskList)
+        {
+            if (oldTime == null)
+                return SearchTimedTasks(taskList);
+            else
+                return SearchForTasks(taskList, taskName, isSpecific, isSpecific.StartTime, oldTime);
+        }
+
+        private List<Task> SearchTimedTasks(List<Task> taskList)
+        {
+            List<Task> searchResults = SearchForTasks(taskList, taskName, isSpecific);
+            //filter floating tasks
+            return (from task in searchResults
+                    where (task is TaskEvent || task is TaskDeadline)
+                    select task).ToList();
+        }
+
+        public override Response Undo(List<Task> taskList, Storage storageIO)
+        {
+            Task taskToUndo = undoTask.Pop();
+            Task Undonetask = undoTask.Pop();
+            redoTask.Push(taskToUndo);
+            redoTask.Push(Undonetask);
+            Response response = ModifyTask(taskToUndo,Undonetask, taskList);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+        }
+
+        public override Response Redo(List<Task> taskList, Storage storageIO)
+        {
+            Task taskToRedo = undoTask.Pop();
+            Task Redonetask = undoTask.Pop();
+            redoTask.Push(taskToRedo);
+            redoTask.Push(Redonetask);
+            Response response = ModifyTask(taskToRedo, Redonetask, taskList);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
         }
     }
 }
