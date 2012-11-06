@@ -206,16 +206,19 @@ namespace ToDo
                 response = (Response)action.DynamicInvoke(parameters);
             }
 
-            // If all keyword is used, delete all in search results if not searching empty string.
-            // If not, delete all currently displayed tasks.
+            // If all keyword is used, delete all in search results,
+            // unless there were no constraining parameters.
+            // If there were, delete all currently displayed tasks if no search string was used.
+            // If not, display search results
             else if (isAll)
             {
-                if (taskName == "" || taskName == null)
+                if (startTime != null || endTime != null || searchType != SearchType.NONE)
+                    response = ExecuteOnAllSearchResults(searchResults, action, args);
+                else if (taskName == "" || taskName == null)
                     response = ExecuteOnAllDisplayedTasks(action, args);
                 else
-                    response = ExecuteOnAllSearchResults(searchResults, action, args);
+                    response = DisplaySearchResults(searchResults, taskName, startTime, endTime, searchType, isAll);
             }
-
             // If not, display search results.
             else
                 response = DisplaySearchResults(searchResults, taskName, startTime, endTime, searchType, isAll);
