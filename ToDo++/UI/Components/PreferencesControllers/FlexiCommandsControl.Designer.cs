@@ -39,8 +39,8 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.rangeController = new Zzzz.ZzzzRangeBar();
             this.timeRangeTree = new System.Windows.Forms.TreeView();
+            this.rangeController = new Zzzz.ZzzzRangeBar();
             this.removeButton = new ToDo.RoundButton();
             this.addButton = new ToDo.RoundButton();
             this.grouper1.SuspendLayout();
@@ -201,28 +201,6 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Timing";
             // 
-            // rangeController
-            // 
-            this.rangeController.Cursor = System.Windows.Forms.Cursors.SizeWE;
-            this.rangeController.DivisionNum = 24;
-            this.rangeController.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.rangeController.ForeColor = System.Drawing.Color.Black;
-            this.rangeController.HeightOfBar = 5;
-            this.rangeController.HeightOfMark = 24;
-            this.rangeController.HeightOfTick = 5;
-            this.rangeController.InnerColor = System.Drawing.Color.Black;
-            this.rangeController.Location = new System.Drawing.Point(3, 82);
-            this.rangeController.Name = "rangeController";
-            this.rangeController.Orientation = Zzzz.ZzzzRangeBar.RangeBarOrientation.horizontal;
-            this.rangeController.RangeMaximum = 4;
-            this.rangeController.RangeMinimum = 3;
-            this.rangeController.ScaleOrientation = Zzzz.ZzzzRangeBar.TopBottomOrientation.bottom;
-            this.rangeController.Size = new System.Drawing.Size(394, 47);
-            this.rangeController.TabIndex = 19;
-            this.rangeController.TotalMaximum = 24;
-            this.rangeController.TotalMinimum = 0;
-            this.rangeController.RangeChanged += new Zzzz.ZzzzRangeBar.RangeChangedEventHandler(this.rangeController_RangeChanged);
-            // 
             // timeRangeTree
             // 
             this.timeRangeTree.BackColor = System.Drawing.Color.Gainsboro;
@@ -234,6 +212,25 @@
             this.timeRangeTree.Size = new System.Drawing.Size(111, 68);
             this.timeRangeTree.TabIndex = 18;
             this.timeRangeTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.timeRangeTree_AfterSelect);
+            // 
+            // rangeController
+            // 
+            this.rangeController.DivisionNum = 23;
+            this.rangeController.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.rangeController.HeightOfBar = 8;
+            this.rangeController.HeightOfMark = 24;
+            this.rangeController.HeightOfTick = 6;
+            this.rangeController.InnerColor = System.Drawing.Color.LightGreen;
+            this.rangeController.Location = new System.Drawing.Point(3, 77);
+            this.rangeController.Name = "rangeController";
+            this.rangeController.Orientation = Zzzz.ZzzzRangeBar.RangeBarOrientation.horizontal;
+            this.rangeController.RangeMaximum = 0;
+            this.rangeController.RangeMinimum = 24;
+            this.rangeController.ScaleOrientation = Zzzz.ZzzzRangeBar.TopBottomOrientation.bottom;
+            this.rangeController.Size = new System.Drawing.Size(394, 52);
+            this.rangeController.TabIndex = 19;
+            this.rangeController.TotalMaximum = 0;
+            this.rangeController.TotalMinimum = 24;
             // 
             // removeButton
             // 
