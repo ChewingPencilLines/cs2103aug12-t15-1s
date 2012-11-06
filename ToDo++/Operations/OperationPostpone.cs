@@ -53,88 +53,118 @@ namespace ToDo
         {
             this.storageIO = storageIO;
             Response response;
-            List<Task> searchResults;
-            if (!hasIndex)
-            {
-                if (oldTime == null)
-                {
-                    searchResults = SearchForTasks(taskList, taskName, isSpecific);
-                    //filter floating tasks
-                    searchResults = (from task in searchResults
-                                     where (task is TaskEvent || task is TaskDeadline)
-                                     select task).ToList();
-                }
-                else
-                {
-                    searchResults = SearchForTasks(taskList, taskName, isSpecific, isSpecific.StartTime, oldTime);
-                }
 
-                if (searchResults.Count == 0)
-                {
-                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
-                  //  response = RESPONSE_POSTPONE_FAILURE;
-                }
-                else if (searchResults.Count == 1)
-                {
-                    response = PostponeTask(searchResults[0], taskList, postponeTime);
-                }
+            if (currentListedTasks.Count == 0)
+                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
+            // Invalid index ranges
+            else if (endIndex < startIndex)
+                return new Response(Result.INVALID_TASK, Format.DEFAULT);
+            else if (startIndex < 0 || endIndex > currentListedTasks.Count - 1)
+                return new Response(Result.INVALID_TASK, Format.DEFAULT);
+
+            if (!hasIndex)
+                response = PostponeBySearch(taskList);
+            else if (hasIndex)
+                response = PostponeByIndex(taskList);
+            else
+                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+
+            if (response.IsSuccessful())
+                TrackOperation();
+            return response;
+        }
+
+
+        private Response PostponeBySearch(List<Task> taskList)
+        {
+            Response response;
+            List<Task> searchResults;
+
+            searchResults = GenerateSearchResult(taskList);
+           
+            if (searchResults.Count == 0)
+                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+            else if (searchResults.Count == 1)
+                response = PostponeTask(searchResults[0], taskList, postponeTime);
+            else
+            {
+                if (isAll)
+                    response = PostponeAllTasks(taskList, searchResults);
                 else
                 {
-                    if (isAll)
-                    {
-                        response = null;
-                        foreach (Task task in searchResults)
-                        {
-                            response = PostponeTask(task, taskList, postponeTime);
-                            if (!response.IsSuccessful()) return response;
-                        }
-                    }
-                    else
-                    {
-                        currentListedTasks = new List<Task>(searchResults);
-                        response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
-                    }
+                    currentListedTasks = new List<Task>(searchResults);
+                    response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                 }
             }
-            else if (startIndex < 0 || startIndex > currentListedTasks.Count - 1)
+            return response;
+        }
+
+        private Response PostponeByIndex(List<Task> taskList)
+        {
+            Response response;
+            if (endIndex == startIndex)
+            {
+                Task taskToPostpone = currentListedTasks[startIndex];
+                if (taskToPostpone == null)
+                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                else
+                    response = PostponeTask(taskToPostpone, taskList, postponeTime);
+            }
+            else if (endIndex < 0 || endIndex > currentListedTasks.Count - 1)
             {
                 response = new Response(Result.INVALID_TASK, Format.DEFAULT);
             }
             else
+                response = PostponeMultipleTasks(taskList);
+
+            return response;
+        }
+
+        private List<Task> GenerateSearchResult(List<Task> taskList)
+        {
+            if (oldTime == null)
+                return SearchTimedTasks(taskList);
+            else
+                return SearchForTasks(taskList, taskName, isSpecific, isSpecific.StartTime, oldTime);
+        }
+
+        private List<Task> SearchTimedTasks(List<Task> taskList)
+        {
+            List<Task> searchResults = SearchForTasks(taskList, taskName, isSpecific);
+            //filter floating tasks
+            return (from task in searchResults
+                    where (task is TaskEvent || task is TaskDeadline)
+                    select task).ToList();
+        }
+
+        private Response PostponeAllTasks(List<Task> taskList, List<Task> searchResults)
+        {
+            Response response = null;
+            foreach (Task task in searchResults)
             {
-                if (endIndex == startIndex)
-                {
-                    Task taskToPostpone = currentListedTasks[startIndex];
-                    if (taskToPostpone == null)
-                        response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
-                    else
-                        response = PostponeTask(taskToPostpone, taskList, postponeTime);
-                }
-                else if (endIndex < 0 || endIndex > currentListedTasks.Count - 1)
-                {
-                    response = new Response(Result.INVALID_TASK, Format.DEFAULT);
-                }
+                response = PostponeTask(task, taskList, postponeTime);
+                if (!response.IsSuccessful()) return response;
+            }
+            return response;
+        }
+
+        private Response PostponeMultipleTasks(List<Task> taskList)
+        {
+            Response response;
+
+            response = null;
+            for (int i = startIndex; i <= endIndex; i++)
+            {
+                Task taskToPostpone = currentListedTasks[i];
+
+                if (taskToPostpone == null)
+                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
                 else
                 {
-                    response = null;
-                    for (int i = startIndex; i <= endIndex; i++)
-                    {
-                        Task taskToPostpone = currentListedTasks[i];
-
-                        if (taskToPostpone == null) 
-                            response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
-                        else
-                        {
-                            // this is a hack. delete task range properly!
-                            response = PostponeTask(taskToPostpone, taskList, postponeTime); 
-                            if (!response.IsSuccessful()) return response;
-                        }
-                    }
+                    // this is a hack. delete task range properly!
+                    response = PostponeTask(taskToPostpone, taskList, postponeTime);
+                    if (!response.IsSuccessful()) return response;
                 }
-            }
-            if (response.IsSuccessful())
-            {
-                TrackOperation();
             }
             return response;
         }
