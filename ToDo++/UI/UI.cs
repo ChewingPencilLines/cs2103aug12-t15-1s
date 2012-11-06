@@ -309,47 +309,48 @@ namespace ToDo
         /// </summary>
         #region CollapseExpand
 
-        int collapseExpandState = 0;
+        bool isCollapsed = false;
         int setHeight;
         int prevHeight;
 
-        public void StartCollapserExpander()
+        public void ToggleCollapsedState()
         {
-            if (collapseExpandState == 0)
+            if (isCollapsed == false)
             {
                 setHeight = this.Height;
                 prevHeight = this.Height;
-                timerCollpaser.Enabled = true;
-                timerExpander.Enabled = false;
-                collapseExpandState = 1;
+                timerCollapse.Enabled = true;
+                timerExpand.Enabled = false;                
+                isCollapsed = true;
             }
             else
             {
                 setHeight = 60;
-                timerCollpaser.Enabled = false;
-                timerExpander.Enabled = true;
+                timerCollapse.Enabled = false;
+                timerExpand.Enabled = true;
                 this.MaximumSize = new System.Drawing.Size(1000, 1000);
-                collapseExpandState = 0;
+                isCollapsed = false;                
             }
+            topMenuControl.SetUpDownButton(isCollapsed);
         }
 
-        private void timerCollpaser_Tick(object sender, EventArgs e)
+        private void timerCollapse_Tick(object sender, EventArgs e)
         {
             setHeight -= 20;
             if (setHeight <= 60)
             {
-                timerCollpaser.Enabled = false;
+                timerCollapse.Enabled = false;
                 this.MaximumSize = new System.Drawing.Size(1000, 60);
             }
             this.Height = setHeight;
         }
 
-        private void timerExpander_Tick(object sender, EventArgs e)
+        private void timerExpand_Tick(object sender, EventArgs e)
         {
             setHeight += 20;
             if (setHeight >= prevHeight)
             {
-                timerExpander.Enabled = false;
+                timerExpand.Enabled = false;
             }
             this.Height = setHeight;
         }
@@ -403,19 +404,11 @@ namespace ToDo
 
         public void SwitchToSettingsPanel()
         {
-            if (collapseExpandState == 1)
-            {
-                StartCollapserExpander();
-            }
             this.customPanelControl.SelectedIndex = 1;
         }
 
         public void SwitchToToDoPanel()
         {
-            if (collapseExpandState == 1)
-            {
-                StartCollapserExpander();
-            }
             this.customPanelControl.SelectedIndex = 0;
         }
 
@@ -517,6 +510,7 @@ namespace ToDo
                 TinyAlertView.Show(TinyAlertView.StateTinyAlert.FAILURE, output.FeedbackString);
             textInput.Clear();
 
+            SwitchToToDoPanel();
             logic.UpdateLastDisplayedTasksList(displayedList);
         }
 
@@ -667,6 +661,7 @@ namespace ToDo
 
             if (task == null) return; // log exception
 
+            // Task is done!
             if (task.DoneState == true)
             {
                 ColorSubItems(row, Color.Green);
@@ -677,6 +672,7 @@ namespace ToDo
                 // Task is over time limit!
                 if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
                     ColorSubItems(row, Color.Red);
+                // Task is within the next 24 hrs!
                 else if (task.IsWithinTime(new DateTimeSpecificity(), DateTime.Now, DateTime.Now.AddDays(1)))
                     ColorSubItems(row, Color.OrangeRed);
             }

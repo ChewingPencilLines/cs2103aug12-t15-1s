@@ -111,7 +111,7 @@ namespace ToDo
                         if (operationType == typeof(OperationSearch))
                             feedbackString = String.Format(STRING_SEARCH_SUCCESS, args);
                         if (operationType == typeof(OperationPostpone))
-                            feedbackString = STRING_POSTPONE_SUCCESS;
+                            feedbackString = String.Format(STRING_POSTPONE_SUCCESS, args);
                         if (operationType == typeof(OperationUndo))
                             feedbackString = STRING_UNDO_SUCCESS;
                         if (operationType == typeof(OperationRedo))

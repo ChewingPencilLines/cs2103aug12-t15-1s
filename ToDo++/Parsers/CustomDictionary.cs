@@ -13,21 +13,22 @@ namespace ToDo
     // ******************************************************************
     // Enumerations
     // ******************************************************************
-    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, SCHEDULE, EXIT, INVALID };
+    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, UNDONE, POSTPONE, SCHEDULE, EXIT, INVALID };
     public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
     // unless otherwise stated in settings,
     // morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
     public enum TimeRangeKeywordsType { MORNING, AFTERNOON, EVENING, NIGHT, NONE };
-    // default should be hours (1 hour), unless otherwise stated in settings
+    // default should be hours (1 hour), unless otherwise specified in settings
     public enum TimeRangeType { DEFAULT = 0, HOUR, DAY, MONTH };
     public enum SortType { DEFAULT, NAME, DATE_TIME, DONE_STATE };
+    public enum SearchType { NONE, DONE, UNDONE }
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
     static class CustomDictionary
     {
         static public TimeRangeType defaultTimeRangeType = TimeRangeType.HOUR;
         static public int defaultTimeRangeIndex = 1;
-        static public Dictionary<string, CommandType> commandKeywords;        
+        static public Dictionary<string, CommandType> commandKeywords;
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
         static public Dictionary<string, TimeRangeType> timeRangeType;
@@ -48,10 +49,10 @@ namespace ToDo
         #region Regexes For Time & Date Parsing
         // matches 00:00 to 23:59 or 0000 to 2359, with or without hours. requires a leading zero if colon or dot is not specified.
         static public Regex time_24HourFormat =
-            new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9]) (h(ou)?rs?)?$");
+            new Regex(@"(?i)^(?<hours>(?<flag>0)?[0-9]|(?<flag>1[0-9])|(?<flag>2[0-3]))(?(flag)(?:\.|:)?|(?:\.|:))(?<minutes>[0-5][0-9]) ?(h(ou)?rs?)?$");
         // matches the above but with AM and PM (case insensitive). colon/dot is optional.
         static public Regex time_12HourFormat =
-            new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])? (?<format>am|pm)$");
+            new Regex(@"(?i)^(?<hours>([0-9]|1[0-2]))(\.|:)?(?<minutes>[0-5][0-9])? ?(?<format>am|pm)$");
         // checks day-month-year and month-day-year format; the formal takes precedence if the input matches both
         static public Regex date_numericFormat =
             new Regex(@"^
@@ -139,6 +140,7 @@ namespace ToDo
             commandKeywords.Add("undo", CommandType.UNDO);
             commandKeywords.Add("redo", CommandType.REDO);
             commandKeywords.Add("done", CommandType.DONE);
+            commandKeywords.Add("undone", CommandType.UNDONE);
             commandKeywords.Add("postpone", CommandType.POSTPONE);
             commandKeywords.Add("schedule", CommandType.SCHEDULE);
             commandKeywords.Add("exit", CommandType.EXIT);
@@ -479,12 +481,15 @@ namespace ToDo
         // ******************************************************************
 
         #region Update Dictionary With FlexiCommands
-        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords, Dictionary<string, TimeRangeType> passedTimeRangeType)
+        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords, 
+            Dictionary<string, TimeRangeType> passedTimeRangeType,Dictionary<TimeRangeKeywordsType, int> passedTimeRangeStartTime,Dictionary<TimeRangeKeywordsType, int> passedTimeRangeEndTime)
         {
             commandKeywords = passedCommandKeywords;
             contextKeywords = passedContextKeywords;
             timeRangeKeywords = passedTimeRangeKeywords;
             timeRangeType = passedTimeRangeType;
+            timeRangeKeywordsStartTime = passedTimeRangeStartTime;
+            timeRangeKeywordsEndTime = passedTimeRangeEndTime;
         }
         #endregion
     }

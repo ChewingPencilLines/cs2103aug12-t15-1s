@@ -36,8 +36,9 @@ namespace ToDo
             }
             // implement?: 
             // ReleaseUnusedTokens();
-            opAttributes.SetScheduleTime();
-            if (opAttributes.commandType != CommandType.SCHEDULE)
+            if (opAttributes.commandType == CommandType.SCHEDULE)
+                opAttributes.SetScheduleTime();
+            else if (opAttributes.commandType != CommandType.SCHEDULE)
             {
                 opAttributes.SetSearchTime();
             }
@@ -54,12 +55,12 @@ namespace ToDo
             DateTime? endCombined = opAttributes.endDateTime;
             DateTimeSpecificity isSpecific = opAttributes.isSpecific;
             bool isAll = opAttributes.rangeIsAll;
-            bool searchForIsDone = opAttributes.sortType == SortType.DONE_STATE ? true : false;
             string taskName = opAttributes.taskName;
             int[] taskIndex = opAttributes.rangeIndexes;
             int timeRangeIndex = opAttributes.timeRangeIndex;
             TimeRangeType timeRangeType = opAttributes.timeRangeType;
             SortType sortType = opAttributes.sortType;
+            SearchType searchType = opAttributes.searchDone;
 
             Task task;
             Operation newOperation = null;
@@ -70,7 +71,7 @@ namespace ToDo
                     newOperation = new OperationAdd(task);
                     break;
                 case CommandType.DELETE:
-                    newOperation = new OperationDelete(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll, searchForIsDone);
+                    newOperation = new OperationDelete(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll, searchType);
                     break;
                 case CommandType.DISPLAY:
                     newOperation = new OperationDisplayDefault();
@@ -80,7 +81,7 @@ namespace ToDo
                     newOperation = new OperationModify(taskIndex,task);
                     break;
                 case CommandType.SEARCH:
-                    newOperation = new OperationSearch(taskName, startCombined, endCombined, isSpecific, isAll, searchForIsDone);
+                    newOperation = new OperationSearch(taskName, startCombined, endCombined, isSpecific, isAll, searchType);
                     break;
                 case CommandType.SORT:
                     newOperation = new OperationSort(sortType);
@@ -93,6 +94,9 @@ namespace ToDo
                     break;
                 case CommandType.DONE:
                     newOperation = new OperationMarkAsDone(taskName,taskIndex,startCombined, isAll);
+                    break;
+                case CommandType.UNDONE:
+                    newOperation = new OperationMarkAsUndone(taskName,taskIndex,startCombined, isAll);
                     break;
                 case CommandType.POSTPONE:
                     newOperation = new OperationPostpone(taskName, taskIndex, startCombined, endCombined, isSpecific, isAll);

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Diagnostics;
 
 namespace ToDo
 {
-    class OperationMarkAsDone : Operation
+    class OperationMarkAsUndone : Operation
     {
         private int? index;
         private int? endindex;
@@ -26,7 +28,7 @@ namespace ToDo
         /// <param name="doneDate">The date in which to mark all tasks as done.</param>
         /// <param name="isAll">If this boolean is true, the current displayed tasks will all be marked as done.</param>
         /// <returns></returns>
-        public OperationMarkAsDone(string doneString, int[] indexRange, DateTime? doneDate, bool isAll)
+        public OperationMarkAsUndone(string doneString, int[] indexRange, DateTime? doneDate, bool isAll)
         {
             if (indexRange == null) this.index = null;
             else
@@ -156,3 +158,4 @@ namespace ToDo
         }
     } 
 }
+

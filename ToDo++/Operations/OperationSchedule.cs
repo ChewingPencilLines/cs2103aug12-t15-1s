@@ -24,10 +24,12 @@ namespace ToDo
             this.timeRangeIndex = timeRangeIndex;
             this.timeRangeType = timeRangeType;
         }
+
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
+            this.storageIO = storageIO;
             // default response: failure to schedule task
-            Response response = null;
+            Response response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             retrieveParameters();
             // check that range > span, else return failure response
             // (error response should be different from if no fitting slot can be found)
@@ -63,13 +65,14 @@ namespace ToDo
             DateTime tryEndTime = new DateTime();
             DateTime copyTryStartTime = startDateTime;
             DateTimeSpecificity searchSpecificity = new DateTimeSpecificity();
+            int index = 0;
             while (!isSlotFound && tryEndTime <= ((DateTime)endDateTime))
             {
                 int numberOfSetsToLoop = 1;
                 switch (timeRangeType)
                 {
                     case TimeRangeType.HOUR:
-                        tryStartTime = tryStartTime.AddHours(1);
+                        tryStartTime = startDateTime.AddHours(index);
                         tryEndTime = tryStartTime.AddHours(timeRangeIndex);
                         break;
                     case TimeRangeType.DAY:
@@ -89,7 +92,7 @@ namespace ToDo
                         tryEndTime = tryStartTime.AddDays(1).Add(((DateTime)endDateTime).TimeOfDay);
                     searchResults = SearchForTasks(taskList, null, searchSpecificity, false, tryStartTime, tryEndTime);
                     if (searchResults.Count != 0) break;
-                    tryStartTime = tryStartTime.AddDays(1);
+                    if (i < numberOfSetsToLoop-1) tryStartTime = tryStartTime.AddDays(1);
                 }
                 // once fitting time is found, change its start and end datetime then
                 // add the task; return success response
@@ -104,6 +107,7 @@ namespace ToDo
                     isSlotFound = true;
                 }
                 tryStartTime = copyTryStartTime.AddDays(1);
+                index++;
             }
             return response;
         }
@@ -161,6 +165,10 @@ namespace ToDo
                     else
                         endDateTime = startDateTime.AddMonths(1).Date;
                 }
+            }
+            if (startDateTime < DateTime.Now)
+            {
+                startDateTime = startDateTime.AddHours(DateTime.Now.Hour);
             }
         }
 

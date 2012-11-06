@@ -14,7 +14,9 @@ namespace ToDo
     {
 
         private UI ui;
-
+        bool collaspedState = false;
+        bool isShowingSettings = false;
+        
         /// <summary>
         /// Currently sets the Text Size of the OutputBox
         /// </summary>
@@ -28,25 +30,27 @@ namespace ToDo
         {
             InitializeComponent();
         }
-
-        int state = 0;
+       
         private void updownButton_Click(object sender, EventArgs e)
         {
-            if (state == 0)
+            if (collaspedState == false)
             {
-                ui.StartCollapserExpander();
-                updownButton.Image = Properties.Resources.downButton;
-                state = 1;
+                ui.ToggleCollapsedState();
+                collaspedState = true;
             }
             else
             {
-                ui.StartCollapserExpander();
-                updownButton.Image = Properties.Resources.upButton;
-                state = 0;
+                ui.ToggleCollapsedState();                
+                collaspedState = false;
             }
+        }
 
-            
-            
+        public void SetUpDownButton(bool isCollasped)
+        {
+            if(isCollasped)
+                updownButton.Image = Properties.Resources.downButton;
+            else
+                updownButton.Image = Properties.Resources.upButton;
         }
 
         private void minButton_Click(object sender, EventArgs e)
@@ -59,18 +63,20 @@ namespace ToDo
             ui.Exit();
         }
 
-        int settingsState = 0;
         private void settingsButton_Click(object sender, EventArgs e)
         {
-            if (settingsState == 0)
+            if (isShowingSettings == false)
             {
                 ui.SwitchToSettingsPanel();
-                settingsState = 1;
+                if (collaspedState == true)
+                    ui.ToggleCollapsedState();
+                isShowingSettings = true;
+                collaspedState = false;
             }
             else
             {
                 ui.SwitchToToDoPanel();
-                settingsState = 0;
+                isShowingSettings = false;
             }
         }
     }
