@@ -203,24 +203,25 @@
             // 
             // rangeController
             // 
-            this.rangeController.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rangeController.Cursor = System.Windows.Forms.Cursors.SizeWE;
             this.rangeController.DivisionNum = 24;
+            this.rangeController.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.rangeController.ForeColor = System.Drawing.Color.Black;
             this.rangeController.HeightOfBar = 5;
             this.rangeController.HeightOfMark = 24;
             this.rangeController.HeightOfTick = 5;
             this.rangeController.InnerColor = System.Drawing.Color.Black;
-            this.rangeController.Location = new System.Drawing.Point(8, 80);
+            this.rangeController.Location = new System.Drawing.Point(3, 82);
             this.rangeController.Name = "rangeController";
             this.rangeController.Orientation = Zzzz.ZzzzRangeBar.RangeBarOrientation.horizontal;
             this.rangeController.RangeMaximum = 4;
             this.rangeController.RangeMinimum = 3;
             this.rangeController.ScaleOrientation = Zzzz.ZzzzRangeBar.TopBottomOrientation.bottom;
-            this.rangeController.Size = new System.Drawing.Size(321, 51);
+            this.rangeController.Size = new System.Drawing.Size(394, 47);
             this.rangeController.TabIndex = 19;
             this.rangeController.TotalMaximum = 24;
             this.rangeController.TotalMinimum = 0;
+            this.rangeController.RangeChanged += new Zzzz.ZzzzRangeBar.RangeChangedEventHandler(this.rangeController_RangeChanged);
             // 
             // timeRangeTree
             // 
