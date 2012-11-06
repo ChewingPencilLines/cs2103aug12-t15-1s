@@ -262,7 +262,7 @@ namespace ToDo
                     newOperation = new OperationMarkAsDone(taskName, taskRangeIndex, startDateTime, rangeIsAll);
                     break;
                 case CommandType.UNDONE:
-                    newOperation = new OperationMarkAsUndone(taskName, taskRangeIndex, startDateTime, rangeIsAll);
+                    newOperation = new OperationMarkAsUndone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
                     break;
                 case CommandType.POSTPONE:
                     newOperation = new OperationPostpone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll);

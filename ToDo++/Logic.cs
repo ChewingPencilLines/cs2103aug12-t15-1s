@@ -71,6 +71,9 @@ namespace ToDo
             else
             {
                 Response feedback = ExecuteCommand(operation);
+
+                if (ui == null) return feedback;
+ 
                 if (taskList.Count == 0)
                     ui.SetMessageTaskListIsEmpty(true);
                 else
