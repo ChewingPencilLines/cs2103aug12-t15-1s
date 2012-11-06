@@ -14,7 +14,6 @@ namespace ToDo
 
         #region Attributes
         public CommandType commandType = new CommandType();
-        public DateTime? startDateTime = null, endDateTime = null;
         public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
         public TimeRangeType timeRangeType = new TimeRangeType();
         public TimeRangeKeywordsType timeRangeOne = new TimeRangeKeywordsType();
@@ -22,7 +21,7 @@ namespace ToDo
         public SortType sortType = new SortType();
         public SearchType searchDone = new SearchType();
         public string taskName = null;
-        public int[] rangeIndexes = null;
+        public int[] taskRangeIndex = null;
         public int timeRangeIndex = 0;
         public bool rangeIsAll = false;
         #endregion
@@ -34,21 +33,22 @@ namespace ToDo
         #region Properties For Operation Generation (Hidden)
         // The following properties are only used internally once set and hence cannot be "get".
         // Set as private to prevent confusion.
-        private TimeSpan? startTime = null, endTime = null;
+        private TimeSpan? startTimeOnly = null, endTimeOnly = null;
         private DateTime? startDateOnly = null, endDateOnly = null;
         private DayOfWeek? startDay = null, endDay = null;
-
+               
         // Setter methods
-        public TimeSpan? EndTime { set { endTime = value; } }
-        public TimeSpan? StartTime { set { startTime = value; } }
+        public TimeSpan? EndTimeOnly { set { endTimeOnly = value; } }
+        public TimeSpan? StartTimeOnly {set { startTimeOnly = value; } }
         public DateTime? EndDateOnly { set { endDateOnly = value; } }
         public DateTime? StartDateOnly { set { startDateOnly = value; } }
         public DayOfWeek? EndDay { set { endDay = value; } }
         public DayOfWeek? StartDay { set { startDay = value; } }
-
+        
         // The following attributes are used during derivation of Operation type and should not be otherwised used.
         public ContextType currentSpecifier = new ContextType();
         public ContextType currentMode = new ContextType();
+        private DateTime? startDateTime = null, endDateTime = null;
         #endregion
 
         public OperationAttributes()
@@ -64,7 +64,6 @@ namespace ToDo
             timeRangeOne = TimeRangeKeywordsType.NONE;
             timeRangeTwo = TimeRangeKeywordsType.NONE;            
         }
-
 
         public void SetTimes()
         {
@@ -82,15 +81,15 @@ namespace ToDo
 
         private void SetSearchTime()
         { // If searching only for a single time, assume it's the end time.
-                if (startTime != null && endTime == null && endDateOnly == null)
+                if (startTimeOnly != null && endTimeOnly == null && endDateOnly == null)
                 {
-                    endTime = startTime;
+                    endTimeOnly = startTimeOnly;
                     isSpecific.EndTime = isSpecific.StartTime;
-                    startTime = null;
+                    startTimeOnly = null;
                 }
 
                 // If searching for a single date, assume the whole range is that date.
-                if (startDateOnly != null && endDateOnly == null && startTime == null && endTime == null)
+                if (startDateOnly != null && endDateOnly == null && startTimeOnly == null && endTimeOnly == null)
                 {
                     endDateOnly = startDateOnly;
                     isSpecific.EndDate = isSpecific.StartDate;
@@ -114,30 +113,30 @@ namespace ToDo
                 }
                 // pick the correct start time and end time if other times were
                 // specified beyond the time range keywords i.e. by time tokens
-                if (startTime == null && endTime == null)
+                if (startTimeOnly == null && endTimeOnly == null)
                 {
-                    startTime = new TimeSpan(startTimeHour, 0, 0);
-                    endTime = new TimeSpan(endTimeHour, 0, 0);
+                    startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
+                    endTimeOnly = new TimeSpan(endTimeHour, 0, 0);
                 }
-                else if (startTime != null && endTime == null)
+                else if (startTimeOnly != null && endTimeOnly == null)
                 {
-                    if (((TimeSpan)startTime).Hours < endTimeHour
-                        && ((TimeSpan)startTime).Hours > startTimeHour)
+                    if (((TimeSpan)startTimeOnly).Hours < endTimeHour
+                        && ((TimeSpan)startTimeOnly).Hours > startTimeHour)
                     {
-                        endTime = startTime;
-                        startTime = new TimeSpan(startTimeHour, 0, 0);
+                        endTimeOnly = startTimeOnly;
+                        startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
                     }
                     else
                     {
                         // warn user that specified time is not within specified time range
                     }
                 }
-                else if (startTime != null && endTime != null)
+                else if (startTimeOnly != null && endTimeOnly != null)
                 {
-                    if (!(((TimeSpan)startTime).Hours < endTimeHour
-                        && ((TimeSpan)startTime).Hours > startTimeHour
-                        && ((TimeSpan)endTime).Hours < endTimeHour
-                        && ((TimeSpan)endTime).Hours > startTimeHour))
+                    if (!(((TimeSpan)startTimeOnly).Hours < endTimeHour
+                        && ((TimeSpan)startTimeOnly).Hours > startTimeHour
+                        && ((TimeSpan)endTimeOnly).Hours < endTimeHour
+                        && ((TimeSpan)endTimeOnly).Hours > startTimeHour))
                     {
                         // warn user that specified time is not within specified time range
                     }
@@ -154,11 +153,11 @@ namespace ToDo
         private void CombineDateTimes()
         {
             // Combine Date/Times
-            if (startTime == null)
+            if (startTimeOnly == null)
             {
                 isSpecific.StartTime = false;
             }
-            if (endTime == null)
+            if (endTimeOnly == null)
             {
                 isSpecific.EndTime = false;
             }
@@ -179,11 +178,11 @@ namespace ToDo
                 }
             }
 
-            startDateTime = CombineDateAndTime(startTime, startDateOnly, DateTime.Now);
+            startDateTime = CombineDateAndTime(startTimeOnly, startDateOnly, DateTime.Now);
             if (startDateTime == null)
-                endDateTime = CombineDateAndTime(endTime, endDateOnly, DateTime.Now);
+                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, DateTime.Now);
             else
-                endDateTime = CombineDateAndTime(endTime, endDateOnly, (DateTime)startDateTime);
+                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, (DateTime)startDateTime);
         }
 
         private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)
@@ -221,5 +220,107 @@ namespace ToDo
             */
             return combinedDT;
         }
+
+
+        // Create operation based on derived values, and whether they have been used.
+        public Operation CreateOperation()
+        {
+            Task task;
+            Operation newOperation = null;
+            switch (commandType)
+            {
+                case CommandType.ADD:
+                    task = GenerateNewTask(taskName, startDateTime, endDateTime, isSpecific);
+                    newOperation = new OperationAdd(task);
+                    break;
+                case CommandType.DELETE:
+                    newOperation = new OperationDelete(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
+                    break;
+                case CommandType.DISPLAY:
+                    newOperation = new OperationDisplayDefault();
+                    break;
+                case CommandType.MODIFY:
+                    task = GenerateNewTask(taskName, startDateTime, endDateTime, isSpecific);
+                    newOperation = new OperationModify(taskRangeIndex, task);
+                    break;
+                case CommandType.SEARCH:
+                    newOperation = new OperationSearch(taskName, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
+                    break;
+                case CommandType.SORT:
+                    newOperation = new OperationSort(sortType);
+                    break;
+                case CommandType.REDO:
+                    newOperation = new OperationRedo();
+                    break;
+                case CommandType.UNDO:
+                    newOperation = new OperationUndo();
+                    break;
+                case CommandType.DONE:
+                    newOperation = new OperationMarkAsDone(taskName, taskRangeIndex, startDateTime, rangeIsAll);
+                    break;
+                case CommandType.UNDONE:
+                    newOperation = new OperationMarkAsUndone(taskName, taskRangeIndex, startDateTime, rangeIsAll);
+                    break;
+                case CommandType.POSTPONE:
+                    newOperation = new OperationPostpone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll);
+                    break;
+                case CommandType.SCHEDULE:
+                    newOperation = new OperationSchedule(taskName, (DateTime)startDateTime, endDateTime, isSpecific, timeRangeIndex, timeRangeType);
+                    break;
+                case CommandType.EXIT:
+                    System.Environment.Exit(0);
+                    break;
+            }
+            return newOperation;
+        }
+
+        private static Task GenerateNewTask(
+            string taskName,
+            DateTime? startTime,
+            DateTime? endTime,
+            DateTimeSpecificity isSpecific
+            )
+        {
+            if (startTime == null && endTime == null)
+                return new TaskFloating(taskName);
+            else if (startTime == null && endTime != null)
+                return new TaskDeadline(taskName, (DateTime)endTime, isSpecific);
+            else if (startTime != null && endTime == null)
+            {
+                // If endTime is not specified set endTime based on startTime.
+                endTime = startTime;
+                if (!isSpecific.StartTime)
+                {
+                    endTime = ((DateTime)endTime).AddDays(1);
+                    endTime = ((DateTime)endTime).AddMinutes(-1);
+                }
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific);
+            }
+            else
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
+        }
+
+        internal void SetConditionalEndTime(TimeSpan Value, bool IsSpecific)
+        {
+            if (startTimeOnly == null && endTimeOnly != null)
+            {
+                this.startTimeOnly = this.endTimeOnly;
+                this.isSpecific.StartTime = this.isSpecific.EndTime;
+            }
+            this.endTimeOnly = Value;
+            this.isSpecific.EndTime = IsSpecific;
+        }
+
+        internal void SetConditionalEndDate(DateTime Value, Specificity IsSpecific)
+        {
+            if (startDateOnly == null && endDateOnly != null)
+            {
+                this.startDateOnly = this.endDateOnly;
+                this.isSpecific.StartDate = this.isSpecific.EndDate;
+            }
+            this.endDateOnly = Value;
+            this.isSpecific.EndDate = IsSpecific;
+        }
+        
     }
 }

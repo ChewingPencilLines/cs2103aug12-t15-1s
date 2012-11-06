@@ -31,7 +31,7 @@ namespace ToDo
             EventHandlers.UpdateSettingsHandler += UpdateSettings;
 
             stringParser = new StringParser();
-            commandParser = new CommandParser(ref stringParser);
+            commandParser = new CommandParser(stringParser);
 
             taskList = storage.LoadTasksFromFile();
             while (taskList == null)

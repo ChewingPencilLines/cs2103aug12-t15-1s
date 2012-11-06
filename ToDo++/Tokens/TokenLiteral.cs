@@ -9,10 +9,7 @@ namespace ToDo
     public class TokenLiteral : Token
     {
         string literal;
-        internal string Value
-        {
-            get { return literal; }
-        }
+
         internal TokenLiteral(int position, string val)
             : base(position)
         {
@@ -21,7 +18,7 @@ namespace ToDo
 
         internal override void UpdateAttributes(OperationAttributes attrb)
         {
-            attrb.taskName = Value;
+            attrb.taskName = literal;
         }
     }
 }
