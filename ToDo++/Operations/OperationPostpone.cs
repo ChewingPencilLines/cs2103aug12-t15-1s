@@ -152,6 +152,7 @@ namespace ToDo
             return response;
         }
 
+
         private List<Task> GenerateSearchResult(List<Task> taskList)
         {
             if (oldTime == null)
@@ -167,6 +168,29 @@ namespace ToDo
             return (from task in searchResults
                     where (task is TaskEvent || task is TaskDeadline)
                     select task).ToList();
+        }
+
+        protected Response PostponeTask(Task taskToPostpone, DateTime? NewDate)
+        {
+            //TaskId doesn't change though the sequence may change
+            Task taskPostponed = taskToPostpone.Postpone(NewDate);
+
+            if (taskPostponed == null)
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationPostpone));
+            else
+            {
+                TrackTask(taskToPostpone, false);
+                TrackTask(taskPostponed, true);
+                currentListedTasks.Remove(taskToPostpone);
+                currentListedTasks.Add(taskPostponed);
+            }
+            if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
+            {
+                return GenerateSuccessResponse(taskPostponed);
+                //return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationPostpone),currentListedTasks);
+            }
+            else
+                return new Response(Result.XML_READWRITE_FAIL);
         }
 
         public override Response Undo(List<Task> taskList, Storage storageIO)

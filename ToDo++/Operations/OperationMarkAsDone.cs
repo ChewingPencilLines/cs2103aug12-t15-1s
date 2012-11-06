@@ -130,6 +130,19 @@ namespace ToDo
             return response;
         }
 
+        protected Response MarkAsDone(Task taskToMarkAsDone)
+        {
+            undoTask.Push(taskToMarkAsDone);
+            taskToMarkAsDone.DoneState = true;
+
+            if (storageIO.MarkTaskAs(taskToMarkAsDone, true))
+            {
+                return GenerateSuccessResponse(taskToMarkAsDone);
+            }
+            else
+                return GenerateXMLFailureResponse();
+        }
+
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             Task task = undoTask.Pop();

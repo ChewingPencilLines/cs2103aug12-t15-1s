@@ -59,19 +59,12 @@ namespace ToDo
         {
             SetMembers(taskList, storageIO);
 
-            Response response = null;
-
             Func<Task, Response> action = DeleteTask;
             object[] args = null;
+            Response response = null;
 
-            // No tasks to delete
-            if (taskList.Count == 0)
-                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
-            // Invalid index ranges
-            else if (endIndex < startIndex)
-                return new Response(Result.INVALID_TASK, Format.DEFAULT);
-            else if (startIndex < 0 || endIndex > currentListedTasks.Count - 1)
-                return new Response(Result.INVALID_TASK, Format.DEFAULT);
+            response = CheckIfIndexesAreValid(startIndex, endIndex);
+            if (response != null) return response;
 
             if (!hasIndex)
                 response = ExecuteBySearch(
@@ -79,9 +72,7 @@ namespace ToDo
                     startTime, endTime, isSpecific, isAll, searchType, action, args);
 
             else if (hasIndex)
-            {
                 response = ExecuteByIndex(startIndex, endIndex, action, args);
-            }
 
             else
                 response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
@@ -91,6 +82,7 @@ namespace ToDo
 
             return response;
         }
+
         #endregion
 
         // ******************************************************************
