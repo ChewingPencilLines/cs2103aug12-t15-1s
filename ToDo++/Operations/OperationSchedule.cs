@@ -148,7 +148,6 @@ namespace ToDo
             }
             else if (!isSpecific.StartTime && !isSpecific.EndTime)
             {
-                startDateTime = startDateTime.AddHours(DateTime.Now.AddHours(1).Hour);
                 if (endDateTime != null)
                 {
                     if (isSpecific.EndDate.Day)
