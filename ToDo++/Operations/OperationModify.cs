@@ -106,11 +106,11 @@ namespace ToDo
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
-            Task taskToUndo = redoTask.Pop();
+            Task taskToRedo = redoTask.Pop();
             Task previousTask = redoTask.Pop();
-            undoTask.Push(taskToUndo);
+            undoTask.Push(taskToRedo);
             undoTask.Push(previousTask);
-            return ModifyTask(taskToUndo, previousTask, taskList);
+            return ModifyTask(taskToRedo, previousTask, taskList);
         }
     }
 }
