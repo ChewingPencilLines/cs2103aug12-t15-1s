@@ -85,6 +85,7 @@ namespace ToDo
 
         private Response MarkAsUndone(Task taskToMarkAsUndone)
         {
+            SetMembers(taskList, storageIO);
             undoTask.Push(taskToMarkAsUndone);
             taskToMarkAsUndone.DoneState = false;
 
@@ -100,6 +101,7 @@ namespace ToDo
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
+            SetMembers(taskList, storageIO);
             Task task = undoTask.Pop();
             redoTask.Push(task);
             task.DoneState = true;
