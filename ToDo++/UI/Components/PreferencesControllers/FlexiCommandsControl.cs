@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using BrightIdeasSoftware;
+using System.Drawing;
 
 namespace ToDo
 {
@@ -30,9 +30,7 @@ namespace ToDo
             LoadTimeKeywordRangeList();
             LoadTimeRangeList();
             LoadCommandList();
-            //this.rangeController.Enabled = false;
-            this.rangeController.RangeMaximum = 10;
-            this.rangeController.RangeMinimum = 5;
+            this.rangeController.Enabled = false;
         }
 
 
@@ -341,10 +339,9 @@ namespace ToDo
 
         private void UpdateTimeRangeUI()
         {
-
-            MessageBox.Show(this.settings.GetStartTime(selectedTimeRangeKeywordType).ToString());
             if (this.selectedTimeRangeKeywordType == TimeRangeKeywordsType.NIGHT)
             {
+                this.rangeController.InnerColor = Color.Gray;
                 this.rangeController.RangeMaximum = this.settings.GetStartTime(selectedTimeRangeKeywordType);
                 this.rangeController.RangeMinimum = this.settings.GetEndTime(selectedTimeRangeKeywordType);
             }
