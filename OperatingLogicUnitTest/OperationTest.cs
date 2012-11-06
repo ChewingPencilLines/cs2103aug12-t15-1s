@@ -10,6 +10,8 @@ namespace OperatingLogicUnitTest
     public class OperationTest
     {
         TaskFloating task = new TaskFloating("test", false, -1);
+        TaskFloating task1 = new TaskFloating("testa", false, -1);
+
         Storage storagetest;
         List<Task> taskList;
         Response result;
@@ -52,25 +54,12 @@ namespace OperatingLogicUnitTest
         }
 
         [TestMethod]
-        public void OperationUndoAddFailTest()
-        {
-            storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
-            taskList = storagetest.LoadTasksFromFile();
-
-            OperationAdd Op = new OperationAdd(task); 
-            result = Op.Undo(taskList, storagetest);
-            Assert.AreEqual(result.FeedbackString, "Cannot undo last executed operation!");
-            return;
-        }
-
-        [TestMethod]
         public void OperationDeleteTest()
         {        
             storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
             taskList = storagetest.LoadTasksFromFile();
 
-            int[] index= new int[2];
-            index[0] = 1; index[1] = 1;
+            int[] index= new int[2]{1,1};
             OperationAdd Op = new OperationAdd(task);
             Op.Execute(taskList, storagetest);
             OperationDelete Op1 = new OperationDelete("", index, null,null, null,false, SearchType.NONE);
@@ -79,6 +68,37 @@ namespace OperatingLogicUnitTest
             return;
         }
 
-        
+        [TestMethod]
+        public void OperationDeleteRangeFailTest()
+        {
+            storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
+            taskList = storagetest.LoadTasksFromFile();
+
+            int[] index = new int[2] { 1, 4 };
+            OperationAdd Op = new OperationAdd(task);
+            Op.Execute(taskList, storagetest);
+            OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE);
+            result = Op1.Execute(taskList, storagetest);
+            Assert.AreEqual(result.FeedbackString, "Invalid task index!");
+            return;
+        }
+
+        [TestMethod]
+        public void OperationDeleteMultipleTest()
+        {
+            storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
+            taskList = storagetest.LoadTasksFromFile();
+
+            int[] index = new int[2] { 1, 2 };
+            OperationAdd Op = new OperationAdd(task);
+            Op.Execute(taskList, storagetest);
+            Op = new OperationAdd(task1);
+            Op.Execute(taskList, storagetest);
+            OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE);
+            result = Op1.Execute(taskList, storagetest);
+            Assert.AreEqual(result.FeedbackString, "Deleted all tasks successfully.");
+            return;
+        }
+
     }
 }
