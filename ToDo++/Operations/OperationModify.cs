@@ -39,7 +39,8 @@ namespace ToDo
              *  after the commandtype, then all tasks will be shown.
              *  only when user input full information will modify operated.
              */
-            this.storageIO = storageIO;
+            SetMembers(taskList, storageIO);
+
             Response response;
             List<Task> searchResults;
             DateTimeSpecificity isSpecific = new DateTimeSpecificity();
@@ -50,7 +51,7 @@ namespace ToDo
             }
             else if (oldIndex.HasValue == false && newTask != null)
             {
-                searchResults = SearchForTasks(taskList, newTask.TaskName, isSpecific);
+                searchResults = SearchForTasks(newTask.TaskName, isSpecific);
                 currentListedTasks = searchResults;
                 response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
             }
@@ -58,7 +59,7 @@ namespace ToDo
             {
                 if (newTask != null)
                 {
-                    searchResults = SearchForTasks(taskList, newTask.TaskName, isSpecific);
+                    searchResults = SearchForTasks(newTask.TaskName, isSpecific);
                     currentListedTasks = new List<Task>(searchResults);
                     response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
                 }
@@ -82,7 +83,7 @@ namespace ToDo
                         newTask = new TaskDeadline(newTask.TaskName, ((TaskDeadline)taskToModify).EndDateTime,
                             ((TaskDeadline)taskToModify).isSpecific);
                     }
-                    response = ModifyTask(taskToModify, newTask, taskList);
+                    response = ModifyTask(taskToModify, newTask);
                 }
                 else
                     response = new Response(Result.INVALID_TASK, Format.DEFAULT);
@@ -97,20 +98,22 @@ namespace ToDo
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
+            SetMembers(taskList, storageIO);
             Task taskToUndo = undoTask.Pop();
             Task previousTask = undoTask.Pop();
             redoTask.Push(taskToUndo);
             redoTask.Push(previousTask);
-            return ModifyTask(taskToUndo, previousTask, taskList);
+            return ModifyTask(taskToUndo, previousTask);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
+            SetMembers(taskList, storageIO);
             Task taskToRedo = redoTask.Pop();
             Task previousTask = redoTask.Pop();
             undoTask.Push(taskToRedo);
             undoTask.Push(previousTask);
-            return ModifyTask(taskToRedo, previousTask, taskList);
+            return ModifyTask(taskToRedo, previousTask);
         }
     }
 }
