@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Operations\OperationMarkAsUndone.cs" />
+    <Compile Include="Operations\SearchDriver.cs" />
     <Compile Include="RoundButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
