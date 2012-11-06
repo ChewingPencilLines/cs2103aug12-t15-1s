@@ -13,14 +13,14 @@ namespace ToDo
             private bool stayOnTop;
             private int textSize;
             private string fontSelection;
-            
+
             public bool LoadOnStartup { get { return loadOnStartup; } set { loadOnStartup = value; } }
             public bool StartMinimized { get { return startMinimized; } set { startMinimized = value; } }
             public bool StayOnTop { get { return stayOnTop; } set { stayOnTop = value; } }
             public int TextSize { get { return textSize; } set { textSize = value; } }
             public string FontSelection { get { return fontSelection; } set { fontSelection = value; } }
 
-            public MiscSettings(bool _loadOnStartup, bool _startMinimized, bool _stayOnTop, int _textSize,string _fontSelection)
+            public MiscSettings(bool _loadOnStartup, bool _startMinimized, bool _stayOnTop, int _textSize, string _fontSelection)
             {
                 loadOnStartup = _loadOnStartup;
                 startMinimized = _startMinimized;
@@ -35,14 +35,18 @@ namespace ToDo
         public Dictionary<string, ContextType> userContextKeywords;
         public Dictionary<string, TimeRangeKeywordsType> userTimeRangeKeywordsType;
         public Dictionary<string, TimeRangeType> userTimeRangeType;
+        public Dictionary<TimeRangeKeywordsType, int> userTimeRangeKeywordsStartTime;
+        public Dictionary<TimeRangeKeywordsType, int> userTimeRangeKeywordsEndTime;
 
         public SettingInformation()
         {
-            misc = new MiscSettings(false, false, false, 9,"Arial");
+            misc = new MiscSettings(false, false, false, 9, "Arial");
             userCommandKeywords = CustomDictionary.GetCommandKeywords();
             userContextKeywords = CustomDictionary.GetContextKeywords();
             userTimeRangeKeywordsType = CustomDictionary.GetTimeRangeKeywordKeywords();
             userTimeRangeType = CustomDictionary.GetTimeRangeKeywords();
+            userTimeRangeKeywordsStartTime = CustomDictionary.GetTimeRangeStartTime();
+            userTimeRangeKeywordsEndTime = CustomDictionary.GetTimeRangeEndTime();
         }
 
         public bool ContainsFlexiCommandKeyword(string userKeyword, Enum flexiCommandType)

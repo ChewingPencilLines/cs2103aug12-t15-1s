@@ -287,6 +287,16 @@ namespace ToDo
             return sortTypeKeywords;
         }
 
+        public static Dictionary<TimeRangeKeywordsType, int> GetTimeRangeStartTime()
+        {
+            return timeRangeKeywordsStartTime;
+        }
+
+        public static Dictionary<TimeRangeKeywordsType, int> GetTimeRangeEndTime()
+        {
+            return timeRangeKeywordsEndTime;
+        }
+
         /*
         public static Dictionary<string, Month> GetMonthKeywords()
         {
