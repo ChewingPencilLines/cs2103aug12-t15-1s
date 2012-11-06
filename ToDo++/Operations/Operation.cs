@@ -170,7 +170,7 @@ namespace ToDo
             bool exact = false,
             DateTime? startTime = null,
             DateTime? endTime = null,
-            bool searchForIsDone = false
+            SearchType searchDone = SearchType.NONE
             )
         {
             List<Task> filteredTasks = taskList;
@@ -183,9 +183,16 @@ namespace ToDo
                 filteredTasks = (from task in filteredTasks
                                  where task.IsWithinTime(isSpecific, startTime, endTime)
                                  select task).ToList();
-            if (searchForIsDone)
-                filteredTasks = (from task in filteredTasks
-                                 where task.DoneState == true
+
+            bool doneMatch;
+            if (searchDone == SearchType.DONE)
+                doneMatch = true;
+            else if (searchDone == SearchType.UNDONE)
+                doneMatch = false;
+            else return filteredTasks; // don't sort anymore.
+                
+            filteredTasks = (from task in filteredTasks
+                                 where task.DoneState == doneMatch
                                  select task).ToList();
             return filteredTasks;
         }
@@ -202,15 +209,17 @@ namespace ToDo
             return new Response(Result.XML_READWRITE_FAIL);
         }
 
-        protected void SetArgumentsForFeedbackString(out string[] criteria, string searchString, DateTime? startTime, DateTime? endTime, bool searchForIsDone, bool isAll)
+        protected void SetArgumentsForFeedbackString(out string[] criteria, string searchString, DateTime? startTime, DateTime? endTime, SearchType searchDone, bool isAll)
         {
             criteria = new string[Response.SEARCH_PARAM_NUM];
             criteria[Response.SEARCH_PARAM_ALL] = "";
             criteria[Response.SEARCH_PARAM_DONE] = "";
             criteria[Response.SEARCH_PARAM_SEARCH_STRING] = "";
 
-            if (searchForIsDone == true)
+            if (searchDone == SearchType.DONE)
                 criteria[Response.SEARCH_PARAM_DONE] = "[DONE] ";
+            else if (searchDone == SearchType.UNDONE)
+                criteria[Response.SEARCH_PARAM_DONE] = "undone ";
             if (isAll == true)
                 criteria[Response.SEARCH_PARAM_ALL] = "all ";
 

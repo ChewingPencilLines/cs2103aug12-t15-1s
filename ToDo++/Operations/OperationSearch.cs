@@ -12,26 +12,26 @@ namespace ToDo
         private DateTime? startTime = null, endTime = null;
         private DateTimeSpecificity isSpecific;
         private bool isAll;
-        private bool searchForIsDone = false;
+        private SearchType searchDone;
 
-        public OperationSearch(string searchString, DateTime? startTime, DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, bool searchForIsDone)
+        public OperationSearch(string searchString, DateTime? startTime, DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchDone)
         {
             this.searchString = searchString;
             this.startTime = startTime;
             this.endTime = endTime;
             this.isSpecific = isSpecific;
             this.isAll = isAll;
-            this.searchForIsDone = searchForIsDone;
+            this.searchDone = searchDone;
         }
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
-            List<Task> searchResults = SearchForTasks(taskList, searchString, isSpecific, false, startTime, endTime, searchForIsDone);
+            List<Task> searchResults = SearchForTasks(taskList, searchString, isSpecific, false, startTime, endTime, searchDone);
             currentListedTasks = new List<Task>(searchResults);
 
             string[] criteria;
-            SetArgumentsForFeedbackString(out criteria, searchString, startTime, endTime, searchForIsDone, isAll);
+            SetArgumentsForFeedbackString(out criteria, searchString, startTime, endTime, searchDone, isAll);
 
             return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(),  currentListedTasks, criteria);
         }
