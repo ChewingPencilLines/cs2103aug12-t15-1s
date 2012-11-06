@@ -9,12 +9,7 @@ namespace ToDo
     public class TokenSortType : Token
     {
         SortType sortType;
-
-        internal SortType Value
-        {
-            get { return sortType; }
-        }
-
+        
         internal TokenSortType(int position, SortType val)
             : base(position)
         {
@@ -23,7 +18,7 @@ namespace ToDo
 
         internal override void UpdateAttributes(OperationAttributes attrb)
         {
-            attrb.sortType = Value;
+            attrb.sortType = sortType;
         }
 
     }
