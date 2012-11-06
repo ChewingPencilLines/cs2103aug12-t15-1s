@@ -16,10 +16,11 @@ namespace ToDo
         public CommandType commandType = new CommandType();
         public DateTime? startDateTime = null, endDateTime = null;
         public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
-        public TimeRangeType timeRangeType = TimeRangeType.DEFAULT;
-        public TimeRangeKeywordsType timeRangeOne = TimeRangeKeywordsType.NONE;
+        public TimeRangeType timeRangeType = new TimeRangeType();
+        public TimeRangeKeywordsType timeRangeOne = new TimeRangeKeywordsType();
+        public TimeRangeKeywordsType timeRangeTwo = new TimeRangeKeywordsType();
         public SortType sortType = new SortType();
-        public TimeRangeKeywordsType timeRangeTwo = TimeRangeKeywordsType.NONE;
+        public SearchType searchDone = new SearchType();
         public string taskName = null;
         public int[] rangeIndexes = null;
         public int timeRangeIndex = 0;
@@ -51,11 +52,17 @@ namespace ToDo
         #endregion
 
         public OperationAttributes()
+        
         {
+            // Initialize enumerations
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
             currentSpecifier = ContextType.CURRENT;
             sortType = SortType.DEFAULT;
+            searchDone = SearchType.NONE;        
+            timeRangeType = TimeRangeType.DEFAULT;
+            timeRangeOne = TimeRangeKeywordsType.NONE;
+            timeRangeTwo = TimeRangeKeywordsType.NONE;            
         }
 
         public void SetSearchTime()
@@ -63,6 +70,7 @@ namespace ToDo
             if (commandType == CommandType.SEARCH
                 || commandType == CommandType.DELETE
                 || commandType == CommandType.DONE
+                || commandType == CommandType.UNDONE
                 || commandType == CommandType.MODIFY)
             {
                 // If searching only for a single time, assume it's the end time.
@@ -73,8 +81,8 @@ namespace ToDo
                     startTime = null;
                 }
 
-                // If searching for a single date, assume the range is that date.
-                if (startDateOnly != null && endDateOnly == null)
+                // If searching for a single date, assume the whole range is that date.
+                if (startDateOnly != null && endDateOnly == null && startTime == null && endTime == null)
                 {
                     endDateOnly = startDateOnly;
                     isSpecific.EndDate = isSpecific.StartDate;

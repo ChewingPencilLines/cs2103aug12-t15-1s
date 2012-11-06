@@ -40,6 +40,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.timeRangeTree = new System.Windows.Forms.TreeView();
+            this.rangeController = new Zzzz.ZzzzRangeBar();
             this.removeButton = new ToDo.RoundButton();
             this.addButton = new ToDo.RoundButton();
             this.grouper1.SuspendLayout();
@@ -84,7 +85,7 @@
             this.descriptionLabel.ForeColor = System.Drawing.Color.Black;
             this.descriptionLabel.Location = new System.Drawing.Point(159, 58);
             this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(243, 71);
+            this.descriptionLabel.Size = new System.Drawing.Size(243, 58);
             this.descriptionLabel.TabIndex = 13;
             this.descriptionLabel.Text = "Please go ahead and select a command to see it\'s description";
             // 
@@ -190,6 +191,7 @@
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabPage3.Controls.Add(this.rangeController);
             this.tabPage3.Controls.Add(this.timeRangeTree);
             this.tabPage3.Controls.Add(this.timeRangeKeywordTree);
             this.tabPage3.Location = new System.Drawing.Point(4, 25);
@@ -210,6 +212,25 @@
             this.timeRangeTree.Size = new System.Drawing.Size(111, 68);
             this.timeRangeTree.TabIndex = 18;
             this.timeRangeTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.timeRangeTree_AfterSelect);
+            // 
+            // rangeController
+            // 
+            this.rangeController.DivisionNum = 23;
+            this.rangeController.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.rangeController.HeightOfBar = 8;
+            this.rangeController.HeightOfMark = 24;
+            this.rangeController.HeightOfTick = 6;
+            this.rangeController.InnerColor = System.Drawing.Color.Black;
+            this.rangeController.Location = new System.Drawing.Point(3, 84);
+            this.rangeController.Name = "rangeController";
+            this.rangeController.Orientation = Zzzz.ZzzzRangeBar.RangeBarOrientation.horizontal;
+            this.rangeController.RangeMaximum = 5;
+            this.rangeController.RangeMinimum = 3;
+            this.rangeController.ScaleOrientation = Zzzz.ZzzzRangeBar.TopBottomOrientation.bottom;
+            this.rangeController.Size = new System.Drawing.Size(394, 45);
+            this.rangeController.TabIndex = 19;
+            this.rangeController.TotalMaximum = 23;
+            this.rangeController.TotalMinimum = 0;
             // 
             // removeButton
             // 
@@ -272,5 +293,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TreeView timeRangeTree;
+        private Zzzz.ZzzzRangeBar rangeController;
     }
 }

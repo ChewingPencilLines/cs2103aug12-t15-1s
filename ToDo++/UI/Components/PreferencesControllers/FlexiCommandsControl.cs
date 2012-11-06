@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using BrightIdeasSoftware;
+using System.Drawing;
 
 namespace ToDo
 {
@@ -30,6 +30,7 @@ namespace ToDo
             LoadTimeKeywordRangeList();
             LoadTimeRangeList();
             LoadCommandList();
+            this.rangeController.Enabled = false;
         }
 
 
@@ -149,8 +150,6 @@ namespace ToDo
             commandTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("POSTPONE");
             commandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("SCHEDULE");
-            commandTree.Nodes.Add(treeNode);
         }
 
         private void LoadContextList()
@@ -226,6 +225,7 @@ namespace ToDo
             this.contextTree.SelectedNode = null;
             this.timeRangeKeywordTree.SelectedNode = null;
             this.timeRangeTree.SelectedNode = null;
+            this.rangeController.Enabled = false;
 
             this.selectedType = SelectedType.CommandSelected;
             string selected = commandTree.SelectedNode.Text;
@@ -240,6 +240,7 @@ namespace ToDo
             this.commandTree.SelectedNode = null;
             this.timeRangeKeywordTree.SelectedNode = null;
             this.timeRangeTree.SelectedNode = null;
+            this.rangeController.Enabled = false;
 
             this.commandTree.SelectedNode = null;
             this.selectedType = SelectedType.ContextSelected;
@@ -255,6 +256,7 @@ namespace ToDo
             this.commandTree.SelectedNode = null;
             this.contextTree.SelectedNode = null;
             this.timeRangeTree.SelectedNode = null;
+            this.rangeController.Enabled = true;
 
             this.commandTree.SelectedNode = null;
             this.selectedType = SelectedType.TimeRangeKeywordsSelected;
@@ -263,6 +265,7 @@ namespace ToDo
 
             UpdateFlexiCommandList();
             UpdateDescription();
+            UpdateTimeRangeUI();
         }
 
         private void timeRangeTree_AfterSelect(object sender, TreeViewEventArgs e)
@@ -270,6 +273,7 @@ namespace ToDo
             this.contextTree.SelectedNode = null;
             this.commandTree.SelectedNode = null;
             this.timeRangeKeywordTree.SelectedNode = null;
+            this.rangeController.Enabled = false;
 
             this.commandTree.SelectedNode = null;
             this.selectedType = SelectedType.TimeRangeSelected;
@@ -331,6 +335,21 @@ namespace ToDo
 
             foreach (string flexiCommand in this.selectedFlexiCommands)
                 listedFlexiCommands.Items.Add(flexiCommand);
+        }
+
+        private void UpdateTimeRangeUI()
+        {
+            if (this.selectedTimeRangeKeywordType == TimeRangeKeywordsType.NIGHT)
+            {
+                this.rangeController.InnerColor = Color.Gray;
+                this.rangeController.RangeMaximum = this.settings.GetStartTime(selectedTimeRangeKeywordType);
+                this.rangeController.RangeMinimum = this.settings.GetEndTime(selectedTimeRangeKeywordType);
+            }
+            else
+            {
+                this.rangeController.RangeMinimum = this.settings.GetStartTime(selectedTimeRangeKeywordType);
+                this.rangeController.RangeMaximum = this.settings.GetEndTime(selectedTimeRangeKeywordType);
+            }
         }
 
         private void AddFlexiCommandToSettings(string flexiCommand)
@@ -410,13 +429,12 @@ namespace ToDo
             descriptionLabel.Text = description;
         }
 
+        private void rangeController_RangeChanged(object sender, EventArgs e)
+        {
+
+        }
 
 
-    }
 
-    public class FlexiList
-    {
-        public string columnType;
-        public string flexiCommand;
     }
 }

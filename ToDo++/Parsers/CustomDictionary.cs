@@ -13,7 +13,7 @@ namespace ToDo
     // ******************************************************************
     // Enumerations
     // ******************************************************************
-    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, POSTPONE, SCHEDULE, EXIT, INVALID };
+    public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, UNDONE, POSTPONE, SCHEDULE, EXIT, INVALID };
     public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
     // unless otherwise stated in settings,
     // morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
@@ -21,6 +21,7 @@ namespace ToDo
     // default should be hours (1 hour), unless otherwise specified in settings
     public enum TimeRangeType { DEFAULT = 0, HOUR, DAY, MONTH };
     public enum SortType { DEFAULT, NAME, DATE_TIME, DONE_STATE };
+    public enum SearchType { NONE, DONE, UNDONE }
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
     static class CustomDictionary
@@ -139,6 +140,7 @@ namespace ToDo
             commandKeywords.Add("undo", CommandType.UNDO);
             commandKeywords.Add("redo", CommandType.REDO);
             commandKeywords.Add("done", CommandType.DONE);
+            commandKeywords.Add("undone", CommandType.UNDONE);
             commandKeywords.Add("postpone", CommandType.POSTPONE);
             commandKeywords.Add("schedule", CommandType.SCHEDULE);
             commandKeywords.Add("exit", CommandType.EXIT);
@@ -489,8 +491,8 @@ namespace ToDo
         // ******************************************************************
 
         #region Update Dictionary With FlexiCommands
-        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords,
-            Dictionary<string, TimeRangeType> passedTimeRangeType, Dictionary<TimeRangeKeywordsType, int> passedTimeRangeStartTime, Dictionary<TimeRangeKeywordsType, int> passedTimeRangeEndTime)
+        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords, 
+            Dictionary<string, TimeRangeType> passedTimeRangeType,Dictionary<TimeRangeKeywordsType, int> passedTimeRangeStartTime,Dictionary<TimeRangeKeywordsType, int> passedTimeRangeEndTime)
         {
             commandKeywords = passedCommandKeywords;
             contextKeywords = passedContextKeywords;

@@ -124,7 +124,7 @@
             this.pictureBox1.Enabled = false;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(522, 371);
+            this.pictureBox1.Size = new System.Drawing.Size(522, 355);
             this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;
             // 
@@ -137,7 +137,7 @@
             this.textInput.Cursor = System.Windows.Forms.Cursors.Hand;
             this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textInput.ForeColor = System.Drawing.Color.White;
-            this.textInput.Location = new System.Drawing.Point(11, 376);
+            this.textInput.Location = new System.Drawing.Point(11, 360);
             this.textInput.Name = "textInput";
             this.textInput.Size = new System.Drawing.Size(501, 19);
             this.textInput.TabIndex = 0;
@@ -155,7 +155,7 @@
             this.customPanelControl.Location = new System.Drawing.Point(7, 37);
             this.customPanelControl.Name = "customPanelControl";
             this.customPanelControl.SelectedIndex = 0;
-            this.customPanelControl.Size = new System.Drawing.Size(509, 328);
+            this.customPanelControl.Size = new System.Drawing.Size(509, 312);
             this.customPanelControl.TabIndex = 12;
             // 
             // tabPage1
@@ -165,7 +165,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(501, 302);
+            this.tabPage1.Size = new System.Drawing.Size(501, 286);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             // 
@@ -191,7 +191,7 @@
             this.taskListViewControl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.taskListViewControl.Location = new System.Drawing.Point(3, 3);
             this.taskListViewControl.Name = "taskListViewControl";
-            this.taskListViewControl.Size = new System.Drawing.Size(495, 296);
+            this.taskListViewControl.Size = new System.Drawing.Size(495, 280);
             this.taskListViewControl.TabIndex = 17;
             this.taskListViewControl.UseCellFormatEvents = true;
             this.taskListViewControl.UseCompatibleStateImageBehavior = false;
@@ -243,7 +243,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(501, 308);
+            this.tabPage2.Size = new System.Drawing.Size(501, 286);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Preferences";
             // 
@@ -273,7 +273,7 @@
             this.taskDisplay.Location = new System.Drawing.Point(4, 22);
             this.taskDisplay.Name = "taskDisplay";
             this.taskDisplay.Padding = new System.Windows.Forms.Padding(3);
-            this.taskDisplay.Size = new System.Drawing.Size(501, 308);
+            this.taskDisplay.Size = new System.Drawing.Size(501, 286);
             this.taskDisplay.TabIndex = 2;
             this.taskDisplay.Text = "Task Display";
             // 
@@ -421,7 +421,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Gray;
-            this.ClientSize = new System.Drawing.Size(522, 401);
+            this.ClientSize = new System.Drawing.Size(522, 385);
             this.Controls.Add(this.textInput);
             this.Controls.Add(this.customPanelControl);
             this.Controls.Add(this.topMenuControl);

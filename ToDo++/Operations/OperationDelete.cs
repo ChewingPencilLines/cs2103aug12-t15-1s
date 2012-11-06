@@ -18,7 +18,7 @@ namespace ToDo
         private int endIndex;
         private bool hasIndex;
         private bool isAll;
-        private bool searchForIsDone;
+        private SearchType searchDone;
         private string taskName;
         private DateTime? startTime = null, endTime = null;
         private DateTimeSpecificity isSpecific;
@@ -30,7 +30,7 @@ namespace ToDo
 
         #region Constructors
         public OperationDelete(string taskName, int[] indexRange, DateTime? startTime,
-            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, bool searchForIsDone)
+            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchDone)
         {
             if (indexRange == null) hasIndex = false;            
             else
@@ -45,7 +45,7 @@ namespace ToDo
             this.endTime = endTime;
             this.isSpecific = isSpecific;
             this.isAll = isAll;
-            this.searchForIsDone = searchForIsDone;
+            this.searchDone = searchDone;
         }
         #endregion
 
@@ -96,7 +96,7 @@ namespace ToDo
             searchResults = SearchForTasks(
                 taskList, taskName, isSpecific, 
                 isSpecific.StartTime && isSpecific.EndTime,
-                startTime, endTime, searchForIsDone
+                startTime, endTime, searchDone
                 );
 
             // If no results and not trying to display all, try non-exact search.
@@ -136,7 +136,7 @@ namespace ToDo
                 currentListedTasks = new List<Task>(searchResults);
 
                 string[] args;
-                SetArgumentsForFeedbackString(out args, taskName, startTime, endTime, searchForIsDone, isAll);
+                SetArgumentsForFeedbackString(out args, taskName, startTime, endTime, searchDone, isAll);
                 response =
                     new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, args);
             }
@@ -162,7 +162,7 @@ namespace ToDo
             currentListedTasks = new List<Task>(searchResults);
 
             string[] args;
-            SetArgumentsForFeedbackString(out args, taskName, startTime, endTime, searchForIsDone, isAll);
+            SetArgumentsForFeedbackString(out args, taskName, startTime, endTime, searchDone, isAll);
 
             return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, args);
         }

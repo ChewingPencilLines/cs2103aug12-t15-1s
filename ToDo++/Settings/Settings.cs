@@ -28,7 +28,7 @@ namespace ToDo
         public void UpdateSettings(SettingInformation updatedInfo)
         {
             settingInfo = updatedInfo;
-            CustomDictionary.UpdateDictionary(settingInfo.userCommandKeywords,settingInfo.userContextKeywords,settingInfo.userTimeRangeKeywordsType,settingInfo.userTimeRangeType,settingInfo.userTimeRangeKeywordsStartTime,settingInfo.userTimeRangeKeywordsEndTime);
+            CustomDictionary.UpdateDictionary(settingInfo.userCommandKeywords, settingInfo.userContextKeywords, settingInfo.userTimeRangeKeywordsType, settingInfo.userTimeRangeType, settingInfo.userTimeRangeKeywordsStartTime, settingInfo.userTimeRangeKeywordsEndTime);
         }
 
         // ******************************************************************
@@ -88,7 +88,7 @@ namespace ToDo
                         CommandType commandType = (CommandType)flexiCommandType;
                         if (settingInfo.ContainsFlexiCommandKeyword(newKeyword, commandType))
                             throw new RepeatCommandException("There is such a command in the list already");
-                        if(!ContainsRepeatKeywords(newKeyword))
+                        if (!ContainsRepeatKeywords(newKeyword))
                             throw new RepeatCommandException("There is such a command in other lists");
 
                         settingInfo.userCommandKeywords.Add(newKeyword, commandType);
@@ -269,6 +269,9 @@ namespace ToDo
             settingInfo.userTimeRangeKeywordsStartTime[timeRange] = startTime;
             settingInfo.userTimeRangeKeywordsEndTime[timeRange] = endTime;
         }
+
+        public int GetStartTime(TimeRangeKeywordsType timeRange) { return settingInfo.userTimeRangeKeywordsStartTime[timeRange]; }
+        public int GetEndTime(TimeRangeKeywordsType timeRange) { return settingInfo.userTimeRangeKeywordsEndTime[timeRange]; }
 
         #endregion
 

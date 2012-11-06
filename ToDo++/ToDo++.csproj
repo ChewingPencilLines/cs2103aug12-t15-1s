@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Operations\OperationMarkAsUndone.cs" />
     <Compile Include="RoundButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -298,6 +299,10 @@
     <ProjectReference Include="..\ObjectListView\ObjectListView2010.csproj">
       <Project>{18feda0c-d147-4286-b39a-01204808106a}</Project>
       <Name>ObjectListView2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZzzzRangeBar\ZzzzRangeBar.csproj">
+      <Project>{A47E495C-A50B-47E3-9148-D788B4E9C652}</Project>
+      <Name>ZzzzRangeBar</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
