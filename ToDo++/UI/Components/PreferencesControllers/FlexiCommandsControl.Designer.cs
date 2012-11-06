@@ -85,7 +85,7 @@
             this.descriptionLabel.ForeColor = System.Drawing.Color.Black;
             this.descriptionLabel.Location = new System.Drawing.Point(159, 58);
             this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(243, 71);
+            this.descriptionLabel.Size = new System.Drawing.Size(243, 58);
             this.descriptionLabel.TabIndex = 13;
             this.descriptionLabel.Text = "Please go ahead and select a command to see it\'s description";
             // 
@@ -220,17 +220,17 @@
             this.rangeController.HeightOfBar = 8;
             this.rangeController.HeightOfMark = 24;
             this.rangeController.HeightOfTick = 6;
-            this.rangeController.InnerColor = System.Drawing.Color.LightGreen;
-            this.rangeController.Location = new System.Drawing.Point(3, 77);
+            this.rangeController.InnerColor = System.Drawing.Color.Black;
+            this.rangeController.Location = new System.Drawing.Point(3, 84);
             this.rangeController.Name = "rangeController";
             this.rangeController.Orientation = Zzzz.ZzzzRangeBar.RangeBarOrientation.horizontal;
-            this.rangeController.RangeMaximum = 0;
-            this.rangeController.RangeMinimum = 24;
+            this.rangeController.RangeMaximum = 5;
+            this.rangeController.RangeMinimum = 3;
             this.rangeController.ScaleOrientation = Zzzz.ZzzzRangeBar.TopBottomOrientation.bottom;
-            this.rangeController.Size = new System.Drawing.Size(394, 52);
+            this.rangeController.Size = new System.Drawing.Size(394, 45);
             this.rangeController.TabIndex = 19;
-            this.rangeController.TotalMaximum = 0;
-            this.rangeController.TotalMinimum = 24;
+            this.rangeController.TotalMaximum = 23;
+            this.rangeController.TotalMinimum = 0;
             // 
             // removeButton
             // 

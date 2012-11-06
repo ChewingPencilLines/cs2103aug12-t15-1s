@@ -30,7 +30,9 @@ namespace ToDo
             LoadTimeKeywordRangeList();
             LoadTimeRangeList();
             LoadCommandList();
-            this.rangeController.Enabled = false;
+            //this.rangeController.Enabled = false;
+            this.rangeController.RangeMaximum = 10;
+            this.rangeController.RangeMinimum = 5;
         }
 
 
