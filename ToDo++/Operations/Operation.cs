@@ -140,17 +140,15 @@ namespace ToDo
 
         protected Response PostponeTask(Task taskToPostpone, List<Task> taskList, DateTime? NewDate)
         {
+            //TaskId doesn't change though the sequence may change
             Task taskPostponed = taskToPostpone.Postpone(NewDate);
+
             if (taskPostponed == null)
-            {
                 return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationPostpone));   
-            }
             else
             {
-                undoTask.Push(taskToPostpone);
-                taskList.Remove(taskToPostpone);
-                taskList.Add(taskPostponed);
-                undoTask.Push(taskPostponed);
+                TrackTask(taskList, taskToPostpone, false);
+                TrackTask(taskList, taskPostponed, true);
                 currentListedTasks.Remove(taskToPostpone);
                 currentListedTasks.Add(taskPostponed);
             }

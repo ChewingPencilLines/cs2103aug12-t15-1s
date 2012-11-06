@@ -65,15 +65,22 @@ namespace ToDo
             timeRangeTwo = TimeRangeKeywordsType.NONE;            
         }
 
-        public void SetSearchTime()
+
+        public void SetTimes()
         {
             if (commandType == CommandType.SEARCH
                 || commandType == CommandType.DELETE
                 || commandType == CommandType.DONE
                 || commandType == CommandType.UNDONE
                 || commandType == CommandType.MODIFY)
-            {
-                // If searching only for a single time, assume it's the end time.
+                SetSearchTime();
+            else
+                SetScheduleTime();
+            CombineDateTimes();
+        }
+
+        private void SetSearchTime()
+        { // If searching only for a single time, assume it's the end time.
                 if (startTime != null && endTime == null && endDateOnly == null)
                 {
                     endTime = startTime;
@@ -87,10 +94,9 @@ namespace ToDo
                     endDateOnly = startDateOnly;
                     isSpecific.EndDate = isSpecific.StartDate;
                 }
-            }
         }
 
-        public void SetScheduleTime()
+        private void SetScheduleTime()
         {
             if (timeRangeOne != TimeRangeKeywordsType.NONE)
             {
@@ -144,7 +150,7 @@ namespace ToDo
             // no time range token i.e. both are NONE
         }
 
-        public void CombineDateTimes()
+        private void CombineDateTimes()
         {
             // Combine Date/Times
             if (startTime == null)
@@ -177,6 +183,10 @@ namespace ToDo
                 endDateTime = CombineDateAndTime(endTime, endDateOnly, DateTime.Now);
             else
                 endDateTime = CombineDateAndTime(endTime, endDateOnly, (DateTime)startDateTime);
+            if (endDateTime < startDateTime)
+            {
+                endDateTime = ((DateTime)endDateTime).AddDays(1);
+            }
         }
 
         private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)

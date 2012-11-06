@@ -28,31 +28,33 @@ namespace ToDo
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
-            // default response: failure to schedule task
+            // default response: failure to schedule task i.e. cannot find fitting slot
             Response response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             retrieveParameters();
             // check that range > span, else return failure response
             // (error response should be different from if no fitting slot can be found)
+            TimeSpan span = ((DateTime)endDateTime) - startDateTime;
             switch (timeRangeType)
             {
                 case TimeRangeType.HOUR:
-                    int numberOfConsecutiveHours = ((DateTime)endDateTime).Hour - startDateTime.Hour;
-                    if (timeRangeIndex > numberOfConsecutiveHours)
+                    if (timeRangeIndex > span.TotalHours)
                     {
-                        // error
+                        // error: not enough time to schedule task; time span < task duration
+                        return response;
                     }
                     break;
                 case TimeRangeType.DAY:
-                    TimeSpan span = ((DateTime)endDateTime) - startDateTime;
                     if (timeRangeIndex > span.TotalDays)
                     {
-                        //error
+                        // error: not enough time to schedule task; time span < task duration
+                        return response;
                     }
                     break;
                 case TimeRangeType.MONTH:
                     if (startDateTime.AddMonths(timeRangeIndex) > ((DateTime)endDateTime))
                     {
-                        // error
+                        // error: not enough time to schedule task; time span < task duration
+                        return response;
                     }
                     break;
                 default:
@@ -76,28 +78,33 @@ namespace ToDo
                         tryEndTime = tryStartTime.AddHours(timeRangeIndex);
                         break;
                     case TimeRangeType.DAY:
-                        copyTryStartTime = tryStartTime;
                         numberOfSetsToLoop = timeRangeIndex;
                         break;
                     case TimeRangeType.MONTH:
-                        TimeSpan span = tryStartTime.AddMonths(timeRangeIndex) - tryStartTime;
-                        copyTryStartTime = tryStartTime;
+                        span = tryStartTime.AddMonths(timeRangeIndex) - tryStartTime;
                         numberOfSetsToLoop = (int)span.TotalDays;
                         break;
                 }
+                copyTryStartTime = tryStartTime;
                 List<Task> searchResults = new List<Task>();
+                if (numberOfSetsToLoop == 0)
+                {
+                    return response;
+                }
                 for (int i = 0; i < numberOfSetsToLoop; i++)
                 {
+                    if (i > 0) tryStartTime = tryStartTime.AddDays(1);
                     if (tryEndTime <= tryStartTime)
                         tryEndTime = tryStartTime.AddDays(1).Add(((DateTime)endDateTime).TimeOfDay);
                     searchResults = SearchForTasks(taskList, null, searchSpecificity, false, tryStartTime, tryEndTime);
                     if (searchResults.Count != 0) break;
-                    if (i < numberOfSetsToLoop-1) tryStartTime = tryStartTime.AddDays(1);
                 }
                 // once fitting time is found, change its start and end datetime then
                 // add the task; return success response
                 if (searchResults.Count == 0)
                 {
+                    if (tryEndTime > endDateTime)
+                        break;
                     TaskEvent newTask = new TaskEvent(taskName, copyTryStartTime, tryEndTime.AddSeconds(-1), searchSpecificity);
                     response = AddTask(newTask, taskList);
                     if (response.IsSuccessful())
@@ -148,7 +155,6 @@ namespace ToDo
             }
             else if (!isSpecific.StartTime && !isSpecific.EndTime)
             {
-                startDateTime = startDateTime.AddHours(DateTime.Now.AddHours(1).Hour);
                 if (endDateTime != null)
                 {
                     if (isSpecific.EndDate.Day)
