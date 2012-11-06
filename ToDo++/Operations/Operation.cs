@@ -11,15 +11,16 @@ namespace ToDo
     // ******************************************************************
     public abstract class Operation
     {
-        // Containers for keeping track of executed operations
+
+        #region Variables for task tracking/storage
         protected static List<Task> currentListedTasks;
         protected static Stack<Operation> undoStack;
         protected static Stack<Operation> redoStack;
         protected static Stack<Task> undoTask;
         protected static Stack<Task> redoTask;
-        protected Storage storageIO;
         protected List<Task> taskList;
-        //     protected bool successFlag;
+        protected Storage storageIO;
+        #endregion
 
         static Operation()
         {
@@ -28,6 +29,13 @@ namespace ToDo
             redoStack = new Stack<Operation>();
             undoTask = new Stack<Task>();
             redoTask = new Stack<Task>();
+        }
+
+        public abstract Response Execute(List<Task> taskList, Storage storageIO);
+
+        public static void UpdateCurrentListedTasks(List<Task> tasks)
+        {
+            currentListedTasks = tasks;
         }
 
         protected void SetMembers(List<Task> taskList, Storage storageIO)
@@ -42,20 +50,13 @@ namespace ToDo
             redoStack.Clear();
         }
 
-        private void TrackTask(Task task, bool isAdd)
+        protected void TrackTask(Task task, bool isAdd)
         {
             if (isAdd) taskList.Add(task);
             else taskList.Remove(task);
 
             undoTask.Push(task);
         }
-
-        public static void UpdateCurrentListedTasks(List<Task> tasks)
-        {
-            currentListedTasks = tasks;
-        }
-
-        public abstract Response Execute(List<Task> taskList, Storage storageIO);
 
         /// <summary>
         /// Base Undo Operation Method. All undoable operations should be override this method.
@@ -117,19 +118,6 @@ namespace ToDo
 
         }
 
-        protected Response MarkAsDone(Task taskToMarkAsDone)
-        {
-            undoTask.Push(taskToMarkAsDone);
-            taskToMarkAsDone.DoneState = true;
-
-            if (storageIO.MarkTaskAs(taskToMarkAsDone, true))
-            {
-                return GenerateSuccessResponse(taskToMarkAsDone);
-            }
-            else
-                return GenerateXMLFailureResponse();
-        }
-
         protected Response ModifyTask(Task taskToModify, Task newTask)
         {
             TrackTask(taskToModify, false);
@@ -143,29 +131,6 @@ namespace ToDo
             }
             else
                 return GenerateXMLFailureResponse();
-        }
-
-        protected Response PostponeTask(Task taskToPostpone, DateTime? NewDate)
-        {
-            //TaskId doesn't change though the sequence may change
-            Task taskPostponed = taskToPostpone.Postpone(NewDate);
-
-            if (taskPostponed == null)
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationPostpone));
-            else
-            {
-                TrackTask(taskToPostpone, false);
-                TrackTask(taskPostponed, true);
-                currentListedTasks.Remove(taskToPostpone);
-                currentListedTasks.Add(taskPostponed);
-            }
-            if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
-            {
-                return GenerateSuccessResponse(taskPostponed);
-                //return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationPostpone),currentListedTasks);
-            }
-            else
-                return new Response(Result.XML_READWRITE_FAIL);
         }
 
         protected List<Task> SearchForTasks(
@@ -200,46 +165,13 @@ namespace ToDo
                              select task).ToList();
             return filteredTasks;
         }
-
-        private Response GenerateSuccessResponse(Task task)
-        {
-            string[] args = new string[1];
-            args[0] = task.TaskName;
-            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks, args);
-        }
-
-        private Response GenerateXMLFailureResponse()
-        {
-            return new Response(Result.XML_READWRITE_FAIL);
-        }
-
-        protected void SetArgumentsForFeedbackString(out string[] criteria, string searchString, DateTime? startTime, DateTime? endTime, SearchType searchType, bool isAll)
-        {
-            criteria = new string[Response.SEARCH_PARAM_NUM];
-            criteria[Response.SEARCH_PARAM_ALL] = "";
-            criteria[Response.SEARCH_PARAM_DONE] = "";
-            criteria[Response.SEARCH_PARAM_SEARCH_STRING] = "";
-
-            if (searchType == SearchType.DONE)
-                criteria[Response.SEARCH_PARAM_DONE] = "[DONE] ";
-            else if (searchType == SearchType.UNDONE)
-                criteria[Response.SEARCH_PARAM_DONE] = "undone ";
-            if (isAll == true)
-                criteria[Response.SEARCH_PARAM_ALL] = "all ";
-
-            if (searchString != "" && searchString != null)
-                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " matching \"" + searchString + "\"";
-            if (startTime != null || endTime != null)
-                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " with time constraints";
-        }
         #endregion
-
-
+                
         // ****************************************************************************************
-        // Task Selection And Execution Methods
+        // Task Selection + Operation Execution Methods
         // ****************************************************************************************
 
-        #region Task Selection And Execution Methods
+        #region Task Selection + Operation Execution Methods
 
         // ******************************************************************
         // Search & Execute
@@ -265,7 +197,7 @@ namespace ToDo
 
             // If no results and not trying to display all, try non-exact search.
             if (searchResults.Count == 0 && !isAll)
-                response = TrySearchNonExact(ref searchResults, taskName, isSpecific);
+                response = TrySearchNonExact(taskName, isSpecific, startTime, endTime, searchType);
 
             // If only one result and is searching by name, delete immediately.
             else if (searchResults.Count == 1 && !(taskName == null || taskName == ""))
@@ -291,9 +223,17 @@ namespace ToDo
             return response;
         }
 
-        private Response TrySearchNonExact(ref List<Task> searchResults, string taskName, DateTimeSpecificity isSpecific)
+        private Response TrySearchNonExact(
+            string taskName,
+            DateTimeSpecificity isSpecific,
+            DateTime? startTime,
+            DateTime? endTime,
+            SearchType searchType
+            )
         {
             Response response = null;
+            List<Task> searchResults = new List<Task>();
+
             searchResults = SearchForTasks(taskName, isSpecific);
 
             if (searchResults.Count == 0)
@@ -303,7 +243,7 @@ namespace ToDo
                 currentListedTasks = new List<Task>(searchResults);
 
                 string[] stringArgs;
-                SetArgumentsForFeedbackString(out stringArgs, taskName, null, null, SearchType.NONE, false);
+                SetArgumentsForFeedbackString(out stringArgs, taskName, startTime, endTime, SearchType.NONE, false);
                 response =
                     new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, stringArgs);
             }
@@ -435,5 +375,64 @@ namespace ToDo
         
         #endregion
 
+        // ******************************************************************
+        // Response Generation Methods
+        // ******************************************************************
+
+        #region Response Generation Methods
+
+        protected Response CheckIfIndexesAreValid(int startIndex, int endIndex)
+        {
+            // No tasks to delete
+            if (taskList.Count == 0)
+                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
+            // Invalid index ranges
+            else if (endIndex < startIndex)
+                return new Response(Result.INVALID_TASK, Format.DEFAULT);
+            else if (startIndex < 0 || endIndex > currentListedTasks.Count - 1)
+                return new Response(Result.INVALID_TASK, Format.DEFAULT);
+            else return null;
+        }
+
+        protected Response GenerateSuccessResponse(Task task)
+        {
+            string[] args = new string[1];
+            args[0] = task.TaskName;
+            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks, args);
+        }
+
+        protected Response GenerateXMLFailureResponse()
+        {
+            return new Response(Result.XML_READWRITE_FAIL);
+        }
+
+        protected void SetArgumentsForFeedbackString(out string[] criteria, string searchString, DateTime? startTime, DateTime? endTime, SearchType searchType, bool isAll)
+        {
+            criteria = new string[Response.SEARCH_PARAM_NUM];
+            criteria[Response.SEARCH_PARAM_ALL] = "";
+            criteria[Response.SEARCH_PARAM_DONE] = "";
+            criteria[Response.SEARCH_PARAM_SEARCH_STRING] = "";
+
+            if (searchType == SearchType.DONE)
+                criteria[Response.SEARCH_PARAM_DONE] = "[DONE] ";
+            else if (searchType == SearchType.UNDONE)
+                criteria[Response.SEARCH_PARAM_DONE] = "undone ";
+            if (isAll == true)
+                criteria[Response.SEARCH_PARAM_ALL] = "all ";
+
+            if (searchString != "" && searchString != null)
+                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " matching \"" + searchString + "\"";
+            if (startTime != null || endTime != null)
+                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " within";
+            if (startTime != null)
+            {
+                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " " + ((DateTime)startTime).ToString("g");
+                if (endTime != null)
+                    criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " to";
+            }
+            if (endTime != null)
+                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " " + ((DateTime)startTime).ToString("g");
+        }
+        #endregion
     }
 }
