@@ -8,10 +8,7 @@ namespace ToDo
     public class TokenDay : Token
     {
         DayOfWeek dayOfWeek;
-        internal DayOfWeek Value
-        {
-            get { return dayOfWeek; }
-        }
+
         internal TokenDay(int position, DayOfWeek val)
             : base(position)
         {
@@ -23,17 +20,13 @@ namespace ToDo
             switch (attrb.currentMode)
             {
                 case ContextType.STARTTIME:
-                    attrb.StartDay = Value;
-                    // @ivan-todo: WarnUser if already determined startDate and startDay conflicts
-                    attrb.StartDateOnly = GetDateFromDay(attrb.currentSpecifier, (DayOfWeek)Value);
+                    attrb.StartDateOnly = GetDateFromDay(attrb.currentSpecifier, dayOfWeek);
                     break;
                 case ContextType.ENDTIME:
-                    attrb.EndDay = Value;
-                    attrb.EndDateOnly = GetDateFromDay(attrb.currentSpecifier, (DayOfWeek)Value);
+                    attrb.SetConditionalEndDate(GetDateFromDay(attrb.currentSpecifier, dayOfWeek), new Specificity());
                     break;
                 case ContextType.DEADLINE:
-                    attrb.EndDay = Value;
-                    attrb.EndDateOnly = GetDateFromDay(attrb.currentSpecifier, (DayOfWeek)Value);
+                    attrb.EndDateOnly = GetDateFromDay(attrb.currentSpecifier, dayOfWeek);
                     break;
                 default:
                     Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");

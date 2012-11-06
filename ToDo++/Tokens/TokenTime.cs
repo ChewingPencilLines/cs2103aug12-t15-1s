@@ -9,14 +9,7 @@ namespace ToDo
     {
         TimeSpan time;
         Boolean specific;
-        internal TimeSpan Value
-        {
-            get { return time; }
-        }
-        internal Boolean IsSpecific
-        {
-            get { return specific; }
-        }
+
         internal TokenTime(int position, TimeSpan val, Boolean specific_flag)
             : base(position)
         {
@@ -29,19 +22,18 @@ namespace ToDo
             switch (attrb.currentMode)
             {
                 case ContextType.STARTTIME:
-                    attrb.StartTime = Value;
-                    attrb.isSpecific.StartTime = IsSpecific;
+                    attrb.StartTimeOnly = time;
+                    attrb.isSpecific.StartTime = specific;
                     break;
                 case ContextType.ENDTIME:
-                    attrb.EndTime = Value;
-                    attrb.isSpecific.EndTime = IsSpecific;
+                    attrb.SetConditionalEndTime(time, specific);
                     break;
                 case ContextType.DEADLINE:
-                    attrb.EndTime = Value;
-                    attrb.isSpecific.EndTime = IsSpecific;
+                    attrb.EndTimeOnly = time;
+                    attrb.isSpecific.EndTime = specific;
                     break;
                 default:
-                    Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenTime case!");
+                    Debug.Assert(false, "Fell through switch statement in UpdateAttributes, TokenTime!");
                     break;
             }
         }

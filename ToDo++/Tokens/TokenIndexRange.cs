@@ -33,7 +33,7 @@ namespace ToDo
         {
             if (indexes != null)
             {
-                attrb.rangeIndexes = indexes;
+                attrb.taskRangeIndex = indexes;
             }
 
             attrb.rangeIsAll = isAll;
