@@ -28,7 +28,7 @@ namespace ToDo
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
-            // default response: failure to schedule task
+            // default response: failure to schedule task i.e. cannot find fitting slot
             Response response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             retrieveParameters();
             // check that range > span, else return failure response
@@ -39,18 +39,21 @@ namespace ToDo
                 case TimeRangeType.HOUR:
                     if (timeRangeIndex > span.TotalHours)
                     {
+                        // error: not enough time to schedule task; time span < task duration
                         return response;
                     }
                     break;
                 case TimeRangeType.DAY:
                     if (timeRangeIndex > span.TotalDays)
                     {
+                        // error: not enough time to schedule task; time span < task duration
                         return response;
                     }
                     break;
                 case TimeRangeType.MONTH:
                     if (startDateTime.AddMonths(timeRangeIndex) > ((DateTime)endDateTime))
                     {
+                        // error: not enough time to schedule task; time span < task duration
                         return response;
                     }
                     break;
@@ -100,6 +103,8 @@ namespace ToDo
                 // add the task; return success response
                 if (searchResults.Count == 0)
                 {
+                    if (tryEndTime > endDateTime)
+                        break;
                     TaskEvent newTask = new TaskEvent(taskName, copyTryStartTime, tryEndTime.AddSeconds(-1), searchSpecificity);
                     response = AddTask(newTask, taskList);
                     if (response.IsSuccessful())
