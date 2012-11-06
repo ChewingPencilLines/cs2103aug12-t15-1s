@@ -71,11 +71,11 @@ namespace ToDo
             if (!hasIndex)
                 response = DeleteBySearch(taskList);
 
-            else if (hasIndex)
-                response = DeleteByIndex(taskList);
-
             else if (isAll)
                 response = DeleteAllDisplayedTasks(taskList);
+
+            else if (hasIndex)
+                response = DeleteByIndex(taskList);
 
             else
                 response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());

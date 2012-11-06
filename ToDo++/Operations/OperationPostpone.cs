@@ -54,7 +54,7 @@ namespace ToDo
             this.storageIO = storageIO;
             Response response;
             List<Task> searchResults;
-            if (startIndex == null)
+            if (!hasIndex)
             {
                 if (oldTime == null)
                 {
