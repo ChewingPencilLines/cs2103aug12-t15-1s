@@ -84,6 +84,10 @@ namespace ToDo
                 }
                 copyTryStartTime = tryStartTime;
                 List<Task> searchResults = new List<Task>();
+                if (numberOfSetsToLoop == 0)
+                {
+                    return response;
+                }
                 for (int i = 0; i < numberOfSetsToLoop; i++)
                 {
                     if (i > 0) tryStartTime = tryStartTime.AddDays(1);

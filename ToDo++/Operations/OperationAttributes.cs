@@ -76,7 +76,6 @@ namespace ToDo
                 SetSearchTime();
             else
                 SetScheduleTime();
-
             CombineDateTimes();
         }
 
@@ -184,6 +183,10 @@ namespace ToDo
                 endDateTime = CombineDateAndTime(endTime, endDateOnly, DateTime.Now);
             else
                 endDateTime = CombineDateAndTime(endTime, endDateOnly, (DateTime)startDateTime);
+            if (endDateTime < startDateTime)
+            {
+                endDateTime = ((DateTime)endDateTime).AddDays(1);
+            }
         }
 
         private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)
