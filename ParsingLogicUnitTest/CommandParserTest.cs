@@ -11,7 +11,7 @@ namespace CommandParserTest
     {
         StringParser testStrParser;
         CommandParser testCmdParser;
-
+/*
         [TestMethod]
         public void OperationParseSearchDeadlineTest()
         {
