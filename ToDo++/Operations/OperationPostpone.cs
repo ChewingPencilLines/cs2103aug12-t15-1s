@@ -51,7 +51,7 @@ namespace ToDo
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
-            this.storageIO = storageIO;
+            SetMembers(taskList, storageIO);
             Response response;
 
             if (currentListedTasks.Count == 0)
@@ -84,7 +84,7 @@ namespace ToDo
             if (searchResults.Count == 0)
                 response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
             else if (searchResults.Count == 1)
-                response = PostponeTask(searchResults[0], taskList, postponeTime);
+                response = PostponeTask(searchResults[0], postponeTime);
             else
             {
                 if (isAll)
@@ -116,7 +116,7 @@ namespace ToDo
             Response response = null;
             foreach (Task task in searchResults)
             {
-                response = PostponeTask(task, taskList, postponeTime);
+                response = PostponeTask(task, postponeTime);
                 if (!response.IsSuccessful()) return response;
             }
             return response;
@@ -128,7 +128,7 @@ namespace ToDo
             if (taskToPostpone == null)
                 return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
             else
-                return PostponeTask(taskToPostpone, taskList, postponeTime);
+                return PostponeTask(taskToPostpone, postponeTime);
         }
 
         private Response PostponeMultipleTasks(List<Task> taskList)
@@ -145,7 +145,7 @@ namespace ToDo
                 else
                 {
                     // this is a hack. delete task range properly!
-                    response = PostponeTask(taskToPostpone, taskList, postponeTime);
+                    response = PostponeTask(taskToPostpone, postponeTime);
                     if (!response.IsSuccessful()) return response;
                 }
             }
@@ -157,12 +157,12 @@ namespace ToDo
             if (oldTime == null)
                 return SearchTimedTasks(taskList);
             else
-                return SearchForTasks(taskList, taskName, isSpecific, isSpecific.StartTime, oldTime);
+                return SearchForTasks(taskName, isSpecific, isSpecific.StartTime, oldTime);
         }
 
         private List<Task> SearchTimedTasks(List<Task> taskList)
         {
-            List<Task> searchResults = SearchForTasks(taskList, taskName, isSpecific);
+            List<Task> searchResults = SearchForTasks(taskName, isSpecific);
             //filter floating tasks
             return (from task in searchResults
                     where (task is TaskEvent || task is TaskDeadline)
@@ -171,11 +171,12 @@ namespace ToDo
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
+            SetMembers(taskList, storageIO);
             Task taskToUndo = undoTask.Pop();
             Task Undonetask = undoTask.Pop();
             redoTask.Push(taskToUndo);
             redoTask.Push(Undonetask);
-            Response response = ModifyTask(taskToUndo,Undonetask, taskList);
+            Response response = ModifyTask(taskToUndo,Undonetask);
             if (response.IsSuccessful())
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
             else
@@ -184,11 +185,12 @@ namespace ToDo
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
+            SetMembers(taskList, storageIO);
             Task taskToRedo = undoTask.Pop();
             Task Redonetask = undoTask.Pop();
             redoTask.Push(taskToRedo);
             redoTask.Push(Redonetask);
-            Response response = ModifyTask(taskToRedo, Redonetask, taskList);
+            Response response = ModifyTask(taskToRedo, Redonetask);
             if (response.IsSuccessful())
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
             else
