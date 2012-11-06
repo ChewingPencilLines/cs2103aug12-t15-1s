@@ -644,7 +644,7 @@ namespace ToDo
         private Token GetHighestPriorityToken(IEnumerable<Token> matches, List<Token> tokens)
         {
             Token highestPriorityToken = null;
-            var match = from eachToken in tokens
+            var tokensWhichRequireTimeRange = from eachToken in tokens
                         where eachToken.RequiresTimeRange()
                         select eachToken;
             foreach (Token token in matches)
@@ -653,7 +653,7 @@ namespace ToDo
                 {
                     highestPriorityToken = token;
                 }
-                else if (token.GetType() == typeof(TokenTimeRange))
+                else if (!(tokensWhichRequireTimeRange.Count() == 0 || token.GetType() == typeof(TokenTimeRange)))
                 {
                     highestPriorityToken = token;
                 }
