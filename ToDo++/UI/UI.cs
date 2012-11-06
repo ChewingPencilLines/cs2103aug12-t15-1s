@@ -634,6 +634,11 @@ namespace ToDo
                 Exit();
                 return true;
             }
+            if (keyData == (Keys.Control | Keys.Space))
+            {
+                this.ActiveControl = textInput;
+                return true;
+            }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 

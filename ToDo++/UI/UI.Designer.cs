@@ -29,17 +29,18 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
+            BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.timerCollapse = new System.Windows.Forms.Timer(this.components);
             this.timerExpand = new System.Windows.Forms.Timer(this.components);
             this.timerFadeIn = new System.Windows.Forms.Timer(this.components);
             this.timerFadeOut = new System.Windows.Forms.Timer(this.components);
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.grayFadePictureBox = new TranspControl.TranspControl();
             this.grayFadeTimer = new System.Windows.Forms.Timer(this.components);
             this.transpControl1 = new TranspControl.TranspControl();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.textInput = new ToDo.InputBox();
             this.customPanelControl = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -64,6 +65,7 @@
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.topMenuControl = new ToDo.TopMenuControl();
             taskDateTimeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.customPanelControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -76,13 +78,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
-            // 
-            // taskDateTimeCol
-            // 
-            taskDateTimeCol.AspectName = "GetTimeString";
-            taskDateTimeCol.CellPadding = null;
-            taskDateTimeCol.FillsFreeSpace = true;
-            taskDateTimeCol.Width = 199;
             // 
             // notifyIcon_taskBar
             // 
@@ -110,18 +105,6 @@
             // 
             this.timerFadeOut.Interval = 15;
             this.timerFadeOut.Tick += new System.EventHandler(this.timerFadeOut_Tick);
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox2.BackColor = System.Drawing.Color.DimGray;
-            this.pictureBox2.Enabled = false;
-            this.pictureBox2.Location = new System.Drawing.Point(-17, -4);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(539, 35);
-            this.pictureBox2.TabIndex = 16;
-            this.pictureBox2.TabStop = false;
             // 
             // grayFadePictureBox
             // 
@@ -164,6 +147,29 @@
             this.transpControl1.Size = new System.Drawing.Size(521, 367);
             this.transpControl1.TabIndex = 19;
             this.transpControl1.TranspKey = System.Drawing.Color.White;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Enabled = false;
+            this.pictureBox1.Image = global::ToDo.Properties.Resources.logo4;
+            this.pictureBox1.Location = new System.Drawing.Point(-2, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(250, 30);
+            this.pictureBox1.TabIndex = 20;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox2.BackColor = System.Drawing.Color.DimGray;
+            this.pictureBox2.Enabled = false;
+            this.pictureBox2.Location = new System.Drawing.Point(-17, -4);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(539, 35);
+            this.pictureBox2.TabIndex = 16;
+            this.pictureBox2.TabStop = false;
             // 
             // textInput
             // 
@@ -260,6 +266,13 @@
             this.taskNameCol.Width = 213;
             this.taskNameCol.WordWrap = true;
             // 
+            // taskDateTimeCol
+            // 
+            taskDateTimeCol.AspectName = "GetTimeString";
+            taskDateTimeCol.CellPadding = null;
+            taskDateTimeCol.FillsFreeSpace = true;
+            taskDateTimeCol.Width = 199;
+            // 
             // taskDoneStateCol
             // 
             this.taskDoneStateCol.AspectName = "DoneState";
@@ -283,7 +296,7 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(495, 292);
+            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
             this.preferencesPanel.TabIndex = 0;
             // 
             // taskDisplay
@@ -315,7 +328,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(495, 275);
+            this.outputBox.Size = new System.Drawing.Size(186, 275);
             this.outputBox.TabIndex = 28;
             this.outputBox.Text = "";
             // 
@@ -452,6 +465,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(522, 397);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.textInput);
             this.Controls.Add(this.customPanelControl);
             this.Controls.Add(this.topMenuControl);
@@ -467,6 +481,7 @@
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UI_MouseDown);
             this.Move += new System.EventHandler(this.UI_Move);
             this.Resize += new System.EventHandler(this.UI_Resize);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.customPanelControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -518,6 +533,7 @@
         private TranspControl.TranspControl grayFadePictureBox;
         private System.Windows.Forms.Timer grayFadeTimer;
         private TranspControl.TranspControl transpControl1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
