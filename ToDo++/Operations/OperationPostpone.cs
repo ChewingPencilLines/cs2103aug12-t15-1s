@@ -103,8 +103,6 @@ namespace ToDo
             Response response;
             if (endIndex == startIndex)
                 response = PostponeSingleTask(taskList);
-            else if (endIndex < 0 || endIndex > currentListedTasks.Count - 1)
-                response = new Response(Result.INVALID_TASK, Format.DEFAULT);
             else
                 response = PostponeMultipleTasks(taskList);
 
