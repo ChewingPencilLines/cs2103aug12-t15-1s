@@ -46,6 +46,7 @@ namespace ToDo
             InitializeTaskListView();
             this.ActiveControl = textInput;
             this.MouseWheel += new MouseEventHandler(ScrollIfOverDisplay);
+            grayFadePictureBox.Hide();
         }
 
         #endregion
@@ -313,23 +314,37 @@ namespace ToDo
         int setHeight;
         int prevHeight;
 
+        //         CONTROL COLLAPSE FLOW OF EVENTS        //
+        /*
+         * 1. Set Opacity of GrayFade to 0, Bring to Front
+         * 2. Start Fading in Gray (Controls Fade Out)
+         * 3. Hide all controls
+         * 4. Begin Collapse
+         * ------------------------------------------------
+         * 1. Begin Expand
+         * 2. Show all controls
+         * 3. Start Gray Fading (Controls Fade In)
+         * 4. Send Gray Fade to Back and Hide
+        */
+        //         CONTROL COLLAPSE FLOW OF EVENTS        //
+
         public void ToggleCollapsedState()
         {
             if (isCollapsed == false)
             {
-                setHeight = this.Height;
-                prevHeight = this.Height;
-                timerCollapse.Enabled = true;
-                timerExpand.Enabled = false;                
+                grayFadePictureBox.BringToFront();
                 isCollapsed = true;
+                grayFadePictureBox.Opacity = 0;
+                grayFadePictureBox.Show();
+                grayFadeTimer.Enabled = true;
             }
             else
             {
                 setHeight = 60;
+                isCollapsed = false;  
                 timerCollapse.Enabled = false;
                 timerExpand.Enabled = true;
-                this.MaximumSize = new System.Drawing.Size(1000, 1000);
-                isCollapsed = false;                
+                this.MaximumSize = new System.Drawing.Size(1000, 1000);              
             }
             topMenuControl.SetUpDownButton(isCollapsed);
         }
@@ -350,9 +365,43 @@ namespace ToDo
             setHeight += 20;
             if (setHeight >= prevHeight)
             {
+                grayFadePictureBox.Show();
+                taskListViewControl.Show();
+                preferencesPanel.Show();
                 timerExpand.Enabled = false;
+                grayFadeTimer.Enabled = true;
             }
             this.Height = setHeight;
+        }
+
+        private void grayFadeTimer_Tick(object sender, EventArgs e)
+        {
+            if (isCollapsed == true)
+            {
+                grayFadePictureBox.Opacity += 15;
+                if (grayFadePictureBox.Opacity == 100)
+                {
+                    grayFadeTimer.Enabled = false;
+                    taskListViewControl.Hide();
+                    preferencesPanel.Hide();
+                    grayFadePictureBox.Hide();
+
+                    setHeight = this.Height;
+                    prevHeight = this.Height;
+                    timerCollapse.Enabled = true;
+                    timerExpand.Enabled = false;
+                }
+            }
+            else
+            {
+                grayFadePictureBox.Opacity -= 15;
+                if (grayFadePictureBox.Opacity == 0)
+                {
+                    grayFadeTimer.Enabled = false;
+                    grayFadePictureBox.SendToBack();
+                    grayFadePictureBox.Hide();
+                }
+            }
         }
 
         #endregion
@@ -647,6 +696,7 @@ namespace ToDo
         {
             SetRowIndex(row);
             ColorRows(row);
+            //#FFDCDCDC
         }
 
         private static void SetRowIndex(BrightIdeasSoftware.FormatRowEventArgs row)
@@ -732,5 +782,7 @@ namespace ToDo
         {
             taskListViewControl.SetMessageTaskListIsEmpty(empty);
         }
+
+
     }
 }

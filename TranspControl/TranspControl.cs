@@ -232,56 +232,57 @@ namespace TranspControl
             //    DRAW YOUR SHAPE HERE   //
             ///////////////////////////////
 
-            //GraphicsPath shape = new GraphicsPath();
-            //GraphicsPath regionShape = new GraphicsPath();
-            //GraphicsPath innerShape = new GraphicsPath();
-            
-            //// Create a shape region for non glass mode
-            //regionShape.AddEllipse(bounds);
-            //Region region = new Region(regionShape);
+            GraphicsPath shape = new GraphicsPath();
+            GraphicsPath regionShape = new GraphicsPath();
+            GraphicsPath innerShape = new GraphicsPath();
 
-            //// Create the inner region for non glass mode
-            //RectangleF inner = bounds;
-            //inner.Inflate(-penWidth, -penWidth);
-            //inner.Inflate(-2.0f, -2.0f);
-            //innerShape.AddEllipse(inner);
-            //Region innerRegion = new Region(innerShape);
-         
-            //// Fill the region background
-            //if (GlassMode)
-            //{
-            //    Region = new Region();
-            //    if (GlassColor != Color.Transparent && Opacity > 0)
-            //    {
-            //        g.FillRegion(bckColor, Region);
-            //    }
-            //}
-            //else
-            //{             
-            //    // Make a hole inside the shape if FillColor is transparent
-            //    if (FillColor == Color.Transparent || Opacity == 0)
-            //    {
-            //        region.Exclude(innerRegion);       
-            //    }
-            //    Region = region;
-            //}
+            // Create a shape region for non glass mode
+            regionShape.AddRectangle(bounds);
+            Region region = new Region(regionShape);
 
-            //// Add a shape to the path
-            //bounds.Inflate(-1.0f, -1.0f); //fit the ellipse inside the region
-            //shape.AddEllipse(bounds);
+            // Create the inner region for non glass mode
+            RectangleF inner = bounds;
+            inner.Inflate(-penWidth, -penWidth);
+            inner.Inflate(-2.0f, -2.0f);
+            innerShape.AddRectangle(inner);
+            Region innerRegion = new Region(innerShape);
 
-            //// Fill the shape with a color
-            //if (FillColor != Color.Transparent && Opacity > 0)
-            //{
-            //    g.FillPath(brushColor, shape);
-            //}
+            // Fill the region background
+            if (GlassMode)
+            {
+                Region = new Region();
+                if (GlassColor != Color.Transparent && Opacity > 0)
+                {
+                    g.FillRegion(bckColor, Region);
+                }
+            }
+            else
+            {
+                // Make a hole inside the shape if FillColor is transparent
+                if (FillColor == Color.Transparent || Opacity == 0)
+                {
+                    region.Exclude(innerRegion);
+                }
+                Region = region;
+            }
 
-            //// Draw the shape outline
-            //bounds.Inflate(-penWidth / 2.0f, -penWidth / 2.0f);
-            //if (ForeColor != Color.Transparent && Opacity > 0)
-            //{
-            //    g.DrawEllipse(pen, bounds);
-            //}
+            // Add a shape to the path
+            bounds.Inflate(-1.0f, -1.0f); //fit the ellipse inside the region
+            shape.AddRectangle(bounds);
+
+            // Fill the shape with a color
+            if (FillColor != Color.Transparent && Opacity > 0)
+            {
+                g.FillPath(brushColor, shape);
+            }
+
+            // Draw the shape outline
+            bounds.Inflate(-penWidth / 2.0f, -penWidth / 2.0f);
+            if (ForeColor != Color.Transparent && Opacity > 0)
+            {
+                //g.DrawEllipse(pen, bounds);
+                
+            }
 
             ///////////////////////////////
             //       FREES MEMORY        //
