@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeVendor.Controls", "Grou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatTabControl", "FlatTabControl\FlatTabControl.csproj", "{96002CA1-D295-4ED5-9B08-92346C1BFA18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZzzzRangeBar", "..\..\..\Backup\RANGE\ZzzzRangeBar\ZzzzRangeBar.csproj", "{A47E495C-A50B-47E3-9148-D788B4E9C652}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZzzzRangeBar", "ZzzzRangeBar\ZzzzRangeBar.csproj", "{A47E495C-A50B-47E3-9148-D788B4E9C652}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

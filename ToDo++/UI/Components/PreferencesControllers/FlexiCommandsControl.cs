@@ -339,8 +339,18 @@ namespace ToDo
 
         private void UpdateTimeRangeUI()
         {
-            this.rangeController.RangeMinimum = this.settings.GetStartTime(selectedTimeRangeKeywordType);
-            this.rangeController.RangeMaximum = this.settings.GetEndTime(selectedTimeRangeKeywordType);
+
+            MessageBox.Show(this.settings.GetStartTime(selectedTimeRangeKeywordType).ToString());
+            if (this.selectedTimeRangeKeywordType == TimeRangeKeywordsType.NIGHT)
+            {
+                this.rangeController.RangeMaximum = this.settings.GetStartTime(selectedTimeRangeKeywordType);
+                this.rangeController.RangeMinimum = this.settings.GetEndTime(selectedTimeRangeKeywordType);
+            }
+            else
+            {
+                this.rangeController.RangeMinimum = this.settings.GetStartTime(selectedTimeRangeKeywordType);
+                this.rangeController.RangeMaximum = this.settings.GetEndTime(selectedTimeRangeKeywordType);
+            }
         }
 
         private void AddFlexiCommandToSettings(string flexiCommand)
@@ -422,8 +432,7 @@ namespace ToDo
 
         private void rangeController_RangeChanged(object sender, EventArgs e)
         {
-            MessageBox.Show(rangeController.RangeMinimum.ToString());
-            MessageBox.Show(rangeController.RangeMaximum.ToString());
+
         }
 
 
