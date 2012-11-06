@@ -300,6 +300,10 @@
       <Project>{18feda0c-d147-4286-b39a-01204808106a}</Project>
       <Name>ObjectListView2010</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TranspControl\TranspControl.csproj">
+      <Project>{984B6860-3AE3-420A-BB8D-BCE5AB333141}</Project>
+      <Name>TranspControl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ZzzzRangeBar\ZzzzRangeBar.csproj">
       <Project>{A47E495C-A50B-47E3-9148-D788B4E9C652}</Project>
       <Name>ZzzzRangeBar</Name>
