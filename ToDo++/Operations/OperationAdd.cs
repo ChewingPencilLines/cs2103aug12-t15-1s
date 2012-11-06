@@ -13,13 +13,14 @@ namespace ToDo
         }
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
-            this.storageIO = storageIO;
+            SetMembers(taskList, storageIO);
+
             Response response;
             if (newTask == null)
             {
                 return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
             }
-            response = AddTask(newTask, taskList);
+            response = AddTask(newTask);
             if (response.IsSuccessful())
             {
                 TrackOperation();
@@ -29,9 +30,11 @@ namespace ToDo
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
+            SetMembers(taskList, storageIO);
+
             Task task = undoTask.Pop();
             redoTask.Push(task);
-            Response response = DeleteTask(task, taskList);
+            Response response = DeleteTask(task);
             if (response.IsSuccessful())
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
             else
@@ -40,9 +43,11 @@ namespace ToDo
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
+            SetMembers(taskList, storageIO);
+
             Task task = redoTask.Pop();
             undoTask.Push(task);
-            Response response = AddTask(task, taskList);
+            Response response = AddTask(task);
             if (response.IsSuccessful())
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
             else

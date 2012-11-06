@@ -49,13 +49,14 @@ namespace ToDo
         // greedy sort
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
+            SetMembers(taskList, storageIO);
+
             DateTimeSpecificity isSpecific = new DateTimeSpecificity();
-            this.storageIO = storageIO;
             Response response;
             if (doneDate != null)
             {
                 response = null;
-                List<Task> searchResults = SearchForTasks(taskList, doneString, isSpecific, false, doneDate, doneDateEnd);
+                List<Task> searchResults = SearchForTasks(doneString, isSpecific, false, doneDate, doneDateEnd);
                 if (searchResults.Count == 0)
                 {
                     response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
@@ -70,7 +71,7 @@ namespace ToDo
             }
             else if (index.HasValue == false && doneString != null)
             {
-                List<Task> searchResults = SearchForTasks(taskList, doneString, isSpecific, true);
+                List<Task> searchResults = SearchForTasks(doneString, isSpecific, true);
                 if (searchResults.Count == 1)
                 {
                     response = MarkAsDone(currentListedTasks[0]);
@@ -84,7 +85,7 @@ namespace ToDo
                 }
                 else
                 {
-                    searchResults = SearchForTasks(taskList, doneString, isSpecific, false);
+                    searchResults = SearchForTasks(doneString, isSpecific, false);
                     if (searchResults.Count > 0)
                     {
                         currentListedTasks = new List<Task>(searchResults);
