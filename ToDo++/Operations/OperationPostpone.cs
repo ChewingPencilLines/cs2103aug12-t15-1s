@@ -8,37 +8,46 @@ namespace ToDo
 {
     class OperationPostpone : Operation
     {
-        private int? index;
-        private int? endindex;
+        // ******************************************************************
+        // Parameters
+        // ******************************************************************
+
+        #region Parameters
+        private int startIndex;
+        private int endIndex;
+        private bool hasIndex;
         private bool isAll;
         private string taskName;
         private DateTime? oldTime = null, postponeTime = null;
         private DateTimeSpecificity isSpecific = new DateTimeSpecificity();
+        #endregion Parameters
 
         public OperationPostpone(string taskName, int[] indexRange, DateTime? startTime,
-            DateTime? postponeTime, DateTimeSpecificity isSpecific,bool isAll)
+            DateTime? postponeTime, DateTimeSpecificity isSpecific, bool isAll)
         {
             this.oldTime = startTime;
             this.postponeTime = postponeTime;
+            this.isAll = isAll;
+            this.isSpecific = isSpecific;
+            if (indexRange == null) hasIndex = false;
+            else
+            {
+                hasIndex = true;
+                this.startIndex = indexRange[TokenIndexRange.START_INDEX] - 1;
+                this.endIndex = indexRange[TokenIndexRange.END_INDEX] - 1;
+            }
+            if (taskName == null) this.taskName = "";
+            else this.taskName = taskName;
 
             //alter for only one date in command as the postpone date
-            if ((indexRange != null || taskName != null|| isAll ==true) && postponeTime == null && startTime != null)
+            if ((indexRange != null || taskName != null || isAll == true) && postponeTime == null && startTime != null)
             {
                 this.oldTime = postponeTime;
                 this.postponeTime = startTime;
                 this.isSpecific.StartTime = isSpecific.EndTime;
                 this.isSpecific.EndTime = isSpecific.StartTime;
             }
-            this.isSpecific = isSpecific;
-            if (indexRange == null) this.index = null;
-            else
-            {
-                this.index = indexRange[TokenIndexRange.START_INDEX] - 1;
-                this.endindex = indexRange[TokenIndexRange.END_INDEX] - 1;
-            }
-            if (taskName == null) this.taskName = "";
-            else this.taskName = taskName;
-            this.isAll = isAll;
+           
 
         }
 
@@ -47,7 +56,7 @@ namespace ToDo
             this.storageIO = storageIO;
             Response response;
             List<Task> searchResults;
-            if (index == null)
+            if (startIndex == null)
             {
                 if (oldTime == null)
                 {
@@ -89,28 +98,28 @@ namespace ToDo
                     }
                 }
             }
-            else if (index < 0 || index > currentListedTasks.Count - 1)
+            else if (startIndex < 0 || startIndex > currentListedTasks.Count - 1)
             {
                 response = new Response(Result.INVALID_TASK, Format.DEFAULT);
             }
             else
             {
-                if (endindex == index)
+                if (endIndex == startIndex)
                 {
-                    Task taskToPostpone = currentListedTasks[index.Value];
+                    Task taskToPostpone = currentListedTasks[startIndex.Value];
                     if (taskToPostpone == null)
                         response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
                     else
                         response = PostponeTask(taskToPostpone, taskList, postponeTime);
                 }
-                else if (endindex < 0 || endindex > currentListedTasks.Count - 1)
+                else if (endIndex < 0 || endIndex > currentListedTasks.Count - 1)
                 {
                     response = new Response(Result.INVALID_TASK, Format.DEFAULT);
                 }
                 else
                 {
                     response = null;
-                    for (int? i = index; i <= endindex; i++)
+                    for (int? i = startIndex; i <= endIndex; i++)
                     {
                         Task taskToPostpone = currentListedTasks[i.Value];
 
