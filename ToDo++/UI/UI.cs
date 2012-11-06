@@ -600,23 +600,6 @@ namespace ToDo
         }
         */
 
-        /// <summary>
-        /// When Up/Down Keys Pressed
-        /// </summary>
-        private void textInput_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            e.IsInputKey = true;
-            if (e.KeyCode == Keys.Up)
-            {
-                textInput.UpdateWithPrevCommand();
-            }
-
-            if (e.KeyCode == Keys.Down)
-            {
-                textInput.UpdateWithNextCommand();
-            }
-        }
-
         #endregion
 
         // ******************************************************************
@@ -638,6 +621,21 @@ namespace ToDo
             if (keyData == (Keys.Control | Keys.Space))
             {
                 this.ActiveControl = textInput;
+                return true;
+            }
+            if ((keyData == (Keys.Control | Keys.Up)) || (keyData == (Keys.Control | Keys.Down)))
+            {
+                topMenuControl.CollapseExpandToDo();
+                return true;
+            }
+            if (keyData == Keys.Up)
+            {
+                textInput.UpdateWithPrevCommand();
+                return true;
+            }
+            if (keyData == Keys.Down)
+            {
+                textInput.UpdateWithNextCommand();
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);

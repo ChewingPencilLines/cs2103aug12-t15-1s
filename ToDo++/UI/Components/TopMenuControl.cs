@@ -33,16 +33,7 @@ namespace ToDo
        
         private void updownButton_Click(object sender, EventArgs e)
         {
-            if (collaspedState == false)
-            {
-                ui.ToggleCollapsedState();
-                collaspedState = true;
-            }
-            else
-            {
-                ui.ToggleCollapsedState();                
-                collaspedState = false;
-            }
+            CollapseExpandFunction();
         }
 
         public void SetUpDownButton(bool isCollasped)
@@ -77,6 +68,25 @@ namespace ToDo
             {
                 ui.SwitchToToDoPanel();
                 isShowingSettings = false;
+            }
+        }
+
+        public void CollapseExpandToDo()
+        {
+            CollapseExpandFunction();
+        }
+
+        private void CollapseExpandFunction()
+        {
+            if (collaspedState == false)
+            {
+                ui.ToggleCollapsedState();
+                collaspedState = true;
+            }
+            else
+            {
+                ui.ToggleCollapsedState();
+                collaspedState = false;
             }
         }
 
