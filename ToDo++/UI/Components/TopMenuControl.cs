@@ -79,5 +79,13 @@ namespace ToDo
                 isShowingSettings = false;
             }
         }
+
+        private void questionButton_MouseEnter(object sender, EventArgs e)
+        {
+            questionButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            questionButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+        }
+
+
     }
 }
