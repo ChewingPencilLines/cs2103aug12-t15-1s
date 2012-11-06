@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Drawing;
 
 namespace ToDo
 {
@@ -47,6 +48,15 @@ namespace ToDo
         public bool GetStayOnTopStatus() { return settingInfo.misc.StayOnTop; }
         public void SetFontSelection(string font) { settingInfo.misc.FontSelection = font; EventHandlers.UpdateSettings(settingInfo); }
         public string GetFontSelection() { return settingInfo.misc.FontSelection; }
+
+        public void SetTaskDoneColor(Color col) { settingInfo.misc.TaskDoneColor = col; EventHandlers.UpdateSettings(settingInfo); }
+        public Color GetTaskDoneColor() { return settingInfo.misc.TaskDoneColor; }
+        public void SetTaskDeadlineColor(Color col) { settingInfo.misc.TaskDeadlineColor = col; EventHandlers.UpdateSettings(settingInfo); }
+        public Color GetTaskDeadlineColor() { return settingInfo.misc.TaskDeadlineColor; }
+        public void SetTaskDeadlineDayColor(Color col) { settingInfo.misc.TaskDeadlineDayColor = col; EventHandlers.UpdateSettings(settingInfo); }
+        public Color GetTaskDeadlineDayColor() { return settingInfo.misc.TaskDeadlineDayColor; }
+        public void SetTaskEventColor(Color col) { settingInfo.misc.TaskEventColor = col; EventHandlers.UpdateSettings(settingInfo); }
+        public Color GetTaskEventColor() { return settingInfo.misc.TaskEventColor; }
 
         #endregion;
 
