@@ -19,15 +19,17 @@ namespace ToDo
     // morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
     public enum TimeRangeKeywordsType { MORNING, AFTERNOON, EVENING, NIGHT, NONE };
     // default should be hours (1 hour), unless otherwise specified in settings
-    public enum TimeRangeType { DEFAULT = 0, HOUR, DAY, MONTH };
+    public enum TimeRangeType { DEFAULT = 0, HOUR, DAY, WEEK, MONTH };
     public enum SortType { DEFAULT, NAME, DATE_TIME, DONE_STATE };
     public enum SearchType { NONE, DONE, UNDONE }
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
     static class CustomDictionary
     {
-        static public TimeRangeType defaultTimeRangeType = TimeRangeType.HOUR;
-        static public int defaultTimeRangeIndex = 1;
+        static public int hoursInADay = 24;
+        static public int daysInAWeek = 7;
+        static public int defaultScheduleTimeLength = 1;
+        static public TimeRangeType defaultScheduleTimeLengthType = TimeRangeType.HOUR;
         static public Dictionary<string, CommandType> commandKeywords;
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;
@@ -108,7 +110,7 @@ namespace ToDo
             new Regex(@"^(((?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?)|((?<start>\d?\d?\d)\-))$");
 
         static public Regex isTimeRange =
-               new Regex(@"^(?<index>(\d*) )?(?<type>(h(?:ou)?r(?:s)?|day(?:s)?|m(?:on)?th(?:s)?))$");
+               new Regex(@"^(?<index>(\d*) )?(?<type>(h(?:ou)?r(?:s)?|day(?:s)?|w(?:ee)?k(?:s)?|m(?:on)?th(?:s)?))$");
         #endregion
 
         static CustomDictionary()
@@ -231,6 +233,10 @@ namespace ToDo
             timeRangeType.Add("hr", TimeRangeType.HOUR);
             timeRangeType.Add("days", TimeRangeType.DAY);
             timeRangeType.Add("day", TimeRangeType.DAY);
+            timeRangeType.Add("week", TimeRangeType.WEEK);
+            timeRangeType.Add("wk", TimeRangeType.WEEK);
+            timeRangeType.Add("weeks", TimeRangeType.WEEK);
+            timeRangeType.Add("wks", TimeRangeType.WEEK);
             timeRangeType.Add("months", TimeRangeType.MONTH);
             timeRangeType.Add("month", TimeRangeType.MONTH);
             timeRangeType.Add("mths", TimeRangeType.MONTH);
