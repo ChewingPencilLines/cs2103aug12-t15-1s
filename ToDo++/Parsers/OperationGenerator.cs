@@ -319,8 +319,11 @@ namespace ToDo
                         case TimeRangeType.DAY:
                             postponeDuration = new TimeSpan(timeRangeIndex, 0, 0, 0);
                             break;
+                        case TimeRangeType.WEEK:
+                            postponeDuration = new TimeSpan(timeRangeIndex * CustomDictionary.DAYS_IN_WEEK, 0, 0, 0);
+                            break;
                         case TimeRangeType.MONTH:
-                            postponeDuration = new TimeSpan(timeRangeIndex*30, 0, 0, 0);
+                            postponeDuration = new TimeSpan(timeRangeIndex * CustomDictionary.DAYS_IN_MONTH, 0, 0, 0);
                             break;
                         default:
                             break;
