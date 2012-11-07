@@ -108,13 +108,9 @@ namespace ToDo
             return timeString;
         }
 
-        public override Task Postpone(DateTime? NewDate)
+        public override bool Postpone(TimeSpan postponeDuration)
         {
-            TaskDeadline result;
-            if (NewDate == null)
-                result = new TaskDeadline(this.taskName, this.endDateTime.AddDays(1), this.isSpecific, this.doneState);
-            else
-                result = new TaskDeadline(this.taskName, NewDate.Value, this.isSpecific, this.doneState);
+            bool result = true;
             return result;
         }
 

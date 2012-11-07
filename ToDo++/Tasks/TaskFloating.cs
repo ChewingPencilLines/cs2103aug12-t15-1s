@@ -28,12 +28,7 @@ namespace ToDo
         {
             return false;
         }
-
-        public override Task Postpone(DateTime? NewDate)
-        {
-            return base.Postpone(NewDate);
-        }
-
+        
         public override void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific)
         {
             startTime = null;
