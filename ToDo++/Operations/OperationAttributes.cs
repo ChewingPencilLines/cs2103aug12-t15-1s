@@ -1,0 +1,328 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ToDo
+{
+    class OperationAttributes
+    {
+        // ******************************************************************
+        // Operation Attributes
+        // ******************************************************************
+
+        #region Attributes
+        public CommandType commandType = new CommandType();
+        public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
+        public TimeRangeType timeRangeType = new TimeRangeType();
+        public TimeRangeKeywordsType timeRangeOne = new TimeRangeKeywordsType();
+        public TimeRangeKeywordsType timeRangeTwo = new TimeRangeKeywordsType();
+        public SortType sortType = new SortType();
+        public SearchType searchDone = new SearchType();
+        public string taskName = null;
+        public int[] taskRangeIndex = null;
+        public int timeRangeIndex = 0;
+        public bool rangeIsAll = false;
+        #endregion
+
+        // ******************************************************************
+        // Properties For Operation Generation
+        // ******************************************************************
+
+        #region Properties For Operation Generation (Hidden)
+        // The following properties are only used internally once set and hence cannot be "get".
+        // Set as private to prevent confusion.
+        private TimeSpan? startTimeOnly = null, endTimeOnly = null;
+        private DateTime? startDateOnly = null, endDateOnly = null;
+        private DayOfWeek? startDay = null, endDay = null;
+               
+        // Setter methods
+        public TimeSpan? EndTimeOnly { set { endTimeOnly = value; } }
+        public TimeSpan? StartTimeOnly {set { startTimeOnly = value; } }
+        public DateTime? EndDateOnly { set { endDateOnly = value; } }
+        public DateTime? StartDateOnly { set { startDateOnly = value; } }
+        public DayOfWeek? EndDay { set { endDay = value; } }
+        public DayOfWeek? StartDay { set { startDay = value; } }
+        
+        // The following attributes are used during derivation of Operation type and should not be otherwised used.
+        public ContextType currentSpecifier = new ContextType();
+        public ContextType currentMode = new ContextType();
+        private DateTime? startDateTime = null, endDateTime = null;
+        #endregion
+
+        public OperationAttributes()
+        
+        {
+            // Initialize enumerations
+            commandType = CommandType.INVALID;
+            currentMode = ContextType.STARTTIME;
+            currentSpecifier = ContextType.CURRENT;
+            sortType = SortType.DEFAULT;
+            searchDone = SearchType.NONE;        
+            timeRangeType = TimeRangeType.DEFAULT;
+            timeRangeOne = TimeRangeKeywordsType.NONE;
+            timeRangeTwo = TimeRangeKeywordsType.NONE;            
+        }
+
+        public void SetTimes()
+        {
+            if (commandType == CommandType.SEARCH
+                || commandType == CommandType.DELETE
+                || commandType == CommandType.DONE
+                || commandType == CommandType.UNDONE
+                || (commandType == CommandType.MODIFY && taskRangeIndex == null))
+                SetSearchTime();
+            else
+                SetScheduleTime();
+            CombineDateTimes();
+        }
+
+        private void SetSearchTime()
+        { // If searching only for a single time, assume it's the end time.
+                if (startTimeOnly != null && endTimeOnly == null && endDateOnly == null)
+                {
+                    endTimeOnly = startTimeOnly;
+                    isSpecific.EndTime = isSpecific.StartTime;
+                    startTimeOnly = null;
+                }
+
+                // If searching for a single date, assume the whole range is that date.
+                if (startDateOnly != null && endDateOnly == null && startTimeOnly == null && endTimeOnly == null)
+                {
+                    endDateOnly = startDateOnly;
+                    isSpecific.EndDate = isSpecific.StartDate;
+                }
+        }
+
+        private void SetScheduleTime()
+        {
+            if (timeRangeOne != TimeRangeKeywordsType.NONE)
+            {
+                int startTimeHour, endTimeHour;
+                // getting values from specified time range keywords
+                CustomDictionary.timeRangeKeywordsStartTime.TryGetValue(timeRangeOne, out startTimeHour);
+                if (timeRangeTwo != TimeRangeKeywordsType.NONE)
+                {
+                    CustomDictionary.timeRangeKeywordsEndTime.TryGetValue(timeRangeTwo, out endTimeHour);
+                }
+                else
+                {
+                    CustomDictionary.timeRangeKeywordsEndTime.TryGetValue(timeRangeOne, out endTimeHour);
+                }
+                // pick the correct start time and end time if other times were
+                // specified beyond the time range keywords i.e. by time tokens
+                if (startTimeOnly == null && endTimeOnly == null)
+                {
+                    startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
+                    endTimeOnly = new TimeSpan(endTimeHour, 0, 0);
+                }
+                else if (startTimeOnly != null && endTimeOnly == null)
+                {
+                    if (((TimeSpan)startTimeOnly).Hours < endTimeHour
+                        && ((TimeSpan)startTimeOnly).Hours > startTimeHour)
+                    {
+                        endTimeOnly = startTimeOnly;
+                        startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
+                    }
+                    else
+                    {
+                        // warn user that specified time is not within specified time range
+                    }
+                }
+                else if (startTimeOnly != null && endTimeOnly != null)
+                {
+                    if (!(((TimeSpan)startTimeOnly).Hours < endTimeHour
+                        && ((TimeSpan)startTimeOnly).Hours > startTimeHour
+                        && ((TimeSpan)endTimeOnly).Hours < endTimeHour
+                        && ((TimeSpan)endTimeOnly).Hours > startTimeHour))
+                    {
+                        // warn user that specified time is not within specified time range
+                    }
+                }
+            }
+            if (startDateOnly == null)
+            {
+                startDateOnly = DateTime.Today;
+            }
+            // start time and end time will stil be null if there is no time token &
+            // no time range token i.e. both are NONE
+        }
+
+        private void CombineDateTimes()
+        {
+            // Combine Date/Times
+            if (startTimeOnly == null)
+            {
+                isSpecific.StartTime = false;
+            }
+            if (endTimeOnly == null)
+            {
+                isSpecific.EndTime = false;
+            }
+            // If only one date is specified, we assume both dates is that date.
+            if (isSpecific.StartTime && isSpecific.EndTime)
+            {
+                // assign start date to end date
+                if (startDateOnly == null && endDateOnly != null)
+                {
+                    startDateOnly = endDateOnly;
+                    isSpecific.StartDate = isSpecific.EndDate;
+                }
+                // assign end date to start date
+                else if (startDateOnly != null && endDateOnly == null)
+                {
+                    endDateOnly = startDateOnly;
+                    isSpecific.EndDate = isSpecific.StartDate;
+                }
+            }
+
+            startDateTime = CombineDateAndTime(startTimeOnly, startDateOnly, DateTime.Now);
+            if (startDateTime == null)
+                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, DateTime.Now);
+            else
+                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, (DateTime)startDateTime);
+            if (endDateTime < startDateTime)
+            {
+                endDateTime = ((DateTime)endDateTime).AddDays(1);
+            }
+        }
+
+        private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)
+        {
+            DateTime? combinedDT = null;
+            // Time defined but not date
+            if (date == null && time != null)
+            {
+                TimeSpan limitTime = limit.TimeOfDay;
+                TimeSpan taskTime = (TimeSpan)time;
+                combinedDT = new DateTime(limit.Year, limit.Month, limit.Day, taskTime.Hours, taskTime.Minutes, taskTime.Seconds);
+                if (limitTime > time)
+                {
+                    combinedDT = ((DateTime)combinedDT).AddDays(1);
+                }
+            }
+            // Date and Time both defined
+            else if (date != null && time != null)
+            {
+                DateTime setDate = (DateTime)date;
+                TimeSpan setTime = (TimeSpan)time;
+                combinedDT = new DateTime(setDate.Year, setDate.Month, setDate.Day, setTime.Hours, setTime.Minutes, setTime.Seconds);
+            }
+            // Date defined but not time
+            else if (time == null && date != null)
+            {
+                combinedDT = date;
+            }
+            /*
+            if (limit > combinedDT)
+                if (combinedDT != new DateTime(0001, 1, 1)
+                    && this.commandType == CommandType.ADD
+                    && this.commandType == CommandType.SCHEDULE)
+                    AlertBox.Show("Note that date specified is past.");
+            */
+            return combinedDT;
+        }
+
+
+        // Create operation based on derived values, and whether they have been used.
+        public Operation CreateOperation()
+        {
+            Task task;
+            Operation newOperation = null;
+            switch (commandType)
+            {
+                case CommandType.ADD:
+                    task = GenerateNewTask(taskName, startDateTime, endDateTime, isSpecific);
+                    newOperation = new OperationAdd(task);
+                    break;
+                case CommandType.DELETE:
+                    newOperation = new OperationDelete(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
+                    break;
+                case CommandType.DISPLAY:
+                    newOperation = new OperationDisplayDefault();
+                    break;
+                case CommandType.MODIFY:
+                    newOperation = new OperationModify(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
+                    break;
+                case CommandType.SEARCH:
+                    newOperation = new OperationSearch(taskName, startDateTime, endDateTime, isSpecific, searchDone);
+                    break;
+                case CommandType.SORT:
+                    newOperation = new OperationSort(sortType);
+                    break;
+                case CommandType.REDO:
+                    newOperation = new OperationRedo();
+                    break;
+                case CommandType.UNDO:
+                    newOperation = new OperationUndo();
+                    break;
+                case CommandType.DONE:
+                    newOperation = new OperationMarkAsDone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
+                    break;
+                case CommandType.UNDONE:
+                    newOperation = new OperationMarkAsUndone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
+                    break;
+                case CommandType.POSTPONE:
+                    newOperation = new OperationPostpone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll);
+                    break;
+                case CommandType.SCHEDULE:
+                    newOperation = new OperationSchedule(taskName, (DateTime)startDateTime, endDateTime, isSpecific, timeRangeIndex, timeRangeType);
+                    break;
+                case CommandType.EXIT:
+                    System.Environment.Exit(0);
+                    break;
+            }
+            return newOperation;
+        }
+
+        public static Task GenerateNewTask(
+            string taskName,
+            DateTime? startTime,
+            DateTime? endTime,
+            DateTimeSpecificity isSpecific
+            )
+        {
+            if (startTime == null && endTime == null)
+                return new TaskFloating(taskName);
+            else if (startTime == null && endTime != null)
+                return new TaskDeadline(taskName, (DateTime)endTime, isSpecific);
+            else if (startTime != null && endTime == null)
+            {
+                // If endTime is not specified set endTime based on startTime.
+                endTime = startTime;
+                if (!isSpecific.StartTime)
+                {
+                    endTime = ((DateTime)endTime).AddDays(1);
+                    endTime = ((DateTime)endTime).AddMinutes(-1);
+                }
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific);
+            }
+            else
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
+        }
+
+        internal void SetConditionalEndTime(TimeSpan Value, bool IsSpecific)
+        {
+            if (startTimeOnly == null && endTimeOnly != null)
+            {
+                this.startTimeOnly = this.endTimeOnly;
+                this.isSpecific.StartTime = this.isSpecific.EndTime;
+            }
+            this.endTimeOnly = Value;
+            this.isSpecific.EndTime = IsSpecific;
+        }
+
+        internal void SetConditionalEndDate(DateTime Value, Specificity IsSpecific)
+        {
+            if (startDateOnly == null && endDateOnly != null)
+            {
+                this.startDateOnly = this.endDateOnly;
+                this.isSpecific.StartDate = this.isSpecific.EndDate;
+            }
+            this.endDateOnly = Value;
+            this.isSpecific.EndDate = IsSpecific;
+        }
+        
+    }
+}
