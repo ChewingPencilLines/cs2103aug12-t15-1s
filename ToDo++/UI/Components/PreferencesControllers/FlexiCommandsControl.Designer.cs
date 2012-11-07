@@ -166,6 +166,7 @@
             this.flatTabControl1.SelectedIndex = 0;
             this.flatTabControl1.Size = new System.Drawing.Size(408, 161);
             this.flatTabControl1.TabIndex = 17;
+            this.flatTabControl1.SelectedIndexChanged += new System.EventHandler(this.flatTabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
