@@ -89,29 +89,37 @@ namespace ToDo
         // Overrides for Undoing and Redoing this operation
         // ******************************************************************
 
-        #region UndoRedo
+        #region Undo and Redo
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Task task = undoTask.Pop();
-            redoTask.Push(task);
-            Response response = AddTask(task);
-            if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
-            else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+
+            Response response = null;
+
+            for (int i = 0; i < executedTasks.Count; i++)
+            {
+                Task taskToUndo = executedTasks.Dequeue();
+                response = AddTask(taskToUndo);
+                if (!response.IsSuccessful())
+                    return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            }
+            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Task task = redoTask.Pop();
-            undoTask.Push(task);
-            Response response = DeleteTask(task);
-            if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
-            else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+
+            Response response = null;
+
+            for (int i = 0; i < executedTasks.Count; i++)
+            {
+                Task taskToUndo = executedTasks.Dequeue();
+                response = DeleteTask(taskToUndo);
+                if (!response.IsSuccessful())
+                    return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            }
+            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
         }
         #endregion
     }

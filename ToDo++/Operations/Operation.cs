@@ -16,8 +16,7 @@ namespace ToDo
         protected static List<Task> currentListedTasks;
         protected static Stack<Operation> undoStack;
         protected static Stack<Operation> redoStack;
-        protected static Stack<Task> undoTask;
-        protected static Stack<Task> redoTask;
+        protected Queue<Task> executedTasks;
         protected List<Task> taskList;
         protected Storage storageIO;
         #endregion
@@ -27,8 +26,11 @@ namespace ToDo
             currentListedTasks = new List<Task>();
             undoStack = new Stack<Operation>();
             redoStack = new Stack<Operation>();
-            undoTask = new Stack<Task>();
-            redoTask = new Stack<Task>();
+        }
+
+        protected Operation()
+        {
+            executedTasks = new Queue<Task>();
         }
 
         public abstract Response Execute(List<Task> taskList, Storage storageIO);
@@ -48,14 +50,6 @@ namespace ToDo
         {
             undoStack.Push(this);
             redoStack.Clear();
-        }
-
-        protected void TrackTask(Task task, bool isAdd)
-        {
-            if (isAdd) taskList.Add(task);
-            else taskList.Remove(task);
-
-            undoTask.Push(task);
         }
 
         /// <summary>
@@ -86,7 +80,8 @@ namespace ToDo
         {
             try
             {
-                TrackTask(taskToAdd, true);
+                taskList.Add(taskToAdd);
+                executedTasks.Enqueue(taskToAdd);
                 bool success = storageIO.AddTaskToFile(taskToAdd);
                 if (success)
                 {
@@ -106,8 +101,11 @@ namespace ToDo
 
         protected Response DeleteTask(Task taskToDelete)
         {
-            TrackTask(taskToDelete, false);
-            currentListedTasks.Remove(taskToDelete);
+            taskList.Remove(taskToDelete);
+            executedTasks.Enqueue(taskToDelete);
+    
+            if(currentListedTasks.Contains(taskToDelete))
+                currentListedTasks.Remove(taskToDelete);
 
             if (storageIO.RemoveTaskFromFile(taskToDelete))
             {
@@ -120,8 +118,8 @@ namespace ToDo
 
         protected Response ModifyTask(Task taskToModify, Task newTask)
         {
-            TrackTask(taskToModify, false);
-            TrackTask(newTask, true);
+            DeleteTask(taskToModify);
+            AddTask(newTask);
 
             if (storageIO.ModifyTask(taskToModify, newTask))
             {
@@ -165,8 +163,23 @@ namespace ToDo
                              select task).ToList();
             return filteredTasks;
         }
+
+        protected Response MarkTaskAs(Task taskToMark, bool doneState)
+        {            
+            SetMembers(taskList, storageIO);
+            taskToMark.DoneState = doneState;
+            executedTasks.Enqueue(taskToMark);
+
+            if (storageIO.MarkTaskAs(taskToMark, doneState))
+            {
+                return GenerateSuccessResponse(taskToMark);
+            }
+            else
+                return GenerateXMLFailureResponse();
+        }
+        
         #endregion
-                
+
         // ****************************************************************************************
         // Task Selection + Operation Execution Methods
         // ****************************************************************************************
@@ -205,24 +218,42 @@ namespace ToDo
                 var parameters = AddTaskToParameters(args, searchResults[0]);
                 response = (Response)action.DynamicInvoke(parameters);
             }
-
-            // If all keyword is used, delete all in search results,
-            // unless there were no constraining parameters.
-            // If there were, delete all currently displayed tasks if no search string was used.
-            // If not, display search results
+            
             else if (isAll)
             {
-                if (startTime != null || endTime != null || searchType != SearchType.NONE)
-                    response = ExecuteOnAllSearchResults(searchResults, action, args);
-                else if (taskName == "" || taskName == null)
-                    response = ExecuteOnAllDisplayedTasks(action, args);
-                else
-                    response = DisplaySearchResults(searchResults, taskName, startTime, endTime, searchType, isAll);
+                response = ExecuteOnAll(taskName, startTime, endTime, searchType, searchResults, isAll, action, args);
             }
+
             // If not, display search results.
             else
+            {
                 response = DisplaySearchResults(searchResults, taskName, startTime, endTime, searchType, isAll);
+            }
+            return response;
+        }
 
+        // If all keyword is used, delete all in search results,
+        // unless there were no constraining parameters.
+        // If there were, delete all currently displayed tasks if no search string was used.
+        // If not, display search results
+        private Response ExecuteOnAll(
+            string taskName,
+            DateTime? startTime,
+            DateTime? endTime,
+            SearchType searchType,
+            List<Task> searchResults,
+            bool isAll,
+            Delegate action,
+            params object[] args
+            )
+        {
+            Response response = null;
+            if (startTime != null || endTime != null || searchType != SearchType.NONE)
+                response = ExecuteOnAllSearchResults(searchResults, action, args);
+            else if (taskName == "" || taskName == null)
+                response = ExecuteOnAllDisplayedTasks(action, args);
+            else
+                response = DisplaySearchResults(searchResults, taskName, startTime, endTime, searchType, isAll);
             return response;
         }
 
@@ -258,9 +289,6 @@ namespace ToDo
             Response response = null;
             foreach (Task task in searchResults)
             {
-                if (currentListedTasks.Contains(task))
-                    currentListedTasks.Remove(task);
-
                 var parameters = AddTaskToParameters(args, searchResults[0]);
                 response = (Response)action.DynamicInvoke(parameters);
 
@@ -375,7 +403,7 @@ namespace ToDo
             return parameters;
         }
         #endregion
-        
+
         #endregion
 
         // ******************************************************************
@@ -384,6 +412,13 @@ namespace ToDo
 
         #region Response Generation Methods
 
+        /// <summary>
+        /// This method checks if the two indices referring to a set of tasks in the currently displayed
+        /// list of tasks are valid and returns null if they are valid.
+        /// </summary>
+        /// <param name="startIndex">The start index of the user requested tasks</param>
+        /// <param name="endIndex">The end index of the user requested tasks</param>
+        /// <returns>A valid response about the error if  the indexes are invalid. Null if valid.</returns>
         protected Response CheckIfIndexesAreValid(int startIndex, int endIndex)
         {
             // No tasks to delete

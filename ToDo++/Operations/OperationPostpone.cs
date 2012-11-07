@@ -179,8 +179,8 @@ namespace ToDo
                 return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationPostpone));
             else
             {
-                TrackTask(taskToPostpone, false);
-                TrackTask(taskPostponed, true);
+                DeleteTask(taskToPostpone);
+                AddTask(taskPostponed);
                 currentListedTasks.Remove(taskToPostpone);
                 currentListedTasks.Add(taskPostponed);
             }
@@ -196,29 +196,13 @@ namespace ToDo
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Task taskToUndo = undoTask.Pop();
-            Task Undonetask = undoTask.Pop();
-            redoTask.Push(taskToUndo);
-            redoTask.Push(Undonetask);
-            Response response = ModifyTask(taskToUndo,Undonetask);
-            if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
-            else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            throw new NotImplementedException();
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Task taskToRedo = undoTask.Pop();
-            Task Redonetask = undoTask.Pop();
-            redoTask.Push(taskToRedo);
-            redoTask.Push(Redonetask);
-            Response response = ModifyTask(taskToRedo, Redonetask);
-            if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
-            else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            throw new NotImplementedException();
         }
     }
 }
