@@ -18,11 +18,6 @@ namespace ToDo
         private SearchType searchType;
         private DateTime? startTime = null, endTime = null;
         private DateTimeSpecificity isSpecific;
-
-        // Paramters for the old tasks
-        private string oldTaskName;
-        private DateTime? oldStartTime = null, oldEndTime = null;
-        private DateTimeSpecificity oldIsSpecific;
         #endregion
 
         #region Task Tracking
@@ -113,23 +108,16 @@ namespace ToDo
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
-            SetMembers(taskList, storageIO); 
+            SetMembers(taskList, storageIO);
             Response response = ModifyTask(newTask, oldTask);
-            if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
-            else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            return response;
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            SetMembers(taskList, storageIO);
             Response response = ModifyTask(oldTask, newTask);
-            if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
-            else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            return response;
         }
     }
 }
