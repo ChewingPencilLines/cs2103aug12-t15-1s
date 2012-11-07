@@ -71,10 +71,10 @@ namespace ToDo
                 {
                     attrb.timeRangeOne = timeRange;
                 }
-                else if (CustomDictionary.AreTimeRangesConsecutive(ref attrb.timeRangeOne, ref timeRange)
-                    && (attrb.timeRangeTwo == TimeRangeKeywordsType.NONE || attrb.timeRangeTwo == timeRange))
+                else if (attrb.timeRangeTwo == TimeRangeKeywordsType.NONE
+                    || attrb.timeRangeTwo <= timeRange)
                 {
-                        attrb.timeRangeTwo = timeRange;
+                    attrb.timeRangeTwo = timeRange;
                 }
                 else
                 {
