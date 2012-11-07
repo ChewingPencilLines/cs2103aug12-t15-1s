@@ -26,6 +26,7 @@ namespace ToDo
         const string STRING_DISPLAY_NO_TASK = "There are no tasks for display.";
         const string STRING_SEARCH_SUCCESS = "Displaying all {0}tasks{1}.";
         const string STRING_SORT_SUCCESS = "Sorting by {0}.";
+        const string STRING_SORT_FAILURE = "Please specify sort type.";
         const string STRING_UNDO_SUCCESS = "Undid last operation.";
         const string STRING_UNDO_FAILURE = "Cannot undo last executed operation!";
         const string STRING_REDO_SUCCESS = "Redid last operation.";
@@ -59,6 +60,7 @@ namespace ToDo
 
         Result result;
         Format formatType;
+        bool feedbackAsWarning = false;
         string[] args;
         string feedbackString = null;
         List<Task> tasksToBeDisplayed;
@@ -151,6 +153,11 @@ namespace ToDo
                             feedbackString = STRING_UNDO_FAILURE;
                         if (operationType == typeof(OperationRedo))
                             feedbackString = STRING_REDO_FAILURE;
+                        if (operationType == typeof(OperationSort))
+                        {
+                            feedbackString = STRING_SORT_FAILURE;
+                            feedbackAsWarning = true;
+                        }
                         break;
                     case Result.INVALID_TASK:
                         if (operationType == typeof(OperationDisplayDefault) ||
@@ -197,19 +204,24 @@ namespace ToDo
             switch (formatType)
             {
                 case Format.NAME:
-                    sortTypeString = "Name";
+                    sortTypeString = "name";
                     break;
                 case Format.DATE_TIME:
-                    sortTypeString = "Date";
+                    sortTypeString = "date";
                     break;
                 case Format.DONE_STATE:
-                    sortTypeString = "[DONE] state";
+                    sortTypeString = "whether task is done or not";
                     break;
                 default:
                     sortTypeString = "the same as before";
                     break;
             }
             return String.Format(STRING_SORT_SUCCESS, sortTypeString);
+        }
+
+        internal bool WarnUser()
+        {
+            return feedbackAsWarning;
         }
     }
 }

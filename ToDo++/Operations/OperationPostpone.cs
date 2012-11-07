@@ -49,7 +49,7 @@ namespace ToDo
             SetMembers(taskList, storageIO);
 
             Func<Task, TimeSpan, Response> action = PostponeTask;
-            object[] args = null;
+            object[] args = { postponeDuration };
             Response response = null;
 
             response = CheckIfIndexesAreValid(startIndex, endIndex);
@@ -58,7 +58,7 @@ namespace ToDo
             if (!hasIndex)
                 response = ExecuteBySearch(
                     taskName, isSpecific.StartTime && isSpecific.EndTime,
-                    startTime, endTime, isSpecific, isAll, SearchType.NONE, action, args);
+                    startTime, endTime, isSpecific, isAll, searchType, action, args);
 
             else if (hasIndex)
                 response = ExecuteByIndex(startIndex, endIndex, action, args);
