@@ -135,6 +135,15 @@ namespace ToDo
         public override bool Postpone(TimeSpan postponeDuration)
         {
             bool result = true;
+            try
+            {                
+                startDateTime.Add(postponeDuration);
+                if(endDateTime != null) endDateTime.Add(postponeDuration);
+            }
+            catch
+            {
+                result = false;
+            }
             return result;
         }
 

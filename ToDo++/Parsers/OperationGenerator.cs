@@ -308,7 +308,21 @@ namespace ToDo
                     newOperation = new OperationMarkAsUndone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
                     break;
                 case CommandType.POSTPONE:
-                    TimeSpan postponeDuration = new TimeSpan(1,1,1);
+                    TimeSpan postponeDuration = new TimeSpan();
+                    switch (timeRangeType)
+                    {
+                        case TimeRangeType.HOUR:
+                            postponeDuration = new TimeSpan(timeRangeIndex,0,0);
+                            break;
+                        case TimeRangeType.DAY:
+                            postponeDuration = new TimeSpan(timeRangeIndex, 0, 0, 0);
+                            break;
+                        case TimeRangeType.MONTH:
+                            postponeDuration = new TimeSpan(timeRangeIndex*30, 0, 0, 0);
+                            break;
+                        default:
+                            break;
+                    }
                     newOperation = new OperationPostpone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone, postponeDuration);
                     break;
                 case CommandType.SCHEDULE:

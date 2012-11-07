@@ -686,10 +686,16 @@ namespace ToDo
             }
 
             List<Task> displayedList = taskListViewControl.UpdateDisplay(output);
+
+            TinyAlertView.StateTinyAlert alertType;
             if (output.IsSuccessful())
-                TinyAlertView.Show(TinyAlertView.StateTinyAlert.SUCCESS, output.FeedbackString);
+                alertType = TinyAlertView.StateTinyAlert.SUCCESS;                
+            else if (output.WarnUser())
+                alertType = TinyAlertView.StateTinyAlert.WARNING;
             else
-                TinyAlertView.Show(TinyAlertView.StateTinyAlert.FAILURE, output.FeedbackString);
+                alertType = TinyAlertView.StateTinyAlert.FAILURE;
+            TinyAlertView.Show(alertType, output.FeedbackString);
+
             textInput.Clear();
 
             SwitchToToDoPanel();
