@@ -70,7 +70,9 @@ namespace ToDo
             GetTimeRangeValues();
             if (commandType == CommandType.SCHEDULE)
                 SetScheduleTime();
-            else
+            else if (!(
+                    (commandType == CommandType.ADD) ||
+                    (commandType == CommandType.MODIFY && taskRangeIndex != null)))
                 SetSearchTime();
             CombineDateTimes();
         }
