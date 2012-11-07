@@ -19,37 +19,47 @@ namespace ToDo
     {
 
         // ******************************************************************
-        // Constructors.
+        // Constructors (BEGIN HERE)
         // ******************************************************************
 
         #region Constructor
 
         private Hotkeys.GlobalHotkey ghk;       //Global Hotkey to Minimize to System Tray
         Logic logic;                            //Instance of Logic that handles Data structure and File Operations
-        bool MouseIsOverDisplayList;
 
         /// <summary>
-        /// Creates a new instance of the Main Program (UI) and loads the various Classes
+        /// Creates a new instance of the Main Program (UI) and loads the various Initialization Functions in order
         /// </summary>
         public UI(Logic logic)
         {
-            IntializeTinyAlert();
-            InitializeComponent();
+            InitializeComponent();                //Create Components
             InitializeLogic(logic);               //Sets logic            
             InitializeSystemTray();               //Loads Code to place App in System Tray
-            InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
-            InitializeMenu();                     //Loads the Menu
-            InitializeOutputBox();                //Loads Output Box    
-            InitializeEventHandlers();            //Adds Event Handlers
-            InitializePreferencesPanel();
-            IntializeTopMenu();
-            InitializeTaskListView();
-            this.ActiveControl = textInput;
-            this.MouseWheel += new MouseEventHandler(ScrollIfOverDisplay);
-            grayFadePictureBox.Hide();
+            InitializeSettings();                 //Set up and Load Settings into ToDo
+            InitializeOutputBox();                //Loads Output/Console Box    
+            InitializeEventHandlers();            //Register All Event Handlers
+            InitializePreferencesPanel();         //Load Settings into Preferences Panel
+            IntializeTopMenu();                   //Load Settings into Top Menu Control
+            InitializeTaskListView();             //Load Settings into Task List View
+            IntializeTinyAlert();                 //Load UI into TinyAlert to register Form Movements
+            InitializeTextInput();                //Sets Text Input in Focus
+
+                        /* HEAD TO LOGIC CONTROL TO DELVE FURTHER */
         }
 
         #endregion
+
+        // ******************************************************************
+        // ToDo Intialization Functions
+        // ******************************************************************
+
+        #region IntializationFunction
+
+        private void InitializeTextInput()
+        {
+            this.ActiveControl = textInput;
+            grayFadePictureBox.Hide();
+        }
 
         private void IntializeTinyAlert()
         {
@@ -68,6 +78,28 @@ namespace ToDo
         {
             topMenuControl.InitializeWithUI(this);
         }
+
+        private void InitializePreferencesPanel()
+        {
+            preferencesPanel.InitializeWithSettings(logic.MainSettings);
+        }
+
+        /// <summary>
+        /// Prepare the Output Box. Pass an instance of settings manager into it so it can interact with it
+        /// </summary>
+        private void InitializeOutputBox()
+        {
+            outputBox.InitializeWithSettings(logic.MainSettings);
+        }
+
+        //Pair Logic with UI
+        private void InitializeLogic(Logic logic)
+        {
+            this.logic = logic;
+            logic.SetUI(this);
+        }
+
+        #endregion
 
         // ******************************************************************
         // Win32 Functions
@@ -477,82 +509,6 @@ namespace ToDo
         }
 
         #endregion
-
-        // ******************************************************************
-        // Prepare Preferences Panel
-        // ******************************************************************
-
-        #region PreparePrefereces
-
-        private void InitializePreferencesPanel()
-        {
-            preferencesPanel.InitializeWithSettings(logic.MainSettings);
-        }
-
-        #endregion
-
-        // ******************************************************************
-        // Prepare the Menu Bar
-        // ******************************************************************
-
-        #region PrepareMenu
-
-        /// <summary>
-        /// Prepare the Menu Bar. Pass an instance of settings manager into it so it can interact with it
-        /// </summary>
-        private void InitializeMenu()
-        {
-
-        }
-
-        int selected = 0;/*
-        private void preferencesButton_Click(object sender, EventArgs e)
-        {
-            if (selected == 0)
-            {
-                preferencesButton.Text = "ToDo";
-                SwitchToSettingsPanel();
-                selected = 1;
-            }
-            else
-            {
-                preferencesButton.Text = "Preferences";
-                SwitchToToDoPanel();
-                selected = 0;
-            }
-        }*/
-
-        #endregion
-
-        // ******************************************************************
-        // Prepare the Output Box
-        // ******************************************************************
-
-        #region PrepareOutputBox
-
-        /// <summary>
-        /// Prepare the Output Box. Pass an instance of settings manager into it so it can interact with it
-        /// </summary>
-        private void InitializeOutputBox()
-        {
-            outputBox.InitializeWithSettings(logic.MainSettings);
-        }
-
-        #endregion
-
-        // ******************************************************************
-        // Pair Logic with UI
-        // ******************************************************************
-
-        #region PrepareLogic
-
-        private void InitializeLogic(Logic logic)
-        {
-            this.logic = logic;
-            logic.SetUI(this);
-        }
-
-        #endregion
         
         // ******************************************************************
         // Shortcut Keys (Hotkeys)
@@ -616,9 +572,12 @@ namespace ToDo
         /// </summary>
         private void InitializeEventHandlers()
         {
+            this.MouseWheel += new MouseEventHandler(ScrollIfOverDisplay);
             EventHandlers.StayOnTopHandler += SetStayOnTop;
             EventHandlers.UpdateUIHandler += UpdateUI;
         }
+
+        #region CustomEventHandlers
 
         /// <summary>
         /// When event received, Form always stays on Top
@@ -641,6 +600,69 @@ namespace ToDo
             taskListViewControl.InitializeWithSettings(logic.MainSettings);
             taskListViewControl.BuildList();
         }
+
+        #endregion
+
+        #region UIEventHandlers
+
+        private void UI_Resize(object sender, EventArgs e)
+        {
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+            //TinyAlertView.Location = new Point(this.Right, this.Bottom - 10);
+            TinyAlertView.SetLocation();
+        }
+
+        private void UI_Move(object sender, EventArgs e)
+        {
+            TinyAlertView.SetLocation();
+        }
+
+        private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs row)
+        {
+            taskListViewControl.SetRowIndex(row);
+            taskListViewControl.ColorRows(row);
+        }
+
+        private void taskListViewControl_BeforeSorting(object sender, BrightIdeasSoftware.BeforeSortingEventArgs e)
+        {
+            e.GroupByOrder = SortOrder.None;
+        }
+
+        bool MouseIsOverDisplayList;
+
+        private void taskListViewControl_MouseEnter(object sender, EventArgs e)
+        {
+            MouseIsOverDisplayList = true;
+            taskListViewControl.Focus();
+        }
+
+        private void taskListViewControl_MouseLeave(object sender, EventArgs e)
+        {
+            MouseIsOverDisplayList = false;
+        }
+
+        private void SelectTextInput(object sender, KeyPressEventArgs e)
+        {
+            textInput.Text += e.KeyChar;
+            textInput.Focus();
+            textInput.DeselectAll();
+            textInput.Select(textInput.TextLength, 0);
+            e.Handled = true;
+        }
+
+        private void ScrollIfOverDisplay(object sender, MouseEventArgs e)
+        {
+            if (MouseIsOverDisplayList)
+                taskListViewControl.Focus();
+        }
+
+        internal void SetMessageTaskListIsEmpty(bool empty)
+        {
+            taskListViewControl.SetMessageTaskListIsEmpty(empty);
+        }
+
+        #endregion
+
         #endregion
 
         // ******************************************************************
@@ -711,7 +733,6 @@ namespace ToDo
         */
         #endregion
 
-
         /// <summary>
         /// Exit the Application
         /// </summary>
@@ -720,59 +741,7 @@ namespace ToDo
             Application.Exit();
         }
 
-        private void UI_Resize(object sender, EventArgs e)
-        {
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
-            //TinyAlertView.Location = new Point(this.Right, this.Bottom - 10);
-            TinyAlertView.SetLocation();
-        }
 
-        private void UI_Move(object sender, EventArgs e)
-        {
-            TinyAlertView.SetLocation();
-        }
-
-        private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs row)
-        {
-            taskListViewControl.SetRowIndex(row);
-            taskListViewControl.ColorRows(row);
-        }
-
-        private void taskListViewControl_BeforeSorting(object sender, BrightIdeasSoftware.BeforeSortingEventArgs e)
-        {
-            e.GroupByOrder = SortOrder.None;
-        }
-
-        private void taskListViewControl_MouseEnter(object sender, EventArgs e)
-        {
-            MouseIsOverDisplayList = true;
-            taskListViewControl.Focus();
-        }   
-
-        private void taskListViewControl_MouseLeave(object sender, EventArgs e)
-        {
-            MouseIsOverDisplayList = false;
-        }
-
-        private void SelectTextInput(object sender, KeyPressEventArgs e)
-        {            
-            textInput.Text += e.KeyChar;
-            textInput.Focus();
-            textInput.DeselectAll();
-            textInput.Select(textInput.TextLength, 0);
-            e.Handled = true;
-        }
-
-        private void ScrollIfOverDisplay(object sender, MouseEventArgs e)
-        {
-            if (MouseIsOverDisplayList)
-                taskListViewControl.Focus();
-        }
-
-        internal void SetMessageTaskListIsEmpty(bool empty)
-        {
-            taskListViewControl.SetMessageTaskListIsEmpty(empty);
-        }
 
 
 
