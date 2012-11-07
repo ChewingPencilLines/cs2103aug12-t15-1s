@@ -32,7 +32,8 @@ namespace ToDo
         /// </summary>
         public UI(Logic logic)
         {
-            InitializeComponent();                //Create Components
+            IntializeTinyAlert();                 //Load UI into TinyAlert to register Form Movements   
+            InitializeComponent();                //Create Components         
             InitializeLogic(logic);               //Sets logic            
             InitializeSystemTray();               //Loads Code to place App in System Tray
             InitializeSettings();                 //Set up and Load Settings into ToDo
@@ -40,8 +41,7 @@ namespace ToDo
             InitializeEventHandlers();            //Register All Event Handlers
             InitializePreferencesPanel();         //Load Settings into Preferences Panel
             IntializeTopMenu();                   //Load Settings into Top Menu Control
-            InitializeTaskListView();             //Load Settings into Task List View
-            IntializeTinyAlert();                 //Load UI into TinyAlert to register Form Movements
+            InitializeTaskListView();             //Load Settings into Task List View            
             InitializeTextInput();                //Sets Text Input in Focus
 
                         /* HEAD TO LOGIC CONTROL TO DELVE FURTHER */
