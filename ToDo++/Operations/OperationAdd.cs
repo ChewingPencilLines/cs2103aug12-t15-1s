@@ -33,10 +33,7 @@ namespace ToDo
             SetMembers(taskList, storageIO);
 
             Response response = DeleteTask(newTask);
-            if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
-            else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            return response;
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
@@ -44,10 +41,7 @@ namespace ToDo
             SetMembers(taskList, storageIO);
 
             Response response = AddTask(newTask);
-            if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
-            else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            return response;
         }
     }
 }

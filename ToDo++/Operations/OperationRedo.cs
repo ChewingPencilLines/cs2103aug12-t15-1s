@@ -17,7 +17,12 @@ namespace ToDo
             Operation redoOp = Operation.redoStack.Pop();
             Response result = redoOp.Redo(taskList, storageIO);
             if (result.IsSuccessful())
+            {
                 undoStack.Push(redoOp);
+                result = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            }
+            else
+                result = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
             return result;
         }
     }
