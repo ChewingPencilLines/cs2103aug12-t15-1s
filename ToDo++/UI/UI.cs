@@ -697,58 +697,15 @@ namespace ToDo
             TinyAlertView.SetLocation();
         }
 
-        private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs row)
-        {
-            SetRowIndex(row);
-            ColorRows(row);
-        }
-
-        private static void SetRowIndex(BrightIdeasSoftware.FormatRowEventArgs row)
-        {
-            // Display index -will- change if doing a column sort.
-            row.Item.SubItems[1].Text = "[" + (row.DisplayIndex + 1).ToString() + "]";
-        }
-
-        private void ColorRows(BrightIdeasSoftware.FormatRowEventArgs row)
-        {
-            Task task = (Task)row.Item.RowObject;
-
-            if (task == null) return; // log exception
-
-            // Task is done!
-            if (task.DoneState == true)
-            {
-                ColorSubItems(row, logic.MainSettings.GetTaskDoneColor());
-            }
-
-            else if (task is TaskDeadline)
-            {
-                // Task is over time limit!
-                if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
-                    ColorSubItems(row, Color.Red);
-                // Task is within the next 24 hrs!
-                else if (task.IsWithinTime(new DateTimeSpecificity(), DateTime.Now, DateTime.Now.AddDays(1)))
-                    ColorSubItems(row, Color.OrangeRed);
-            }
-
-            else if (task is TaskEvent)
-            {
-                // Task is over!
-                if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
-                    ColorSubItems(row, Color.MediumVioletRed);
-            }
-        }
-
-        private static void ColorSubItems(BrightIdeasSoftware.FormatRowEventArgs row, Color newColor)
-        {
-            int numOfCol = row.Item.SubItems.Count;
-            for (int i = 2; i < numOfCol; i++)
-                row.Item.GetSubItem(i).ForeColor = newColor;
-        }
-
         private void UI_Move(object sender, EventArgs e)
         {
             TinyAlertView.SetLocation();
+        }
+
+        private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs row)
+        {
+            taskListViewControl.SetRowIndex(row);
+            taskListViewControl.ColorRows(row);
         }
 
         private void taskListViewControl_BeforeSorting(object sender, BrightIdeasSoftware.BeforeSortingEventArgs e)
