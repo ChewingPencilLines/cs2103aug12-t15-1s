@@ -31,6 +31,8 @@ namespace ToDo
         public const int DAYS_IN_MONTH = 30;
         static public int defaultScheduleTimeLength = 1;
         static public TimeRangeType defaultScheduleTimeLengthType = TimeRangeType.HOUR;
+        static public int defaultPostponeDurationLength = 1;
+        static public TimeRangeType defaultPostponeDurationType = TimeRangeType.DAY;
         static public Dictionary<string, CommandType> commandKeywords;
         static public Dictionary<string, ContextType> contextKeywords;
         static public Dictionary<string, TimeRangeKeywordsType> timeRangeKeywords;

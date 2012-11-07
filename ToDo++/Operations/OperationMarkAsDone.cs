@@ -97,9 +97,9 @@ namespace ToDo
                 Task taskToUndo = executedTasks.Dequeue();
                 response = MarkTaskAs(taskToUndo, false);
                 if (!response.IsSuccessful())
-                    return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+                    return response;
             }
-            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            return response;
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
@@ -113,9 +113,9 @@ namespace ToDo
                 Task taskToUndo = executedTasks.Dequeue();
                 response = MarkTaskAs(taskToUndo, true);
                 if (!response.IsSuccessful())
-                    return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+                    return response;
             }
-            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            return response;
         }
     } 
 }

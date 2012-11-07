@@ -18,7 +18,12 @@ namespace ToDo
             Operation undoOp = Operation.undoStack.Pop();
             Response result = undoOp.Undo(taskList, storageIO);
             if (result.IsSuccessful())
+            {
                 redoStack.Push(undoOp);
+                result = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            }
+            else
+                result = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
             return result;
         }
     }
