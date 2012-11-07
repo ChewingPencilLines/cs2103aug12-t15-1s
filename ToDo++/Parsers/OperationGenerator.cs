@@ -36,15 +36,15 @@ namespace ToDo
         private TimeSpan? startTimeOnly = null, endTimeOnly = null;
         private DateTime? startDateOnly = null, endDateOnly = null;
         private DayOfWeek? startDay = null, endDay = null;
-               
+
         // Setter methods
         public TimeSpan? EndTimeOnly { set { endTimeOnly = value; } }
-        public TimeSpan? StartTimeOnly {set { startTimeOnly = value; } }
+        public TimeSpan? StartTimeOnly { set { startTimeOnly = value; } }
         public DateTime? EndDateOnly { set { endDateOnly = value; } }
         public DateTime? StartDateOnly { set { startDateOnly = value; } }
         public DayOfWeek? EndDay { set { endDay = value; } }
         public DayOfWeek? StartDay { set { startDay = value; } }
-        
+
         // The following attributes are used during derivation of Operation type and should not be otherwised used.
         public ContextType currentSpecifier = new ContextType();
         public ContextType currentMode = new ContextType();
@@ -53,17 +53,16 @@ namespace ToDo
         #endregion
 
         public OperationGenerator()
-        
         {
             // Initialize enumerations
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
             currentSpecifier = ContextType.CURRENT;
             sortType = SortType.DEFAULT;
-            searchDone = SearchType.NONE;        
+            searchDone = SearchType.NONE;
             timeRangeType = TimeRangeType.DEFAULT;
             timeRangeOne = TimeRangeKeywordsType.NONE;
-            timeRangeTwo = TimeRangeKeywordsType.NONE;            
+            timeRangeTwo = TimeRangeKeywordsType.NONE;
         }
 
         public void SetTimes()
@@ -83,19 +82,19 @@ namespace ToDo
 
         private void SetSearchTime()
         { // If searching only for a single time, assume it's the end time.
-                if (startTimeOnly != null && endTimeOnly == null && endDateOnly == null)
-                {
-                    endTimeOnly = startTimeOnly;
-                    isSpecific.EndTime = isSpecific.StartTime;
-                    startTimeOnly = null;
-                }
+            if (startTimeOnly != null && endTimeOnly == null && endDateOnly == null)
+            {
+                endTimeOnly = startTimeOnly;
+                isSpecific.EndTime = isSpecific.StartTime;
+                startTimeOnly = null;
+            }
 
-                // If searching for a single date, assume the whole range is that date.
-                if (startDateOnly != null && endDateOnly == null && startTimeOnly == null && endTimeOnly == null)
-                {
-                    endDateOnly = startDateOnly;
-                    isSpecific.EndDate = isSpecific.StartDate;
-                }
+            // If searching for a single date, assume the whole range is that date.
+            if (startDateOnly != null && endDateOnly == null && startTimeOnly == null && endTimeOnly == null)
+            {
+                endDateOnly = startDateOnly;
+                isSpecific.EndDate = isSpecific.StartDate;
+            }
         }
 
         private void SetScheduleTime()
@@ -112,13 +111,18 @@ namespace ToDo
         private void GetTimeRangeValues()
         {
             int startTimeHour = 0, endTimeHour = 0;
-            if(TryGetTimeRangeValues(ref startTimeHour, ref endTimeHour))
+            if (TryGetTimeRangeValues(ref startTimeHour, ref endTimeHour))
             {
                 // pick the correct start time and end time if other times were
                 // specified beyond the time range keywords i.e. by time tokens
                 if (IsSpecificTimeSupplied())
                 {
                     RetrieveFinalStartAndEndTimes(startTimeHour, endTimeHour);
+                }
+                else
+                {
+                    startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
+                    endTimeOnly = new TimeSpan(endTimeHour, 0, 0);
                 }
             }
         }
@@ -161,13 +165,7 @@ namespace ToDo
 
         private void RetrieveFinalStartAndEndTimes(int startTimeHour, int endTimeHour)
         {
-
-            if (startTimeOnly == null && endTimeOnly == null)
-            {
-                startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
-                endTimeOnly = new TimeSpan(endTimeHour, 0, 0);
-            }
-            else if (startTimeOnly != null && endTimeOnly == null)
+            if (startTimeOnly != null && endTimeOnly == null)
             {
                 if (((TimeSpan)startTimeOnly).Hours < endTimeHour
                     && ((TimeSpan)startTimeOnly).Hours > startTimeHour)
@@ -276,7 +274,6 @@ namespace ToDo
             return combinedDT;
         }
 
-
         // Create operation based on derived values, and whether they have been used.
         public Operation CreateOperation()
         {
@@ -349,6 +346,6 @@ namespace ToDo
             this.endDateOnly = Value;
             this.isSpecific.EndDate = IsSpecific;
         }
-        
+
     }
 }

@@ -239,6 +239,7 @@ namespace ToDo
         }
 
 
+
         // Create operation based on derived values, and whether they have been used.
         public Operation CreateOperation()
         {
