@@ -465,20 +465,12 @@ namespace ToDo
             return false;
         }
 
-        public static bool AreTimeRangesConsecutive(ref TimeRangeKeywordsType timeRangeOne, ref TimeRangeKeywordsType timeRangeTwo)
+        public static bool IsTimeRangeOverDayBoundary(TimeRangeKeywordsType timeRangeKeyword)
         {
-            // make timeRangeOne the earlier of the 2 time ranges
-            if (timeRangeOne > timeRangeTwo)
-            {
-                TimeRangeKeywordsType temp;
-                temp = timeRangeTwo;
-                timeRangeTwo = timeRangeOne;
-                timeRangeOne = temp;
-            }
-            int timeRangeTwoStartTime, timeRangeOneEndTime;
-            timeRangeKeywordsStartTime.TryGetValue(timeRangeOne, out timeRangeTwoStartTime);
-            timeRangeKeywordsEndTime.TryGetValue(timeRangeTwo, out timeRangeOneEndTime);
-            if (timeRangeTwoStartTime == timeRangeOneEndTime)
+            int timeRangeStartHour, timeRangeEndHour;
+            timeRangeKeywordsStartTime.TryGetValue(timeRangeKeyword, out timeRangeStartHour);
+            timeRangeKeywordsEndTime.TryGetValue(timeRangeKeyword, out timeRangeEndHour);
+            if (timeRangeEndHour <= timeRangeStartHour)
             {
                 return true;
             }
