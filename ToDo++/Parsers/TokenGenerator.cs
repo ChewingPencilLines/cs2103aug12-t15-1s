@@ -428,7 +428,7 @@ namespace ToDo
                 if (CustomDictionary.contextKeywords.TryGetValue(word, out context))
                 {
                     object nextToken = GetTokenAtPosition(parsedTokens, index + 1);
-                    if (nextToken is TokenDate || nextToken is TokenDay || nextToken is TokenTime)
+                    if (nextToken is TokenDate || nextToken is TokenDay || nextToken is TokenTime || nextToken is TokenTimeRange)
                     {
                         TokenContext newToken = new TokenContext(index, context);
                         tokens.Add(newToken);

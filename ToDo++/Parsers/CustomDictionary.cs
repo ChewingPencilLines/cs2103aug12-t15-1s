@@ -26,8 +26,9 @@ namespace ToDo
 
     static class CustomDictionary
     {
-        static public int hoursInADay = 24;
-        static public int daysInAWeek = 7;
+        public const int HOURS_IN_DAY = 24;
+        public const int DAYS_IN_WEEK = 7;
+        public const int DAYS_IN_MONTH = 30;
         static public int defaultScheduleTimeLength = 1;
         static public TimeRangeType defaultScheduleTimeLengthType = TimeRangeType.HOUR;
         static public Dictionary<string, CommandType> commandKeywords;
