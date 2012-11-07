@@ -111,9 +111,22 @@ namespace ToDo
 
         private void GetTimeRangeValues()
         {
+            int startTimeHour = 0, endTimeHour = 0;
+            if(TryGetTimeRangeValues(ref startTimeHour, ref endTimeHour))
+            {
+                // pick the correct start time and end time if other times were
+                // specified beyond the time range keywords i.e. by time tokens
+                if (IsSpecificTimeSupplied())
+                {
+                    RetrieveFinalStartAndEndTimes(startTimeHour, endTimeHour);
+                }
+            }
+        }
+
+        private bool TryGetTimeRangeValues(ref int startTimeHour, ref int endTimeHour)
+        {
             if (timeRangeOne != TimeRangeKeywordsType.NONE)
             {
-                int startTimeHour, endTimeHour;
                 // getting values from specified time range keywords
                 CustomDictionary.timeRangeKeywordsStartTime.TryGetValue(timeRangeOne, out startTimeHour);
                 if (timeRangeTwo == TimeRangeKeywordsType.NONE)
@@ -132,37 +145,60 @@ namespace ToDo
                         crossDayBoundary = true;
                     }
                 }
-                // pick the correct start time and end time if other times were
-                // specified beyond the time range keywords i.e. by time tokens
-                if (startTimeOnly == null && endTimeOnly == null)
+                return true;
+            }
+            return false;
+        }
+
+        private bool IsSpecificTimeSupplied()
+        {
+            if (startTimeOnly == null && endTimeOnly == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void RetrieveFinalStartAndEndTimes(int startTimeHour, int endTimeHour)
+        {
+
+            if (startTimeOnly == null && endTimeOnly == null)
+            {
+                startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
+                endTimeOnly = new TimeSpan(endTimeHour, 0, 0);
+            }
+            else if (startTimeOnly != null && endTimeOnly == null)
+            {
+                if (((TimeSpan)startTimeOnly).Hours < endTimeHour
+                    && ((TimeSpan)startTimeOnly).Hours > startTimeHour)
                 {
+                    endTimeOnly = startTimeOnly;
                     startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
-                    endTimeOnly = new TimeSpan(endTimeHour, 0, 0);
                 }
-                else if (startTimeOnly != null && endTimeOnly == null)
+                else
                 {
-                    if (((TimeSpan)startTimeOnly).Hours < endTimeHour
-                        && ((TimeSpan)startTimeOnly).Hours > startTimeHour)
-                    {
-                        endTimeOnly = startTimeOnly;
-                        startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
-                    }
-                    else
-                    {
-                        // warn user that specified time is not within specified time range
-                    }
-                }
-                else if (startTimeOnly != null && endTimeOnly != null)
-                {
-                    if (!(((TimeSpan)startTimeOnly).Hours < endTimeHour
-                        && ((TimeSpan)startTimeOnly).Hours > startTimeHour
-                        && ((TimeSpan)endTimeOnly).Hours < endTimeHour
-                        && ((TimeSpan)endTimeOnly).Hours > startTimeHour))
-                    {
-                        // warn user that specified time is not within specified time range
-                    }
+                    // warn user that specified time is not within specified time range
                 }
             }
+            else if (startTimeOnly != null && endTimeOnly != null)
+            {
+                if (!IsSpecifiedTimeWithinTimeRange(startTimeHour, endTimeHour))
+                {
+                    // warn user that specified time is not within specified time range
+                }
+            }
+        }
+
+        private bool IsSpecifiedTimeWithinTimeRange(int startTimeHour, int endTimeHour)
+        {
+            if (!(((TimeSpan)startTimeOnly).Hours < endTimeHour
+                && ((TimeSpan)startTimeOnly).Hours > startTimeHour
+                && ((TimeSpan)endTimeOnly).Hours < endTimeHour
+                && ((TimeSpan)endTimeOnly).Hours > startTimeHour))
+            {
+                return false;
+            }
+            return true;
         }
 
         private void CombineDateTimes()

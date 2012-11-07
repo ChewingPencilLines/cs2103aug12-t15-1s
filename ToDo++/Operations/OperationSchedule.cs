@@ -15,6 +15,7 @@ namespace ToDo
         int timeRangeIndex;
         TimeRangeType timeRangeType;
         Task scheduledTask;
+        DateTimeSpecificity searchSpecificity = new DateTimeSpecificity();
         
         public OperationSchedule(string taskName, DateTime startDateTime, DateTime? endDateTime, DateTimeSpecificity isSpecific, int timeRangeIndex, TimeRangeType timeRangeType)
         {
@@ -40,7 +41,6 @@ namespace ToDo
             DateTime tryStartTime = startDateTime;
             DateTime tryEndTime = new DateTime();
             DateTime copyTryStartTime = startDateTime;
-            DateTimeSpecificity searchSpecificity = new DateTimeSpecificity();
             int index = 0;
             // loop through all tasks to find earliest possible fitting time
             while (!isSlotFound && tryEndTime <= ((DateTime)endDateTime))
