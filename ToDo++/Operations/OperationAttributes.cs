@@ -144,6 +144,9 @@ namespace ToDo
             if (startDateOnly == null)
             {
                 startDateOnly = DateTime.Today;
+                isSpecific.StartDate.Day = false;
+                isSpecific.StartDate.Month = false;
+                isSpecific.StartDate.Year = false;
             }
             // start time and end time will stil be null if there is no time token &
             // no time range token i.e. both are NONE
