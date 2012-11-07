@@ -27,7 +27,7 @@ namespace ToDo
             commandType = val;
         }
 
-        internal override void UpdateAttributes(OperationAttributes attrb)
+        internal override void UpdateAttributes(OperationGenerator attrb)
         {
             if (attrb.commandType != CommandType.INVALID)
             {

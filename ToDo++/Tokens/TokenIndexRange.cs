@@ -29,7 +29,7 @@ namespace ToDo
             this.isAll = isAll;
         }
 
-        internal override void UpdateAttributes(OperationAttributes attrb)
+        internal override void UpdateAttributes(OperationGenerator attrb)
         {
             if (indexes != null)
             {
