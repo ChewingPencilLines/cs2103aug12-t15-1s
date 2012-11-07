@@ -1,0 +1,780 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+using Hotkeys;
+using Microsoft.Win32;
+using System.Windows.Forms.VisualStyles;
+using System.Runtime.InteropServices;
+
+namespace ToDo
+{
+    public partial class UI : Form
+    {
+
+        // ******************************************************************
+        // Constructors.
+        // ******************************************************************
+
+        #region Constructor
+
+        private Hotkeys.GlobalHotkey ghk;       //Global Hotkey to Minimize to System Tray
+        Logic logic;                            //Instance of Logic that handles Data structure and File Operations
+        bool MouseIsOverDisplayList;
+
+        /// <summary>
+        /// Creates a new instance of the Main Program (UI) and loads the various Classes
+        /// </summary>
+        public UI(Logic logic)
+        {
+            IntializeTinyAlert();
+            InitializeComponent();
+            InitializeLogic(logic);               //Sets logic            
+            InitializeSystemTray();               //Loads Code to place App in System Tray
+            InitializeSettings();                 //Sets the correct settings to ToDo++ at the start
+            InitializeMenu();                     //Loads the Menu
+            InitializeOutputBox();                //Loads Output Box    
+            InitializeEventHandlers();            //Adds Event Handlers
+            InitializePreferencesPanel();
+            IntializeTopMenu();
+            InitializeTaskListView();
+            this.ActiveControl = textInput;
+            this.MouseWheel += new MouseEventHandler(ScrollIfOverDisplay);
+            grayFadePictureBox.Hide();
+        }
+
+        #endregion
+
+        private void IntializeTinyAlert()
+        {
+            TinyAlertView.SetUI(this);
+            TinyAlertView.SetTiming(5);
+        }
+
+        private void InitializeTaskListView()
+        {
+            taskListViewControl.InitializeWithSettings(logic.MainSettings);
+            List<Task> displayedList = taskListViewControl.UpdateDisplay(logic.GetDefaultView());
+            logic.UpdateLastDisplayedTasksList(displayedList);
+        }
+
+        private void IntializeTopMenu()
+        {
+            topMenuControl.InitializeWithUI(this);
+        }
+
+        // ******************************************************************
+        // Win32 Functions
+        // ******************************************************************
+
+        #region Win32Functions
+
+        /// <summary>
+        /// Code for placing App in System Tray
+        /// </summary>
+        #region SystemTray
+
+        const int WM_NCHITTEST = 0x0084;
+        const int HTCLIENT = 1;
+        const int HTCAPTION = 2;
+
+        private void InitializeSystemTray()
+        {
+            ghk = new Hotkeys.GlobalHotkey(Constants.ALT, Keys.Q, this);
+            ghk.Register();
+            notifyIcon_taskBar.Visible = false;
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            const int htBottomLeft = 16;
+            const int htBottomRight = 17;
+            switch (m.Msg)
+            {
+                case WM_NCHITTEST:
+                    /*
+                    if (m.Result == (IntPtr)HTCLIENT)
+                    {
+                        m.Result = (IntPtr)HTCAPTION;
+                    }*/
+                    int x = (int)(m.LParam.ToInt64() & 0xFFFF);
+                    int y = (int)((m.LParam.ToInt64() & 0xFFFF0000) >> 16);
+                    Point pt = PointToClient(new Point(x, y));
+                    Size clientSize = ClientSize;
+                    if (pt.X >= clientSize.Width - 16 && pt.Y >= clientSize.Height - 16 && clientSize.Height >= 16)
+                    {
+                        m.Result = (IntPtr)(IsMirrored ? htBottomLeft : htBottomRight);
+                        return;
+                    }
+                    break;
+
+                case Hotkeys.Constants.WM_HOTKEY_MSG_ID:
+                    MinimiseMaximiseTray();
+                    break;
+            }
+            base.WndProc(ref m);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            //base.OnPaint(e);
+            //DrawGripper(e);
+        }
+
+        public void DrawGripper(PaintEventArgs e)
+        {
+            if (VisualStyleRenderer.IsElementDefined(
+                VisualStyleElement.Status.Gripper.Normal))
+            {
+                VisualStyleRenderer renderer = new VisualStyleRenderer(VisualStyleElement.Status.Gripper.Normal);
+                Rectangle rectangle1 = new Rectangle((Width) - 18, (Height) - 20, 20, 20);
+                renderer.DrawBackground(e.Graphics, rectangle1);
+            }
+        }
+
+        //Calling this Minimizes or Maximizes the application into system tray depending on state
+        public void MinimiseMaximiseTray()
+        {
+            notifyIcon_taskBar.BalloonTipTitle = "ToDo++";
+            notifyIcon_taskBar.BalloonTipText = "Hit Alt+Q to bring it up";
+
+            //If Window is Open
+            if (notifyIcon_taskBar.Visible == false)
+            {
+                StartFadeOut();
+                TinyAlertView.DismissEarly();
+                notifyIcon_taskBar.Visible = true;
+                notifyIcon_taskBar.ShowBalloonTip(500);
+            }
+            //If Window is in tray
+            else
+            {
+                notifyIcon_taskBar.Visible = false;
+                StartFadeIn();
+                this.WindowState = FormWindowState.Normal;
+                this.ActiveControl = textInput;
+            }
+        }
+
+        //Double click the tray icon and it pops back up
+        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            MinimiseMaximiseTray();
+        }
+
+        //De registers the hot-keys when the application closes
+        private void UI_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!ghk.Unregiser())
+                MessageBox.Show("Hotkeys failed to unregister!");
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Registers the App with the Registry to open on Startup
+        /// </summary>
+        #region RegisterToOpenOnStartup
+
+        private void RegisterInStartup(bool isChecked)
+        {
+            if (isChecked == true)
+            {
+                RegistryKey registryKey = Registry.CurrentUser.OpenSubKey
+                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                if (isChecked)
+                {
+                    registryKey.SetValue("ApplicationName", Application.ExecutablePath);
+                }
+                else
+                {
+                    registryKey.DeleteValue("ApplicationName");
+                }
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Allows resizing of borderless form
+        /// </summary>
+        #region Resizing
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd,
+                         int Msg, int wParam, int lParam);
+        [DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
+        private void UI_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Creates rounded edge
+        /// </summary>
+        #region Rounded Edge
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn
+        (
+            int nLeftRect, // x-coordinate of upper-left corner
+            int nTopRect, // y-coordinate of upper-left corner
+            int nRightRect, // x-coordinate of lower-right corner
+            int nBottomRect, // y-coordinate of lower-right corner
+            int nWidthEllipse, // height of ellipse
+            int nHeightEllipse // width of ellipse
+        );
+        #endregion
+
+        /// <summary>
+        /// Creates Shadow
+        /// </summary>
+        #region Shadow
+
+        private const int CS_DROPSHADOW = 0x20000;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ClassStyle |= CS_DROPSHADOW;
+                return cp;
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Form Fade In and Out Timers
+        /// </summary>
+        #region FormFadeInOut
+
+        double i = 1;
+
+        public void StartFadeOut()
+        {
+            timerFadeIn.Enabled = false;
+            timerFadeOut.Enabled = true;
+        }
+
+        public void StartFadeIn()
+        {
+            this.Show();
+            timerFadeIn.Enabled = true;//start the Fade In Effect
+            timerFadeOut.Enabled = false;
+        }
+
+        private void timerFadeIn_Tick(object sender, EventArgs e)
+        {
+            i += 0.05;
+            if (i >= 1)
+            {//if form is full visible we execute the Fade Out Effect
+                this.Opacity = 1;
+                timerFadeIn.Enabled = false;//stop the Fade In Effect
+                //timerFadeOut.Enabled = true;//start the Fade Out Effect
+                return;
+            }
+            this.Opacity = i;
+        }
+
+        private void timerFadeOut_Tick(object sender, EventArgs e)
+        {
+            i -= 0.05;
+            if (i <= 0.01)
+            {//if form is invisible we execute the Fade In Effect again
+                this.Opacity = 0.0;
+                //timerFadeIn.Enabled = true;//start the Fade In Effect
+                timerFadeOut.Enabled = false;//stop the Fade Out Effect
+                this.Hide();
+                return;
+            }
+            this.Opacity = i;
+        }
+
+
+
+        #endregion
+
+        /// <summary>
+        /// Collapse Expand
+        /// </summary>
+        #region CollapseExpand
+
+        bool isCollapsed = false;
+        int setHeight;
+        int prevHeight;
+
+        //         CONTROL COLLAPSE FLOW OF EVENTS        //
+        /*
+         * 1. Set Opacity of GrayFade to 0, Bring to Front
+         * 2. Start Fading in Gray (Controls Fade Out)
+         * 3. Hide all controls
+         * 4. Begin Collapse
+         * ------------------------------------------------
+         * 1. Begin Expand
+         * 2. Show all controls
+         * 3. Start Gray Fading (Controls Fade In)
+         * 4. Send Gray Fade to Back and Hide
+        */
+        //         CONTROL COLLAPSE FLOW OF EVENTS        //
+
+        public void ToggleCollapsedState()
+        {
+            if (isCollapsed == false)
+            {
+                this.MinimumSize = new Size(522, 60);
+                grayFadePictureBox.BringToFront();
+                isCollapsed = true;
+                grayFadePictureBox.Opacity = 0;
+                grayFadePictureBox.Show();
+                grayFadeTimer.Enabled = true;
+            }
+            else
+            {
+                setHeight = 60;
+                isCollapsed = false;  
+                timerCollapse.Enabled = false;
+                timerExpand.Enabled = true;
+                this.MaximumSize = new System.Drawing.Size(1000, 1000);              
+            }
+            topMenuControl.SetUpDownButton(isCollapsed);
+        }
+
+        private void timerCollapse_Tick(object sender, EventArgs e)
+        {
+            setHeight -= 20;
+            if (setHeight <= 60)
+            {
+                timerCollapse.Enabled = false;
+                this.MaximumSize = new System.Drawing.Size(1000, 60);
+            }
+            this.Height = setHeight;
+        }
+
+        private void timerExpand_Tick(object sender, EventArgs e)
+        {
+            setHeight += 20;
+            if (setHeight >= prevHeight)
+            {
+                grayFadePictureBox.Show();
+                taskListViewControl.Show();
+                preferencesPanel.Show();
+                timerExpand.Enabled = false;
+                grayFadeTimer.Enabled = true;
+            }
+            this.Height = setHeight;
+        }
+
+        private void grayFadeTimer_Tick(object sender, EventArgs e)
+        {
+            if (isCollapsed == true)
+            {
+                grayFadePictureBox.Opacity += 15;
+                if (grayFadePictureBox.Opacity == 100)
+                {
+                    grayFadeTimer.Enabled = false;
+                    taskListViewControl.Hide();
+                    preferencesPanel.Hide();
+                    grayFadePictureBox.Hide();
+
+                    setHeight = this.Height;
+                    prevHeight = this.Height;
+                    timerCollapse.Enabled = true;
+                    timerExpand.Enabled = false;
+                }
+            }
+            else
+            {
+                grayFadePictureBox.Opacity -= 15;
+                if (grayFadePictureBox.Opacity == 0)
+                {
+                    grayFadeTimer.Enabled = false;
+                    grayFadePictureBox.SendToBack();
+                    grayFadePictureBox.Hide();
+                    this.MinimumSize = new Size(522, 397);
+                }
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        // ******************************************************************
+        // Prepare Settings Manager
+        // ******************************************************************
+
+        #region PrepareSettings
+
+        /// <summary>
+        /// Creates an Instance of Settings Manager
+        /// </summary>
+        private void InitializeSettings()
+        {
+            MinimiseToTrayWhenChecked();
+            RegisterLoadOnStartupWhenChecked();
+        }
+
+        /// <summary>
+        /// Minimizes App to System tray if true
+        /// </summary>
+        private void MinimiseToTrayWhenChecked()
+        {
+            if (logic.MainSettings.GetStartMinimizeStatus() == true)
+                MinimiseMaximiseTray();
+        }
+
+        /// <summary>
+        /// Sets the Load on Startup Status
+        /// </summary>
+        private void RegisterLoadOnStartupWhenChecked()
+        {
+            if (logic.MainSettings.GetLoadOnStartupStatus() == true)
+                RegisterInStartup(true);
+            else
+                RegisterInStartup(false);
+        }
+
+        #endregion
+
+        // ******************************************************************
+        // Switch Between Panels (Preferences and ToDo++)
+        // ******************************************************************
+
+        #region PanelSwitching
+
+        public void SwitchToSettingsPanel()
+        {
+            this.customPanelControl.SelectedIndex = 1;
+        }
+
+        public void SwitchToToDoPanel()
+        {
+            this.customPanelControl.SelectedIndex = 0;
+        }
+
+        private void ToggleToDoPanel()
+        {
+            if (this.customPanelControl.SelectedIndex == 0)
+            {
+                this.customPanelControl.SelectedIndex = 1;
+            }
+            else
+            {
+                this.customPanelControl.SelectedIndex = 0;
+            }
+        }
+
+        #endregion
+
+        // ******************************************************************
+        // Prepare Preferences Panel
+        // ******************************************************************
+
+        #region PreparePrefereces
+
+        private void InitializePreferencesPanel()
+        {
+            preferencesPanel.InitializeWithSettings(logic.MainSettings);
+        }
+
+        #endregion
+
+        // ******************************************************************
+        // Prepare the Menu Bar
+        // ******************************************************************
+
+        #region PrepareMenu
+
+        /// <summary>
+        /// Prepare the Menu Bar. Pass an instance of settings manager into it so it can interact with it
+        /// </summary>
+        private void InitializeMenu()
+        {
+
+        }
+
+        int selected = 0;/*
+        private void preferencesButton_Click(object sender, EventArgs e)
+        {
+            if (selected == 0)
+            {
+                preferencesButton.Text = "ToDo";
+                SwitchToSettingsPanel();
+                selected = 1;
+            }
+            else
+            {
+                preferencesButton.Text = "Preferences";
+                SwitchToToDoPanel();
+                selected = 0;
+            }
+        }*/
+
+        #endregion
+
+        // ******************************************************************
+        // Prepare the Output Box
+        // ******************************************************************
+
+        #region PrepareOutputBox
+
+        /// <summary>
+        /// Prepare the Output Box. Pass an instance of settings manager into it so it can interact with it
+        /// </summary>
+        private void InitializeOutputBox()
+        {
+            outputBox.InitializeWithSettings(logic.MainSettings);
+        }
+
+        #endregion
+
+        // ******************************************************************
+        // Pair Logic with UI
+        // ******************************************************************
+
+        #region PrepareLogic
+
+        private void InitializeLogic(Logic logic)
+        {
+            this.logic = logic;
+            logic.SetUI(this);
+        }
+
+        #endregion
+        
+        // ******************************************************************
+        // Shortcut Keys (Hotkeys)
+        // ******************************************************************
+
+        #region Hotkeys
+
+        /// <summary>
+        /// Holds all Shortcut Keys
+        /// </summary>
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.Q))
+            {
+                Exit();
+                return true;
+            }
+            if (keyData == (Keys.Control | Keys.Space))
+            {
+                this.ActiveControl = textInput;
+                return true;
+            }
+            if (keyData == (Keys.Shift | Keys.S))
+            {
+                ToggleToDoPanel();
+                return true;
+            }
+            if (keyData == (Keys.Shift | Keys.S))
+            {
+                ToggleToDoPanel();
+                return true;
+            }
+            if ((keyData == (Keys.Control | Keys.Up)) || (keyData == (Keys.Control | Keys.Down)))
+            {
+                topMenuControl.CollapseExpandToDo();
+                return true;
+            }
+            if (keyData == Keys.Up)
+            {
+                textInput.UpdateWithPrevCommand();
+                return true;
+            }
+            if (keyData == Keys.Down)
+            {
+                textInput.UpdateWithNextCommand();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        #endregion
+
+        // ******************************************************************
+        // Event Handlers
+        // ******************************************************************
+
+        #region EventHandlers
+
+        /// <summary>
+        /// Adds Event Handlers relating to UI here
+        /// </summary>
+        private void InitializeEventHandlers()
+        {
+            EventHandlers.StayOnTopHandler += SetStayOnTop;
+            EventHandlers.UpdateUIHandler += UpdateUI;
+        }
+
+        /// <summary>
+        /// When event received, Form always stays on Top
+        /// </summary>
+        private void SetStayOnTop(object sender, EventArgs args)
+        {
+            bool onTop = Convert.ToBoolean(sender);
+            this.TopMost = onTop;
+            UserInputBox.OnTop(onTop);
+            FontBox.OnTop(onTop);
+            AlertBox.OnTop(onTop);
+        }
+
+        /// <summary>
+        /// When event received, UI updates itself with the latest settings
+        /// </summary>
+        private void UpdateUI(object sender, EventArgs args)
+        {
+            //taskListViewControl.RefreshListView();
+            taskListViewControl.InitializeWithSettings(logic.MainSettings);
+            taskListViewControl.BuildList();
+        }
+        #endregion
+
+        // ******************************************************************
+        // Code that interacts with logic and returns an output goes here
+        // ******************************************************************
+
+        #region LogicControl
+
+        /// <summary>
+        /// Passes an the user text to Logic, which processes it and returns an output to be displayed
+        /// </summary>
+        private void ProcessText()
+        {
+            string input = textInput.Text;
+            Response output = logic.ProcessCommand(input);
+
+            if (output == null)
+            {
+                AlertBox.Show("An invalid response was returned.");
+                return;
+            }
+
+            List<Task> displayedList = taskListViewControl.UpdateDisplay(output);
+            if (output.IsSuccessful())
+                TinyAlertView.Show(TinyAlertView.StateTinyAlert.SUCCESS, output.FeedbackString);
+            else
+                TinyAlertView.Show(TinyAlertView.StateTinyAlert.FAILURE, output.FeedbackString);
+            textInput.Clear();
+
+            SwitchToToDoPanel();
+            logic.UpdateLastDisplayedTasksList(displayedList);
+        }
+
+        /// <summary>
+        /// When Enter Button Pressed
+        /// </summary>
+        private void textBox_input_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                e.Handled = true;
+                textInput.AddToList(textInput.Text);
+                ProcessText();
+                //TaskDisplayTestDriver();
+            }
+        }
+
+        /*
+        // deprecated -- was used to unit test new UI implementation
+        private void TaskDisplayTestDriver()
+        {
+            List<Task> displayList = new List<Task>();
+            Task addTask;
+            addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
+            displayList.Add(addTask);
+            addTask = new TaskEvent("test task 2", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
+            displayList.Add(addTask);
+            addTask = new TaskEvent("this is a super long test task. who writes this sort of tasks??", new DateTime(2012, 12, 31), new DateTime(2013, 1, 1), new DateTimeSpecificity());            
+            displayList.Add(addTask);
+            addTask = new TaskDeadline("deaddddline is near. =[", new DateTime(2013, 1, 1), new DateTimeSpecificity());
+            addTask.DoneState = true;
+            displayList.Add(addTask);            
+            addTask = new TaskFloating("floating task test");
+            displayList.Add(addTask);
+            Response testResponse = new Response(Result.SUCCESS, Format.NAME, typeof(OperationAdd), displayList);
+            taskListViewControl.UpdateDisplay(testResponse);
+        }
+        */
+        #endregion
+
+
+        /// <summary>
+        /// Exit the Application
+        /// </summary>
+        public void Exit()
+        {
+            Application.Exit();
+        }
+
+        private void UI_Resize(object sender, EventArgs e)
+        {
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+            //TinyAlertView.Location = new Point(this.Right, this.Bottom - 10);
+            TinyAlertView.SetLocation();
+        }
+
+        private void UI_Move(object sender, EventArgs e)
+        {
+            TinyAlertView.SetLocation();
+        }
+
+        private void taskListViewControl_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs row)
+        {
+            taskListViewControl.SetRowIndex(row);
+            taskListViewControl.ColorRows(row);
+        }
+
+        private void taskListViewControl_BeforeSorting(object sender, BrightIdeasSoftware.BeforeSortingEventArgs e)
+        {
+            e.GroupByOrder = SortOrder.None;
+        }
+
+        private void taskListViewControl_MouseEnter(object sender, EventArgs e)
+        {
+            MouseIsOverDisplayList = true;
+            taskListViewControl.Focus();
+        }   
+
+        private void taskListViewControl_MouseLeave(object sender, EventArgs e)
+        {
+            MouseIsOverDisplayList = false;
+        }
+
+        private void SelectTextInput(object sender, KeyPressEventArgs e)
+        {            
+            textInput.Text += e.KeyChar;
+            textInput.Focus();
+            textInput.DeselectAll();
+            textInput.Select(textInput.TextLength, 0);
+            e.Handled = true;
+        }
+
+        private void ScrollIfOverDisplay(object sender, MouseEventArgs e)
+        {
+            if (MouseIsOverDisplayList)
+                taskListViewControl.Focus();
+        }
+
+        internal void SetMessageTaskListIsEmpty(bool empty)
+        {
+            taskListViewControl.SetMessageTaskListIsEmpty(empty);
+        }
+
+
+
+    }
+}
