@@ -16,7 +16,7 @@ namespace ToDo
             contextType = val;
         }
 
-        internal override void UpdateAttributes(OperationAttributes attrb)
+        internal override void UpdateAttributes(OperationGenerator attrb)
         {
             if (contextType == ContextType.CURRENT ||
                 contextType == ContextType.NEXT ||

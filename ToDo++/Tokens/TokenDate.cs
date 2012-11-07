@@ -23,7 +23,7 @@ namespace ToDo
             this.isSpecific = isSpecific;
         }
 
-        internal override void UpdateAttributes(OperationAttributes attrb)
+        internal override void UpdateAttributes(OperationGenerator attrb)
         {
             switch (attrb.currentMode)
             {

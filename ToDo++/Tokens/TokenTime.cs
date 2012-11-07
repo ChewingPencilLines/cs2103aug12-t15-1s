@@ -17,7 +17,7 @@ namespace ToDo
             specific = specific_flag;
         }
 
-        internal override void UpdateAttributes(OperationAttributes attrb)
+        internal override void UpdateAttributes(OperationGenerator attrb)
         {
             switch (attrb.currentMode)
             {
