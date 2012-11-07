@@ -31,7 +31,7 @@ namespace ToDo
                     response = new Response(Result.SUCCESS, Format.DATE_TIME, this.GetType(), currentListedTasks);
                     break;
                 default:
-                    response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
+                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
                     break;
             }
             return response;

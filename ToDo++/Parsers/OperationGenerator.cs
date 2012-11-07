@@ -70,7 +70,9 @@ namespace ToDo
             GetTimeRangeValues();
             if (commandType == CommandType.SCHEDULE)
                 SetScheduleTime();
-            else
+            else if (!(
+                    (commandType == CommandType.ADD) ||
+                    (commandType == CommandType.MODIFY && taskRangeIndex != null)))
                 SetSearchTime();
             CombineDateTimes();
         }
@@ -308,7 +310,24 @@ namespace ToDo
                     newOperation = new OperationMarkAsUndone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
                     break;
                 case CommandType.POSTPONE:
-                    TimeSpan postponeDuration = new TimeSpan(1,1,1);
+                    TimeSpan postponeDuration = new TimeSpan();
+                    switch (timeRangeType)
+                    {
+                        case TimeRangeType.HOUR:
+                            postponeDuration = new TimeSpan(timeRangeIndex,0,0);
+                            break;
+                        case TimeRangeType.DAY:
+                            postponeDuration = new TimeSpan(timeRangeIndex, 0, 0, 0);
+                            break;
+                        case TimeRangeType.WEEK:
+                            postponeDuration = new TimeSpan(timeRangeIndex * CustomDictionary.DAYS_IN_WEEK, 0, 0, 0);
+                            break;
+                        case TimeRangeType.MONTH:
+                            postponeDuration = new TimeSpan(timeRangeIndex * CustomDictionary.DAYS_IN_MONTH, 0, 0, 0);
+                            break;
+                        default:
+                            break;
+                    }
                     newOperation = new OperationPostpone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone, postponeDuration);
                     break;
                 case CommandType.SCHEDULE:

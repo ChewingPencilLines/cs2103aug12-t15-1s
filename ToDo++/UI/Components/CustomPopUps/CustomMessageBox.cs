@@ -160,7 +160,7 @@ namespace ToDo
                     break;
 
                 case StateTinyAlert.WARNING:
-                    tinyAlert.SetColorText(Color.Orange, Color.White, response);
+                    tinyAlert.SetColorText(Color.DarkOrange, Color.Black, response);
                     break;
 
             }

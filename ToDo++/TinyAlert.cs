@@ -44,7 +44,7 @@ namespace ToDo
             //StartDrop();
         }
 
-        public void SetColorText(Color backColor,Color textColor,string text)
+        public void SetColorText (Color backColor,Color textColor, string text)
         {
             this.BackColor = backColor;
             this.tinyAlertLabel.Text = text;
