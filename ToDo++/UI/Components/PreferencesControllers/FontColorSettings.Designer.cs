@@ -30,7 +30,7 @@
         {
             this.textSizeButton = new System.Windows.Forms.Button();
             this.taskDoneColorButton = new System.Windows.Forms.Button();
-            this.taskDeadlineColorButton = new System.Windows.Forms.Button();
+            this.taskMissedDeadlineColorButton = new System.Windows.Forms.Button();
             this.taskDeadlineDayColor = new System.Windows.Forms.Button();
             this.taskEventColor = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -65,20 +65,20 @@
             this.taskDoneColorButton.UseVisualStyleBackColor = false;
             this.taskDoneColorButton.Click += new System.EventHandler(this.taskDoneColorButton_Click);
             // 
-            // taskDeadlineColorButton
+            // taskMissedDeadlineColorButton
             // 
-            this.taskDeadlineColorButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.taskMissedDeadlineColorButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.taskDeadlineColorButton.BackColor = System.Drawing.Color.DimGray;
-            this.taskDeadlineColorButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.taskDeadlineColorButton.ForeColor = System.Drawing.Color.Gainsboro;
-            this.taskDeadlineColorButton.Location = new System.Drawing.Point(3, 61);
-            this.taskDeadlineColorButton.Name = "taskDeadlineColorButton";
-            this.taskDeadlineColorButton.Size = new System.Drawing.Size(320, 23);
-            this.taskDeadlineColorButton.TabIndex = 3;
-            this.taskDeadlineColorButton.Text = "Task Deadline Color";
-            this.taskDeadlineColorButton.UseVisualStyleBackColor = false;
-            this.taskDeadlineColorButton.Click += new System.EventHandler(this.taskDeadlineColorButton_Click);
+            this.taskMissedDeadlineColorButton.BackColor = System.Drawing.Color.DimGray;
+            this.taskMissedDeadlineColorButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.taskMissedDeadlineColorButton.ForeColor = System.Drawing.Color.Gainsboro;
+            this.taskMissedDeadlineColorButton.Location = new System.Drawing.Point(3, 61);
+            this.taskMissedDeadlineColorButton.Name = "taskMissedDeadlineColorButton";
+            this.taskMissedDeadlineColorButton.Size = new System.Drawing.Size(320, 23);
+            this.taskMissedDeadlineColorButton.TabIndex = 3;
+            this.taskMissedDeadlineColorButton.Text = "Task Missed Deadline Color";
+            this.taskMissedDeadlineColorButton.UseVisualStyleBackColor = false;
+            this.taskMissedDeadlineColorButton.Click += new System.EventHandler(this.taskDeadlineColorButton_Click);
             // 
             // taskDeadlineDayColor
             // 
@@ -91,7 +91,7 @@
             this.taskDeadlineDayColor.Name = "taskDeadlineDayColor";
             this.taskDeadlineDayColor.Size = new System.Drawing.Size(320, 23);
             this.taskDeadlineDayColor.TabIndex = 4;
-            this.taskDeadlineDayColor.Text = "Task Deadline Day Color";
+            this.taskDeadlineDayColor.Text = "Task Nearing Deadline Color";
             this.taskDeadlineDayColor.UseVisualStyleBackColor = false;
             this.taskDeadlineDayColor.Click += new System.EventHandler(this.taskDeadlineDayColor_Click);
             // 
@@ -106,7 +106,7 @@
             this.taskEventColor.Name = "taskEventColor";
             this.taskEventColor.Size = new System.Drawing.Size(320, 23);
             this.taskEventColor.TabIndex = 5;
-            this.taskEventColor.Text = "Task Event Color";
+            this.taskEventColor.Text = "Task Missed Color";
             this.taskEventColor.UseVisualStyleBackColor = false;
             this.taskEventColor.Click += new System.EventHandler(this.taskEventColor_Click);
             // 
@@ -117,7 +117,7 @@
             this.BackColor = System.Drawing.Color.Gainsboro;
             this.Controls.Add(this.taskEventColor);
             this.Controls.Add(this.taskDeadlineDayColor);
-            this.Controls.Add(this.taskDeadlineColorButton);
+            this.Controls.Add(this.taskMissedDeadlineColorButton);
             this.Controls.Add(this.taskDoneColorButton);
             this.Controls.Add(this.textSizeButton);
             this.Name = "FontColorSettings";
@@ -130,7 +130,7 @@
 
         private System.Windows.Forms.Button textSizeButton;
         private System.Windows.Forms.Button taskDoneColorButton;
-        private System.Windows.Forms.Button taskDeadlineColorButton;
+        private System.Windows.Forms.Button taskMissedDeadlineColorButton;
         private System.Windows.Forms.Button taskDeadlineDayColor;
         private System.Windows.Forms.Button taskEventColor;
 

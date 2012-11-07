@@ -333,6 +333,7 @@ namespace ToDo
         {
             if (isCollapsed == false)
             {
+                this.MinimumSize = new Size(522, 60);
                 grayFadePictureBox.BringToFront();
                 isCollapsed = true;
                 grayFadePictureBox.Opacity = 0;
@@ -401,6 +402,7 @@ namespace ToDo
                     grayFadeTimer.Enabled = false;
                     grayFadePictureBox.SendToBack();
                     grayFadePictureBox.Hide();
+                    this.MinimumSize = new Size(522, 397);
                 }
             }
         }
@@ -460,6 +462,18 @@ namespace ToDo
         public void SwitchToToDoPanel()
         {
             this.customPanelControl.SelectedIndex = 0;
+        }
+
+        private void ToggleToDoPanel()
+        {
+            if (this.customPanelControl.SelectedIndex == 0)
+            {
+                this.customPanelControl.SelectedIndex = 1;
+            }
+            else
+            {
+                this.customPanelControl.SelectedIndex = 0;
+            }
         }
 
         #endregion
@@ -559,6 +573,11 @@ namespace ToDo
             if (keyData == (Keys.Control | Keys.Space))
             {
                 this.ActiveControl = textInput;
+                return true;
+            }
+            if (keyData == (Keys.Shift | Keys.S))
+            {
+                ToggleToDoPanel();
                 return true;
             }
             if ((keyData == (Keys.Control | Keys.Up)) || (keyData == (Keys.Control | Keys.Down)))

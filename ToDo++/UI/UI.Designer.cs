@@ -473,7 +473,7 @@
             this.Controls.Add(this.transpControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(522, 60);
+            this.MinimumSize = new System.Drawing.Size(522, 397);
             this.Name = "UI";
             this.Text = "ToDo++";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SelectTextInput);
