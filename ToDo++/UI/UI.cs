@@ -539,69 +539,7 @@ namespace ToDo
         }
 
         #endregion
-
-        // ******************************************************************
-        // Code that interacts with logic and returns an output goes here
-        // ******************************************************************
-
-        #region LogicControl
-
-        /// <summary>
-        /// Passes an the user text to Logic, which processes it and returns an output to be displayed
-        /// </summary>
-        private void ProcessText()
-        {
-            string input = textInput.Text;
-            Response output = logic.ProcessCommand(input);
-            List<Task> displayedList = taskListViewControl.UpdateDisplay(output);
-            if (output.IsSuccessful())
-                TinyAlertView.Show(TinyAlertView.StateTinyAlert.SUCCESS, output.FeedbackString);
-            else 
-                TinyAlertView.Show(TinyAlertView.StateTinyAlert.FAILURE, output.FeedbackString);
-            textInput.Clear();
-
-            SwitchToToDoPanel();
-            logic.UpdateLastDisplayedTasksList(displayedList);
-        }
-
-        /// <summary>
-        /// When Enter Button Pressed
-        /// </summary>
-        private void textBox_input_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)13)
-            {
-                e.Handled = true;
-                textInput.AddToList(textInput.Text);
-                ProcessText();
-                //TaskDisplayTestDriver();
-            }
-        }
-
-        /*
-        // deprecated -- was used to unit test new UI implementation
-        private void TaskDisplayTestDriver()
-        {
-            List<Task> displayList = new List<Task>();
-            Task addTask;
-            addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
-            displayList.Add(addTask);
-            addTask = new TaskEvent("test task 2", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
-            displayList.Add(addTask);
-            addTask = new TaskEvent("this is a super long test task. who writes this sort of tasks??", new DateTime(2012, 12, 31), new DateTime(2013, 1, 1), new DateTimeSpecificity());            
-            displayList.Add(addTask);
-            addTask = new TaskDeadline("deaddddline is near. =[", new DateTime(2013, 1, 1), new DateTimeSpecificity());
-            addTask.DoneState = true;
-            displayList.Add(addTask);            
-            addTask = new TaskFloating("floating task test");
-            displayList.Add(addTask);
-            Response testResponse = new Response(Result.SUCCESS, Format.NAME, typeof(OperationAdd), displayList);
-            taskListViewControl.UpdateDisplay(testResponse);
-        }
-        */
-
-        #endregion
-
+        
         // ******************************************************************
         // Shortcut Keys (Hotkeys)
         // ******************************************************************
@@ -678,9 +616,76 @@ namespace ToDo
             taskListViewControl.RefreshListView();
             taskListViewControl.InitializeWithSettings(logic.MainSettings);
         }
-
-
         #endregion
+
+        // ******************************************************************
+        // Code that interacts with logic and returns an output goes here
+        // ******************************************************************
+
+        #region LogicControl
+
+        /// <summary>
+        /// Passes an the user text to Logic, which processes it and returns an output to be displayed
+        /// </summary>
+        private void ProcessText()
+        {
+            string input = textInput.Text;
+            Response output = logic.ProcessCommand(input);
+
+            if (output == null)
+            {
+                AlertBox.Show("An invalid response was returned.");
+                return;
+            }
+
+            List<Task> displayedList = taskListViewControl.UpdateDisplay(output);
+            if (output.IsSuccessful())
+                TinyAlertView.Show(TinyAlertView.StateTinyAlert.SUCCESS, output.FeedbackString);
+            else
+                TinyAlertView.Show(TinyAlertView.StateTinyAlert.FAILURE, output.FeedbackString);
+            textInput.Clear();
+
+            SwitchToToDoPanel();
+            logic.UpdateLastDisplayedTasksList(displayedList);
+        }
+
+        /// <summary>
+        /// When Enter Button Pressed
+        /// </summary>
+        private void textBox_input_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                e.Handled = true;
+                textInput.AddToList(textInput.Text);
+                ProcessText();
+                //TaskDisplayTestDriver();
+            }
+        }
+
+        /*
+        // deprecated -- was used to unit test new UI implementation
+        private void TaskDisplayTestDriver()
+        {
+            List<Task> displayList = new List<Task>();
+            Task addTask;
+            addTask = new TaskEvent("test task", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
+            displayList.Add(addTask);
+            addTask = new TaskEvent("test task 2", DateTime.Now, DateTime.Now, new DateTimeSpecificity());
+            displayList.Add(addTask);
+            addTask = new TaskEvent("this is a super long test task. who writes this sort of tasks??", new DateTime(2012, 12, 31), new DateTime(2013, 1, 1), new DateTimeSpecificity());            
+            displayList.Add(addTask);
+            addTask = new TaskDeadline("deaddddline is near. =[", new DateTime(2013, 1, 1), new DateTimeSpecificity());
+            addTask.DoneState = true;
+            displayList.Add(addTask);            
+            addTask = new TaskFloating("floating task test");
+            displayList.Add(addTask);
+            Response testResponse = new Response(Result.SUCCESS, Format.NAME, typeof(OperationAdd), displayList);
+            taskListViewControl.UpdateDisplay(testResponse);
+        }
+        */
+        #endregion
+
 
         /// <summary>
         /// Exit the Application

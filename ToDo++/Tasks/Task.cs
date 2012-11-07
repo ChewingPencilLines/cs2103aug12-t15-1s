@@ -108,5 +108,7 @@ namespace ToDo
         {
             return null;
         }
+
+        internal abstract void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific);
     }
 }

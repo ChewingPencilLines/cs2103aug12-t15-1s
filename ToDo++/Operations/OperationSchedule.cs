@@ -62,7 +62,7 @@ namespace ToDo
                     break;
             }
             // todo: loop through all tasks to find earliest possible fitting time
-            bool isSlotFound = false;;
+            bool isSlotFound = false;
             DateTime tryStartTime = startDateTime;
             DateTime tryEndTime = new DateTime();
             DateTime copyTryStartTime = startDateTime;
