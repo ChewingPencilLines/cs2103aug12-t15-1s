@@ -14,6 +14,7 @@ namespace ToDo
         DateTimeSpecificity isSpecific;
         int timeRangeIndex;
         TimeRangeType timeRangeType;
+        Task scheduledTask;
         
         public OperationSchedule(string taskName, DateTime startDateTime, DateTime? endDateTime, DateTimeSpecificity isSpecific, int timeRangeIndex, TimeRangeType timeRangeType)
         {
@@ -29,45 +30,19 @@ namespace ToDo
         {
             SetMembers(taskList, storageIO);
             // default response: failure to schedule task i.e. cannot find fitting slot
-            Response response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
+            Response response = new Response(Result.INVALID_TASK, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             retrieveParameters();
-            // check that range > span, else return failure response
-            // (error response should be different from if no fitting slot can be found)
-            TimeSpan span = ((DateTime)endDateTime) - startDateTime;
-            switch (timeRangeType)
+            if (!CheckTaskDurationWithinRange())
             {
-                case TimeRangeType.HOUR:
-                    if (timeRangeIndex > span.TotalHours)
-                    {
-                        // error: not enough time to schedule task; time span < task duration
-                        return response;
-                    }
-                    break;
-                case TimeRangeType.DAY:
-                    if (timeRangeIndex > span.TotalDays)
-                    {
-                        // error: not enough time to schedule task; time span < task duration
-                        return response;
-                    }
-                    break;
-                case TimeRangeType.MONTH:
-                    if (startDateTime.AddMonths(timeRangeIndex) > ((DateTime)endDateTime))
-                    {
-                        // error: not enough time to schedule task; time span < task duration
-                        return response;
-                    }
-                    break;
-                default:
-                    // should never fall to this
-                    break;
+                return response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             }
-            // todo: loop through all tasks to find earliest possible fitting time
             bool isSlotFound = false;;
             DateTime tryStartTime = startDateTime;
             DateTime tryEndTime = new DateTime();
             DateTime copyTryStartTime = startDateTime;
             DateTimeSpecificity searchSpecificity = new DateTimeSpecificity();
             int index = 0;
+            // loop through all tasks to find earliest possible fitting time
             while (!isSlotFound && tryEndTime <= ((DateTime)endDateTime))
             {
                 int numberOfSetsToLoop = 1;
@@ -78,11 +53,24 @@ namespace ToDo
                         tryEndTime = tryStartTime.AddHours(timeRangeIndex);
                         break;
                     case TimeRangeType.DAY:
+                        if (!isSpecific.StartTime)
+                        {
+                            timeRangeType = TimeRangeType.HOUR;
+                            timeRangeIndex *= 24;
+                        }
                         numberOfSetsToLoop = timeRangeIndex;
                         break;
                     case TimeRangeType.MONTH:
-                        span = tryStartTime.AddMonths(timeRangeIndex) - tryStartTime;
-                        numberOfSetsToLoop = (int)span.TotalDays;
+                        TimeSpan span = tryStartTime.AddMonths(timeRangeIndex) - tryStartTime;
+                        if (!isSpecific.StartTime)
+                        {
+                            timeRangeType = TimeRangeType.HOUR;
+                            timeRangeIndex = numberOfSetsToLoop = (int)span.TotalHours;
+                        }
+                        else
+                        {
+                            numberOfSetsToLoop = (int)span.TotalDays;
+                        }
                         break;
                 }
                 copyTryStartTime = tryStartTime;
@@ -93,11 +81,26 @@ namespace ToDo
                 }
                 for (int i = 0; i < numberOfSetsToLoop; i++)
                 {
-                    if (i > 0) tryStartTime = tryStartTime.AddDays(1);
+                    if (i > 0)
+                    {
+                        if (timeRangeType == TimeRangeType.HOUR)
+                        {
+                            tryStartTime = tryStartTime.AddHours(1);
+                        }
+                        else
+                        {
+                            tryStartTime = tryStartTime.AddDays(1);
+                        }
+                    }
                     if (tryEndTime <= tryStartTime)
+                    {
                         tryEndTime = tryStartTime.AddDays(1).Add(((DateTime)endDateTime).TimeOfDay);
+                    }
                     searchResults = SearchForTasks(null, searchSpecificity, false, tryStartTime, tryEndTime);
-                    if (searchResults.Count != 0) break;
+                    if (searchResults.Count != 0)
+                    {
+                        break;
+                    }
                 }
                 // once fitting time is found, change its start and end datetime then
                 // add the task; return success response
@@ -105,8 +108,8 @@ namespace ToDo
                 {
                     if (tryEndTime > endDateTime)
                         break;
-                    TaskEvent newTask = new TaskEvent(taskName, copyTryStartTime, tryEndTime.AddSeconds(-1), searchSpecificity);
-                    response = AddTask(newTask);
+                    scheduledTask = new TaskEvent(taskName, copyTryStartTime, tryEndTime.AddSeconds(-1), searchSpecificity);
+                    response = AddTask(scheduledTask);
                     if (response.IsSuccessful())
                     {
                         TrackOperation();
@@ -164,26 +167,72 @@ namespace ToDo
                 }
                 else
                 {
-                    // shit: not able to differentiate between "schedule task today 3 hours" and
-                    // "schedule task 3 days" -- endDateTime = DateTime.Max;
                     if (isSpecific.StartDate.Day)
                         endDateTime = startDateTime.AddDays(1).Date;
-                    else
+                    else if (isSpecific.StartDate.Month)
                         endDateTime = startDateTime.AddMonths(1).Date;
+                    else
+                        endDateTime = DateTime.MaxValue.Date;
                 }
             }
             if (startDateTime < DateTime.Now)
             {
-                startDateTime = startDateTime.AddHours(DateTime.Now.Hour);
+                startDateTime = startDateTime.AddHours(DateTime.Now.Hour+1);
             }
+        }
+
+        private bool CheckTaskDurationWithinRange()
+        {
+            // check that range > span, else return failure response
+            // (error response should be different from if no fitting slot can be found)
+            TimeSpan span = ((DateTime)endDateTime) - startDateTime;
+            switch (timeRangeType)
+            {
+                case TimeRangeType.HOUR:
+                    if (timeRangeIndex > span.TotalHours)
+                    {
+                        return false;
+                    }
+                    break;
+                case TimeRangeType.DAY:
+                    if (timeRangeIndex > span.TotalDays)
+                    {
+                        // error: not enough time to schedule task; time span < task duration
+                        return false;
+                    }
+                    break;
+                case TimeRangeType.MONTH:
+                    if (startDateTime.AddMonths(timeRangeIndex) > ((DateTime)endDateTime))
+                    {
+                        // error: not enough time to schedule task; time span < task duration
+                        return false;
+                    }
+                    break;
+                default:
+                    // should never fall to this
+                    break;
+            }
+            return true;
         }
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            throw new NotImplementedException();
-            //Task task = undoTask.Pop();
-            //return DeleteTask(task);
+            Response response = DeleteTask(scheduledTask);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+        }
+
+        public override Response Redo(List<Task> taskList, Storage storageIO)
+        {
+            SetMembers(taskList, storageIO);
+            Response response = AddTask(scheduledTask);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
         }
     }
 }
