@@ -118,6 +118,8 @@ namespace ToDo
                     return TimeRangeType.DAY;
                 case "HOUR":
                     return TimeRangeType.HOUR;
+                case "WEEK":
+                    return TimeRangeType.WEEK;
                 case "MONTH":
                     return TimeRangeType.MONTH;
             }

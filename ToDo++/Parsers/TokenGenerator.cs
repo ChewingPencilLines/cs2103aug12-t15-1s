@@ -134,20 +134,20 @@ namespace ToDo
             int index = 0;
             foreach (string word in inputWords)
             {
-                int userDefinedIndex = 0;
+                int timeRangeAmount = 0;
                 TimeRangeType timeRangeType;
                 TimeRangeKeywordsType timeRangeKeyword;
                 TokenTimeRange timeRangeToken = null;
                 if (CustomDictionary.IsTimeRange(word.ToLower()))
                 {
                     Match match = CustomDictionary.isTimeRange.Match(word.ToLower());
-                    Int32.TryParse(match.Groups["index"].Value, out userDefinedIndex);
+                    Int32.TryParse(match.Groups["index"].Value, out timeRangeAmount);
                     string matchString = match.Groups["type"].Value;
                     if (!CustomDictionary.timeRangeType.TryGetValue(matchString, out timeRangeType))
                     {
                         throw new Exception("Something wrong with IsTimeRange regex etc.");
                     }
-                        timeRangeToken = new TokenTimeRange(index, userDefinedIndex, timeRangeType);
+                        timeRangeToken = new TokenTimeRange(index, timeRangeAmount, timeRangeType);
                 }
                 else if (CustomDictionary.timeRangeKeywords.TryGetValue(word.ToLower(), out timeRangeKeyword))
                 {
