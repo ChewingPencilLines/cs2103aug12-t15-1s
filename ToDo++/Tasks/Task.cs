@@ -84,9 +84,9 @@ namespace ToDo
             return String.Empty;
         }
 
-        public virtual Task Postpone(DateTime? NewDate)
+        public virtual bool Postpone(TimeSpan postponeDuration)
         {
-            return null;
+            return false;
         }        
         
         // Need to handle exceptions (null?)

@@ -11,8 +11,6 @@ namespace ToDo
 {
     class CommandParser
     {
-        const int START_INDEX = 0;
-        const int END_INDEX = 1;
         StringParser stringParser;
 
         public CommandParser(StringParser stringParser)
@@ -22,7 +20,6 @@ namespace ToDo
 
         public Operation ParseOperation(string input)
         {
-            // Get position of delimiters so we can treat those substrings as a single word.
             List<Token> tokens = stringParser.ParseStringIntoTokens(input);
             return GenerateOperation(tokens);            
         }
@@ -34,8 +31,7 @@ namespace ToDo
             {
                token.UpdateAttributes(opAttributes);
             }
-            // implement?: 
-            // ReleaseUnusedTokens();
+            // implement? ReleaseUnusedTokens();
             opAttributes.SetTimes();
             Operation newOperation = opAttributes.CreateOperation();
             return newOperation;

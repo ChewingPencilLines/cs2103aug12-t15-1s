@@ -18,18 +18,16 @@ namespace ToDo
         private bool hasIndex;
         private bool isAll;
         private string taskName;
-        private DateTime? oldTime = null, postponeTime = null;
+        private DateTime? startTime = null, endTime = null;
         private DateTimeSpecificity isSpecific = new DateTimeSpecificity();
+        private SearchType searchType;
+        private TimeSpan postponeDuration;
         #endregion Parameters
 
         public OperationPostpone(string taskName, int[] indexRange, DateTime? startTime,
-            DateTime? postponeTime, DateTimeSpecificity isSpecific, bool isAll)
+            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType, TimeSpan postponeDuration)
         {
-            this.oldTime = startTime;
-            this.postponeTime = postponeTime;
-            this.isAll = isAll;
-            this.isSpecific = isSpecific;
-            if (indexRange == null) hasIndex = false;
+            if (indexRange == null) hasIndex = false;            
             else
             {
                 hasIndex = true;
@@ -38,159 +36,50 @@ namespace ToDo
             }
             if (taskName == null) this.taskName = "";
             else this.taskName = taskName;
-
-            //alter for only one date in command as the postpone date
-            if ((indexRange != null || taskName != null || isAll == true) && postponeTime == null && startTime != null)
-            {
-                this.oldTime = postponeTime;
-                this.postponeTime = startTime;
-                this.isSpecific.StartTime = isSpecific.EndTime;
-                this.isSpecific.EndTime = isSpecific.StartTime;
-            }
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.isSpecific = isSpecific;
+            this.isAll = isAll;
+            this.searchType = searchType;
+            this.postponeDuration = postponeDuration;
         }
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Response response;
 
-            if (currentListedTasks.Count == 0)
-                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
-            // Invalid index ranges
-            else if (endIndex < startIndex)
-                return new Response(Result.INVALID_TASK, Format.DEFAULT);
-            else if (startIndex < 0 || endIndex > currentListedTasks.Count - 1)
-                return new Response(Result.INVALID_TASK, Format.DEFAULT);
+            Func<Task, TimeSpan, Response> action = PostponeTask;
+            object[] args = null;
+            Response response = null;
+
+            response = CheckIfIndexesAreValid(startIndex, endIndex);
+            if (response != null) return response;
 
             if (!hasIndex)
-                response = PostponeBySearch(taskList);
+                response = ExecuteBySearch(
+                    taskName, isSpecific.StartTime && isSpecific.EndTime,
+                    startTime, endTime, isSpecific, isAll, SearchType.NONE, action, args);
+
             else if (hasIndex)
-                response = PostponeByIndex(taskList);
+                response = ExecuteByIndex(startIndex, endIndex, action, args);
+
             else
                 response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
 
             if (response.IsSuccessful())
                 TrackOperation();
-            return response;
-        }
-
-        private Response PostponeBySearch(List<Task> taskList)
-        {
-            Response response;
-            List<Task> searchResults;
-
-            searchResults = GenerateSearchResult(taskList);
-           
-            if (searchResults.Count == 0)
-                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
-            else if (searchResults.Count == 1)
-                response = PostponeTask(searchResults[0], postponeTime);
-            else
-            {
-                if (isAll)
-                    response = PostponeAllTasks(taskList, searchResults);
-                else
-                {
-                    currentListedTasks = new List<Task>(searchResults);
-                    response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
-                }
-            }
-            return response;
-        }
-
-        private Response PostponeByIndex(List<Task> taskList)
-        {
-            Response response;
-            if (endIndex == startIndex)
-                response = PostponeSingleTask(taskList);
-            else if (endIndex < 0 || endIndex > currentListedTasks.Count - 1)
-                response = new Response(Result.INVALID_TASK, Format.DEFAULT);
-            else
-                response = PostponeMultipleTasks(taskList);
 
             return response;
         }
-       
-        private Response PostponeAllTasks(List<Task> taskList, List<Task> searchResults)
-        {
-            Response response = null;
-            foreach (Task task in searchResults)
-            {
-                response = PostponeTask(task, postponeTime);
-                if (!response.IsSuccessful()) return response;
-            }
-            return response;
-        }
 
-        private Response PostponeSingleTask(List<Task> taskList)
+        protected Response PostponeTask(Task taskToPostpone, TimeSpan postponeDuration)
         {
-            Task taskToPostpone = currentListedTasks[startIndex];
-            if (taskToPostpone == null)
-                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+            if (taskToPostpone.Postpone(postponeDuration) == false)
+                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
+            if (storageIO.UpdateTask(taskToPostpone))
+                return GenerateStandardSuccessResponse(taskToPostpone);
             else
-                return PostponeTask(taskToPostpone, postponeTime);
-        }
-
-        private Response PostponeMultipleTasks(List<Task> taskList)
-        {
-            Response response;
-
-            response = null;
-            for (int i = startIndex; i <= endIndex; i++)
-            {
-                Task taskToPostpone = currentListedTasks[i];
-
-                if (taskToPostpone == null)
-                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
-                else
-                {
-                    // this is a hack. delete task range properly!
-                    response = PostponeTask(taskToPostpone, postponeTime);
-                    if (!response.IsSuccessful()) return response;
-                }
-            }
-            return response;
-        }
-
-
-        private List<Task> GenerateSearchResult(List<Task> taskList)
-        {
-            if (oldTime == null)
-                return SearchTimedTasks(taskList);
-            else
-                return SearchForTasks(taskName, isSpecific, isSpecific.StartTime, oldTime);
-        }
-
-        private List<Task> SearchTimedTasks(List<Task> taskList)
-        {
-            List<Task> searchResults = SearchForTasks(taskName, isSpecific);
-            //filter floating tasks
-            return (from task in searchResults
-                    where (task is TaskEvent || task is TaskDeadline)
-                    select task).ToList();
-        }
-
-        protected Response PostponeTask(Task taskToPostpone, DateTime? NewDate)
-        {
-            //TaskId doesn't change though the sequence may change
-            Task taskPostponed = taskToPostpone.Postpone(NewDate);
-
-            if (taskPostponed == null)
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationPostpone));
-            else
-            {
-                DeleteTask(taskToPostpone);
-                AddTask(taskPostponed);
-                currentListedTasks.Remove(taskToPostpone);
-                currentListedTasks.Add(taskPostponed);
-            }
-            if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
-            {
-                return GenerateStandardSuccessResponse(taskPostponed);
-                //return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationPostpone),currentListedTasks);
-            }
-            else
-                return new Response(Result.XML_READWRITE_FAIL);
+                return GenerateXMLFailureResponse();
         }
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
