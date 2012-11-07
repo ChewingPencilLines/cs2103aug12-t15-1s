@@ -236,7 +236,7 @@ namespace ToDo
             switch (commandType)
             {
                 case CommandType.ADD:
-                    task = GenerateNewTask(taskName, startDateTime, endDateTime, isSpecific);
+                    task = Task.GenerateNewTask(taskName, startDateTime, endDateTime, isSpecific);
                     newOperation = new OperationAdd(task);
                     break;
                 case CommandType.DELETE:
@@ -277,32 +277,6 @@ namespace ToDo
                     break;
             }
             return newOperation;
-        }
-
-        public static Task GenerateNewTask(
-            string taskName,
-            DateTime? startTime,
-            DateTime? endTime,
-            DateTimeSpecificity isSpecific
-            )
-        {
-            if (startTime == null && endTime == null)
-                return new TaskFloating(taskName);
-            else if (startTime == null && endTime != null)
-                return new TaskDeadline(taskName, (DateTime)endTime, isSpecific);
-            else if (startTime != null && endTime == null)
-            {
-                // If endTime is not specified set endTime based on startTime.
-                endTime = startTime;
-                if (!isSpecific.StartTime)
-                {
-                    endTime = ((DateTime)endTime).AddDays(1);
-                    endTime = ((DateTime)endTime).AddMinutes(-1);
-                }
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific);
-            }
-            else
-                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
         }
 
         internal void SetConditionalEndTime(TimeSpan Value, bool IsSpecific)

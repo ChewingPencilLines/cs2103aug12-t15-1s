@@ -34,7 +34,7 @@ namespace ToDo
             return base.Postpone(NewDate);
         }
 
-        internal override void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific)
+        public override void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific)
         {
             startTime = null;
             endTime = null;
