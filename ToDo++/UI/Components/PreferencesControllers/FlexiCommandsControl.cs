@@ -557,6 +557,32 @@ namespace ToDo
             }
         }
 
+        private void flatTabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (flatTabControl1.SelectedIndex == 0)
+            {
+                commandTree.Focus();
+                Size tempSize = descriptionLabel.Size;
+                tempSize.Height = flatTabControl1.Height-70;
+                descriptionLabel.Size = tempSize;
+            }
+            else if (flatTabControl1.SelectedIndex == 1)
+            {
+                contextTree.Focus();
+                Size tempSize = descriptionLabel.Size;
+                tempSize.Height = flatTabControl1.Height-70;
+                descriptionLabel.Size = tempSize;
+            }
+            else if (flatTabControl1.SelectedIndex == 2)
+            {
+                timeRangeKeywordTree.Focus();
+                //descriptionLabel.Anchor = (AnchorStyles.Top | AnchorStyles.Left);
+                Size tempSize = descriptionLabel.Size;
+                tempSize.Height = 93;
+                descriptionLabel.Size = tempSize;
+            }
+        }
+
 
 
 

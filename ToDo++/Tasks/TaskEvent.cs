@@ -131,22 +131,10 @@ namespace ToDo
             }
             return timeString;
         }
-
-        public string test()
+        
+        public override bool Postpone(TimeSpan postponeDuration)
         {
-            return String.Empty;
-        }
-
-        public override Task Postpone(DateTime? NewDate)
-        {
-            TaskEvent result;
-            if (NewDate == null)
-                result= new TaskEvent(this.taskName, this.startDateTime.AddDays(1),this.endDateTime.AddDays(1), this.isSpecific, this.doneState);           
-            else
-            {
-                DateTime NewEnd = this.endDateTime + (NewDate.Value - this.startDateTime);
-                result = new TaskEvent(this.taskName, NewDate.Value, NewEnd, this.isSpecific, this.doneState);  
-            }
+            bool result = true;
             return result;
         }
 

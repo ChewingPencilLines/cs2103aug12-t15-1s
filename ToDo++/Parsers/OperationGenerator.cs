@@ -68,15 +68,10 @@ namespace ToDo
         public void SetTimes()
         {
             GetTimeRangeValues();
-            if (commandType == CommandType.SEARCH
-                || commandType == CommandType.DELETE
-                || commandType == CommandType.DONE
-                || commandType == CommandType.UNDONE
-                || (commandType == CommandType.MODIFY && taskRangeIndex != null)
-                || commandType == CommandType.ADD)
-                SetSearchTime();
-            else
+            if (commandType == CommandType.SCHEDULE)
                 SetScheduleTime();
+            else
+                SetSearchTime();
             CombineDateTimes();
         }
 
@@ -313,7 +308,8 @@ namespace ToDo
                     newOperation = new OperationMarkAsUndone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
                     break;
                 case CommandType.POSTPONE:
-                    newOperation = new OperationPostpone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll);
+                    TimeSpan postponeDuration = new TimeSpan(1,1,1);
+                    newOperation = new OperationPostpone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone, postponeDuration);
                     break;
                 case CommandType.SCHEDULE:
                     newOperation = new OperationSchedule(taskName, (DateTime)startDateTime, endDateTime, isSpecific, timeRangeIndex, timeRangeType);
