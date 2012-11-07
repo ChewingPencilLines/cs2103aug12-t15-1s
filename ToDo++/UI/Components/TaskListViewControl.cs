@@ -159,10 +159,6 @@ namespace ToDo
             row.Item.SubItems[1].Text = "[" + (row.DisplayIndex + 1).ToString() + "]";
         }
 
-        public void RefreshListView()
-        {
-            this.BuildList();
-        }
         public void ColorRows(BrightIdeasSoftware.FormatRowEventArgs row)
         {
             Task task = (Task)row.Item.RowObject;
