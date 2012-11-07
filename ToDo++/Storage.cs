@@ -157,22 +157,22 @@ namespace ToDo
 
             return true;            
         }
-
-        internal bool ModifyTask(Task oldTask, Task newTask)
+        
+        internal bool UpdateTask(Task taskToUpdate)
         {
             XDocument doc = XDocument.Load(taskStorageFile);
 
             var task = from node in doc.Descendants("Task")
                        let attr = node.Attribute("id")
-                       where attr != null && attr.Value == oldTask.ID.ToString()
+                       where attr != null && attr.Value == taskToUpdate.ID.ToString()
                        select node;
 
             if (task == null) return false;
 
             try
             {
-                XElement oldTaskNode = task.First();
-                oldTaskNode.ReplaceWith(newTask.ToXElement());
+                XElement taskNode = task.First();
+                taskNode.ReplaceWith(taskToUpdate.ToXElement());
             }
             catch (Exception e)
             {
