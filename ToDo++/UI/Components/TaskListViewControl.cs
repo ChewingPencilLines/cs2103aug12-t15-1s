@@ -159,11 +159,6 @@ namespace ToDo
             row.Item.SubItems[1].Text = "[" + (row.DisplayIndex + 1).ToString() + "]";
         }
 
-        public void RefreshListView()
-        {
-            throw new NotImplementedException("Need a function to redraw content in listview, and recolor rows");
-        }
-
         public void ColorRows(BrightIdeasSoftware.FormatRowEventArgs row)
         {
             Task task = (Task)row.Item.RowObject;

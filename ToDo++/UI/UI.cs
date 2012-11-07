@@ -632,8 +632,9 @@ namespace ToDo
         /// </summary>
         private void UpdateUI(object sender, EventArgs args)
         {
-            taskListViewControl.RefreshListView();
+            //taskListViewControl.RefreshListView();
             taskListViewControl.InitializeWithSettings(logic.MainSettings);
+            taskListViewControl.BuildList();
         }
         #endregion
 
