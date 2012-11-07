@@ -470,7 +470,7 @@ namespace ToDo
                     criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " to";
             }
             if (endTime != null)
-                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " " + ((DateTime)startTime).ToString("g");
+                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " " + ((DateTime)endTime).ToString("g");
         }
         #endregion
     }
