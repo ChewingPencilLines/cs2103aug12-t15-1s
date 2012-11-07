@@ -13,7 +13,7 @@ namespace ToDo
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            if (undoStack.Count == 0 || undoTask.Count == 0)
+            if (undoStack.Count == 0)
                 return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
             Operation undoOp = Operation.undoStack.Pop();
             Response result = undoOp.Undo(taskList, storageIO);

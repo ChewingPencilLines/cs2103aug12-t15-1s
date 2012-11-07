@@ -12,7 +12,7 @@ namespace ToDo
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            if (redoStack.Count == 0 || redoTask.Count == 0)
+            if (redoStack.Count == 0)
                 return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
             Operation redoOp = Operation.redoStack.Pop();
             Response result = redoOp.Redo(taskList, storageIO);
