@@ -72,13 +72,14 @@ namespace ToDo
             {
                 Response feedback = ExecuteCommand(operation);
 
-                if (ui == null) 
-                    return feedback; 
-
-                if (taskList.Count == 0)
-                    ui.SetMessageTaskListIsEmpty(true);
-                else
-                    ui.SetMessageTaskListIsEmpty(false);
+                if (ui != null)
+                {
+                    if (taskList.Count == 0)
+                        ui.SetMessageTaskListIsEmpty(true);
+                    else
+                        ui.SetMessageTaskListIsEmpty(false);
+                }
+                
                 return feedback;
             }
         }

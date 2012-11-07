@@ -20,10 +20,11 @@ namespace ToDo
         const string STRING_DELETE_SUCCESS_MULTI = "Deleted all tasks successfully.";
         const string STRING_DELETE_FAILURE = "No matching tasks found!";
         const string STRING_DELETE_INVALID_TASK = "No task to delete!";
-        const string STRING_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
+        const string STRING_MODIFY_SUCCESS = "Modified task successfully.";
         const string STRING_MODIFY_FAILURE = "Failed to modify task..!";
+        const string STRING_MODIFY_INVALID_TASK = "Cannot modify more than one task at once!";
         const string STRING_DISPLAY_NO_TASK = "There are no tasks for display.";
-        const string STRING_SEARCH_SUCCESS = "Showing {0}tasks{1}.";
+        const string STRING_SEARCH_SUCCESS = "Displaying all {0}tasks{1}.";
         const string STRING_SORT_SUCCESS = "Sorting by {0}.";
         const string STRING_UNDO_SUCCESS = "Undid last operation.";
         const string STRING_UNDO_FAILURE = "Cannot undo last executed operation!";
@@ -38,6 +39,9 @@ namespace ToDo
         const string STRING_MARKASDONE_FAILURE = "No matching tasks found!";
         const string STRING_MARKASDONE_INVALID_TASK = "Cannot mark this task as done!";
         const string STRING_MARKASUNDONE_SUCCESS = "Successfully marked \"{0}\" as undone."; // Not implemented.
+        const string STRING_SCHEDULE_INVALID_TASK = "Task duration exceeds specified time range!";
+        const string STRING_SCHEDULE_FAILURE = "Task could not be scheduled within specified time range!";
+        const string STRING_SCHEDULE_SUCCESS = "Scheduled new task \"{0}\" successfully.";
         const string STRING_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string STRING_CALLED_INVALID_TASK_INDEX = "Invalid task index!";
         const string STRING_INVALID_COMMAND = "Invalid command input!";
@@ -49,7 +53,6 @@ namespace ToDo
         public const int MODIFY_PARAM_NEW_TASK = 1;
         public const int MODIFY_PARAM_NUM = 2;
         public const int SEARCH_PARAM_DONE = 0;
-        public const int SEARCH_PARAM_ALL = 0;
         public const int SEARCH_PARAM_SEARCH_STRING = 1;
         public const int SEARCH_PARAM_NUM = 2;
         #endregion
@@ -87,6 +90,10 @@ namespace ToDo
             SetFeedbackString(resultType, operationType);            
         }
 
+        /// <summary>
+        /// Gets a boolean indicating the success of the executed operation.
+        /// </summary>
+        /// <returns>True if successful. False if unsuccessful.</returns>
         public bool IsSuccessful()
         {
             if (result == Result.SUCCESS || result == Result.SUCCESS_MULTIPLE) return true;
@@ -108,6 +115,8 @@ namespace ToDo
                             feedbackString = String.Format(STRING_MODIFY_SUCCESS, args);
                         if (operationType == typeof(OperationMarkAsDone))
                             feedbackString = String.Format(STRING_MARKASDONE_SUCCESS, args);
+                        if (operationType == typeof(OperationSchedule))
+                            feedbackString = String.Format(STRING_SCHEDULE_SUCCESS, args);
                         if (operationType == typeof(OperationSearch))
                             feedbackString = String.Format(STRING_SEARCH_SUCCESS, args);
                         if (operationType == typeof(OperationPostpone))
@@ -136,6 +145,8 @@ namespace ToDo
                             feedbackString = STRING_MODIFY_FAILURE;
                         if (operationType == typeof(OperationMarkAsDone))
                             feedbackString = STRING_MARKASDONE_FAILURE;
+                        if (operationType == typeof(OperationSchedule))
+                            feedbackString = STRING_SCHEDULE_FAILURE;
                         if (operationType == typeof(OperationUndo))
                             feedbackString = STRING_UNDO_FAILURE;
                         if (operationType == typeof(OperationRedo))
@@ -147,10 +158,14 @@ namespace ToDo
                             feedbackString = STRING_DISPLAY_NO_TASK;
                         else if (operationType == typeof(OperationDelete))
                             feedbackString = STRING_DELETE_INVALID_TASK;
+                        else if (operationType == typeof(OperationModify))
+                            feedbackString = STRING_MODIFY_INVALID_TASK;
                         else if (operationType == typeof(OperationPostpone))
                             feedbackString = STRING_POSTPONE_INVALID_TASK;
                         else if (operationType == typeof(OperationMarkAsDone))
                             feedbackString = STRING_MARKASDONE_INVALID_TASK;
+                        else if (operationType == typeof(OperationSchedule))
+                            feedbackString = STRING_SCHEDULE_INVALID_TASK;
                         else
                             feedbackString = STRING_CALLED_INVALID_TASK_INDEX;
                         break;
@@ -166,7 +181,7 @@ namespace ToDo
             }
             catch (FormatException e)
             {
-                // change exception to log.
+                // add to log! what params were given and what Response.ToString() is this?
                 feedbackString = "Invalid number of parameters called!";
                 resultType = Result.EXCEPTION_FAILURE;
             }

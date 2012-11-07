@@ -71,7 +71,7 @@ namespace ToDo
                 || commandType == CommandType.DELETE
                 || commandType == CommandType.DONE
                 || commandType == CommandType.UNDONE
-                || commandType == CommandType.MODIFY)
+                || (commandType == CommandType.MODIFY && taskRangeIndex != null))
                 SetSearchTime();
             else
                 SetScheduleTime();
@@ -144,6 +144,9 @@ namespace ToDo
             if (startDateOnly == null)
             {
                 startDateOnly = DateTime.Today;
+                isSpecific.StartDate.Day = false;
+                isSpecific.StartDate.Month = false;
+                isSpecific.StartDate.Year = false;
             }
             // start time and end time will stil be null if there is no time token &
             // no time range token i.e. both are NONE
@@ -243,11 +246,10 @@ namespace ToDo
                     newOperation = new OperationDisplayDefault();
                     break;
                 case CommandType.MODIFY:
-                    task = GenerateNewTask(taskName, startDateTime, endDateTime, isSpecific);
-                    newOperation = new OperationModify(taskRangeIndex, task);
+                    newOperation = new OperationModify(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
                     break;
                 case CommandType.SEARCH:
-                    newOperation = new OperationSearch(taskName, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
+                    newOperation = new OperationSearch(taskName, startDateTime, endDateTime, isSpecific, searchDone);
                     break;
                 case CommandType.SORT:
                     newOperation = new OperationSort(sortType);
@@ -277,7 +279,7 @@ namespace ToDo
             return newOperation;
         }
 
-        private static Task GenerateNewTask(
+        public static Task GenerateNewTask(
             string taskName,
             DateTime? startTime,
             DateTime? endTime,
