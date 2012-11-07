@@ -37,6 +37,8 @@ namespace ToDo
         
         public void ShowDisplay()
         {
+            int size=System.Windows.Forms.TextRenderer.MeasureText(tinyAlertLabel.Text, new Font(tinyAlertLabel.Font.FontFamily, tinyAlertLabel.Font.Size, tinyAlertLabel.Font.Style)).Width;
+            this.Width = size+20;
             this.Show();
             StartFader();
             //StartDrop();
