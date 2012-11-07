@@ -311,6 +311,11 @@ namespace ToDo
                     break;
                 case CommandType.POSTPONE:
                     TimeSpan postponeDuration = new TimeSpan();
+                    if (timeRangeType == TimeRangeType.DEFAULT)
+                    {
+                        timeRangeType = CustomDictionary.defaultPostponeDurationType;
+                        timeRangeIndex = CustomDictionary.defaultPostponeDurationLength;
+                    }
                     switch (timeRangeType)
                     {
                         case TimeRangeType.HOUR:
@@ -324,8 +329,6 @@ namespace ToDo
                             break;
                         case TimeRangeType.MONTH:
                             postponeDuration = new TimeSpan(timeRangeIndex * CustomDictionary.DAYS_IN_MONTH, 0, 0, 0);
-                            break;
-                        default:
                             break;
                     }
                     newOperation = new OperationPostpone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone, postponeDuration);

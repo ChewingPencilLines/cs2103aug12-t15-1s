@@ -76,6 +76,8 @@ namespace ToDo
         {
             if (taskToPostpone.Postpone(postponeDuration) == false)
                 return new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
+            else
+                executedTasks.Enqueue(taskToPostpone);
             if (storageIO.UpdateTask(taskToPostpone))
                 return GenerateStandardSuccessResponse(taskToPostpone);
             else
@@ -85,13 +87,17 @@ namespace ToDo
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            throw new NotImplementedException();
+            Task taskToUndo = executedTasks.Dequeue();
+            Response response = PostponeTask(taskToUndo, postponeDuration.Negate());
+            return response;
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            throw new NotImplementedException();
+            Task taskToUndo = executedTasks.Dequeue();
+            Response response = PostponeTask(taskToUndo, postponeDuration);
+            return response;
         }
     }
 }

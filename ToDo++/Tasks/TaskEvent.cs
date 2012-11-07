@@ -137,8 +137,8 @@ namespace ToDo
             bool result = true;
             try
             {                
-                startDateTime.Add(postponeDuration);
-                if(endDateTime != null) endDateTime.Add(postponeDuration);
+                startDateTime = startDateTime.Add(postponeDuration);
+                if (endDateTime != null) endDateTime = endDateTime.Add(postponeDuration);
             }
             catch
             {
