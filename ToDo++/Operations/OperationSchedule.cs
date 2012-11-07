@@ -107,7 +107,9 @@ namespace ToDo
                 if (searchResults.Count == 0)
                 {
                     if (tryEndTime > endDateTime)
+                    {
                         break;
+                    }
                     scheduledTask = new TaskEvent(taskName, copyTryStartTime, tryEndTime.AddSeconds(-1), searchSpecificity);
                     response = AddTask(scheduledTask);
                     if (response.IsSuccessful())
@@ -124,12 +126,9 @@ namespace ToDo
 
         private void retrieveParameters()
         {
-            // if there is no time span indicated i.e. 3 days etc., get default 
-            // getting task duration
+            // if there is no time duration specified i.e. 3 days etc., get default 
             if (timeRangeIndex == 0 && timeRangeType == TimeRangeType.DEFAULT)
             {
-                // todo: get default time range from settings
-                // for now, just take it to be 1 hour long
                 timeRangeIndex = CustomDictionary.defaultTimeRangeIndex;
                 timeRangeType = CustomDictionary.defaultTimeRangeType;
             }
@@ -197,19 +196,16 @@ namespace ToDo
                 case TimeRangeType.DAY:
                     if (timeRangeIndex > span.TotalDays)
                     {
-                        // error: not enough time to schedule task; time span < task duration
                         return false;
                     }
                     break;
                 case TimeRangeType.MONTH:
                     if (startDateTime.AddMonths(timeRangeIndex) > ((DateTime)endDateTime))
                     {
-                        // error: not enough time to schedule task; time span < task duration
                         return false;
                     }
                     break;
                 default:
-                    // should never fall to this
                     break;
             }
             return true;
