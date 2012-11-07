@@ -40,6 +40,13 @@ namespace ToDo
             currentListedTasks = tasks;
         }
 
+        /// <summary>
+        /// This method sets the operating task list and storage IO controller
+        /// this Operation will use to the instances referred to by the input parameters.
+        /// </summary>
+        /// <param name="taskList">The task list this Operation will execute on.</param>
+        /// <param name="storageIO">The storage IO controller this Operation will use to store data.</param>
+        /// <returns></returns>
         protected void SetMembers(List<Task> taskList, Storage storageIO)
         {
             this.storageIO = storageIO;
@@ -86,7 +93,7 @@ namespace ToDo
                 if (success)
                 {
                     currentListedTasks.Add(taskToAdd);
-                    return GenerateSuccessResponse(taskToAdd);
+                    return GenerateStandardSuccessResponse(taskToAdd);
                 }
                 else
                     return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationAdd), currentListedTasks);
@@ -109,7 +116,7 @@ namespace ToDo
 
             if (storageIO.RemoveTaskFromFile(taskToDelete))
             {
-                return GenerateSuccessResponse(taskToDelete);
+                return GenerateStandardSuccessResponse(taskToDelete);
             }
             else
                 return GenerateXMLFailureResponse();
@@ -118,17 +125,13 @@ namespace ToDo
 
         protected Response ModifyTask(Task taskToModify, Task newTask)
         {
-            DeleteTask(taskToModify);
-            AddTask(newTask);
-
-            if (storageIO.ModifyTask(taskToModify, newTask))
-            {
-                currentListedTasks.Remove(taskToModify);
-                currentListedTasks.Add(newTask);
+            Response response = null;
+            response = DeleteTask(taskToModify);
+            if (response.IsSuccessful()) response = AddTask(newTask);
+            if (response.IsSuccessful())
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify), currentListedTasks);
-            }
             else
-                return GenerateXMLFailureResponse();
+                return response;
         }
 
         protected List<Task> SearchForTasks(
@@ -161,6 +164,7 @@ namespace ToDo
             filteredTasks = (from task in filteredTasks
                              where task.DoneState == doneMatch
                              select task).ToList();
+
             return filteredTasks;
         }
 
@@ -172,7 +176,7 @@ namespace ToDo
 
             if (storageIO.MarkTaskAs(taskToMark, doneState))
             {
-                return GenerateSuccessResponse(taskToMark);
+                return GenerateStandardSuccessResponse(taskToMark);
             }
             else
                 return GenerateXMLFailureResponse();
@@ -277,7 +281,7 @@ namespace ToDo
                 currentListedTasks = new List<Task>(searchResults);
 
                 string[] stringArgs;
-                SetArgumentsForFeedbackString(out stringArgs, taskName, startTime, endTime, SearchType.NONE, false);
+                SetArgumentsForFeedbackString(out stringArgs, taskName, startTime, endTime, SearchType.NONE);
                 response =
                     new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, stringArgs);
             }
@@ -310,7 +314,7 @@ namespace ToDo
             currentListedTasks = new List<Task>(searchResults);
 
             string[] args;
-            SetArgumentsForFeedbackString(out args, taskName, startTime, endTime, searchType, isAll);
+            SetArgumentsForFeedbackString(out args, taskName, startTime, endTime, searchType);
 
             return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, args);
         }
@@ -418,7 +422,7 @@ namespace ToDo
         /// </summary>
         /// <param name="startIndex">The start index of the user requested tasks</param>
         /// <param name="endIndex">The end index of the user requested tasks</param>
-        /// <returns>A valid response about the error if  the indexes are invalid. Null if valid.</returns>
+        /// <returns>Returns a null value if indexes are valid. Returns a Response indicating the error if the indexes are invalid.</returns>
         protected Response CheckIfIndexesAreValid(int startIndex, int endIndex)
         {
             // No tasks to delete
@@ -432,7 +436,7 @@ namespace ToDo
             else return null;
         }
 
-        protected Response GenerateSuccessResponse(Task task)
+        protected Response GenerateStandardSuccessResponse(Task task)
         {
             string[] args = new string[1];
             args[0] = task.TaskName;
@@ -444,10 +448,9 @@ namespace ToDo
             return new Response(Result.XML_READWRITE_FAIL);
         }
 
-        protected void SetArgumentsForFeedbackString(out string[] criteria, string searchString, DateTime? startTime, DateTime? endTime, SearchType searchType, bool isAll)
+        protected void SetArgumentsForFeedbackString(out string[] criteria, string searchString, DateTime? startTime, DateTime? endTime, SearchType searchType)
         {
             criteria = new string[Response.SEARCH_PARAM_NUM];
-            criteria[Response.SEARCH_PARAM_ALL] = "";
             criteria[Response.SEARCH_PARAM_DONE] = "";
             criteria[Response.SEARCH_PARAM_SEARCH_STRING] = "";
 
@@ -455,8 +458,6 @@ namespace ToDo
                 criteria[Response.SEARCH_PARAM_DONE] = "[DONE] ";
             else if (searchType == SearchType.UNDONE)
                 criteria[Response.SEARCH_PARAM_DONE] = "undone ";
-            if (isAll == true)
-                criteria[Response.SEARCH_PARAM_ALL] = "all ";
 
             if (searchString != "" && searchString != null)
                 criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " matching \"" + searchString + "\"";
@@ -469,7 +470,7 @@ namespace ToDo
                     criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " to";
             }
             if (endTime != null)
-                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " " + ((DateTime)startTime).ToString("g");
+                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " " + ((DateTime)endTime).ToString("g");
         }
         #endregion
     }

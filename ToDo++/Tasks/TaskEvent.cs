@@ -149,6 +149,12 @@ namespace ToDo
             }
             return result;
         }
-    
+
+        public override void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific)
+        {
+            startTime = this.startDateTime;
+            endTime = this.endDateTime;
+            specific = this.isSpecific;
+        }    
     }
 }

@@ -5,72 +5,103 @@ namespace ToDo
 {
     class OperationModify : Operation
     {
-        private int? oldIndex;
+        // ******************************************************************
+        // Parameters
+        // ******************************************************************
+
+        #region Parameters
+        private string taskName;
+        private int startIndex;
+        private int endIndex;
+        private bool hasIndex;
+        private bool isAll;
+        private SearchType searchType;
+        private DateTime? startTime = null, endTime = null;
+        private DateTimeSpecificity isSpecific;
+
+        // Paramters for the old tasks
+        private string oldTaskName;
+        private DateTime? oldStartTime = null, oldEndTime = null;
+        private DateTimeSpecificity oldIsSpecific;
+        #endregion
+
+        #region Task Tracking
+        private Task oldTask;
         private Task newTask;
+        #endregion
 
-        public OperationModify(int[] indexRange, Task newTask)
+        // ******************************************************************
+        // Constructors
+        // ******************************************************************
+
+        #region Constructors
+        public OperationModify(string taskName, int[] indexRange, DateTime? startTime,
+            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType)
         {
-            if (indexRange == null) this.oldIndex = null;
-            else this.oldIndex = indexRange[TokenIndexRange.START_INDEX] - 1;
-            if (newTask.TaskName == null) this.newTask = null;
-            else this.newTask = newTask;
-        }
-
-        public override Response Execute(List<Task> taskList, Storage storageIO)
-        {
-            /*
-             *  when modify, if user key in nothing or only index or only task details
-             *  after the commandtype, then all tasks will be shown.
-             *  only when user input full information will modify operated.
-             */
-            SetMembers(taskList, storageIO);
-
-            Response response;
-            List<Task> searchResults;
-            DateTimeSpecificity isSpecific = new DateTimeSpecificity();
-            if (oldIndex.HasValue == false && newTask == null)
-            {
-                currentListedTasks = new List<Task>(taskList);
-                response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
-            }
-            else if (oldIndex.HasValue == false && newTask != null)
-            {
-                searchResults = SearchForTasks(newTask.TaskName, isSpecific);
-                currentListedTasks = searchResults;
-                response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
-            }
-            else if (oldIndex.HasValue == true && (oldIndex < 0 || oldIndex > taskList.Count - 1))
-            {
-                if (newTask != null)
-                {
-                    searchResults = SearchForTasks(newTask.TaskName, isSpecific);
-                    currentListedTasks = new List<Task>(searchResults);
-                    response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks);
-                }
-                else
-                {
-                    response = new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks);
-                }
-            }
+            if (indexRange == null) hasIndex = false;
             else
             {
-                if (oldIndex.Value >= 0 && oldIndex.Value <  currentListedTasks.Count)
+                hasIndex = true;
+                this.startIndex = indexRange[TokenIndexRange.START_INDEX] - 1;
+                this.endIndex = indexRange[TokenIndexRange.END_INDEX] - 1;
+            }
+            if (taskName == null) this.taskName = "";
+            else this.taskName = taskName;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.isSpecific = isSpecific;
+            this.isAll = isAll;
+            this.searchType = searchType;
+        }
+        #endregion
+
+        /*
+        *  If a user keys in nothing or only index or only task details
+        *  after the commandtype, then all tasks will be shown.
+        *  only when user input an index + information will a task be modified.
+        */
+        public override Response Execute(List<Task> taskList, Storage storageIO)
+        {
+            SetMembers(taskList, storageIO);
+
+            Response response = null;
+
+            if (!hasIndex)
+            {
+                // search for task
+                SetMembers(taskList, storageIO);
+                List<Task> searchResults = SearchForTasks(taskName, isSpecific, false, startTime, endTime, searchType);
+                currentListedTasks = new List<Task>(searchResults);
+
+                string[] criteria;
+                SetArgumentsForFeedbackString(out criteria, taskName, startTime, endTime, searchType);
+
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, criteria);
+            }
+            else
+            {                
+                response = CheckIfIndexesAreValid(startIndex, endIndex);
+                if (response != null) return response;
+
+                if (startIndex != endIndex || isAll == true)
                 {
-                    Task taskToModify =  currentListedTasks[oldIndex.Value];
-                    if (taskToModify is TaskEvent && newTask is TaskFloating)
-                    {
-                        newTask = new TaskEvent(newTask.TaskName, ((TaskEvent)taskToModify).StartDateTime,
-                            ((TaskEvent)taskToModify).EndDateTime, ((TaskEvent)taskToModify).isSpecific);
-                    }
-                    else if (taskToModify is TaskDeadline && newTask is TaskFloating)
-                    {
-                        newTask = new TaskDeadline(newTask.TaskName, ((TaskDeadline)taskToModify).EndDateTime,
-                            ((TaskDeadline)taskToModify).isSpecific);
-                    }
-                    response = ModifyTask(taskToModify, newTask);
+                    return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
                 }
-                else
-                    response = new Response(Result.INVALID_TASK, Format.DEFAULT);
+
+                oldTask = currentListedTasks[startIndex];
+                if (taskName == null || taskName == String.Empty)
+                {
+                    // copy over taskName from indexed task if didn't specify a name
+                    taskName = oldTask.TaskName;
+                }
+                else if (startTime == null && endTime == null)
+                {
+                    // copy over all times from indexed task
+                    oldTask.CopyDateTimes(ref startTime, ref endTime, ref isSpecific);
+                }
+                newTask = Task.GenerateNewTask(taskName, startTime, endTime, isSpecific);
+
+                response = ModifyTask(oldTask, newTask);
             }
 
             if (response.IsSuccessful())
@@ -82,14 +113,23 @@ namespace ToDo
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
-            SetMembers(taskList, storageIO);
-            throw new NotImplementedException();
+            SetMembers(taskList, storageIO); 
+            Response response = ModifyTask(newTask, oldTask);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            throw new NotImplementedException();
+            SetMembers(taskList, storageIO);
+            Response response = ModifyTask(oldTask, newTask);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
         }
     }
 }

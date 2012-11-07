@@ -117,5 +117,12 @@ namespace ToDo
                 result = new TaskDeadline(this.taskName, NewDate.Value, this.isSpecific, this.doneState);
             return result;
         }
+
+        public override void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific)
+        {
+            startTime = null;
+            endTime = this.endDateTime;
+            specific = this.isSpecific;
+        } 
     }
 }

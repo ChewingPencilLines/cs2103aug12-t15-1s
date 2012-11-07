@@ -36,7 +36,7 @@ namespace ToDo
             {
                 return response = new Response(Result.INVALID_TASK, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             }
-            bool isSlotFound = false;;
+            bool isSlotFound = false;
             DateTime tryStartTime = startDateTime;
             DateTime tryEndTime = new DateTime();
             DateTime copyTryStartTime = startDateTime;

@@ -33,6 +33,32 @@ namespace ToDo
             //set { id = value; }
         }
 
+        public static Task GenerateNewTask(
+            string taskName,
+            DateTime? startTime,
+            DateTime? endTime,
+            DateTimeSpecificity isSpecific
+            )
+        {
+            if (startTime == null && endTime == null)
+                return new TaskFloating(taskName);
+            else if (startTime == null && endTime != null)
+                return new TaskDeadline(taskName, (DateTime)endTime, isSpecific);
+            else if (startTime != null && endTime == null)
+            {
+                // If endTime is not specified set endTime based on startTime.
+                endTime = startTime;
+                if (!isSpecific.StartTime)
+                {
+                    endTime = ((DateTime)endTime).AddDays(1);
+                    endTime = ((DateTime)endTime).AddMinutes(-1);
+                }
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)startTime, isSpecific);
+            }
+            else
+                return new TaskEvent(taskName, (DateTime)startTime, (DateTime)endTime, isSpecific);
+        }
+
         public Task(string taskName, Boolean state, int forceID)
         {
             this.taskName = taskName;
@@ -46,17 +72,23 @@ namespace ToDo
 
         public abstract bool IsWithinTime(DateTimeSpecificity isSpecific, DateTime? start, DateTime? end);
 
+        public abstract void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific);
+
         public virtual DayOfWeek GetDay()
         {
             throw new TaskHasNoDayException();
         }
 
-        public override int GetHashCode()
+        public virtual string GetTimeString()
         {
-            int newHashCode = Math.Abs(base.GetHashCode() ^ (int)DateTime.Now.ToBinary());
-            return newHashCode;
+            return String.Empty;
         }
 
+        public virtual Task Postpone(DateTime? NewDate)
+        {
+            return null;
+        }        
+        
         // Need to handle exceptions (null?)
         public static int CompareByDateTime(Task a, Task b)
         {
@@ -90,12 +122,7 @@ namespace ToDo
             return DateTime.Compare(aDT, bDT);
         }
 
-        public virtual string GetTimeString()
-        {
-            return String.Empty;
-        }
-
-        internal static int CompareByName(Task x, Task y)
+        public static int CompareByName(Task x, Task y)
         {
             int compare = x.TaskName.CompareTo(y.TaskName);
             if (compare == 0)
@@ -103,10 +130,11 @@ namespace ToDo
             else
                 return compare;
         }
-
-        public virtual Task Postpone(DateTime? NewDate)
+        
+        public override int GetHashCode()
         {
-            return null;
+            int newHashCode = Math.Abs(base.GetHashCode() ^ (int)DateTime.Now.ToBinary());
+            return newHashCode;
         }
     }
 }

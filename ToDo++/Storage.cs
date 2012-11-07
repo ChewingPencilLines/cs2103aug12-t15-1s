@@ -171,11 +171,12 @@ namespace ToDo
 
             try
             {
-                task.First().ReplaceWith(newTask);
+                XElement oldTaskNode = task.First();
+                oldTaskNode.ReplaceWith(newTask.ToXElement());
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                // log: failed to find node.
+                // log: failed to find node or replace node?
                 return false;
             }
 

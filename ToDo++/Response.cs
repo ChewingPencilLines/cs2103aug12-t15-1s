@@ -20,10 +20,11 @@ namespace ToDo
         const string STRING_DELETE_SUCCESS_MULTI = "Deleted all tasks successfully.";
         const string STRING_DELETE_FAILURE = "No matching tasks found!";
         const string STRING_DELETE_INVALID_TASK = "No task to delete!";
-        const string STRING_MODIFY_SUCCESS = "Modified task \"{0}\" into \"{1}\"  successfully.";
+        const string STRING_MODIFY_SUCCESS = "Modified task successfully.";
         const string STRING_MODIFY_FAILURE = "Failed to modify task..!";
+        const string STRING_MODIFY_INVALID_TASK = "Cannot modify more than one task at once!";
         const string STRING_DISPLAY_NO_TASK = "There are no tasks for display.";
-        const string STRING_SEARCH_SUCCESS = "Showing {0}tasks{1}.";
+        const string STRING_SEARCH_SUCCESS = "Displaying all {0}tasks{1}.";
         const string STRING_SORT_SUCCESS = "Sorting by {0}.";
         const string STRING_UNDO_SUCCESS = "Undid last operation.";
         const string STRING_UNDO_FAILURE = "Cannot undo last executed operation!";
@@ -52,7 +53,6 @@ namespace ToDo
         public const int MODIFY_PARAM_NEW_TASK = 1;
         public const int MODIFY_PARAM_NUM = 2;
         public const int SEARCH_PARAM_DONE = 0;
-        public const int SEARCH_PARAM_ALL = 0;
         public const int SEARCH_PARAM_SEARCH_STRING = 1;
         public const int SEARCH_PARAM_NUM = 2;
         #endregion
@@ -90,6 +90,10 @@ namespace ToDo
             SetFeedbackString(resultType, operationType);            
         }
 
+        /// <summary>
+        /// Gets a boolean indicating the success of the executed operation.
+        /// </summary>
+        /// <returns>True if successful. False if unsuccessful.</returns>
         public bool IsSuccessful()
         {
             if (result == Result.SUCCESS || result == Result.SUCCESS_MULTIPLE) return true;
@@ -154,6 +158,8 @@ namespace ToDo
                             feedbackString = STRING_DISPLAY_NO_TASK;
                         else if (operationType == typeof(OperationDelete))
                             feedbackString = STRING_DELETE_INVALID_TASK;
+                        else if (operationType == typeof(OperationModify))
+                            feedbackString = STRING_MODIFY_INVALID_TASK;
                         else if (operationType == typeof(OperationPostpone))
                             feedbackString = STRING_POSTPONE_INVALID_TASK;
                         else if (operationType == typeof(OperationMarkAsDone))
@@ -175,7 +181,7 @@ namespace ToDo
             }
             catch (FormatException e)
             {
-                // change exception to log.
+                // add to log! what params were given and what Response.ToString() is this?
                 feedbackString = "Invalid number of parameters called!";
                 resultType = Result.EXCEPTION_FAILURE;
             }

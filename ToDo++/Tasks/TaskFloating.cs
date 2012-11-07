@@ -33,5 +33,12 @@ namespace ToDo
         {
             return base.Postpone(NewDate);
         }
+
+        public override void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific)
+        {
+            startTime = null;
+            endTime = null;
+            specific = new DateTimeSpecificity();
+        }
     }
 }
