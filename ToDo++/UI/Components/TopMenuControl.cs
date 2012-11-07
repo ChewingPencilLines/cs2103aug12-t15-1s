@@ -22,6 +22,16 @@ namespace ToDo
         /// </summary>
         public void InitializeWithUI(UI ui)
         {
+            questionButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            questionButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            settingsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            settingsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            updownButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            updownButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            minButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            minButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            closeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            closeButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.ui = ui;
         }
 
@@ -90,10 +100,9 @@ namespace ToDo
             }
         }
 
-        private void questionButton_MouseEnter(object sender, EventArgs e)
+        private void questionButton_MouseDown(object sender, MouseEventArgs e)
         {
-            questionButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            questionButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+
         }
 
 

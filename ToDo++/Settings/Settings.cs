@@ -51,12 +51,12 @@ namespace ToDo
 
         public void SetTaskDoneColor(Color col) { settingInfo.misc.TaskDoneColor = col; EventHandlers.UpdateSettings(settingInfo); }
         public Color GetTaskDoneColor() { return settingInfo.misc.TaskDoneColor; }
-        public void SetTaskDeadlineColor(Color col) { settingInfo.misc.TaskDeadlineColor = col; EventHandlers.UpdateSettings(settingInfo); }
-        public Color GetTaskDeadlineColor() { return settingInfo.misc.TaskDeadlineColor; }
-        public void SetTaskDeadlineDayColor(Color col) { settingInfo.misc.TaskDeadlineDayColor = col; EventHandlers.UpdateSettings(settingInfo); }
-        public Color GetTaskDeadlineDayColor() { return settingInfo.misc.TaskDeadlineDayColor; }
-        public void SetTaskEventColor(Color col) { settingInfo.misc.TaskEventColor = col; EventHandlers.UpdateSettings(settingInfo); }
-        public Color GetTaskEventColor() { return settingInfo.misc.TaskEventColor; }
+        public void SetTaskMissedDeadlineColor(Color col) { settingInfo.misc.TaskMissedDeadlineColor = col; EventHandlers.UpdateSettings(settingInfo); }
+        public Color GetTaskMissedDeadlineColor() { return settingInfo.misc.TaskMissedDeadlineColor; }
+        public void SetTaskNearingDeadlineColor(Color col) { settingInfo.misc.TaskNearingDeadlineColor = col; EventHandlers.UpdateSettings(settingInfo); }
+        public Color GetTaskNearingDeadlineColor() { return settingInfo.misc.TaskNearingDeadlineColor; }
+        public void SetTaskOverColor(Color col) { settingInfo.misc.TaskOverColor = col; EventHandlers.UpdateSettings(settingInfo); }
+        public Color GetTaskOverColor() { return settingInfo.misc.TaskOverColor; }
 
         #endregion;
 
