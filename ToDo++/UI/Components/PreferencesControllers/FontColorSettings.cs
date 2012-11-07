@@ -36,5 +36,16 @@ namespace ToDo
                 EventHandlers.UpdateUI();
             }
         }
+
+        private void taskDoneColorButton_Click(object sender, EventArgs e)
+        {
+            FontBox.InitializeOptions(settings.GetFontSelection(), settings.GetTextSize(), settings.GetTaskDoneColor());
+            FontBox.Show(false, false, true);
+            if (FontBox.ConfirmHit())
+            {
+                settings.SetTaskDoneColor(FontBox.GetColor());
+                EventHandlers.UpdateUI();
+            }
+        }
     }
 }

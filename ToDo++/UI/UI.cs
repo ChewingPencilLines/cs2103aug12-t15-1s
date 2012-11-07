@@ -676,6 +676,7 @@ namespace ToDo
         private void UpdateUI(object sender, EventArgs args)
         {
             taskListViewControl.InitializeWithSettings(logic.MainSettings);
+
         }
 
 
@@ -700,7 +701,6 @@ namespace ToDo
         {
             SetRowIndex(row);
             ColorRows(row);
-            //#FFDCDCDC
         }
 
         private static void SetRowIndex(BrightIdeasSoftware.FormatRowEventArgs row)
@@ -709,7 +709,7 @@ namespace ToDo
             row.Item.SubItems[1].Text = "[" + (row.DisplayIndex + 1).ToString() + "]";
         }
 
-        private static void ColorRows(BrightIdeasSoftware.FormatRowEventArgs row)
+        private void ColorRows(BrightIdeasSoftware.FormatRowEventArgs row)
         {
             Task task = (Task)row.Item.RowObject;
 
@@ -718,7 +718,7 @@ namespace ToDo
             // Task is done!
             if (task.DoneState == true)
             {
-                ColorSubItems(row, Color.Green);
+                ColorSubItems(row, logic.MainSettings.GetTaskDoneColor());
             }
 
             else if (task is TaskDeadline)
