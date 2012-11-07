@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    class OperationAttributes
+    class OperationGenerator
     {
         // ******************************************************************
         // Operation Attributes
         // ******************************************************************
 
-        #region Attributes
+        #region Operation Attributes
         public CommandType commandType = new CommandType();
         public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
         public TimeRangeType timeRangeType = new TimeRangeType();
@@ -51,7 +51,7 @@ namespace ToDo
         private DateTime? startDateTime = null, endDateTime = null;
         #endregion
 
-        public OperationAttributes()
+        public OperationGenerator()
         
         {
             // Initialize enumerations

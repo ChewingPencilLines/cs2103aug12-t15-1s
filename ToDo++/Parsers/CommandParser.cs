@@ -29,7 +29,7 @@ namespace ToDo
 
         private static Operation GenerateOperation(List<Token> tokens)
         {            
-            OperationAttributes opAttributes = new OperationAttributes();
+            OperationGenerator opAttributes = new OperationGenerator();
             foreach (Token token in tokens)
             {
                token.UpdateAttributes(opAttributes);
