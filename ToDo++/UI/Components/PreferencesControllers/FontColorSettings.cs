@@ -50,33 +50,33 @@ namespace ToDo
 
         private void taskDeadlineColorButton_Click(object sender, EventArgs e)
         {
-            FontBox.InitializeOptions(settings.GetFontSelection(), settings.GetTextSize(), settings.GetTaskDeadlineColor());
+            FontBox.InitializeOptions(settings.GetFontSelection(), settings.GetTextSize(), settings.GetTaskMissedDeadlineColor());
             FontBox.Show(false, false, true);
             if (FontBox.ConfirmHit())
             {
-                settings.SetTaskDeadlineColor(FontBox.GetColor());
+                settings.SetTaskMissedDeadlineColor(FontBox.GetColor());
                 EventHandlers.UpdateUI();
             }
         }
 
         private void taskDeadlineDayColor_Click(object sender, EventArgs e)
         {
-            FontBox.InitializeOptions(settings.GetFontSelection(), settings.GetTextSize(), settings.GetTaskDeadlineDayColor());
+            FontBox.InitializeOptions(settings.GetFontSelection(), settings.GetTextSize(), settings.GetTaskNearingDeadlineColor());
             FontBox.Show(false, false, true);
             if (FontBox.ConfirmHit())
             {
-                settings.SetTaskDeadlineDayColor(FontBox.GetColor());
+                settings.SetTaskNearingDeadlineColor(FontBox.GetColor());
                 EventHandlers.UpdateUI();
             }
         }
 
         private void taskEventColor_Click(object sender, EventArgs e)
         {
-            FontBox.InitializeOptions(settings.GetFontSelection(), settings.GetTextSize(), settings.GetTaskEventColor());
+            FontBox.InitializeOptions(settings.GetFontSelection(), settings.GetTextSize(), settings.GetTaskOverColor());
             FontBox.Show(false, false, true);
             if (FontBox.ConfirmHit())
             {
-                settings.SetTaskEventColor(FontBox.GetColor());
+                settings.SetTaskOverColor(FontBox.GetColor());
                 EventHandlers.UpdateUI();
             }
         }
