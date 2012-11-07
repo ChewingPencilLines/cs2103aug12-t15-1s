@@ -49,6 +49,7 @@ namespace ToDo
         public ContextType currentSpecifier = new ContextType();
         public ContextType currentMode = new ContextType();
         private DateTime? startDateTime = null, endDateTime = null;
+        private bool crossDayBoundary = false;
         #endregion
 
         public OperationGenerator()
@@ -67,11 +68,13 @@ namespace ToDo
 
         public void SetTimes()
         {
+            GetTimeRangeValues();
             if (commandType == CommandType.SEARCH
                 || commandType == CommandType.DELETE
                 || commandType == CommandType.DONE
                 || commandType == CommandType.UNDONE
-                || (commandType == CommandType.MODIFY && taskRangeIndex != null))
+                || (commandType == CommandType.MODIFY && taskRangeIndex != null)
+                || commandType == CommandType.ADD)
                 SetSearchTime();
             else
                 SetScheduleTime();
@@ -97,18 +100,37 @@ namespace ToDo
 
         private void SetScheduleTime()
         {
+            if (startDateOnly == null)
+            {
+                startDateOnly = DateTime.Today;
+                isSpecific.StartDate.Day = false;
+                isSpecific.StartDate.Month = false;
+                isSpecific.StartDate.Year = false;
+            }
+        }
+
+        private void GetTimeRangeValues()
+        {
             if (timeRangeOne != TimeRangeKeywordsType.NONE)
             {
                 int startTimeHour, endTimeHour;
                 // getting values from specified time range keywords
                 CustomDictionary.timeRangeKeywordsStartTime.TryGetValue(timeRangeOne, out startTimeHour);
-                if (timeRangeTwo != TimeRangeKeywordsType.NONE)
+                if (timeRangeTwo == TimeRangeKeywordsType.NONE)
                 {
-                    CustomDictionary.timeRangeKeywordsEndTime.TryGetValue(timeRangeTwo, out endTimeHour);
+                    CustomDictionary.timeRangeKeywordsEndTime.TryGetValue(timeRangeOne, out endTimeHour);
+                    if (CustomDictionary.IsTimeRangeOverDayBoundary(timeRangeOne))
+                    {
+                        crossDayBoundary = true;
+                    }
                 }
                 else
                 {
-                    CustomDictionary.timeRangeKeywordsEndTime.TryGetValue(timeRangeOne, out endTimeHour);
+                    CustomDictionary.timeRangeKeywordsEndTime.TryGetValue(timeRangeTwo, out endTimeHour);
+                    if (CustomDictionary.IsTimeRangeOverDayBoundary(timeRangeTwo))
+                    {
+                        crossDayBoundary = true;
+                    }
                 }
                 // pick the correct start time and end time if other times were
                 // specified beyond the time range keywords i.e. by time tokens
@@ -141,15 +163,6 @@ namespace ToDo
                     }
                 }
             }
-            if (startDateOnly == null)
-            {
-                startDateOnly = DateTime.Today;
-                isSpecific.StartDate.Day = false;
-                isSpecific.StartDate.Month = false;
-                isSpecific.StartDate.Year = false;
-            }
-            // start time and end time will stil be null if there is no time token &
-            // no time range token i.e. both are NONE
         }
 
         private void CombineDateTimes()
@@ -185,7 +198,7 @@ namespace ToDo
                 endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, DateTime.Now);
             else
                 endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, (DateTime)startDateTime);
-            if (endDateTime < startDateTime)
+            if (crossDayBoundary || endDateTime < startDateTime)
             {
                 endDateTime = ((DateTime)endDateTime).AddDays(1);
             }
