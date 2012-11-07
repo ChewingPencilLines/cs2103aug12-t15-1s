@@ -58,7 +58,7 @@ namespace ToDo
             {
                 AlertBox.Show(e.Message);
             }
-            catch (MultipleCommandsException e)
+            catch (MultipleCommandsException)
             {
                 AlertBox.Show(@"Invalid input.\r\n
                             Multiple commands were entered that could not be resolved.\r\n

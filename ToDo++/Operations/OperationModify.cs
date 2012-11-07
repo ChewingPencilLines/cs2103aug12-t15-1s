@@ -99,7 +99,7 @@ namespace ToDo
                     // copy over all times from indexed task
                     oldTask.CopyDateTimes(ref startTime, ref endTime, ref isSpecific);
                 }
-                newTask = OperationAttributes.GenerateNewTask(taskName, startTime, endTime, isSpecific);
+                newTask = Task.GenerateNewTask(taskName, startTime, endTime, isSpecific);
 
                 response = ModifyTask(oldTask, newTask);
             }

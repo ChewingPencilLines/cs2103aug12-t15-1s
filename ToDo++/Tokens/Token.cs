@@ -18,7 +18,7 @@ namespace ToDo
             get { return position; }           
         }
 
-        internal abstract void UpdateAttributes(OperationAttributes attrb);
+        internal abstract void UpdateAttributes(OperationGenerator attrb);
 
         internal virtual bool RequiresIndexRange()
         {            

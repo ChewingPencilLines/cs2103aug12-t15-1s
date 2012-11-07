@@ -30,11 +30,11 @@ namespace ToDo
         {
             SetMembers(taskList, storageIO);
             // default response: failure to schedule task i.e. cannot find fitting slot
-            Response response = new Response(Result.INVALID_TASK, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
+            Response response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             retrieveParameters();
             if (!CheckTaskDurationWithinRange())
             {
-                return response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
+                return response = new Response(Result.INVALID_TASK, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             }
             bool isSlotFound = false;
             DateTime tryStartTime = startDateTime;

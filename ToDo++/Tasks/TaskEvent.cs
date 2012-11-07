@@ -150,7 +150,7 @@ namespace ToDo
             return result;
         }
 
-        internal override void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific)
+        public override void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific)
         {
             startTime = this.startDateTime;
             endTime = this.endDateTime;
