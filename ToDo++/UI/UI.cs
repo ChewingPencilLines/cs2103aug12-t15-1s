@@ -580,6 +580,11 @@ namespace ToDo
                 ToggleToDoPanel();
                 return true;
             }
+            if (keyData == (Keys.Shift | Keys.S))
+            {
+                ToggleToDoPanel();
+                return true;
+            }
             if ((keyData == (Keys.Control | Keys.Up)) || (keyData == (Keys.Control | Keys.Down)))
             {
                 topMenuControl.CollapseExpandToDo();
@@ -632,8 +637,9 @@ namespace ToDo
         /// </summary>
         private void UpdateUI(object sender, EventArgs args)
         {
-            taskListViewControl.RefreshListView();
+            //taskListViewControl.RefreshListView();
             taskListViewControl.InitializeWithSettings(logic.MainSettings);
+            taskListViewControl.BuildList();
         }
         #endregion
 
