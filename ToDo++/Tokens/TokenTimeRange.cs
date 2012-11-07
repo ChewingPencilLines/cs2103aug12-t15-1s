@@ -39,7 +39,7 @@ namespace ToDo
             timeRange = range;
         }
 
-        internal override void UpdateAttributes(OperationAttributes attrb)
+        internal override void UpdateAttributes(OperationGenerator attrb)
         {
             if (index != 0)
             {

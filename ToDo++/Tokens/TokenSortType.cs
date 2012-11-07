@@ -16,7 +16,7 @@ namespace ToDo
             sortType = val;
         }
 
-        internal override void UpdateAttributes(OperationAttributes attrb)
+        internal override void UpdateAttributes(OperationGenerator attrb)
         {
             attrb.sortType = sortType;
         }
