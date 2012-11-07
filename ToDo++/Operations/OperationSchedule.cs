@@ -186,7 +186,7 @@ namespace ToDo
                     if (!isSpecific.StartTime)
                     {
                         timeRangeType = TimeRangeType.HOUR;
-                        timeRangeAmount *= CustomDictionary.hoursInADay;
+                        timeRangeAmount *= CustomDictionary.HOURS_IN_DAY;
                     }
                     numberOfSetsToLoop = timeRangeAmount;
                     break;
@@ -194,12 +194,12 @@ namespace ToDo
                     if (!isSpecific.StartTime)
                     {
                         timeRangeType = TimeRangeType.HOUR;
-                        timeRangeAmount *= CustomDictionary.hoursInADay * CustomDictionary.daysInAWeek;
+                        timeRangeAmount *= CustomDictionary.HOURS_IN_DAY * CustomDictionary.DAYS_IN_WEEK;
                     }
                     else
                     {
                         timeRangeType = TimeRangeType.DAY;
-                        timeRangeAmount *= CustomDictionary.daysInAWeek;
+                        timeRangeAmount *= CustomDictionary.DAYS_IN_WEEK;
                     }
                     numberOfSetsToLoop = timeRangeAmount;
                     break;
