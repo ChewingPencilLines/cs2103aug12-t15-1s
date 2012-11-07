@@ -159,6 +159,11 @@ namespace ToDo
             row.Item.SubItems[1].Text = "[" + (row.DisplayIndex + 1).ToString() + "]";
         }
 
+        public void RefreshListView()
+        {
+            throw new NotImplementedException("Need a function to redraw content in listview, and recolor rows");
+        }
+
         public void ColorRows(BrightIdeasSoftware.FormatRowEventArgs row)
         {
             Task task = (Task)row.Item.RowObject;
@@ -168,24 +173,24 @@ namespace ToDo
             // Task is done!
             if (task.DoneState == true)
             {
-                ColorSubItems(row, Color.Green);
+                ColorSubItems(row, settings.GetTaskDoneColor());
             }
 
             else if (task is TaskDeadline)
             {
                 // Task is over time limit!
                 if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
-                    ColorSubItems(row, Color.Red);
+                    ColorSubItems(row, settings.GetTaskDeadlineDayColor());
                 // Task is within the next 24 hrs!
                 else if (task.IsWithinTime(new DateTimeSpecificity(), DateTime.Now, DateTime.Now.AddDays(1)))
-                    ColorSubItems(row, Color.OrangeRed);
+                    ColorSubItems(row, settings.GetTaskDeadlineColor());
             }
 
             else if (task is TaskEvent)
             {
                 // Task is over!
                 if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
-                    ColorSubItems(row, Color.MediumVioletRed);
+                    ColorSubItems(row, settings.GetTaskEventColor());
             }
         }
 

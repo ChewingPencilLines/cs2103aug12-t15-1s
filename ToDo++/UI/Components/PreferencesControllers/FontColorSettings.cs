@@ -47,5 +47,38 @@ namespace ToDo
                 EventHandlers.UpdateUI();
             }
         }
+
+        private void taskDeadlineColorButton_Click(object sender, EventArgs e)
+        {
+            FontBox.InitializeOptions(settings.GetFontSelection(), settings.GetTextSize(), settings.GetTaskDeadlineColor());
+            FontBox.Show(false, false, true);
+            if (FontBox.ConfirmHit())
+            {
+                settings.SetTaskDeadlineColor(FontBox.GetColor());
+                EventHandlers.UpdateUI();
+            }
+        }
+
+        private void taskDeadlineDayColor_Click(object sender, EventArgs e)
+        {
+            FontBox.InitializeOptions(settings.GetFontSelection(), settings.GetTextSize(), settings.GetTaskDeadlineDayColor());
+            FontBox.Show(false, false, true);
+            if (FontBox.ConfirmHit())
+            {
+                settings.SetTaskDeadlineDayColor(FontBox.GetColor());
+                EventHandlers.UpdateUI();
+            }
+        }
+
+        private void taskEventColor_Click(object sender, EventArgs e)
+        {
+            FontBox.InitializeOptions(settings.GetFontSelection(), settings.GetTextSize(), settings.GetTaskEventColor());
+            FontBox.Show(false, false, true);
+            if (FontBox.ConfirmHit())
+            {
+                settings.SetTaskEventColor(FontBox.GetColor());
+                EventHandlers.UpdateUI();
+            }
+        }
     }
 }

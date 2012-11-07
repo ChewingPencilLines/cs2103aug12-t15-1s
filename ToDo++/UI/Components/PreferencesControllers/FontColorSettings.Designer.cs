@@ -30,8 +30,9 @@
         {
             this.textSizeButton = new System.Windows.Forms.Button();
             this.taskDoneColorButton = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.taskDeadlineColorButton = new System.Windows.Forms.Button();
+            this.taskDeadlineDayColor = new System.Windows.Forms.Button();
+            this.taskEventColor = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textSizeButton
@@ -64,41 +65,59 @@
             this.taskDoneColorButton.UseVisualStyleBackColor = false;
             this.taskDoneColorButton.Click += new System.EventHandler(this.taskDoneColorButton_Click);
             // 
-            // button2
+            // taskDeadlineColorButton
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.taskDeadlineColorButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.BackColor = System.Drawing.Color.DimGray;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.ForeColor = System.Drawing.Color.Gainsboro;
-            this.button2.Location = new System.Drawing.Point(3, 61);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(320, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Text Size";
-            this.button2.UseVisualStyleBackColor = false;
+            this.taskDeadlineColorButton.BackColor = System.Drawing.Color.DimGray;
+            this.taskDeadlineColorButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.taskDeadlineColorButton.ForeColor = System.Drawing.Color.Gainsboro;
+            this.taskDeadlineColorButton.Location = new System.Drawing.Point(3, 61);
+            this.taskDeadlineColorButton.Name = "taskDeadlineColorButton";
+            this.taskDeadlineColorButton.Size = new System.Drawing.Size(320, 23);
+            this.taskDeadlineColorButton.TabIndex = 3;
+            this.taskDeadlineColorButton.Text = "Task Deadline Color";
+            this.taskDeadlineColorButton.UseVisualStyleBackColor = false;
+            this.taskDeadlineColorButton.Click += new System.EventHandler(this.taskDeadlineColorButton_Click);
             // 
-            // button3
+            // taskDeadlineDayColor
             // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.taskDeadlineDayColor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.BackColor = System.Drawing.Color.DimGray;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.ForeColor = System.Drawing.Color.Gainsboro;
-            this.button3.Location = new System.Drawing.Point(3, 90);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(320, 23);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Text Size";
-            this.button3.UseVisualStyleBackColor = false;
+            this.taskDeadlineDayColor.BackColor = System.Drawing.Color.DimGray;
+            this.taskDeadlineDayColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.taskDeadlineDayColor.ForeColor = System.Drawing.Color.Gainsboro;
+            this.taskDeadlineDayColor.Location = new System.Drawing.Point(3, 90);
+            this.taskDeadlineDayColor.Name = "taskDeadlineDayColor";
+            this.taskDeadlineDayColor.Size = new System.Drawing.Size(320, 23);
+            this.taskDeadlineDayColor.TabIndex = 4;
+            this.taskDeadlineDayColor.Text = "Task Deadline Day Color";
+            this.taskDeadlineDayColor.UseVisualStyleBackColor = false;
+            this.taskDeadlineDayColor.Click += new System.EventHandler(this.taskDeadlineDayColor_Click);
+            // 
+            // taskEventColor
+            // 
+            this.taskEventColor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.taskEventColor.BackColor = System.Drawing.Color.DimGray;
+            this.taskEventColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.taskEventColor.ForeColor = System.Drawing.Color.Gainsboro;
+            this.taskEventColor.Location = new System.Drawing.Point(3, 119);
+            this.taskEventColor.Name = "taskEventColor";
+            this.taskEventColor.Size = new System.Drawing.Size(320, 23);
+            this.taskEventColor.TabIndex = 5;
+            this.taskEventColor.Text = "Task Event Color";
+            this.taskEventColor.UseVisualStyleBackColor = false;
+            this.taskEventColor.Click += new System.EventHandler(this.taskEventColor_Click);
             // 
             // FontColorSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.taskEventColor);
+            this.Controls.Add(this.taskDeadlineDayColor);
+            this.Controls.Add(this.taskDeadlineColorButton);
             this.Controls.Add(this.taskDoneColorButton);
             this.Controls.Add(this.textSizeButton);
             this.Name = "FontColorSettings";
@@ -111,8 +130,9 @@
 
         private System.Windows.Forms.Button textSizeButton;
         private System.Windows.Forms.Button taskDoneColorButton;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button taskDeadlineColorButton;
+        private System.Windows.Forms.Button taskDeadlineDayColor;
+        private System.Windows.Forms.Button taskEventColor;
 
     }
 }
