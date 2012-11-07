@@ -333,6 +333,7 @@ namespace ToDo
         {
             if (isCollapsed == false)
             {
+                this.MinimumSize = new Size(522, 60);
                 grayFadePictureBox.BringToFront();
                 isCollapsed = true;
                 grayFadePictureBox.Opacity = 0;
@@ -401,6 +402,7 @@ namespace ToDo
                     grayFadeTimer.Enabled = false;
                     grayFadePictureBox.SendToBack();
                     grayFadePictureBox.Hide();
+                    this.MinimumSize = new Size(522, 397);
                 }
             }
         }

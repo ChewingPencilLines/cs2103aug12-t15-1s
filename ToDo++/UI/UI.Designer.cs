@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
+            BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.timerCollapse = new System.Windows.Forms.Timer(this.components);
             this.timerExpand = new System.Windows.Forms.Timer(this.components);
@@ -78,13 +78,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
-            // 
-            // taskDateTimeCol
-            // 
-            taskDateTimeCol.AspectName = "GetTimeString";
-            taskDateTimeCol.CellPadding = null;
-            taskDateTimeCol.FillsFreeSpace = true;
-            taskDateTimeCol.Width = 199;
             // 
             // notifyIcon_taskBar
             // 
@@ -272,6 +265,13 @@
             this.taskNameCol.Width = 213;
             this.taskNameCol.WordWrap = true;
             // 
+            // taskDateTimeCol
+            // 
+            taskDateTimeCol.AspectName = "GetTimeString";
+            taskDateTimeCol.CellPadding = null;
+            taskDateTimeCol.FillsFreeSpace = true;
+            taskDateTimeCol.Width = 199;
+            // 
             // taskDoneStateCol
             // 
             this.taskDoneStateCol.AspectName = "DoneState";
@@ -295,7 +295,7 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(495, 292);
+            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
             this.preferencesPanel.TabIndex = 0;
             // 
             // taskDisplay
@@ -327,7 +327,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(495, 275);
+            this.outputBox.Size = new System.Drawing.Size(186, 275);
             this.outputBox.TabIndex = 28;
             this.outputBox.Text = "";
             // 
@@ -473,7 +473,7 @@
             this.Controls.Add(this.transpControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(522, 60);
+            this.MinimumSize = new System.Drawing.Size(522, 397);
             this.Name = "UI";
             this.Text = "ToDo++";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SelectTextInput);

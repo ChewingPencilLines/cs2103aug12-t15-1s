@@ -407,31 +407,61 @@ namespace ToDo
                 switch (selectedCommand)
                 {
                     case CommandType.ADD:
-                        SetFormat(Color.Brown, "Floating: ", 9);
+                        SetFormat(Color.Brown, "Floating:\n", 9);
                         SetFormat(Color.Black, "Enter \"add [task name]\"\n", 9);
                         SetFormat(Color.Gray, "eg. add finish project\n", 9);
-                        SetFormat(Color.Brown, "Event: ", 9);
+                        SetFormat(Color.Brown, "Event:\n", 9);
                         SetFormat(Color.Black, "Enter \"add [task name] [start time] {end time} {day/date}\"\n", 9);
                         SetFormat(Color.Gray, "eg. add check todo++ in 2 hours\n", 9);
                         SetFormat(Color.Gray, "eg. add max birthday 4pm tomorrow \n", 9);
                         SetFormat(Color.Gray, "eg. add team meeting 2pm-4pm next wed \n", 9);
-                        SetFormat(Color.Brown, "Deadline: ", 9);
+                        SetFormat(Color.Brown, "Deadline:\n", 9);
                         SetFormat(Color.Black, "Enter \"add [task name] by [deadline]\" \n", 9);
                         SetFormat(Color.Gray, "eg. add do cs2103 CE2 by saturday midnight \n", 9);
                         break;
 
                     case CommandType.DELETE:
-                        SetFormat(Color.Brown, "Floating: ", 9);
-                        SetFormat(Color.Black, "Enter \"add [task name]\"\n", 9);
-                        SetFormat(Color.Gray, "eg. add finish project\n", 9);
-                        SetFormat(Color.Brown, "Event: ", 9);
-                        SetFormat(Color.Black, "Enter \"add [task name] [start time] {end time} {day/date}\"\n", 9);
-                        SetFormat(Color.Gray, "eg. add check todo++ in 2 hours\n", 9);
-                        SetFormat(Color.Gray, "eg. add max birthday 4pm tomorrow \n", 9);
-                        SetFormat(Color.Gray, "eg. add team meeting 2pm-4pm next wed \n", 9);
-                        SetFormat(Color.Brown, "Deadline: ", 9);
-                        SetFormat(Color.Black, "Enter \"add [task name] by [deadline]\" \n", 9);
-                        SetFormat(Color.Gray, "eg. add do cs2103 CE2 by saturday midnight \n", 9);
+                        SetFormat(Color.Brown, "Delete Tasks:\n", 9);
+                        SetFormat(Color.Black, "Enter \"delete [task name/ID]\"\n", 9);
+                        SetFormat(Color.Gray, "eg. delete 3\n", 9);
+                        SetFormat(Color.Gray, "eg. delete task\n", 9);
+                        SetFormat(Color.Gray, "eg. delete 1-3\n", 9);
+                        SetFormat(Color.Brown, "Delete from Schedule:\n", 9);
+                        SetFormat(Color.Black, "Enter \"delete [day/date] {before/after} {time}\"\n", 9);
+                        SetFormat(Color.Gray, "eg. remove Sunday after 1500hrs\n", 9);
+                        SetFormat(Color.Gray, "eg. delete 31 December after 10pm \n", 9);
+                        break;
+
+                    case CommandType.DISPLAY:
+                        SetFormat(Color.Brown, "Display All Tasks:\n", 9);
+                        SetFormat(Color.Black, "Enter \"display\"\n", 9);
+                        SetFormat(Color.Brown, "Within Dates:\n", 9);
+                        SetFormat(Color.Black, "Enter \"display [day/date] {before/after} {time}\"\n", 9);
+                        SetFormat(Color.Gray, "eg. display 06/09/2012\n", 9);
+                        SetFormat(Color.Gray, "eg. display Sunday after 1500hrs\n", 9);
+                        SetFormat(Color.Gray, "eg. display 6 sept before 10pm\n", 9);
+                        SetFormat(Color.Gray, "eg. display next Saturday\n", 9);
+                        SetFormat(Color.Gray, "eg. display tomorrow\n", 9);
+                        SetFormat(Color.Brown, "Searching Task Names:\n", 9);
+                        SetFormat(Color.Black, "Enter \"display [name]\"\n", 9);
+                        SetFormat(Color.Gray, "eg. display buy milk\n", 9);
+                        SetFormat(Color.Brown, "Searching Task Types:\n", 9);
+                        SetFormat(Color.Black, "Enter \"display [type]\"\n", 9);
+                        SetFormat(Color.Gray, "eg. display event\n", 9);
+                        SetFormat(Color.Gray, "eg. display deadline\n", 9);
+                        SetFormat(Color.Gray, "eg. display floating\n", 9);
+                        break;
+
+                    case CommandType.DONE:
+                        SetFormat(Color.Brown, "Task Done:\n", 9);
+                        SetFormat(Color.Black, "Enter \"done [day/date] {before/after} {time}\"\n", 9);
+                        SetFormat(Color.Gray, "eg. done task\n", 9);
+                        SetFormat(Color.Gray, "eg. done 3\n", 9);
+                        SetFormat(Color.Gray, "eg. done 1-3\n", 9);
+                        SetFormat(Color.Gray, "eg. done all\n", 9);
+                        break;
+
+                    case CommandType.MODIFY:
                         break;
 
                     default:
