@@ -106,6 +106,7 @@ namespace ToDo
             this.sizeSelection.SelectedItem = size;
             this.fontSelection.SelectedFontFamily = new FontFamily(font);
             this.colorSelection.SelectedColor = color;
+            SetFormattingForPreview();
         }
 
         /// <summary>
