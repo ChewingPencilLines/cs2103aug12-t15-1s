@@ -18,7 +18,10 @@ namespace ToDo
 
         internal override void UpdateAttributes(OperationGenerator attrb)
         {
-            attrb.taskName = literal;
+            if (attrb.taskName == null)
+            {
+                attrb.taskName = literal;
+            }
         }
     }
 }
