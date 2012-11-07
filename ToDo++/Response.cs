@@ -38,6 +38,9 @@ namespace ToDo
         const string STRING_MARKASDONE_FAILURE = "No matching tasks found!";
         const string STRING_MARKASDONE_INVALID_TASK = "Cannot mark this task as done!";
         const string STRING_MARKASUNDONE_SUCCESS = "Successfully marked \"{0}\" as undone."; // Not implemented.
+        const string STRING_SCHEDULE_INVALID_TASK = "Task duration exceeds specified time range!";
+        const string STRING_SCHEDULE_FAILURE = "Task could not be scheduled within specified time range!";
+        const string STRING_SCHEDULE_SUCCESS = "Scheduled new task \"{0}\" successfully.";
         const string STRING_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string STRING_CALLED_INVALID_TASK_INDEX = "Invalid task index!";
         const string STRING_INVALID_COMMAND = "Invalid command input!";
@@ -108,6 +111,8 @@ namespace ToDo
                             feedbackString = String.Format(STRING_MODIFY_SUCCESS, args);
                         if (operationType == typeof(OperationMarkAsDone))
                             feedbackString = String.Format(STRING_MARKASDONE_SUCCESS, args);
+                        if (operationType == typeof(OperationSchedule))
+                            feedbackString = String.Format(STRING_SCHEDULE_SUCCESS, args);
                         if (operationType == typeof(OperationSearch))
                             feedbackString = String.Format(STRING_SEARCH_SUCCESS, args);
                         if (operationType == typeof(OperationPostpone))
@@ -136,6 +141,8 @@ namespace ToDo
                             feedbackString = STRING_MODIFY_FAILURE;
                         if (operationType == typeof(OperationMarkAsDone))
                             feedbackString = STRING_MARKASDONE_FAILURE;
+                        if (operationType == typeof(OperationSchedule))
+                            feedbackString = STRING_SCHEDULE_FAILURE;
                         if (operationType == typeof(OperationUndo))
                             feedbackString = STRING_UNDO_FAILURE;
                         if (operationType == typeof(OperationRedo))
@@ -151,6 +158,8 @@ namespace ToDo
                             feedbackString = STRING_POSTPONE_INVALID_TASK;
                         else if (operationType == typeof(OperationMarkAsDone))
                             feedbackString = STRING_MARKASDONE_INVALID_TASK;
+                        else if (operationType == typeof(OperationSchedule))
+                            feedbackString = STRING_SCHEDULE_INVALID_TASK;
                         else
                             feedbackString = STRING_CALLED_INVALID_TASK_INDEX;
                         break;
