@@ -181,8 +181,9 @@ namespace ToDo
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Task task = undoTask.Pop();
-            return DeleteTask(task);
+            throw new NotImplementedException();
+            //Task task = undoTask.Pop();
+            //return DeleteTask(task);
         }
     }
 }

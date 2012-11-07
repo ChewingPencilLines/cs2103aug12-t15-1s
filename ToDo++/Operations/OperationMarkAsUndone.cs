@@ -59,8 +59,8 @@ namespace ToDo
         {
             SetMembers(taskList, storageIO);
 
-            Func<Task, Response> action = MarkAsUndone;
-            object[] args = null;
+            Func<Task, bool, Response> action = MarkTaskAs;
+            object[] args = { (bool)false };
             Response response = null;
 
             response = CheckIfIndexesAreValid(startIndex, endIndex);
@@ -83,47 +83,38 @@ namespace ToDo
             return response;
         }
 
-        private Response MarkAsUndone(Task taskToMarkAsUndone)
-        {
-            SetMembers(taskList, storageIO);
-            undoTask.Push(taskToMarkAsUndone);
-            taskToMarkAsUndone.DoneState = false;
-
-            if (storageIO.MarkTaskAs(taskToMarkAsUndone, false))
-            {
-                return GenerateSuccessResponse(taskToMarkAsUndone);
-            }
-            else
-                return GenerateXMLFailureResponse();
-        }
-
         #endregion
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Task task = undoTask.Pop();
-            redoTask.Push(task);
-            task.DoneState = true;
-            if (storageIO.MarkTaskAs(task, true))
+
+            Response response = null;
+
+            for (int i = 0; i < executedTasks.Count; i++)
             {
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo),  currentListedTasks);
+                Task taskToUndo = executedTasks.Dequeue();
+                response = MarkTaskAs(taskToUndo, true);
+                if (!response.IsSuccessful())
+                    return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
             }
-            else
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
-            Task task = redoTask.Pop();
-            undoTask.Push(task);
-            task.DoneState = false;
-            if (storageIO.MarkTaskAs(task, false))
+            SetMembers(taskList, storageIO);
+
+            Response response = null;
+
+            for (int i = 0; i < executedTasks.Count; i++)
             {
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+                Task taskToUndo = executedTasks.Dequeue();
+                response = MarkTaskAs(taskToUndo, false);
+                if (!response.IsSuccessful())
+                    return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
             }
-            else
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
         }
     } 
 }

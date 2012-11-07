@@ -32,9 +32,7 @@ namespace ToDo
         {
             SetMembers(taskList, storageIO);
 
-            Task task = undoTask.Pop();
-            redoTask.Push(task);
-            Response response = DeleteTask(task);
+            Response response = DeleteTask(newTask);
             if (response.IsSuccessful())
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
             else
@@ -45,9 +43,7 @@ namespace ToDo
         {
             SetMembers(taskList, storageIO);
 
-            Task task = redoTask.Pop();
-            undoTask.Push(task);
-            Response response = AddTask(task);
+            Response response = AddTask(newTask);
             if (response.IsSuccessful())
                 return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
             else
