@@ -180,17 +180,17 @@ namespace ToDo
             {
                 // Task is over time limit!
                 if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
-                    ColorSubItems(row, settings.GetTaskDeadlineDayColor());
+                    ColorSubItems(row, settings.GetTaskNearingDeadlineColor());
                 // Task is within the next 24 hrs!
                 else if (task.IsWithinTime(new DateTimeSpecificity(), DateTime.Now, DateTime.Now.AddDays(1)))
-                    ColorSubItems(row, settings.GetTaskDeadlineColor());
+                    ColorSubItems(row, settings.GetTaskMissedDeadlineColor());
             }
 
             else if (task is TaskEvent)
             {
                 // Task is over!
                 if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
-                    ColorSubItems(row, settings.GetTaskEventColor());
+                    ColorSubItems(row, settings.GetTaskOverColor());
             }
         }
 

@@ -15,9 +15,9 @@ namespace ToDo
             private int textSize;
             private string fontSelection;
             private Color taskDoneColor;
-            private Color taskDeadlineColor;
-            private Color taskDeadlineDayColor;
-            private Color taskEventColor;
+            private Color taskMissedDeadlineColor;
+            private Color taskNearingDeadlineColor;
+            private Color taskOverColor;
 
             public bool LoadOnStartup { get { return loadOnStartup; } set { loadOnStartup = value; } }
             public bool StartMinimized { get { return startMinimized; } set { startMinimized = value; } }
@@ -25,12 +25,12 @@ namespace ToDo
             public int TextSize { get { return textSize; } set { textSize = value; } }
             public string FontSelection { get { return fontSelection; } set { fontSelection = value; } }
             public Color TaskDoneColor { get { return taskDoneColor; } set { taskDoneColor = value; } }
-            public Color TaskDeadlineColor { get { return taskDeadlineColor; } set { taskDeadlineColor = value; } }
-            public Color TaskDeadlineDayColor { get { return taskDeadlineDayColor; } set { taskDeadlineDayColor = value; } }
-            public Color TaskEventColor { get { return taskEventColor; } set { taskEventColor = value; } }
+            public Color TaskMissedDeadlineColor { get { return taskMissedDeadlineColor; } set { taskMissedDeadlineColor = value; } }
+            public Color TaskNearingDeadlineColor { get { return taskNearingDeadlineColor; } set { taskNearingDeadlineColor = value; } }
+            public Color TaskOverColor { get { return taskOverColor; } set { taskOverColor = value; } }
 
             public MiscSettings(bool _loadOnStartup, bool _startMinimized, bool _stayOnTop, int _textSize, string _fontSelection,
-                                Color _taskDoneColor, Color _taskDeadlineColor, Color _taskDeadlineDayColor, Color _taskEventColor)
+                                Color _taskDoneColor, Color _taskMissedDeadlineColor, Color _taskNearingDeadlineColor, Color _taskOverColor)
             {
                 loadOnStartup = _loadOnStartup;
                 startMinimized = _startMinimized;
@@ -38,9 +38,9 @@ namespace ToDo
                 textSize = _textSize;
                 fontSelection = _fontSelection;
                 taskDoneColor = _taskDoneColor;
-                taskDeadlineColor = _taskDeadlineColor;
-                taskDeadlineDayColor = _taskDeadlineDayColor;
-                taskEventColor = _taskEventColor;
+                taskMissedDeadlineColor = _taskMissedDeadlineColor;
+                taskNearingDeadlineColor = _taskNearingDeadlineColor;
+                taskOverColor = _taskOverColor;
             }
         }
 

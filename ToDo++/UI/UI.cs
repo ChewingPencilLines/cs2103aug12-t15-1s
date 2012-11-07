@@ -464,6 +464,18 @@ namespace ToDo
             this.customPanelControl.SelectedIndex = 0;
         }
 
+        private void ToggleToDoPanel()
+        {
+            if (this.customPanelControl.SelectedIndex == 0)
+            {
+                this.customPanelControl.SelectedIndex = 1;
+            }
+            else
+            {
+                this.customPanelControl.SelectedIndex = 0;
+            }
+        }
+
         #endregion
 
         // ******************************************************************
@@ -561,6 +573,11 @@ namespace ToDo
             if (keyData == (Keys.Control | Keys.Space))
             {
                 this.ActiveControl = textInput;
+                return true;
+            }
+            if (keyData == (Keys.Shift | Keys.S))
+            {
+                ToggleToDoPanel();
                 return true;
             }
             if ((keyData == (Keys.Control | Keys.Up)) || (keyData == (Keys.Control | Keys.Down)))
