@@ -399,6 +399,7 @@ namespace ToDo
         {
             string title="";
             string description="";
+            descriptionLabel.Text = "";
 
             if (this.selectedType == SelectedType.CommandSelected)
             {
@@ -406,7 +407,31 @@ namespace ToDo
                 switch (selectedCommand)
                 {
                     case CommandType.ADD:
-                        description = "This is a description for ADD Command";
+                        SetFormat(Color.Brown, "Floating: ", 9);
+                        SetFormat(Color.Black, "Enter \"add [task name]\"\n", 9);
+                        SetFormat(Color.Gray, "eg. add finish project\n", 9);
+                        SetFormat(Color.Brown, "Event: ", 9);
+                        SetFormat(Color.Black, "Enter \"add [task name] [start time] {end time} {day/date}\"\n", 9);
+                        SetFormat(Color.Gray, "eg. add check todo++ in 2 hours\n", 9);
+                        SetFormat(Color.Gray, "eg. add max birthday 4pm tomorrow \n", 9);
+                        SetFormat(Color.Gray, "eg. add team meeting 2pm-4pm next wed \n", 9);
+                        SetFormat(Color.Brown, "Deadline: ", 9);
+                        SetFormat(Color.Black, "Enter \"add [task name] by [deadline]\" \n", 9);
+                        SetFormat(Color.Gray, "eg. add do cs2103 CE2 by saturday midnight \n", 9);
+                        break;
+
+                    case CommandType.DELETE:
+                        SetFormat(Color.Brown, "Floating: ", 9);
+                        SetFormat(Color.Black, "Enter \"add [task name]\"\n", 9);
+                        SetFormat(Color.Gray, "eg. add finish project\n", 9);
+                        SetFormat(Color.Brown, "Event: ", 9);
+                        SetFormat(Color.Black, "Enter \"add [task name] [start time] {end time} {day/date}\"\n", 9);
+                        SetFormat(Color.Gray, "eg. add check todo++ in 2 hours\n", 9);
+                        SetFormat(Color.Gray, "eg. add max birthday 4pm tomorrow \n", 9);
+                        SetFormat(Color.Gray, "eg. add team meeting 2pm-4pm next wed \n", 9);
+                        SetFormat(Color.Brown, "Deadline: ", 9);
+                        SetFormat(Color.Black, "Enter \"add [task name] by [deadline]\" \n", 9);
+                        SetFormat(Color.Gray, "eg. add do cs2103 CE2 by saturday midnight \n", 9);
                         break;
 
                     default:
@@ -441,32 +466,31 @@ namespace ToDo
             }
 
             titleLabel.Text = title;
-            descriptionLabel.Text = description;
         }
 
         private void UpdateTimeRangeDescription()
         {
             descriptionLabel.Clear();
-            SetFormat(Color.Black, "MORNING: ", 9,FontStyle.Regular);
-            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.MORNING).ToString(), 9,FontStyle.Regular);
-            SetFormat(Color.Gray, "-", 9, FontStyle.Regular);
-            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.MORNING).ToString(), 9, FontStyle.Regular);
-            SetFormat(Color.Gray, "\n", 9, FontStyle.Regular);
-            SetFormat(Color.Black, "AFTERNOON: ", 9, FontStyle.Regular);
-            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.AFTERNOON).ToString(), 9, FontStyle.Regular);
-            SetFormat(Color.Gray, "-", 9, FontStyle.Regular);
-            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.AFTERNOON).ToString(), 9, FontStyle.Regular);
-            SetFormat(Color.Gray, "\n", 9, FontStyle.Regular);
-            SetFormat(Color.Black, "EVENING: ", 9, FontStyle.Regular);
-            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.EVENING).ToString(), 9, FontStyle.Regular);
-            SetFormat(Color.Gray, "-", 9, FontStyle.Regular);
-            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.EVENING).ToString(), 9, FontStyle.Regular);
-            SetFormat(Color.Gray, "\n", 9, FontStyle.Regular);
-            SetFormat(Color.Black, "NIGHT: ", 9, FontStyle.Regular);
-            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.NIGHT).ToString(), 9, FontStyle.Regular);
-            SetFormat(Color.Gray, "-", 9, FontStyle.Regular);
-            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.NIGHT).ToString(), 9, FontStyle.Regular);
-            SetFormat(Color.Gray, "\n", 9, FontStyle.Regular);
+            SetFormat(Color.Black, "MORNING: ", 9);
+            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.MORNING).ToString(), 9);
+            SetFormat(Color.Gray, "-", 9);
+            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.MORNING).ToString(), 9);
+            SetFormat(Color.Gray, "\n", 9);
+            SetFormat(Color.Black, "AFTERNOON: ", 9);
+            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.AFTERNOON).ToString(), 9);
+            SetFormat(Color.Gray, "-", 9);
+            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.AFTERNOON).ToString(), 9);
+            SetFormat(Color.Gray, "\n", 9);
+            SetFormat(Color.Black, "EVENING: ", 9);
+            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.EVENING).ToString(), 9);
+            SetFormat(Color.Gray, "-", 9);
+            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.EVENING).ToString(), 9);
+            SetFormat(Color.Gray, "\n", 9);
+            SetFormat(Color.Black, "NIGHT: ", 9);
+            SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.NIGHT).ToString(), 9);
+            SetFormat(Color.Gray, "-", 9);
+            SetFormat(Color.Gray, settings.GetEndTime(TimeRangeKeywordsType.NIGHT).ToString(), 9);
+            SetFormat(Color.Gray, "\n", 9);
         }
 
         #region FormattingControl
@@ -474,7 +498,7 @@ namespace ToDo
         /// <summary>
         /// Set Formatting of Text to be set into OutputBox
         /// </summary>
-        public void SetFormat(Color color, string text, int size,FontStyle fontStyle)
+        public void SetFormat(Color color, string text, int size)
         {
             RichTextBox box = descriptionLabel;
             int start = box.TextLength;
@@ -483,7 +507,7 @@ namespace ToDo
 
             box.Select(start, end - start + 1);
             box.SelectionColor = color;
-            box.SelectionFont = new Font("Tahoma", size,fontStyle);
+            box.SelectionFont = new Font("Tahoma", size,FontStyle.Regular);
             box.SelectionLength = 0;
         }
 

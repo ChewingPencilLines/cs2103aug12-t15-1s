@@ -78,14 +78,15 @@
             // 
             // descriptionLabel
             // 
-            this.descriptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.descriptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.descriptionLabel.BackColor = System.Drawing.Color.Gainsboro;
             this.descriptionLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.descriptionLabel.ForeColor = System.Drawing.Color.Black;
             this.descriptionLabel.Location = new System.Drawing.Point(159, 58);
             this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(243, 77);
+            this.descriptionLabel.Size = new System.Drawing.Size(243, 93);
             this.descriptionLabel.TabIndex = 13;
             this.descriptionLabel.Text = "Please go ahead and select a command to see it\'s description";
             // 
