@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace ToDo
 {
@@ -6,24 +7,7 @@ namespace ToDo
     {
         private int? oldIndex;
         private Task newTask;
- /*       
-        public OperationModify(int Previous, Task Revised)
-        {
-            oldIndex = Previous - 1;
-            newTask = Revised;
-        }
 
-        public OperationModify(Task Search)
-        {
-            newTask = Search;
-        }
-
-        public OperationModify()
-        {
-            oldIndex = null;
-            newTask = null;
-        }
-*/
         public OperationModify(int[] indexRange, Task newTask)
         {
             if (indexRange == null) this.oldIndex = null;
@@ -99,21 +83,13 @@ namespace ToDo
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Task taskToUndo = undoTask.Pop();
-            Task previousTask = undoTask.Pop();
-            redoTask.Push(taskToUndo);
-            redoTask.Push(previousTask);
-            return ModifyTask(taskToUndo, previousTask);
+            throw new NotImplementedException();
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Task taskToRedo = redoTask.Pop();
-            Task previousTask = redoTask.Pop();
-            undoTask.Push(taskToRedo);
-            undoTask.Push(previousTask);
-            return ModifyTask(taskToRedo, previousTask);
+            throw new NotImplementedException();
         }
     }
 }

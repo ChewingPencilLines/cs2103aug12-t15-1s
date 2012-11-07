@@ -7,12 +7,24 @@ namespace ToDo
 {
     class OperationMarkAsDone : Operation
     {
-        private int? index;
-        private int? endindex;
-        private string doneString;
-        private DateTime? doneDate;
-        private DateTime? doneDateEnd;
+        // ******************************************************************
+        // Parameters
+        // ******************************************************************
+
+        #region Parameters
+        private string taskName;
+        private int startIndex;
+        private int endIndex;
+        private bool hasIndex;
         private bool isAll;
+        private SearchType searchType;
+        private DateTime? startTime = null, endTime = null;
+        private DateTimeSpecificity isSpecific;
+        #endregion Parameters
+
+        // ******************************************************************
+        // Constructors
+        // ******************************************************************
 
         /// <summary>
         /// This is the base constructor for the MarkAsDone operation.
@@ -26,150 +38,84 @@ namespace ToDo
         /// <param name="doneDate">The date in which to mark all tasks as done.</param>
         /// <param name="isAll">If this boolean is true, the current displayed tasks will all be marked as done.</param>
         /// <returns></returns>
-        public OperationMarkAsDone(string doneString, int[] indexRange, DateTime? doneDate, bool isAll)
+        public OperationMarkAsDone(string taskName, int[] indexRange, DateTime? startTime,
+            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType)
         {
-            if (indexRange == null) this.index = null;
+            if (indexRange == null) hasIndex = false;            
             else
             {
-                this.index = indexRange[TokenIndexRange.START_INDEX] - 1;
-                this.endindex = indexRange[TokenIndexRange.END_INDEX] - 1;
+                hasIndex = true;
+                this.startIndex = indexRange[TokenIndexRange.START_INDEX] - 1;
+                this.endIndex = indexRange[TokenIndexRange.END_INDEX] - 1;
             }
-            if (doneString == "") this.doneString = null;
-            else this.doneString = doneString;
-            this.doneDate = doneDate;
-            if(doneDate != null)
-                this.doneDateEnd = ((DateTime)doneDate).AddDays(1).AddMinutes(-1);
-            else 
-                this.doneDateEnd = null;
+            if (taskName == null) this.taskName = "";
+            else this.taskName = taskName;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.isSpecific = isSpecific;
             this.isAll = isAll;
+            this.searchType = searchType;
         }
 
-        // greedy sort
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
 
-            DateTimeSpecificity isSpecific = new DateTimeSpecificity();
-            Response response;
-            if (doneDate != null)
-            {
-                response = null;
-                List<Task> searchResults = SearchForTasks(doneString, isSpecific, false, doneDate, doneDateEnd);
-                if (searchResults.Count == 0)
-                {
-                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
-                }
-                else
-                {
-                    foreach (Task taskToDone in searchResults)
-                    {
-                        response = MarkAsDone(taskToDone);
-                    }
-                }
-            }
-            else if (index.HasValue == false && doneString != null)
-            {
-                List<Task> searchResults = SearchForTasks(doneString, isSpecific, true);
-                if (searchResults.Count == 1)
-                {
-                    response = MarkAsDone(currentListedTasks[0]);
-                }
-                else if (searchResults.Count > 0)
-                {
-                    currentListedTasks = new List<Task>(searchResults);
-                    string[] args;
-                    this.SetArgumentsForFeedbackString(out args, doneString, doneDate, doneDateEnd, SearchType.NONE, false);
-                    response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, args);
-                }
-                else
-                {
-                    searchResults = SearchForTasks(doneString, isSpecific, false);
-                    if (searchResults.Count > 0)
-                    {
-                        currentListedTasks = new List<Task>(searchResults);
-                        string[] args;
-                        this.SetArgumentsForFeedbackString(out args, doneString, doneDate, doneDateEnd, SearchType.NONE, false);
-                        response = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, args);
-                    }
-                    else
-                        response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
-                }
-            }
-            else if (index < 0 || index > taskList.Count - 1)
-            {
-                response = new Response(Result.INVALID_TASK, Format.DEFAULT);
-            }
-            else if (index != null)
-            {
-                response = null;
-                Debug.Assert(index <= endindex);
-                Debug.Assert(endindex < currentListedTasks.Count);
-                for (int? i = index; i <= endindex; i++)
-                {
-                    Task taskToMarkAsDone =  currentListedTasks[i.Value];
-                    response = MarkAsDone(taskToMarkAsDone);
-                }
-            }
-            else if (isAll)
-            {
-                foreach (Task task in currentListedTasks)
-                {
-                    response = MarkAsDone(task);
-                    if (!response.IsSuccessful()) return response;
-                }
-                response = new Response(Result.SUCCESS_MULTIPLE, Format.DEFAULT, this.GetType(), currentListedTasks);
-            }
+            Func<Task, bool, Response> action = MarkTaskAs;
+            object[] args = { (bool)true };
+
+            Response response = null;
+
+            response = CheckIfIndexesAreValid(startIndex, endIndex);
+            if (response != null) return response;
+
+            if (!hasIndex)
+                response = ExecuteBySearch(
+                    taskName, isSpecific.StartTime && isSpecific.EndTime,
+                    startTime, endTime, isSpecific, isAll, searchType, action, args);
+
+            else if (hasIndex)
+                response = ExecuteByIndex(startIndex, endIndex, action, args);
+
             else
-            {
-                response = new Response(Result.INVALID_COMMAND, Format.DEFAULT, this.GetType(),  currentListedTasks);
-            }
+                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+
             if (response.IsSuccessful())
-            {
                 TrackOperation();
-            }
+
             return response;
-        }
-
-        protected Response MarkAsDone(Task taskToMarkAsDone)
-        {
-            undoTask.Push(taskToMarkAsDone);
-            taskToMarkAsDone.DoneState = true;
-
-            if (storageIO.MarkTaskAs(taskToMarkAsDone, true))
-            {
-                return GenerateSuccessResponse(taskToMarkAsDone);
-            }
-            else
-                return GenerateXMLFailureResponse();
         }
 
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
 
-            Task task = undoTask.Pop();
-            redoTask.Push(task);
-            task.DoneState = false;
-            if (storageIO.MarkTaskAs(task, false))
+            Response response = null;
+
+            for (int i = 0; i < executedTasks.Count; i++)
             {
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo),  currentListedTasks);
+                Task taskToUndo = executedTasks.Dequeue();
+                response = MarkTaskAs(taskToUndo, false);
+                if (!response.IsSuccessful())
+                    return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
             }
-            else
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Task task = redoTask.Pop();
-            undoTask.Push(task);
-            task.DoneState = true;
-            if (storageIO.MarkTaskAs(task, true))
+
+            Response response = null;
+
+            for (int i = 0; i < executedTasks.Count; i++)
             {
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+                Task taskToUndo = executedTasks.Dequeue();
+                response = MarkTaskAs(taskToUndo, true);
+                if (!response.IsSuccessful())
+                    return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
             }
-            else
-                return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
         }
     } 
 }
