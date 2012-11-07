@@ -71,7 +71,7 @@ namespace ToDo
                 || commandType == CommandType.DELETE
                 || commandType == CommandType.DONE
                 || commandType == CommandType.UNDONE
-                || (commandType == CommandType.MODIFY && taskRangeIndex == null))
+                || (commandType == CommandType.MODIFY && taskRangeIndex != null))
                 SetSearchTime();
             else
                 SetScheduleTime();
