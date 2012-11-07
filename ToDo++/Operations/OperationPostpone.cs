@@ -186,7 +186,7 @@ namespace ToDo
             }
             if (storageIO.RemoveTaskFromFile(taskToPostpone) && storageIO.AddTaskToFile(taskPostponed))
             {
-                return GenerateSuccessResponse(taskPostponed);
+                return GenerateStandardSuccessResponse(taskPostponed);
                 //return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationPostpone),currentListedTasks);
             }
             else
