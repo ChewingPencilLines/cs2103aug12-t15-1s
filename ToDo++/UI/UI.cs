@@ -744,6 +744,7 @@ namespace ToDo
         /// </summary>
         public void Exit()
         {
+            Logger.Info("Exiting the application normally...", "UI");
             Application.Exit();
         }
 
