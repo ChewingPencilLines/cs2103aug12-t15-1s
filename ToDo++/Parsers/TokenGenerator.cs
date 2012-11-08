@@ -363,6 +363,7 @@ namespace ToDo
                     TokenTime timeToken = new TokenTime(index, time, specificity);
                     timeTokens.Add(timeToken);
                 }
+                minutes = 0;
                 index++;
             }
             return timeTokens;
