@@ -75,7 +75,7 @@ namespace ToDo
 
                 // Extend compare range if task dates are not specific                
                 if ((!isSpecific.EndDate.Day && !isSpecific.EndTime ||
-                    (!compareIsSpecific.EndDate.Day && compareIsSpecific.EndTime)))
+                    (!compareIsSpecific.EndDate.Day && !compareIsSpecific.EndTime)))
                 {
                     if (!isSpecific.EndDate.Month)
                         endCompare = new DateTime(endCompare.Year + 1, 1, 1);
