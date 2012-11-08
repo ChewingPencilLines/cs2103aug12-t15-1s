@@ -213,7 +213,7 @@ namespace ToDo
             int index = 0;
             foreach (string word in input)
             {
-                if (CustomDictionary.dayKeywords.ContainsKey(word))
+                if (CustomDictionary.dayKeywords.ContainsKey(word.ToLower()))
                 {
                     CustomDictionary.dayKeywords.TryGetValue(word, out day);
                     TokenDay dayToken = new TokenDay(index, day);
