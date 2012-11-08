@@ -33,7 +33,6 @@
             this.grouper1 = new CodeVendor.Controls.Grouper();
             this.flatTabControl1 = new FlatTabControl.FlatTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.titleLabel = new System.Windows.Forms.Label();
             this.commandTree = new System.Windows.Forms.TreeView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.contextTree = new System.Windows.Forms.TreeView();
@@ -41,10 +40,11 @@
             this.rangeController = new Zzzz.ZzzzRangeBar();
             this.timeRangeTree = new System.Windows.Forms.TreeView();
             this.timeRangeKeywordTree = new System.Windows.Forms.TreeView();
+            this.titleLabel = new System.Windows.Forms.Label();
             this.schedPostponePanel = new System.Windows.Forms.Panel();
-            this.schedulePostponeLabel = new System.Windows.Forms.Label();
-            this.timeComboBox = new System.Windows.Forms.ComboBox();
             this.typeComboBox = new System.Windows.Forms.ComboBox();
+            this.timeComboBox = new System.Windows.Forms.ComboBox();
+            this.schedulePostponeLabel = new System.Windows.Forms.Label();
             this.removeButton = new ToDo.RoundButton();
             this.addButton = new ToDo.RoundButton();
             this.grouper1.SuspendLayout();
@@ -65,7 +65,7 @@
             this.descriptionLabel.ForeColor = System.Drawing.Color.Black;
             this.descriptionLabel.Location = new System.Drawing.Point(110, 58);
             this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(292, 105);
+            this.descriptionLabel.Size = new System.Drawing.Size(292, 129);
             this.descriptionLabel.TabIndex = 13;
             this.descriptionLabel.Text = "Please go ahead and select a command to see it\'s description";
             // 
@@ -134,17 +134,6 @@
             this.tabPage1.Size = new System.Drawing.Size(400, 196);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Commands";
-            // 
-            // titleLabel
-            // 
-            this.titleLabel.AutoSize = true;
-            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titleLabel.ForeColor = System.Drawing.Color.Black;
-            this.titleLabel.Location = new System.Drawing.Point(107, 32);
-            this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(176, 25);
-            this.titleLabel.TabIndex = 12;
-            this.titleLabel.Text = "Nothing Selected";
             // 
             // commandTree
             // 
@@ -243,6 +232,17 @@
             this.timeRangeKeywordTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.timeRangeKeywordTree_AfterSelect);
             this.timeRangeKeywordTree.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.timeRangeKeywordTree_MouseDoubleClick);
             // 
+            // titleLabel
+            // 
+            this.titleLabel.AutoSize = true;
+            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.titleLabel.ForeColor = System.Drawing.Color.Black;
+            this.titleLabel.Location = new System.Drawing.Point(107, 32);
+            this.titleLabel.Name = "titleLabel";
+            this.titleLabel.Size = new System.Drawing.Size(176, 25);
+            this.titleLabel.TabIndex = 12;
+            this.titleLabel.Text = "Nothing Selected";
+            // 
             // schedPostponePanel
             // 
             this.schedPostponePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -256,14 +256,22 @@
             this.schedPostponePanel.Size = new System.Drawing.Size(293, 52);
             this.schedPostponePanel.TabIndex = 13;
             // 
-            // schedulePostponeLabel
+            // typeComboBox
             // 
-            this.schedulePostponeLabel.AutoSize = true;
-            this.schedulePostponeLabel.Location = new System.Drawing.Point(3, 6);
-            this.schedulePostponeLabel.Name = "schedulePostponeLabel";
-            this.schedulePostponeLabel.Size = new System.Drawing.Size(103, 13);
-            this.schedulePostponeLabel.TabIndex = 1;
-            this.schedulePostponeLabel.Text = "Postpone Response";
+            this.typeComboBox.BackColor = System.Drawing.Color.Gainsboro;
+            this.typeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.typeComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.typeComboBox.FormattingEnabled = true;
+            this.typeComboBox.Items.AddRange(new object[] {
+            "HOUR",
+            "DAY",
+            "WEEK",
+            "MONTH"});
+            this.typeComboBox.Location = new System.Drawing.Point(108, 24);
+            this.typeComboBox.Name = "typeComboBox";
+            this.typeComboBox.Size = new System.Drawing.Size(85, 21);
+            this.typeComboBox.TabIndex = 3;
+            this.typeComboBox.SelectedValueChanged += new System.EventHandler(this.typeComboBox_SelectedValueChanged);
             // 
             // timeComboBox
             // 
@@ -301,22 +309,14 @@
             this.timeComboBox.TabIndex = 2;
             this.timeComboBox.SelectedValueChanged += new System.EventHandler(this.timeComboBox_SelectedValueChanged);
             // 
-            // typeComboBox
+            // schedulePostponeLabel
             // 
-            this.typeComboBox.BackColor = System.Drawing.Color.Gainsboro;
-            this.typeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.typeComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.typeComboBox.FormattingEnabled = true;
-            this.typeComboBox.Items.AddRange(new object[] {
-            "HOUR",
-            "DAY",
-            "WEEK",
-            "MONTH"});
-            this.typeComboBox.Location = new System.Drawing.Point(108, 24);
-            this.typeComboBox.Name = "typeComboBox";
-            this.typeComboBox.Size = new System.Drawing.Size(85, 21);
-            this.typeComboBox.TabIndex = 3;
-            this.typeComboBox.SelectedValueChanged += new System.EventHandler(this.typeComboBox_SelectedValueChanged);
+            this.schedulePostponeLabel.AutoSize = true;
+            this.schedulePostponeLabel.Location = new System.Drawing.Point(3, 6);
+            this.schedulePostponeLabel.Name = "schedulePostponeLabel";
+            this.schedulePostponeLabel.Size = new System.Drawing.Size(103, 13);
+            this.schedulePostponeLabel.TabIndex = 1;
+            this.schedulePostponeLabel.Text = "Postpone Response";
             // 
             // removeButton
             // 

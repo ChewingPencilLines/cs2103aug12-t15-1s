@@ -34,7 +34,6 @@ namespace ToDo
             schedPostponePanel.Hide();
         }
 
-
         #region ConversionStringToEnum
 
         public enum SelectedType { CommandSelected = 1, ContextSelected, TimeRangeKeywordsSelected, TimeRangeSelected };
@@ -247,6 +246,8 @@ namespace ToDo
 
         #endregion
 
+        #region TabAndRangeEventHandlers
+
         private void rangeController_RangeChanged(object sender, EventArgs e)
         {
             if (this.selectedTimeRangeKeywordType == TimeRangeKeywordsType.NIGHT)
@@ -285,6 +286,78 @@ namespace ToDo
                 tempSize.Height = 93;
                 descriptionLabel.Size = tempSize;
             }
+        }
+
+        #endregion
+
+        #region ComboBoxPostponeScheduleEventHandlers
+
+        bool allowComboBoxChanges = true;
+        private void timeComboBox_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (allowComboBoxChanges == true)
+            {
+                int time = Convert.ToInt32(timeComboBox.SelectedItem.ToString());
+
+                if ((time < 1) || (time > 24))
+                {
+                    AlertBox.Show("Select a Time Range between 1-23");
+                    return;
+                }
+
+                if (selectedCommand == CommandType.POSTPONE)
+                {
+                    settings.SetDefaultPostponeDurationLength(time);
+                    UpdateSchedulePostponeLabel();
+                }
+                else if (selectedCommand == CommandType.SCHEDULE)
+                {
+                    settings.SetDefaultScheduleTimeLength(time);
+                    UpdateSchedulePostponeLabel();
+                }
+            }
+        }
+
+        private void typeComboBox_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (allowComboBoxChanges == true)
+            {
+                string x = typeComboBox.SelectedItem.ToString();
+                TimeRangeType timeRangeType = (TimeRangeType)Enum.Parse(typeof(TimeRangeType), x);
+
+                if (selectedCommand == CommandType.POSTPONE)
+                {
+                    settings.SetDefaultPostponeDurationType(timeRangeType);
+                    UpdateSchedulePostponeLabel();
+                }
+                else if (selectedCommand == CommandType.SCHEDULE)
+                {
+                    settings.SetDefaultScheduleTimeLengthType(timeRangeType);
+                    UpdateSchedulePostponeLabel();
+                }
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region FormattingControl
+
+        /// <summary>
+        /// Set Formatting of Text to be set into OutputBox
+        /// </summary>
+        public void SetFormat(Color color, string text, int size)
+        {
+            RichTextBox box = descriptionLabel;
+            int start = box.TextLength;
+            box.AppendText(text);
+            int end = box.TextLength;
+
+            box.Select(start, end - start + 1);
+            box.SelectionColor = color;
+            box.SelectionFont = new Font("Tahoma", size, FontStyle.Regular);
+            box.SelectionLength = 0;
         }
 
         #endregion
@@ -397,54 +470,36 @@ namespace ToDo
                 switch (selectedCommand)
                 {
                     case CommandType.ADD:
-                        SetFormat(Color.Brown, "Floating:\n", 9);
-                        SetFormat(Color.Black, "Enter \"add [task name]\"\n", 9);
+                        SetFormat(Color.Brown, "Add a task anyway you like\n", 9);
                         SetFormat(Color.Gray, "eg. add finish project\n", 9);
-                        SetFormat(Color.Brown, "Event:\n", 9);
-                        SetFormat(Color.Black, "Enter \"add [task name] [start time] {end time} {day/date}\"\n", 9);
                         SetFormat(Color.Gray, "eg. add check todo++ in 2 hours\n", 9);
                         SetFormat(Color.Gray, "eg. add max birthday 4pm tomorrow \n", 9);
                         SetFormat(Color.Gray, "eg. add team meeting 2pm-4pm next wed \n", 9);
-                        SetFormat(Color.Brown, "Deadline:\n", 9);
-                        SetFormat(Color.Black, "Enter \"add [task name] by [deadline]\" \n", 9);
-                        SetFormat(Color.Gray, "eg. add do cs2103 CE2 by saturday midnight \n", 9);
+                        SetFormat(Color.Gray, "eg. add do cs2103 CE2 by sat midnight \n", 9);
                         break;
 
                     case CommandType.DELETE:
-                        SetFormat(Color.Brown, "Delete Tasks:\n", 9);
-                        SetFormat(Color.Black, "Enter \"delete [task name/ID]\"\n", 9);
+                        SetFormat(Color.Brown, "Delete Tasks anyway you like:\n", 9);
                         SetFormat(Color.Gray, "eg. delete 3\n", 9);
                         SetFormat(Color.Gray, "eg. delete task\n", 9);
                         SetFormat(Color.Gray, "eg. delete 1-3\n", 9);
-                        SetFormat(Color.Brown, "Delete from Schedule:\n", 9);
-                        SetFormat(Color.Black, "Enter \"delete [day/date] {before/after} {time}\"\n", 9);
                         SetFormat(Color.Gray, "eg. remove Sunday after 1500hrs\n", 9);
                         SetFormat(Color.Gray, "eg. delete 31 December after 10pm \n", 9);
                         break;
 
                     case CommandType.DISPLAY:
-                        SetFormat(Color.Brown, "Display All Tasks:\n", 9);
-                        SetFormat(Color.Black, "Enter \"display\"\n", 9);
-                        SetFormat(Color.Brown, "Within Dates:\n", 9);
-                        SetFormat(Color.Black, "Enter \"display [day/date] {before/after} {time}\"\n", 9);
+                        SetFormat(Color.Brown, "Display/Search tasks in many ways:\n", 9);
                         SetFormat(Color.Gray, "eg. display 06/09/2012\n", 9);
                         SetFormat(Color.Gray, "eg. display Sunday after 1500hrs\n", 9);
                         SetFormat(Color.Gray, "eg. display 6 sept before 10pm\n", 9);
                         SetFormat(Color.Gray, "eg. display next Saturday\n", 9);
                         SetFormat(Color.Gray, "eg. display tomorrow\n", 9);
-                        SetFormat(Color.Brown, "Searching Task Names:\n", 9);
-                        SetFormat(Color.Black, "Enter \"display [name]\"\n", 9);
                         SetFormat(Color.Gray, "eg. display buy milk\n", 9);
-                        SetFormat(Color.Brown, "Searching Task Types:\n", 9);
-                        SetFormat(Color.Black, "Enter \"display [type]\"\n", 9);
-                        SetFormat(Color.Gray, "eg. display event\n", 9);
-                        SetFormat(Color.Gray, "eg. display deadline\n", 9);
                         SetFormat(Color.Gray, "eg. display floating\n", 9);
                         break;
 
                     case CommandType.DONE:
-                        SetFormat(Color.Brown, "Task Done:\n", 9);
-                        SetFormat(Color.Black, "Enter \"done [day/date] {before/after} {time}\"\n", 9);
+                        SetFormat(Color.Brown, "Set Tasks as completed:\n", 9);
                         SetFormat(Color.Gray, "eg. done task\n", 9);
                         SetFormat(Color.Gray, "eg. done 3\n", 9);
                         SetFormat(Color.Gray, "eg. done 1-3\n", 9);
@@ -452,10 +507,8 @@ namespace ToDo
                         break;
 
                     case CommandType.MODIFY:
-                        SetFormat(Color.Brown, "Modify Task Name:\n", 9);
-                        SetFormat(Color.Black, "Enter \"modify [task name/ID] [new name]\"\n", 9);
+                        SetFormat(Color.Brown, "Modify tasks as you please:\n", 9);
                         SetFormat(Color.Gray, "eg. modify 1 buy car\n", 9);
-                        SetFormat(Color.Black, "Enter \"modify [task name/ID] [new start time/deadline] {end time} {day/date}\"\n", 9);
                         SetFormat(Color.Gray, "eg. modify 1 3pm\n", 9);
                         SetFormat(Color.Gray, "eg. modify buy milk 9 Nov\n", 9);
                         break;
@@ -542,71 +595,6 @@ namespace ToDo
             }  
         }
 
-        #region FormattingControl
-
-        /// <summary>
-        /// Set Formatting of Text to be set into OutputBox
-        /// </summary>
-        public void SetFormat(Color color, string text, int size)
-        {
-            RichTextBox box = descriptionLabel;
-            int start = box.TextLength;
-            box.AppendText(text);
-            int end = box.TextLength;
-
-            box.Select(start, end - start + 1);
-            box.SelectionColor = color;
-            box.SelectionFont = new Font("Tahoma", size,FontStyle.Regular);
-            box.SelectionLength = 0;
-        }
-
-        #endregion
-
-        bool allowComboBoxChanges=true;
-        private void timeComboBox_SelectedValueChanged(object sender, EventArgs e)
-        {
-            if (allowComboBoxChanges == true)
-            {
-                int time = Convert.ToInt32(timeComboBox.SelectedItem.ToString());
-
-                if ((time < 1) || (time > 24))
-                {
-                    AlertBox.Show("Select a Time Range between 1-23");
-                    return;
-                }
-
-                if (selectedCommand == CommandType.POSTPONE)
-                {
-                    settings.SetDefaultPostponeDurationLength(time);
-                    UpdateSchedulePostponeLabel();
-                }
-                else if (selectedCommand == CommandType.SCHEDULE)
-                {
-                    settings.SetDefaultScheduleTimeLength(time);
-                    UpdateSchedulePostponeLabel();
-                }
-            }
-        }
-
-        private void typeComboBox_SelectedValueChanged(object sender, EventArgs e)
-        {
-            if (allowComboBoxChanges == true)
-            {
-                string x = typeComboBox.SelectedItem.ToString();
-                TimeRangeType timeRangeType = (TimeRangeType)Enum.Parse(typeof(TimeRangeType), x);
-
-                if (selectedCommand == CommandType.POSTPONE)
-                {
-                    settings.SetDefaultPostponeDurationType(timeRangeType);
-                    UpdateSchedulePostponeLabel();
-                }
-                else if (selectedCommand == CommandType.SCHEDULE)
-                {
-                    settings.SetDefaultScheduleTimeLengthType(timeRangeType);
-                    UpdateSchedulePostponeLabel();
-                }
-            }
-        }
 
 
 
