@@ -38,8 +38,11 @@ namespace ToDo
         const string STRING_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
         const string STRING_MARKASDONE_SUCCESS_MULTI = "Successfully marked all tasks as done.";
         const string STRING_MARKASDONE_FAILURE = "No matching tasks found!";
-        const string STRING_MARKASDONE_INVALID_TASK = "Cannot mark this task as done!";
-        const string STRING_MARKASUNDONE_SUCCESS = "Successfully marked \"{0}\" as undone."; // Not implemented.
+        const string STRING_MARKASDONE_INVALID_TASK = "Task already marked as done.";
+        const string STRING_MARKASUNDONE_SUCCESS = "Successfully marked \"{0}\" as undone.";
+        const string STRING_MARKASUNDONE_SUCCESS_MULTI = "Successfully marked all tasks as undone.";
+        const string STRING_MARKASUNDONE_FAILURE = "No matching tasks found!";
+        const string STRING_MARKASUNDONE_INVALID_TASK = "Task already marked as undone.";
         const string STRING_SCHEDULE_INVALID_TASK = "Task duration exceeds specified time range!";
         const string STRING_SCHEDULE_FAILURE = "Task could not be scheduled within specified time range!";
         const string STRING_SCHEDULE_SUCCESS = "Scheduled new task \"{0}\" successfully.";
@@ -101,6 +104,18 @@ namespace ToDo
             if (result == Result.SUCCESS || result == Result.SUCCESS_MULTIPLE) return true;
             else return false;
         }
+        
+        internal bool WarnUser()
+        {
+            return feedbackAsWarning;
+        }
+
+        public bool IsInvalidTask()
+        {
+            if (result == Result.INVALID_TASK)
+                return true;
+            else return false;
+        }
 
         private void SetFeedbackString(Result resultType, Type operationType)
         {
@@ -117,6 +132,8 @@ namespace ToDo
                             feedbackString = String.Format(STRING_MODIFY_SUCCESS, args);
                         if (operationType == typeof(OperationMarkAsDone))
                             feedbackString = String.Format(STRING_MARKASDONE_SUCCESS, args);
+                        if (operationType == typeof(OperationMarkAsUndone))
+                            feedbackString = String.Format(STRING_MARKASUNDONE_SUCCESS, args);
                         if (operationType == typeof(OperationSchedule))
                             feedbackString = String.Format(STRING_SCHEDULE_SUCCESS, args);
                         if (operationType == typeof(OperationSearch))
@@ -135,6 +152,8 @@ namespace ToDo
                             feedbackString = STRING_DELETE_SUCCESS_MULTI;
                         if (operationType == typeof(OperationMarkAsDone))
                             feedbackString = STRING_MARKASDONE_SUCCESS_MULTI;
+                        if (operationType == typeof(OperationMarkAsUndone))
+                            feedbackString = STRING_MARKASUNDONE_SUCCESS_MULTI;
                         if (operationType == typeof(OperationPostpone))
                             feedbackString = STRING_POSTPONE_SUCCESS_MULTI;
                         break;
@@ -147,6 +166,8 @@ namespace ToDo
                             feedbackString = STRING_MODIFY_FAILURE;
                         if (operationType == typeof(OperationMarkAsDone))
                             feedbackString = STRING_MARKASDONE_FAILURE;
+                        if (operationType == typeof(OperationMarkAsUndone))
+                            feedbackString = STRING_MARKASUNDONE_FAILURE;
                         if (operationType == typeof(OperationSchedule))
                             feedbackString = STRING_SCHEDULE_FAILURE;
                         if (operationType == typeof(OperationUndo))
@@ -171,6 +192,8 @@ namespace ToDo
                             feedbackString = STRING_POSTPONE_INVALID_TASK;
                         else if (operationType == typeof(OperationMarkAsDone))
                             feedbackString = STRING_MARKASDONE_INVALID_TASK;
+                        else if (operationType == typeof(OperationMarkAsUndone))
+                            feedbackString = STRING_MARKASUNDONE_INVALID_TASK;
                         else if (operationType == typeof(OperationSchedule))
                             feedbackString = STRING_SCHEDULE_INVALID_TASK;
                         else
@@ -217,11 +240,6 @@ namespace ToDo
                     break;
             }
             return String.Format(STRING_SORT_SUCCESS, sortTypeString);
-        }
-
-        internal bool WarnUser()
-        {
-            return feedbackAsWarning;
         }
     }
 }

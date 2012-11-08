@@ -40,6 +40,8 @@ namespace ToDo
             DateTimeSpecificity isSpecific
             )
         {
+            if (taskName == String.Empty || taskName == null)
+                return null; // don't accept empty task names
             if (startTime == null && endTime == null)
                 return new TaskFloating(taskName);
             else if (startTime == null && endTime != null)

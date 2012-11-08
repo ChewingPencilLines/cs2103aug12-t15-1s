@@ -117,6 +117,11 @@ namespace ToDo
             return words;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="words"></param>
+        /// <returns></returns>
         private List<string> MergeNumericalRangeWords(List<string> words)
         {               
             int j = 1;
