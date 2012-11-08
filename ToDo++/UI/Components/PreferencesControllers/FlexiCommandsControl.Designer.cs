@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.commandTree = new System.Windows.Forms.TreeView();
             this.contextTree = new System.Windows.Forms.TreeView();
             this.descriptionLabel = new System.Windows.Forms.RichTextBox();
             this.titleLabel = new System.Windows.Forms.Label();
@@ -43,27 +42,13 @@
             this.timeRangeTree = new System.Windows.Forms.TreeView();
             this.removeButton = new ToDo.RoundButton();
             this.addButton = new ToDo.RoundButton();
+            this.commandTree = new System.Windows.Forms.TreeView();
             this.grouper1.SuspendLayout();
             this.flatTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // commandTree
-            // 
-            this.commandTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.commandTree.BackColor = System.Drawing.Color.Gainsboro;
-            this.commandTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.commandTree.ForeColor = System.Drawing.Color.Black;
-            this.commandTree.LineColor = System.Drawing.Color.Gainsboro;
-            this.commandTree.Location = new System.Drawing.Point(-14, 0);
-            this.commandTree.Name = "commandTree";
-            this.commandTree.Size = new System.Drawing.Size(111, 188);
-            this.commandTree.TabIndex = 1;
-            this.commandTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.commandTree_AfterSelect);
-            this.commandTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.commandTree_NodeMouseDoubleClick);
             // 
             // contextTree
             // 
@@ -259,6 +244,19 @@
             this.addButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.addButton_MouseDown);
             this.addButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.addButton_MouseUp);
             // 
+            // commandTree
+            // 
+            this.commandTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.commandTree.BackColor = System.Drawing.Color.Gainsboro;
+            this.commandTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.commandTree.LineColor = System.Drawing.Color.Gainsboro;
+            this.commandTree.Location = new System.Drawing.Point(-14, 0);
+            this.commandTree.Name = "commandTree";
+            this.commandTree.Size = new System.Drawing.Size(111, 188);
+            this.commandTree.TabIndex = 0;
+            this.commandTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.commandTree_AfterSelect);
+            // 
             // FlexiCommandsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -284,7 +282,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView commandTree;
         private System.Windows.Forms.TreeView contextTree;
         private System.Windows.Forms.RichTextBox descriptionLabel;
         private System.Windows.Forms.Label titleLabel;
@@ -299,5 +296,6 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TreeView timeRangeTree;
         private Zzzz.ZzzzRangeBar rangeController;
+        private System.Windows.Forms.TreeView commandTree;
     }
 }

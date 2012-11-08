@@ -64,6 +64,9 @@
     <Compile Include="Response.cs" />
     <Compile Include="Tokens\TokenSortType.cs" />
     <Compile Include="Tokens\TokenTimeRange.cs" />
+    <Compile Include="TreeViewNoFlicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Components\PreferencesControllers\FontColorSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>

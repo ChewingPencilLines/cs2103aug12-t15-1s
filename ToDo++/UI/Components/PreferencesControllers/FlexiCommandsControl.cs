@@ -380,6 +380,12 @@ namespace ToDo
                         break;
 
                     case CommandType.MODIFY:
+                        SetFormat(Color.Brown, "Modify Task Name:\n", 9);
+                        SetFormat(Color.Black, "Enter \"modify [task name/ID] [new name]\"\n", 9);
+                        SetFormat(Color.Gray, "eg. modify 1 buy car\n", 9);
+                        SetFormat(Color.Black, "Enter \"modify [task name/ID] [new start time/deadline] {end time} {day/date}\"\n", 9);
+                        SetFormat(Color.Gray, "eg. modify 1 3pm\n", 9);
+                        SetFormat(Color.Gray, "eg. modify buy milk 9 Nov\n", 9);
                         break;
 
                     default:
@@ -498,6 +504,11 @@ namespace ToDo
                 tempSize.Height = 93;
                 descriptionLabel.Size = tempSize;
             }
+        }
+
+        private void commandTree_AfterSelect(object sender, EventArgs e)
+        {
+
         }
 
 
