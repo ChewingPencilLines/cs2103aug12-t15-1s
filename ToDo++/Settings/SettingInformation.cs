@@ -7,6 +7,17 @@ namespace ToDo
 {
     public class SettingInformation
     {
+        //DEFAULT SETTING VALUES TO BE LOADED
+        private const bool defaultLoadOnStartup = false;
+        private const bool defaultStartMinimized = false;
+        private const bool defaultStayOnTop = false;
+        private const int defaultTextSize = 9;
+        private const string defaultFont = "Arial";
+        private const Color defaultTaskDoneColor = Color.Green;
+        private const Color defaultTaskMissedDeadlineColor = Color.Red;
+        private const Color defaultTaskNearingDeadlineColor = Color.OrangeRed;
+        private const Color defaultTaskOverColor = Color.MediumVioletRed;
+
         public struct MiscSettings
         {
             private bool loadOnStartup;
@@ -54,7 +65,8 @@ namespace ToDo
 
         public SettingInformation()
         {
-            misc = new MiscSettings(false, false, false, 9, "Arial",Color.Green,Color.Red,Color.OrangeRed,Color.MediumVioletRed);
+            misc = new MiscSettings(defaultLoadOnStartup, defaultStartMinimized, defaultStayOnTop, defaultTextSize, defaultFont,
+                                    defaultTaskDoneColor,defaultTaskMissedDeadlineColor,defaultTaskNearingDeadlineColor,defaultTaskOverColor);
             userCommandKeywords = CustomDictionary.GetCommandKeywords();
             userContextKeywords = CustomDictionary.GetContextKeywords();
             userTimeRangeKeywordsType = CustomDictionary.GetTimeRangeKeywordKeywords();
