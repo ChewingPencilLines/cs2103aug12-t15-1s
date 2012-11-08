@@ -69,11 +69,15 @@ namespace ToDo
         {
             GetTimeRangeValues();
             if (commandType == CommandType.SCHEDULE)
+            {
                 SetScheduleTime();
+            }
             else if (!(
                     (commandType == CommandType.ADD) ||
                     (commandType == CommandType.MODIFY && taskRangeIndex != null)))
+            {
                 SetSearchTime();
+            }
             CombineDateTimes();
         }
 
@@ -118,7 +122,14 @@ namespace ToDo
                 }
                 else
                 {
-                    startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
+                    if (currentMode != ContextType.DEADLINE)
+                    {
+                        startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
+                    }
+                    else
+                    {
+                        startTimeOnly = null;
+                    }
                     endTimeOnly = new TimeSpan(endTimeHour, 0, 0);
                 }
             }
