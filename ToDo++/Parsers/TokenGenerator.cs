@@ -327,12 +327,11 @@ namespace ToDo
         {
             List<Token> timeTokens = new List<Token>();
             Match match;
-            int index = 0, hours = 0, minutes = 0, seconds = 0;
             bool specificity = true;
             bool Format_12Hour = false;            
             foreach (string word in input)
             {
-                bool isTime = false;
+                int index = 0, hours = 0, minutes = 0, seconds = 0;
                 match = CustomDictionary.time_12HourFormat.Match(word.ToLower());
                 if (!match.Success)
                 {
@@ -344,7 +343,6 @@ namespace ToDo
                 }
                 if (match.Success)
                 {
-                    isTime = true;
                     string strHours = match.Groups["hours"].Value;
                     string strMinutes = match.Groups["minutes"].Value;    
                     if (strHours.Length != 0)  
@@ -359,14 +357,10 @@ namespace ToDo
                     {
                         minutes = Int32.Parse(strMinutes);
                     }
-                }
-                if (isTime)
-                {
                     TimeSpan time = new TimeSpan(hours, minutes, seconds);
                     TokenTime timeToken = new TokenTime(index, time, specificity);
                     timeTokens.Add(timeToken);
                 }
-                minutes = 0;
                 index++;
             }
             return timeTokens;
