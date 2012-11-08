@@ -303,7 +303,7 @@ namespace ToDo
             Response response = null;
             foreach (Task task in searchResults)
             {
-                var parameters = AddTaskToParameters(args, searchResults[0]);
+                var parameters = AddTaskToParameters(args, task);
                 response = (Response)action.DynamicInvoke(parameters);
 
                 if (!response.IsSuccessful() && !AllowSkipOver(response)) return response;
