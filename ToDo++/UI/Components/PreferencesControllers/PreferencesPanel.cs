@@ -33,7 +33,7 @@ namespace ToDo
             preferencesTree.Nodes.Add(treeNode);
             treeNode = new TreeNode("FlexiCommands");
             preferencesTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("Font");
+            treeNode = new TreeNode("Font/Colors");
             preferencesTree.Nodes.Add(treeNode);
         }
 
