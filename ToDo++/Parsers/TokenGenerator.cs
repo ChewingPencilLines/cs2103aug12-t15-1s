@@ -138,9 +138,11 @@ namespace ToDo
                 TimeRangeType timeRangeType;
                 TimeRangeKeywordsType timeRangeKeyword;
                 TokenTimeRange timeRangeToken = null;
-                if (CustomDictionary.IsTimeRange(word.ToLower()))
+
+                string wordLower = word.ToLower();
+                if (CustomDictionary.IsTimeRange(wordLower))
                 {
-                    Match match = CustomDictionary.isTimeRange.Match(word.ToLower());
+                    Match match = CustomDictionary.isTimeRange.Match(wordLower);
                     Int32.TryParse(match.Groups["index"].Value, out timeRangeAmount);
                     string matchString = match.Groups["type"].Value;
                     if (!CustomDictionary.timeRangeType.TryGetValue(matchString, out timeRangeType))
@@ -149,7 +151,7 @@ namespace ToDo
                     }
                         timeRangeToken = new TokenTimeRange(index, timeRangeAmount, timeRangeType);
                 }
-                else if (CustomDictionary.timeRangeKeywords.TryGetValue(word.ToLower(), out timeRangeKeyword))
+                else if (CustomDictionary.timeRangeKeywords.TryGetValue(wordLower, out timeRangeKeyword))
                 {
                     timeRangeToken = new TokenTimeRange(index, timeRangeKeyword);
                 }
@@ -194,7 +196,7 @@ namespace ToDo
         private bool CheckIfAllKeyword(string word)
         {
             bool isAll;
-            if ((CustomDictionary.rangeAllKeywords.Where(e => e == word).Count()) >= 1)
+            if ((CustomDictionary.rangeAllKeywords.Where(e => e == word.ToLower()).Count()) >= 1)
                 isAll = true;
             else isAll = false;
             return isAll;
@@ -215,7 +217,7 @@ namespace ToDo
             {
                 if (CustomDictionary.dayKeywords.ContainsKey(word.ToLower()))
                 {
-                    CustomDictionary.dayKeywords.TryGetValue(word, out day);
+                    CustomDictionary.dayKeywords.TryGetValue(word.ToLower(), out day);
                     TokenDay dayToken = new TokenDay(index, day);
                     dayTokens.Add(dayToken);
                 }
@@ -240,27 +242,28 @@ namespace ToDo
             List<TokenDate> dateTokens = new List<TokenDate>();
 
             foreach (string word in input)
-            {
+            {                
                 Specificity isSpecific = new Specificity();
                 DateTime dateTime = new DateTime();
                 TokenDate dateToken = null;
-                if ( CustomDictionary.IsValidDate(word.ToLower())
-                    || CustomDictionary.IsToday(word.ToLower())
-                    || CustomDictionary.IsValidMonthWord(word.ToLower())
+                string wordLower = word.ToLower();
+                if (CustomDictionary.IsValidDate(wordLower)
+                    || CustomDictionary.IsToday(wordLower)
+                    || CustomDictionary.IsValidMonthWord(wordLower)
                     )  
                 {
                     string dayString = String.Empty;
                     string monthString = String.Empty;
                     string yearString = String.Empty;
-                    if (CustomDictionary.IsToday(word.ToLower()))
+                    if (CustomDictionary.IsToday(wordLower))
                     {
                         day = DateTime.Now.Day;
                         month = DateTime.Now.Month;
                         year = DateTime.Now.Year;
                     }
-                    else if(CustomDictionary.IsValidMonthWord(word.ToLower()))
+                    else if (CustomDictionary.IsValidMonthWord(wordLower))
                     {
-                        monthString = CustomDictionary.date_alphabeticMonth.Match(word.ToLower()).Groups["month"].Value;
+                        monthString = CustomDictionary.date_alphabeticMonth.Match(wordLower).Groups["month"].Value;
                         isSpecific.Day = false;
                         isSpecific.Year = false;
                         day = 1;
@@ -269,7 +272,7 @@ namespace ToDo
                     }
                     else
                     {
-                        Match match = GetDateMatch(word.ToLower());
+                        Match match = GetDateMatch(wordLower);
                         GetMatchTagValues(match, ref dayString, ref monthString, ref yearString);
                         ConvertDateStringsToInt(dayString, monthString, yearString, ref day, ref month, ref year);
                     }
@@ -330,10 +333,10 @@ namespace ToDo
             foreach (string word in input)
             {
                 bool isTime = false;
-                match = CustomDictionary.time_12HourFormat.Match(word);
+                match = CustomDictionary.time_12HourFormat.Match(word.ToLower());
                 if (!match.Success)
                 {
-                    match = CustomDictionary.time_24HourFormat.Match(word);
+                    match = CustomDictionary.time_24HourFormat.Match(word.ToLower());
                 }
                 else
                 {
