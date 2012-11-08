@@ -17,8 +17,10 @@ namespace ToDo
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Logger.Info("Starting Application...", "Main");
             Logic logic = new Logic();
-            Application.Run(new UI(logic));             
+            Application.Run(new UI(logic));
+            Logger.Info("Application terminated!\r\n", "Main");         
         }
 
     }
