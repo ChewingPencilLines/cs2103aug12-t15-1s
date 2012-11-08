@@ -13,10 +13,10 @@ namespace ToDo
         private const bool defaultStayOnTop = false;
         private const int defaultTextSize = 9;
         private const string defaultFont = "Arial";
-        private const Color defaultTaskDoneColor = Color.Green;
-        private const Color defaultTaskMissedDeadlineColor = Color.Red;
-        private const Color defaultTaskNearingDeadlineColor = Color.OrangeRed;
-        private const Color defaultTaskOverColor = Color.MediumVioletRed;
+        private static readonly Color defaultTaskDoneColor = Color.Green;
+        private static readonly Color defaultTaskMissedDeadlineColor = Color.Red;
+        private static readonly Color defaultTaskNearingDeadlineColor = Color.OrangeRed;
+        private static readonly Color defaultTaskOverColor = Color.MediumVioletRed;
 
         public struct MiscSettings
         {
