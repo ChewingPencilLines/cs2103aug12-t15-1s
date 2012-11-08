@@ -119,7 +119,7 @@ namespace ToDo
 
             try
             {
-                endDateTime.Add(postponeDuration);
+                endDateTime = endDateTime.Add(postponeDuration);
             }
             catch
             {

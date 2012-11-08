@@ -155,9 +155,10 @@ namespace ToDo
         {
             if (endDateTime != null)
             {
-                if ((!isSpecific.EndTime && postponeDuration.Hours != 0) ||
-                    (!isSpecific.EndDate.Day && postponeDuration.Days != 0))
-                    return true;
+                if(endDateTime != startDateTime)
+                    if ((!isSpecific.EndTime && postponeDuration.Hours != 0) ||
+                        (!isSpecific.EndDate.Day && postponeDuration.Days != 0))
+                        return true;
             }
             if ((!isSpecific.StartTime && postponeDuration.Hours != 0) ||
                 (!isSpecific.StartDate.Day && postponeDuration.Days != 0))
