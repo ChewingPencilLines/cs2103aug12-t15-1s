@@ -32,7 +32,7 @@ namespace ToDo
             Response response;
             SetMembers(taskList, storageIO);
             RetrieveParameters();
-            if (!CheckTaskDurationWithinRange())
+            if (!CheckTaskDurationWithinRange() || timeRangeAmount == 0)
             {
                 response = new Response(Result.INVALID_TASK, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             }
@@ -156,11 +156,6 @@ namespace ToDo
                 }
                 copyTryStartTime = tryStartTime;
                 List<Task> searchResults = new List<Task>();
-                if (numberOfSetsToLoop == 0)
-                {
-                    // should never fall to this!
-                    response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
-                }
                 isSlotFound = IsTimeFrameFreeOfTasks(numberOfSetsToLoop, tryStartTime, ref tryEndTime);
                 if (isSlotFound)
                 {
