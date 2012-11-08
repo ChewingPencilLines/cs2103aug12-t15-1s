@@ -44,7 +44,7 @@ namespace ToDo
         const string STRING_MARKASUNDONE_FAILURE = "No matching tasks found!";
         const string STRING_MARKASUNDONE_INVALID_TASK = "Task already marked as undone.";
         const string STRING_SCHEDULE_INVALID_TASK = "Task duration exceeds specified time range!";
-        const string STRING_SCHEDULE_FAILURE = "Task could not be scheduled within specified time range!";
+        const string STRING_SCHEDULE_FAILURE = "Task could not be scheduled within specified time range (no free slot)!";
         const string STRING_SCHEDULE_SUCCESS = "Scheduled new task \"{0}\" successfully.";
         const string STRING_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string STRING_CALLED_INVALID_TASK_INDEX = "Invalid task index!";
