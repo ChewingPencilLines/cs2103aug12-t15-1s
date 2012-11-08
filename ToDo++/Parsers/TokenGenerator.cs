@@ -246,7 +246,7 @@ namespace ToDo
                 TokenDate dateToken = null;
                 if ( CustomDictionary.IsValidDate(word.ToLower())
                     || CustomDictionary.IsToday(word.ToLower())
-                    || CustomDictionary.monthKeywords.ContainsKey(word.ToLower())
+                    || CustomDictionary.IsValidMonthWord(word.ToLower())
                     )  
                 {
                     string dayString = String.Empty;
@@ -258,12 +258,13 @@ namespace ToDo
                         month = DateTime.Now.Month;
                         year = DateTime.Now.Year;
                     }
-                    else if (CustomDictionary.monthKeywords.ContainsKey(word.ToLower()))
+                    else if(CustomDictionary.IsValidMonthWord(word.ToLower()))
                     {
+                        monthString = CustomDictionary.date_alphabeticMonth.Match(word.ToLower()).Groups["month"].Value;
                         isSpecific.Day = false;
                         isSpecific.Year = false;
                         day = 1;
-                        month = ConvertToNumericMonth(word);
+                        month = ConvertToNumericMonth(monthString);
                         year = DateTime.Now.Year;
                     }
                     else
