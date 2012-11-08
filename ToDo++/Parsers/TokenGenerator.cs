@@ -426,7 +426,7 @@ namespace ToDo
             List<TokenContext> tokens = new List<TokenContext>();
             foreach (string word in input)
             {
-                if (CustomDictionary.contextKeywords.TryGetValue(word, out context))
+                if (CustomDictionary.contextKeywords.TryGetValue(word.ToLower(), out context))
                 {
                     object nextToken = GetTokenAtPosition(parsedTokens, index + 1);
                     if (nextToken is TokenDate || nextToken is TokenDay || nextToken is TokenTime || nextToken is TokenTimeRange)
