@@ -52,11 +52,13 @@
             // 
             // commandTree
             // 
+            this.commandTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.commandTree.BackColor = System.Drawing.Color.Gainsboro;
             this.commandTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.commandTree.ForeColor = System.Drawing.Color.Black;
             this.commandTree.LineColor = System.Drawing.Color.Gainsboro;
-            this.commandTree.Location = new System.Drawing.Point(-14, 3);
+            this.commandTree.Location = new System.Drawing.Point(-14, 0);
             this.commandTree.Name = "commandTree";
             this.commandTree.Size = new System.Drawing.Size(111, 188);
             this.commandTree.TabIndex = 1;

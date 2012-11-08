@@ -40,91 +40,22 @@ namespace ToDo
 
         private CommandType ConvertStringToCommand(string command)
         {
-            switch (command)
-            {
-                case "ADD":
-                    return CommandType.ADD;
-                case "DELETE":
-                    return CommandType.DELETE;
-                case "DISPLAY":
-                    return CommandType.DISPLAY;
-                case "SORT":
-                    return CommandType.SORT;
-                case "SEARCH":
-                    return CommandType.SEARCH;
-                case "MODIFY":
-                    return CommandType.MODIFY;
-                case "UNDO":
-                    return CommandType.UNDO;
-                case "REDO":
-                    return CommandType.REDO;
-                case "DONE":
-                    return CommandType.DONE;
-                case "UNDONE":
-                    return CommandType.UNDONE;
-                case "POSTPONE":
-                    return CommandType.POSTPONE;
-                case "SCHEDULE":
-                    return CommandType.SCHEDULE;
-                case "EXIT":
-                    return CommandType.EXIT;
-            }
-            return CommandType.INVALID;
+            return (CommandType)Enum.Parse(typeof(CommandType), command);
         }
 
         private ContextType ConvertStringToContext(string context)
         {
-            switch (context)
-            {
-                case "ON/FROM":
-                    return ContextType.STARTTIME;
-                case "TO":
-                    return ContextType.ENDTIME;
-                case "-":
-                    return ContextType.ENDTIME;
-                case "THIS":
-                    return ContextType.CURRENT;
-                case "NEXT":
-                    return ContextType.NEXT;
-                case "FOLLOWING":
-                    return ContextType.FOLLOWING;
-            }
-
-            return ContextType.DEADLINE;
+            return (ContextType)Enum.Parse(typeof(ContextType), context);
         }
 
-        private TimeRangeKeywordsType ConvertStringToTimeRangeKeyword(string context)
+        private TimeRangeKeywordsType ConvertStringToTimeRangeKeyword(string rangeKeyword)
         {
-            switch (context)
-            {
-                case "MORNING":
-                    return TimeRangeKeywordsType.MORNING;
-                case "AFTERNOON":
-                    return TimeRangeKeywordsType.AFTERNOON;
-                case "EVENING":
-                    return TimeRangeKeywordsType.EVENING;
-                case "NIGHT":
-                    return TimeRangeKeywordsType.NIGHT;
-            }
-
-            return TimeRangeKeywordsType.NONE;
+            return (TimeRangeKeywordsType)Enum.Parse(typeof(TimeRangeKeywordsType), rangeKeyword);
         }
 
-        private TimeRangeType ConvertStringToTimeRange(string context)
+        private TimeRangeType ConvertStringToTimeRange(string timeRange)
         {
-            switch (context)
-            {
-                case "DAY":
-                    return TimeRangeType.DAY;
-                case "HOUR":
-                    return TimeRangeType.HOUR;
-                case "WEEK":
-                    return TimeRangeType.WEEK;
-                case "MONTH":
-                    return TimeRangeType.MONTH;
-            }
-
-            return TimeRangeType.DEFAULT;
+            return (TimeRangeType)Enum.Parse(typeof(TimeRangeType), timeRange);
         }
 
         #endregion
@@ -134,45 +65,29 @@ namespace ToDo
         private void LoadCommandList()
         {
             commandTree.Nodes.Clear();
-            TreeNode treeNode = new TreeNode("ADD");
-            commandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("DELETE");
-            commandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("DISPLAY");
-            commandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("SORT");
-            commandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("SEARCH");
-            commandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("MODIFY");
-            commandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("UNDO");
-            commandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("REDO");
-            commandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("DONE");
-            commandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("UNDONE");
-            commandTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("POSTPONE");
-            commandTree.Nodes.Add(treeNode);
+            TreeNode treeNode = new TreeNode();
+            foreach (string commandType in Enum.GetNames(typeof(CommandType)))
+            {
+                if (!((commandType == "INVALID") || (commandType == "EXIT")))
+                {
+                    treeNode = new TreeNode(commandType);
+                    commandTree.Nodes.Add(treeNode);
+                }
+            }
         }
 
         private void LoadContextList()
         {
             contextTree.Nodes.Clear();
-            TreeNode treeNode = new TreeNode("ON/FROM");
-            contextTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("TO");
-            contextTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("-");
-            contextTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("THIS");
-            contextTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("NEXT");
-            contextTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("FOLLOWING");
-            contextTree.Nodes.Add(treeNode);
+            TreeNode treeNode = new TreeNode();
+            foreach (string contextType in Enum.GetNames(typeof(ContextType)))
+            {
+                if (!((contextType == "INVALID") || (contextType == "EXIT")))
+                {
+                    treeNode = new TreeNode(contextType);
+                    contextTree.Nodes.Add(treeNode);
+                }
+            }
         }
 
         private void LoadTimeKeywordRangeList()
@@ -353,6 +268,7 @@ namespace ToDo
             }
             else
             {
+                this.rangeController.InnerColor = Color.Black;
                 this.rangeController.RangeMinimum = this.settings.GetStartTime(selectedTimeRangeKeywordType);
                 this.rangeController.RangeMaximum = this.settings.GetEndTime(selectedTimeRangeKeywordType);
             }
@@ -578,7 +494,6 @@ namespace ToDo
             else if (flatTabControl1.SelectedIndex == 2)
             {
                 timeRangeKeywordTree.Focus();
-                //descriptionLabel.Anchor = (AnchorStyles.Top | AnchorStyles.Left);
                 Size tempSize = descriptionLabel.Size;
                 tempSize.Height = 93;
                 descriptionLabel.Size = tempSize;
