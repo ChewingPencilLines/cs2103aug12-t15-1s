@@ -36,13 +36,13 @@
             this.timeRangeKeywordTree = new System.Windows.Forms.TreeView();
             this.flatTabControl1 = new FlatTabControl.FlatTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.commandTree = new System.Windows.Forms.TreeView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.rangeController = new Zzzz.ZzzzRangeBar();
             this.timeRangeTree = new System.Windows.Forms.TreeView();
             this.removeButton = new ToDo.RoundButton();
             this.addButton = new ToDo.RoundButton();
-            this.commandTree = new System.Windows.Forms.TreeView();
             this.grouper1.SuspendLayout();
             this.flatTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -71,9 +71,9 @@
             this.descriptionLabel.BackColor = System.Drawing.Color.Gainsboro;
             this.descriptionLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.descriptionLabel.ForeColor = System.Drawing.Color.Black;
-            this.descriptionLabel.Location = new System.Drawing.Point(159, 58);
+            this.descriptionLabel.Location = new System.Drawing.Point(110, 58);
             this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(243, 93);
+            this.descriptionLabel.Size = new System.Drawing.Size(292, 93);
             this.descriptionLabel.TabIndex = 13;
             this.descriptionLabel.Text = "Please go ahead and select a command to see it\'s description";
             // 
@@ -82,7 +82,7 @@
             this.titleLabel.AutoSize = true;
             this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleLabel.ForeColor = System.Drawing.Color.Black;
-            this.titleLabel.Location = new System.Drawing.Point(154, 30);
+            this.titleLabel.Location = new System.Drawing.Point(98, 0);
             this.titleLabel.Name = "titleLabel";
             this.titleLabel.Size = new System.Drawing.Size(176, 25);
             this.titleLabel.TabIndex = 12;
@@ -138,6 +138,7 @@
             this.timeRangeKeywordTree.Size = new System.Drawing.Size(111, 68);
             this.timeRangeKeywordTree.TabIndex = 17;
             this.timeRangeKeywordTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.timeRangeKeywordTree_AfterSelect);
+            this.timeRangeKeywordTree.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.timeRangeKeywordTree_MouseDoubleClick);
             // 
             // flatTabControl1
             // 
@@ -158,6 +159,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabPage1.Controls.Add(this.titleLabel);
             this.tabPage1.Controls.Add(this.commandTree);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
@@ -165,6 +167,20 @@
             this.tabPage1.Size = new System.Drawing.Size(400, 132);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Commands";
+            // 
+            // commandTree
+            // 
+            this.commandTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.commandTree.BackColor = System.Drawing.Color.Gainsboro;
+            this.commandTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.commandTree.LineColor = System.Drawing.Color.Gainsboro;
+            this.commandTree.Location = new System.Drawing.Point(-14, 0);
+            this.commandTree.Name = "commandTree";
+            this.commandTree.Size = new System.Drawing.Size(111, 188);
+            this.commandTree.TabIndex = 0;
+            this.commandTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.commandTree_AfterSelect);
+            this.commandTree.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.commandTree_MouseDoubleClick);
             // 
             // tabPage2
             // 
@@ -221,6 +237,7 @@
             this.timeRangeTree.Size = new System.Drawing.Size(111, 68);
             this.timeRangeTree.TabIndex = 18;
             this.timeRangeTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.timeRangeTree_AfterSelect);
+            this.timeRangeTree.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.timeRangeTree_MouseDoubleClick);
             // 
             // removeButton
             // 
@@ -244,25 +261,11 @@
             this.addButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.addButton_MouseDown);
             this.addButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.addButton_MouseUp);
             // 
-            // commandTree
-            // 
-            this.commandTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.commandTree.BackColor = System.Drawing.Color.Gainsboro;
-            this.commandTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.commandTree.LineColor = System.Drawing.Color.Gainsboro;
-            this.commandTree.Location = new System.Drawing.Point(-14, 0);
-            this.commandTree.Name = "commandTree";
-            this.commandTree.Size = new System.Drawing.Size(111, 188);
-            this.commandTree.TabIndex = 0;
-            this.commandTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.commandTree_AfterSelect);
-            // 
             // FlexiCommandsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.descriptionLabel);
             this.Controls.Add(this.flatTabControl1);
             this.Controls.Add(this.removeButton);
@@ -273,10 +276,10 @@
             this.grouper1.ResumeLayout(false);
             this.flatTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

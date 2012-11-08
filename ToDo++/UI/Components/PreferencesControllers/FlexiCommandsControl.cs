@@ -118,6 +118,8 @@ namespace ToDo
 
         #region EventHandlersForButtons
 
+        #region Add/Remove
+
         private void addButton_MouseDown(object sender, MouseEventArgs e)
         {
             addButton.SetMouseDown();
@@ -140,6 +142,10 @@ namespace ToDo
             RemoveFlexiCommandFromSettings(this.listedFlexiCommands.SelectedItem.ToString());
             UpdateFlexiCommandList();
         }
+
+        #endregion
+
+        #region TreeViewControlsSelection
 
         private void commandTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -205,7 +211,11 @@ namespace ToDo
             UpdateDescription();
         }
 
-        private void commandTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        #endregion
+
+        #region TreeViewControlDoubleClick
+
+        private void commandTree_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             ShowUserInputBox();
         }
@@ -214,6 +224,18 @@ namespace ToDo
         {
             ShowUserInputBox();
         }
+
+        private void timeRangeKeywordTree_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ShowUserInputBox();
+        }
+
+        private void timeRangeTree_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ShowUserInputBox();
+        }
+
+        #endregion
 
         #endregion
 
@@ -506,10 +528,11 @@ namespace ToDo
             }
         }
 
-        private void commandTree_AfterSelect(object sender, EventArgs e)
-        {
 
-        }
+
+
+
+
 
 
 
