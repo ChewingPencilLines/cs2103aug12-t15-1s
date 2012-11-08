@@ -13,45 +13,68 @@ namespace ToDo
         private const bool defaultStayOnTop = false;
         private const int defaultTextSize = 9;
         private const string defaultFont = "Arial";
+
         private static readonly Color defaultTaskDoneColor = Color.Green;
         private static readonly Color defaultTaskMissedDeadlineColor = Color.Red;
         private static readonly Color defaultTaskNearingDeadlineColor = Color.OrangeRed;
         private static readonly Color defaultTaskOverColor = Color.MediumVioletRed;
 
+        private const int defDefaultScheduleTimeLength = 1;
+        private const int defDefaultPostponeDurationLength = 1;
+        private const TimeRangeType defDefaultScheduleTimeLengthType = TimeRangeType.HOUR;
+        private const TimeRangeType defDefaultPostponeDurationType = TimeRangeType.DAY;
+
         public struct MiscSettings
         {
-            private bool loadOnStartup;
-            private bool startMinimized;
-            private bool stayOnTop;
-            private int textSize;
-            private string fontSelection;
-            private Color taskDoneColor;
-            private Color taskMissedDeadlineColor;
-            private Color taskNearingDeadlineColor;
-            private Color taskOverColor;
+            private bool _loadOnStartup;
+            private bool _startMinimized;
+            private bool _stayOnTop;
+            private int _textSize;
+            private string _fontSelection;
 
-            public bool LoadOnStartup { get { return loadOnStartup; } set { loadOnStartup = value; } }
-            public bool StartMinimized { get { return startMinimized; } set { startMinimized = value; } }
-            public bool StayOnTop { get { return stayOnTop; } set { stayOnTop = value; } }
-            public int TextSize { get { return textSize; } set { textSize = value; } }
-            public string FontSelection { get { return fontSelection; } set { fontSelection = value; } }
-            public Color TaskDoneColor { get { return taskDoneColor; } set { taskDoneColor = value; } }
-            public Color TaskMissedDeadlineColor { get { return taskMissedDeadlineColor; } set { taskMissedDeadlineColor = value; } }
-            public Color TaskNearingDeadlineColor { get { return taskNearingDeadlineColor; } set { taskNearingDeadlineColor = value; } }
-            public Color TaskOverColor { get { return taskOverColor; } set { taskOverColor = value; } }
+            private Color _taskDoneColor;
+            private Color _taskMissedDeadlineColor;
+            private Color _taskNearingDeadlineColor;
+            private Color _taskOverColor;
 
-            public MiscSettings(bool _loadOnStartup, bool _startMinimized, bool _stayOnTop, int _textSize, string _fontSelection,
-                                Color _taskDoneColor, Color _taskMissedDeadlineColor, Color _taskNearingDeadlineColor, Color _taskOverColor)
+            private int _defaultScheduleTimeLength;
+            private TimeRangeType _defaultScheduleTimeLengthType;
+            private int _defaultPostponeDurationLength;
+            private TimeRangeType _defaultPostponeDurationType;
+
+            public bool LoadOnStartup { get { return _loadOnStartup; } set { _loadOnStartup = value; } }
+            public bool StartMinimized { get { return _startMinimized; } set { _startMinimized = value; } }
+            public bool StayOnTop { get { return _stayOnTop; } set { _stayOnTop = value; } }
+            public int TextSize { get { return _textSize; } set { _textSize = value; } }
+            public string FontSelection { get { return _fontSelection; } set { _fontSelection = value; } }
+
+            public Color TaskDoneColor { get { return _taskDoneColor; } set { _taskDoneColor = value; } }
+            public Color TaskMissedDeadlineColor { get { return _taskMissedDeadlineColor; } set { _taskMissedDeadlineColor = value; } }
+            public Color TaskNearingDeadlineColor { get { return _taskNearingDeadlineColor; } set { _taskNearingDeadlineColor = value; } }
+            public Color TaskOverColor { get { return _taskOverColor; } set { _taskOverColor = value; } }
+
+            public int DefaultScheduleTimeLength { get { return _defaultScheduleTimeLength; } set { _defaultScheduleTimeLength = value; } }
+            public int DefaultPostponeDurationLength { get { return _defaultPostponeDurationLength; } set { _defaultPostponeDurationLength = value; } }
+            public TimeRangeType DefaultScheduleTimeLengthType { get { return _defaultScheduleTimeLengthType; } set { _defaultScheduleTimeLengthType = value; } }
+            public TimeRangeType DefaultPostponeDurationType { get { return _defaultPostponeDurationType; } set { _defaultPostponeDurationType = value; } }
+
+            public MiscSettings(bool loadOnStartup, bool startMinimized, bool stayOnTop, int textSize, string fontSelection,
+                                Color taskDoneColor, Color taskMissedDeadlineColor, Color taskNearingDeadlineColor, Color taskOverColor,
+                                int defaultScheduleTimeLength, TimeRangeType defaultScheduleTimeLengthType,int defaultPostponeDurationLength,TimeRangeType defaultPostponeDurationType)
             {
-                loadOnStartup = _loadOnStartup;
-                startMinimized = _startMinimized;
-                stayOnTop = _stayOnTop;
-                textSize = _textSize;
-                fontSelection = _fontSelection;
-                taskDoneColor = _taskDoneColor;
-                taskMissedDeadlineColor = _taskMissedDeadlineColor;
-                taskNearingDeadlineColor = _taskNearingDeadlineColor;
-                taskOverColor = _taskOverColor;
+                _loadOnStartup = loadOnStartup;
+                _startMinimized = startMinimized;
+                _stayOnTop = stayOnTop;
+                _textSize = textSize;
+                _fontSelection = fontSelection;
+                _taskDoneColor = taskDoneColor;
+                _taskMissedDeadlineColor = taskMissedDeadlineColor;
+                _taskNearingDeadlineColor = taskNearingDeadlineColor;
+                _taskOverColor = taskOverColor;
+                _defaultScheduleTimeLength = defaultScheduleTimeLength;
+                _defaultScheduleTimeLengthType = defaultScheduleTimeLengthType;
+                _defaultPostponeDurationLength = defaultPostponeDurationLength;
+                _defaultPostponeDurationType = defaultPostponeDurationType;
             }
         }
 
@@ -66,7 +89,9 @@ namespace ToDo
         public SettingInformation()
         {
             misc = new MiscSettings(defaultLoadOnStartup, defaultStartMinimized, defaultStayOnTop, defaultTextSize, defaultFont,
-                                    defaultTaskDoneColor,defaultTaskMissedDeadlineColor,defaultTaskNearingDeadlineColor,defaultTaskOverColor);
+                                    defaultTaskDoneColor,defaultTaskMissedDeadlineColor,defaultTaskNearingDeadlineColor,defaultTaskOverColor,
+                                    defDefaultScheduleTimeLength,defDefaultScheduleTimeLengthType,defDefaultPostponeDurationLength,defDefaultPostponeDurationType);
+
             userCommandKeywords = CustomDictionary.GetCommandKeywords();
             userContextKeywords = CustomDictionary.GetContextKeywords();
             userTimeRangeKeywordsType = CustomDictionary.GetTimeRangeKeywordKeywords();

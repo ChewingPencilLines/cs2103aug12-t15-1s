@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace ToDo
 {
@@ -30,6 +31,7 @@ namespace ToDo
         {
             settingInfo = updatedInfo;
             CustomDictionary.UpdateDictionary(settingInfo.userCommandKeywords, settingInfo.userContextKeywords, settingInfo.userTimeRangeKeywordsType, settingInfo.userTimeRangeType, settingInfo.userTimeRangeKeywordsStartTime, settingInfo.userTimeRangeKeywordsEndTime);
+            UpdateDictionaryPostponeSchedule();
         }
 
         // ******************************************************************
@@ -57,6 +59,23 @@ namespace ToDo
         public Color GetTaskNearingDeadlineColor() { return settingInfo.misc.TaskNearingDeadlineColor; }
         public void SetTaskOverColor(Color col) { settingInfo.misc.TaskOverColor = col; EventHandlers.UpdateSettings(settingInfo); }
         public Color GetTaskOverColor() { return settingInfo.misc.TaskOverColor; }
+
+        public void SetDefaultScheduleTimeLength(int length) { settingInfo.misc.DefaultScheduleTimeLength = length; EventHandlers.UpdateSettings(settingInfo); UpdateDictionaryPostponeSchedule(); }
+        public int GetDefaultScheduleTimeLength() { return settingInfo.misc.DefaultScheduleTimeLength; }
+        public void SetDefaultPostponeDurationLength(int length) { settingInfo.misc.DefaultPostponeDurationLength = length; EventHandlers.UpdateSettings(settingInfo); UpdateDictionaryPostponeSchedule(); }
+        public int GetDefaultPostponeDurationLength() { return settingInfo.misc.DefaultPostponeDurationLength; }
+        public void SetDefaultScheduleTimeLengthType(TimeRangeType timeRange) { settingInfo.misc.DefaultScheduleTimeLengthType = timeRange; EventHandlers.UpdateSettings(settingInfo); UpdateDictionaryPostponeSchedule(); }
+        public TimeRangeType GetDefaultScheduleTimeLengthType() { return settingInfo.misc.DefaultScheduleTimeLengthType; }
+        public void SetDefaultPostponeDurationType(TimeRangeType timeRange) { settingInfo.misc.DefaultPostponeDurationType = timeRange; EventHandlers.UpdateSettings(settingInfo); UpdateDictionaryPostponeSchedule(); }
+        public TimeRangeType GetDefaultPostponeDurationType() { return settingInfo.misc.DefaultPostponeDurationType; }
+
+        public void UpdateDictionaryPostponeSchedule()
+        {
+            CustomDictionary.defaultScheduleTimeLength = this.GetDefaultScheduleTimeLength();
+            CustomDictionary.defaultPostponeDurationLength = this.GetDefaultPostponeDurationLength();
+            CustomDictionary.defaultScheduleTimeLengthType = this.GetDefaultScheduleTimeLengthType();
+            CustomDictionary.defaultPostponeDurationType = this.GetDefaultPostponeDurationType();
+        }
 
         #endregion;
 

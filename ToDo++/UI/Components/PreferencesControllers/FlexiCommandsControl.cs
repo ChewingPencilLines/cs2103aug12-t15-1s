@@ -31,6 +31,7 @@ namespace ToDo
             LoadTimeRangeList();
             LoadCommandList();
             this.rangeController.Enabled = false;
+            schedPostponePanel.Hide();
         }
 
 
@@ -158,8 +159,14 @@ namespace ToDo
             string selected = commandTree.SelectedNode.Text;
             this.selectedCommand = ConvertStringToCommand(selected);
 
+            if ((this.selectedCommand == CommandType.POSTPONE) || (this.selectedCommand == CommandType.SCHEDULE))
+                schedPostponePanel.Show();
+            else
+                schedPostponePanel.Hide();
+
             UpdateFlexiCommandList();
             UpdateDescription();
+            UpdateSchedulePostponeLabel();
         }
 
         private void contextTree_AfterSelect(object sender, TreeViewEventArgs e)
@@ -168,6 +175,7 @@ namespace ToDo
             this.timeRangeKeywordTree.SelectedNode = null;
             this.timeRangeTree.SelectedNode = null;
             this.rangeController.Enabled = false;
+            schedPostponePanel.Hide();
 
             this.commandTree.SelectedNode = null;
             this.selectedType = SelectedType.ContextSelected;
@@ -184,6 +192,7 @@ namespace ToDo
             this.contextTree.SelectedNode = null;
             this.timeRangeTree.SelectedNode = null;
             this.rangeController.Enabled = true;
+            schedPostponePanel.Hide();
 
             this.commandTree.SelectedNode = null;
             this.selectedType = SelectedType.TimeRangeKeywordsSelected;
@@ -201,6 +210,7 @@ namespace ToDo
             this.commandTree.SelectedNode = null;
             this.timeRangeKeywordTree.SelectedNode = null;
             this.rangeController.Enabled = false;
+            schedPostponePanel.Hide();
 
             this.commandTree.SelectedNode = null;
             this.selectedType = SelectedType.TimeRangeSelected;
@@ -236,6 +246,46 @@ namespace ToDo
         }
 
         #endregion
+
+        private void rangeController_RangeChanged(object sender, EventArgs e)
+        {
+            if (this.selectedTimeRangeKeywordType == TimeRangeKeywordsType.NIGHT)
+            {
+                settings.SetTimeRange(selectedTimeRangeKeywordType, rangeController.RangeMaximum, rangeController.RangeMinimum);
+                UpdateDescription();
+            }
+            else
+            {
+                settings.SetTimeRange(selectedTimeRangeKeywordType, rangeController.RangeMinimum, rangeController.RangeMaximum);
+                UpdateDescription();
+            }
+        }
+
+        private void flatTabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            schedPostponePanel.Hide();
+            if (flatTabControl1.SelectedIndex == 0)
+            {
+                commandTree.Focus();
+                Size tempSize = descriptionLabel.Size;
+                tempSize.Height = flatTabControl1.Height - 70;
+                descriptionLabel.Size = tempSize;
+            }
+            else if (flatTabControl1.SelectedIndex == 1)
+            {
+                contextTree.Focus();
+                Size tempSize = descriptionLabel.Size;
+                tempSize.Height = flatTabControl1.Height - 70;
+                descriptionLabel.Size = tempSize;
+            }
+            else if (flatTabControl1.SelectedIndex == 2)
+            {
+                timeRangeKeywordTree.Focus();
+                Size tempSize = descriptionLabel.Size;
+                tempSize.Height = 93;
+                descriptionLabel.Size = tempSize;
+            }
+        }
 
         #endregion
 
@@ -469,6 +519,29 @@ namespace ToDo
             SetFormat(Color.Gray, "\n", 9);
         }
 
+        private void UpdateSchedulePostponeLabel()
+        {
+            if (selectedCommand == CommandType.POSTPONE)
+            {
+                string x = String.Format("Postpone by {0} {1}", settings.GetDefaultPostponeDurationLength(), settings.GetDefaultPostponeDurationType().ToString().ToLower());
+                schedulePostponeLabel.Text = x;
+                allowComboBoxChanges = false;
+                timeComboBox.Text = settings.GetDefaultPostponeDurationLength().ToString();
+                typeComboBox.Text = settings.GetDefaultPostponeDurationType().ToString();
+                allowComboBoxChanges = true;
+            }
+            else if (selectedCommand == CommandType.SCHEDULE)
+            {
+                string x = String.Format("Schedule by {0} {1}", settings.GetDefaultScheduleTimeLength(), settings.GetDefaultScheduleTimeLengthType().ToString().ToLower());
+                schedulePostponeLabel.Text = x;
+                allowComboBoxChanges = false;
+                timeComboBox.Text = settings.GetDefaultScheduleTimeLength().ToString();
+                typeComboBox.Text = settings.GetDefaultScheduleTimeLengthType().ToString();
+                allowComboBoxChanges = true;
+
+            }  
+        }
+
         #region FormattingControl
 
         /// <summary>
@@ -489,44 +562,52 @@ namespace ToDo
 
         #endregion
 
-        private void rangeController_RangeChanged(object sender, EventArgs e)
+        bool allowComboBoxChanges=true;
+        private void timeComboBox_SelectedValueChanged(object sender, EventArgs e)
         {
-            if (this.selectedTimeRangeKeywordType == TimeRangeKeywordsType.NIGHT)
+            if (allowComboBoxChanges == true)
             {
-                settings.SetTimeRange(selectedTimeRangeKeywordType, rangeController.RangeMaximum, rangeController.RangeMinimum);
-                UpdateDescription();
-            }
-            else
-            {
-                settings.SetTimeRange(selectedTimeRangeKeywordType, rangeController.RangeMinimum, rangeController.RangeMaximum);
-                UpdateDescription();
+                int time = Convert.ToInt32(timeComboBox.SelectedItem.ToString());
+
+                if ((time < 1) || (time > 24))
+                {
+                    AlertBox.Show("Select a Time Range between 1-23");
+                    return;
+                }
+
+                if (selectedCommand == CommandType.POSTPONE)
+                {
+                    settings.SetDefaultPostponeDurationLength(time);
+                    UpdateSchedulePostponeLabel();
+                }
+                else if (selectedCommand == CommandType.SCHEDULE)
+                {
+                    settings.SetDefaultScheduleTimeLength(time);
+                    UpdateSchedulePostponeLabel();
+                }
             }
         }
 
-        private void flatTabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        private void typeComboBox_SelectedValueChanged(object sender, EventArgs e)
         {
-            if (flatTabControl1.SelectedIndex == 0)
+            if (allowComboBoxChanges == true)
             {
-                commandTree.Focus();
-                Size tempSize = descriptionLabel.Size;
-                tempSize.Height = flatTabControl1.Height-70;
-                descriptionLabel.Size = tempSize;
-            }
-            else if (flatTabControl1.SelectedIndex == 1)
-            {
-                contextTree.Focus();
-                Size tempSize = descriptionLabel.Size;
-                tempSize.Height = flatTabControl1.Height-70;
-                descriptionLabel.Size = tempSize;
-            }
-            else if (flatTabControl1.SelectedIndex == 2)
-            {
-                timeRangeKeywordTree.Focus();
-                Size tempSize = descriptionLabel.Size;
-                tempSize.Height = 93;
-                descriptionLabel.Size = tempSize;
+                string x = typeComboBox.SelectedItem.ToString();
+                TimeRangeType timeRangeType = (TimeRangeType)Enum.Parse(typeof(TimeRangeType), x);
+
+                if (selectedCommand == CommandType.POSTPONE)
+                {
+                    settings.SetDefaultPostponeDurationType(timeRangeType);
+                    UpdateSchedulePostponeLabel();
+                }
+                else if (selectedCommand == CommandType.SCHEDULE)
+                {
+                    settings.SetDefaultScheduleTimeLengthType(timeRangeType);
+                    UpdateSchedulePostponeLabel();
+                }
             }
         }
+
 
 
 
