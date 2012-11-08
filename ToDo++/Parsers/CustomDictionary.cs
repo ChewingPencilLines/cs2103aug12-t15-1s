@@ -102,12 +102,16 @@ namespace ToDo
                         \s
                         (?<day>(([23]?1(?:st)?)|(2?2(?:nd)?)|(2?3(?:rd)?)|([12]?[4-9](?:th)?)|([123][0](?:th)?)|(1[123](?:th)?)))
                         ))
+                        ,?
                         # (YY)YY
                         (?:(?(day)(\s(?<year>(\d\d)?\d\d))?|(\s(?<year>\d\d\d\d))))$"
             , RegexOptions.IgnorePatternWhitespace);
 
         static public Regex date_daysWithSuffixes =
              new Regex(@"^(?<day>(([23]?1(?:st))|(2?2(?:nd))|(2?3(?:rd))|([12]?[4-9](?:th))|([123][0](?:th))|(1[123](?:th))))$");
+
+        static public Regex date_alphabeticMonth =
+            new Regex(@"^(?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?)),?$");
 
         static public Regex isNumericalRange =
             new Regex(@"^(((?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?)|((?<start>\d?\d?\d)\-))$");
@@ -390,6 +394,11 @@ namespace ToDo
         public static bool IsValidAlphabeticDate(string theDate)
         {
             return date_alphabeticFormat.IsMatch(theDate);
+        }
+
+        public static bool IsValidMonthWord(string theWord)
+        {
+            return date_alphabeticMonth.IsMatch(theWord);
         }
 
         public static bool IsTimeRange(string theWord)
