@@ -45,52 +45,63 @@ namespace ToDo
 
         private void RetrieveParameters()
         {
-            // if there is no time duration specified i.e. 3 days etc., get default 
+            SetTaskDuration();
+            SetTimeRange();
+        }
+
+        private void SetTaskDuration()
+        {
+            // if there is no task duration specified i.e. 3 days etc., get default 
             if (timeRangeAmount == 0 && timeRangeType == TimeRangeType.DEFAULT)
             {
                 timeRangeAmount = CustomDictionary.defaultScheduleTimeLength;
                 timeRangeType = CustomDictionary.defaultScheduleTimeLengthType;
             }
+        }
+
+        private void SetTimeRange()
+        {
             // setting the start and end search datetimes
             if (isSpecific.StartTime && !isSpecific.EndTime)
             {
-                if (isSpecific.StartDate.Day)
+                if (isSpecific.StartDate.Day && endDateTime == null)
                 {
-                    if (endDateTime == null)
-                        endDateTime = startDateTime.AddDays(1).Date;
-                    else
-                        endDateTime = ((DateTime)endDateTime).AddDays(1).Date;
+                    endDateTime = startDateTime.AddDays(1).Date;
                 }
-                else
+                else if (!(isSpecific.StartDate.Day || isSpecific.EndDate.Day))
                 {
-                    if (endDateTime == null)
-                        endDateTime = startDateTime.AddMonths(1).Date;
-                    else
-                    {
-                        if (isSpecific.EndDate.Day)
-                            endDateTime = ((DateTime)endDateTime).AddDays(1).Date;
-                        else
-                            endDateTime = startDateTime.AddMonths(1).Date;
-                    }
+                    endDateTime = startDateTime.AddMonths(1).Date;
+                }
+                if (endDateTime != null
+                    && (!isSpecific.StartDate.Day||isSpecific.EndDate.Day))
+                {
+                    endDateTime = ((DateTime)endDateTime).AddDays(1).Date;
                 }
             }
             else if (!isSpecific.StartTime && !isSpecific.EndTime)
             {
-                if (endDateTime != null)
+                if (endDateTime == null)
                 {
-                    if (isSpecific.EndDate.Day)
-                        endDateTime = ((DateTime)endDateTime).AddDays(1).Date;
+                    endDateTime = DateTime.MaxValue.Date;
+                    if (isSpecific.StartDate.Day)
+                    {
+                        endDateTime = startDateTime.AddDays(1).Date;
+                    }
                     else
-                        endDateTime = ((DateTime)endDateTime).AddMonths(1).Date;
+                    {
+                        endDateTime = startDateTime.AddMonths(1).Date;
+                    }
                 }
                 else
                 {
-                    if (isSpecific.StartDate.Day)
-                        endDateTime = startDateTime.AddDays(1).Date;
-                    else if (isSpecific.StartDate.Month)
-                        endDateTime = startDateTime.AddMonths(1).Date;
+                    if (isSpecific.EndDate.Day)
+                    {
+                        endDateTime = ((DateTime)endDateTime).AddDays(1).Date;
+                    }
                     else
-                        endDateTime = DateTime.MaxValue.Date;
+                    {
+                        endDateTime = ((DateTime)endDateTime).AddMonths(1).Date;
+                    }
                 }
             }
             if (startDateTime < DateTime.Now)
@@ -132,12 +143,13 @@ namespace ToDo
 
         private Response TryScheduleTask()
         {
-            Response response = null;
-            bool isSlotFound = false;
+            Response response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             DateTime tryStartTime = startDateTime;
-            DateTime tryEndTime = new DateTime();
             DateTime copyTryStartTime = startDateTime;
-            int index = 0;
+            DateTime tryEndTime = new DateTime();
+            int numberOfIterations = 0;
+            bool isSlotFound = false;
+            
             // loop through all tasks to find earliest possible fitting time
             while (!isSlotFound && tryEndTime <= ((DateTime)endDateTime))
             {
@@ -145,7 +157,7 @@ namespace ToDo
                 switch (timeRangeType)
                 {
                     case TimeRangeType.HOUR:
-                        tryStartTime = startDateTime.AddHours(index);
+                        tryStartTime = startDateTime.AddHours(numberOfIterations);
                         tryEndTime = tryStartTime.AddHours(timeRangeAmount);
                         break;
                     case TimeRangeType.DAY:
@@ -155,19 +167,25 @@ namespace ToDo
                         break;
                 }
                 copyTryStartTime = tryStartTime;
-                List<Task> searchResults = new List<Task>();
-                isSlotFound = IsTimeFrameFreeOfTasks(numberOfSetsToLoop, tryStartTime, ref tryEndTime);
+                isSlotFound = IsTimeSlotFreeOfTasks(numberOfSetsToLoop, tryStartTime, ref tryEndTime);
                 if (isSlotFound)
                 {
-                    scheduledTask = new TaskEvent(taskName, copyTryStartTime, tryEndTime.AddSeconds(-1), searchSpecificity);
-                    response = AddTask(scheduledTask);
-                    if (response.IsSuccessful())
-                    {
-                        TrackOperation();
-                    }
+                    response = ScheduleTaskAtSlot(taskName, copyTryStartTime, tryEndTime);
                 }
                 tryStartTime = copyTryStartTime.AddDays(1);
-                index++;
+                numberOfIterations++;
+            }
+            return response;
+        }
+
+        private Response ScheduleTaskAtSlot(string taskName, DateTime startDateTime, DateTime endDateTime)
+        {
+            Response response;
+            scheduledTask = new TaskEvent(taskName, startDateTime, endDateTime.AddSeconds(-1), searchSpecificity);
+            response = AddTask(scheduledTask);
+            if (response.IsSuccessful())
+            {
+                TrackOperation();
             }
             return response;
         }
@@ -214,7 +232,7 @@ namespace ToDo
             return numberOfSetsToLoop;
         }
 
-        private bool IsTimeFrameFreeOfTasks(int numberOfSetsToLoop, DateTime tryStartTime, ref DateTime tryEndTime)
+        private bool IsTimeSlotFreeOfTasks(int numberOfSetsToLoop, DateTime tryStartTime, ref DateTime tryEndTime)
         {
             List<Task> searchResults = new List<Task>();
             for (int i = 0; i < numberOfSetsToLoop; i++)
@@ -240,7 +258,7 @@ namespace ToDo
                     break;
                 }
             }
-            if (searchResults.Count == 0 && tryEndTime < endDateTime)
+            if (searchResults.Count == 0 && tryEndTime <= endDateTime)
             {
                 return true;
             }
