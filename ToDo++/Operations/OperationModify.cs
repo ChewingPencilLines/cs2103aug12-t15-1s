@@ -106,6 +106,17 @@ namespace ToDo
             return response;
         }
 
+        protected Response ModifyTask(Task taskToModify, Task newTask)
+        {
+            Response response = null;
+            response = DeleteTask(taskToModify);
+            if (response.IsSuccessful()) response = AddTask(newTask);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify), currentListedTasks);
+            else
+                return response;
+        }
+
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);

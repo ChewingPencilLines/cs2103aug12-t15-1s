@@ -135,16 +135,37 @@ namespace ToDo
         public override bool Postpone(TimeSpan postponeDuration)
         {
             bool result = true;
+
             try
-            {                
+            {
+                if (TaskDateTimeIsNotSpecificEnough(ref postponeDuration)) return false;
+
                 startDateTime = startDateTime.Add(postponeDuration);
-                if (endDateTime != null) endDateTime = endDateTime.Add(postponeDuration);
+                if (endDateTime != null)
+                    endDateTime = endDateTime.Add(postponeDuration);
             }
             catch
             {
                 result = false;
             }
             return result;
+        }
+
+        private bool TaskDateTimeIsNotSpecificEnough(ref TimeSpan postponeDuration)
+        {
+            if (endDateTime != null)
+            {
+                if ((!isSpecific.EndTime && postponeDuration.Hours != 0) ||
+                    (!isSpecific.EndDate.Day && postponeDuration.Days != 0))
+                    return true;
+            }
+            if ((!isSpecific.StartTime && postponeDuration.Hours != 0) ||
+                (!isSpecific.StartDate.Day && postponeDuration.Days != 0))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public override void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific)
