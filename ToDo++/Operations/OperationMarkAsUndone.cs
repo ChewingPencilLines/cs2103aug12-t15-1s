@@ -49,6 +49,13 @@ namespace ToDo
         }
         #endregion
 
+        public override bool AllowSkipOver(Response response)
+        {
+            if (response.IsInvalidTask())
+                return true;
+            else return false;
+        }
+
         // ******************************************************************
         // Override for Executing this operation
         // ******************************************************************
