@@ -82,7 +82,7 @@ namespace ToDo
         protected Response PostponeTask(Task taskToPostpone, TimeSpan postponeDuration)
         {
             if (taskToPostpone.Postpone(postponeDuration) == false)
-                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
+                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), currentListedTasks);
             else
                 executedTasks.Enqueue(taskToPostpone);
             if (storageIO.UpdateTask(taskToPostpone))
@@ -94,16 +94,30 @@ namespace ToDo
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Task taskToUndo = executedTasks.Dequeue();
-            Response response = PostponeTask(taskToUndo, postponeDuration.Negate());
+
+            Response response = null;
+            for (int i = 0; i < executedTasks.Count; i++)
+            {
+                Task taskToUndo = executedTasks.Dequeue();
+                response = PostponeTask(taskToUndo, postponeDuration.Negate());
+                if (!response.IsSuccessful())
+                    return response;
+            }
             return response;
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            Task taskToUndo = executedTasks.Dequeue();
-            Response response = PostponeTask(taskToUndo, postponeDuration);
+
+            Response response = null;
+            for (int i = 0; i < executedTasks.Count; i++)
+            {
+                Task taskToRedo = executedTasks.Dequeue();
+                response = PostponeTask(taskToRedo, postponeDuration);
+                if (!response.IsSuccessful())
+                    return response;
+            }
             return response;
         }
     }

@@ -33,8 +33,8 @@ namespace ToDo
         const string STRING_REDO_FAILURE = "Cannot redo last executed operation!";
         const string STRING_POSTPONE_SUCCESS = "Postponed task \"{0}\" successfully.";
         const string STRING_POSTPONE_SUCCESS_MULTI = "Postponed all tasks successfully.";
-        const string STRING_POSTPONE_INVALID_TASK = "Cannot postpone floating tasks!";
-        const string STRING_POSTPONE_FAILURE = "No matching task found!";
+        const string STRING_POSTPONE_INVALID_TASK = "Trying to postpone a task by a more specific time than it allows!";
+        const string STRING_POSTPONE_FAILURE = "Failed to postpone task!";
         const string STRING_MARKASDONE_SUCCESS = "Successfully marked \"{0}\" as done.";
         const string STRING_MARKASDONE_SUCCESS_MULTI = "Successfully marked all tasks as done.";
         const string STRING_MARKASDONE_FAILURE = "No matching tasks found!";
@@ -164,6 +164,8 @@ namespace ToDo
                             feedbackString = STRING_DELETE_FAILURE;
                         if (operationType == typeof(OperationModify))
                             feedbackString = STRING_MODIFY_FAILURE;
+                        if (operationType == typeof(OperationPostpone))
+                            feedbackString = STRING_POSTPONE_FAILURE;
                         if (operationType == typeof(OperationMarkAsDone))
                             feedbackString = STRING_MARKASDONE_FAILURE;
                         if (operationType == typeof(OperationMarkAsUndone))

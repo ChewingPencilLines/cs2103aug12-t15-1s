@@ -111,12 +111,19 @@ namespace ToDo
         public override bool Postpone(TimeSpan postponeDuration)
         {
             bool result = true;
+
+            // Return failure if trying to postpone at a higher specificity level then task allows.
+            if ((!isSpecific.EndTime && postponeDuration.Hours != 0) ||
+                (!isSpecific.EndDate.Day && postponeDuration.Days != 0))
+                return false;
+
             try
             {
                 endDateTime.Add(postponeDuration);
             }
             catch
             {
+                // log failure.
                 result = false;
             }
             return result;

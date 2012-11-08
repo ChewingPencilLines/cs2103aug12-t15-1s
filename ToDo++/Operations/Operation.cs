@@ -130,17 +130,6 @@ namespace ToDo
 
         }
 
-        protected Response ModifyTask(Task taskToModify, Task newTask)
-        {
-            Response response = null;
-            response = DeleteTask(taskToModify);
-            if (response.IsSuccessful()) response = AddTask(newTask);
-            if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify), currentListedTasks);
-            else
-                return response;
-        }
-
         protected List<Task> SearchForTasks(
             string searchString,
             DateTimeSpecificity isSpecific,
