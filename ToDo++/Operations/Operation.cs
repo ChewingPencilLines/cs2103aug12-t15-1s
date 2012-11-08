@@ -93,7 +93,9 @@ namespace ToDo
             try
             {
                 if (taskToAdd == null)
+                {
                     return new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
+                }
                 taskList.Add(taskToAdd);
                 executedTasks.Enqueue(taskToAdd);
                 bool success = storageIO.AddTaskToFile(taskToAdd);
