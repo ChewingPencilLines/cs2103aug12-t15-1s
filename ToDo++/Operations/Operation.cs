@@ -32,9 +32,7 @@ namespace ToDo
         {
             executedTasks = new Queue<Task>();
         }
-
-        public abstract Response Execute(List<Task> taskList, Storage storageIO);
-
+        
         public static void UpdateCurrentListedTasks(List<Task> tasks)
         {
             currentListedTasks = tasks;
@@ -59,6 +57,8 @@ namespace ToDo
             redoStack.Clear();
         }
 
+        public abstract Response Execute(List<Task> taskList, Storage storageIO);
+        
         /// <summary>
         /// Base Undo Operation Method. All undoable operations should be override this method.
         /// This base method will throw an assertion if called.
@@ -78,6 +78,11 @@ namespace ToDo
             return null;
         }
 
+        public virtual bool AllowSkipOver(Response response)
+        {
+            return false;
+        }
+
         // ******************************************************************
         // Task Manipulation Methods
         // ******************************************************************
@@ -87,6 +92,8 @@ namespace ToDo
         {
             try
             {
+                if (taskToAdd == null)
+                    return new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
                 taskList.Add(taskToAdd);
                 executedTasks.Enqueue(taskToAdd);
                 bool success = storageIO.AddTaskToFile(taskToAdd);
@@ -96,7 +103,7 @@ namespace ToDo
                     return GenerateStandardSuccessResponse(taskToAdd);
                 }
                 else
-                    return new Response(Result.XML_READWRITE_FAIL, Format.DEFAULT, typeof(OperationAdd), currentListedTasks);
+                    return GenerateXMLFailureResponse();
             }
             catch (Exception e)
             {
@@ -171,13 +178,16 @@ namespace ToDo
         protected Response MarkTaskAs(Task taskToMark, bool doneState)
         {            
             SetMembers(taskList, storageIO);
-            taskToMark.DoneState = doneState;
+
+            if (taskToMark.DoneState == doneState)
+                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
+            else
+                taskToMark.DoneState = doneState;
+
             executedTasks.Enqueue(taskToMark);
 
             if (storageIO.MarkTaskAs(taskToMark, doneState))
-            {
-                return GenerateStandardSuccessResponse(taskToMark);
-            }
+                return GenerateStandardSuccessResponse(taskToMark);            
             else
                 return GenerateXMLFailureResponse();
         }
@@ -296,7 +306,7 @@ namespace ToDo
                 var parameters = AddTaskToParameters(args, searchResults[0]);
                 response = (Response)action.DynamicInvoke(parameters);
 
-                if (!response.IsSuccessful()) return response;
+                if (!response.IsSuccessful() && !AllowSkipOver(response)) return response;
             }
             response = new Response(Result.SUCCESS_MULTIPLE, Format.DEFAULT, this.GetType(), currentListedTasks);
             return response;
@@ -367,7 +377,7 @@ namespace ToDo
                 {
                     var parameters = AddTaskToParameters(args, task);
                     response = (Response)action.DynamicInvoke(parameters);
-                    if (!response.IsSuccessful()) return response;
+                    if (!response.IsSuccessful() && !AllowSkipOver(response)) return response;
                 }
             }
             return new Response(Result.SUCCESS_MULTIPLE, Format.DEFAULT, this.GetType(), currentListedTasks);
@@ -391,7 +401,7 @@ namespace ToDo
                 {
                     var parameters = AddTaskToParameters(args, task);
                     response = (Response)action.DynamicInvoke(parameters);
-                    if (!response.IsSuccessful()) return response;
+                    if (!response.IsSuccessful() && !AllowSkipOver(response)) return response;
                 }
             }
             return new Response(Result.SUCCESS_MULTIPLE, Format.DEFAULT, this.GetType(), currentListedTasks);

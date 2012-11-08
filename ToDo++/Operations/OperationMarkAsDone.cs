@@ -57,6 +57,13 @@ namespace ToDo
             this.searchType = searchType;
         }
 
+        public override bool AllowSkipOver(Response response)
+        {
+            if (response.IsInvalidTask())
+                return true;
+            else return false;
+        }
+
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
