@@ -175,14 +175,15 @@
             // 
             this.textInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textInput.BackColor = System.Drawing.Color.Gray;
+            this.textInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(148)))), ((int)(((byte)(148)))));
             this.textInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textInput.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textInput.ForeColor = System.Drawing.Color.White;
-            this.textInput.Location = new System.Drawing.Point(11, 388);
+            this.textInput.Location = new System.Drawing.Point(11, 387);
+            this.textInput.Multiline = true;
             this.textInput.Name = "textInput";
-            this.textInput.Size = new System.Drawing.Size(501, 19);
+            this.textInput.Size = new System.Drawing.Size(501, 20);
             this.textInput.TabIndex = 0;
             this.textInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_input_KeyPress);
             // 
@@ -285,7 +286,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(501, 316);
+            this.tabPage2.Size = new System.Drawing.Size(501, 314);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Preferences";
             // 
@@ -315,7 +316,7 @@
             this.taskDisplay.Location = new System.Drawing.Point(4, 22);
             this.taskDisplay.Name = "taskDisplay";
             this.taskDisplay.Padding = new System.Windows.Forms.Padding(3);
-            this.taskDisplay.Size = new System.Drawing.Size(501, 316);
+            this.taskDisplay.Size = new System.Drawing.Size(501, 314);
             this.taskDisplay.TabIndex = 2;
             this.taskDisplay.Text = "Task Display";
             // 
@@ -462,7 +463,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.Gray;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(148)))), ((int)(((byte)(148)))));
             this.ClientSize = new System.Drawing.Size(522, 413);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.textInput);
