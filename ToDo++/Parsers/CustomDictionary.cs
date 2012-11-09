@@ -114,7 +114,7 @@ namespace ToDo
             new Regex(@"^(?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?)),?$");
 
         static public Regex isNumericalRange =
-            new Regex(@"^(((?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?)|((?<start>\d?\d?\d)\-))$");
+            new Regex(@"^(((?<start>\d?\d?\d)(\-(?<end>\d?\d?\d))?)|((?<start>\d?\d?\d)\-)),?$");
 
         static public Regex isTimeRange =
                new Regex(@"^(?<index>(\d*) )?(?<type>(h(?:ou)?r(?:s)?|day(?:s)?|w(?:ee)?k(?:s)?|m(?:on)?th(?:s)?))$");

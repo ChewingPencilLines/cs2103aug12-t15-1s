@@ -130,7 +130,7 @@ namespace ToDo
 
         #region Task Manipulation Methods
         /// <summary>
-        /// This method adds a task to the system. The newly added file is immediately written to file
+        /// This method adds a task to the system. The newly added task is written to file
         /// using the Storage controller specified with SetMembers.
         /// </summary>
         /// <param name="taskToAdd">The task to add.</param>
@@ -140,7 +140,10 @@ namespace ToDo
             try
             {
                 if (TaskIsInvalid(taskToAdd))
+                {
+                    Logger.Warning("Attempted to add an invalid task.", "AddTask::Operation");
                     return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd), currentListedTasks);
+                }
                                 
                 taskList.Add(taskToAdd);
                 AddToOperationHistory(taskToAdd);                
@@ -149,6 +152,7 @@ namespace ToDo
                 if (success)
                 {
                     currentListedTasks.Add(taskToAdd);
+                    Logger.Info("Added a new task successfully.", "AddTask::Operation");
                     return GenerateStandardSuccessResponse(taskToAdd);
                 }
                 else
@@ -161,6 +165,12 @@ namespace ToDo
             }
         }
         
+        /// <summary>
+        /// This method removes a task from the system. The deleted task is removed from file
+        /// using the Storage controller specified with SetMembers.
+        /// </summary>
+        /// <param name="taskToDelete"></param>
+        /// <returns></returns>
         protected Response DeleteTask(Task taskToDelete)
         {
             try
@@ -172,7 +182,10 @@ namespace ToDo
                     currentListedTasks.Remove(taskToDelete);
 
                 if (storageIO.RemoveTaskFromFile(taskToDelete))
+                {
+                    Logger.Info("Deleted a task successfully.", "DeleteTask::Operation");
                     return GenerateStandardSuccessResponse(taskToDelete);
+                }
                 else
                     return GenerateXMLFailureResponse();
             }
@@ -183,6 +196,17 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// This method searches the Tasks specified in SetMembers using the specified
+        /// parameters as filters and returns the Tasks matching those filters.
+        /// </summary>
+        /// <param name="searchString">The string to match the Task's name against.</param>
+        /// <param name="isSpecific">The Specificity of the DateTime filters.</param>
+        /// <param name="exact">The flag indicating whether the string comparison should exact or not.</param>
+        /// <param name="startTime">The start time by which Tasks falling before are not matched.</param>
+        /// <param name="endTime">The end time by which Tasks falling after are not matched.</param>
+        /// <param name="searchType">The type of search to perform.</param>
+        /// <returns></returns>
         protected List<Task> SearchForTasks(
             string searchString,
             DateTimeSpecificity isSpecific,
@@ -193,16 +217,62 @@ namespace ToDo
             )
         {
             List<Task> filteredTasks = taskList;
+            try
+            {
+                filteredTasks = FilterByTaskName(filteredTasks, searchString, exact);
+                filteredTasks = FilterByTaskTime(filteredTasks, startTime, endTime, isSpecific);
+                filteredTasks = FilterBySearchType(filteredTasks, searchType);                 
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "SearchForTasks::Operation");
+                return new List<Task>(); // return empty list.
+            }
+            return filteredTasks;
+        }
+
+        /// <summary>
+        /// This method filters the input list of tasks by time. 
+        /// Tasks within the specified start and end times are returned.
+        /// As long as part of the task is within the specified tasks,
+        /// they are considered as matched.
+        /// </summary>
+        /// <param name="tasks">The list of task to apply the filter on.</param>
+        /// <param name="startTime">The start time by which the filtered tasks should be within.</param>
+        /// <param name="endTime">The end time by which the filtered tasks should be within.</param>
+        /// <param name="isSpecific">The Specificity of the time constraints</param>
+        /// <returns></returns>
+        private List<Task> FilterByTaskTime(List<Task> tasks, DateTime? startTime, DateTime? endTime, DateTimeSpecificity isSpecific)
+        {
+            List<Task> filteredTasks = new List<Task>(tasks);
+            if (!(startTime == null && endTime == null))
+                filteredTasks = (from task in filteredTasks
+                                 where task.IsWithinTime(isSpecific, startTime, endTime)
+                                 select task).ToList();
+            return filteredTasks;
+        }
+
+        /// <summary>
+        /// This method filters the input list of tasks by task name.
+        /// </summary>
+        /// <param name="tasks">The list of task to apply the filter on.</param>
+        /// <param name="searchString">The string by which to filter the task name against.</param>
+        /// <param name="exact">The flag indicating whether the string comparison should exact or not.</param>
+        /// <returns></returns>
+        private List<Task> FilterByTaskName(List<Task> tasks, string searchString, bool exact)
+        {
+            List<Task> filteredTasks = new List<Task>(tasks);
             if (searchString != null)
                 filteredTasks = (from task in filteredTasks
                                  where ((task.TaskName.IndexOf(searchString) >= 0 && exact == false) ||
                                        (String.Compare(searchString, task.TaskName, true) == 0 && exact == true))
                                  select task).ToList();
-            if (!(startTime == null && endTime == null))
-                filteredTasks = (from task in filteredTasks
-                                 where task.IsWithinTime(isSpecific, startTime, endTime)
-                                 select task).ToList();
+            return filteredTasks;
+        }
 
+        private List<Task> FilterBySearchType(List<Task> tasks, SearchType searchType)
+        {
+            List<Task> filteredTasks = new List<Task>(tasks);
             bool doneMatch;
             if (searchType == SearchType.DONE)
                 doneMatch = true;
@@ -213,7 +283,6 @@ namespace ToDo
             filteredTasks = (from task in filteredTasks
                              where task.DoneState == doneMatch
                              select task).ToList();
-
             return filteredTasks;
         }
 

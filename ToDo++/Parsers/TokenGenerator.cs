@@ -653,7 +653,7 @@ namespace ToDo
                 {
                     highestPriorityToken = token;
                 }
-                else if (!(tokensWhichRequireTimeRange.Count() == 0 || token.GetType() == typeof(TokenTimeRange)))
+                else if (tokensWhichRequireTimeRange.Count() > 0 && token.GetType() == typeof(TokenTimeRange))
                 {
                     highestPriorityToken = token;
                 }
