@@ -14,7 +14,6 @@ namespace ToDo
         public DateTime EndDateTime
         {
             get { return endDateTime; }
-         //   set { endTime = value; }
         }
 
         public TaskDeadline(
@@ -27,6 +26,7 @@ namespace ToDo
         {
             this.endDateTime = endTime;
             isSpecific = endDateSpecificity;
+            Logger.Info("Created a deadline task", "TaskDeadline::TaskDeadline");
         }
 
         public override DayOfWeek GetDay()
@@ -56,18 +56,26 @@ namespace ToDo
             {
                 startCompare = (DateTime)start;
 
-                // If comparision is not specific to Day/Month, extend search range
+                // If comparison is not specific to Day/Month, extend search range
                 if ((!isSpecific.StartDate.Day && !isSpecific.StartTime ||
                     (!compareIsSpecific.StartDate.Day && compareIsSpecific.StartTime)))
                 {
                     if (!isSpecific.StartDate.Month)
+                    {
                         startCompare = new DateTime(startCompare.Year, 1, 1);
+                    }
                     else
+                    {
                         startCompare = new DateTime(startCompare.Year, startCompare.Month, 1);
+                    }
+                    Logger.Info("Search range extended in accordance to search specificity.", "IsWithinTime::TaskDeadline");
                 }
 
                 if (endDateTime < startCompare)
+                {
                     isWithinTime = false;
+                    Logger.Info("Task is not within time range (deadline is before range).", "IsWithinTime::TaskDeadline");
+                }
             }
             if (end != null)
             {
@@ -78,21 +86,27 @@ namespace ToDo
                     (!compareIsSpecific.EndDate.Day && !compareIsSpecific.EndTime)))
                 {
                     if (!isSpecific.EndDate.Month)
+                    {
                         endCompare = new DateTime(endCompare.Year + 1, 1, 1);
+                    }
                     else
                     {
                         endCompare = endCompare.AddMonths(1);
                         endCompare = new DateTime(endCompare.Year, endCompare.Month, 1);
                     }
                     endCompare = endCompare.AddMinutes(-1);
+                    Logger.Info("Search range extended in accordance to task dates specificity.", "IsWithinTime::TaskDeadline");
                 }
                 else if (!isSpecific.EndTime || !compareIsSpecific.EndTime)
                 {
                     endCompare = new DateTime(endCompare.Year, endCompare.Month, endCompare.Day, 23, 59, 0);
+                    Logger.Info("Search range extended in accordance to task times specificity.", "IsWithinTime::TaskDeadline");
                 }
-
                 if (endDateTime > endCompare)
+                {
                     isWithinTime = false;
+                    Logger.Info("Task is not within time range (deadline is after range).", "IsWithinTime::TaskDeadline");
+                }
             }
             return isWithinTime;
         }
@@ -115,16 +129,20 @@ namespace ToDo
             // Return failure if trying to postpone at a higher specificity level then task allows.
             if ((!isSpecific.EndTime && postponeDuration.Hours != 0) ||
                 (!isSpecific.EndDate.Day && postponeDuration.Days != 0))
+            {
+                Logger.Warning("Attempted to postpone a deadline task with no start and end datetimes.", "Postpone::TaskDeadline");
                 return false;
+            }
 
             try
             {
                 endDateTime = endDateTime.Add(postponeDuration);
+                Logger.Info("Attmpted to postpone deadline task.", "Postpone::TaskDeadline");
             }
             catch
             {
-                // log failure.
                 result = false;
+                Logger.Warning("Failed to postpone deadline task.", "Postpone::TaskDeadline");
             }
             return result;
         }
@@ -134,6 +152,7 @@ namespace ToDo
             startTime = null;
             endTime = this.endDateTime;
             specific = this.isSpecific;
+            Logger.Info("Updated datetimes and their specificity.", "CopyDateTimes::TaskDeadline");
         } 
     }
 }

@@ -25,6 +25,7 @@ namespace ToDo
             : base(position)
         {
             commandType = val;
+            Logger.Info("Created a command token object", "TokenCommand::TokenCommand");
         }
 
         internal override void UpdateAttributes(OperationGenerator attrb)
@@ -41,7 +42,11 @@ namespace ToDo
                     attrb.searchDone = SearchType.UNDONE;
                     Logger.Info("Updated searchDone to UNDONE.", "UpdateAttributes::TokenCommand");
                 }
-                else throw new MultipleCommandsException();
+                else
+                {
+                    Logger.Error("Multiple commands detected", "UpdateAttributes::TokenCommand");
+                    throw new MultipleCommandsException();
+                }
             }
             else
             {

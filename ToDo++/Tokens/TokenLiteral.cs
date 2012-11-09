@@ -14,6 +14,7 @@ namespace ToDo
             : base(position)
         {
             literal = val;
+            Logger.Info("Created a literal token", "TokenLiteral::TokenLiteral");
         }
 
         internal override void UpdateAttributes(OperationGenerator attrb)

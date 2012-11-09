@@ -13,6 +13,7 @@ namespace ToDo
             : base(position)
         {
             dayOfWeek = val;
+            Logger.Info("Created a day token object", "TokenDay::TokenDay");
         }
 
         internal override void UpdateAttributes(OperationGenerator attrb)
@@ -32,7 +33,7 @@ namespace ToDo
                     Logger.Info("Updated EndDateOnly.", "UpdateAttributes::TokenDay");
                     break;
                 default:
-                    Logger.Warning("Fell through switch statement.", "UpdateAttributes::TokenDay");
+                    Logger.Error("Fell through currentMode switch statement.", "UpdateAttributes::TokenDay");
                     Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");
                     break;
             }                    
@@ -54,16 +55,20 @@ namespace ToDo
                 case ContextType.CURRENT:
                     break;
                 case ContextType.NEXT:
+                    Logger.Info("preposition is NEXT", "GetDateFromDay::TokenDay");
                     daysToAdd += 7;
                     break;
                 case ContextType.FOLLOWING:
+                    Logger.Info("preposition is FOLLOWING", "GetDateFromDay::TokenDay");
                     daysToAdd += 14;
                     break;
                 default:
+                    Logger.Error("Fell through preposition switch statement.", "GetDateFromDay::TokenDay");
                     Debug.Assert(false, "Fell through switch statement in GetDateFromDay!");
                     break;
             }
             startDate = todayDate.AddDays(daysToAdd);
+            Logger.Info("Updated startDate", "GetDateFromDay::TokenDay");
             return startDate;
         }
 
@@ -82,7 +87,6 @@ namespace ToDo
         {
             // f( c, d ) = [7 - (c - d)] mod 7
             //   where 0 <= c < 7 and 0 <= d < 7
-
             int c = (int)current;
             int d = (int)desired;
             return (7 - c + d) % 7;
