@@ -23,25 +23,24 @@ namespace ToDo
         }
 
         // ******************************************************************
-        // Getters and Setters to get and set properties of this Pop Up
+        // Properties - Title,SubTitle,UserInput
         // ******************************************************************
 
-        #region GettersSetters
+        #region Properties
 
-        public string userInput { get { return userInputBox.Text; } set { userInputBox.Text = userInput; } }
-        public string title { get { return titleLabel.Text; } set { titleLabel.Text = title; } }
-        public string subTitle { get { return subtitleLabel.Text; } set { subtitleLabel.Text = subTitle; } }
+        public string UserInput { get { return userInputBox.Text; } set { userInputBox.Text = value; } }
+        public string Title { get { return titleLabel.Text; } set { titleLabel.Text = value; } }
+        public string SubTitle { get { return subtitleLabel.Text; } set { subtitleLabel.Text = value; } }
 
         #endregion
 
         // ******************************************************************
-        // Win32 Code to make this form draggable
+        // Win32 Functions
         // ******************************************************************
 
-        /// <summary>
-        /// Creates rounded edge
-        /// </summary>
-        /// 
+        #region Win32Functions
+
+        //Creates rounded edge
         #region Rounded Edge
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
@@ -55,9 +54,7 @@ namespace ToDo
         );
         #endregion
 
-        /// <summary>
-        /// Creates Shadow (DISABLED)
-        /// </summary>
+        //Creates Shadow (DISABLED)
         #region Shadow
 
         
@@ -75,6 +72,7 @@ namespace ToDo
 
         #endregion
 
+        //Make form draggable
         #region MakeDraggable
 
         //const int WM_NCHITTEST = 0x0084;
@@ -91,11 +89,13 @@ namespace ToDo
 
         #endregion
 
+        #endregion
+
         // ******************************************************************
         // Public Methods to Get Set User Input, Title, Subtitle
         // ******************************************************************
 
-        #region PublicMethods
+        #region PublicGetterSetterMethods
 
         /// <summary>
         /// Sets Title and Subtitle of PopUp
@@ -123,7 +123,7 @@ namespace ToDo
         /// <returns>Boolean of whether there was valid data or not</returns>
         public bool UserEnteredData()
         {
-            if (userInput == "")
+            if (UserInput == "")
                 return false;
             else
                 return true;
@@ -137,17 +137,20 @@ namespace ToDo
 
         #region EventHandlers
 
+        //Cancel Button
         private void cancelButton_Click(object sender, EventArgs e)
         {
             userInputBox.Text = "";
             this.Close();
         }
 
+        //Confirm Button
         private void confirmButton_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+        //Keyboard Commands
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Enter))
@@ -164,11 +167,12 @@ namespace ToDo
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        #endregion
-
         private void UserInputForm_Resize(object sender, EventArgs e)
         {
-            System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20)); 
+            System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
         }
+
+        #endregion
+
     }
 }

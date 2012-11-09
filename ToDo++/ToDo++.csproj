@@ -179,12 +179,6 @@
     <Compile Include="UI\Components\TopMenuControl.Designer.cs">
       <DependentUpon>TopMenuControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\CustomButton.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\CustomButton.designer.cs">
-      <DependentUpon>CustomButton.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\UI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -232,9 +226,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Components\TopMenuControl.resx">
       <DependentUpon>TopMenuControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\CustomButton.resx">
-      <DependentUpon>CustomButton.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\UI.resx">
       <DependentUpon>UI.cs</DependentUpon>

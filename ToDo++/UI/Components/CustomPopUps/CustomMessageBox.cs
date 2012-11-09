@@ -26,7 +26,7 @@ namespace ToDo
         /// <returns>Returns true if data was actually entered</returns>
         internal static bool ValidData()
         {
-            if (popUp.userInput == "")
+            if (popUp.UserInput == "")
                 return false;
             else
                 return true;
@@ -38,7 +38,7 @@ namespace ToDo
         /// <returns>Returns user input</returns>
         internal static string GetInput()
         {
-            return popUp.userInput;
+            return popUp.UserInput;
         }
 
         /// <summary>
@@ -94,10 +94,19 @@ namespace ToDo
         }
 
         /// <summary>
-        /// Getters for Font Size and Color
+        /// Gets size selected by user
         /// </summary>
+        /// <returns>Size selected by user</returns>
         internal static int GetSize() { return popUp.GetSize(); }
+        /// <summary>
+        /// Gets Font selected by user
+        /// </summary>
+        /// <returns>Font seleceted by user</returns>
         internal static string GetFont() { return popUp.GetFont(); }
+        /// <summary>
+        /// Gets Color Selected by user
+        /// </summary>
+        /// <returns>Color selected by user</returns>
         internal static Color GetColor() { return popUp.GetColor(); }
 
         /// <summary>
@@ -142,11 +151,21 @@ namespace ToDo
         private static UI ui;
         public enum StateTinyAlert { SUCCESS, FAILURE, WARNING };
 
+        /// <summary>
+        /// Passes an instance of UI into TinyAlertView to capture UI Movements
+        /// </summary>
+        /// <param name="uiPass">Instance of UI passed in</param>
         internal static void SetUI(UI uiPass)
         {
             ui = uiPass;
         }
 
+        /// <summary>
+        /// Displays TinyAlert for the specified period of time
+        /// </summary>
+        /// <param name="state">Set state of TinyAlert</param>
+        /// <param name="response">Set the response to be shown</param>
+        /// <returns></returns>
         internal static void Show(StateTinyAlert state, string response)
         {
             switch (state)
@@ -170,16 +189,26 @@ namespace ToDo
             SetLocation();
         }
 
+        /// <summary>
+        /// Ensures TinyAlert moves with UI
+        /// </summary>
         internal static void SetLocation()
         {
             tinyAlert.Location = new Point(ui.Left, ui.Bottom +5);
         }
 
+        /// <summary>
+        /// Set how long you want TinyAlert to display before fading out
+        /// </summary>
+        /// <param name="time"></param>
         internal static void SetTiming(int time)
         {
             tinyAlert.SetTiming(time);
         }
 
+        /// <summary>
+        /// Dismiss even if TinyAlert is still showing
+        /// </summary>
         internal static void DismissEarly()
         {
             tinyAlert.Dismiss();
