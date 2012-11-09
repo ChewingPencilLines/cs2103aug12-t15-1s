@@ -18,7 +18,35 @@ namespace LogicUnitTest
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
             result = logic.ProcessCommand("add milk");
+            Type type = result.TasksToBeDisplayed[0].GetType();
+            Assert.AreEqual("ToDo.TaskFloating", type.ToString());
             Assert.AreEqual("Added new task \"milk\" successfully.", result.FeedbackString);
+            return;
+        }
+
+        [TestMethod]
+        public void AddTimedTest()
+        {
+            Response result;
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            result = logic.ProcessCommand("add test by 2020 jan 5th");
+            Type type = result.TasksToBeDisplayed[0].GetType();
+            Assert.AreEqual("ToDo.TaskDeadline", type.ToString());
+            Assert.AreEqual("Added new task \"test\" successfully.", result.FeedbackString);
+            return;
+        }
+
+        [TestMethod]
+        public void AddTimedFailTest()
+        {
+            Response result;
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            result = logic.ProcessCommand("add test feb 29th ");
+            Assert.AreEqual("Invalid command input.", result.FeedbackString);
+            result = logic.ProcessCommand("add test feb 29th 2016");
+            Assert.AreEqual("Added new task \"test\" successfully.", result.FeedbackString);
             return;
         }
 
@@ -148,8 +176,8 @@ namespace LogicUnitTest
             logic.ProcessCommand("delete all");
             logic.ProcessCommand("add pp 5pm");
             logic.ProcessCommand("add qq 3pm");
-            result = logic.ProcessCommand("postpone today tmr");
-            Assert.AreEqual("Postponed task \"pp\" successfully.", result.FeedbackString);
+            result = logic.ProcessCommand("postpone all today to tmr");
+            Assert.AreEqual("Postponed all tasks successfully.", result.FeedbackString);
             return;
         }
 
@@ -160,7 +188,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
             logic.ProcessCommand("add pp 5pm");
-            result = logic.ProcessCommand("postpone pp jan");
+            result = logic.ProcessCommand("postpone pp to jan");
             Assert.AreEqual("Postponed task \"pp\" successfully.", result.FeedbackString);
             return;
         }
