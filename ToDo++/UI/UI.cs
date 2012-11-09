@@ -528,22 +528,22 @@ namespace ToDo
                 Exit();
                 return true;
             }
-            if (keyData == (Keys.Control | Keys.Space))
+            if (keyData == (Keys.Alt | Keys.Space))
             {
                 this.ActiveControl = textInput;
                 return true;
             }
-            if (keyData == (Keys.Shift | Keys.S))
+            if (keyData == (Keys.Alt | Keys.S))
             {
                 ToggleToDoPanel();
                 return true;
             }
-            if (keyData == (Keys.Shift | Keys.S))
+            if (keyData == (Keys.Alt | Keys.S))
             {
                 ToggleToDoPanel();
                 return true;
             }
-            if ((keyData == (Keys.Control | Keys.Up)) || (keyData == (Keys.Control | Keys.Down)))
+            if ((keyData == (Keys.Alt | Keys.Up)) || (keyData == (Keys.Alt | Keys.Down)))
             {
                 topMenuControl.CollapseExpandToDo();
                 return true;

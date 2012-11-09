@@ -20,6 +20,7 @@ namespace ToDo
             {
                 currentIndex--;
                 this.Text = commandsEntered[currentIndex];
+                this.SelectionStart = this.Text.Length;
             }
         }
 
@@ -29,6 +30,7 @@ namespace ToDo
             {
                 currentIndex++;
                 this.Text = commandsEntered[currentIndex];
+                this.SelectionStart = this.Text.Length;
             }
         }
     }
