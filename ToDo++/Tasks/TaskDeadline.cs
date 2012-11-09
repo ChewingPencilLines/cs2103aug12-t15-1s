@@ -68,13 +68,11 @@ namespace ToDo
                     {
                         startCompare = new DateTime(startCompare.Year, startCompare.Month, 1);
                     }
-                    Logger.Info("Search range extended in accordance to search specificity.", "IsWithinTime::TaskDeadline");
                 }
 
                 if (endDateTime < startCompare)
                 {
                     isWithinTime = false;
-                    Logger.Info("Task is not within time range (deadline is before range).", "IsWithinTime::TaskDeadline");
                 }
             }
             if (end != null)
@@ -95,17 +93,14 @@ namespace ToDo
                         endCompare = new DateTime(endCompare.Year, endCompare.Month, 1);
                     }
                     endCompare = endCompare.AddMinutes(-1);
-                    Logger.Info("Search range extended in accordance to task dates specificity.", "IsWithinTime::TaskDeadline");
                 }
                 else if (!isSpecific.EndTime || !compareIsSpecific.EndTime)
                 {
                     endCompare = new DateTime(endCompare.Year, endCompare.Month, endCompare.Day, 23, 59, 0);
-                    Logger.Info("Search range extended in accordance to task times specificity.", "IsWithinTime::TaskDeadline");
                 }
                 if (endDateTime > endCompare)
                 {
                     isWithinTime = false;
-                    Logger.Info("Task is not within time range (deadline is after range).", "IsWithinTime::TaskDeadline");
                 }
             }
             return isWithinTime;

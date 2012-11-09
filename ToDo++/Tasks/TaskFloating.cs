@@ -35,7 +35,6 @@ namespace ToDo
             startTime = null;
             endTime = null;
             specific = new DateTimeSpecificity();
-            Logger.Info("Updated datetimes and their specificity.", "CopyDateTimes::TaskFloating");
         }
     }
 }

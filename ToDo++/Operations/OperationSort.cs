@@ -7,9 +7,8 @@ namespace ToDo
 {
     class OperationSort : Operation
     {
-        private SortType sortType;
-
         public OperationSort(SortType sortType)
+            :base (sortType)
         {
             this.sortType = sortType;
         }

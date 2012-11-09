@@ -19,7 +19,7 @@ namespace ToDo
         public TimeRangeKeywordsType timeRangeOne = new TimeRangeKeywordsType();
         public TimeRangeKeywordsType timeRangeTwo = new TimeRangeKeywordsType();
         public SortType sortType = new SortType();
-        public SearchType searchDone = new SearchType();
+        public SearchType searchType = new SearchType();
         public string taskName = null;
         public int[] taskRangeIndex = null;
         public int timeRangeIndex = 0;
@@ -59,7 +59,7 @@ namespace ToDo
             currentMode = ContextType.STARTTIME;
             currentSpecifier = ContextType.CURRENT;
             sortType = SortType.DEFAULT;
-            searchDone = SearchType.NONE;
+            searchType = SearchType.NONE;
             timeRangeType = TimeRangeType.DEFAULT;
             timeRangeOne = TimeRangeKeywordsType.NONE;
             timeRangeTwo = TimeRangeKeywordsType.NONE;
@@ -291,34 +291,34 @@ namespace ToDo
             {
                 case CommandType.ADD:
                     task = Task.GenerateNewTask(taskName, startDateTime, endDateTime, isSpecific);
-                    newOperation = new OperationAdd(task);
+                    newOperation = new OperationAdd(task, sortType);
                     break;
                 case CommandType.DELETE:
-                    newOperation = new OperationDelete(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
+                    newOperation = new OperationDelete(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchType, sortType);
                     break;
                 case CommandType.DISPLAY:
-                    newOperation = new OperationDisplayDefault();
+                    newOperation = new OperationDisplayDefault(sortType);
                     break;
                 case CommandType.MODIFY:
-                    newOperation = new OperationModify(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
+                    newOperation = new OperationModify(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchType, sortType);
                     break;
                 case CommandType.SEARCH:
-                    newOperation = new OperationSearch(taskName, startDateTime, endDateTime, isSpecific, searchDone);
+                    newOperation = new OperationSearch(taskName, startDateTime, endDateTime, isSpecific, searchType, sortType);
                     break;
                 case CommandType.SORT:
                     newOperation = new OperationSort(sortType);
                     break;
                 case CommandType.REDO:
-                    newOperation = new OperationRedo();
+                    newOperation = new OperationRedo(sortType);
                     break;
                 case CommandType.UNDO:
-                    newOperation = new OperationUndo();
+                    newOperation = new OperationUndo(sortType);
                     break;
                 case CommandType.DONE:
-                    newOperation = new OperationMarkAsDone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
+                    newOperation = new OperationMarkAsDone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchType, sortType);
                     break;
                 case CommandType.UNDONE:
-                    newOperation = new OperationMarkAsUndone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone);
+                    newOperation = new OperationMarkAsUndone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchType, sortType);
                     break;
                 case CommandType.POSTPONE:
                     TimeSpan postponeDuration = new TimeSpan();
@@ -342,10 +342,10 @@ namespace ToDo
                             postponeDuration = new TimeSpan(timeRangeIndex * CustomDictionary.DAYS_IN_MONTH, 0, 0, 0);
                             break;
                     }
-                    newOperation = new OperationPostpone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchDone, postponeDuration);
+                    newOperation = new OperationPostpone(taskName, taskRangeIndex, startDateTime, endDateTime, isSpecific, rangeIsAll, searchType, postponeDuration, sortType);
                     break;
                 case CommandType.SCHEDULE:
-                    newOperation = new OperationSchedule(taskName, (DateTime)startDateTime, endDateTime, isSpecific, timeRangeIndex, timeRangeType);
+                    newOperation = new OperationSchedule(taskName, (DateTime)startDateTime, endDateTime, isSpecific, timeRangeIndex, timeRangeType, sortType);
                     break;
                 case CommandType.EXIT:
                     System.Environment.Exit(0);

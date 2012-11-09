@@ -30,7 +30,8 @@ namespace ToDo
 
         #region Constructors
         public OperationMarkAsUndone(string taskName, int[] indexRange, DateTime? startTime,
-            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType)
+            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType, SortType sortType)
+            : base(sortType)
         {
             if (indexRange == null) hasIndex = false;            
             else

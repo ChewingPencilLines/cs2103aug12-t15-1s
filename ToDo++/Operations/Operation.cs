@@ -19,6 +19,7 @@ namespace ToDo
         protected Queue<Task> executedTasks;                // Contains a history of tasks which this operation has manipulated.        
         protected List<Task> taskList;                      // The entire list of tasks which this Operation will execute on.        
         protected Storage storageIO;                        // The Storage controller which will be used for reading / writing from tasks to file.
+        protected SortType sortType;
         #endregion
 
         /// <summary>
@@ -36,8 +37,9 @@ namespace ToDo
         /// This method initializes the neccesary variables for all Operation.
         /// </summary>
         /// <returns>Nothing.</returns>
-        protected Operation()
+        protected Operation(SortType sortType)
         {
+            this.sortType = sortType;
             executedTasks = new Queue<Task>();
         }
         

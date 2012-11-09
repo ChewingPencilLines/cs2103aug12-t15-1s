@@ -12,7 +12,6 @@ namespace ToDo
         internal Token(int position)
         {
             this.position = position;
-            Logger.Info("Created a token object", "Token::Token");
         }  
         internal int Position
         {

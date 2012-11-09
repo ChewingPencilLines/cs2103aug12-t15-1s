@@ -8,7 +8,8 @@ namespace ToDo
 {
     class OperationUndo : Operation
     {
-        public OperationUndo()
+        public OperationUndo(SortType sortType)
+            : base(sortType)
         { }
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {

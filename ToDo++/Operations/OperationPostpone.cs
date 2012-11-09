@@ -25,7 +25,8 @@ namespace ToDo
         #endregion Parameters
 
         public OperationPostpone(string taskName, int[] indexRange, DateTime? startTime,
-            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType, TimeSpan postponeDuration)
+            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType, TimeSpan postponeDuration, SortType sortType)
+            : base(sortType)
         {
             if (indexRange == null) hasIndex = false;            
             else
