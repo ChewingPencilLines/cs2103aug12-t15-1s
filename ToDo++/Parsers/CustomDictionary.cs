@@ -405,25 +405,6 @@ namespace ToDo
             return isTimeRange.IsMatch(theWord);
         }
         
-        public static bool IsPartOfValidNumericalTimeRange(List<string> words, int i)
-        {
-            if (words[i + 1] == "-"
-                && IsValidTime(words[i + 2]))
-            {
-                return true;
-            }
-            else if (i > 1)
-            {
-                if (words[i - 1] == "from"
-                    && words[i + 1] == "to"
-                    && IsValidTime(words[i + 2]))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         /// <summary> This method checks if a word is a time keyword.
         /// </summary>
         /// <param name="word">The word to be checked</param>
