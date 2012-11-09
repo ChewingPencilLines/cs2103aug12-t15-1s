@@ -688,6 +688,7 @@ namespace ToDo
 
             if (output == null)
             {
+                Logger.Error("Null Response detected", "ProcessText::UI");
                 AlertBox.Show("An invalid response was returned.");
                 return;
             }
