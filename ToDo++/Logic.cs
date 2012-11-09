@@ -58,11 +58,13 @@ namespace ToDo
             {
                 AlertBox.Show(e.Message);
             }
+            catch (InvalidTimeRangeException ex)
+            {
+                AlertBox.Show(ex.Message);
+            }
             catch (MultipleCommandsException)
             {
-                AlertBox.Show(@"Invalid input.\r\n
-                            Multiple commands were entered that could not be resolved.\r\n
-                            Use delimiting characters if reserved keywords are required in your task name.");
+                AlertBox.Show(@"Multiple commands were entered that could not be resolved. Use delimiters.");
             }
             if (operation == null)
             {
@@ -71,7 +73,6 @@ namespace ToDo
             else
             {
                 Response feedback = ExecuteCommand(operation);
-
                 if (ui != null)
                 {
                     if (taskList.Count == 0)
@@ -79,7 +80,6 @@ namespace ToDo
                     else
                         ui.SetMessageTaskListIsEmpty(false);
                 }
-                
                 return feedback;
             }
         }

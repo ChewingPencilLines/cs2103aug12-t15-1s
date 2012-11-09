@@ -103,6 +103,10 @@ namespace ToDo
                 if (!response.IsSuccessful())
                     return response;
             }
+
+            if (response == null)
+                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+
             return response;
         }
 
@@ -119,6 +123,10 @@ namespace ToDo
                 if (!response.IsSuccessful())
                     return response;
             }
+
+            if (response == null)
+                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+
             return response;
         }
         #endregion

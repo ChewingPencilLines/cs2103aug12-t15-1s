@@ -41,17 +41,9 @@ namespace ToDo
 
         internal override void UpdateAttributes(OperationGenerator attrb)
         {
-            if (index != 0)
+            if (index != 0 && attrb.timeRangeIndex == 0)
             {
-                if (attrb.timeRangeIndex == 0)
-                {
-                    attrb.timeRangeIndex = index;
-                }
-                else
-                {
-                    // todo: warn user of multiple inputs
-                    // can consider extending functionality in the future to take in multiple time spans i.e. 4 months 6 days
-                }
+                attrb.timeRangeIndex = index;
             }
             if (timeRangeType != TimeRangeType.DEFAULT)
             {
@@ -61,8 +53,7 @@ namespace ToDo
                 }
                 else
                 {
-                    // todo: warn user of multiple inputs
-                    // can consider extending functionality in the future to take in multiple time spans i.e. 4 months 6 days
+                    AlertBox.Show("Multiple task durations specified. Only the first is accepted.");
                 }
             }
             if (timeRange != TimeRangeKeywordsType.NONE)
@@ -75,12 +66,6 @@ namespace ToDo
                     || attrb.timeRangeTwo <= timeRange)
                 {
                     attrb.timeRangeTwo = timeRange;
-                }
-                else
-                {
-                    // todo: reject non-consecutive inputs
-                    // also reject more than double inputs for time ranges i.e. morning afternoon evening
-                    // can consider extending functionality in the future to take in multiple consecutives
                 }
             }
         }

@@ -20,7 +20,7 @@ namespace ToDo
     public enum TimeRangeKeywordsType { MORNING, AFTERNOON, EVENING, NIGHT, NONE };
     // default should be hours (1 hour), unless otherwise specified in settings
     public enum TimeRangeType { DEFAULT = 0, HOUR, DAY, WEEK, MONTH };
-    public enum SortType { DEFAULT, NAME, DATE_TIME, DONE_STATE };
+    public enum SortType { DEFAULT, NAME, DATE_TIME };
     public enum SearchType { NONE, DONE, UNDONE }
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
@@ -114,7 +114,7 @@ namespace ToDo
             new Regex(@"^(?<month>(jan(?:(uary))?|feb(?:(ruary))?|mar(?:(ch))?|apr(?:(il))?|may|jun(?:e)?|jul(?:y)?|aug((?:ust))?|sep((?:t|tember))?|oct((?:ober))?|nov((?:ember))?|dec((?:ember))?)),?$");
 
         static public Regex isNumericalRange =
-            new Regex(@"^(((?<start>\d?\d?\d),?(\-(?<end>\d?\d?\d))?)|((?<start>\d?\d?\d)\-))$");
+            new Regex(@"^(((?<start>\d?\d?\d)(\-(?<end>\d?\d?\d))?)|((?<start>\d?\d?\d)\-)),?$");
 
         static public Regex isTimeRange =
                new Regex(@"^(?<index>(\d*) )?(?<type>(h(?:ou)?r(?:s)?|day(?:s)?|w(?:ee)?k(?:s)?|m(?:on)?th(?:s)?))$");
@@ -265,7 +265,6 @@ namespace ToDo
             sortTypeKeywords = new Dictionary<string, SortType>();
             sortTypeKeywords.Add("name", SortType.NAME);
             sortTypeKeywords.Add("date", SortType.DATE_TIME);
-            sortTypeKeywords.Add("done", SortType.DONE_STATE);
         }
 
         #endregion

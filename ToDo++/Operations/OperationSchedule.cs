@@ -12,8 +12,8 @@ namespace ToDo
         DateTime startDateTime;
         DateTime? endDateTime;
         DateTimeSpecificity isSpecific;
-        int timeRangeAmount;
-        TimeRangeType timeRangeType;
+        int taskDurationAmount;
+        TimeRangeType taskDurationType;
         Task scheduledTask;
         DateTimeSpecificity searchSpecificity = new DateTimeSpecificity();
         
@@ -23,8 +23,8 @@ namespace ToDo
             this.startDateTime = startDateTime;
             this.endDateTime = endDateTime;
             this.isSpecific = isSpecific;
-            this.timeRangeAmount = timeRangeAmount;
-            this.timeRangeType = timeRangeType;
+            this.taskDurationAmount = timeRangeAmount;
+            this.taskDurationType = timeRangeType;
         }
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
@@ -32,7 +32,7 @@ namespace ToDo
             Response response;
             SetMembers(taskList, storageIO);
             RetrieveParameters();
-            if (!IsTaskDurationWithinRange() || timeRangeAmount == 0)
+            if (!IsTaskDurationWithinRange() || taskDurationAmount == 0)
             {
                 response = new Response(Result.INVALID_TASK, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             }
@@ -43,22 +43,53 @@ namespace ToDo
             return response;
         }
 
+        public override Response Undo(List<Task> taskList, Storage storageIO)
+        {
+            SetMembers(taskList, storageIO);
+            Response response = DeleteTask(scheduledTask);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+        }
+
+        public override Response Redo(List<Task> taskList, Storage storageIO)
+        {
+            SetMembers(taskList, storageIO);
+            Response response = AddTask(scheduledTask);
+            if (response.IsSuccessful())
+                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+            else
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+        }
+
+        // ******************************************************************
+        // Private Methods
+        // ******************************************************************
+
+        #region Private Helper Methods
         private void RetrieveParameters()
         {
             SetTaskDuration();
             SetTimeRange();
         }
 
+        /// <summary>
+        /// This method sets the task duration to the default task duration if it was not specified by the user.
+        /// </summary>
         private void SetTaskDuration()
         {
             // if there is no task duration specified i.e. 3 days etc., get default 
-            if (timeRangeAmount == 0 && timeRangeType == TimeRangeType.DEFAULT)
+            if (taskDurationType == TimeRangeType.DEFAULT)
             {
-                timeRangeAmount = CustomDictionary.defaultScheduleTimeLength;
-                timeRangeType = CustomDictionary.defaultScheduleTimeLengthType;
+                taskDurationAmount = CustomDictionary.defaultScheduleTimeLength;
+                taskDurationType = CustomDictionary.defaultScheduleTimeLengthType;
             }
         }
 
+        /// <summary>
+        /// This method sets the schedule datetime range within which the task ought tbe scheduled.
+        /// </summary>
         private void SetTimeRange()
         {
             // setting the start and end search datetimes
@@ -72,8 +103,8 @@ namespace ToDo
                 {
                     endDateTime = startDateTime.AddMonths(1).Date;
                 }
-                if (endDateTime != null
-                    && (!isSpecific.StartDate.Day||isSpecific.EndDate.Day))
+                else if (endDateTime != null
+                    && (!isSpecific.StartDate.Day || isSpecific.EndDate.Day))
                 {
                     endDateTime = ((DateTime)endDateTime).AddDays(1).Date;
                 }
@@ -110,27 +141,32 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// This method checks if the task can possibly be scheduled within the schedule datetime range
+        /// i.e. it checks that the task duration can be contained within the schedule time range.
+        /// </summary>
+        /// <returns>True if possible, false if otherwise</returns>
         private bool IsTaskDurationWithinRange()
         {
             // check that range > span, else return failure response
             // (error response should be different from if no fitting slot can be found)
             TimeSpan span = ((DateTime)endDateTime) - startDateTime;
-            switch (timeRangeType)
+            switch (taskDurationType)
             {
                 case TimeRangeType.HOUR:
-                    if (timeRangeAmount > span.TotalHours)
+                    if (taskDurationAmount > span.TotalHours)
                     {
                         return false;
                     }
                     break;
                 case TimeRangeType.DAY:
-                    if (timeRangeAmount > span.TotalDays)
+                    if (taskDurationAmount > span.TotalDays)
                     {
                         return false;
                     }
                     break;
                 case TimeRangeType.MONTH:
-                    if (startDateTime.AddMonths(timeRangeAmount) > ((DateTime)endDateTime))
+                    if (startDateTime.AddMonths(taskDurationAmount) > ((DateTime)endDateTime))
                     {
                         return false;
                     }
@@ -141,6 +177,11 @@ namespace ToDo
             return true;
         }
 
+        /// <summary>
+        /// This method tries to find a free time slot within the spceified schedule datetime range
+        /// to schedule the task. 
+        /// </summary>
+        /// <returns>The appropriate response object, depending on whether a free slot could be found</returns>
         private Response TryScheduleTask()
         {
             Response response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
@@ -153,16 +194,16 @@ namespace ToDo
             while (!isSlotFound && tryEndTime <= ((DateTime)endDateTime))
             {
                 int numberOfSetsToLoop = 1;
-                switch (timeRangeType)
+                switch (taskDurationType)
                 {
                     case TimeRangeType.HOUR:
                         tryStartTime = startDateTime.AddHours(numberOfIterations);
-                        tryEndTime = tryStartTime.AddHours(timeRangeAmount);
+                        tryEndTime = tryStartTime.AddHours(taskDurationAmount);
                         break;
                     case TimeRangeType.DAY:
                     case TimeRangeType.WEEK:
                     case TimeRangeType.MONTH:
-                        numberOfSetsToLoop = GetNumberOfLoops(timeRangeType, tryStartTime);
+                        numberOfSetsToLoop = GetNumberOfLoops(taskDurationType, tryStartTime);
                         break;
                 }
                 isSlotFound = IsTimeSlotFreeOfTasks(numberOfSetsToLoop, tryStartTime, ref tryEndTime);
@@ -176,38 +217,45 @@ namespace ToDo
             return response;
         }
 
-        private int GetNumberOfLoops(TimeRangeType type, DateTime tryStartTime)
+        /// <summary>
+        /// This method breaks the task duration down to blocks of hours or days if the schedule start time is
+        /// not specific.
+        /// </summary>
+        /// <param name="type">The task duration type: hours, days, weeks or months</param>
+        /// <param name="startTime">The time slot's start time</param>
+        /// <returns>Returns the number of divided blocks</returns>
+        private int GetNumberOfLoops(TimeRangeType type, DateTime startTime)
         {
             int numberOfSetsToLoop = 0;
-            switch (timeRangeType)
+            switch (taskDurationType)
             {
                 case TimeRangeType.DAY:
                     if (!isSpecific.StartTime)
                     {
-                        timeRangeType = TimeRangeType.HOUR;
-                        timeRangeAmount *= CustomDictionary.HOURS_IN_DAY;
+                        taskDurationType = TimeRangeType.HOUR;
+                        taskDurationAmount *= CustomDictionary.HOURS_IN_DAY;
                     }
-                    numberOfSetsToLoop = timeRangeAmount;
+                    numberOfSetsToLoop = taskDurationAmount;
                     break;
                 case TimeRangeType.WEEK:
                     if (!isSpecific.StartTime)
                     {
-                        timeRangeType = TimeRangeType.HOUR;
-                        timeRangeAmount *= CustomDictionary.HOURS_IN_DAY * CustomDictionary.DAYS_IN_WEEK;
+                        taskDurationType = TimeRangeType.HOUR;
+                        taskDurationAmount *= CustomDictionary.HOURS_IN_DAY * CustomDictionary.DAYS_IN_WEEK;
                     }
                     else
                     {
-                        timeRangeType = TimeRangeType.DAY;
-                        timeRangeAmount *= CustomDictionary.DAYS_IN_WEEK;
+                        taskDurationType = TimeRangeType.DAY;
+                        taskDurationAmount *= CustomDictionary.DAYS_IN_WEEK;
                     }
-                    numberOfSetsToLoop = timeRangeAmount;
+                    numberOfSetsToLoop = taskDurationAmount;
                     break;
                 case TimeRangeType.MONTH:
-                    TimeSpan span = tryStartTime.AddMonths(timeRangeAmount) - tryStartTime;
+                    TimeSpan span = startTime.AddMonths(taskDurationAmount) - startTime;
                     if (!isSpecific.StartTime)
                     {
-                        timeRangeType = TimeRangeType.HOUR;
-                        timeRangeAmount = numberOfSetsToLoop = (int)span.TotalHours;
+                        taskDurationType = TimeRangeType.HOUR;
+                        taskDurationAmount = numberOfSetsToLoop = (int)span.TotalHours;
                     }
                     else
                     {
@@ -218,40 +266,54 @@ namespace ToDo
             return numberOfSetsToLoop;
         }
 
-        private bool IsTimeSlotFreeOfTasks(int numberOfLoops, DateTime startTime, ref DateTime endTime)
+        /// <summary>
+        /// This method checks if the time slot is free of task and hence, available for task scheduling.
+        /// </summary>
+        /// <param name="numberOfLoops">The number of iterations (time slot may be composed of several hours/days)</param>
+        /// <param name="tryStartTime">The time slot's start time</param>
+        /// <param name="tryEndTime">The time slot's end time</param>
+        /// <returns>True if the time slot is available for task schedule; false if otherwise</returns>
+        private bool IsTimeSlotFreeOfTasks(int numberOfLoops, DateTime tryStartTime, ref DateTime tryEndTime)
         {
             List<Task> searchResults = new List<Task>();
             for (int i = 0; i < numberOfLoops; i++)
             {
-                if (endTime <= startTime)
+                if (tryEndTime <= tryStartTime)
                 {
-                    endTime = startTime.AddDays(1).Add(((DateTime)endDateTime).TimeOfDay);
+                    tryEndTime = tryStartTime.AddDays(1).Add(((DateTime)endDateTime).TimeOfDay);
                 }
-                searchResults = SearchForTasks(null, searchSpecificity, false, startTime, endTime);
-                if (timeRangeType == TimeRangeType.HOUR)
+                searchResults = SearchForTasks(null, searchSpecificity, false, tryStartTime, tryEndTime);
+                if (taskDurationType == TimeRangeType.HOUR)
                 {
-                    startTime = startTime.AddHours(1);
+                    tryStartTime = tryStartTime.AddHours(1);
                 }
                 else
                 {
-                    startTime = startTime.AddDays(1);
+                    tryStartTime = tryStartTime.AddDays(1);
                 }
                 if (searchResults.Count != 0)
                 {
                     break;
                 }
             }
-            if (searchResults.Count == 0 && endTime <= endDateTime)
-            {
+            if (searchResults.Count == 0 && tryEndTime <= endDateTime)
+            {   
                 return true;
             }
             return false;
         }
 
-        private Response ScheduleTaskAtSlot(string taskName, DateTime startDateTime, DateTime endDateTime)
+        /// <summary>
+        /// This method creates an event task and schedules it at the time slot.
+        /// </summary>
+        /// <param name="taskName">Name of the task</param>
+        /// <param name="startTime">Start time of the time slot</param>
+        /// <param name="endTime">End time of the time slot</param>
+        /// <returns>The appropriate response object, depending on whether he task could be scheduled at the time slot</returns>
+        private Response ScheduleTaskAtSlot(string taskName, DateTime startTime, DateTime endTime)
         {
             Response response;
-            scheduledTask = new TaskEvent(taskName, startDateTime, endDateTime.AddSeconds(-1), searchSpecificity);
+            scheduledTask = new TaskEvent(taskName, startTime, endTime.AddSeconds(-1), searchSpecificity);
             response = AddTask(scheduledTask);
             if (response.IsSuccessful())
             {
@@ -259,25 +321,6 @@ namespace ToDo
             }
             return response;
         }
-   
-        public override Response Undo(List<Task> taskList, Storage storageIO)
-        {
-            SetMembers(taskList, storageIO);
-            Response response = DeleteTask(scheduledTask);
-            if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
-            else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
-        }
-
-        public override Response Redo(List<Task> taskList, Storage storageIO)
-        {
-            SetMembers(taskList, storageIO);
-            Response response = AddTask(scheduledTask);
-            if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
-            else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
-        }
+        #endregion
     }
 }

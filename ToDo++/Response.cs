@@ -28,9 +28,9 @@ namespace ToDo
         const string STRING_SORT_SUCCESS = "Sorting by {0}.";
         const string STRING_SORT_FAILURE = "Please specify sort type.";
         const string STRING_UNDO_SUCCESS = "Undid last operation.";
-        const string STRING_UNDO_FAILURE = "Cannot undo last executed operation!";
+        const string STRING_UNDO_FAILURE = "Cannot undo anymore!";
         const string STRING_REDO_SUCCESS = "Redid last operation.";
-        const string STRING_REDO_FAILURE = "Cannot redo last executed operation!";
+        const string STRING_REDO_FAILURE = "Cannot redo anymore!";
         const string STRING_POSTPONE_SUCCESS = "Postponed task \"{0}\" successfully.";
         const string STRING_POSTPONE_SUCCESS_MULTI = "Postponed all tasks successfully.";
         const string STRING_POSTPONE_INVALID_TASK = "Trying to postpone a task by a more specific time than it allows!";
@@ -233,9 +233,6 @@ namespace ToDo
                     break;
                 case Format.DATE_TIME:
                     sortTypeString = "date";
-                    break;
-                case Format.DONE_STATE:
-                    sortTypeString = "whether task is done or not";
                     break;
                 default:
                     sortTypeString = "the same as before";

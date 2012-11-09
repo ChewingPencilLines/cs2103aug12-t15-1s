@@ -145,9 +145,13 @@ namespace ToDo
                     Match match = CustomDictionary.isTimeRange.Match(wordLower);
                     Int32.TryParse(match.Groups["index"].Value, out timeRangeAmount);
                     string matchString = match.Groups["type"].Value;
+                    if (timeRangeAmount == 0 && matchString != null)
+                    {
+                        throw new InvalidTimeRangeException("Task duration type was specified without a valid amount (0 " + matchString + ").");
+                    }
                     if (!CustomDictionary.timeRangeType.TryGetValue(matchString, out timeRangeType))
                     {
-                        throw new Exception("Something wrong with IsTimeRange regex etc.");
+                        throw new Exception("Something is wrong with IsTimeRange regex etc.");
                     }
                         timeRangeToken = new TokenTimeRange(index, timeRangeAmount, timeRangeType);
                 }
@@ -366,42 +370,6 @@ namespace ToDo
             }
             return timeTokens;
         }
-
-        /*
-        /// <summary>
-        /// Retrieve the default hour values for general and specific time keywords.
-        /// </summary>
-        /// <param name="word">The time keyword</param>
-        /// <param name="hours">The hour value to be updated</param>
-        /// <returns>Returns true if the time keyword is specific; false if not</returns>
-        private bool GetDefaultTimeValues(string word, ref int hours)
-        {
-            switch (word.ToLower())
-            {
-                //@ivan -> jenna: unmagic number these pls
-                case "noon":
-                    hours = 12;
-                    return true;
-                case "midnight":
-                    hours = 0;
-                    return true;
-                case "morning":
-                    hours = 6;
-                    return false;
-                case "afternoon":
-                    hours = 12;
-                    return false;
-                case "evening":
-                    hours = 18;
-                    return false;
-                case "night":
-                    hours = 0;
-                    return false;
-                default:
-                    Debug.Assert(false, "Control fell to default case statement in GetDefaultTimeValues. Assumption is that only hard-coded words are allowed currently.");
-                    return false;
-            }
-        }*/
 
         private int ConvertTo24HoursFormat(string format, int hours)
         {
@@ -653,7 +621,7 @@ namespace ToDo
                 {
                     highestPriorityToken = token;
                 }
-                else if (!(tokensWhichRequireTimeRange.Count() == 0 || token.GetType() == typeof(TokenTimeRange)))
+                else if (tokensWhichRequireTimeRange.Count() > 0 && token.GetType() == typeof(TokenTimeRange))
                 {
                     highestPriorityToken = token;
                 }

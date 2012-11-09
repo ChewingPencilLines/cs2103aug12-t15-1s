@@ -96,6 +96,7 @@ namespace ToDo
             SetMembers(taskList, storageIO);
 
             Response response = null;
+
             for (int i = 0; i < executedTasks.Count; i++)
             {
                 Task taskToUndo = executedTasks.Dequeue();
@@ -103,6 +104,10 @@ namespace ToDo
                 if (!response.IsSuccessful())
                     return response;
             }
+
+            if (response == null)
+                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+
             return response;
         }
 
@@ -110,7 +115,8 @@ namespace ToDo
         {
             SetMembers(taskList, storageIO);
 
-            Response response = null;
+            Response response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+
             for (int i = 0; i < executedTasks.Count; i++)
             {
                 Task taskToRedo = executedTasks.Dequeue();
@@ -118,6 +124,10 @@ namespace ToDo
                 if (!response.IsSuccessful())
                     return response;
             }
+
+            if (response == null)
+                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+
             return response;
         }
     }

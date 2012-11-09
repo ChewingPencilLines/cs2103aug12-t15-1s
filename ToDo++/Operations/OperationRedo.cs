@@ -18,6 +18,9 @@ namespace ToDo
                 return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
             
             Response result = redoOp.Redo(taskList, storageIO);
+            if (result == null)
+                return result;
+
             if (result.IsSuccessful())
             {
                 undoStack.Push(redoOp);
