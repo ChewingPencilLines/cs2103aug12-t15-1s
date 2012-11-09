@@ -7,7 +7,8 @@ namespace ToDo
     public class OperationAdd : Operation
     {
         private Task newTask;
-        public OperationAdd(Task setTask)
+        public OperationAdd(Task setTask, SortType sortType)
+            : base(sortType)
         {
             newTask = setTask;
         }

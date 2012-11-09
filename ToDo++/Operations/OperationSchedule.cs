@@ -17,7 +17,15 @@ namespace ToDo
         Task scheduledTask;
         DateTimeSpecificity searchSpecificity = new DateTimeSpecificity();
         
-        public OperationSchedule(string taskName, DateTime startDateTime, DateTime? endDateTime, DateTimeSpecificity isSpecific, int timeRangeAmount, TimeRangeType timeRangeType)
+        public OperationSchedule(
+            string taskName,
+            DateTime startDateTime,
+            DateTime? endDateTime,
+            DateTimeSpecificity isSpecific,
+            int timeRangeAmount,
+            TimeRangeType timeRangeType,
+            SortType sortType)
+            : base(sortType)
         {
             this.taskName = taskName;
             this.startDateTime = startDateTime;

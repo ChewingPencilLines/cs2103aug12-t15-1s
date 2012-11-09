@@ -13,7 +13,14 @@ namespace ToDo
         private DateTimeSpecificity isSpecific;
         private SearchType searchType;
 
-        public OperationSearch(string searchString, DateTime? startTime, DateTime? endTime, DateTimeSpecificity isSpecific, SearchType searchType)
+        public OperationSearch(
+            string searchString,
+            DateTime? startTime,
+            DateTime? endTime,
+            DateTimeSpecificity isSpecific,
+            SearchType searchType,
+            SortType sortType)
+            : base(sortType)
         {
             this.searchString = searchString;
             this.startTime = startTime;

@@ -39,7 +39,8 @@ namespace ToDo
         /// <param name="isAll">If this boolean is true, the current displayed tasks will all be marked as done.</param>
         /// <returns></returns>
         public OperationMarkAsDone(string taskName, int[] indexRange, DateTime? startTime,
-            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType)
+            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType, SortType sortType)
+            : base(sortType)
         {
             if (indexRange == null) hasIndex = false;            
             else

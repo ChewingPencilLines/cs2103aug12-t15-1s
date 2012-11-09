@@ -6,7 +6,8 @@ namespace ToDo
 {
     class OperationRedo : Operation
     {
-        public OperationRedo()
+        public OperationRedo(SortType sortType)
+            : base(sortType)
         { }
 
         public override Response Execute(List<Task> taskList, Storage storageIO)

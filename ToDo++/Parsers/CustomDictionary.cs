@@ -404,51 +404,7 @@ namespace ToDo
         {
             return isTimeRange.IsMatch(theWord);
         }
-
-        /// <summary>
-        /// Checks if a word matches a time specific or general keyword.
-        /// </summary>
-        /// <param name="word">The word to be checked</param>
-        /// <returns>True if a positive match is found; false if otherwise</returns>
-        public static bool CheckIfIsValidTimeInWordFormat(string word)
-        {
-            foreach (string timeSpecificKeyword in timeSpecificKeywords)
-            {
-                if (word.ToLower() == timeSpecificKeyword)
-                    return true;
-            }
-            if (CheckIfIsTimeGeneralKeyword(word))
-                return true;
-            return false;
-        }
-
-        public static bool CheckIfIsTimeGeneralKeyword(string word)
-        {
-            switch (word.ToLower())
-            {
-                case "morning":
-                case "afternoon":
-                case "evening":
-                case "night":
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        public static bool CheckIfIsSortTypeKeyword(string word)
-        {
-            switch (word.ToLower())
-            {
-                case "name":
-                case "date":
-                case "donestate":
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
+        
         public static bool IsPartOfValidNumericalTimeRange(List<string> words, int i)
         {
             if (words[i + 1] == "-"

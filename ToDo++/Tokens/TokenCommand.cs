@@ -34,13 +34,22 @@ namespace ToDo
             {
                 if (Value == CommandType.DONE)
                 {
-                    attrb.searchDone = SearchType.DONE;
-                    Logger.Info("Updated searchDone to DONE.", "UpdateAttributes::TokenCommand");
+                    attrb.searchType = SearchType.DONE;
+                    Logger.Info("Updated SearchType to DONE.", "UpdateAttributes::TokenCommand");
                 }
                 else if (Value == CommandType.UNDONE)
                 {
-                    attrb.searchDone = SearchType.UNDONE;
-                    Logger.Info("Updated searchDone to UNDONE.", "UpdateAttributes::TokenCommand");
+                    attrb.searchType = SearchType.UNDONE;
+                    Logger.Info("Updated SearchType to UNDONE.", "UpdateAttributes::TokenCommand");
+                }
+                else if (attrb.commandType == CommandType.SORT)
+                {
+                    attrb.commandType = Value;
+                    Logger.Info("Resolved multiple commands to not use Sort as command (lower priority)", "UpdateAttributes::TokenCommand");
+                }
+                else if (Value == CommandType.SORT)
+                {
+                    Logger.Info("Resolved multiple commands to not use Sort as command (lower priority)", "UpdateAttributes::TokenCommand");
                 }
                 else
                 {

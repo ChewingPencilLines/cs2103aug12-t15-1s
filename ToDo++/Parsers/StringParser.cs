@@ -140,7 +140,7 @@ namespace ToDo
                     success = CustomDictionary.isNumericalRange.IsMatch(matchCheck + words[i + j]);
                     if (success)
                     {
-                        if (AdjacentWordsAreBothNumerical(words, i, j))
+                        if (AdjacentCharsAreNumerical(words, i, j))
                             break;
                         matchCheck += words[i + j];
                     }
@@ -152,7 +152,7 @@ namespace ToDo
             return output;
         }
 
-        private bool AdjacentWordsAreBothNumerical(List<string> words, int i, int j)
+        private bool AdjacentCharsAreNumerical(List<string> words, int i, int j)
         {            
             int temp;
             if (i + j - 1 >= 0)
