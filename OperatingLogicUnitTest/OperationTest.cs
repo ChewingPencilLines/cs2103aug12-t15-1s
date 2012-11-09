@@ -97,7 +97,7 @@ namespace OperatingLogicUnitTest
             Op.Execute(taskList, storagetest);
             OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE, sortType);
             result = Op1.Execute(taskList, storagetest);
-            Assert.AreEqual(result.FeedbackString, "Deleted all tasks successfully.");
+            Assert.AreEqual(result.FeedbackString, "Deleted all indicated tasks successfully.");
             return;
         }
 
