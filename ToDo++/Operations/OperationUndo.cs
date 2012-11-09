@@ -13,9 +13,11 @@ namespace ToDo
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            if (undoStack.Count == 0)
+
+            Operation undoOp = GetLastOperation();
+            if (undoOp == null)
                 return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
-            Operation undoOp = Operation.undoStack.Pop();
+
             Response result = undoOp.Undo(taskList, storageIO);
             if (result.IsSuccessful())
             {
@@ -24,7 +26,23 @@ namespace ToDo
             }
             else
                 result = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+
             return result;
+        }
+
+        private Operation GetLastOperation()
+        {            
+            if (undoStack.Count == 0)
+                return null;
+            try
+            {
+                Operation lastOperation = Operation.undoStack.Pop();
+                return lastOperation;
+            }
+            catch
+            {
+                return null;
+            }            
         }
     }
 }
