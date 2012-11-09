@@ -9,23 +9,26 @@ namespace ToDo
         private Settings settings;
 
         /// <summary>
-        /// Currently sets the Text Size of the OutputBox
+        /// Initializes child preferences controls with settings
         /// </summary>
         public void InitializeWithSettings(Settings settings)
         {
             this.settings = settings;
             startingOptionsControl.InitializeStartingOptions(settings);
             flexiCommandsControl.InitializeFlexiCommands(settings);
-            fontColorSettingsControl.InitializeFontColorControl(settings);
-            
-            LoadPreferencesTree();
+            fontColorSettingsControl.InitializeFontColorControl(settings); 
         }
 
+        /// <summary>
+        /// Intialize Components and Load UI Elements
+        /// </summary>
         public PreferencesPanel()
         {
             InitializeComponent();
+            LoadPreferencesTree();
         }
 
+        //Loads preference names
         private void LoadPreferencesTree()
         {
             preferencesTree.Nodes.Clear();
@@ -37,6 +40,7 @@ namespace ToDo
             preferencesTree.Nodes.Add(treeNode);
         }
 
+        //Event handler for selecting preference - loads relavent tab (see designer)
         private void preferencesTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
             int selectedNodeText = e.Node.Index;

@@ -44,6 +44,8 @@ namespace ToDo
             InitializeTaskListView();             //Load Settings into Task List View            
             InitializeTextInput();                //Sets Text Input in Focus
 
+            Logger.Info("All UI Elements loaded correctly...", "UI");
+
                         /* HEAD TO LOGIC CONTROL TO DELVE FURTHER */
         }
 
@@ -55,18 +57,28 @@ namespace ToDo
 
         #region IntializationFunction
 
+        /// <summary>
+        /// Set TextInput as the Active Control
+        /// </summary>
+        /// <returns></returns>
         private void InitializeTextInput()
         {
             this.ActiveControl = textInput;
             grayFadePictureBox.Hide();
         }
 
+        /// <summary>
+        /// Intialize Tiny Alert - Passing an instance of UI and set fade out timing
+        /// </summary>
         private void IntializeTinyAlert()
         {
             TinyAlertView.SetUI(this);
             TinyAlertView.SetTiming(5);
         }
 
+        /// <summary>
+        /// Intialize Task List View - Pass settings into it and load default view
+        /// </summary>
         private void InitializeTaskListView()
         {
             taskListViewControl.InitializeWithSettings(logic.MainSettings);
@@ -74,25 +86,34 @@ namespace ToDo
             logic.UpdateLastDisplayedTasksList(displayedList);
         }
 
+        /// <summary>
+        /// Initialize Top Menu - Pass an instance of UI into it
+        /// </summary>
         private void IntializeTopMenu()
         {
             topMenuControl.InitializeWithUI(this);
         }
 
+        /// <summary>
+        /// Initialize Preferences Panel - Pass an instance of settings into it
+        /// </summary>
         private void InitializePreferencesPanel()
         {
             preferencesPanel.InitializeWithSettings(logic.MainSettings);
         }
 
         /// <summary>
-        /// Prepare the Output Box. Pass an instance of settings manager into it so it can interact with it
+        /// Prepare the Output Box. Pass an instance of settings into it
         /// </summary>
         private void InitializeOutputBox()
         {
             outputBox.InitializeWithSettings(logic.MainSettings);
         }
 
-        //Pair Logic with UI
+        /// <summary>
+        /// Pair Logic with UI
+        /// </summary>
+        /// <param name="logic"></param>
         private void InitializeLogic(Logic logic)
         {
             this.logic = logic;
@@ -107,15 +128,16 @@ namespace ToDo
 
         #region Win32Functions
 
-        /// <summary>
-        /// Code for placing App in System Tray
-        /// </summary>
+        //Placing ToDo++ in System Tray
         #region SystemTray
 
         const int WM_NCHITTEST = 0x0084;
         const int HTCLIENT = 1;
         const int HTCAPTION = 2;
 
+        /// <summary>
+        /// Register HotKeys with ToDo++
+        /// </summary>
         private void InitializeSystemTray()
         {
             ghk = new Hotkeys.GlobalHotkey(Constants.ALT, Keys.Q, this);
@@ -123,54 +145,9 @@ namespace ToDo
             notifyIcon_taskBar.Visible = false;
         }
 
-        protected override void WndProc(ref Message m)
-        {
-            const int htBottomLeft = 16;
-            const int htBottomRight = 17;
-            switch (m.Msg)
-            {
-                case WM_NCHITTEST:
-                    /*
-                    if (m.Result == (IntPtr)HTCLIENT)
-                    {
-                        m.Result = (IntPtr)HTCAPTION;
-                    }*/
-                    int x = (int)(m.LParam.ToInt64() & 0xFFFF);
-                    int y = (int)((m.LParam.ToInt64() & 0xFFFF0000) >> 16);
-                    Point pt = PointToClient(new Point(x, y));
-                    Size clientSize = ClientSize;
-                    if (pt.X >= clientSize.Width - 16 && pt.Y >= clientSize.Height - 16 && clientSize.Height >= 16)
-                    {
-                        m.Result = (IntPtr)(IsMirrored ? htBottomLeft : htBottomRight);
-                        return;
-                    }
-                    break;
-
-                case Hotkeys.Constants.WM_HOTKEY_MSG_ID:
-                    MinimiseMaximiseTray();
-                    break;
-            }
-            base.WndProc(ref m);
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            //base.OnPaint(e);
-            //DrawGripper(e);
-        }
-
-        public void DrawGripper(PaintEventArgs e)
-        {
-            if (VisualStyleRenderer.IsElementDefined(
-                VisualStyleElement.Status.Gripper.Normal))
-            {
-                VisualStyleRenderer renderer = new VisualStyleRenderer(VisualStyleElement.Status.Gripper.Normal);
-                Rectangle rectangle1 = new Rectangle((Width) - 18, (Height) - 20, 20, 20);
-                renderer.DrawBackground(e.Graphics, rectangle1);
-            }
-        }
-
-        //Calling this Minimizes or Maximizes the application into system tray depending on state
+        /// <summary>
+        /// Calling this Minimizes or Maximizes the application into system tray depending on state
+        /// </summary>
         public void MinimiseMaximiseTray()
         {
             notifyIcon_taskBar.BalloonTipTitle = "ToDo++";
@@ -194,6 +171,44 @@ namespace ToDo
             }
         }
 
+        //Allow Borderless Form to be resized and Hotkeys to function
+        protected override void WndProc(ref Message m)
+        {
+            const int htBottomLeft = 16;
+            const int htBottomRight = 17;
+            switch (m.Msg)
+            {
+                case WM_NCHITTEST:
+                    int x = (int)(m.LParam.ToInt64() & 0xFFFF);
+                    int y = (int)((m.LParam.ToInt64() & 0xFFFF0000) >> 16);
+                    Point pt = PointToClient(new Point(x, y));
+                    Size clientSize = ClientSize;
+                    if (pt.X >= clientSize.Width - 16 && pt.Y >= clientSize.Height - 16 && clientSize.Height >= 16)
+                    {
+                        m.Result = (IntPtr)(IsMirrored ? htBottomLeft : htBottomRight);
+                        return;
+                    }
+                    break;
+
+                case Hotkeys.Constants.WM_HOTKEY_MSG_ID:
+                    MinimiseMaximiseTray();
+                    break;
+            }
+            base.WndProc(ref m);
+        }
+
+        //Draw Gripper on borderless form
+        public void DrawGripper(PaintEventArgs e)
+        {
+            if (VisualStyleRenderer.IsElementDefined(
+                VisualStyleElement.Status.Gripper.Normal))
+            {
+                VisualStyleRenderer renderer = new VisualStyleRenderer(VisualStyleElement.Status.Gripper.Normal);
+                Rectangle rectangle1 = new Rectangle((Width) - 18, (Height) - 20, 20, 20);
+                renderer.DrawBackground(e.Graphics, rectangle1);
+            }
+        }
+
         //Double click the tray icon and it pops back up
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -209,9 +224,7 @@ namespace ToDo
 
         #endregion
 
-        /// <summary>
-        /// Registers the App with the Registry to open on Startup
-        /// </summary>
+        //Registers the App with the Registry to open on Startup
         #region RegisterToOpenOnStartup
 
         private void RegisterInStartup(bool isChecked)
@@ -222,10 +235,12 @@ namespace ToDo
                 ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
                 if (isChecked)
                 {
+                    Logger.Info("Registered ToDo++ in Registry to open on startup..", "UI");
                     registryKey.SetValue("ApplicationName", Application.ExecutablePath);
                 }
                 else
                 {
+                    Logger.Info("Dregistered ToDo++ in Registry to open on startup..", "UI");
                     registryKey.DeleteValue("ApplicationName");
                 }
             }
@@ -233,9 +248,7 @@ namespace ToDo
 
         #endregion
 
-        /// <summary>
-        /// Allows resizing of borderless form
-        /// </summary>
+        //Allows resizing of borderless form
         #region Resizing
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
@@ -253,9 +266,7 @@ namespace ToDo
 
         #endregion
 
-        /// <summary>
-        /// Creates rounded edge
-        /// </summary>
+        //Creates rounded edge
         #region Rounded Edge
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
@@ -269,9 +280,7 @@ namespace ToDo
         );
         #endregion
 
-        /// <summary>
-        /// Creates Shadow
-        /// </summary>
+        //Creates Shadow
         #region Shadow
 
         private const int CS_DROPSHADOW = 0x20000;
@@ -287,23 +296,27 @@ namespace ToDo
 
         #endregion
 
-        /// <summary>
-        /// Form Fade In and Out Timers
-        /// </summary>
+        //Form Fade In and Out Timers
         #region FormFadeInOut
 
         double i = 1;
 
+        /// <summary>
+        /// Start ToDo++ FadeOut
+        /// </summary>
         public void StartFadeOut()
         {
             timerFadeIn.Enabled = false;
             timerFadeOut.Enabled = true;
         }
 
+        /// <summary>
+        /// Start ToDo++ FadeIn
+        /// </summary>
         public void StartFadeIn()
         {
             this.Show();
-            timerFadeIn.Enabled = true;//start the Fade In Effect
+            timerFadeIn.Enabled = true;
             timerFadeOut.Enabled = false;
         }
 
@@ -311,10 +324,9 @@ namespace ToDo
         {
             i += 0.05;
             if (i >= 1)
-            {//if form is full visible we execute the Fade Out Effect
+            {
                 this.Opacity = 1;
-                timerFadeIn.Enabled = false;//stop the Fade In Effect
-                //timerFadeOut.Enabled = true;//start the Fade Out Effect
+                timerFadeIn.Enabled = false;
                 return;
             }
             this.Opacity = i;
@@ -334,13 +346,9 @@ namespace ToDo
             this.Opacity = i;
         }
 
-
-
         #endregion
 
-        /// <summary>
-        /// Collapse Expand
-        /// </summary>
+        //Collapse Expand ToDo++
         #region CollapseExpand
 
         bool isCollapsed = false;
@@ -361,6 +369,9 @@ namespace ToDo
         */
         //         CONTROL COLLAPSE FLOW OF EVENTS        //
 
+        /// <summary>
+        /// Toggles - Expand or Collapse ToDo++
+        /// </summary>
         public void ToggleCollapsedState()
         {
             if (isCollapsed == false)
@@ -446,13 +457,13 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Prepare Settings Manager
+        // Load all Relevant Settings into ToDo++ on startup
         // ******************************************************************
 
         #region PrepareSettings
 
         /// <summary>
-        /// Creates an Instance of Settings Manager
+        /// Ensures ToDo++ is minimized on startup and load on startup is set
         /// </summary>
         private void InitializeSettings()
         {
@@ -488,16 +499,25 @@ namespace ToDo
 
         #region PanelSwitching
 
+        /// <summary>
+        /// Switches to Settings Panel
+        /// </summary>
         public void SwitchToSettingsPanel()
         {
             this.customPanelControl.SelectedIndex = 1;
         }
 
-        public void SwitchToToDoPanel()
+        /// <summary>
+        /// Switches to TaskListView Panel
+        /// </summary>
+        public void SwitchToTaskListViewPanel()
         {
             this.customPanelControl.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Toggle between TaskListView and Settings Panels
+        /// </summary>
         private void ToggleToDoPanel()
         {
             if (this.customPanelControl.SelectedIndex == 0)
@@ -550,7 +570,7 @@ namespace ToDo
             }
             if ((keyData == (Keys.Alt | Keys.Up)) || (keyData == (Keys.Alt | Keys.Down)))
             {
-                topMenuControl.CollapseExpandToDo();
+                ToggleCollapsedState();
                 return true;
             }
             if (keyData == Keys.Up)
@@ -706,12 +726,12 @@ namespace ToDo
 
             textInput.Clear();
 
-            SwitchToToDoPanel();
+            SwitchToTaskListViewPanel();
             logic.UpdateLastDisplayedTasksList(displayedList);
         }
 
         /// <summary>
-        /// When Enter Button Pressed
+        /// When Enter Button Pressed in inputBox
         /// </summary>
         private void textBox_input_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -720,7 +740,6 @@ namespace ToDo
                 e.Handled = true;
                 textInput.AddToList(textInput.Text);
                 ProcessText();
-                //TaskDisplayTestDriver();
             }
         }
 

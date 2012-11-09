@@ -14,13 +14,29 @@ namespace ToDo
     {
 
         private UI ui;
-        bool collaspedState = false;
+        bool isCollapsed = false;
         bool isShowingSettings = false;
+
+        public TopMenuControl()
+        {
+            InitializeComponent();
+            SetButtonControlsToTransparent();
+        }
         
         /// <summary>
-        /// Currently sets the Text Size of the OutputBox
+        /// Intialize with UI
         /// </summary>
+        /// <param name="ui"></param>
+        /// <returns></returns>
         public void InitializeWithUI(UI ui)
+        {
+            this.ui = ui;
+        }
+
+        /// <summary>
+        /// Disable Button Color Change when mouse over
+        /// </summary>
+        private void SetButtonControlsToTransparent()
         {
             questionButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             questionButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
@@ -32,78 +48,73 @@ namespace ToDo
             minButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             closeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             closeButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.ui = ui;
         }
 
-
-        public TopMenuControl()
-        {
-            InitializeComponent();
-        }
-       
-        private void updownButton_Click(object sender, EventArgs e)
-        {
-            CollapseExpandFunction();
-        }
-
+        /// <summary>
+        /// Changes the image of the Collapse Button respectively
+        /// </summary>
+        /// <param name="isCollasped"></param>
         public void SetUpDownButton(bool isCollasped)
         {
-            if(isCollasped)
+            if (isCollasped)
                 updownButton.Image = Properties.Resources.downButton;
             else
                 updownButton.Image = Properties.Resources.upButton;
         }
 
-        private void minButton_Click(object sender, EventArgs e)
-        {
-            ui.MinimiseMaximiseTray();
-        }
+        #region ButtonEventHandlers
 
-        private void closeButton_Click(object sender, EventArgs e)
-        {
-            ui.Exit();
-        }
-
+        //Go to Settings Event Handler
         private void settingsButton_Click(object sender, EventArgs e)
         {
             if (isShowingSettings == false)
             {
                 ui.SwitchToSettingsPanel();
-                if (collaspedState == true)
+                if (isCollapsed == true)
                     ui.ToggleCollapsedState();
                 isShowingSettings = true;
-                collaspedState = false;
+                isCollapsed = false;
             }
             else
             {
-                ui.SwitchToToDoPanel();
+                ui.SwitchToTaskListViewPanel();
                 isShowingSettings = false;
             }
         }
 
-        public void CollapseExpandToDo()
+        //CollapseExpand Event Handler
+        private void updownButton_Click(object sender, EventArgs e)
         {
-            CollapseExpandFunction();
-        }
-
-        private void CollapseExpandFunction()
-        {
-            if (collaspedState == false)
+            if (isCollapsed == false)
             {
                 ui.ToggleCollapsedState();
-                collaspedState = true;
+                isCollapsed = true;
             }
             else
             {
                 ui.ToggleCollapsedState();
-                collaspedState = false;
+                isCollapsed = false;
             }
+        }
+
+        //Minimize to Tray Event Handler
+        private void minButton_Click(object sender, EventArgs e)
+        {
+            ui.MinimiseMaximiseTray();
+        }
+
+        //Exit Event Handler
+        private void closeButton_Click(object sender, EventArgs e)
+        {
+            ui.Exit();
         }
 
         private void questionButton_MouseDown(object sender, MouseEventArgs e)
         {
 
         }
+
+        #endregion
 
 
     }

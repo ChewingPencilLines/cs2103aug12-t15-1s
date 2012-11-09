@@ -17,12 +17,25 @@ namespace ToDo
         TimeRangeType selectedTimeRangeType;
         List<string> selectedFlexiCommands;
 
+        // ******************************************************************
+        // Constructor - Intialize with Settings and load all UI Elements
+        // ******************************************************************
+
+        #region Constructor
+
+        /// <summary>
+        /// Intialize FlexiCommands with an instance of settings
+        /// </summary>
+        /// <param name="settings"></param>
         public void InitializeFlexiCommands(Settings settings)
         {
             this.settings = settings;
             this.selectedFlexiCommands=new List<string>();
         }
 
+        /// <summary>
+        /// Load all TreeView Lists
+        /// </summary>
         public FlexiCommandsControl()
         {
             InitializeComponent();
@@ -33,6 +46,12 @@ namespace ToDo
             this.rangeController.Enabled = false;
             schedPostponePanel.Hide();
         }
+
+        #endregion
+
+        // ******************************************************************
+        // Parses through CustomDictionary and convert strings to enums
+        // ******************************************************************
 
         #region ConversionStringToEnum
 
@@ -59,6 +78,10 @@ namespace ToDo
         }
 
         #endregion
+
+        // ******************************************************************
+        // Parses through CustomDictionary and loads all Keywords into UI
+        // ******************************************************************
 
         #region LoadTreeLists
 
@@ -115,6 +138,10 @@ namespace ToDo
         }
 
         #endregion
+
+        // ******************************************************************
+        // Event Handlers
+        // ******************************************************************
 
         #region EventHandlersForButtons
 
@@ -350,6 +377,10 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        // Formatting Functions for Rich Text Boxes
+        // ******************************************************************
+
         #region FormattingControl
 
         /// <summary>
@@ -370,6 +401,15 @@ namespace ToDo
 
         #endregion
 
+        // ******************************************************************
+        // Function/API calls to Update UI Elements
+        // ******************************************************************
+
+        #region UpdateUIElemets
+
+        /// <summary>
+        /// Shows the User Input Box to enter new flexiCommands
+        /// </summary>
         private void ShowUserInputBox()
         {
             UserInputBox.Show("Add Command", "Enter your new command here");
@@ -379,6 +419,9 @@ namespace ToDo
             UpdateFlexiCommandList();
         }
 
+        /// <summary>
+        /// Updates the flexiCommand list with the updated flexiCommands
+        /// </summary>
         private void UpdateFlexiCommandList()
         {
             listedFlexiCommands.Items.Clear();
@@ -411,6 +454,9 @@ namespace ToDo
                 listedFlexiCommands.Items.Add(flexiCommand);
         }
 
+        /// <summary>
+        /// Updates the time ranges set by the user
+        /// </summary>
         private void UpdateTimeRangeUI()
         {
             if (this.selectedTimeRangeKeywordType == TimeRangeKeywordsType.NIGHT)
@@ -427,6 +473,10 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Adds the user defined flexiCommand to settings to be saved
+        /// </summary>
+        /// <param name="flexiCommand"></param>
         private void AddFlexiCommandToSettings(string flexiCommand)
         {
             try
@@ -447,6 +497,10 @@ namespace ToDo
 
         }
 
+        /// <summary>
+        /// Removes the user selected flexiCommand and saves
+        /// </summary>
+        /// <param name="flexiCommand"></param>
         private void RemoveFlexiCommandFromSettings(string flexiCommand)
         {
             try
@@ -466,6 +520,9 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Updates the description of the selected flexiCommand
+        /// </summary>
         private void UpdateDescription()
         {
             string title="";
@@ -632,6 +689,9 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Updates the description of time ranges
+        /// </summary>
         private void UpdateTimeRangeDescription()
         {
             descriptionLabel.Clear();
@@ -658,6 +718,9 @@ namespace ToDo
             SetFormat(Color.Gray, "\n", 9);
         }
 
+        /// <summary>
+        /// Updates description of schedule and postpone default time ranges
+        /// </summary>
         private void UpdateSchedulePostponeLabel()
         {
             if (selectedCommand == CommandType.POSTPONE)
@@ -680,6 +743,8 @@ namespace ToDo
 
             }
         }
+
+        #endregion
 
 
 

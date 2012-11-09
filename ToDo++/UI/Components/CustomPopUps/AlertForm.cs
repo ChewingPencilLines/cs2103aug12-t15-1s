@@ -32,9 +32,12 @@ namespace ToDo
         }
 
         // ******************************************************************
-        // Win32 Code to make this form draggable
+        // Win32 Functions
         // ******************************************************************
 
+        #region Win32Functions
+
+        //Make Form Draggable
         #region MakeDraggable
 
         const int WM_NCHITTEST = 0x0084;
@@ -51,10 +54,7 @@ namespace ToDo
 
         #endregion
 
-        /// <summary>
-        /// Creates rounded edge
-        /// </summary>
-        /// 
+        //Creates rounded edge
         #region Rounded Edge
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
@@ -68,9 +68,7 @@ namespace ToDo
         );
         #endregion
 
-        /// <summary>
-        /// Creates Shadow (DISABLED)
-        /// </summary>
+        //Creates Shadow (DISABLED)
         #region Shadow
 
 
@@ -85,6 +83,8 @@ namespace ToDo
             }
         }
 
+
+        #endregion
 
         #endregion
 
