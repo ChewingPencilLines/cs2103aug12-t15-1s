@@ -243,14 +243,13 @@ namespace ToDo
         {
             if (taskToCheck == null)
                 return true;
-            if (taskToCheck.TaskName != null || taskToCheck.TaskName != String.Empty)
+            if (taskToCheck.TaskName == null || taskToCheck.TaskName == String.Empty)
                 return true;
             return false;
         }
 
         /// <summary>
-        /// This method adds the specified task to the history containing
-        /// all tasks this operation has manipulated.
+        /// This method adds the specified task to the history executed tasks for this operation.
         /// </summary>
         /// <param name="task">The task to add to history.</param>
         /// <returns></returns>
