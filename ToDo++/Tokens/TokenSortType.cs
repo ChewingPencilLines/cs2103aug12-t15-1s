@@ -19,6 +19,7 @@ namespace ToDo
         internal override void UpdateAttributes(OperationGenerator attrb)
         {
             attrb.sortType = sortType;
+            Logger.Info("Updated sortType.", "UpdateAttributes::TokenSortType");
         }
 
     }

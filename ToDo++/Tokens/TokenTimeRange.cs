@@ -41,19 +41,31 @@ namespace ToDo
 
         internal override void UpdateAttributes(OperationGenerator attrb)
         {
-            if (index != 0 && attrb.timeRangeIndex == 0)
+            bool multipleTaskDurations = false;
+            if (index != 0)
             {
-                attrb.timeRangeIndex = index;
+                if (attrb.timeRangeIndex == 0)
+                {
+                    attrb.timeRangeIndex = index;
+                    Logger.Info("Updated timeRangeIndex.", "UpdateAttributes::TokenTimeRange");
+                }
+                else
+                {
+                    multipleTaskDurations = true;
+                    Logger.Warning("Attempted to update timeRangeIndex again", "UpdateAttributes::TokenTimeRange");
+                }
             }
             if (timeRangeType != TimeRangeType.DEFAULT)
             {
                 if (attrb.timeRangeType == TimeRangeType.DEFAULT)
                 {
                     attrb.timeRangeType = timeRangeType;
+                    Logger.Info("Updated timeRangeType.", "UpdateAttributes::TokenTimeRange");
                 }
                 else
                 {
-                    AlertBox.Show("Multiple task durations specified. Only the first is accepted.");
+                    multipleTaskDurations = true;
+                    Logger.Warning("Attempted to update timeRangeType again", "UpdateAttributes::TokenTimeRange");
                 }
             }
             if (timeRange != TimeRangeKeywordsType.NONE)
@@ -61,12 +73,18 @@ namespace ToDo
                 if (attrb.timeRangeOne == TimeRangeKeywordsType.NONE)
                 {
                     attrb.timeRangeOne = timeRange;
+                    Logger.Info("Updated timeRangeOne.", "UpdateAttributes::TokenTimeRange");
                 }
                 else if (attrb.timeRangeTwo == TimeRangeKeywordsType.NONE
                     || attrb.timeRangeTwo <= timeRange)
                 {
                     attrb.timeRangeTwo = timeRange;
+                    Logger.Info("Updated timeRangeTwo.", "UpdateAttributes::TokenTimeRange");
                 }
+            }
+            if (multipleTaskDurations)
+            {
+                AlertBox.Show("Multiple task durations specified. Only the first is accepted.");
             }
         }
     }
