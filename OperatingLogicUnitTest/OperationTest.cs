@@ -15,14 +15,15 @@ namespace OperatingLogicUnitTest
         Storage storagetest;
         List<Task> taskList;
         Response result;
+        SortType sortType = SortType.DEFAULT;
 
         [TestMethod]
         public void OperationAddTest()
         {
             storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
             taskList = storagetest.LoadTasksFromFile();
-           
-            OperationAdd Op = new OperationAdd(task);
+
+            OperationAdd Op = new OperationAdd(task, sortType);
             result = Op.Execute(taskList, storagetest);
             Assert.AreEqual(result.FeedbackString, "Added new task \"test\" successfully.");
             return;
@@ -34,7 +35,7 @@ namespace OperatingLogicUnitTest
             storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
             taskList = storagetest.LoadTasksFromFile();
 
-            OperationAdd Op = new OperationAdd(null);
+            OperationAdd Op = new OperationAdd(null, sortType);
             result = Op.Execute(taskList, storagetest);
             Assert.AreEqual(result.FeedbackString, "Failed to add task!");
             return;
@@ -46,7 +47,7 @@ namespace OperatingLogicUnitTest
             storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
             taskList = storagetest.LoadTasksFromFile();
 
-            OperationAdd Op = new OperationAdd(task);
+            OperationAdd Op = new OperationAdd(task, sortType);
             Op.Execute(taskList, storagetest); 
             result = Op.Undo(taskList, storagetest);
             Assert.AreEqual(result.FeedbackString, "Undid last operation.");
@@ -60,9 +61,9 @@ namespace OperatingLogicUnitTest
             taskList = storagetest.LoadTasksFromFile();
 
             int[] index= new int[2]{1,1};
-            OperationAdd Op = new OperationAdd(task);
+            OperationAdd Op = new OperationAdd(task, sortType);
             Op.Execute(taskList, storagetest);
-            OperationDelete Op1 = new OperationDelete("", index, null,null, null,false, SearchType.NONE);
+            OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE, sortType);
             result = Op1.Execute(taskList, storagetest);
             Assert.AreEqual(result.FeedbackString, "Deleted task \"test\" successfully.");
             return;
@@ -75,9 +76,9 @@ namespace OperatingLogicUnitTest
             taskList = storagetest.LoadTasksFromFile();
 
             int[] index = new int[2] { 1, 4 };
-            OperationAdd Op = new OperationAdd(task);
+            OperationAdd Op = new OperationAdd(task, sortType);
             Op.Execute(taskList, storagetest);
-            OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE);
+            OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE, sortType);
             result = Op1.Execute(taskList, storagetest);
             Assert.AreEqual(result.FeedbackString, "Invalid task index!");
             return;
@@ -90,13 +91,13 @@ namespace OperatingLogicUnitTest
             taskList = storagetest.LoadTasksFromFile();
 
             int[] index = new int[2] { 1, 2 };
-            OperationAdd Op = new OperationAdd(task);
+            OperationAdd Op = new OperationAdd(task, sortType);
             Op.Execute(taskList, storagetest);
-            Op = new OperationAdd(task1);
+            Op = new OperationAdd(task1, sortType);
             Op.Execute(taskList, storagetest);
-            OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE);
+            OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE, sortType);
             result = Op1.Execute(taskList, storagetest);
-            Assert.AreEqual(result.FeedbackString, "Deleted all tasks successfully.");
+            Assert.AreEqual(result.FeedbackString, "Deleted all indicated tasks successfully.");
             return;
         }
 

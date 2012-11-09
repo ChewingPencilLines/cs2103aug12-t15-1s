@@ -44,7 +44,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
             result = logic.ProcessCommand("add test feb 29th ");
-            Assert.AreEqual("Invalid command input.", result.FeedbackString);
+            Assert.AreEqual("Invalid command input!", result.FeedbackString);
             result = logic.ProcessCommand("add test feb 29th 2016");
             Assert.AreEqual("Added new task \"test\" successfully.", result.FeedbackString);
             return;
@@ -78,7 +78,7 @@ namespace LogicUnitTest
             Response result;
             logic.ProcessCommand("add bb");
             result = logic.ProcessCommand("delete jan");
-            Assert.AreEqual("Showing tasks within 2013/1/1 0:00 to 2013/1/1 0:00.", result.FeedbackString); 
+            Assert.AreEqual("Showing tasks within 2013/1/1 12:00 AM to 2013/1/1 12:00 AM.", result.FeedbackString); 
             return;
         }
 
@@ -90,7 +90,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("add aa");
             logic.ProcessCommand("add aaa");
             result = logic.ProcessCommand("delete all");
-            Assert.AreEqual("Deleted all tasks successfully.", result.FeedbackString);
+            Assert.AreEqual("Deleted all indicated tasks successfully.", result.FeedbackString);
             return;
         }
 
@@ -101,7 +101,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("add xx fri 5pm");
             logic.ProcessCommand("add yy fri 9pm");
             result = logic.ProcessCommand("delete friday all");
-            Assert.AreEqual("Deleted all tasks successfully.", result.FeedbackString);
+            Assert.AreEqual("Deleted all indicated tasks successfully.", result.FeedbackString);
             logic.ProcessCommand("delete all");
             return;
         } 
@@ -169,7 +169,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("add aaa 5pm");
             logic.ProcessCommand("add bbb 7pm");
             result = logic.ProcessCommand("search today");
-            Assert.AreEqual("Displaying all tasks within 2012/11/9 0:00 to 2012/11/9 0:00.", result.FeedbackString);
+            Assert.AreEqual("Displaying all tasks within 2012/11/9 12:00 AM to 2012/11/9 12:00 AM.", result.FeedbackString);
            // Assert.AreEqual("aaa", result.TasksToBeDisplayed[0].TaskName);
             //Assert.AreEqual("bbb", result.TasksToBeDisplayed[1].TaskName);
             return;

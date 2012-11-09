@@ -31,7 +31,8 @@ namespace ToDo
 
         #region Constructors
         public OperationModify(string taskName, int[] indexRange, DateTime? startTime,
-            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType)
+            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType, SortType sortType)
+            : base(sortType)
         {
             if (indexRange == null) hasIndex = false;
             else
@@ -71,7 +72,7 @@ namespace ToDo
                 string[] criteria;
                 SetArgumentsForFeedbackString(out criteria, taskName, startTime, endTime, searchType);
 
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, criteria);
+                return new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, criteria);
             }
             else
             {                
@@ -80,7 +81,7 @@ namespace ToDo
 
                 if (startIndex != endIndex || isAll == true)
                 {
-                    return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
+                    return new Response(Result.INVALID_TASK, sortType, this.GetType());
                 }
 
                 oldTask = currentListedTasks[startIndex];
@@ -112,7 +113,7 @@ namespace ToDo
             response = DeleteTask(taskToModify);
             if (response.IsSuccessful()) response = AddTask(newTask);
             if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationModify), currentListedTasks);
+                return new Response(Result.SUCCESS, sortType, typeof(OperationModify), currentListedTasks);
             else
                 return response;
         }

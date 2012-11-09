@@ -31,10 +31,11 @@ namespace ToDo
         {
             List<Token> tokens = new List<Token>();
             // must be done first to catch index ranges.
-            tokens.AddRange(GenerateCommandTokens(input));
+            List<TokenCommand> commandTokens = GenerateCommandTokens(input);
+            tokens.AddRange(commandTokens);
             // must be done after generating command tokens
-            tokens.AddRange(GenerateIndexRangeTokens(input, tokens));
-            tokens.AddRange(GenerateSortTypeTokens(input, tokens));
+            tokens.AddRange(GenerateIndexRangeTokens(input, commandTokens));
+            tokens.AddRange(GenerateSortTypeTokens(input, commandTokens));
             tokens.AddRange(GenerateTimeRangeTokens(input));
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
@@ -46,32 +47,7 @@ namespace ToDo
             DeconflictTokens(ref tokens);
             tokens.Sort(CompareByPosition);
             return tokens;
-        }
-
-        private List<Token> GenerateSortTypeTokens(List<string> input, List<Token> tokens)
-        {
-            SortType sortType;
-            int index = 0;
-
-            List<Token> sortTokens = new List<Token>();
-            foreach (string word in input)
-            {
-                if (CustomDictionary.sortTypeKeywords.TryGetValue(word.ToLower(), out sortType) && index != 0)
-                {
-                    if(tokens[index-1] is TokenCommand)
-                    {
-                        if (((TokenCommand)tokens[index-1]).Value == CommandType.SORT)
-                        {
-                            TokenSortType sortTypeToken = new TokenSortType(index, sortType);
-                            sortTokens.Add(sortTypeToken);
-                        }
-                    }
-                }
-                index++;
-            }
-            return sortTokens;
-
-        }
+        } 
         
         /// <summary>
         /// This method searches an input list of strings against the set list of command keywords and returns
@@ -79,10 +55,10 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of command tokens</returns>
-        private List<Token> GenerateCommandTokens(List<string> inputWords)
+        private List<TokenCommand> GenerateCommandTokens(List<string> inputWords)
         {
             CommandType commandType;
-            List<Token> tokens = new List<Token>();
+            List<TokenCommand> tokens = new List<TokenCommand>();
             int index = 0;
             foreach (string word in inputWords)
             {
@@ -96,7 +72,7 @@ namespace ToDo
             return tokens;
         }
 
-        private List<Token> GenerateIndexRangeTokens(List<string> inputWords, List<Token> parsedTokens)
+        private List<Token> GenerateIndexRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
         {
             List<Token> indexRangeTokens = new List<Token>();
             int index = 0;
@@ -107,7 +83,7 @@ namespace ToDo
                 TokenIndexRange indexRangeToken = null;
                 if (TryGetNumericalRange(word, out userDefinedIndex))
                 {
-                    var prevToken = from token in parsedTokens
+                    var prevToken = from token in commandTokens
                                     where token.Position == index - 1 &&
                                           token.RequiresIndexRange()
                                     select token;
@@ -126,6 +102,32 @@ namespace ToDo
                 index++;
             }
             return indexRangeTokens;
+        }
+
+        private List<Token> GenerateSortTypeTokens(List<string> input, List<TokenCommand> commandTokens)
+        {
+            SortType sortType;
+            int index = 0;
+
+            List<Token> sortTokens = new List<Token>();
+            foreach (string word in input)
+            {
+                if (CustomDictionary.sortTypeKeywords.TryGetValue(word.ToLower(), out sortType) && index != 0)
+                {
+                    var validTokens = from token in commandTokens
+                                      where (token.Position == index - 1 &&
+                                               token.Value == CommandType.SORT)
+                                      select token;
+                    if (validTokens.Count() > 0)
+                    {
+                        TokenSortType sortTypeToken = new TokenSortType(index, sortType);
+                        sortTokens.Add(sortTypeToken);
+                    }
+                }
+                index++;
+            }
+            return sortTokens;
+
         }
 
         private List<Token> GenerateTimeRangeTokens(List<string> inputWords)

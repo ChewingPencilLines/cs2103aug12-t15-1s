@@ -6,7 +6,8 @@ namespace ToDo
 {
     class OperationRedo : Operation
     {
-        public OperationRedo()
+        public OperationRedo(SortType sortType)
+            : base(sortType)
         { }
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
@@ -15,7 +16,7 @@ namespace ToDo
 
             Operation redoOp = GetLastRevertedOperation();
             if (redoOp == null)
-                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                return new Response(Result.FAILURE, sortType, this.GetType());
             
             Response result = redoOp.Redo(taskList, storageIO);
             if (result == null)
@@ -24,10 +25,10 @@ namespace ToDo
             if (result.IsSuccessful())
             {
                 undoStack.Push(redoOp);
-                result = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+                result = new Response(Result.SUCCESS, sortType, typeof(OperationRedo), currentListedTasks);
             }
             else
-                result = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+                result = new Response(Result.FAILURE, sortType, typeof(OperationRedo), currentListedTasks);
 
             return result;
         }

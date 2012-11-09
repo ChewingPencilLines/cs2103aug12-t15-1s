@@ -8,7 +8,13 @@ namespace ToDo
     class OperationDisplayDefault : Operation
     {
         const int MAX_TASKS = 10;
+
         public OperationDisplayDefault()
+            : base(SortType.DEFAULT)
+        { }
+
+        public OperationDisplayDefault(SortType sortType)
+            : base(sortType)
         { }
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
@@ -31,7 +37,7 @@ namespace ToDo
 
             currentListedTasks = new List<Task>(mostRecentTasks);
 
-            return new Response(Result.SUCCESS, Format.DATE_TIME, this.GetType(), currentListedTasks);
+            return new Response(Result.SUCCESS, SortType.DATE_TIME, this.GetType(), currentListedTasks);
         }
     }
 }

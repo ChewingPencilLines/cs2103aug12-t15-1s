@@ -17,7 +17,15 @@ namespace ToDo
         Task scheduledTask;
         DateTimeSpecificity searchSpecificity = new DateTimeSpecificity();
         
-        public OperationSchedule(string taskName, DateTime startDateTime, DateTime? endDateTime, DateTimeSpecificity isSpecific, int timeRangeAmount, TimeRangeType timeRangeType)
+        public OperationSchedule(
+            string taskName,
+            DateTime startDateTime,
+            DateTime? endDateTime,
+            DateTimeSpecificity isSpecific,
+            int timeRangeAmount,
+            TimeRangeType timeRangeType,
+            SortType sortType)
+            : base(sortType)
         {
             this.taskName = taskName;
             this.startDateTime = startDateTime;
@@ -34,7 +42,7 @@ namespace ToDo
             RetrieveParameters();
             if (!IsTaskDurationWithinRange() || taskDurationAmount == 0)
             {
-                response = new Response(Result.INVALID_TASK, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
+                response = new Response(Result.INVALID_TASK, sortType, typeof(OperationSchedule), currentListedTasks);
             }
             else
             {
@@ -48,9 +56,9 @@ namespace ToDo
             SetMembers(taskList, storageIO);
             Response response = DeleteTask(scheduledTask);
             if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+                return new Response(Result.SUCCESS, sortType, typeof(OperationUndo), currentListedTasks);
             else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+                return new Response(Result.FAILURE, sortType, typeof(OperationUndo), currentListedTasks);
         }
 
         public override Response Redo(List<Task> taskList, Storage storageIO)
@@ -58,9 +66,9 @@ namespace ToDo
             SetMembers(taskList, storageIO);
             Response response = AddTask(scheduledTask);
             if (response.IsSuccessful())
-                return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+                return new Response(Result.SUCCESS, sortType, typeof(OperationRedo), currentListedTasks);
             else
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+                return new Response(Result.FAILURE, sortType, typeof(OperationRedo), currentListedTasks);
         }
 
         // ******************************************************************
@@ -184,7 +192,7 @@ namespace ToDo
         /// <returns>The appropriate response object, depending on whether a free slot could be found</returns>
         private Response TryScheduleTask()
         {
-            Response response = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
+            Response response = new Response(Result.FAILURE, sortType, typeof(OperationSchedule), currentListedTasks);
             DateTime tryStartTime = startDateTime;
             DateTime tryEndTime = new DateTime();
             int numberOfIterations = 0;

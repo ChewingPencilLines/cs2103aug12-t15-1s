@@ -137,11 +137,11 @@ namespace ToDo
                 }
                 while (i + j < words.Count)  // Don't check last word.
                 {
-                    if (AdjacentWordsAreBothNumerical(words, i, j)) 
-                        break;
                     success = CustomDictionary.isNumericalRange.IsMatch(matchCheck + words[i + j]);
                     if (success)
                     {
+                        if (AdjacentCharsAreNumerical(words, i, j))
+                            break;
                         matchCheck += words[i + j];
                     }
                     else break;
@@ -152,12 +152,25 @@ namespace ToDo
             return output;
         }
 
-        private bool AdjacentWordsAreBothNumerical(List<string> words, int i, int j)
+        private bool AdjacentCharsAreNumerical(List<string> words, int i, int j)
         {            
             int temp;
             if (i + j - 1 >= 0)
-                if (Int32.TryParse(words[i + j], out temp) && Int32.TryParse(words[i + j - 1], out temp))
-                    return true;
+            {
+                try
+                {
+                    string firstWord = words[i + j - 1];
+                    string secondWord = words[i + j];
+                    string firstEndChar = firstWord.Substring(firstWord.Length - 1, 1);
+                    string secondEndChar = secondWord.Substring(secondWord.Length - 1, 1);
+                    if (Int32.TryParse(firstEndChar, out temp) && Int32.TryParse(secondEndChar, out temp))
+                        return true;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return false;
+                }
+            }
             return false;
         }
 

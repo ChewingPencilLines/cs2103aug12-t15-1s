@@ -39,7 +39,8 @@ namespace ToDo
         /// <param name="isAll">If this boolean is true, the current displayed tasks will all be marked as done.</param>
         /// <returns></returns>
         public OperationMarkAsDone(string taskName, int[] indexRange, DateTime? startTime,
-            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType)
+            DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType, SortType sortType)
+            : base(sortType)
         {
             if (indexRange == null) hasIndex = false;            
             else
@@ -85,7 +86,7 @@ namespace ToDo
                 response = ExecuteByIndex(startIndex, endIndex, action, args);
 
             else
-                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                response = new Response(Result.FAILURE, sortType, this.GetType());
 
             if (response.IsSuccessful())
                 TrackOperation();
@@ -108,7 +109,7 @@ namespace ToDo
             }
             
             if (response == null ) 
-                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                response = new Response(Result.FAILURE, sortType, this.GetType());
 
             return response;
         }
@@ -128,7 +129,7 @@ namespace ToDo
             }
 
             if (response == null)
-                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                response = new Response(Result.FAILURE, sortType, this.GetType());
 
             return response;
         }

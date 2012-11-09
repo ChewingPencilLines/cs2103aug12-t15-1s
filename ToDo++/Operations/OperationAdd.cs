@@ -7,7 +7,8 @@ namespace ToDo
     public class OperationAdd : Operation
     {
         private Task newTask;
-        public OperationAdd(Task setTask)
+        public OperationAdd(Task setTask, SortType sortType)
+            : base(sortType)
         {
             newTask = setTask;
         }
@@ -18,7 +19,7 @@ namespace ToDo
             Response response;
             if (newTask == null)
             {
-                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                return new Response(Result.FAILURE, sortType, this.GetType());
             }
             response = AddTask(newTask);
             if (response.IsSuccessful())

@@ -54,17 +54,13 @@ namespace ToDo
 
             switch (response.FormatType)
             {
-                case Format.DEFAULT:
-                    break;
-                case Format.NAME:
+                case SortType.NAME:
                     displayedTasks.Sort(Task.CompareByName);
                     SetGroupingByName();
                     break;
-                case Format.DATE_TIME:
+                case SortType.DATE_TIME:
                     displayedTasks.Sort(Task.CompareByDateTime);
                     SetGroupingByDateTime();
-                    break;
-                case Format.DONE_STATE:
                     break;
                 default:
                     Trace.Fail("Some case in UpdateDisplay in TaskListViewControl was not accounted for..!");

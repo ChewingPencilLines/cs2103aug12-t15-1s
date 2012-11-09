@@ -13,7 +13,14 @@ namespace ToDo
         private DateTimeSpecificity isSpecific;
         private SearchType searchType;
 
-        public OperationSearch(string searchString, DateTime? startTime, DateTime? endTime, DateTimeSpecificity isSpecific, SearchType searchType)
+        public OperationSearch(
+            string searchString,
+            DateTime? startTime,
+            DateTime? endTime,
+            DateTimeSpecificity isSpecific,
+            SearchType searchType,
+            SortType sortType)
+            : base(sortType)
         {
             this.searchString = searchString;
             this.startTime = startTime;
@@ -31,7 +38,7 @@ namespace ToDo
             string[] criteria;
             SetArgumentsForFeedbackString(out criteria, searchString, startTime, endTime, searchType);
 
-            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks, criteria);
+            return new Response(Result.SUCCESS, sortType, this.GetType(), currentListedTasks, criteria);
         }
 
     }   
