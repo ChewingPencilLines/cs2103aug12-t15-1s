@@ -12,8 +12,8 @@ namespace ToDo
         DateTime startDateTime;
         DateTime? endDateTime;
         DateTimeSpecificity isSpecific;
-        int timeRangeAmount;
-        TimeRangeType timeRangeType;
+        int taskDurationAmount;
+        TimeRangeType taskDurationType;
         Task scheduledTask;
         DateTimeSpecificity searchSpecificity = new DateTimeSpecificity();
         
@@ -23,8 +23,8 @@ namespace ToDo
             this.startDateTime = startDateTime;
             this.endDateTime = endDateTime;
             this.isSpecific = isSpecific;
-            this.timeRangeAmount = timeRangeAmount;
-            this.timeRangeType = timeRangeType;
+            this.taskDurationAmount = timeRangeAmount;
+            this.taskDurationType = timeRangeType;
         }
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
@@ -32,7 +32,7 @@ namespace ToDo
             Response response;
             SetMembers(taskList, storageIO);
             RetrieveParameters();
-            if (!IsTaskDurationWithinRange() || timeRangeAmount == 0)
+            if (!IsTaskDurationWithinRange() || taskDurationAmount == 0)
             {
                 response = new Response(Result.INVALID_TASK, Format.DEFAULT, typeof(OperationSchedule), currentListedTasks);
             }
@@ -80,10 +80,10 @@ namespace ToDo
         private void SetTaskDuration()
         {
             // if there is no task duration specified i.e. 3 days etc., get default 
-            if (timeRangeAmount == 0 && timeRangeType == TimeRangeType.DEFAULT)
+            if (taskDurationType == TimeRangeType.DEFAULT)
             {
-                timeRangeAmount = CustomDictionary.defaultScheduleTimeLength;
-                timeRangeType = CustomDictionary.defaultScheduleTimeLengthType;
+                taskDurationAmount = CustomDictionary.defaultScheduleTimeLength;
+                taskDurationType = CustomDictionary.defaultScheduleTimeLengthType;
             }
         }
 
@@ -103,8 +103,8 @@ namespace ToDo
                 {
                     endDateTime = startDateTime.AddMonths(1).Date;
                 }
-                if (endDateTime != null
-                    && (!isSpecific.StartDate.Day||isSpecific.EndDate.Day))
+                else if (endDateTime != null
+                    && (!isSpecific.StartDate.Day || isSpecific.EndDate.Day))
                 {
                     endDateTime = ((DateTime)endDateTime).AddDays(1).Date;
                 }
@@ -151,22 +151,22 @@ namespace ToDo
             // check that range > span, else return failure response
             // (error response should be different from if no fitting slot can be found)
             TimeSpan span = ((DateTime)endDateTime) - startDateTime;
-            switch (timeRangeType)
+            switch (taskDurationType)
             {
                 case TimeRangeType.HOUR:
-                    if (timeRangeAmount > span.TotalHours)
+                    if (taskDurationAmount > span.TotalHours)
                     {
                         return false;
                     }
                     break;
                 case TimeRangeType.DAY:
-                    if (timeRangeAmount > span.TotalDays)
+                    if (taskDurationAmount > span.TotalDays)
                     {
                         return false;
                     }
                     break;
                 case TimeRangeType.MONTH:
-                    if (startDateTime.AddMonths(timeRangeAmount) > ((DateTime)endDateTime))
+                    if (startDateTime.AddMonths(taskDurationAmount) > ((DateTime)endDateTime))
                     {
                         return false;
                     }
@@ -194,16 +194,16 @@ namespace ToDo
             while (!isSlotFound && tryEndTime <= ((DateTime)endDateTime))
             {
                 int numberOfSetsToLoop = 1;
-                switch (timeRangeType)
+                switch (taskDurationType)
                 {
                     case TimeRangeType.HOUR:
                         tryStartTime = startDateTime.AddHours(numberOfIterations);
-                        tryEndTime = tryStartTime.AddHours(timeRangeAmount);
+                        tryEndTime = tryStartTime.AddHours(taskDurationAmount);
                         break;
                     case TimeRangeType.DAY:
                     case TimeRangeType.WEEK:
                     case TimeRangeType.MONTH:
-                        numberOfSetsToLoop = GetNumberOfLoops(timeRangeType, tryStartTime);
+                        numberOfSetsToLoop = GetNumberOfLoops(taskDurationType, tryStartTime);
                         break;
                 }
                 isSlotFound = IsTimeSlotFreeOfTasks(numberOfSetsToLoop, tryStartTime, ref tryEndTime);
@@ -227,35 +227,35 @@ namespace ToDo
         private int GetNumberOfLoops(TimeRangeType type, DateTime startTime)
         {
             int numberOfSetsToLoop = 0;
-            switch (timeRangeType)
+            switch (taskDurationType)
             {
                 case TimeRangeType.DAY:
                     if (!isSpecific.StartTime)
                     {
-                        timeRangeType = TimeRangeType.HOUR;
-                        timeRangeAmount *= CustomDictionary.HOURS_IN_DAY;
+                        taskDurationType = TimeRangeType.HOUR;
+                        taskDurationAmount *= CustomDictionary.HOURS_IN_DAY;
                     }
-                    numberOfSetsToLoop = timeRangeAmount;
+                    numberOfSetsToLoop = taskDurationAmount;
                     break;
                 case TimeRangeType.WEEK:
                     if (!isSpecific.StartTime)
                     {
-                        timeRangeType = TimeRangeType.HOUR;
-                        timeRangeAmount *= CustomDictionary.HOURS_IN_DAY * CustomDictionary.DAYS_IN_WEEK;
+                        taskDurationType = TimeRangeType.HOUR;
+                        taskDurationAmount *= CustomDictionary.HOURS_IN_DAY * CustomDictionary.DAYS_IN_WEEK;
                     }
                     else
                     {
-                        timeRangeType = TimeRangeType.DAY;
-                        timeRangeAmount *= CustomDictionary.DAYS_IN_WEEK;
+                        taskDurationType = TimeRangeType.DAY;
+                        taskDurationAmount *= CustomDictionary.DAYS_IN_WEEK;
                     }
-                    numberOfSetsToLoop = timeRangeAmount;
+                    numberOfSetsToLoop = taskDurationAmount;
                     break;
                 case TimeRangeType.MONTH:
-                    TimeSpan span = startTime.AddMonths(timeRangeAmount) - startTime;
+                    TimeSpan span = startTime.AddMonths(taskDurationAmount) - startTime;
                     if (!isSpecific.StartTime)
                     {
-                        timeRangeType = TimeRangeType.HOUR;
-                        timeRangeAmount = numberOfSetsToLoop = (int)span.TotalHours;
+                        taskDurationType = TimeRangeType.HOUR;
+                        taskDurationAmount = numberOfSetsToLoop = (int)span.TotalHours;
                     }
                     else
                     {
@@ -270,34 +270,34 @@ namespace ToDo
         /// This method checks if the time slot is free of task and hence, available for task scheduling.
         /// </summary>
         /// <param name="numberOfLoops">The number of iterations (time slot may be composed of several hours/days)</param>
-        /// <param name="startTime">The time slot's start time</param>
-        /// <param name="endTime">The time slot's end time</param>
+        /// <param name="tryStartTime">The time slot's start time</param>
+        /// <param name="tryEndTime">The time slot's end time</param>
         /// <returns>True if the time slot is available for task schedule; false if otherwise</returns>
-        private bool IsTimeSlotFreeOfTasks(int numberOfLoops, DateTime startTime, ref DateTime endTime)
+        private bool IsTimeSlotFreeOfTasks(int numberOfLoops, DateTime tryStartTime, ref DateTime tryEndTime)
         {
             List<Task> searchResults = new List<Task>();
             for (int i = 0; i < numberOfLoops; i++)
             {
-                if (endTime <= startTime)
+                if (tryEndTime <= tryStartTime)
                 {
-                    endTime = startTime.AddDays(1).Add(((DateTime)endDateTime).TimeOfDay);
+                    tryEndTime = tryStartTime.AddDays(1).Add(((DateTime)endDateTime).TimeOfDay);
                 }
-                searchResults = SearchForTasks(null, searchSpecificity, false, startTime, endTime);
-                if (timeRangeType == TimeRangeType.HOUR)
+                searchResults = SearchForTasks(null, searchSpecificity, false, tryStartTime, tryEndTime);
+                if (taskDurationType == TimeRangeType.HOUR)
                 {
-                    startTime = startTime.AddHours(1);
+                    tryStartTime = tryStartTime.AddHours(1);
                 }
                 else
                 {
-                    startTime = startTime.AddDays(1);
+                    tryStartTime = tryStartTime.AddDays(1);
                 }
                 if (searchResults.Count != 0)
                 {
                     break;
                 }
             }
-            if (searchResults.Count == 0 && endTime <= endDateTime)
-            {
+            if (searchResults.Count == 0 && tryEndTime <= endDateTime)
+            {   
                 return true;
             }
             return false;
