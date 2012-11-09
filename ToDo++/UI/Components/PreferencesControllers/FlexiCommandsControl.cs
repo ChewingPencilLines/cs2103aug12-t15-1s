@@ -68,7 +68,7 @@ namespace ToDo
             TreeNode treeNode = new TreeNode();
             foreach (string commandType in Enum.GetNames(typeof(CommandType)))
             {
-                if (!((commandType == "INVALID") || (commandType == "EXIT")))
+                if (!((commandType == "INVALID") || (commandType == "EXIT") || (commandType == "DISPLAY")))
                 {
                     treeNode = new TreeNode(commandType);
                     commandTree.Nodes.Add(treeNode);
@@ -138,9 +138,17 @@ namespace ToDo
 
         private void removeButton_MouseUp(object sender, MouseEventArgs e)
         {
-            removeButton.SetMouseUp();
-            RemoveFlexiCommandFromSettings(this.listedFlexiCommands.SelectedItem.ToString());
-            UpdateFlexiCommandList();
+            try
+            {
+                removeButton.SetMouseUp();
+                RemoveFlexiCommandFromSettings(this.listedFlexiCommands.SelectedItem.ToString());
+                UpdateFlexiCommandList();
+            }
+            catch (NullReferenceException x)
+            {
+                AlertBox.Show("Please select a Command");
+            }
+
         }
 
         #endregion
@@ -356,7 +364,7 @@ namespace ToDo
 
             box.Select(start, end - start + 1);
             box.SelectionColor = color;
-            box.SelectionFont = new Font("Tahoma", size, FontStyle.Regular);
+            box.SelectionFont = new Font("Arial", size, FontStyle.Regular);
             box.SelectionLength = 0;
         }
 
@@ -487,7 +495,7 @@ namespace ToDo
                         SetFormat(Color.Gray, "eg. delete 31 December after 10pm \n", 9);
                         break;
 
-                    case CommandType.DISPLAY:
+                    case CommandType.SEARCH:
                         SetFormat(Color.Brown, "Display/Search tasks in many ways:\n", 9);
                         SetFormat(Color.Gray, "eg. display 06/09/2012\n", 9);
                         SetFormat(Color.Gray, "eg. display Sunday after 1500hrs\n", 9);
@@ -511,6 +519,15 @@ namespace ToDo
                         SetFormat(Color.Gray, "eg. modify 1 buy car\n", 9);
                         SetFormat(Color.Gray, "eg. modify 1 3pm\n", 9);
                         SetFormat(Color.Gray, "eg. modify buy milk 9 Nov\n", 9);
+                        break;
+
+                    case CommandType.POSTPONE:
+                        SetFormat(Color.Brown, "Postpone task as you please:\n", 9);
+                        SetFormat(Color.Gray, "eg. postpone 1-2 2 hours\n", 9);
+                        SetFormat(Color.Gray, "eg. postpone 1 2 days\n", 9);
+                        SetFormat(Color.Gray, "eg. postpone task (default)\n", 9);
+                        //SetFormat(Color.Brown, "\n\n", 9);
+                        SetFormat(Color.Black, "Change the default Postpone below\n", 9);
                         break;
 
                     default:
@@ -592,7 +609,7 @@ namespace ToDo
                 typeComboBox.Text = settings.GetDefaultScheduleTimeLengthType().ToString();
                 allowComboBoxChanges = true;
 
-            }  
+            }
         }
 
 

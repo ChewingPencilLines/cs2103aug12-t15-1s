@@ -528,6 +528,11 @@ namespace ToDo
                 Exit();
                 return true;
             }
+            if (keyData == (Keys.Control | Keys.A))
+            {
+                textInput.SelectAll();
+                return true;
+            }
             if (keyData == (Keys.Alt | Keys.Space))
             {
                 this.ActiveControl = textInput;
