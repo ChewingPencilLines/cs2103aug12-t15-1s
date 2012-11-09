@@ -19,7 +19,9 @@ namespace LogicUnitTest
             logic.ProcessCommand("delete all");
             result = logic.ProcessCommand("add milk");
             Type type = result.TasksToBeDisplayed[0].GetType();
+            string s = result.FormatType.ToString();
             Assert.AreEqual("ToDo.TaskFloating", type.ToString());
+            Assert.AreEqual("DEFAULT", s);
             Assert.AreEqual("Added new task \"milk\" successfully.", result.FeedbackString);
             return;
         }
