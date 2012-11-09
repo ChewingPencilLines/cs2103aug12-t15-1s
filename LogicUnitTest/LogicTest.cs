@@ -51,6 +51,16 @@ namespace LogicUnitTest
         }
 
         [TestMethod]
+        public void ComplicatedAddTest()
+        {
+            Response result;
+            result = logic.ProcessCommand(" add \"add 5 and 5\" 0000 hours tmr to friday 2pm");
+            Assert.AreEqual("Added new task \"add 5 and 5\" successfully.", result.FeedbackString);
+            logic.ProcessCommand("delete all");
+            return;
+        }
+        
+        [TestMethod]
         public void DeleteByNameTest()
         {
             Response result;
@@ -63,6 +73,16 @@ namespace LogicUnitTest
         }
 
         [TestMethod]
+        public void DeleteByDateTest()
+        {
+            Response result;
+            logic.ProcessCommand("add bb");
+            result = logic.ProcessCommand("delete jan");
+            Assert.AreEqual("Showing tasks within 2013/1/1 0:00 to 2013/1/1 0:00.", result.FeedbackString); 
+            return;
+        }
+
+        [TestMethod]
         public void DeleteAllTest()
         {
             Response result;
@@ -71,6 +91,18 @@ namespace LogicUnitTest
             logic.ProcessCommand("add aaa");
             result = logic.ProcessCommand("delete all");
             Assert.AreEqual("Deleted all tasks successfully.", result.FeedbackString);
+            return;
+        }
+
+        [TestMethod]
+        public void DeleteDateAllTest()
+        {
+            Response result;
+            logic.ProcessCommand("add xx fri 5pm");
+            logic.ProcessCommand("add yy fri 9pm");
+            result = logic.ProcessCommand("delete friday all");
+            Assert.AreEqual("Deleted all tasks successfully.", result.FeedbackString);
+            logic.ProcessCommand("delete all");
             return;
         } 
 
@@ -93,9 +125,9 @@ namespace LogicUnitTest
             Response result;
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
-            logic.ProcessCommand("add aa");
-            logic.ProcessCommand("add aaa");
-            result = logic.ProcessCommand("delete bb");
+            logic.ProcessCommand("add ques");
+            logic.ProcessCommand("add quee");
+            result = logic.ProcessCommand("delete quse");
             Assert.AreEqual("No matching tasks found!", result.FeedbackString);
             return;
         }
@@ -214,6 +246,18 @@ namespace LogicUnitTest
             logic.ProcessCommand("add aa");
             result = logic.ProcessCommand("done aa");
             Assert.AreEqual("Successfully marked \"aa\" as done.", result.FeedbackString);
+            return;
+        }
+
+        [TestMethod]
+        public void MarkTaskByDateTest()
+        {
+            Response result;
+            logic.ProcessCommand("delete all");
+            logic.ProcessCommand("add done1 tmr");
+            logic.ProcessCommand("add done2 tmr 3pm");
+            result = logic.ProcessCommand("done tmr");
+            Assert.AreEqual("Successfully marked all tasks as done.", result.FeedbackString);
             return;
         }
 
