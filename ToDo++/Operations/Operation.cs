@@ -12,15 +12,19 @@ namespace ToDo
     public abstract class Operation
     {
 
-        #region Variables for task tracking/storage
-        protected static List<Task> currentListedTasks;
-        protected static Stack<Operation> undoStack;
-        protected static Stack<Operation> redoStack;
-        protected Queue<Task> executedTasks;
-        protected List<Task> taskList;
-        protected Storage storageIO;
+        #region Variables for Task and Operation tracking/storage
+        protected static List<Task> currentListedTasks;     // The currently displayed list of tasks.        
+        protected static Stack<Operation> undoStack;        // Contains the Operation history of all Operations.
+        protected static Stack<Operation> redoStack;        // Contains the Operation Undo history of all Operations.        
+        protected Queue<Task> executedTasks;                // Contains a history of tasks which this operation has manipulated.        
+        protected List<Task> taskList;                      // The entire list of tasks which this Operation will execute on.        
+        protected Storage storageIO;                        // The Storage controller which will be used for reading / writing from tasks to file.
         #endregion
 
+        /// <summary>
+        /// This method initializes the static variables used by all Operations.
+        /// </summary>
+        /// <returns>Nothing.</returns>
         static Operation()
         {
             currentListedTasks = new List<Task>();
@@ -28,11 +32,21 @@ namespace ToDo
             redoStack = new Stack<Operation>();
         }
 
+        /// <summary>
+        /// This method initializes the neccesary variables for all Operation.
+        /// </summary>
+        /// <returns>Nothing.</returns>
         protected Operation()
         {
             executedTasks = new Queue<Task>();
         }
         
+        /// <summary>
+        /// This method sets the currently displayed list of tasks shared by all Operations
+        /// to the input list of tasks.
+        /// </summary>
+        /// <param name="tasks">The list of tasks to be displayed.</param>
+        /// <returns></returns>
         public static void UpdateCurrentListedTasks(List<Task> tasks)
         {
             currentListedTasks = tasks;
@@ -51,33 +65,60 @@ namespace ToDo
             this.taskList = taskList;
         }
 
+        /// <summary>
+        /// This method adds this Operation to the history of successful operations.
+        /// </summary>
+        /// <returns>Nothing.</returns>
         protected void TrackOperation()
         {
             undoStack.Push(this);
             redoStack.Clear();
         }
-
-        public abstract Response Execute(List<Task> taskList, Storage storageIO);
         
         /// <summary>
-        /// Base Undo Operation Method. All undoable operations should be override this method.
-        /// This base method will throw an assertion if called.
+        /// Base method to execute this Operation. Must be overriden by all derived Operations.
+        /// </summary>
+        /// <param name="taskList">The list of task to execute the Operation on.</param>
+        /// <param name="storageIO">The Storage controller to use for reading/writing to file.</param>
+        /// <returns></returns>
+        public abstract Response Execute(List<Task> taskList, Storage storageIO);
+
+        /// <summary>
+        /// Base Undo method. All undoable operations must override this method.
+        /// This base method will throw an assertion if called without being overriden
+        /// and debug mode is on.
         /// </summary>
         /// <param name="taskList">Current task list for task updates to be applied on.</param>
-        /// <param name="storageIO">Storage controller to write changes to file. </param>
-        /// <returns></returns>
+        /// <param name="storageIO">Storage controller to be used to write task changes.</param>
+        /// <returns>Null</returns>
         public virtual Response Undo(List<Task> taskList, Storage storageIO)
         {
             Debug.Assert(false, "This operation should not be undoable!");
             return null;
         }
 
+        /// <summary>
+        /// Base Redo method. All undoable operations must override this method.
+        /// This base method will throw an assertion if it is called without being overriden
+        /// and debug mode is on.
+        /// </summary>
+        /// <param name="taskList">Current task list for task updates to be applied on.</param>
+        /// <param name="storageIO">Storage controller to be used to write task changes.</param>
+        /// <returns>Null</returns>
         public virtual Response Redo(List<Task> taskList, Storage storageIO)
         {
             Debug.Assert(false, "This operation should not be redoable!");
             return null;
         }
-
+        
+        /// <summary>
+        /// This method returns whether the Operation should allow a multiple-task
+        /// execution to continue if one of the tasks execute unsuccessfully.
+        /// This method can be overriden to specify when this condition should be allowed.
+        /// If it is not overriden, it will return false by default.
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns>False</returns>
         public virtual bool AllowSkipOver(Response response)
         {
             return false;
@@ -88,14 +129,22 @@ namespace ToDo
         // ******************************************************************
 
         #region Task Manipulation Methods
+        /// <summary>
+        /// This method adds a task to the system. The newly added file is immediately written to file
+        /// using the Storage controller specified with SetMembers.
+        /// </summary>
+        /// <param name="taskToAdd">The task to add.</param>
+        /// <returns>Response indicating the result of the operation.</returns>
         protected Response AddTask(Task taskToAdd)
         {
             try
             {
-                if (taskToAdd == null || taskToAdd.TaskName == null || taskToAdd.TaskName == String.Empty)
+                if (TaskIsInvalid(taskToAdd))
                     return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd), currentListedTasks);
+                                
                 taskList.Add(taskToAdd);
-                executedTasks.Enqueue(taskToAdd);
+                AddToOperationHistory(taskToAdd);                
+
                 bool success = storageIO.AddTaskToFile(taskToAdd);
                 if (success)
                 {
@@ -107,27 +156,31 @@ namespace ToDo
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.ToString()); // <- this is not logging.
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd), currentListedTasks);
-                //log this: return RESPONSE_ADD_FAILURE + "\r\nThe following exception occured: " + e.ToString();
+                Logger.Error(e, "AddTask::Operation");
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd), currentListedTasks);                
             }
         }
-
+        
         protected Response DeleteTask(Task taskToDelete)
         {
-            taskList.Remove(taskToDelete);
-            executedTasks.Enqueue(taskToDelete);
-    
-            if(currentListedTasks.Contains(taskToDelete))
-                currentListedTasks.Remove(taskToDelete);
-
-            if (storageIO.RemoveTaskFromFile(taskToDelete))
+            try
             {
-                return GenerateStandardSuccessResponse(taskToDelete);
-            }
-            else
-                return GenerateXMLFailureResponse();
+                taskList.Remove(taskToDelete);
+                AddToOperationHistory(taskToDelete);
 
+                if (currentListedTasks.Contains(taskToDelete))
+                    currentListedTasks.Remove(taskToDelete);
+
+                if (storageIO.RemoveTaskFromFile(taskToDelete))
+                    return GenerateStandardSuccessResponse(taskToDelete);
+                else
+                    return GenerateXMLFailureResponse();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "DeleteTask::Operation");
+                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd), currentListedTasks);
+            }
         }
 
         protected List<Task> SearchForTasks(
@@ -180,7 +233,31 @@ namespace ToDo
             else
                 return GenerateXMLFailureResponse();
         }
-        
+
+        /// <summary>
+        /// This method checks for the validity of the specified task.
+        /// </summary>
+        /// <param name="taskToCheck">The Task to check validity of.</param>
+        /// <returns>True if invalid. False if valid.</returns>
+        private bool TaskIsInvalid(Task taskToCheck)
+        {
+            if (taskToCheck == null)
+                return true;
+            if (taskToCheck.TaskName != null || taskToCheck.TaskName != String.Empty)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// This method adds the specified task to the history containing
+        /// all tasks this operation has manipulated.
+        /// </summary>
+        /// <param name="task">The task to add to history.</param>
+        /// <returns></returns>
+        private void AddToOperationHistory(Task task)
+        {
+            executedTasks.Enqueue(task);
+        }        
         #endregion
 
         // ****************************************************************************************

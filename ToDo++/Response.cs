@@ -17,7 +17,7 @@ namespace ToDo
         const string STRING_ADD_SUCCESS = "Added new task \"{0}\" successfully.";
         const string STRING_ADD_FAILURE = "Failed to add task!";
         const string STRING_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
-        const string STRING_DELETE_SUCCESS_MULTI = "Deleted all tasks successfully.";
+        const string STRING_DELETE_SUCCESS_MULTI = "Deleted all indicated tasks successfully.";
         const string STRING_DELETE_FAILURE = "No matching tasks found!";
         const string STRING_DELETE_INVALID_TASK = "No task to delete!";
         const string STRING_MODIFY_SUCCESS = "Modified task successfully.";

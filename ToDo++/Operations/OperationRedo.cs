@@ -12,9 +12,11 @@ namespace ToDo
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            if (redoStack.Count == 0)
+
+            Operation redoOp = GetLastRevertedOperation();
+            if (redoOp == null)
                 return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
-            Operation redoOp = Operation.redoStack.Pop();
+            
             Response result = redoOp.Redo(taskList, storageIO);
             if (result.IsSuccessful())
             {
@@ -23,7 +25,23 @@ namespace ToDo
             }
             else
                 result = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationRedo), currentListedTasks);
+
             return result;
+        }
+
+        private Operation GetLastRevertedOperation()
+        {
+            if (redoStack.Count == 0)
+                return null;
+            try
+            {
+                Operation lastRevertedOperation = Operation.redoStack.Pop();
+                return lastRevertedOperation;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
