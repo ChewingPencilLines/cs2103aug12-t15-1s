@@ -24,9 +24,6 @@ namespace ToDo
                 case SortType.NAME:                    
                     response = new Response(Result.SUCCESS, Format.NAME, this.GetType(), currentListedTasks);
                     break;
-                case SortType.DONE_STATE:
-                    response = new Response(Result.SUCCESS, Format.DONE_STATE, this.GetType(), currentListedTasks);
-                    break;
                 case SortType.DATE_TIME:
                     response = new Response(Result.SUCCESS, Format.DATE_TIME, this.GetType(), currentListedTasks);
                     break;

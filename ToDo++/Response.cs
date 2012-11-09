@@ -234,9 +234,6 @@ namespace ToDo
                 case Format.DATE_TIME:
                     sortTypeString = "date";
                     break;
-                case Format.DONE_STATE:
-                    sortTypeString = "whether task is done or not";
-                    break;
                 default:
                     sortTypeString = "the same as before";
                     break;
