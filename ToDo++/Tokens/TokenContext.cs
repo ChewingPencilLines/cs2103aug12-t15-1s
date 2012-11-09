@@ -14,6 +14,7 @@ namespace ToDo
             : base(position)
         {
             contextType = val;
+            Logger.Info("Created a context token object", "TokenContext::TokenContext");
         }
 
         internal override void UpdateAttributes(OperationGenerator attrb)

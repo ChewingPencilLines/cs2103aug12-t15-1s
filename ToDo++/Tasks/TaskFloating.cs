@@ -11,6 +11,7 @@ namespace ToDo
         public TaskFloating(string taskName, Boolean isDone = false, int forceID = -1)
             : base(taskName, isDone, forceID)
         {
+            Logger.Info("Created an floating task", "TaskFloating::TaskFloating");
         }
 
         public override XElement ToXElement()
@@ -34,6 +35,7 @@ namespace ToDo
             startTime = null;
             endTime = null;
             specific = new DateTimeSpecificity();
+            Logger.Info("Updated datetimes and their specificity.", "CopyDateTimes::TaskFloating");
         }
     }
 }

@@ -27,6 +27,7 @@ namespace ToDo
         {
             indexes = val;
             this.isAll = isAll;
+            Logger.Info("Created an index range token object", "TokenIndexRange::TokenIndexRange");
         }
 
         internal override void UpdateAttributes(OperationGenerator attrb)

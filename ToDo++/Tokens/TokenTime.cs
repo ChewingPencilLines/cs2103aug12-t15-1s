@@ -15,6 +15,7 @@ namespace ToDo
         {
             time = val;
             specific = specific_flag;
+            Logger.Info("Created an time token object", "TokenTime::TokenTime");
         }
 
         internal override void UpdateAttributes(OperationGenerator attrb)

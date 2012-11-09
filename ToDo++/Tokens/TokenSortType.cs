@@ -14,6 +14,7 @@ namespace ToDo
             : base(position)
         {
             sortType = val;
+            Logger.Info("Created a sort type token", "TokenSortType::TokenSortType");
         }
 
         internal override void UpdateAttributes(OperationGenerator attrb)

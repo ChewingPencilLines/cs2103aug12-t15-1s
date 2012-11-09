@@ -30,6 +30,7 @@ namespace ToDo
             index = val;
             timeRangeType = type;
             timeRange = TimeRangeKeywordsType.NONE;
+            Logger.Info("Created an time range token object", "TokenTimeRange::TokenTimeRange");
         }
         internal TokenTimeRange(int position, TimeRangeKeywordsType range)
             : base(position)
