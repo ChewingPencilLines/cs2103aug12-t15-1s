@@ -501,7 +501,7 @@ namespace ToDo
                         SetFormat(Color.Gray, "eg. display Sunday after 1500hrs\n", 9);
                         SetFormat(Color.Gray, "eg. display 6 sept before 10pm\n", 9);
                         SetFormat(Color.Gray, "eg. display next Saturday\n", 9);
-                        SetFormat(Color.Gray, "eg. display tomorrow\n", 9);
+                        SetFormat(Color.Gray, "eg. display tmr\n", 9);
                         SetFormat(Color.Gray, "eg. display buy milk\n", 9);
                         SetFormat(Color.Gray, "eg. display floating\n", 9);
                         break;
@@ -512,6 +512,14 @@ namespace ToDo
                         SetFormat(Color.Gray, "eg. done 3\n", 9);
                         SetFormat(Color.Gray, "eg. done 1-3\n", 9);
                         SetFormat(Color.Gray, "eg. done all\n", 9);
+                        break;
+
+                    case CommandType.UNDONE:
+                        SetFormat(Color.Brown, "Set Tasks as incomplete:\n", 9);
+                        SetFormat(Color.Gray, "eg. undone task\n", 9);
+                        SetFormat(Color.Gray, "eg. undone 3\n", 9);
+                        SetFormat(Color.Gray, "eg. undone 1-3\n", 9);
+                        SetFormat(Color.Gray, "eg. undone all\n", 9);
                         break;
 
                     case CommandType.MODIFY:
@@ -526,8 +534,31 @@ namespace ToDo
                         SetFormat(Color.Gray, "eg. postpone 1-2 2 hours\n", 9);
                         SetFormat(Color.Gray, "eg. postpone 1 2 days\n", 9);
                         SetFormat(Color.Gray, "eg. postpone task (default)\n", 9);
-                        //SetFormat(Color.Brown, "\n\n", 9);
                         SetFormat(Color.Black, "Change the default Postpone below\n", 9);
+                        break;
+
+                    case CommandType.SCHEDULE:
+                        SetFormat(Color.Brown, "Schedule task as you please:\n", 9);
+                        SetFormat(Color.Gray, "eg. schedule buy milk\n", 9);
+                        SetFormat(Color.Gray, "eg. schedule task tmr 2-5pm\n", 9);
+                        SetFormat(Color.Gray, "eg. schedule task tmr (default)\n", 9);
+                        SetFormat(Color.Black, "Change the default Schedule range below\n", 9);
+                        break;
+
+                    case CommandType.UNDO:
+                        SetFormat(Color.Brown, "Undo last command:\n", 9);
+                        SetFormat(Color.Gray, "eg. undo\n", 9);
+                        break;
+
+                    case CommandType.REDO:
+                        SetFormat(Color.Brown, "Redo last command:\n", 9);
+                        SetFormat(Color.Gray, "eg. redo\n", 9);
+                        break;
+                        
+                    case CommandType.SORT:
+                        SetFormat(Color.Brown, "Sort last command:\n", 9);
+                        SetFormat(Color.Gray, "eg. sort date \n", 9);
+                        SetFormat(Color.Gray, "eg. sort name \n", 9);
                         break;
 
                     default:
