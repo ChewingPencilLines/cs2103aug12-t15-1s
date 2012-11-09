@@ -19,7 +19,9 @@ namespace LogicUnitTest
             logic.ProcessCommand("delete all");
             result = logic.ProcessCommand("add milk");
             Type type = result.TasksToBeDisplayed[0].GetType();
+            string s = result.FormatType.ToString();
             Assert.AreEqual("ToDo.TaskFloating", type.ToString());
+            Assert.AreEqual("DEFAULT", s);
             Assert.AreEqual("Added new task \"milk\" successfully.", result.FeedbackString);
             return;
         }
@@ -44,7 +46,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
             result = logic.ProcessCommand("add test feb 29th ");
-            Assert.AreEqual("Invalid command input.", result.FeedbackString);
+            Assert.AreEqual("Invalid command input!", result.FeedbackString);
             result = logic.ProcessCommand("add test feb 29th 2016");
             Assert.AreEqual("Added new task \"test\" successfully.", result.FeedbackString);
             return;
