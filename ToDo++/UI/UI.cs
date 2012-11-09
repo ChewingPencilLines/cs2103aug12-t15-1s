@@ -755,10 +755,5 @@ namespace ToDo
             Logger.Info("Exiting the application normally...", "UI");
             Application.Exit();
         }
-
-
-
-
-
     }
 }
