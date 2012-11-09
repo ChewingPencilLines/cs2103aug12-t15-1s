@@ -76,7 +76,7 @@ namespace ToDo
                 response = ExecuteByIndex(startIndex, endIndex, action, args);
 
             else
-                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                response = new Response(Result.FAILURE, sortType, this.GetType());
 
             if (response.IsSuccessful())
                 TrackOperation();
@@ -106,7 +106,7 @@ namespace ToDo
             }
 
             if (response == null)
-                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                response = new Response(Result.FAILURE, sortType, this.GetType());
 
             return response;
         }
@@ -126,7 +126,7 @@ namespace ToDo
             }
 
             if (response == null)
-                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                response = new Response(Result.FAILURE, sortType, this.GetType());
 
             return response;
         }

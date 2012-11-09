@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace ToDo
 {
     public enum Result { SUCCESS, SUCCESS_MULTIPLE, FAILURE, INVALID_TASK, INVALID_COMMAND, XML_READWRITE_FAIL, TASK_MISSING_FROM_FILE, EXCEPTION_FAILURE };
-    public enum Format { DEFAULT, NAME, DATE_TIME, DONE_STATE };    
     public class Response
     {
         // ******************************************************************
@@ -62,15 +61,15 @@ namespace ToDo
         #endregion
 
         Result result;
-        Format formatType;
+        SortType sortType;
         bool feedbackAsWarning = false;
         string[] args;
         string feedbackString = null;
         List<Task> tasksToBeDisplayed;
 
-        public Format FormatType
+        public SortType FormatType
         {
-            get { return formatType; }
+            get { return sortType; }
         }
         public string FeedbackString
         {
@@ -82,13 +81,13 @@ namespace ToDo
         }
         public Response(
             Result resultType,
-            Format formatType = Format.DEFAULT,
+            SortType sortType = SortType.DEFAULT,
             Type operationType = null,
             List<Task> tasks = null,
             params string[] args
             )
-        {        
-            this.formatType = formatType;
+        {
+            this.sortType = sortType;
             this.tasksToBeDisplayed = tasks;
             this.result = resultType;
             this.args = args;
@@ -226,16 +225,15 @@ namespace ToDo
         private string GetSortTypeString()
         {
             string sortTypeString = "";
-            switch (formatType)
+            switch (sortType)
             {
-                case Format.NAME:
+                case SortType.NAME:
                     sortTypeString = "name";
                     break;
-                case Format.DATE_TIME:
+                case SortType.DATE_TIME:
                     sortTypeString = "date";
                     break;
-                default:
-                    sortTypeString = "the same as before";
+                case SortType.DEFAULT:
                     break;
             }
             return String.Format(STRING_SORT_SUCCESS, sortTypeString);

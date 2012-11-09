@@ -17,19 +17,12 @@ namespace ToDo
         {
             this.storageIO = storageIO;
             Response response;
-            switch (sortType)
-            {
+            
                 // sorting is done On-The-Fly in TaskListViewControl.
-                case SortType.NAME:                    
-                    response = new Response(Result.SUCCESS, Format.NAME, this.GetType(), currentListedTasks);
-                    break;
-                case SortType.DATE_TIME:
-                    response = new Response(Result.SUCCESS, Format.DATE_TIME, this.GetType(), currentListedTasks);
-                    break;
-                default:
-                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
-                    break;
-            }
+            if(sortType == SortType.DEFAULT)
+                response = new Response(Result.FAILURE, sortType, this.GetType(), currentListedTasks);
+            else
+                response = new Response(Result.SUCCESS, sortType, this.GetType(), currentListedTasks);
             return response;
         }
     }
