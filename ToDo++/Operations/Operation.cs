@@ -23,7 +23,7 @@ namespace ToDo
         #endregion
 
         /// <summary>
-        /// This method initializes the static variables used by all Operations.
+        /// Initializes the static variables used by all Operations.
         /// </summary>
         /// <returns>Nothing.</returns>
         static Operation()
@@ -34,7 +34,7 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method initializes the neccesary variables for all Operation.
+        /// Initializes the neccesary variables for all Operation.
         /// </summary>
         /// <returns>Nothing.</returns>
         protected Operation(SortType sortType)
@@ -44,7 +44,7 @@ namespace ToDo
         }
         
         /// <summary>
-        /// This method sets the currently displayed list of tasks shared by all Operations
+        /// Sets the currently displayed list of tasks shared by all Operations
         /// to the input list of tasks.
         /// </summary>
         /// <param name="tasks">The list of tasks to be displayed.</param>
@@ -55,7 +55,7 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method sets the operating task list and storage IO controller
+        /// Sets the operating task list and storage IO controller
         /// this Operation will use to the instances referred to by the input parameters.
         /// </summary>
         /// <param name="taskList">The task list this Operation will execute on.</param>
@@ -68,7 +68,7 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method adds this Operation to the history of successful operations.
+        /// Adds this Operation to the history of successful operations.
         /// </summary>
         /// <returns>Nothing.</returns>
         protected void TrackOperation()
@@ -114,7 +114,7 @@ namespace ToDo
         }
         
         /// <summary>
-        /// This method returns whether the Operation should allow a multiple-task
+        /// Indicates whether the Operation should allow a multiple-task
         /// execution to continue if one of the tasks execute unsuccessfully.
         /// This method can be overriden to specify when this condition should be allowed.
         /// If it is not overriden, it will return false by default.
@@ -132,7 +132,7 @@ namespace ToDo
 
         #region Task Manipulation Methods
         /// <summary>
-        /// This method adds a task to the system. The newly added task is written to file
+        /// Adds a task to the system. The newly added task is written to file
         /// using the Storage controller specified with SetMembers.
         /// </summary>
         /// <param name="taskToAdd">The task to add.</param>
@@ -168,7 +168,7 @@ namespace ToDo
         }
         
         /// <summary>
-        /// This method removes a task from the system. The deleted task is removed from file
+        /// Removes a task from the system. The deleted task is removed from file
         /// using the Storage controller specified with SetMembers.
         /// </summary>
         /// <param name="taskToDelete"></param>
@@ -199,7 +199,7 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method searches the Tasks specified in SetMembers using the specified
+        /// Searches the Tasks specified in SetMembers using the specified
         /// parameters as filters and returns the Tasks matching those filters.
         /// </summary>
         /// <param name="searchString">The string to match the Task's name against.</param>
@@ -234,10 +234,10 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method filters the input list of tasks by time. 
+        /// Filters the input list of tasks by time, returning a list of the filtered results.
         /// Tasks within the specified start and end times are returned.
         /// As long as part of the task is within the specified tasks,
-        /// they are considered as matched.
+        /// they are considered as validly matched.
         /// </summary>
         /// <param name="tasks">The list of task to apply the filter on.</param>
         /// <param name="startTime">The start time by which the filtered tasks should be within.</param>
@@ -255,12 +255,12 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method filters the input list of tasks by task name.
+        /// Filters the input list of tasks by task name, returning the list of tasks with names matching the search string.
         /// </summary>
         /// <param name="tasks">The list of task to apply the filter on.</param>
         /// <param name="searchString">The string by which to filter the task name against.</param>
         /// <param name="exact">The flag indicating whether the string comparison should exact or not.</param>
-        /// <returns></returns>
+        /// <returns>The filtered list of tasks.</returns>
         private List<Task> FilterByTaskName(List<Task> tasks, string searchString, bool exact)
         {
             List<Task> filteredTasks = new List<Task>(tasks);
@@ -272,6 +272,12 @@ namespace ToDo
             return filteredTasks;
         }
 
+        /// <summary>
+        /// Filters the input list of tasks by the specified SearchType, returning a list of the filtered results.
+        /// </summary>
+        /// <param name="tasks">The list of task to apply the filter on.</param>
+        /// <param name="searchType">The type of search to execute.</param>
+        /// <returns></returns>
         private List<Task> FilterBySearchType(List<Task> tasks, SearchType searchType)
         {
             List<Task> filteredTasks = new List<Task>(tasks);
@@ -288,6 +294,12 @@ namespace ToDo
             return filteredTasks;
         }
 
+        /// <summary>
+        /// Marks a task's [done] state depending on the given flag. Marks as done if true, undone if false.
+        /// </summary>
+        /// <param name="taskToMark">Task to mark.</param>
+        /// <param name="doneState">Flag indiciating whether to mark as done or undone.</param>
+        /// <returns></returns>
         protected Response MarkTaskAs(Task taskToMark, bool doneState)
         {            
             SetMembers(taskList, storageIO);

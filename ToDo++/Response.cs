@@ -48,7 +48,11 @@ namespace ToDo
         const string STRING_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string STRING_CALLED_INVALID_TASK_INDEX = "Invalid task index!";
         const string STRING_INVALID_COMMAND = "Invalid command input!";
+        const string STRING_INVALID_PARAMS = "Invalid number of parameters called!";
         const string STRING_UNDEFINED = "Undefined feedback string!";
+
+        const string STRING_NAME = "name";
+        const string STRING_DATE = "date";
         #endregion
 
         #region Parameter indices
@@ -213,7 +217,7 @@ namespace ToDo
             catch (FormatException e)
             {
                 // add to log! what params were given and what Response.ToString() is this?
-                feedbackString = "Invalid number of parameters called!";
+                feedbackString = STRING_INVALID_PARAMS;
                 resultType = Result.EXCEPTION_FAILURE;
             }
             if (feedbackString == null)
@@ -228,10 +232,10 @@ namespace ToDo
             switch (sortType)
             {
                 case SortType.NAME:
-                    sortTypeString = "name";
+                    sortTypeString = STRING_NAME;
                     break;
                 case SortType.DATE_TIME:
-                    sortTypeString = "date";
+                    sortTypeString = STRING_DATE;
                     break;
                 case SortType.DEFAULT:
                     break;
