@@ -21,14 +21,18 @@ namespace ToDo
             {
                 case ContextType.STARTTIME:
                     attrb.StartDateOnly = GetDateFromDay(attrb.currentSpecifier, dayOfWeek);
+                    Logger.Info("Updated StartDateOnly.", "UpdateAttributes::TokenDay");
                     break;
                 case ContextType.ENDTIME:
                     attrb.SetConditionalEndDate(GetDateFromDay(attrb.currentSpecifier, dayOfWeek), new Specificity());
+                    Logger.Info("Successfully set conditional end date.", "UpdateAttributes::TokenDay");
                     break;
                 case ContextType.DEADLINE:
                     attrb.EndDateOnly = GetDateFromDay(attrb.currentSpecifier, dayOfWeek);
+                    Logger.Info("Updated EndDateOnly.", "UpdateAttributes::TokenDay");
                     break;
                 default:
+                    Logger.Warning("Fell through switch statement.", "UpdateAttributes::TokenDay");
                     Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");
                     break;
             }                    

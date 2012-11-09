@@ -22,8 +22,15 @@ namespace ToDo
                 contextType == ContextType.NEXT ||
                 contextType == ContextType.FOLLOWING
                 )
+            {
                 attrb.currentSpecifier = contextType;
-            else attrb.currentMode = contextType;
+                Logger.Info("Updated currentSpecifier.", "UpdateAttributes::TokenContext");
+            }
+            else
+            {
+                attrb.currentMode = contextType;
+                Logger.Info("Updated currentMode.", "UpdateAttributes::TokenContext");
+            }
         }
     }
 }
