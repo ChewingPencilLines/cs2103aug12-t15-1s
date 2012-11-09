@@ -20,7 +20,7 @@ namespace ToDo
     public enum TimeRangeKeywordsType { MORNING, AFTERNOON, EVENING, NIGHT, NONE };
     // default should be hours (1 hour), unless otherwise specified in settings
     public enum TimeRangeType { DEFAULT = 0, HOUR, DAY, WEEK, MONTH };
-    public enum SortType { DEFAULT, NAME, DATE_TIME, DONE_STATE };
+    public enum SortType { DEFAULT, NAME, DATE_TIME };
     public enum SearchType { NONE, DONE, UNDONE }
     public enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
@@ -265,7 +265,6 @@ namespace ToDo
             sortTypeKeywords = new Dictionary<string, SortType>();
             sortTypeKeywords.Add("name", SortType.NAME);
             sortTypeKeywords.Add("date", SortType.DATE_TIME);
-            sortTypeKeywords.Add("done", SortType.DONE_STATE);
         }
 
         #endregion
