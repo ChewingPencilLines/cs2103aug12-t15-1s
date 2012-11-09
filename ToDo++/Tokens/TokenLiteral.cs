@@ -21,6 +21,7 @@ namespace ToDo
             if (attrb.taskName == null)
             {
                 attrb.taskName = literal;
+                Logger.Info("Updated taskName.", "UpdateAttributes::TokenLiteral");
             }
         }
     }
