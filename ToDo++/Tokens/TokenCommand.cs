@@ -34,7 +34,6 @@ namespace ToDo
                 if (Value == CommandType.DONE)
                 {
                     attrb.searchDone = SearchType.DONE;
-                    attrb.sortType = SortType.DONE_STATE;
                 }
                 else if (Value == CommandType.UNDONE)
                     attrb.searchDone = SearchType.UNDONE;
