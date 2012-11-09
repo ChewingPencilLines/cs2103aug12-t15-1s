@@ -378,7 +378,7 @@ namespace ToDo
                 isCollapsed = false;  
                 timerCollapse.Enabled = false;
                 timerExpand.Enabled = true;
-                this.MaximumSize = new System.Drawing.Size(1000, 1000);              
+                this.MaximumSize = new System.Drawing.Size(1000, 1000);
             }
             topMenuControl.SetUpDownButton(isCollapsed);
         }
@@ -424,6 +424,7 @@ namespace ToDo
                     prevHeight = this.Height;
                     timerCollapse.Enabled = true;
                     timerExpand.Enabled = false;
+                    this.ActiveControl = textInput;
                 }
             }
             else
@@ -435,6 +436,7 @@ namespace ToDo
                     grayFadePictureBox.SendToBack();
                     grayFadePictureBox.Hide();
                     this.MinimumSize = new Size(522, 397);
+                    this.ActiveControl = textInput;
                 }
             }
         }
