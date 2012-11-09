@@ -145,9 +145,13 @@ namespace ToDo
                     Match match = CustomDictionary.isTimeRange.Match(wordLower);
                     Int32.TryParse(match.Groups["index"].Value, out timeRangeAmount);
                     string matchString = match.Groups["type"].Value;
+                    if (timeRangeAmount == 0 && matchString != null)
+                    {
+                        throw new InvalidTimeRangeException("Task duration type was specified without a valid amount (0 " + matchString + ").");
+                    }
                     if (!CustomDictionary.timeRangeType.TryGetValue(matchString, out timeRangeType))
                     {
-                        throw new Exception("Something wrong with IsTimeRange regex etc.");
+                        throw new Exception("Something is wrong with IsTimeRange regex etc.");
                     }
                         timeRangeToken = new TokenTimeRange(index, timeRangeAmount, timeRangeType);
                 }
