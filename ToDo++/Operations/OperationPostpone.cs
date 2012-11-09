@@ -72,7 +72,7 @@ namespace ToDo
                 response = ExecuteByIndex(startIndex, endIndex, action, args);
 
             else
-                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                response = new Response(Result.FAILURE, sortType, this.GetType());
 
             if (response.IsSuccessful())
                 TrackOperation();
@@ -83,7 +83,7 @@ namespace ToDo
         protected Response PostponeTask(Task taskToPostpone, TimeSpan postponeDuration)
         {
             if (taskToPostpone.Postpone(postponeDuration) == false)
-                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType(), currentListedTasks);
+                return new Response(Result.INVALID_TASK, sortType, this.GetType(), currentListedTasks);
             else
                 executedTasks.Enqueue(taskToPostpone);
             if (storageIO.UpdateTask(taskToPostpone))
@@ -107,7 +107,7 @@ namespace ToDo
             }
 
             if (response == null)
-                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                response = new Response(Result.FAILURE, sortType, this.GetType());
 
             return response;
         }
@@ -116,7 +116,7 @@ namespace ToDo
         {
             SetMembers(taskList, storageIO);
 
-            Response response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+            Response response = new Response(Result.FAILURE, sortType, this.GetType());
 
             for (int i = 0; i < executedTasks.Count; i++)
             {
@@ -127,7 +127,7 @@ namespace ToDo
             }
 
             if (response == null)
-                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                response = new Response(Result.FAILURE, sortType, this.GetType());
 
             return response;
         }

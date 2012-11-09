@@ -17,7 +17,7 @@ namespace ToDo
 
             Operation undoOp = GetLastOperation();
             if (undoOp == null)
-                return new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                return new Response(Result.FAILURE, sortType, this.GetType());
 
             Response result = undoOp.Undo(taskList, storageIO);
             if (result == null)
@@ -26,10 +26,10 @@ namespace ToDo
             if (result.IsSuccessful())
             {
                 redoStack.Push(undoOp);
-                result = new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+                result = new Response(Result.SUCCESS, sortType, typeof(OperationUndo), currentListedTasks);
             }
             else
-                result = new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationUndo), currentListedTasks);
+                result = new Response(Result.FAILURE, sortType, typeof(OperationUndo), currentListedTasks);
 
             return result;
         }

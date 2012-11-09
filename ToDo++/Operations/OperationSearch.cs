@@ -38,7 +38,7 @@ namespace ToDo
             string[] criteria;
             SetArgumentsForFeedbackString(out criteria, searchString, startTime, endTime, searchType);
 
-            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks, criteria);
+            return new Response(Result.SUCCESS, sortType, this.GetType(), currentListedTasks, criteria);
         }
 
     }   

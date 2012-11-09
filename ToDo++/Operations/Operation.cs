@@ -144,7 +144,7 @@ namespace ToDo
                 if (TaskIsInvalid(taskToAdd))
                 {
                     Logger.Warning("Attempted to add an invalid task.", "AddTask::Operation");
-                    return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd), currentListedTasks);
+                    return new Response(Result.FAILURE, sortType, typeof(OperationAdd), currentListedTasks);
                 }
                                 
                 taskList.Add(taskToAdd);
@@ -163,7 +163,7 @@ namespace ToDo
             catch (Exception e)
             {
                 Logger.Error(e, "AddTask::Operation");
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd), currentListedTasks);                
+                return new Response(Result.FAILURE, sortType, typeof(OperationAdd), currentListedTasks);                
             }
         }
         
@@ -194,7 +194,7 @@ namespace ToDo
             catch (Exception e)
             {
                 Logger.Error(e, "DeleteTask::Operation");
-                return new Response(Result.FAILURE, Format.DEFAULT, typeof(OperationAdd), currentListedTasks);
+                return new Response(Result.FAILURE, sortType, typeof(OperationAdd), currentListedTasks);
             }
         }
 
@@ -293,7 +293,7 @@ namespace ToDo
             SetMembers(taskList, storageIO);
 
             if (taskToMark.DoneState == doneState)
-                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
+                return new Response(Result.INVALID_TASK, sortType, this.GetType());
             else
                 taskToMark.DoneState = doneState;
 
@@ -421,7 +421,7 @@ namespace ToDo
             searchResults = SearchForTasks(taskName, isSpecific);
 
             if (searchResults.Count == 0)
-                response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType());
+                response = new Response(Result.FAILURE, sortType, this.GetType());
             else
             {
                 currentListedTasks = new List<Task>(searchResults);
@@ -429,7 +429,7 @@ namespace ToDo
                 string[] stringArgs;
                 SetArgumentsForFeedbackString(out stringArgs, taskName, startTime, endTime, SearchType.NONE);
                 response =
-                    new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, stringArgs);
+                    new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, stringArgs);
             }
             return response;
         }
@@ -444,7 +444,7 @@ namespace ToDo
 
                 if (!response.IsSuccessful() && !AllowSkipOver(response)) return response;
             }
-            response = new Response(Result.SUCCESS_MULTIPLE, Format.DEFAULT, this.GetType(), currentListedTasks);
+            response = new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
             return response;
         }
 
@@ -462,7 +462,7 @@ namespace ToDo
             string[] args;
             SetArgumentsForFeedbackString(out args, taskName, startTime, endTime, searchType);
 
-            return new Response(Result.SUCCESS, Format.DEFAULT, typeof(OperationSearch), currentListedTasks, args);
+            return new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, args);
         }
 
 
@@ -508,7 +508,7 @@ namespace ToDo
             {
                 Task task = currentListedTasks[i];
                 if (task == null)
-                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
+                    response = new Response(Result.FAILURE, sortType, this.GetType(), currentListedTasks);
                 else
                 {
                     var parameters = AddTaskToParameters(args, task);
@@ -516,7 +516,7 @@ namespace ToDo
                     if (!response.IsSuccessful() && !AllowSkipOver(response)) return response;
                 }
             }
-            return new Response(Result.SUCCESS_MULTIPLE, Format.DEFAULT, this.GetType(), currentListedTasks);
+            return new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
         }
         #endregion DeleteByIndex
 
@@ -532,7 +532,7 @@ namespace ToDo
             {
                 Task task = currentListedTasks[i];
                 if (task == null)
-                    response = new Response(Result.FAILURE, Format.DEFAULT, this.GetType(), currentListedTasks);
+                    response = new Response(Result.FAILURE, sortType, this.GetType(), currentListedTasks);
                 else
                 {
                     var parameters = AddTaskToParameters(args, task);
@@ -540,7 +540,7 @@ namespace ToDo
                     if (!response.IsSuccessful() && !AllowSkipOver(response)) return response;
                 }
             }
-            return new Response(Result.SUCCESS_MULTIPLE, Format.DEFAULT, this.GetType(), currentListedTasks);
+            return new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
         }
 
         private static object[] AddTaskToParameters(object[] args, Task task)
@@ -573,12 +573,12 @@ namespace ToDo
         {
             // No tasks to delete
             if (taskList.Count == 0)
-                return new Response(Result.INVALID_TASK, Format.DEFAULT, this.GetType());
+                return new Response(Result.INVALID_TASK, sortType, this.GetType());
             // Invalid index ranges
             else if (endIndex < startIndex)
-                return new Response(Result.INVALID_TASK, Format.DEFAULT);
+                return new Response(Result.INVALID_TASK, sortType);
             else if (startIndex < 0 || endIndex > currentListedTasks.Count - 1)
-                return new Response(Result.INVALID_TASK, Format.DEFAULT);
+                return new Response(Result.INVALID_TASK, sortType);
             else return null;
         }
 
@@ -586,7 +586,7 @@ namespace ToDo
         {
             string[] args = new string[1];
             args[0] = task.TaskName;
-            return new Response(Result.SUCCESS, Format.DEFAULT, this.GetType(), currentListedTasks, args);
+            return new Response(Result.SUCCESS, sortType, this.GetType(), currentListedTasks, args);
         }
 
         protected Response GenerateXMLFailureResponse()
