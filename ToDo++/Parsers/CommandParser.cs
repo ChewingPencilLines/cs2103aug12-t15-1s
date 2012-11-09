@@ -21,7 +21,7 @@ namespace ToDo
         public Operation ParseOperation(string input)
         {
             List<Token> tokens = stringParser.ParseStringIntoTokens(input);
-            return GenerateOperation(tokens);            
+            return GenerateOperation(tokens);       
         }
 
         private static Operation GenerateOperation(List<Token> tokens)
