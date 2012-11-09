@@ -68,7 +68,7 @@ namespace ToDo
             TreeNode treeNode = new TreeNode();
             foreach (string commandType in Enum.GetNames(typeof(CommandType)))
             {
-                if (!((commandType == "INVALID") || (commandType == "EXIT")))
+                if (!((commandType == "INVALID") || (commandType == "EXIT") || (commandType == "DISPLAY")))
                 {
                     treeNode = new TreeNode(commandType);
                     commandTree.Nodes.Add(treeNode);
@@ -138,9 +138,17 @@ namespace ToDo
 
         private void removeButton_MouseUp(object sender, MouseEventArgs e)
         {
-            removeButton.SetMouseUp();
-            RemoveFlexiCommandFromSettings(this.listedFlexiCommands.SelectedItem.ToString());
-            UpdateFlexiCommandList();
+            try
+            {
+                removeButton.SetMouseUp();
+                RemoveFlexiCommandFromSettings(this.listedFlexiCommands.SelectedItem.ToString());
+                UpdateFlexiCommandList();
+            }
+            catch (NullReferenceException x)
+            {
+                AlertBox.Show("Please select a Command");
+            }
+
         }
 
         #endregion
@@ -356,7 +364,7 @@ namespace ToDo
 
             box.Select(start, end - start + 1);
             box.SelectionColor = color;
-            box.SelectionFont = new Font("Tahoma", size, FontStyle.Regular);
+            box.SelectionFont = new Font("Arial", size, FontStyle.Regular);
             box.SelectionLength = 0;
         }
 
@@ -487,13 +495,13 @@ namespace ToDo
                         SetFormat(Color.Gray, "eg. delete 31 December after 10pm \n", 9);
                         break;
 
-                    case CommandType.DISPLAY:
+                    case CommandType.SEARCH:
                         SetFormat(Color.Brown, "Display/Search tasks in many ways:\n", 9);
                         SetFormat(Color.Gray, "eg. display 06/09/2012\n", 9);
                         SetFormat(Color.Gray, "eg. display Sunday after 1500hrs\n", 9);
                         SetFormat(Color.Gray, "eg. display 6 sept before 10pm\n", 9);
                         SetFormat(Color.Gray, "eg. display next Saturday\n", 9);
-                        SetFormat(Color.Gray, "eg. display tomorrow\n", 9);
+                        SetFormat(Color.Gray, "eg. display tmr\n", 9);
                         SetFormat(Color.Gray, "eg. display buy milk\n", 9);
                         SetFormat(Color.Gray, "eg. display floating\n", 9);
                         break;
@@ -506,11 +514,51 @@ namespace ToDo
                         SetFormat(Color.Gray, "eg. done all\n", 9);
                         break;
 
-                    case CommandType.MODIFY:
+                    case CommandType.UNDONE:
+                        SetFormat(Color.Brown, "Set Tasks as incomplete:\n", 9);
+                        SetFormat(Color.Gray, "eg. undone task\n", 9);
+                        SetFormat(Color.Gray, "eg. undone 3\n", 9);
+                        SetFormat(Color.Gray, "eg. undone 1-3\n", 9);
+                        SetFormat(Color.Gray, "eg. undone all\n", 9);
+                        break;
+
+                    case CommandType. MODIFY:
                         SetFormat(Color.Brown, "Modify tasks as you please:\n", 9);
                         SetFormat(Color.Gray, "eg. modify 1 buy car\n", 9);
                         SetFormat(Color.Gray, "eg. modify 1 3pm\n", 9);
                         SetFormat(Color.Gray, "eg. modify buy milk 9 Nov\n", 9);
+                        break;
+
+                    case CommandType.POSTPONE:
+                        SetFormat(Color.Brown, "Postpone task as you please:\n", 9);
+                        SetFormat(Color.Gray, "eg. postpone 1-2 2 hours\n", 9);
+                        SetFormat(Color.Gray, "eg. postpone 1 2 days\n", 9);
+                        SetFormat(Color.Gray, "eg. postpone task (default)\n", 9);
+                        SetFormat(Color.Black, "Change the default Postpone below\n", 9);
+                        break;
+
+                    case CommandType.SCHEDULE:
+                        SetFormat(Color.Brown, "Schedule task as you please:\n", 9);
+                        SetFormat(Color.Gray, "eg. schedule buy milk\n", 9);
+                        SetFormat(Color.Gray, "eg. schedule task tmr 2-5pm\n", 9);
+                        SetFormat(Color.Gray, "eg. schedule task tmr (default)\n", 9);
+                        SetFormat(Color.Black, "Change the default Schedule range below\n", 9);
+                        break;
+
+                    case CommandType.UNDO:
+                        SetFormat(Color.Brown, "Undo last command:\n", 9);
+                        SetFormat(Color.Gray, "eg. undo\n", 9);
+                        break;
+
+                    case CommandType.REDO:
+                        SetFormat(Color.Brown, "Redo last command:\n", 9);
+                        SetFormat(Color.Gray, "eg. redo\n", 9);
+                        break;
+                        
+                    case CommandType.SORT:
+                        SetFormat(Color.Brown, "Sort last command:\n", 9);
+                        SetFormat(Color.Gray, "eg. sort date \n", 9);
+                        SetFormat(Color.Gray, "eg. sort name \n", 9);
                         break;
 
                     default:
@@ -523,8 +571,36 @@ namespace ToDo
                 title = contextTree.SelectedNode.Text;
                 switch (selectedContext)
                 {
+                    case ContextType.STARTTIME:
+                        SetFormat(Color.Brown, "Set the time you wish to start your task:\n", 9);
+                        SetFormat(Color.Gray, "eg. add task (from) 2pm-3pm \n", 9);
+                        SetFormat(Color.Gray, "eg. add task (on) 12/11/2012 \n", 9);
+                        break;
+
+                    case ContextType.ENDTIME:
+                        SetFormat(Color.Brown, "Set a range for your task:\n", 9);
+                        SetFormat(Color.Gray, "eg. add task from 2pm(-)3pm \n", 9);
+                        SetFormat(Color.Gray, "eg. add task from 6 Nov (to) 7 Nov \n", 9);
+                        break;
+
+                    case ContextType.DEADLINE:
+                        SetFormat(Color.Brown, "Set a task that must be completed by deadline:\n", 9);
+                        SetFormat(Color.Gray, "eg. add task (by) 3pm next sunday \n", 9);
+                        break;
+
                     case ContextType.CURRENT:
-                        description = "This is a description for Current Command";
+                        SetFormat(Color.Brown, "Set a task deadline with 'this':\n", 9);
+                        SetFormat(Color.Gray, "eg. add task buy milk by (this) sunday \n", 9);
+                        break;
+
+                    case ContextType.NEXT:
+                        SetFormat(Color.Brown, "Set a task deadline with 'next':\n", 9);
+                        SetFormat(Color.Gray, "eg. add task buy milk by (next) month \n", 9);
+                        break;
+
+                    case ContextType.FOLLOWING:
+                        SetFormat(Color.Brown, "Set a task deadline in two weeks:\n", 9);
+                        SetFormat(Color.Gray, "eg. add task buy milk by (following) sunday \n", 9);
                         break;
 
                     default:
@@ -543,13 +619,23 @@ namespace ToDo
                         return;
                 }
             }
-
-            titleLabel.Text = title;
+            else if (this.selectedType == SelectedType.TimeRangeSelected)
+            {
+                title = timeRangeTree.SelectedNode.Text;
+                titleLabel.Text = title;
+                switch (selectedTimeRangeKeywordType)
+                {
+                    default:
+                        SetFormat(Color.Gray, "Set your own keyword for these time ranges\n", 9);
+                        break;
+                }
+            }
         }
 
         private void UpdateTimeRangeDescription()
         {
             descriptionLabel.Clear();
+            SetFormat(Color.Brown, "Set the range of default timings\n", 9);
             SetFormat(Color.Black, "MORNING: ", 9);
             SetFormat(Color.Gray, settings.GetStartTime(TimeRangeKeywordsType.MORNING).ToString(), 9);
             SetFormat(Color.Gray, "-", 9);
@@ -592,7 +678,7 @@ namespace ToDo
                 typeComboBox.Text = settings.GetDefaultScheduleTimeLengthType().ToString();
                 allowComboBoxChanges = true;
 
-            }  
+            }
         }
 
 

@@ -178,7 +178,7 @@ namespace ToDo
             {
                 case "ToDo.CommandType":
                     {
-                        if (keywordToRemove == "add" || keywordToRemove == "remove" || keywordToRemove == "display" || keywordToRemove == "sort"
+                        if (keywordToRemove == "add" || keywordToRemove == "delete" || keywordToRemove == "display" || keywordToRemove == "sort"
                         || keywordToRemove == "search" || keywordToRemove == "modify" || keywordToRemove == "undo" || keywordToRemove == "redo"
                         || keywordToRemove == "done" || keywordToRemove == "undone" || keywordToRemove == "postpone")
                             throw new InvalidDeleteFlexiException("This is a default keyword and can't be removed");

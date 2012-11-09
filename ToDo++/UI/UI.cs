@@ -528,6 +528,11 @@ namespace ToDo
                 Exit();
                 return true;
             }
+            if (keyData == (Keys.Control | Keys.A))
+            {
+                textInput.SelectAll();
+                return true;
+            }
             if (keyData == (Keys.Alt | Keys.Space))
             {
                 this.ActiveControl = textInput;
@@ -683,6 +688,7 @@ namespace ToDo
 
             if (output == null)
             {
+                Logger.Error("Null Response detected", "ProcessText::UI");
                 AlertBox.Show("An invalid response was returned.");
                 return;
             }
