@@ -68,7 +68,7 @@ namespace ToDo
             if (lastPositionOfSpace > -1)
             {
                 this.Text = this.Text.Remove(lastPositionOfSpace, this.SelectionStart-lastPositionOfSpace);
-                this.SelectionStart = this.Text.Length;
+                this.SelectionStart = lastPositionOfSpace;
             }
             else
             {
