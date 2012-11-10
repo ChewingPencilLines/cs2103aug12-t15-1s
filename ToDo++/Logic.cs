@@ -131,6 +131,7 @@ namespace ToDo
 
         private void UpdateSettings(object sender, EventArgs args)
         {
+            Logger.Info("Updated Settings File", "UI::Logic");
             UpdateSettingsFile((SettingInformation)sender);
         }
 
