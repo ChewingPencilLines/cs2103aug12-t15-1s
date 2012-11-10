@@ -20,6 +20,7 @@ namespace ToDo
         int currImage = 1;
         bool fadeLock=false;
         bool firstLoad;
+        bool slideshowEnabled = false;
 
         public HelpControl()
         {
@@ -28,23 +29,33 @@ namespace ToDo
             transpControl.BringToFront();
         }
 
+        /// <summary>
+        /// Pass an instance of UI into HelpControl
+        /// </summary>
+        /// <param name="ui">instance of ui</param>
+        /// <param name="firstLoad">loads slideshow or not</param>
         public void SetUI(UI ui,bool firstLoad)
         {
             this.ui = ui;
             this.firstLoad = firstLoad;
-            LoadRelaventHelpPanel();
+            LoadFullHelpPanel();
         }
 
-        private void LoadRelaventHelpPanel()
+        /// <summary>
+        /// Loads actual help panel instead of slideshow
+        /// </summary>
+        private void LoadFullHelpPanel()
         {
             if (!firstLoad)
                 customPanelControl.SelectedIndex = 1;
         }
 
+        /// <summary>
+        /// Generate slideshow images
+        /// </summary>
         private void GenerateNextImage()
         {
             currImage += 1;
-            string fileName = string.Format("helpFrame{0}", currImage);
 
             switch (currImage)
             {
@@ -88,27 +99,28 @@ namespace ToDo
                     pictureBox.Image = Properties.Resources.help0011;
                     break;
             }
-            //pictureBox.Image = Properties.Resources.helpFrame2;
         }
 
 
-        private void transpControl_MouseDown(object sender, MouseEventArgs e)
+        /// <summary>
+        /// Resets to help layout and closes slidshow
+        /// </summary>
+        private void ResetHelpPanel()
         {
-            if (currImage == 11)
-            {
-                customPanelControl.SelectedIndex = 1;
-                currImage = 1;
-                ui.SwitchToTaskListViewPanel();
-                pictureBox.Image = Properties.Resources.help0001;
-                return;
-            }
-
-            if(!fadeLock)
-                StartFadeInFadeOut();
+            customPanelControl.SelectedIndex = 1;
+            currImage = 1;
+            ui.SwitchToTaskListViewPanel();
+            pictureBox.Image = Properties.Resources.help0001;
         }
 
+        #region FadeOutFadeInAnimator
+
+        /// <summary>
+        /// Go to next slide in animation sequence
+        /// </summary>
         private void StartFadeInFadeOut()
         {
+            slideshowEnabled = true;
             fadeLock = true;
             fadeInTimer.Enabled = true;
         }
@@ -136,9 +148,45 @@ namespace ToDo
             }
         }
 
+        #endregion
+
+        #region EventHandlers
+
         private void introButton_Click(object sender, EventArgs e)
         {
+            slideshowEnabled = true;
             customPanelControl.SelectedIndex = 0;
+        }
+
+        private void HelpControl_Leave(object sender, EventArgs e)
+        {
+            if (slideshowEnabled)
+            {
+                slideshowEnabled = false;
+                ResetHelpPanel();
+            }
+        }
+
+        private void transpControl_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (currImage == 11)
+            {
+                ResetHelpPanel();
+                return;
+            }
+
+            if (!fadeLock)
+                StartFadeInFadeOut();
+        }
+
+        #endregion
+
+        private void manualButton_Click(object sender, EventArgs e)
+        {
+            string local=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string openPDFFile = string.Format("{0}\\fullManual.pdf", local);
+            System.IO.File.WriteAllBytes(openPDFFile, Properties.Resources.user);
+            System.Diagnostics.Process.Start(openPDFFile);        
         }
     }
 }
