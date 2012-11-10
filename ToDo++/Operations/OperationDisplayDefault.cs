@@ -25,7 +25,7 @@ namespace ToDo
             
             List<Task> mostRecentTasks =
                 (from task in taskList
-                 where task.IsWithinTime(isSpecific, DateTime.Today, DateTime.Today.AddDays(7))
+                 where task.IsWithinTime(DateTime.Today, DateTime.Today.AddDays(7))
                  select task).ToList();
 
             mostRecentTasks.Sort(Task.CompareByDateTime);
