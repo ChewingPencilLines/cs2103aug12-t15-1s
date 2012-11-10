@@ -131,6 +131,16 @@ namespace ToDo.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] completeUserManual {
+            get {
+                object obj = ResourceManager.GetObject("completeUserManual", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Cover {
@@ -437,16 +447,6 @@ namespace ToDo.Properties {
             get {
                 object obj = ResourceManager.GetObject("upButton", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] user {
-            get {
-                object obj = ResourceManager.GetObject("user", resourceCulture);
-                return ((byte[])(obj));
             }
         }
     }

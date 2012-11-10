@@ -185,7 +185,7 @@ namespace ToDo
         {
             string local=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string openPDFFile = string.Format("{0}\\fullManual.pdf", local);
-            System.IO.File.WriteAllBytes(openPDFFile, Properties.Resources.user);
+            System.IO.File.WriteAllBytes(openPDFFile, Properties.Resources.completeUserManual);
             System.Diagnostics.Process.Start(openPDFFile);        
         }
     }
