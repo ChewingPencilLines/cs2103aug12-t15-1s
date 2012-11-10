@@ -32,11 +32,11 @@ namespace ToDo
         private void LoadPreferencesTree()
         {
             preferencesTree.Nodes.Clear();
-            TreeNode treeNode = new TreeNode("Starting");
+            TreeNode treeNode = new TreeNode("Starting Options");
             preferencesTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("FlexiCommands");
+            treeNode = new TreeNode("Flexi Commands");
             preferencesTree.Nodes.Add(treeNode);
-            treeNode = new TreeNode("Font/Colors");
+            treeNode = new TreeNode("Font and Colors");
             preferencesTree.Nodes.Add(treeNode);
         }
 

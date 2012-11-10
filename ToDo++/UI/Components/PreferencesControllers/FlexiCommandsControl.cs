@@ -148,27 +148,15 @@ namespace ToDo
 
         #region Add/Remove
 
-        private void addButton_MouseDown(object sender, MouseEventArgs e)
+        private void addButton_Click(object sender, EventArgs e)
         {
-            addButton.SetMouseDown();
-        }
-
-        private void addButton_MouseUp(object sender, MouseEventArgs e)
-        {
-            addButton.SetMouseUp();
             ShowUserInputBox();
         }
 
-        private void removeButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            removeButton.SetMouseDown();
-        }
-
-        private void removeButton_MouseUp(object sender, MouseEventArgs e)
+        private void removeButton_Click(object sender, EventArgs e)
         {
             try
             {
-                removeButton.SetMouseUp();
                 RemoveFlexiCommandFromSettings(this.listedFlexiCommands.SelectedItem.ToString());
                 UpdateFlexiCommandList();
             }
@@ -176,7 +164,6 @@ namespace ToDo
             {
                 AlertBox.Show("Please select a Command");
             }
-
         }
 
         #endregion
@@ -789,6 +776,8 @@ namespace ToDo
         }
 
         #endregion
+
+
 
 
 
