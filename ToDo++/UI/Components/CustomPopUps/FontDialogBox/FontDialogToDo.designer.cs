@@ -45,6 +45,7 @@
             // 
             this.cancelButton.BackColor = System.Drawing.Color.WhiteSmoke;
             this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cancelButton.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cancelButton.ForeColor = System.Drawing.Color.DimGray;
             this.cancelButton.Location = new System.Drawing.Point(5, 100);
             this.cancelButton.Name = "cancelButton";
@@ -58,6 +59,7 @@
             // 
             this.okButton.BackColor = System.Drawing.Color.WhiteSmoke;
             this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.okButton.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.okButton.ForeColor = System.Drawing.Color.DimGray;
             this.okButton.Location = new System.Drawing.Point(182, 100);
             this.okButton.Name = "okButton";
@@ -81,33 +83,33 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.label1.Location = new System.Drawing.Point(157, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(40, 20);
+            this.label1.Size = new System.Drawing.Size(38, 21);
             this.label1.TabIndex = 6;
             this.label1.Text = "Size";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.label2.Location = new System.Drawing.Point(229, 12);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 20);
+            this.label2.Size = new System.Drawing.Size(51, 21);
             this.label2.TabIndex = 7;
             this.label2.Text = "Color";
             // 
             // font
             // 
             this.font.AutoSize = true;
-            this.font.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.font.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.font.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.font.Location = new System.Drawing.Point(2, 12);
             this.font.Name = "font";
-            this.font.Size = new System.Drawing.Size(42, 20);
+            this.font.Size = new System.Drawing.Size(45, 21);
             this.font.TabIndex = 5;
             this.font.Text = "Font";
             // 
