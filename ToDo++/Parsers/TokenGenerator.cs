@@ -10,6 +10,7 @@ using System.Diagnostics;
 
 namespace ToDo
 {
+    // Factory class for creating Tokens.
     public class TokenGenerator
     {
         public TokenGenerator()
@@ -27,7 +28,7 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of tokens</returns>
-        public List<Token> GenerateTokens(List<string> input)
+        public List<Token> GenerateAllTokens(List<string> input)
         {
             List<Token> tokens = new List<Token>();
             // must be done first to catch index ranges.
@@ -55,7 +56,7 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of command tokens</returns>
-        private List<TokenCommand> GenerateCommandTokens(List<string> inputWords)
+        public List<TokenCommand> GenerateCommandTokens(List<string> inputWords)
         {
             CommandType commandType;
             List<TokenCommand> tokens = new List<TokenCommand>();
@@ -72,7 +73,7 @@ namespace ToDo
             return tokens;
         }
 
-        private List<Token> GenerateIndexRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
+        public List<Token> GenerateIndexRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
         {
             List<Token> indexRangeTokens = new List<Token>();
             int index = 0;
@@ -110,7 +111,7 @@ namespace ToDo
             return indexRangeTokens;
         }
 
-        private List<Token> GenerateSortTypeTokens(List<string> input, List<TokenCommand> commandTokens)
+        public List<Token> GenerateSortTypeTokens(List<string> input, List<TokenCommand> commandTokens)
         {
             SortType sortType;
             int index = 0;
@@ -139,7 +140,7 @@ namespace ToDo
             return sortTokens;
         }
 
-        private List<Token> GenerateTimeRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
+        public List<Token> GenerateTimeRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
         {
             List<Token> timeRangeTokens = new List<Token>();
             int index = 0;
