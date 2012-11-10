@@ -26,14 +26,14 @@ namespace ToDo
 
         private static Operation GenerateOperation(List<Token> tokens)
         {            
-            OperationGenerator opAttributes = new OperationGenerator();
+            OperationGenerator factory = new OperationGenerator();
             foreach (Token token in tokens)
             {
-               token.UpdateAttributes(opAttributes);
+               token.ConfigureGenerator(factory);
             }
             // implement? ReleaseUnusedTokens();
-            opAttributes.SetTimes();
-            Operation newOperation = opAttributes.CreateOperation();
+            factory.SetTimes();
+            Operation newOperation = factory.CreateOperation();
             return newOperation;
         }
 

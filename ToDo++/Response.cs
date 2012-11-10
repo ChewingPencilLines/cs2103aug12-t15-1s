@@ -56,7 +56,7 @@ namespace ToDo
         const string STRING_DATE = "date";
         #endregion
 
-        #region Parameter indices
+        #region Parameter Indices
         public const int MODIFY_PARAM_OLD_TASK = 0;
         public const int MODIFY_PARAM_NEW_TASK = 1;
         public const int MODIFY_PARAM_NUM = 2;

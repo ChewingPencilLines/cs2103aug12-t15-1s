@@ -9,6 +9,11 @@ namespace ToDo
     {
         const int MAX_TASKS = 10;
 
+        // ******************************************************************
+        // Constructors
+        // ******************************************************************
+
+        #region Constructors
         public OperationDisplayDefault()
             : base(SortType.DEFAULT)
         { }
@@ -16,7 +21,19 @@ namespace ToDo
         public OperationDisplayDefault(SortType sortType)
             : base(sortType)
         { }
+        #endregion
 
+        // ******************************************************************
+        // Override for Executing this operation
+        // ******************************************************************
+
+        #region ExecuteOperation
+        /// <summary>
+        /// Executes the operation and adds it to the operation history.
+        /// </summary>
+        /// <param name="taskList">List of task this method will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the operation execution.</returns>
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
@@ -39,5 +56,7 @@ namespace ToDo
 
             return new Response(Result.SUCCESS, SortType.DATE_TIME, this.GetType(), currentListedTasks);
         }
+        #endregion
+
     }
 }

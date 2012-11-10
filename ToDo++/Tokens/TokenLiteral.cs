@@ -17,17 +17,17 @@ namespace ToDo
             Logger.Info("Created a literal token", "TokenLiteral::TokenLiteral");
         }
 
-        internal override void UpdateAttributes(OperationGenerator attrb)
+        internal override void ConfigureGenerator(OperationGenerator attrb)
         {
             if (attrb.taskName == null)
             {
                 attrb.taskName = literal;
-                Logger.Info("Found task name", "UpdateAttributes::TokenLiteral");
+                Logger.Info("Found task name", "ConfigureGenerator::TokenLiteral");
             }
             else
             {
                 attrb.taskName += " " + literal;
-                Logger.Info("Task name already defined but more literals present. Appending to task name.", "UpdateAttributes::TokenLiteral");
+                Logger.Info("Task name already defined but more literals present. Appending to task name.", "ConfigureGenerator::TokenLiteral");
             }
         }
     }

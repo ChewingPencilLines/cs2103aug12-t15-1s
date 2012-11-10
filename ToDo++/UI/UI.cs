@@ -43,6 +43,7 @@ namespace ToDo
             IntializeTopMenu();                   //Load Settings into Top Menu Control
             InitializeTaskListView();             //Load Settings into Task List View            
             InitializeTextInput();                //Sets Text Input in Focus
+            IntializeHelpPanel();                 //Loads Help Panel
 
             Logger.Info("All UI Elements loaded correctly...", "UI");
 
@@ -56,6 +57,17 @@ namespace ToDo
         // ******************************************************************
 
         #region IntializationFunction
+
+        /// <summary>
+        /// Initialize Help Control - Pass an instance of UI into it
+        /// </summary>
+        private void IntializeHelpPanel()
+        {
+            bool firstLoadStatus = logic.MainSettings.GetFirstLoadStatus();
+            helpControl.SetUI(this,firstLoadStatus);
+            if (firstLoadStatus == true)
+                SwitchToHelpPanel();
+        }
 
         /// <summary>
         /// Set TextInput as the Active Control
@@ -376,6 +388,7 @@ namespace ToDo
         {
             if (isCollapsed == false)
             {
+                topMenuControl.SetCollapsedStatus(true);
                 this.MinimumSize = new Size(522, 60);
                 grayFadePictureBox.BringToFront();
                 isCollapsed = true;
@@ -385,6 +398,7 @@ namespace ToDo
             }
             else
             {
+                topMenuControl.SetCollapsedStatus(false);
                 setHeight = 60;
                 isCollapsed = false;  
                 timerCollapse.Enabled = false;
@@ -413,6 +427,7 @@ namespace ToDo
                 grayFadePictureBox.Show();
                 taskListViewControl.Show();
                 preferencesPanel.Show();
+                helpControl.Show();
                 timerExpand.Enabled = false;
                 grayFadeTimer.Enabled = true;
             }
@@ -430,6 +445,7 @@ namespace ToDo
                     taskListViewControl.Hide();
                     preferencesPanel.Hide();
                     grayFadePictureBox.Hide();
+                    helpControl.Hide();
 
                     setHeight = this.Height;
                     prevHeight = this.Height;

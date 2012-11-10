@@ -17,10 +17,10 @@ namespace ToDo
             Logger.Info("Created a sort type token", "TokenSortType::TokenSortType");
         }
 
-        internal override void UpdateAttributes(OperationGenerator attrb)
+        internal override void ConfigureGenerator(OperationGenerator attrb)
         {
             attrb.sortType = sortType;
-            Logger.Info("Updated sortType.", "UpdateAttributes::TokenSortType");
+            Logger.Info("Updated sortType.", "ConfigureGenerator::TokenSortType");
         }
 
     }

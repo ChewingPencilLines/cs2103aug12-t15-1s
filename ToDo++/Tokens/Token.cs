@@ -18,6 +18,6 @@ namespace ToDo
             get { return position; }           
         }
 
-        internal abstract void UpdateAttributes(OperationGenerator attrb);
+        internal abstract void ConfigureGenerator(OperationGenerator attrb);
     }
 }

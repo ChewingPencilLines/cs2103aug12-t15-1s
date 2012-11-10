@@ -40,7 +40,7 @@ namespace ToDo
             timeRange = range;
         }
 
-        internal override void UpdateAttributes(OperationGenerator attrb)
+        internal override void ConfigureGenerator(OperationGenerator attrb)
         {
             bool multipleTaskDurations = false;
             if (index != 0)
@@ -48,12 +48,12 @@ namespace ToDo
                 if (attrb.timeRangeIndex == 0)
                 {
                     attrb.timeRangeIndex = index;
-                    Logger.Info("Updated timeRangeIndex.", "UpdateAttributes::TokenTimeRange");
+                    Logger.Info("Updated timeRangeIndex.", "ConfigureGenerator::TokenTimeRange");
                 }
                 else
                 {
                     multipleTaskDurations = true;
-                    Logger.Warning("Attempted to update timeRangeIndex again", "UpdateAttributes::TokenTimeRange");
+                    Logger.Warning("Attempted to update timeRangeIndex again", "ConfigureGenerator::TokenTimeRange");
                 }
             }
             if (timeRangeType != TimeRangeType.DEFAULT)
@@ -61,12 +61,12 @@ namespace ToDo
                 if (attrb.timeRangeType == TimeRangeType.DEFAULT)
                 {
                     attrb.timeRangeType = timeRangeType;
-                    Logger.Info("Updated timeRangeType.", "UpdateAttributes::TokenTimeRange");
+                    Logger.Info("Updated timeRangeType.", "ConfigureGenerator::TokenTimeRange");
                 }
                 else
                 {
                     multipleTaskDurations = true;
-                    Logger.Warning("Attempted to update timeRangeType again", "UpdateAttributes::TokenTimeRange");
+                    Logger.Warning("Attempted to update timeRangeType again", "ConfigureGenerator::TokenTimeRange");
                 }
             }
             if (timeRange != TimeRangeKeywordsType.NONE)
@@ -74,13 +74,13 @@ namespace ToDo
                 if (attrb.timeRangeOne == TimeRangeKeywordsType.NONE)
                 {
                     attrb.timeRangeOne = timeRange;
-                    Logger.Info("Updated timeRangeOne.", "UpdateAttributes::TokenTimeRange");
+                    Logger.Info("Updated timeRangeOne.", "ConfigureGenerator::TokenTimeRange");
                 }
                 else if (attrb.timeRangeTwo == TimeRangeKeywordsType.NONE
                     || attrb.timeRangeTwo <= timeRange)
                 {
                     attrb.timeRangeTwo = timeRange;
-                    Logger.Info("Updated timeRangeTwo.", "UpdateAttributes::TokenTimeRange");
+                    Logger.Info("Updated timeRangeTwo.", "ConfigureGenerator::TokenTimeRange");
                 }
             }
             if (multipleTaskDurations)

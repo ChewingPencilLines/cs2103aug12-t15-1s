@@ -30,15 +30,15 @@ namespace ToDo
             Logger.Info("Created an index range token object", "TokenIndexRange::TokenIndexRange");
         }
 
-        internal override void UpdateAttributes(OperationGenerator attrb)
+        internal override void ConfigureGenerator(OperationGenerator attrb)
         {
             if (indexes != null)
             {
                 attrb.taskRangeIndex = indexes;
-                Logger.Info("Updated taskRangeIndex.", "UpdateAttributes::TokenIndexRange");
+                Logger.Info("Updated taskRangeIndex.", "ConfigureGenerator::TokenIndexRange");
             }
             attrb.rangeIsAll = isAll;
-            Logger.Info("Updated rangeIsAll.", "UpdateAttributes::TokenIndexRange");
+            Logger.Info("Updated rangeIsAll.", "ConfigureGenerator::TokenIndexRange");
         }
     }
 }
