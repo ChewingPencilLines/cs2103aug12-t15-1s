@@ -39,10 +39,11 @@ namespace ToDo
         static public Dictionary<string, TimeRangeType> timeRangeType;
         static public Dictionary<TimeRangeKeywordsType, int> timeRangeKeywordsStartTime;
         static public Dictionary<TimeRangeKeywordsType, int> timeRangeKeywordsEndTime;
+        static public Dictionary<string, int> timeSpecificKeywords;
         static public Dictionary<string, Month> monthKeywords;
         static public Dictionary<string, DayOfWeek> dayKeywords;
         static public Dictionary<string, SortType> sortTypeKeywords;
-        static public List<string> timeSpecificKeywords;
+        
         static public List<string> timeSuffixes;
         static public List<string> todayKeywords;
         static public List<string> rangeAllKeywords;
@@ -220,7 +221,9 @@ namespace ToDo
             dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
             // NYI
             timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
-            timeSpecificKeywords = new List<string> { "noon", "midnight" };
+            timeSpecificKeywords = new Dictionary<string, int>();
+            timeSpecificKeywords.Add("noon", 12);
+            timeSpecificKeywords.Add("midnight", 0);
             todayKeywords = new List<string> { "today" };
             rangeAllKeywords = new List<string> { "all" };
         }

@@ -352,7 +352,8 @@ namespace ToDo
                 {
                     Format_12Hour = true;
                 }
-                if (match.Success)
+                if (match.Success
+                    || CustomDictionary.timeSpecificKeywords.TryGetValue(word.ToLower(), out hours))
                 {
                     string strHours = match.Groups["hours"].Value;
                     string strMinutes = match.Groups["minutes"].Value;
