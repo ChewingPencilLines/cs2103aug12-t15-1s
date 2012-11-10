@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             BrightIdeasSoftware.OLVColumn taskDateTimeCol;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.timerCollapse = new System.Windows.Forms.Timer(this.components);
             this.timerExpand = new System.Windows.Forms.Timer(this.components);
@@ -79,6 +79,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
+            // taskDateTimeCol
+            // 
+            taskDateTimeCol.AspectName = "GetTimeString";
+            taskDateTimeCol.CellPadding = null;
+            taskDateTimeCol.FillsFreeSpace = true;
+            taskDateTimeCol.Width = 199;
+            // 
             // notifyIcon_taskBar
             // 
             this.notifyIcon_taskBar.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon_taskBar.Icon")));
@@ -120,7 +127,7 @@
             this.grayFadePictureBox.Location = new System.Drawing.Point(1, 37);
             this.grayFadePictureBox.Name = "grayFadePictureBox";
             this.grayFadePictureBox.Opacity = 100;
-            this.grayFadePictureBox.Size = new System.Drawing.Size(519, 324);
+            this.grayFadePictureBox.Size = new System.Drawing.Size(519, 347);
             this.grayFadePictureBox.TabIndex = 18;
             this.grayFadePictureBox.TranspKey = System.Drawing.Color.White;
             // 
@@ -144,7 +151,7 @@
             this.transpControl1.Location = new System.Drawing.Point(0, 0);
             this.transpControl1.Name = "transpControl1";
             this.transpControl1.Opacity = 100;
-            this.transpControl1.Size = new System.Drawing.Size(521, 367);
+            this.transpControl1.Size = new System.Drawing.Size(521, 390);
             this.transpControl1.TabIndex = 19;
             this.transpControl1.TranspKey = System.Drawing.Color.White;
             // 
@@ -180,7 +187,7 @@
             this.textInput.Cursor = System.Windows.Forms.Cursors.Hand;
             this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textInput.ForeColor = System.Drawing.Color.White;
-            this.textInput.Location = new System.Drawing.Point(11, 371);
+            this.textInput.Location = new System.Drawing.Point(11, 394);
             this.textInput.Multiline = true;
             this.textInput.Name = "textInput";
             this.textInput.Size = new System.Drawing.Size(501, 20);
@@ -198,7 +205,7 @@
             this.customPanelControl.Location = new System.Drawing.Point(7, 37);
             this.customPanelControl.Name = "customPanelControl";
             this.customPanelControl.SelectedIndex = 0;
-            this.customPanelControl.Size = new System.Drawing.Size(509, 324);
+            this.customPanelControl.Size = new System.Drawing.Size(509, 347);
             this.customPanelControl.TabIndex = 12;
             // 
             // tabPage1
@@ -208,7 +215,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(501, 298);
+            this.tabPage1.Size = new System.Drawing.Size(501, 321);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             // 
@@ -234,7 +241,7 @@
             this.taskListViewControl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.taskListViewControl.Location = new System.Drawing.Point(3, 3);
             this.taskListViewControl.Name = "taskListViewControl";
-            this.taskListViewControl.Size = new System.Drawing.Size(495, 292);
+            this.taskListViewControl.Size = new System.Drawing.Size(495, 315);
             this.taskListViewControl.TabIndex = 17;
             this.taskListViewControl.UseCellFormatEvents = true;
             this.taskListViewControl.UseCompatibleStateImageBehavior = false;
@@ -266,13 +273,6 @@
             this.taskNameCol.Width = 213;
             this.taskNameCol.WordWrap = true;
             // 
-            // taskDateTimeCol
-            // 
-            taskDateTimeCol.AspectName = "GetTimeString";
-            taskDateTimeCol.CellPadding = null;
-            taskDateTimeCol.FillsFreeSpace = true;
-            taskDateTimeCol.Width = 199;
-            // 
             // taskDoneStateCol
             // 
             this.taskDoneStateCol.AspectName = "DoneState";
@@ -286,7 +286,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(501, 314);
+            this.tabPage2.Size = new System.Drawing.Size(501, 321);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Preferences";
             // 
@@ -296,7 +296,7 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
+            this.preferencesPanel.Size = new System.Drawing.Size(495, 315);
             this.preferencesPanel.TabIndex = 0;
             // 
             // taskDisplay
@@ -316,7 +316,7 @@
             this.taskDisplay.Location = new System.Drawing.Point(4, 22);
             this.taskDisplay.Name = "taskDisplay";
             this.taskDisplay.Padding = new System.Windows.Forms.Padding(3);
-            this.taskDisplay.Size = new System.Drawing.Size(501, 314);
+            this.taskDisplay.Size = new System.Drawing.Size(501, 321);
             this.taskDisplay.TabIndex = 2;
             this.taskDisplay.Text = "Task Display";
             // 
@@ -328,7 +328,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(186, 275);
+            this.outputBox.Size = new System.Drawing.Size(495, 275);
             this.outputBox.TabIndex = 28;
             this.outputBox.Text = "";
             // 
@@ -464,7 +464,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(148)))), ((int)(((byte)(148)))));
-            this.ClientSize = new System.Drawing.Size(522, 397);
+            this.ClientSize = new System.Drawing.Size(522, 420);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.textInput);
             this.Controls.Add(this.customPanelControl);
@@ -474,7 +474,7 @@
             this.Controls.Add(this.transpControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(522, 397);
+            this.MinimumSize = new System.Drawing.Size(522, 420);
             this.Name = "UI";
             this.Text = "ToDo++";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SelectTextInput);
