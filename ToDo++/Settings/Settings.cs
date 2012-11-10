@@ -45,6 +45,18 @@ namespace ToDo
         #region GettersSetters
 
         /// <summary>
+        /// Gets whether this is the first time loading ToDo++. Once gotten, it is set to false
+        /// </summary>
+        /// <returns>First load status</returns>
+        public bool GetFirstLoadStatus()
+        {
+            bool firstLoad=settingInfo.misc.FirstLoad;
+            settingInfo.misc.FirstLoad = false;
+            EventHandlers.UpdateSettings(settingInfo);
+            return firstLoad;
+        }
+
+        /// <summary>
         /// Set default text size of Task View
         /// </summary>
         /// <param name="size">text size</param>

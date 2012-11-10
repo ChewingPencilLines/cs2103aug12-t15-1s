@@ -64,7 +64,7 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.helpTab = new System.Windows.Forms.TabPage();
-            this.helpControl1 = new ToDo.HelpControl();
+            this.helpControl = new ToDo.HelpControl();
             this.topMenuControl = new ToDo.TopMenuControl();
             taskDateTimeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -456,7 +456,7 @@
             // helpTab
             // 
             this.helpTab.BackColor = System.Drawing.Color.Gainsboro;
-            this.helpTab.Controls.Add(this.helpControl1);
+            this.helpTab.Controls.Add(this.helpControl);
             this.helpTab.Location = new System.Drawing.Point(4, 22);
             this.helpTab.Name = "helpTab";
             this.helpTab.Padding = new System.Windows.Forms.Padding(3);
@@ -464,14 +464,14 @@
             this.helpTab.TabIndex = 3;
             this.helpTab.Text = "Help Page";
             // 
-            // helpControl1
+            // helpControl
             // 
-            this.helpControl1.BackColor = System.Drawing.Color.Gainsboro;
-            this.helpControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.helpControl1.Location = new System.Drawing.Point(3, 3);
-            this.helpControl1.Name = "helpControl1";
-            this.helpControl1.Size = new System.Drawing.Size(495, 315);
-            this.helpControl1.TabIndex = 0;
+            this.helpControl.BackColor = System.Drawing.Color.Gainsboro;
+            this.helpControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.helpControl.Location = new System.Drawing.Point(3, 3);
+            this.helpControl.Name = "helpControl";
+            this.helpControl.Size = new System.Drawing.Size(495, 315);
+            this.helpControl.TabIndex = 0;
             // 
             // topMenuControl
             // 
@@ -560,7 +560,7 @@
         private TranspControl.TranspControl transpControl1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TabPage helpTab;
-        private HelpControl helpControl1;
+        private HelpControl helpControl;
     }
 }
 
