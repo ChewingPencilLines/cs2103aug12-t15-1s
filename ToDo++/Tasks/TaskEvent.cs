@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace ToDo
 {
-    class TaskEvent : Task
+    public class TaskEvent : Task
     {
         public DateTimeSpecificity isSpecific;
 

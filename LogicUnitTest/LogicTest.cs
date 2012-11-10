@@ -23,6 +23,7 @@ namespace LogicUnitTest
             Assert.AreEqual("ToDo.TaskFloating", type.ToString());
             Assert.AreEqual("DEFAULT", s);
             Assert.AreEqual("Added new task \"milk\" successfully.", result.FeedbackString);
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             return;
         }
 
@@ -36,6 +37,7 @@ namespace LogicUnitTest
             Type type = result.TasksToBeDisplayed[0].GetType();
             Assert.AreEqual("ToDo.TaskDeadline", type.ToString());
             Assert.AreEqual("Added new task \"test\" successfully.", result.FeedbackString);
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             return;
         }
 
@@ -47,8 +49,12 @@ namespace LogicUnitTest
             logic.ProcessCommand("delete all");
             result = logic.ProcessCommand("add test feb 29th ");
             Assert.AreEqual("Invalid command input!", result.FeedbackString);
+            Assert.AreEqual("INVALID_COMMAND", result.Result.ToString());
             result = logic.ProcessCommand("add test feb 29th 2016");
             Assert.AreEqual("Added new task \"test\" successfully.", result.FeedbackString);
+            Type type = result.TasksToBeDisplayed[0].GetType();
+            Assert.AreEqual("ToDo.TaskEvent", type.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             return;
         }
 
@@ -56,8 +62,12 @@ namespace LogicUnitTest
         public void ComplicatedAddTest()
         {
             Response result;
-            result = logic.ProcessCommand(" add \"add 5 and 5\" 0000 hours tmr to friday 2pm");
+            result = logic.ProcessCommand(" add \"add 5 and 5\" feb 3 2pm to feb 5");
+            Type type = result.TasksToBeDisplayed[0].GetType();
+            Assert.AreEqual("ToDo.TaskEvent", type.ToString());
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
             Assert.AreEqual("Added new task \"add 5 and 5\" successfully.", result.FeedbackString);
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             logic.ProcessCommand("delete all");
             return;
         }
@@ -69,7 +79,10 @@ namespace LogicUnitTest
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
             logic.ProcessCommand("add abcd");
+            logic.ProcessCommand("add abd");
             result = logic.ProcessCommand("delete abcd");
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("abd", result.TasksToBeDisplayed[0].TaskName);
             Assert.AreEqual("Deleted task \"abcd\" successfully.", result.FeedbackString);
             return;
         }
@@ -78,9 +91,15 @@ namespace LogicUnitTest
         public void DeleteByDateTest()
         {
             Response result;
-            logic.ProcessCommand("add bb");
+            logic.ProcessCommand("delete all");
+            logic.ProcessCommand("add bb JAN 3");
+            logic.ProcessCommand("add bA JAN 5");
             result = logic.ProcessCommand("delete jan");
-            Assert.AreEqual("Showing tasks within 2013/1/1 12:00 AM to 2013/1/1 12:00 AM.", result.FeedbackString); 
+            Assert.AreEqual("Displaying all tasks within 2013/1/1 0:00 to 2013/1/1 0:00.", result.FeedbackString);
+            Assert.AreEqual("bb", result.TasksToBeDisplayed[0].TaskName);
+            Assert.AreEqual("bA", result.TasksToBeDisplayed[1].TaskName);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             return;
         }
 
@@ -92,7 +111,10 @@ namespace LogicUnitTest
             logic.ProcessCommand("add aa");
             logic.ProcessCommand("add aaa");
             result = logic.ProcessCommand("delete all");
+            Assert.AreEqual(0, result.TasksToBeDisplayed.Count);
             Assert.AreEqual("Deleted all indicated tasks successfully.", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS_MULTIPLE", result.Result.ToString());
             return;
         }
 
@@ -100,11 +122,14 @@ namespace LogicUnitTest
         public void DeleteDateAllTest()
         {
             Response result;
+            logic.ProcessCommand("delete all");
             logic.ProcessCommand("add xx fri 5pm");
             logic.ProcessCommand("add yy fri 9pm");
             result = logic.ProcessCommand("delete friday all");
+            Assert.AreEqual(0, result.TasksToBeDisplayed.Count);
             Assert.AreEqual("Deleted all indicated tasks successfully.", result.FeedbackString);
-            logic.ProcessCommand("delete all");
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS_MULTIPLE", result.Result.ToString());
             return;
         } 
 
@@ -118,6 +143,8 @@ namespace LogicUnitTest
             logic.ProcessCommand("add aaa");
             result = logic.ProcessCommand("delete a");
             Assert.AreEqual("Displaying all tasks matching \"a\".", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             return;
         }
 
@@ -131,6 +158,8 @@ namespace LogicUnitTest
             logic.ProcessCommand("add quee");
             result = logic.ProcessCommand("delete quse");
             Assert.AreEqual("No matching tasks found!", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("FAILURE", result.Result.ToString());
             return;
         }
 
@@ -145,8 +174,12 @@ namespace LogicUnitTest
             logic.ProcessCommand("delete c");
             result = logic.ProcessCommand("delete 1");
             Assert.AreEqual("Deleted task \"cd\" successfully.", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             result = logic.ProcessCommand("delete -1");
             Assert.AreEqual("No matching tasks found!", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("FAILURE", result.Result.ToString());
             return;
         }
 
@@ -159,6 +192,9 @@ namespace LogicUnitTest
             logic.ProcessCommand("add aaa");
             result = logic.ProcessCommand("search aaa");
             Assert.AreEqual("Displaying all tasks matching \"aaa\".", result.FeedbackString);
+            Assert.AreEqual("aaa",result.TasksToBeDisplayed[0].TaskName);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             return;
         }
 
@@ -168,12 +204,14 @@ namespace LogicUnitTest
             Response result;
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
-            logic.ProcessCommand("add aaa 5pm");
-            logic.ProcessCommand("add bbb 7pm");
-            result = logic.ProcessCommand("search today");
-            Assert.AreEqual("Displaying all tasks within 2012/11/9 12:00 AM to 2012/11/9 12:00 AM.", result.FeedbackString);
-           // Assert.AreEqual("aaa", result.TasksToBeDisplayed[0].TaskName);
-            //Assert.AreEqual("bbb", result.TasksToBeDisplayed[1].TaskName);
+            logic.ProcessCommand("add aaa by dec 3");
+            logic.ProcessCommand("add bbb dec 3 7pm");
+            result = logic.ProcessCommand("search dec");
+            Assert.AreEqual("Displaying all tasks within 2012/12/1 0:00 to 2012/12/31 0:00.", result.FeedbackString);
+            Assert.AreEqual("aaa", result.TasksToBeDisplayed[0].TaskName);
+            Assert.AreEqual("bbb", result.TasksToBeDisplayed[1].TaskName);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             return;
         }
 
@@ -183,10 +221,12 @@ namespace LogicUnitTest
             Response result;
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
-            logic.ProcessCommand("add aba 5pm");
-            result = logic.ProcessCommand("search 5pm");
-            Assert.AreEqual("Displaying all tasks within 2012/11/9 17:00.", result.FeedbackString);
-          //  Assert.AreEqual("aba", result.TasksToBeDisplayed[0].TaskName);
+            logic.ProcessCommand("add aba 8th 5pm");
+            result = logic.ProcessCommand("search 8th 5pm");
+            Assert.AreEqual("Displaying all tasks within 2012/12/8 0:00 to 2012/12/8 17:00.", result.FeedbackString);
+            Assert.AreEqual("aba", result.TasksToBeDisplayed[0].TaskName);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             return;
         }
 
@@ -197,11 +237,12 @@ namespace LogicUnitTest
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
             result = logic.ProcessCommand("display");
-            Assert.AreEqual("Displaying all tasks.", result.FeedbackString); 
+            Assert.AreEqual("Displaying all tasks.", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             return;
         }
 
-        //no feedback known since broken of postpone
         [TestMethod]
         public void PostponeByDateTest()
         {
@@ -212,6 +253,8 @@ namespace LogicUnitTest
             logic.ProcessCommand("add qq 3pm");
             result = logic.ProcessCommand("postpone all today to tmr");
             Assert.AreEqual("Postponed all tasks successfully.", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS_MULTIPLE", result.Result.ToString());
             return;
         }
 
@@ -224,6 +267,8 @@ namespace LogicUnitTest
             logic.ProcessCommand("add pp 5pm");
             result = logic.ProcessCommand("postpone pp to jan");
             Assert.AreEqual("Postponed task \"pp\" successfully.", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             return;
         }
 
@@ -236,6 +281,27 @@ namespace LogicUnitTest
             logic.ProcessCommand("add bbbb tmr");
             result = logic.ProcessCommand("modify 1 aaaa");
             Assert.AreEqual("Modified task successfully.", result.FeedbackString);
+            Assert.AreEqual("aaaa", result.TasksToBeDisplayed[0].TaskName);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
+            return;
+        }
+
+        [TestMethod]
+        public void ModifyByIndexFailTest()
+        {
+            Response result;
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            logic.ProcessCommand("add bbbb tmr");
+            result = logic.ProcessCommand("modify -1");
+            Assert.AreEqual("Displaying all tasks matching \"-1\".", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
+            result = logic.ProcessCommand("modify 3");
+            Assert.AreEqual("Invalid task index!", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("INVALID_TASK", result.Result.ToString());
             return;
         }
 
@@ -247,7 +313,11 @@ namespace LogicUnitTest
             logic.ProcessCommand("delete all");
             logic.ProcessCommand("add aa");
             result = logic.ProcessCommand("done aa");
+            bool st = result.TasksToBeDisplayed[0].DoneState;
+            Assert.AreEqual(true, st);
             Assert.AreEqual("Successfully marked \"aa\" as done.", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
             return;
         }
 
@@ -258,8 +328,16 @@ namespace LogicUnitTest
             logic.ProcessCommand("delete all");
             logic.ProcessCommand("add done1 tmr");
             logic.ProcessCommand("add done2 tmr 3pm");
-            result = logic.ProcessCommand("done tmr");
+            result = logic.ProcessCommand("done ALL tmr");
+            bool st = false;
+            foreach (Task task in result.TasksToBeDisplayed)
+            {
+                st = task.DoneState;
+                Assert.AreEqual(true, st);
+            }
             Assert.AreEqual("Successfully marked all tasks as done.", result.FeedbackString);
+            Assert.AreEqual("DEFAULT", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS_MULTIPLE", result.Result.ToString());
             return;
         }
 
@@ -267,8 +345,39 @@ namespace LogicUnitTest
         public void SortByNameTest()
         {
             Response result; 
+            logic.ProcessCommand("delete all");
+            logic.ProcessCommand("add aa by feb");
+            logic.ProcessCommand("add bb jan");
             result = logic.ProcessCommand("sort name");
             Assert.AreEqual("Sorting by name.", result.FeedbackString);
+            Assert.AreEqual("NAME", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
+            Type type = result.TasksToBeDisplayed[0].GetType();
+            Assert.AreEqual("aa", result.TasksToBeDisplayed[0].TaskName);
+            Assert.AreEqual("ToDo.TaskDeadline", type.ToString());
+            type = result.TasksToBeDisplayed[1].GetType();
+            Assert.AreEqual("bb", result.TasksToBeDisplayed[1].TaskName);
+            Assert.AreEqual("ToDo.TaskEvent", type.ToString());
+            return;
+        }
+
+        [TestMethod]
+        public void SortByDateTest()
+        {
+            Response result;
+            logic.ProcessCommand("delete all");
+            logic.ProcessCommand("add aa BY feb");
+            logic.ProcessCommand("add bb jan");
+            result = logic.ProcessCommand("SORT DATE");
+            Assert.AreEqual("Sorting by date.", result.FeedbackString);
+            Assert.AreEqual("DATE_TIME", result.FormatType.ToString());
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
+            Type type = result.TasksToBeDisplayed[0].GetType();
+            Assert.AreEqual("aa", result.TasksToBeDisplayed[0].TaskName);
+            Assert.AreEqual("ToDo.TaskDeadline", type.ToString());
+            type = result.TasksToBeDisplayed[1].GetType();
+            Assert.AreEqual("bb", result.TasksToBeDisplayed[1].TaskName);
+            Assert.AreEqual("ToDo.TaskEvent", type.ToString());
             return;
         }
     }
