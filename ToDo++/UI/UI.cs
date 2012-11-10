@@ -516,9 +516,32 @@ namespace ToDo
         }
 
         /// <summary>
+        /// Switches to Help Panel
+        /// </summary>
+        public void SwitchToHelpPanel()
+        {
+            this.customPanelControl.SelectedIndex = 3;
+        }
+
+        /// <summary>
+        /// Toggle between Help and ToDo Panels
+        /// </summary>
+        public void ToggleHelpToDoPanel()
+        {
+            if (this.customPanelControl.SelectedIndex == 0)
+            {
+                this.customPanelControl.SelectedIndex = 3;
+            }
+            else
+            {
+                this.customPanelControl.SelectedIndex = 0;
+            }
+        }
+
+        /// <summary>
         /// Toggle between TaskListView and Settings Panels
         /// </summary>
-        private void ToggleToDoPanel()
+        public void ToggleToDoSettingsPanel()
         {
             if (this.customPanelControl.SelectedIndex == 0)
             {
@@ -560,12 +583,12 @@ namespace ToDo
             }
             if (keyData == (Keys.Alt | Keys.S))
             {
-                ToggleToDoPanel();
+                ToggleToDoSettingsPanel();
                 return true;
             }
             if (keyData == (Keys.Alt | Keys.S))
             {
-                ToggleToDoPanel();
+                ToggleToDoSettingsPanel();
                 return true;
             }
             if ((keyData == (Keys.Alt | Keys.Up)) || (keyData == (Keys.Alt | Keys.Down)))

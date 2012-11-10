@@ -15,7 +15,8 @@ namespace ToDo
 
         private UI ui;
         bool isCollapsed = false;
-        bool isShowingSettings = false;
+        bool isSettings = false;
+        bool isHelp = false;
 
         public TopMenuControl()
         {
@@ -67,19 +68,20 @@ namespace ToDo
         //Go to Settings Event Handler
         private void settingsButton_Click(object sender, EventArgs e)
         {
-            if (isShowingSettings == false)
+            if (isHelp)
             {
                 ui.SwitchToSettingsPanel();
-                if (isCollapsed == true)
-                    ui.ToggleCollapsedState();
-                isShowingSettings = true;
-                isCollapsed = false;
+                isHelp = false;
+                return;
             }
-            else
-            {
-                ui.SwitchToTaskListViewPanel();
-                isShowingSettings = false;
-            }
+
+            isSettings = true;
+            isHelp = false;
+
+            ui.ToggleToDoSettingsPanel();
+            if (isCollapsed == true)
+                ui.ToggleCollapsedState();
+            isCollapsed = false;
         }
 
         //CollapseExpand Event Handler
@@ -109,12 +111,27 @@ namespace ToDo
             ui.Exit();
         }
 
-        private void questionButton_MouseDown(object sender, MouseEventArgs e)
+        private void questionButton_Click(object sender, EventArgs e)
         {
+            if (isSettings)
+            {
+                ui.SwitchToHelpPanel();
+                isSettings = false;
+                return;
+            }
 
+            isHelp = true;
+            isSettings = false;
+
+            ui.ToggleHelpToDoPanel();
+            if (isCollapsed == true)
+                ui.ToggleCollapsedState();
+            isCollapsed = false;
         }
 
         #endregion
+
+
 
 
     }
