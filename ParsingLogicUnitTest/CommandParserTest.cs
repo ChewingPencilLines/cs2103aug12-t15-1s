@@ -18,6 +18,7 @@ namespace CommandParserTest
             testStrParser = new StringParser();
             testCmdParser = new CommandParser(testStrParser);
             Operation op1 = testCmdParser.ParseOperation("search by oct 30th");
+            Assert.AreEqual("ToDo.OperationSearch", op1.GetType().ToString());
             return;
         }
 
@@ -27,6 +28,7 @@ namespace CommandParserTest
             testStrParser = new StringParser();
             testCmdParser = new CommandParser(testStrParser);
             Operation op1 = testCmdParser.ParseOperation("task do stuff add Oct 15 5 am");
+            Assert.AreEqual("ToDo.OperationAdd", op1.GetType().ToString());
             return;
         }
 
@@ -36,6 +38,7 @@ namespace CommandParserTest
             testStrParser = new StringParser();
             testCmdParser = new CommandParser(testStrParser);
             Operation op1 = testCmdParser.ParseOperation("add task do stuff  by 20");
+            Assert.AreEqual("ToDo.OperationAdd", op1.GetType().ToString());
             return;
         }
 
@@ -45,6 +48,7 @@ namespace CommandParserTest
             testStrParser = new StringParser();
             testCmdParser = new CommandParser(testStrParser);
             Operation op1 = testCmdParser.ParseOperation("add task do stuff by friday 2pm");
+            Assert.AreEqual("ToDo.OperationAdd", op1.GetType().ToString());
             return;
         }
 
@@ -54,6 +58,7 @@ namespace CommandParserTest
             testStrParser = new StringParser();
             testCmdParser = new CommandParser(testStrParser);
             Operation op1 = testCmdParser.ParseOperation("task do stuff add Oct 15 5 am to 6am");
+            Assert.AreEqual("ToDo.OperationAdd", op1.GetType().ToString());
             return;
         }
 
@@ -63,8 +68,7 @@ namespace CommandParserTest
             testStrParser = new StringParser();
             testCmdParser = new CommandParser(testStrParser);
             Operation op1 = testCmdParser.ParseOperation("task do stuff add by 9 pm");
-            Assert.IsTrue(op1 is OperationAdd);
-            //Task task1 = ((OperationAdd)op1).NewTask;
+            Assert.AreEqual("ToDo.OperationAdd", op1.GetType().ToString());
             //Assert.IsTrue(task1.TaskName == "task do stuff");
             //Assert.IsTrue(task1 is TaskDeadline);
             //TimeSpan deadline = ((TaskDeadline)task1).EndTime.TimeOfDay;
