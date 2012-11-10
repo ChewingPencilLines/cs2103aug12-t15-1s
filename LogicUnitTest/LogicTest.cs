@@ -237,9 +237,9 @@ namespace LogicUnitTest
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
             result = logic.ProcessCommand("display");
-            Assert.AreEqual("Displaying all tasks.", result.FeedbackString);
+            Assert.AreEqual("No matching tasks found!", result.FeedbackString);
             Assert.AreEqual("DEFAULT", result.FormatType.ToString());
-            Assert.AreEqual("SUCCESS", result.Result.ToString());
+            Assert.AreEqual("FAILURE", result.Result.ToString());
             return;
         }
 
