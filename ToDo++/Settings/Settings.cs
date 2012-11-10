@@ -27,6 +27,10 @@ namespace ToDo
             settingInfo = new SettingInformation();
         }
 
+        /// <summary>
+        /// Completely wipes and re-updates Settings Data
+        /// </summary>
+        /// <param name="updatedInfo">Pass in an instance of SettingsInformation</param>
         public void UpdateSettings(SettingInformation updatedInfo)
         {
             settingInfo = updatedInfo;
@@ -40,15 +44,95 @@ namespace ToDo
 
         #region GettersSetters
 
-        public void SetTextSize(int size) { settingInfo.misc.TextSize = size; EventHandlers.UpdateSettings(settingInfo); }
+        /// <summary>
+        /// Set default text size of Task View
+        /// </summary>
+        /// <param name="size">text size</param>
+        public void SetTextSize(int size) 
+        { 
+            settingInfo.misc.TextSize = size; 
+            EventHandlers.UpdateSettings(settingInfo);
+            string loggerString = string.Format("User set default text size to {0}..", size);
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get the text size of Task View
+        /// </summary>
+        /// <returns>Text size of Task View</returns>
         public int GetTextSize() { return settingInfo.misc.TextSize; }
-        public void SetLoadOnStartupStatus(bool status) { settingInfo.misc.LoadOnStartup = status; EventHandlers.UpdateSettings(settingInfo); }
+
+
+        /// <summary>
+        /// Sets the load on startup status
+        /// </summary>
+        /// <param name="status">set status</param>
+        public void SetLoadOnStartupStatus(bool status) 
+        { 
+            settingInfo.misc.LoadOnStartup = status; 
+            EventHandlers.UpdateSettings(settingInfo);
+            string loggerString = string.Format("User set load on startup to {0}..", status);
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get the load on startup status
+        /// </summary>
+        /// <returns>load on startup status</returns>
         public bool GetLoadOnStartupStatus() { return settingInfo.misc.LoadOnStartup; }
-        public void SetStartMinimized(bool status) { settingInfo.misc.StartMinimized = status; EventHandlers.UpdateSettings(settingInfo); }
+
+        /// <summary>
+        /// Set start minimized status
+        /// </summary>
+        /// <param name="status">start minized status</param>
+        public void SetStartMinimized(bool status) 
+        { 
+            settingInfo.misc.StartMinimized = status; 
+            EventHandlers.UpdateSettings(settingInfo);
+            string loggerString = string.Format("User set start minimized status to {0}..", status);
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get the start minimized status
+        /// </summary>
+        /// <returns>start Minimized status</returns>
         public bool GetStartMinimizeStatus() { return settingInfo.misc.StartMinimized; }
-        public void SetStayOnTop(bool status) { settingInfo.misc.StayOnTop = status; EventHandlers.UpdateSettings(settingInfo); }
+
+        /// <summary>
+        /// Set stay on top status
+        /// </summary>
+        /// <param name="status">stay on top status</param>
+        public void SetStayOnTop(bool status) 
+        { 
+            settingInfo.misc.StayOnTop = status; 
+            EventHandlers.UpdateSettings(settingInfo);
+            string loggerString = string.Format("User set stay on top to {0}..", status);
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get stay on top status
+        /// </summary>
+        /// <returns>stay on top status</returns>
         public bool GetStayOnTopStatus() { return settingInfo.misc.StayOnTop; }
-        public void SetFontSelection(string font) { settingInfo.misc.FontSelection = font; EventHandlers.UpdateSettings(settingInfo); }
+
+        /// <summary>
+        /// Set Task View font
+        /// </summary>
+        /// <param name="font">default font</param>
+        public void SetFontSelection(string font) 
+        { 
+            settingInfo.misc.FontSelection = font; 
+            EventHandlers.UpdateSettings(settingInfo);
+            string loggerString = string.Format("User set font to {0}..", font);
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Gets Task View font
+        /// </summary>
+        /// <returns>task view font</returns>
         public string GetFontSelection() { return settingInfo.misc.FontSelection; }
 
         public void SetTaskDoneColor(Color col) { settingInfo.misc.TaskDoneColor = col; EventHandlers.UpdateSettings(settingInfo); }
@@ -69,7 +153,7 @@ namespace ToDo
         public void SetDefaultPostponeDurationType(TimeRangeType timeRange) { settingInfo.misc.DefaultPostponeDurationType = timeRange; EventHandlers.UpdateSettings(settingInfo); UpdateDictionaryPostponeSchedule(); }
         public TimeRangeType GetDefaultPostponeDurationType() { return settingInfo.misc.DefaultPostponeDurationType; }
 
-        public void UpdateDictionaryPostponeSchedule()
+        private void UpdateDictionaryPostponeSchedule()
         {
             CustomDictionary.defaultScheduleTimeLength = this.GetDefaultScheduleTimeLength();
             CustomDictionary.defaultPostponeDurationLength = this.GetDefaultPostponeDurationLength();
@@ -295,6 +379,12 @@ namespace ToDo
 
         #region TimeDictionary
 
+        /// <summary>
+        /// Set the Default Time Range of Morning,Afternoon,Evening and Night
+        /// </summary>
+        /// <param name="timeRange">Set type of TimeRange</param>
+        /// <param name="startTime">Set Starting Time</param>
+        /// <param name="endTime">Set Ending Time</param>
         public void SetTimeRange(TimeRangeKeywordsType timeRange, int startTime, int endTime)
         {
             settingInfo.userTimeRangeKeywordsStartTime[timeRange] = startTime;
