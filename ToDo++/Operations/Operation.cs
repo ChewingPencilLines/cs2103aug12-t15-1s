@@ -71,7 +71,7 @@ namespace ToDo
         /// Adds this Operation to the history of successful operations.
         /// </summary>
         /// <returns>Nothing.</returns>
-        protected void TrackOperation()
+        protected void AddToOperationHistory()
         {
             undoStack.Push(this);
             redoStack.Clear();

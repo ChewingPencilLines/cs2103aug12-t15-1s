@@ -102,7 +102,7 @@ namespace ToDo
 
             if (response.IsSuccessful())
             {
-                TrackOperation();
+                AddToOperationHistory();
             }
             return response;
         }

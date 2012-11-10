@@ -85,7 +85,7 @@ namespace ToDo
                 response = new Response(Result.FAILURE, sortType, this.GetType());
 
             if (response.IsSuccessful())
-                TrackOperation();
+                AddToOperationHistory();
 
             return response;
         }
