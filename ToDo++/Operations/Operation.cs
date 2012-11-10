@@ -203,16 +203,14 @@ namespace ToDo
         /// parameters as filters and returns the Tasks matching those filters.
         /// </summary>
         /// <param name="searchString">The string to match the Task's name against.</param>
-        /// <param name="isSpecific">The Specificity of the DateTime filters.</param>
-        /// <param name="exact">The flag indicating whether the string comparison should exact or not.</param>
+        /// <param name="requireExactMatch">The flag indicating whether the string comparison should be exact or not.</param>
         /// <param name="startTime">The start time by which Tasks falling before are not matched.</param>
         /// <param name="endTime">The end time by which Tasks falling after are not matched.</param>
         /// <param name="searchType">The type of search to perform.</param>
         /// <returns></returns>
         protected List<Task> SearchForTasks(
             string searchString,
-            DateTimeSpecificity isSpecific,
-            bool exact = false,
+            bool requireExactMatch = false,
             DateTime? startTime = null,
             DateTime? endTime = null,
             SearchType searchType = SearchType.NONE
@@ -221,8 +219,8 @@ namespace ToDo
             List<Task> filteredTasks = taskList;
             try
             {
-                filteredTasks = FilterByTaskName(filteredTasks, searchString, exact);
-                filteredTasks = FilterByTaskTime(filteredTasks, startTime, endTime, isSpecific);
+                filteredTasks = FilterByTaskName(filteredTasks, searchString, requireExactMatch);
+                filteredTasks = FilterByTaskTime(filteredTasks, startTime, endTime);
                 filteredTasks = FilterBySearchType(filteredTasks, searchType);                 
             }
             catch (Exception e)
@@ -244,7 +242,7 @@ namespace ToDo
         /// <param name="endTime">The end time by which the filtered tasks should be within.</param>
         /// <param name="isSpecific">The Specificity of the time constraints</param>
         /// <returns></returns>
-        private List<Task> FilterByTaskTime(List<Task> tasks, DateTime? startTime, DateTime? endTime, DateTimeSpecificity isSpecific)
+        private List<Task> FilterByTaskTime(List<Task> tasks, DateTime? startTime, DateTime? endTime)
         {
             List<Task> filteredTasks = new List<Task>(tasks);
             if (!(startTime == null && endTime == null))
@@ -264,7 +262,7 @@ namespace ToDo
         private List<Task> FilterByTaskName(List<Task> tasks, string searchString, bool exact)
         {
             List<Task> filteredTasks = new List<Task>(tasks);
-            if (searchString != null)
+            if (!IsValidString(searchString))
                 filteredTasks = (from task in filteredTasks
                                  where ((task.TaskName.IndexOf(searchString) >= 0 && exact == false) ||
                                        (String.Compare(searchString, task.TaskName, true) == 0 && exact == true))
@@ -326,7 +324,7 @@ namespace ToDo
         {
             if (taskToCheck == null)
                 return true;
-            if (taskToCheck.TaskName == null || taskToCheck.TaskName == String.Empty)
+            if (IsValidString(taskToCheck.TaskName))
                 return true;
             return false;
         }
@@ -343,19 +341,31 @@ namespace ToDo
         #endregion
 
         // ****************************************************************************************
-        // Task Selection + Operation Execution Methods
+        // Common Task Selection And Execution Methods
         // ****************************************************************************************
 
-        #region Task Selection + Operation Execution Methods
+        #region Common Task Selection And Execution Methods
 
         // ******************************************************************
         // Search & Execute
         // ******************************************************************
 
         #region Search & Execute
+        /// <summary>
+        /// Searches for one or more tasks using the provided search paramters
+        /// and then executes the specified action on them.
+        /// </summary>
+        /// <param name="searchString">The string to search the tasks' names against.</param>
+        /// <param name="startTime">The start time by which the task must fall within.</param>
+        /// <param name="endTime">The end time by which the task must fall within.</param>
+        /// <param name="isSpecific">The specificty</param>
+        /// <param name="isAll"></param>
+        /// <param name="searchType"></param>
+        /// <param name="action"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
         protected Response ExecuteBySearch(
-                        string taskName,
-                        bool isExact,
+                        string searchString,
                         DateTime? startTime,
                         DateTime? endTime,
                         DateTimeSpecificity isSpecific,
@@ -368,14 +378,14 @@ namespace ToDo
             List<Task> searchResults = new List<Task>();
             Response response = null;
 
-            searchResults = SearchForTasks(taskName, isSpecific, isExact, startTime, endTime, searchType);
+            searchResults = SearchForTasks(searchString, true, startTime, endTime, searchType);
 
             // If no results and not trying to display all, try non-exact search.
             if (searchResults.Count == 0 && !isAll)
-                response = TrySearchNonExact(taskName, isSpecific, startTime, endTime, searchType);
+                response = TrySearchNonExact(searchString, startTime, endTime, searchType);
 
             // If only one result and is searching by name, delete immediately.
-            else if (searchResults.Count == 1 && !(taskName == null || taskName == ""))
+            else if (searchResults.Count == 1 && !IsValidString(searchString))
             {
                 var parameters = AddTaskToParameters(args, searchResults[0]);
                 response = (Response)action.DynamicInvoke(parameters);
@@ -383,13 +393,14 @@ namespace ToDo
             
             else if (isAll)
             {
-                response = ExecuteOnAll(taskName, startTime, endTime, searchType, searchResults, isAll, action, args);
+                searchResults = SearchForTasks(searchString, false, startTime, endTime, searchType);
+                response = ExecuteOnAll(searchString, startTime, endTime, searchType, searchResults, isAll, action, args);
             }
 
             // If not, display search results.
             else
             {
-                response = DisplaySearchResults(searchResults, taskName, startTime, endTime, searchType, isAll);
+                response = DisplaySearchResults(searchResults, searchString, startTime, endTime, searchType, isAll);
             }
             return response;
         }
@@ -421,7 +432,6 @@ namespace ToDo
 
         private Response TrySearchNonExact(
             string taskName,
-            DateTimeSpecificity isSpecific,
             DateTime? startTime,
             DateTime? endTime,
             SearchType searchType
@@ -430,7 +440,7 @@ namespace ToDo
             Response response = null;
             List<Task> searchResults = new List<Task>();
 
-            searchResults = SearchForTasks(taskName, isSpecific);
+            searchResults = SearchForTasks(taskName);
 
             if (searchResults.Count == 0)
                 response = new Response(Result.FAILURE, sortType, this.GetType());
@@ -631,5 +641,10 @@ namespace ToDo
                 criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " " + ((DateTime)endTime).ToString("g");
         }
         #endregion
+
+        private static bool IsValidString(string searchString)
+        {
+            return (searchString == null || searchString == String.Empty);
+        }
     }
 }

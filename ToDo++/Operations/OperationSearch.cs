@@ -32,7 +32,7 @@ namespace ToDo
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
-            List<Task> searchResults = SearchForTasks(searchString, isSpecific, false, startTime, endTime, searchType);
+            List<Task> searchResults = SearchForTasks(searchString, false, startTime, endTime, searchType);
             currentListedTasks = new List<Task>(searchResults);
 
             string[] criteria;

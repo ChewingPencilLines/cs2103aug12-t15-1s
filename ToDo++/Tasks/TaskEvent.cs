@@ -67,7 +67,7 @@ namespace ToDo
                 startCompare = (DateTime)start;
 
                 // If task is not specific to Day/Month, extend search range
-                if ((!isSpecific.StartDate.Day && !isSpecific.StartTime))
+                if (!isSpecific.StartDate.Day && !isSpecific.StartTime)
                 {
                     if (!isSpecific.StartDate.Month)
                     {
@@ -101,10 +101,6 @@ namespace ToDo
                         endCompare = new DateTime(endCompare.Year, endCompare.Month, 1);
                     }
                     endCompare = endCompare.AddMinutes(-1);
-                }
-                else if (!isSpecific.EndTime)
-                {
-                    endCompare = new DateTime(endCompare.Year, endCompare.Month, endCompare.Day, 23, 59, 0);
                 }
 
                 if (startDateTime > endCompare)

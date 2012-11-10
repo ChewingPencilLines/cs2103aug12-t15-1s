@@ -55,6 +55,9 @@
     <Compile Include="RoundButton.Designer.cs">
       <DependentUpon>RoundButton.cs</DependentUpon>
     </Compile>
+    <Compile Include="TimeFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TinyAlert.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,7 +101,7 @@
     <Compile Include="GlobalEventHandlers.cs" />
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\OperationAdd.cs" />
-    <Compile Include="Parsers\OperationGenerator.cs" />
+    <Compile Include="OperationGenerator.cs" />
     <Compile Include="Operations\OperationDelete.cs" />
     <Compile Include="Operations\OperationDisplayDefault.cs" />
     <Compile Include="Operations\OperationMarkAsDone.cs" />

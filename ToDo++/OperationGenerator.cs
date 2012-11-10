@@ -96,7 +96,11 @@ namespace ToDo
                 endDateOnly = startDateOnly;
                 isSpecific.EndDate = isSpecific.StartDate;
             }
+            ExtendTimeRanges();
+        }
 
+        private void ExtendTimeRanges()
+        {
             // Range extensions
             if (startDateOnly != null)
             {
@@ -129,7 +133,7 @@ namespace ToDo
                     }
                     endDateOnly = endDateOnly.Value.AddMinutes(-1);
                 }
-                else if (!isSpecific.EndTime && isSpecific.StartDate.Day == true)
+                else if (endTimeOnly == null && isSpecific.StartDate.Day == true)
                 {
                     endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, endDateOnly.Value.Day, 23, 59, 0);
                 }
@@ -213,8 +217,8 @@ namespace ToDo
         {
             if (startTimeOnly != null && endTimeOnly == null)
             {
-                if (((TimeSpan)startTimeOnly).Hours < endTimeHour
-                    && ((TimeSpan)startTimeOnly).Hours > startTimeHour)
+                if (startTimeOnly.Value.Hours < endTimeHour
+                    && startTimeOnly.Value.Hours > startTimeHour)
                 {
                     endTimeOnly = startTimeOnly;
                     startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
@@ -235,10 +239,10 @@ namespace ToDo
 
         private bool IsSpecifiedTimeWithinTimeRange(int startTimeHour, int endTimeHour)
         {
-            if (!(((TimeSpan)startTimeOnly).Hours < endTimeHour
-                && ((TimeSpan)startTimeOnly).Hours > startTimeHour
-                && ((TimeSpan)endTimeOnly).Hours < endTimeHour
-                && ((TimeSpan)endTimeOnly).Hours > startTimeHour))
+            if (!(startTimeOnly.Value.Hours < endTimeHour
+                && startTimeOnly.Value.Hours > startTimeHour
+                && endTimeOnly.Value.Hours < endTimeHour
+                && endTimeOnly.Value.Hours > startTimeHour))
             {
                 return false;
             }
