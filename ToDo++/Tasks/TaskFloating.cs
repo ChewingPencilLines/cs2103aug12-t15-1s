@@ -25,7 +25,7 @@ namespace ToDo
             return task;
         }
 
-        public override bool IsWithinTime(DateTimeSpecificity isSpecific, DateTime? start, DateTime? end)
+        public override bool IsWithinTime(DateTime? start, DateTime? end)
         {
             return false;
         }

@@ -83,7 +83,7 @@ namespace ToDo
 
         public abstract XElement ToXElement();
 
-        public abstract bool IsWithinTime(DateTimeSpecificity isSpecific, DateTime? start, DateTime? end);
+        public abstract bool IsWithinTime(DateTime? start, DateTime? end);
 
         public abstract void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific);
 

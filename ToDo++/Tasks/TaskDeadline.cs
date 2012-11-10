@@ -46,7 +46,7 @@ namespace ToDo
             return task;
         }
 
-        public override bool IsWithinTime(DateTimeSpecificity compareIsSpecific, DateTime? start, DateTime? end)
+        public override bool IsWithinTime(DateTime? start, DateTime? end)
         {
             bool isWithinTime = true;
             DateTime startCompare, endCompare;
@@ -57,8 +57,7 @@ namespace ToDo
                 startCompare = (DateTime)start;
 
                 // If comparison is not specific to Day/Month, extend search range
-                if ((!isSpecific.StartDate.Day && !isSpecific.StartTime ||
-                    (!compareIsSpecific.StartDate.Day && compareIsSpecific.StartTime)))
+                if (!isSpecific.StartDate.Day && !isSpecific.StartTime)
                 {
                     if (!isSpecific.StartDate.Month)
                     {
@@ -80,8 +79,7 @@ namespace ToDo
                 endCompare = (DateTime)end;
 
                 // Extend compare range if task dates are not specific                
-                if ((!isSpecific.EndDate.Day && !isSpecific.EndTime ||
-                    (!compareIsSpecific.EndDate.Day && !compareIsSpecific.EndTime)))
+                if ((!isSpecific.EndDate.Day && !isSpecific.EndTime))
                 {
                     if (!isSpecific.EndDate.Month)
                     {
@@ -94,10 +92,11 @@ namespace ToDo
                     }
                     endCompare = endCompare.AddMinutes(-1);
                 }
-                else if (!isSpecific.EndTime || !compareIsSpecific.EndTime)
+                else if (!isSpecific.EndTime)
                 {
                     endCompare = new DateTime(endCompare.Year, endCompare.Month, endCompare.Day, 23, 59, 0);
                 }
+
                 if (endDateTime > endCompare)
                 {
                     isWithinTime = false;

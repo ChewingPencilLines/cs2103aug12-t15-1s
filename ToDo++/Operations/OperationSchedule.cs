@@ -116,6 +116,10 @@ namespace ToDo
                 {
                     endDateTime = ((DateTime)endDateTime).AddDays(1).Date;
                 }
+                else
+                {
+                    endDateTime = DateTime.MaxValue.Date;
+                }
             }
             else if (!isSpecific.StartTime && !isSpecific.EndTime)
             {
