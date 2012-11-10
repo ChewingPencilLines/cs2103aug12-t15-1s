@@ -80,23 +80,27 @@ namespace ToDo
             foreach (string word in inputWords)
             {
                 var validTokens = from token in commandTokens
-                                  where token.Position == index - 1 &&
-                                        token.RequiresIndexRange()
+                                  where token.RequiresIndexRange()
                                   select token;
                 if (validTokens.Count() > 0)
                 {
                     bool isAll = false;
                     int[] userDefinedIndex = null;
                     TokenIndexRange indexRangeToken = null;
-                    if (TryGetNumericalRange(word, out userDefinedIndex))
-                    {
-                        indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
-                    }
-                    else if (CheckIfAllKeyword(word))
+                    if (CheckIfAllKeyword(word))
                     {
                         isAll = true;
                         indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
                     }
+                    else if (TryGetNumericalRange(word, out userDefinedIndex))
+                    {
+                        var validTokensAdjacent = from token in commandTokens
+                                                  where token.Position == index - 1
+                                                  select token;
+                        if (validTokensAdjacent.Count() > 0)
+                            indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
+                    }
+
                     if (indexRangeToken != null)
                         indexRangeTokens.Add(indexRangeToken);
                 }
