@@ -66,7 +66,7 @@ namespace ToDo
             {
                 // search for task
                 SetMembers(taskList, storageIO);
-                List<Task> searchResults = SearchForTasks(taskName, isSpecific, false, startTime, endTime, searchType);
+                List<Task> searchResults = SearchForTasks(taskName, false, startTime, endTime, searchType);
                 currentListedTasks = new List<Task>(searchResults);
 
                 string[] criteria;

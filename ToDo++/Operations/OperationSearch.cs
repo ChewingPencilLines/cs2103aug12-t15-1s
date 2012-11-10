@@ -31,14 +31,24 @@ namespace ToDo
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
-            SetMembers(taskList, storageIO);
-            List<Task> searchResults = SearchForTasks(searchString, isSpecific, false, startTime, endTime, searchType);
-            currentListedTasks = new List<Task>(searchResults);
+            Response response = null;
 
-            string[] criteria;
-            SetArgumentsForFeedbackString(out criteria, searchString, startTime, endTime, searchType);
+            SetMembers(taskList, storageIO);            
 
-            return new Response(Result.SUCCESS, sortType, this.GetType(), currentListedTasks, criteria);
+            List<Task> searchResults = SearchForTasks(searchString, false, startTime, endTime, searchType);
+
+            if (searchResults.Count == 0)
+                response = new Response(Result.FAILURE, sortType, this.GetType());
+
+            else
+            {
+                currentListedTasks = new List<Task>(searchResults);
+
+                string[] criteria;
+                SetArgumentsForFeedbackString(out criteria, searchString, startTime, endTime, searchType);
+                response = new Response(Result.SUCCESS, sortType, this.GetType(), currentListedTasks, criteria);
+            }
+            return response;
         }
 
     }   

@@ -9,7 +9,7 @@ namespace ToDo
     public class TokenCommand : Token
     {
         static private List<CommandType> indexRangeableCommandTypes
-            = new List<CommandType> { CommandType.DELETE, CommandType.DONE, CommandType.UNDONE, CommandType.MODIFY, CommandType.POSTPONE };
+            = new List<CommandType> { CommandType.DELETE, CommandType.DONE, CommandType.UNDONE, CommandType.MODIFY, CommandType.POSTPONE, CommandType.SEARCH };
 
         static private List<CommandType> timeRangeableCommandTypes
             = new List<CommandType> { CommandType.SCHEDULE, CommandType.POSTPONE };
