@@ -49,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelpControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="HelpControl.Designer.cs">
+      <DependentUpon>HelpControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logger.cs" />
     <Compile Include="Operations\OperationMarkAsUndone.cs" />
     <Compile Include="RoundButton.cs">
@@ -190,6 +196,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
+    <EmbeddedResource Include="HelpControl.resx">
+      <DependentUpon>HelpControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RoundButton.resx">
       <DependentUpon>RoundButton.cs</DependentUpon>
     </EmbeddedResource>
@@ -270,6 +279,19 @@
     <None Include="Resources\logo2.png" />
     <None Include="Resources\logo3.png" />
     <None Include="Resources\logo4.png" />
+    <None Include="Resources\helpFrame1.png" />
+    <None Include="Resources\helpFrame2.png" />
+    <None Include="Resources\help0001.png" />
+    <None Include="Resources\help0002.png" />
+    <None Include="Resources\help0003.png" />
+    <None Include="Resources\help0004.png" />
+    <None Include="Resources\help0005.png" />
+    <None Include="Resources\help0006.png" />
+    <None Include="Resources\help0007.png" />
+    <None Include="Resources\help0008.png" />
+    <None Include="Resources\help0009.png" />
+    <None Include="Resources\help0010.png" />
+    <None Include="Resources\help0011.png" />
     <Content Include="Resources\settings_icon.jpg" />
     <Content Include="UI\Components\CustomPopUps\FontDialogBox\CGFontCombo.bmp" />
     <Content Include="Resources\Cover.png" />
