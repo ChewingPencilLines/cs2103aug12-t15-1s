@@ -439,5 +439,15 @@ namespace ToDo.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] user {
+            get {
+                object obj = ResourceManager.GetObject("user", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

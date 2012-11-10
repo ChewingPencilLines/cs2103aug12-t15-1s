@@ -253,6 +253,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="App.config" />
+    <None Include="Resources\user.pdf" />
     <None Include="UI\Components\CustomPopUps\FontDialogBox\App.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
