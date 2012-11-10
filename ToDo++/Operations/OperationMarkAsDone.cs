@@ -26,18 +26,25 @@ namespace ToDo
         // Constructors
         // ******************************************************************
 
+        #region Constructors
         /// <summary>
         /// This is the base constructor for the MarkAsDone operation.
-        /// There are three ways to execute this operation in the following priorities.
-        /// By using a single date to mark all tasks on that date.
-        /// by searching the task name against a string,
-        /// and by using the current display index of the task.
+        /// There are three ways to execute this operation.
+        /// If a valid index range is specified or the isAll set to true, the operation will be carried out
+        /// those corresponding indicies or all displayed tasks respectively.
+        /// If search parameters are specified instead, a search operation will be carried out instead.
+        /// The operation will be carried out on the search results if the isAll flag is true.
         /// </summary>
-        /// <param name="doneString">The name of the task to mark as done. Can be a substring of it.</param>
+        /// <param name="taskName">The name of the task to mark as done. Can be a substring of it.</param>
         /// <param name="indexRange">The display index of the task to be marked.</param>
-        /// <param name="doneDate">The date in which to mark all tasks as done.</param>
-        /// <param name="isAll">If this boolean is true, the current displayed tasks will all be marked as done.</param>
-        /// <returns></returns>
+        /// <param name="startTime">The start date from which to mark all tasks as done.</param>
+        /// <param name="endTime">The end date to which to mark all tasks as done.</param>
+        /// <param name="isSpecific"></param>
+        /// <param name="isAll">If this boolean is true, the current displayed tasks or results of the search
+        /// carried out will all be marked as done.</param>
+        /// <param name="searchType">The type of search to be carried out if required.</param>
+        /// <param name="sortType">The type of sort to sort the diplay list by after the operation is executed.</param>
+        /// <returns>Nothing.</returns>
         public OperationMarkAsDone(string taskName, int[] indexRange, DateTime? startTime,
             DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType, SortType sortType)
             : base(sortType)
@@ -57,6 +64,7 @@ namespace ToDo
             this.isAll = isAll;
             this.searchType = searchType;
         }
+        #endregion
 
         public override bool AllowSkipOver(Response response)
         {
@@ -64,6 +72,12 @@ namespace ToDo
                 return true;
             else return false;
         }
+
+        // ******************************************************************
+        // Override for Executing this operation
+        // ******************************************************************
+
+        #region ExecuteOperation
 
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
@@ -92,7 +106,19 @@ namespace ToDo
 
             return response;
         }
+        #endregion
 
+        // ******************************************************************
+        // Overrides for Undoing and Redoing this operation
+        // ******************************************************************
+
+        #region Undo and Redo
+        /// <summary>
+        /// Undo this operation.
+        /// </summary>
+        /// <param name="taskList">List of task this method will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the undo operation.</returns>
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
@@ -113,6 +139,12 @@ namespace ToDo
             return response;
         }
 
+        /// <summary>
+        /// Redo this operation.
+        /// </summary>
+        /// <param name="taskList">List of task this method will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the undo operation.</returns>
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
@@ -132,5 +164,6 @@ namespace ToDo
 
             return response;
         }
+        #endregion
     } 
 }

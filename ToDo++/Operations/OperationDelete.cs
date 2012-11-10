@@ -55,7 +55,12 @@ namespace ToDo
         // ******************************************************************
 
         #region ExecuteOperation
-
+        /// <summary>
+        /// Executes the operation and adds it to the operation history.
+        /// </summary>
+        /// <param name="taskList">List of task this operation will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the operation execution.</returns>
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
@@ -90,6 +95,12 @@ namespace ToDo
         // ******************************************************************
 
         #region Undo and Redo
+        /// <summary>
+        /// Undo this operation.
+        /// </summary>
+        /// <param name="taskList">List of task this method will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the undo operation.</returns>
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
@@ -110,6 +121,12 @@ namespace ToDo
             return response;
         }
 
+        /// <summary>
+        /// Redo this operation.
+        /// </summary>
+        /// <param name="taskList">List of task this method will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the undo operation.</returns>
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
