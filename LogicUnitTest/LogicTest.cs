@@ -56,7 +56,7 @@ namespace LogicUnitTest
         public void ComplicatedAddTest()
         {
             Response result;
-            result = logic.ProcessCommand(" add \"add 5 and 5\" 0000 hours tmr to friday 2pm");
+            result = logic.ProcessCommand(" add \"add 5 and 5\" friday 2pm");
             Assert.AreEqual("Added new task \"add 5 and 5\" successfully.", result.FeedbackString);
             logic.ProcessCommand("delete all");
             return;
@@ -80,7 +80,7 @@ namespace LogicUnitTest
             Response result;
             logic.ProcessCommand("add bb");
             result = logic.ProcessCommand("delete jan");
-            Assert.AreEqual("Showing tasks within 2013/1/1 12:00 AM to 2013/1/1 12:00 AM.", result.FeedbackString); 
+            Assert.AreEqual("Displaying all tasks within 2013/1/1 0:00 to 2013/1/1 0:00.", result.FeedbackString); 
             return;
         }
 
@@ -258,7 +258,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("delete all");
             logic.ProcessCommand("add done1 tmr");
             logic.ProcessCommand("add done2 tmr 3pm");
-            result = logic.ProcessCommand("done tmr");
+            result = logic.ProcessCommand("done ALL tmr");
             Assert.AreEqual("Successfully marked all tasks as done.", result.FeedbackString);
             return;
         }
