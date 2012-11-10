@@ -19,11 +19,7 @@ namespace ToDo
         const int START_INDEX = 0;
         const int END_INDEX = 1;
         static char[,] delimitingCharacters = { { '\'', '\'' }, { '\"', '\"' }, { '[', ']' }, { '(', ')' }, { '{', '}' } };
-
-        static StringParser()
-        {
-        }
-
+        
         // ******************************************************************
         // Public Methods   
         // ******************************************************************
@@ -42,7 +38,7 @@ namespace ToDo
             List<int[]> indexOfDelimiters = FindPositionOfDelimiters(input);
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
             TokenGenerator tokenGenerator = new TokenGenerator();
-            return tokenGenerator.GenerateTokens(words);
+            return tokenGenerator.GenerateAllTokens(words);
         }
 
         internal static string MarkWordsAsAbsolute(string absoluteSubstr)
@@ -230,22 +226,21 @@ namespace ToDo
         {
             List<string> output = new List<string>();
             int position = 0;
-            bool isWordAdded = false;
             foreach (string word in input)
             {
+                bool isWordAdded = false;
                 if (CustomDictionary.CheckIfWordIsTimeSuffix(word))
                 {
                     isWordAdded = MergeWord_IfValidTime(ref output, input, position);
                     if (isWordAdded)
                     {
-                        break;
+                        continue;
                     }
                 }
                 if (!isWordAdded)
                 {
                     output.Add(word);
                 }
-                isWordAdded = false;
                 position++;
             }
             return output;

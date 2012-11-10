@@ -10,6 +10,7 @@ using System.Diagnostics;
 
 namespace ToDo
 {
+    // Factory class for creating Tokens.
     public class TokenGenerator
     {
         public TokenGenerator()
@@ -27,22 +28,19 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of tokens</returns>
-        public List<Token> GenerateTokens(List<string> input)
+        public List<Token> GenerateAllTokens(List<string> input)
         {
             List<Token> tokens = new List<Token>();
-            // must be done first to catch index ranges.
             List<TokenCommand> commandTokens = GenerateCommandTokens(input);
             tokens.AddRange(commandTokens);
-            // must be done after generating command tokens
             tokens.AddRange(GenerateIndexRangeTokens(input, commandTokens));
             tokens.AddRange(GenerateSortTypeTokens(input, commandTokens));
             tokens.AddRange(GenerateTimeRangeTokens(input, commandTokens));
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
             tokens.AddRange(GenerateTimeTokens(input));
-            // must be done after generating day/date/time tokens.
             tokens.AddRange(GenerateContextTokens(input, tokens));
-            // must be done last. all non-hits are taken to be literals            
+            // must be done last. all words not already in tokens are taken to be literals
             tokens.AddRange(GenerateLiteralTokens(input, tokens));
             DeconflictTokens(ref tokens);
             tokens.Sort(CompareByPosition);
@@ -55,7 +53,7 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of command tokens</returns>
-        private List<TokenCommand> GenerateCommandTokens(List<string> inputWords)
+        public List<TokenCommand> GenerateCommandTokens(List<string> inputWords)
         {
             CommandType commandType;
             List<TokenCommand> tokens = new List<TokenCommand>();
@@ -72,7 +70,7 @@ namespace ToDo
             return tokens;
         }
 
-        private List<Token> GenerateIndexRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
+        public List<Token> GenerateIndexRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
         {
             List<Token> indexRangeTokens = new List<Token>();
             int index = 0;
@@ -110,7 +108,7 @@ namespace ToDo
             return indexRangeTokens;
         }
 
-        private List<Token> GenerateSortTypeTokens(List<string> input, List<TokenCommand> commandTokens)
+        public List<Token> GenerateSortTypeTokens(List<string> input, List<TokenCommand> commandTokens)
         {
             SortType sortType;
             int index = 0;
@@ -139,12 +137,15 @@ namespace ToDo
             return sortTokens;
         }
 
-        private List<Token> GenerateTimeRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
+        public List<Token> GenerateTimeRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
         {
             List<Token> timeRangeTokens = new List<Token>();
             int index = 0;
+            bool requiresTimeLength = false;
 
             if (commandTokens.Count(e => e.RequiresTimeRange()) < 1) return timeRangeTokens;
+            if (commandTokens.Count(e => e.RequiresTimeRange() && e.Value != CommandType.ADD) > 0)
+                requiresTimeLength = true;
 
             foreach (string word in inputWords)
             {
@@ -154,11 +155,18 @@ namespace ToDo
                 TokenTimeRange timeRangeToken = null;
 
                 string wordLower = word.ToLower();
-                if (CustomDictionary.IsTimeRange(wordLower))
+
+                if (CustomDictionary.timeRangeKeywords.TryGetValue(wordLower, out timeRangeKeyword))
                 {
+                    timeRangeToken = new TokenTimeRange(index, timeRangeKeyword);
+                }
+
+                else if (CustomDictionary.IsTimeRange(wordLower) && requiresTimeLength)
+                {                    
                     Match match = CustomDictionary.isTimeRange.Match(wordLower);
                     Int32.TryParse(match.Groups["index"].Value, out timeRangeAmount);
                     string matchString = match.Groups["type"].Value;
+
                     if (timeRangeAmount == 0 && matchString != null)
                     {
                         throw new InvalidTimeRangeException("Task duration type was specified without a valid amount (0 " + matchString + ").");
@@ -167,12 +175,10 @@ namespace ToDo
                     {
                         throw new Exception("Something is wrong with IsTimeRange regex etc.");
                     }
+
                     timeRangeToken = new TokenTimeRange(index, timeRangeAmount, timeRangeType);
                 }
-                else if (CustomDictionary.timeRangeKeywords.TryGetValue(wordLower, out timeRangeKeyword))
-                {
-                    timeRangeToken = new TokenTimeRange(index, timeRangeKeyword);
-                }
+
                 if (timeRangeToken != null)
                 {
                     timeRangeTokens.Add(timeRangeToken);
@@ -250,7 +256,6 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of date tokens</returns>
-
         public List<TokenDate> GenerateDateTokens(List<string> input)
         {
             int day = 0;

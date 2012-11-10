@@ -71,7 +71,7 @@ namespace ToDo
         /// Adds this Operation to the history of successful operations.
         /// </summary>
         /// <returns>Nothing.</returns>
-        protected void TrackOperation()
+        protected void AddToOperationHistory()
         {
             undoStack.Push(this);
             redoStack.Clear();
@@ -127,10 +127,10 @@ namespace ToDo
         }
 
         // ******************************************************************
-        // Task Manipulation Methods
+        // Task Handling Methods
         // ******************************************************************
 
-        #region Task Manipulation Methods
+        #region Task Handling Methods
         /// <summary>
         /// Adds a task to the system. The newly added task is written to file
         /// using the Storage controller specified with SetMembers.
@@ -196,6 +196,29 @@ namespace ToDo
                 Logger.Error(e, "DeleteTask::Operation");
                 return new Response(Result.FAILURE, sortType, typeof(OperationAdd), currentListedTasks);
             }
+        }
+
+        /// <summary>
+        /// Marks a task's [done] state depending on the given flag. Marks as done if true, undone if false.
+        /// </summary>
+        /// <param name="taskToMark">Task to mark.</param>
+        /// <param name="doneState">Flag indiciating whether to mark as done or undone.</param>
+        /// <returns></returns>
+        protected Response MarkTaskAs(Task taskToMark, bool doneState)
+        {
+            SetMembers(taskList, storageIO);
+
+            if (taskToMark.DoneState == doneState)
+                return new Response(Result.INVALID_TASK, sortType, this.GetType());
+            else
+                taskToMark.DoneState = doneState;
+
+            executedTasks.Enqueue(taskToMark);
+
+            if (storageIO.MarkTaskAs(taskToMark, doneState))
+                return GenerateStandardSuccessResponse(taskToMark);
+            else
+                return GenerateXMLFailureResponse();
         }
 
         /// <summary>
@@ -293,29 +316,6 @@ namespace ToDo
         }
 
         /// <summary>
-        /// Marks a task's [done] state depending on the given flag. Marks as done if true, undone if false.
-        /// </summary>
-        /// <param name="taskToMark">Task to mark.</param>
-        /// <param name="doneState">Flag indiciating whether to mark as done or undone.</param>
-        /// <returns></returns>
-        protected Response MarkTaskAs(Task taskToMark, bool doneState)
-        {
-            SetMembers(taskList, storageIO);
-
-            if (taskToMark.DoneState == doneState)
-                return new Response(Result.INVALID_TASK, sortType, this.GetType());
-            else
-                taskToMark.DoneState = doneState;
-
-            executedTasks.Enqueue(taskToMark);
-
-            if (storageIO.MarkTaskAs(taskToMark, doneState))
-                return GenerateStandardSuccessResponse(taskToMark);
-            else
-                return GenerateXMLFailureResponse();
-        }
-
-        /// <summary>
         /// This method checks for the validity of the specified task.
         /// </summary>
         /// <param name="taskToCheck">The Task to check validity of.</param>
@@ -341,16 +341,11 @@ namespace ToDo
         #endregion
 
         // ****************************************************************************************
-        // Common Task Selection And Execution Methods
+        // Task Selection And Delegate Invoking Methods
         // ****************************************************************************************
 
-        #region Common Task Selection And Execution Methods
+        #region Task Selection And Delegate Invoking Methods
 
-        // ******************************************************************
-        // Search & Execute
-        // ******************************************************************
-
-        #region Search & Execute
         /// <summary>
         /// Searches for one or more tasks using the provided search paramters
         /// and then executes the specified action on them if there is only one result,
@@ -362,7 +357,7 @@ namespace ToDo
         /// <param name="endTime">The end time by which the task must fall within.</param>
         /// <param name="immediateExecutionFlag">Flag which indicates whether the Delegate should be performed immediately if there are more than one results.</param>
         /// <param name="searchType">The type of search to perform.</param>
-        /// <param name="action">The Delegate method to be invoked which must accept a Task as the first parameters.</param>
+        /// <param name="action">The Delegate method to be invoked which must accept a Task as the first parameter.</param>
         /// <param name="args">Any subsequent parameters to be passed into the Delegate method and then invoked.</param>
         /// <returns>Response indicating the result of the operation.</returns>
         protected Response ExecuteBySearch(
@@ -400,7 +395,7 @@ namespace ToDo
             // If not, display search results.
             else
             {
-                response = DisplaySearchResults(searchResults, searchString, startTime, endTime, searchType, immediateExecutionFlag);
+                response = DisplaySearchResults(searchResults, searchString, startTime, endTime, searchType);
             }
             return response;
         }
@@ -414,10 +409,16 @@ namespace ToDo
         /// <param name="startTime">The start time by which the task must fall within.</param>
         /// <param name="endTime">The end time by which the task must fall within.</param>        
         /// <param name="searchType">The type of search to perform.</param>
-        /// <param name="action">The Delegate method to be invoked which must accept a Task as the first parameters.</param>
+        /// <param name="action">The Delegate method to be invoked which must accept a Task as the first parameter.</param>
         /// <param name="args">Any subsequent parameters to be passed into the Delegate method and then invoked.</param>
         /// <returns>Response indicating the result of the operation.</returns>
-        private Response ExecuteAllBySearch(string searchString, DateTime? startTime, DateTime? endTime, SearchType searchType, Delegate action, object[] args)
+        private Response ExecuteAllBySearch(
+            string searchString,
+            DateTime? startTime,
+            DateTime? endTime,
+            SearchType searchType,
+            Delegate action,
+            object[] args)
         {
             List<Task> searchResults = new List<Task>();
             Response response = null;
@@ -433,11 +434,41 @@ namespace ToDo
                 return new Response(Result.FAILURE, sortType, typeof(OperationSearch));
             }
 
-            if (HasValidTime(startTime, endTime) || IsValidString(searchString) || searchType != SearchType.NONE )
+            if (HasValidTime(startTime, endTime) || IsValidString(searchString) || searchType != SearchType.NONE)
                 response = ExecuteOnAll(searchResults, action, args);
             else
-                response = ExecuteOnAllDisplayedTasks(action, args);
+                response = ExecuteOnAll(currentListedTasks, action, args);
 
+            return response;
+        }
+
+        /// <summary>
+        /// Executes the given Delegate for every Task in the given list of Tasks, with each of the Tasks as the first parameter.        
+        /// Returns the Response indicating the result of this operation.
+        /// </summary>
+        /// <param name="tasks">The list of tasks to operate on.</param>
+        /// <param name="action">The delegate to invoke.</param>
+        /// <param name="args">An optional list of additional parameters to invoke with the delegate
+        /// which will be added after the Task parameter.</param>
+        /// <returns>Response indicating the result of the operation.</returns>
+        private Response ExecuteOnAll(List<Task> tasks, Delegate action, params object[] args)
+        {
+            Response response = null;
+            for (int i = tasks.Count - 1; i >= 0; i--)
+            {
+                Task task = tasks[i];
+
+                if (task == null)
+                    response = new Response(Result.FAILURE, sortType, this.GetType(), currentListedTasks);
+
+                var parameters = AddTaskToParameters(args, task);
+
+                response = InvokeAction(action, parameters);
+
+                if (!response.IsSuccessful() && !AllowSkipOver(response))
+                    return response;
+            }
+            response = new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
             return response;
         }
 
@@ -459,101 +490,59 @@ namespace ToDo
             Response response = null;
             List<Task> searchResults = new List<Task>();
 
-            searchResults = SearchForTasks(taskName);
+            searchResults = SearchForTasks(taskName, false, startTime, endTime, searchType);
+            response = DisplaySearchResults(searchResults, taskName, startTime, endTime, searchType);
 
+            return response;
+        }
+        
+        /// <summary>
+        /// Updates the current display list to show all tasks in the given search results list.
+        /// </summary>
+        /// <param name="searchResults">The search result list of tasks to display.</param>
+        /// <param name="searchString">The search string to display in the feedback string for the user.</param>
+        /// <param name="startTime">The limiting start time of the search.</param>
+        /// <param name="endTime">The limiting end time of the search.</param>
+        /// <param name="searchType">The search type of the search.</param>
+        /// <returns>Response containing the new list of tasks to be displayed.</returns>
+        protected Response DisplaySearchResults(
+            List<Task> searchResults,
+            string searchString,
+            DateTime? startTime,
+            DateTime? endTime,
+            SearchType searchType
+            )
+        {
+            Response response;
             if (searchResults.Count == 0)
                 response = new Response(Result.FAILURE, sortType, typeof(OperationSearch));
+
             else
             {
                 currentListedTasks = new List<Task>(searchResults);
 
-                string[] stringArgs;
-                SetArgumentsForFeedbackString(out stringArgs, taskName, startTime, endTime, SearchType.NONE);
-                response =
-                    new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, stringArgs);
+                string[] criteria;
+                SetArgumentsForSearchFeedbackString(out criteria, searchString, startTime, endTime, searchType);
+                response = new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, criteria);
             }
             return response;
         }
 
         /// <summary>
-        /// 
+        /// Executes a Delegate action on one or more tasks chosen by the currently displayed index.
+        /// The indices provided must be valid for the current displayed list.
         /// </summary>
-        /// <param name="searchResults"></param>
-        /// <param name="action"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        private Response ExecuteOnAll(List<Task> searchResults, Delegate action, params object[] args)
-        {
-            Response response = null;
-            foreach (Task task in searchResults)
-            {
-                var parameters = AddTaskToParameters(args, task);
-                
-                response = InvokeAction(action, parameters);
-
-                if (!response.IsSuccessful() && !AllowSkipOver(response)) 
-                    return response;
-            }
-            response = new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
-            return response;
-        }
-
-        private Response DisplaySearchResults(
-            List<Task> searchResults,
-            string taskName,
-            DateTime? startTime,
-            DateTime? endTime,
-            SearchType searchType,
-            bool isAll
-            )
-        {
-            currentListedTasks = new List<Task>(searchResults);
-
-            string[] args;
-            SetArgumentsForFeedbackString(out args, taskName, startTime, endTime, searchType);
-
-            return new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, args);
-        }
-
-
-        #endregion
-
-
-        // ******************************************************************
-        // Execute By Index
-        // ******************************************************************
-
-        #region Execute By Index
+        /// <param name="startIndex">The start index of the tasks for the Delegate to invoke with.</param>
+        /// <param name="endIndex">The end index of the tasks for the Delegate to invoke with.</param>
+        /// <param name="action">The Delegate method to be invoked which must accept a Task as the first parameter.</param>
+        /// <param name="args">Any subsequent parameters to be passed into the Delegate method and then invoked.</param>
+        /// <returns>Response indicating the result of the operation.</returns>
         protected Response ExecuteByIndex(int startIndex, int endIndex, Delegate action, params object[] args)
         {
             Response response = null;
-            if (endIndex == startIndex)
-            {
-                response = ExecuteOnSingleTask(startIndex, action, args);
-            }
-            else
-            {
-                response = ExecuteOnMultipleTasks(startIndex, endIndex, action, args);
-            }
-            return response;
-        }
 
-        private Response ExecuteOnSingleTask(int startIndex, Delegate action, params object[] args)
-        {
-            Response response = null;
-            Task task = currentListedTasks[startIndex];
-            Debug.Assert(task != null, "Tried to manipulate a null task!");
+            Debug.Assert(startIndex >= 0 && endIndex < currentListedTasks.Count(), "Invalid indexes were passed to ExecuteByIndex!");
 
-            var parameters = AddTaskToParameters(args, task);
-            response = (Response)action.DynamicInvoke(parameters);
-
-            return response;
-        }
-
-        private Response ExecuteOnMultipleTasks(int startIndex, int endIndex, Delegate action, params object[] args)
-        {
-            Response response = null;
-            response = new Response(Result.INVALID_TASK);
             for (int i = endIndex; i >= startIndex; i--)
             {
                 Task task = currentListedTasks[i];
@@ -562,48 +551,15 @@ namespace ToDo
                 else
                 {
                     var parameters = AddTaskToParameters(args, task);
-                    response = (Response)action.DynamicInvoke(parameters);
+                    response = InvokeAction(action, parameters);
                     if (!response.IsSuccessful() && !AllowSkipOver(response)) return response;
                 }
             }
-            return new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
+
+            if (startIndex != endIndex)
+                response = new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
+            return response;
         }
-        #endregion DeleteByIndex
-
-        // ******************************************************************
-        // Execute On All
-        // ******************************************************************
-
-        #region Execute On All
-        protected Response ExecuteOnAllDisplayedTasks(Delegate action, params object[] args)
-        {
-            Response response = null;
-            for (int i = currentListedTasks.Count - 1; i >= 0; i--)
-            {
-                Task task = currentListedTasks[i];
-                if (task == null)
-                    response = new Response(Result.FAILURE, sortType, this.GetType(), currentListedTasks);
-                else
-                {
-                    var parameters = AddTaskToParameters(args, task);
-                    response = (Response)action.DynamicInvoke(parameters);
-                    if (!response.IsSuccessful() && !AllowSkipOver(response)) return response;
-                }
-            }
-            return new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
-        }
-
-        private static object[] AddTaskToParameters(object[] args, Task task)
-        {
-            if (args == null) return new object[1] { task };
-
-            var parameterList = args.ToList();
-            parameterList.Insert(0, task);
-            var parameters = parameterList.ToArray();
-            return parameters;
-        }
-        #endregion
-
         #endregion
 
         // ******************************************************************
@@ -632,6 +588,12 @@ namespace ToDo
             else return null;
         }
 
+        /// <summary>
+        /// Generates and returns a standard success Response indicating that the specified task has been
+        /// successfully executed on by this Operation.
+        /// </summary>
+        /// <param name="task">The task to generate the success response for.</param>
+        /// <returns></returns>
         protected Response GenerateStandardSuccessResponse(Task task)
         {
             string[] args = new string[1];
@@ -639,12 +601,25 @@ namespace ToDo
             return new Response(Result.SUCCESS, sortType, this.GetType(), currentListedTasks, args);
         }
 
+        /// <summary>
+        /// Generates and returns a Response indicating that an XML IO failure has occured.
+        /// </summary>
+        /// <returns></returns>
         protected Response GenerateXMLFailureResponse()
         {
             return new Response(Result.XML_READWRITE_FAIL);
         }
 
-        protected void SetArgumentsForFeedbackString(out string[] criteria, string searchString, DateTime? startTime, DateTime? endTime, SearchType searchType)
+        /// <summary>
+        /// Formats and sets the arguments for the feedback string for a search operation.
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <param name="searchString"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="searchType"></param>
+        /// <returns></returns>
+        protected void SetArgumentsForSearchFeedbackString(out string[] criteria, string searchString, DateTime? startTime, DateTime? endTime, SearchType searchType)
         {
             criteria = new string[Response.SEARCH_PARAM_NUM];
             criteria[Response.SEARCH_PARAM_DONE] = "";
@@ -661,25 +636,72 @@ namespace ToDo
                 criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " within";
             if (startTime != null)
             {
-                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " " + ((DateTime)startTime).ToString("g");
+                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " " + startTime.Value.ToString("g");
                 if (endTime != null)
                     criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " to";
             }
             if (endTime != null)
-                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " " + ((DateTime)endTime).ToString("g");
+                criteria[Response.SEARCH_PARAM_SEARCH_STRING] += " " + endTime.Value.ToString("g");
         }
         #endregion
 
-        private static bool IsValidString(string checkString)
+        // ******************************************************************
+        // Validation Methods
+        // ******************************************************************
+
+        #region Validation Methods        
+        /// <summary>
+        /// Checks a string for it's validity. A string is considered valid
+        /// if it is not null or empty.
+        /// </summary>
+        /// <param name="checkString">The string to check.</param>
+        /// <returns>A boolean indicating the string's validity. True if valid, false if invalid.</returns>
+        protected static bool IsValidString(string checkString)
         {
             return checkString != null && checkString != String.Empty;
         }
 
-        private static bool HasValidTime(DateTime? startTime, DateTime? endTime)
+        /// <summary>
+        /// Checks the two input Nullable DateTimes for whether they have values.
+        /// Returns true if at least one of them has a value, and false if both of them are null.
+        /// </summary>
+        /// <param name="timeOne">First DateTime to check.</param>
+        /// <param name="timeTwo">Second DateTime to check.</param>
+        /// <returns>Boolean indicating if at least one time is not null.</returns>
+        private static bool HasValidTime(DateTime? timeOne, DateTime? timeTwo)
         {
-            return startTime != null || endTime != null;
+            return timeOne != null || timeTwo != null;
+        }
+        #endregion
+
+        // ******************************************************************
+        // Delegate Invocation and Parameter Generation Methods
+        // ******************************************************************
+
+        #region Delegate Invocation and Parameter Generation Methods        
+        /// <summary>
+        /// Accepts an array of objects and returns the same array of objects with
+        /// a Task inserted in the first (zeroth-index) position.
+        /// </summary>
+        /// <param name="args">The given array of objects.</param>
+        /// <param name="task">The task to insert into the first position.</param>
+        /// <returns>The output array with the Task inserted.</returns>
+        private static object[] AddTaskToParameters(object[] args, Task task)
+        {
+            if (args == null) return new object[1] { task };
+
+            var parameterList = args.ToList();
+            parameterList.Insert(0, task);
+            var parameters = parameterList.ToArray();
+            return parameters;
         }
 
+        /// <summary>
+        /// Invokes the given delegate with the given parameters.
+        /// </summary>
+        /// <param name="action">Delegate to invoke.</param>
+        /// <param name="parameters">Parameters to invoke the delegate with.</param>
+        /// <returns>The Response returned by the Delegate after it is invoked.</returns>
         private static Response InvokeAction(Delegate action, object[] parameters)
         {
             Response response;
@@ -690,9 +712,10 @@ namespace ToDo
             catch (System.Exception ex)
             {
                 response = new Response(Result.EXCEPTION_FAILURE);
-                Logger.Error(ex, "ExecuteBySearch::Operation");
+                Logger.Error(ex, "InvokeAction::Operation");
             }
             return response;
         }
+        #endregion
     }
 }

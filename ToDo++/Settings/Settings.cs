@@ -44,6 +44,20 @@ namespace ToDo
 
         #region GettersSetters
 
+        #region MiscGetterSetters
+
+        /// <summary>
+        /// Gets whether this is the first time loading ToDo++. Once gotten, it is set to false
+        /// </summary>
+        /// <returns>First load status</returns>
+        public bool GetFirstLoadStatus()
+        {
+            bool firstLoad=settingInfo.misc.FirstLoad;
+            settingInfo.misc.FirstLoad = false;
+            EventHandlers.UpdateSettings(settingInfo);
+            return firstLoad;
+        }
+
         /// <summary>
         /// Set default text size of Task View
         /// </summary>
@@ -135,7 +149,24 @@ namespace ToDo
         /// <returns>task view font</returns>
         public string GetFontSelection() { return settingInfo.misc.FontSelection; }
 
-        public void SetTaskDoneColor(Color col) { settingInfo.misc.TaskDoneColor = col; EventHandlers.UpdateSettings(settingInfo); }
+        #endregion
+
+        /// <summary>
+        /// Set task done color
+        /// </summary>
+        /// <param name="col">task done color</param>
+        public void SetTaskDoneColor(Color col) 
+        { 
+            settingInfo.misc.TaskDoneColor = col; 
+            EventHandlers.UpdateSettings(settingInfo);
+            string loggerString = string.Format("User set task done color to {0}..", col.ToString());
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get task done color
+        /// </summary>
+        /// <returns>task done color</returns>
         public Color GetTaskDoneColor() { return settingInfo.misc.TaskDoneColor; }
         public void SetTaskMissedDeadlineColor(Color col) { settingInfo.misc.TaskMissedDeadlineColor = col; EventHandlers.UpdateSettings(settingInfo); }
         public Color GetTaskMissedDeadlineColor() { return settingInfo.misc.TaskMissedDeadlineColor; }

@@ -16,24 +16,24 @@ namespace ToDo
             Logger.Info("Created a day token object", "TokenDay::TokenDay");
         }
 
-        internal override void UpdateAttributes(OperationGenerator attrb)
+        internal override void ConfigureGenerator(OperationGenerator attrb)
         {
             switch (attrb.currentMode)
             {
                 case ContextType.STARTTIME:
                     attrb.StartDateOnly = GetDateFromDay(attrb.currentSpecifier, dayOfWeek);
-                    Logger.Info("Updated StartDateOnly.", "UpdateAttributes::TokenDay");
+                    Logger.Info("Updated StartDateOnly.", "ConfigureGenerator::TokenDay");
                     break;
                 case ContextType.ENDTIME:
                     attrb.SetConditionalEndDate(GetDateFromDay(attrb.currentSpecifier, dayOfWeek), new Specificity());
-                    Logger.Info("Successfully set conditional end date.", "UpdateAttributes::TokenDay");
+                    Logger.Info("Successfully set conditional end date.", "ConfigureGenerator::TokenDay");
                     break;
                 case ContextType.DEADLINE:
                     attrb.EndDateOnly = GetDateFromDay(attrb.currentSpecifier, dayOfWeek);
-                    Logger.Info("Updated EndDateOnly.", "UpdateAttributes::TokenDay");
+                    Logger.Info("Updated EndDateOnly.", "ConfigureGenerator::TokenDay");
                     break;
                 default:
-                    Logger.Error("Fell through currentMode switch statement.", "UpdateAttributes::TokenDay");
+                    Logger.Error("Fell through currentMode switch statement.", "ConfigureGenerator::TokenDay");
                     Debug.Assert(false, "Fell through switch statement in GenerateOperation, TokenDay case!");
                     break;
             }                    
