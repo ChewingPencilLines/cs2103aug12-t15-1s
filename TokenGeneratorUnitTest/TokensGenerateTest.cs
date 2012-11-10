@@ -13,7 +13,7 @@ namespace TokenGeneratorTest
         List<Token> result;
 
         [TestMethod]
-        public void GenerateAllTokensTest1()
+        public void SimpleAddTest()
         {
             input = new List<string>();
             input.Add("add");
@@ -30,7 +30,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest2()
+        public void SimpleDaterangeAddTest()
         {
             input = new List<string>();
             input.Add("add");
@@ -49,7 +49,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest3()
+        public void DateTimeParseTest1()
         {
             input = new List<string>();
             input.Add("delete");
@@ -62,7 +62,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest4()
+        public void DateTimeParseTest2()
         {
             input = new List<string>();
             input.Add("delete");
@@ -75,7 +75,22 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest5()
+        public void DateTimeParseTest3()
+        {
+            input = new List<string>();
+            input.Add("delete");
+            input.Add("jan");
+            input.Add("13th");
+            result = gene.GenerateAllTokens(input);
+            Assert.AreEqual(3, result.Count);
+            Assert.IsTrue(result[0] is TokenCommand);
+            Assert.IsTrue(result[1] is TokenDate);
+            Assert.IsTrue(result[2] is TokenDate);
+            return;
+        }
+
+        [TestMethod]
+        public void SimplePostponeTest()
         {
             input = new List<string>();
             input.Add("postpone");
@@ -92,20 +107,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest6()
-        {
-            input = new List<string>();
-            input.Add("delete");
-            input.Add("jan 13th");
-            result = gene.GenerateAllTokens(input);
-            Assert.AreEqual(2, result.Count);
-            Assert.IsTrue(result[0] is TokenCommand);
-            Assert.IsTrue(result[1] is TokenDate);
-            return;
-        }
-
-        [TestMethod]
-        public void GenerateAllTokensTest7()
+        public void IndexRangeTest()
         {
             input = new List<string>();
             input.Add("delete");
@@ -118,7 +120,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest8()
+        public void IndexRangeFailTest()
         {
             input = new List<string>();
             input.Add("delete");
@@ -131,7 +133,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest9()
+        public void CombinedTest1()
         {
             input = new List<string>();
             input.Add("add");
@@ -154,7 +156,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest10()
+        public void CombinedTest2()
         {
             input = new List<string>();
             input.Add("add");
@@ -177,7 +179,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest11()
+        public void SortTypeTest()
         {
             input = new List<string>();
             input.Add("sort");
@@ -190,7 +192,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest12()
+        public void TimeRangeTest()
         {
             input = new List<string>();
             input.Add("add");
@@ -212,7 +214,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest13()
+        public void DateRangeTest()
         {
             input = new List<string>();
             input.Add("add");
