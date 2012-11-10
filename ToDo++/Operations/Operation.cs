@@ -505,7 +505,7 @@ namespace ToDo
         /// <param name="endTime">The limiting end time of the search.</param>
         /// <param name="searchType">The search type of the search.</param>
         /// <returns>Response containing the new list of tasks to be displayed.</returns>
-        private Response DisplaySearchResults(
+        protected Response DisplaySearchResults(
             List<Task> searchResults,
             string searchString,
             DateTime? startTime,
@@ -656,7 +656,7 @@ namespace ToDo
         /// </summary>
         /// <param name="checkString">The string to check.</param>
         /// <returns>A boolean indicating the string's validity. True if valid, false if invalid.</returns>
-        private static bool IsValidString(string checkString)
+        protected static bool IsValidString(string checkString)
         {
             return checkString != null && checkString != String.Empty;
         }
