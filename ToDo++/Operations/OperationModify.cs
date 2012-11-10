@@ -30,6 +30,23 @@ namespace ToDo
         // ******************************************************************
 
         #region Constructors
+        /// <summary>
+        /// This is the base constructor for the Modify operation.
+        /// There are three ways to execute this operation.
+        /// If a valid index range is specified or the isAll set to true, the operation will be carried out
+        /// those corresponding indicies or all displayed tasks respectively.
+        /// If search parameters are specified instead, a search operation will be carried out instead.
+        /// The operation will be carried out on the search results if the isAll flag is true.
+        /// </summary>
+        /// <param name="taskName">The name of the task to modified. Can be a substring of it.</param>
+        /// <param name="indexRange">The display index of the task to be marked.</param>
+        /// <param name="startTime">The new start date to set for the task</param>
+        /// <param name="endTime">The new end date to set for the task.</param>
+        /// <param name="isSpecific">The new Specificity of the dates for the task.</param>
+        /// <param name="isAll">If this boolean is true, the operation will be invalid.</param>
+        /// <param name="searchType">The type of search to be carried out if required.</param>
+        /// <param name="sortType">The type of sort to sort the diplay list by after the operation is executed.</param>
+        /// <returns>Nothing.</returns>
         public OperationModify(string taskName, int[] indexRange, DateTime? startTime,
             DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType, SortType sortType)
             : base(sortType)
@@ -51,50 +68,47 @@ namespace ToDo
         }
         #endregion
 
-        /*
-        *  If a user keys in nothing or only index or only task details
-        *  after the commandtype, then all tasks will be shown.
-        *  only when user input an index + information will a task be modified.
-        */
+        // ******************************************************************
+        // Override for Executing this operation
+        // ******************************************************************
+
+        #region ExecuteOperation        
+        /// <summary>
+        /// Executes the operation and adds it to the operation history.
+        /// </summary>
+        /// <param name="taskList">List of task this operation will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the operation execution.</returns>
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
 
             Response response = null;
 
-            if (!hasIndex)
+            // No index, do a search instead
+            if (!hasIndex && !isAll)
             {
-                // search for task
                 SetMembers(taskList, storageIO);
                 List<Task> searchResults = SearchForTasks(taskName, false, startTime, endTime, searchType);
-                currentListedTasks = new List<Task>(searchResults);
-
-                string[] criteria;
-                SetArgumentsForSearchFeedbackString(out criteria, taskName, startTime, endTime, searchType);
-
-                return new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, criteria);
+                response = DisplaySearchResults(searchResults, taskName, startTime, endTime, searchType);
             }
             else
             {                
                 response = CheckIfIndexesAreValid(startIndex, endIndex);
                 if (response != null) return response;
 
-                if (startIndex != endIndex || isAll == true)
-                {
+                if (MultipleTasksSelected())
                     return new Response(Result.INVALID_TASK, sortType, this.GetType());
-                }
 
                 oldTask = currentListedTasks[startIndex];
-                if (taskName == null || taskName == String.Empty)
-                {
-                    // copy over taskName from indexed task if didn't specify a name
+
+                // copy over taskName from indexed task if didn't specify a name
+                if (!IsValidString(taskName))
                     taskName = oldTask.TaskName;
-                }
+                // copy over date/times from indexed task if didn't specify time
                 else if (startTime == null && endTime == null)
-                {
-                    // copy over all times from indexed task
                     oldTask.CopyDateTimes(ref startTime, ref endTime, ref isSpecific);
-                }
+
                 newTask = Task.GenerateNewTask(taskName, startTime, endTime, isSpecific);
 
                 response = ModifyTask(oldTask, newTask);
@@ -102,12 +116,30 @@ namespace ToDo
 
             if (response.IsSuccessful())
             {
-                TrackOperation();
+                AddToOperationHistory();
             }
+
             return response;
         }
 
-        protected Response ModifyTask(Task taskToModify, Task newTask)
+        /// <summary>
+        /// Returns true if more than one tasks were selected by the user.
+        /// </summary>
+        /// <returns>Boolean indicated if multiple tasks were selected.</returns>
+        private bool MultipleTasksSelected()
+        {
+            return startIndex != endIndex || isAll == true;
+        }
+        
+        /// <summary>
+        /// Modifies a task in the list specified by SetMembers by replacing 
+        /// it with the a new given new task.
+        /// Does not preserve the hash and actual object of the original task.
+        /// </summary>
+        /// <param name="taskToModify">The old task to be modified.</param>
+        /// <param name="newTask">The new task to replace the old task.</param>
+        /// <returns></returns>
+        private Response ModifyTask(Task taskToModify, Task newTask)
         {
             Response response = null;
             response = DeleteTask(taskToModify);
@@ -117,7 +149,19 @@ namespace ToDo
             else
                 return response;
         }
+        #endregion
 
+        // ******************************************************************
+        // Overrides for Undoing and Redoing this operation
+        // ******************************************************************
+
+        #region Undo and Redo
+        /// <summary>
+        /// Undo this operation.
+        /// </summary>
+        /// <param name="taskList">List of task this method will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the undo operation.</returns>
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
@@ -125,11 +169,19 @@ namespace ToDo
             return response;
         }
 
+        /// <summary>
+        /// Redo this operation.
+        /// </summary>
+        /// <param name="taskList">List of task this method will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the undo operation.</returns>
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
             Response response = ModifyTask(oldTask, newTask);
             return response;
         }
+        #endregion
+
     }
 }
