@@ -19,15 +19,5 @@ namespace ToDo
         }
 
         internal abstract void UpdateAttributes(OperationGenerator attrb);
-
-        internal virtual bool RequiresIndexRange()
-        {            
-            return false;
-        }
-
-        internal virtual bool RequiresTimeRange()
-        {
-            return false;
-        }
     }
 }

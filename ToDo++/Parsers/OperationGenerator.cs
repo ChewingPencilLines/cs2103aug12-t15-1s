@@ -96,6 +96,44 @@ namespace ToDo
                 endDateOnly = startDateOnly;
                 isSpecific.EndDate = isSpecific.StartDate;
             }
+
+            // Range extensions
+            if (startDateOnly != null)
+            {
+                // If comparison is not specific to Day/Month, extend search range
+                if (!isSpecific.StartDate.Day && startTimeOnly == null)
+                {
+                    if (!isSpecific.StartDate.Month)
+                    {
+                        startDateOnly = new DateTime(startDateOnly.Value.Year, 1, 1);
+                    }
+                    else
+                    {
+                        startDateOnly = new DateTime(startDateOnly.Value.Year, startDateOnly.Value.Month, 1);
+                    }
+                }
+            }
+            if (endDateOnly != null)
+            {
+                // Extend compare range if task dates are not specific                
+                if (!isSpecific.EndDate.Day && endTimeOnly == null)
+                {
+                    if (!isSpecific.EndDate.Month)
+                    {
+                        endDateOnly = new DateTime(endDateOnly.Value.Year + 1, 1, 1);
+                    }
+                    else
+                    {
+                        endDateOnly = endDateOnly.Value.AddMonths(1);
+                        endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, 1);
+                    }
+                    endDateOnly = endDateOnly.Value.AddMinutes(-1);
+                }
+                else if (!isSpecific.EndTime && isSpecific.StartDate.Day == true)
+                {
+                    endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, endDateOnly.Value.Day, 23, 59, 0);
+                }
+            }
         }
 
         private void SetScheduleTime()

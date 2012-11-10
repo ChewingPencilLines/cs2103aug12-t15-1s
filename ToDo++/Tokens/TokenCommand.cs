@@ -64,33 +64,20 @@ namespace ToDo
             }
         }
 
-        internal override bool RequiresIndexRange()
+        internal bool RequiresIndexRange()
         {
             if (indexRangeableCommandTypes.Contains(Value))
-            {
-                Logger.Info("command type requires index range", "RequiresIndexRange::TokenCommand");
                 return true;
-            }
             else
-            {
-                Logger.Info("command type does not require index range", "RequiresIndexRange::TokenCommand");
                 return false;
-            }
         }
 
-        internal override bool RequiresTimeRange()
+        internal bool RequiresTimeRange()
         {
-            if (this.GetType() == typeof(TokenCommand))
-            {
-                TokenCommand token = (TokenCommand)this;
-                if (timeRangeableCommandTypes.Contains(token.Value))
-                {
-                    Logger.Info("command type requires time range", "RequiresTimeRange::TokenCommand");
-                    return true;
-                }
-            }
-            Logger.Info("command type does not require time range", "RequiresTimeRange::TokenCommand");
-            return false;
+            if (timeRangeableCommandTypes.Contains(Value))
+                return true;
+            else
+                return false;
         }
 
     }
