@@ -39,8 +39,8 @@ namespace ToDo
         /// The operation will be carried out on the search results if the isAll flag is true.
         /// </summary>
         /// <param name="taskName">The name of the task to modified. Can be a substring of it.</param>
-        /// <param name="indexRange">The display index of the task to be marked.</param>
-        /// <param name="startTime">The new start date to set for the task</param>
+        /// <param name="indexRange">The display index of the task to be modified.</param>
+        /// <param name="startTime">The new start date to set for the task.</param>
         /// <param name="endTime">The new end date to set for the task.</param>
         /// <param name="isSpecific">The new Specificity of the dates for the task.</param>
         /// <param name="isAll">If this boolean is true, the operation will be invalid.</param>
