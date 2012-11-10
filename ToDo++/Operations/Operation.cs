@@ -400,44 +400,8 @@ namespace ToDo
             // If not, display search results.
             else
             {
-                response = DisplaySearchResults(searchResults, searchString, startTime, endTime, searchType, immediateExecutionFlag);
+                response = DisplaySearchResults(searchResults, searchString, startTime, endTime, searchType);
             }
-            return response;
-        }
-
-        /// <summary>
-        /// Searches for one or more tasks using the provided search paramters
-        /// and then executes the specified action on them immediately.
-        /// Does an exact search only if all times provided are null.
-        /// </summary>
-        /// <param name="searchString">The string to search the tasks' names against.</param>
-        /// <param name="startTime">The start time by which the task must fall within.</param>
-        /// <param name="endTime">The end time by which the task must fall within.</param>        
-        /// <param name="searchType">The type of search to perform.</param>
-        /// <param name="action">The Delegate method to be invoked which must accept a Task as the first parameters.</param>
-        /// <param name="args">Any subsequent parameters to be passed into the Delegate method and then invoked.</param>
-        /// <returns>Response indicating the result of the operation.</returns>
-        private Response ExecuteAllBySearch(string searchString, DateTime? startTime, DateTime? endTime, SearchType searchType, Delegate action, object[] args)
-        {
-            List<Task> searchResults = new List<Task>();
-            Response response = null;
-
-            if (HasValidTime(startTime, endTime))
-                searchResults = SearchForTasks(searchString, false, startTime, endTime, searchType);
-            else
-                searchResults = SearchForTasks(searchString, true, startTime, endTime, searchType);
-
-            if (searchResults.Count == 0)
-            {
-                Logger.Info("Tried to execute all with no results", "ExecuteAllBySearch::Operation");
-                return new Response(Result.FAILURE, sortType, typeof(OperationSearch));
-            }
-
-            if (HasValidTime(startTime, endTime) || IsValidString(searchString) || searchType != SearchType.NONE )
-                response = ExecuteOnAll(searchResults, action, args);
-            else
-                response = ExecuteOnAllDisplayedTasks(action, args);
-
             return response;
         }
 
@@ -474,56 +438,46 @@ namespace ToDo
             }
             return response;
         }
-
+        
         /// <summary>
-        /// 
+        /// Updates the current display list to show all tasks in the given search results list.
         /// </summary>
-        /// <param name="searchResults"></param>
-        /// <param name="action"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        private Response ExecuteOnAll(List<Task> searchResults, Delegate action, params object[] args)
-        {
-            Response response = null;
-            foreach (Task task in searchResults)
-            {
-                var parameters = AddTaskToParameters(args, task);
-                
-                response = InvokeAction(action, parameters);
-
-                if (!response.IsSuccessful() && !AllowSkipOver(response)) 
-                    return response;
-            }
-            response = new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
-            return response;
-        }
-
+        /// <param name="searchResults">The search result list of tasks to display.</param>
+        /// <param name="searchString">The search string to display in the feedback string for the user.</param>
+        /// <param name="startTime">The limiting start time of the search.</param>
+        /// <param name="endTime">The limiting end time of the search.</param>
+        /// <param name="searchType">The search type of the search.</param>
+        /// <returns>Response containing the new list of tasks to be displayed.</returns>
         private Response DisplaySearchResults(
             List<Task> searchResults,
-            string taskName,
+            string searchString,
             DateTime? startTime,
             DateTime? endTime,
-            SearchType searchType,
-            bool isAll
+            SearchType searchType
             )
         {
             currentListedTasks = new List<Task>(searchResults);
 
             string[] args;
-            SetArgumentsForFeedbackString(out args, taskName, startTime, endTime, searchType);
+            SetArgumentsForFeedbackString(out args, searchString, startTime, endTime, searchType);
 
             return new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, args);
         }
-
-
         #endregion
-
 
         // ******************************************************************
         // Execute By Index
         // ******************************************************************
 
         #region Execute By Index
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startIndex"></param>
+        /// <param name="endIndex"></param>
+        /// <param name="action"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
         protected Response ExecuteByIndex(int startIndex, int endIndex, Delegate action, params object[] args)
         {
             Response response = null;
@@ -575,33 +529,78 @@ namespace ToDo
         // ******************************************************************
 
         #region Execute On All
-        protected Response ExecuteOnAllDisplayedTasks(Delegate action, params object[] args)
+        /// <summary>
+        /// Searches for one or more tasks using the provided search paramters
+        /// and then executes the specified action on them immediately.
+        /// Does an exact search only if all times provided are null.
+        /// </summary>
+        /// <param name="searchString">The string to search the tasks' names against.</param>
+        /// <param name="startTime">The start time by which the task must fall within.</param>
+        /// <param name="endTime">The end time by which the task must fall within.</param>        
+        /// <param name="searchType">The type of search to perform.</param>
+        /// <param name="action">The Delegate method to be invoked which must accept a Task as the first parameters.</param>
+        /// <param name="args">Any subsequent parameters to be passed into the Delegate method and then invoked.</param>
+        /// <returns>Response indicating the result of the operation.</returns>
+        private Response ExecuteAllBySearch(
+            string searchString,
+            DateTime? startTime,
+            DateTime? endTime,
+            SearchType searchType,
+            Delegate action,
+            object[] args)
+        {
+            List<Task> searchResults = new List<Task>();
+            Response response = null;
+
+            if (HasValidTime(startTime, endTime))
+                searchResults = SearchForTasks(searchString, false, startTime, endTime, searchType);
+            else
+                searchResults = SearchForTasks(searchString, true, startTime, endTime, searchType);
+
+            if (searchResults.Count == 0)
+            {
+                Logger.Info("Tried to execute all with no results", "ExecuteAllBySearch::Operation");
+                return new Response(Result.FAILURE, sortType, typeof(OperationSearch));
+            }
+
+            if (HasValidTime(startTime, endTime) || IsValidString(searchString) || searchType != SearchType.NONE)
+                response = ExecuteOnAll(searchResults, action, args);
+            else
+                response = ExecuteOnAll(currentListedTasks, action, args);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Executes the given Delegate for every Task in the given list of Tasks, with each of the Tasks as the first parameter.        
+        /// Returns the Response indicating the result of this operation.
+        /// </summary>
+        /// <param name="tasks">The list of tasks to operate on.</param>
+        /// <param name="action">The delegate to invoke.</param>
+        /// <param name="args">An optional list of additional parameters to invoke with the delegate
+        /// which will be added after the Task parameter.</param>
+        /// <returns>Response indicating the result of the operation.</returns>
+        private Response ExecuteOnAll(List<Task> tasks, Delegate action, params object[] args)
         {
             Response response = null;
-            for (int i = currentListedTasks.Count - 1; i >= 0; i--)
+            for (int i = tasks.Count - 1; i >= 0; i--)
             {
-                Task task = currentListedTasks[i];
+                Task task = tasks[i];
+
                 if (task == null)
                     response = new Response(Result.FAILURE, sortType, this.GetType(), currentListedTasks);
-                else
-                {
-                    var parameters = AddTaskToParameters(args, task);
-                    response = (Response)action.DynamicInvoke(parameters);
-                    if (!response.IsSuccessful() && !AllowSkipOver(response)) return response;
-                }
+
+                var parameters = AddTaskToParameters(args, task);
+
+                response = InvokeAction(action, parameters);
+
+                if (!response.IsSuccessful() && !AllowSkipOver(response))
+                    return response;
             }
-            return new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
+            response = new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
+            return response;
         }
 
-        private static object[] AddTaskToParameters(object[] args, Task task)
-        {
-            if (args == null) return new object[1] { task };
-
-            var parameterList = args.ToList();
-            parameterList.Insert(0, task);
-            var parameters = parameterList.ToArray();
-            return parameters;
-        }
         #endregion
 
         #endregion
@@ -678,6 +677,16 @@ namespace ToDo
         private static bool HasValidTime(DateTime? startTime, DateTime? endTime)
         {
             return startTime != null || endTime != null;
+        }
+
+        private static object[] AddTaskToParameters(object[] args, Task task)
+        {
+            if (args == null) return new object[1] { task };
+
+            var parameterList = args.ToList();
+            parameterList.Insert(0, task);
+            var parameters = parameterList.ToArray();
+            return parameters;
         }
 
         private static Response InvokeAction(Delegate action, object[] parameters)
