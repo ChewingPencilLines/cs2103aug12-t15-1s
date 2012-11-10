@@ -77,28 +77,30 @@ namespace ToDo
             List<Token> indexRangeTokens = new List<Token>();
             int index = 0;
 
-            var prevToken = from token in commandTokens
-                            where token.Position == index - 1 &&
-                                  token.RequiresIndexRange()
-                            select token;
-            if (prevToken.Count() < 1) return indexRangeTokens;
-
             foreach (string word in inputWords)
             {
-                bool isAll = false;
-                int[] userDefinedIndex = null;
-                TokenIndexRange indexRangeToken = null;
-                if (TryGetNumericalRange(word, out userDefinedIndex))
+                var validTokens = from token in commandTokens
+                                  where token.Position == index - 1 &&
+                                        token.RequiresIndexRange()
+                                  select token;
+                if (validTokens.Count() > 0)
                 {
-                    indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
+                    bool isAll = false;
+                    int[] userDefinedIndex = null;
+                    TokenIndexRange indexRangeToken = null;
+                    if (TryGetNumericalRange(word, out userDefinedIndex))
+                    {
+                        indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
+                    }
+                    else if (CheckIfAllKeyword(word))
+                    {
+                        isAll = true;
+                        indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
+                    }
+                    if (indexRangeToken != null)
+                        indexRangeTokens.Add(indexRangeToken);
                 }
-                else if (CheckIfAllKeyword(word))
-                {
-                    isAll = true;
-                    indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
-                }
-                if (indexRangeToken != null)
-                    indexRangeTokens.Add(indexRangeToken);
+
                 index++;
             }
             return indexRangeTokens;
@@ -111,23 +113,26 @@ namespace ToDo
 
             List<Token> sortTokens = new List<Token>();
 
-            var validTokens = from token in commandTokens
-                              where (token.Position == index - 1 &&
-                                     token.Value == CommandType.SORT)
-                              select token;
-            if (validTokens.Count() < 1) return sortTokens;
 
             foreach (string word in input)
             {
-                if (CustomDictionary.sortTypeKeywords.TryGetValue(word.ToLower(), out sortType) && index != 0)
+                var validTokens = from token in commandTokens
+                                  where (token.Position == index - 1 &&
+                                         token.Value == CommandType.SORT)
+                                  select token;
+                if (validTokens.Count() > 0)
                 {
-                    TokenSortType sortTypeToken = new TokenSortType(index, sortType);
-                    sortTokens.Add(sortTypeToken);
+
+                    if (CustomDictionary.sortTypeKeywords.TryGetValue(word.ToLower(), out sortType) && index != 0)
+                    {
+                        TokenSortType sortTypeToken = new TokenSortType(index, sortType);
+                        sortTokens.Add(sortTypeToken);
+                    }
                 }
+
                 index++;
             }
             return sortTokens;
-
         }
 
         private List<Token> GenerateTimeRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
