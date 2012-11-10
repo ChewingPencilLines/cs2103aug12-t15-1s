@@ -17,13 +17,14 @@ namespace ToDo
         const string STRING_ADD_FAILURE = "Failed to add task!";
         const string STRING_DELETE_SUCCESS = "Deleted task \"{0}\" successfully.";
         const string STRING_DELETE_SUCCESS_MULTI = "Deleted all indicated tasks successfully.";
-        const string STRING_DELETE_FAILURE = "No matching tasks found!";
+        const string STRING_DELETE_FAILURE = "Failed to carry out delete operation!";
         const string STRING_DELETE_INVALID_TASK = "No task to delete!";
         const string STRING_MODIFY_SUCCESS = "Modified task successfully.";
         const string STRING_MODIFY_FAILURE = "Failed to modify task..!";
         const string STRING_MODIFY_INVALID_TASK = "Cannot modify more than one task at once!";
         const string STRING_DISPLAY_NO_TASK = "There are no tasks for display.";
         const string STRING_SEARCH_SUCCESS = "Displaying all {0}tasks{1}.";
+        const string STRING_SEARCH_FAILURE = "No matching tasks found!";
         const string STRING_SORT_SUCCESS = "Sorting by {0}.";
         const string STRING_SORT_FAILURE = "Please specify sort type.";
         const string STRING_UNDO_SUCCESS = "Undid last operation.";
@@ -47,9 +48,9 @@ namespace ToDo
         const string STRING_SCHEDULE_SUCCESS = "Scheduled new task \"{0}\" successfully.";
         const string STRING_XML_READWRITE_FAIL = "Failed to read/write from XML file!";
         const string STRING_CALLED_INVALID_TASK_INDEX = "Invalid task index!";
-        const string STRING_INVALID_COMMAND = "Invalid command input!";
-        const string STRING_INVALID_PARAMS = "Invalid number of parameters called!";
+        const string STRING_INVALID_COMMAND = "Invalid command input!";        
         const string STRING_UNDEFINED = "Undefined feedback string!";
+        const string STRING_EXCEPTION_FAILURE = "An unrecoverable exception occured.";
 
         const string STRING_NAME = "name";
         const string STRING_DATE = "date";
@@ -179,6 +180,11 @@ namespace ToDo
                             feedbackString = STRING_MARKASUNDONE_FAILURE;
                         if (operationType == typeof(OperationSchedule))
                             feedbackString = STRING_SCHEDULE_FAILURE;
+                        if (operationType == typeof(OperationSearch))
+                        {
+                            feedbackString = STRING_SEARCH_FAILURE;
+                            feedbackAsWarning = true;
+                        }
                         if (operationType == typeof(OperationUndo))
                             feedbackString = STRING_UNDO_FAILURE;
                         if (operationType == typeof(OperationRedo))
@@ -214,6 +220,9 @@ namespace ToDo
                     case Result.XML_READWRITE_FAIL:
                         feedbackString = STRING_XML_READWRITE_FAIL;
                         break;
+                    case Result.EXCEPTION_FAILURE:
+                        feedbackString = STRING_EXCEPTION_FAILURE;
+                        break;
                     default:
                         throw new Exception("Type of Result in invalid!");
                 }
@@ -221,7 +230,8 @@ namespace ToDo
             catch (FormatException e)
             {
                 // add to log! what params were given and what Response.ToString() is this?
-                feedbackString = STRING_INVALID_PARAMS;
+                Logger.Error(e, "SetFeedbackString::Response");
+                feedbackString = STRING_UNDEFINED;
                 resultType = Result.EXCEPTION_FAILURE;
             }
             if (feedbackString == null)
