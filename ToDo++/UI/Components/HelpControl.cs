@@ -16,7 +16,10 @@ namespace ToDo
 {
     public partial class HelpControl : UserControl
     {
+        private UI ui;
         int currImage = 1;
+        bool fadeLock=false;
+        bool firstLoad;
 
         public HelpControl()
         {
@@ -25,11 +28,21 @@ namespace ToDo
             transpControl.BringToFront();
         }
 
+        public void SetUI(UI ui,bool firstLoad)
+        {
+            this.ui = ui;
+            this.firstLoad = firstLoad;
+            LoadRelaventHelpPanel();
+        }
+
+        private void LoadRelaventHelpPanel()
+        {
+            if (!firstLoad)
+                customPanelControl.SelectedIndex = 1;
+        }
+
         private void GenerateNextImage()
         {
-            if (currImage == 11)
-                return;
-
             currImage += 1;
             string fileName = string.Format("helpFrame{0}", currImage);
 
@@ -81,11 +94,20 @@ namespace ToDo
 
         private void transpControl_MouseDown(object sender, MouseEventArgs e)
         {
-            StartFadeInFadeOut();
+            if (currImage == 11)
+            {
+                customPanelControl.SelectedIndex = 1;
+                ui.SwitchToTaskListViewPanel();
+                return;
+            }
+
+            if(!fadeLock)
+                StartFadeInFadeOut();
         }
 
         private void StartFadeInFadeOut()
         {
+            fadeLock = true;
             fadeInTimer.Enabled = true;
         }
 
@@ -108,7 +130,13 @@ namespace ToDo
             {
                 fadeInTimer.Enabled = false;
                 fadeOutTimer.Enabled = false;
+                fadeLock = false;
             }
+        }
+
+        private void introButton_Click(object sender, EventArgs e)
+        {
+            customPanelControl.SelectedIndex = 0;
         }
     }
 }

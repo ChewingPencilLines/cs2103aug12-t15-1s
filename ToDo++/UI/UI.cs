@@ -43,6 +43,7 @@ namespace ToDo
             IntializeTopMenu();                   //Load Settings into Top Menu Control
             InitializeTaskListView();             //Load Settings into Task List View            
             InitializeTextInput();                //Sets Text Input in Focus
+            IntializeHelpPanel();                 //Loads Help Panel
 
             Logger.Info("All UI Elements loaded correctly...", "UI");
 
@@ -56,6 +57,17 @@ namespace ToDo
         // ******************************************************************
 
         #region IntializationFunction
+
+        /// <summary>
+        /// Initialize Help Control - Pass an instance of UI into it
+        /// </summary>
+        private void IntializeHelpPanel()
+        {
+            bool firstLoadStatus = logic.MainSettings.GetFirstLoadStatus();
+            helpControl.SetUI(this,firstLoadStatus);
+            if (firstLoadStatus == true)
+                SwitchToHelpPanel();
+        }
 
         /// <summary>
         /// Set TextInput as the Active Control

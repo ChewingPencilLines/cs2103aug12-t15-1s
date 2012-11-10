@@ -26,6 +26,8 @@ namespace ToDo
 
         public struct MiscSettings
         {
+            private bool _firstLoad;
+
             private bool _loadOnStartup;
             private bool _startMinimized;
             private bool _stayOnTop;
@@ -41,6 +43,8 @@ namespace ToDo
             private TimeRangeType _defaultScheduleTimeLengthType;
             private int _defaultPostponeDurationLength;
             private TimeRangeType _defaultPostponeDurationType;
+
+            public bool FirstLoad { get { return _firstLoad; } set { _firstLoad = value; } }
 
             public bool LoadOnStartup { get { return _loadOnStartup; } set { _loadOnStartup = value; } }
             public bool StartMinimized { get { return _startMinimized; } set { _startMinimized = value; } }
@@ -58,10 +62,11 @@ namespace ToDo
             public TimeRangeType DefaultScheduleTimeLengthType { get { return _defaultScheduleTimeLengthType; } set { _defaultScheduleTimeLengthType = value; } }
             public TimeRangeType DefaultPostponeDurationType { get { return _defaultPostponeDurationType; } set { _defaultPostponeDurationType = value; } }
 
-            public MiscSettings(bool loadOnStartup, bool startMinimized, bool stayOnTop, int textSize, string fontSelection,
+            public MiscSettings(bool firstLoad,bool loadOnStartup, bool startMinimized, bool stayOnTop, int textSize, string fontSelection,
                                 Color taskDoneColor, Color taskMissedDeadlineColor, Color taskNearingDeadlineColor, Color taskOverColor,
                                 int defaultScheduleTimeLength, TimeRangeType defaultScheduleTimeLengthType,int defaultPostponeDurationLength,TimeRangeType defaultPostponeDurationType)
             {
+                _firstLoad = firstLoad;
                 _loadOnStartup = loadOnStartup;
                 _startMinimized = startMinimized;
                 _stayOnTop = stayOnTop;
@@ -88,7 +93,7 @@ namespace ToDo
 
         public SettingInformation()
         {
-            misc = new MiscSettings(defaultLoadOnStartup, defaultStartMinimized, defaultStayOnTop, defaultTextSize, defaultFont,
+            misc = new MiscSettings(true,defaultLoadOnStartup, defaultStartMinimized, defaultStayOnTop, defaultTextSize, defaultFont,
                                     defaultTaskDoneColor,defaultTaskMissedDeadlineColor,defaultTaskNearingDeadlineColor,defaultTaskOverColor,
                                     defDefaultScheduleTimeLength,defDefaultScheduleTimeLengthType,defDefaultPostponeDurationLength,defDefaultPostponeDurationType);
 

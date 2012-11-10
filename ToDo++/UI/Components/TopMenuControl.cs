@@ -84,6 +84,25 @@ namespace ToDo
             isCollapsed = false;
         }
 
+        //Help Event Handler
+        private void questionButton_Click(object sender, EventArgs e)
+        {
+            if (isSettings)
+            {
+                ui.SwitchToHelpPanel();
+                isSettings = false;
+                return;
+            }
+
+            isSettings = false;
+            isHelp = true;
+
+            ui.ToggleHelpToDoPanel();
+            if (isCollapsed == true)
+                ui.ToggleCollapsedState();
+            isCollapsed = false;
+        }
+
         //CollapseExpand Event Handler
         private void updownButton_Click(object sender, EventArgs e)
         {
@@ -109,24 +128,6 @@ namespace ToDo
         private void closeButton_Click(object sender, EventArgs e)
         {
             ui.Exit();
-        }
-
-        private void questionButton_Click(object sender, EventArgs e)
-        {
-            if (isSettings)
-            {
-                ui.SwitchToHelpPanel();
-                isSettings = false;
-                return;
-            }
-
-            isHelp = true;
-            isSettings = false;
-
-            ui.ToggleHelpToDoPanel();
-            if (isCollapsed == true)
-                ui.ToggleCollapsedState();
-            isCollapsed = false;
         }
 
         #endregion
