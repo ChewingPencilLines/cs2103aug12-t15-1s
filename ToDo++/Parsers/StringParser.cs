@@ -230,22 +230,21 @@ namespace ToDo
         {
             List<string> output = new List<string>();
             int position = 0;
-            bool isWordAdded = false;
             foreach (string word in input)
             {
+                bool isWordAdded = false;
                 if (CustomDictionary.CheckIfWordIsTimeSuffix(word))
                 {
                     isWordAdded = MergeWord_IfValidTime(ref output, input, position);
                     if (isWordAdded)
                     {
-                        break;
+                        continue;
                     }
                 }
                 if (!isWordAdded)
                 {
                     output.Add(word);
                 }
-                isWordAdded = false;
                 position++;
             }
             return output;
