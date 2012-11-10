@@ -57,9 +57,6 @@
     <Compile Include="RoundButton.Designer.cs">
       <DependentUpon>RoundButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="TimeFormatter.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TinyAlert.cs">
       <SubType>Form</SubType>
     </Compile>
