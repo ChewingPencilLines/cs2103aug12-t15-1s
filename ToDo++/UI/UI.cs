@@ -583,6 +583,18 @@ namespace ToDo
                 textInput.UpdateWithNextCommand();
                 return true;
             }
+            if (keyData == (Keys.Alt | Keys.Left))
+            {
+                textInput.MoveBackOneWord();
+            }
+            if (keyData == (Keys.Alt | Keys.Right))
+            {
+                textInput.MoveForwardOneWord();
+            }
+            if (keyData == (Keys.Alt | Keys.Back))
+            {
+                textInput.DeleteLastWord();
+            }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
