@@ -390,7 +390,7 @@ namespace ToDo
 
             box.Select(start, end - start + 1);
             box.SelectionColor = color;
-            box.SelectionFont = new Font("Arial", size, FontStyle.Regular);
+            box.SelectionFont = new Font("Century Gothic", size, FontStyle.Regular);
             box.SelectionLength = 0;
         }
 
@@ -596,7 +596,7 @@ namespace ToDo
                         SetFormat(Color.Gray, "eg. postpone 1-2 2 hours\n", 9);
                         SetFormat(Color.Gray, "eg. postpone 1 2 days\n", 9);
                         SetFormat(Color.Gray, "eg. postpone task (default)\n", 9);
-                        SetFormat(Color.Black, "Change the default Postpone below\n", 9);
+                        SetFormat(Color.Black, "Change Postpone range below\n", 9);
                         break;
 
                     case CommandType.SCHEDULE:
@@ -604,7 +604,7 @@ namespace ToDo
                         SetFormat(Color.Gray, "eg. schedule buy milk\n", 9);
                         SetFormat(Color.Gray, "eg. schedule task tmr 2-5pm\n", 9);
                         SetFormat(Color.Gray, "eg. schedule task tmr (default)\n", 9);
-                        SetFormat(Color.Black, "Change the default Schedule range below\n", 9);
+                        SetFormat(Color.Black, "Change Schedule range below\n", 9);
                         break;
 
                     case CommandType.UNDO:
@@ -770,7 +770,7 @@ namespace ToDo
             else if (flexiCommandTab.SelectedIndex == 2)
             {
                 this.titleLabel.Text = "Time Keywords";
-                SetFormat(Color.Black, "Time Keywords are how ToDo++ sets Time Ranges. For example, MORNING would let make ToDo++ set the \"5am to 10am\" time range. You can modify as you please, or add your own custom flexiCommands :)", 9);
+                SetFormat(Color.Black, "Time Keywords are how ToDo++ sets Time Ranges. For example, MORNING would let make ToDo++ set the \"5am to 10am\" time range. You can modify or add your own custom flexiCommands :)", 9);
 
             }
         }
