@@ -70,7 +70,7 @@ namespace ToDo
                 currentListedTasks = new List<Task>(searchResults);
 
                 string[] criteria;
-                SetArgumentsForFeedbackString(out criteria, taskName, startTime, endTime, searchType);
+                SetArgumentsForSearchFeedbackString(out criteria, taskName, startTime, endTime, searchType);
 
                 return new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, criteria);
             }
