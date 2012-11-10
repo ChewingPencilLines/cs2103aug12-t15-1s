@@ -97,7 +97,9 @@ namespace ToDo
             if (currImage == 11)
             {
                 customPanelControl.SelectedIndex = 1;
+                currImage = 1;
                 ui.SwitchToTaskListViewPanel();
+                pictureBox.Image = Properties.Resources.help0001;
                 return;
             }
 
