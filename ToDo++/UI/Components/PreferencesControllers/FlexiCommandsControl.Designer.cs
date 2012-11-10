@@ -31,7 +31,7 @@
             this.descriptionLabel = new System.Windows.Forms.RichTextBox();
             this.listedFlexiCommands = new System.Windows.Forms.ListBox();
             this.grouper1 = new CodeVendor.Controls.Grouper();
-            this.flatTabControl1 = new FlatTabControl.FlatTabControl();
+            this.flexiCommandTab = new FlatTabControl.FlatTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.commandTree = new System.Windows.Forms.TreeView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -45,10 +45,10 @@
             this.typeComboBox = new System.Windows.Forms.ComboBox();
             this.timeComboBox = new System.Windows.Forms.ComboBox();
             this.schedulePostponeLabel = new System.Windows.Forms.Label();
-            this.removeButton = new ToDo.RoundButton();
-            this.addButton = new ToDo.RoundButton();
+            this.addButton = new System.Windows.Forms.Button();
+            this.removeButton = new System.Windows.Forms.Button();
             this.grouper1.SuspendLayout();
-            this.flatTabControl1.SuspendLayout();
+            this.flexiCommandTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -62,10 +62,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.descriptionLabel.BackColor = System.Drawing.Color.Gainsboro;
             this.descriptionLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.descriptionLabel.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.descriptionLabel.ForeColor = System.Drawing.Color.Black;
             this.descriptionLabel.Location = new System.Drawing.Point(110, 58);
             this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(292, 157);
+            this.descriptionLabel.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.descriptionLabel.Size = new System.Drawing.Size(292, 160);
             this.descriptionLabel.TabIndex = 13;
             this.descriptionLabel.Text = "Please go ahead and select a command to see it\'s description";
             // 
@@ -75,13 +77,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listedFlexiCommands.BackColor = System.Drawing.Color.Gainsboro;
             this.listedFlexiCommands.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listedFlexiCommands.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listedFlexiCommands.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listedFlexiCommands.ForeColor = System.Drawing.Color.Black;
             this.listedFlexiCommands.FormattingEnabled = true;
-            this.listedFlexiCommands.ItemHeight = 16;
+            this.listedFlexiCommands.ItemHeight = 17;
             this.listedFlexiCommands.Location = new System.Drawing.Point(5, 13);
             this.listedFlexiCommands.Name = "listedFlexiCommands";
-            this.listedFlexiCommands.Size = new System.Drawing.Size(396, 48);
+            this.listedFlexiCommands.Size = new System.Drawing.Size(396, 51);
             this.listedFlexiCommands.TabIndex = 2;
             // 
             // grouper1
@@ -105,24 +107,25 @@
             this.grouper1.ShadowColor = System.Drawing.Color.DarkGray;
             this.grouper1.ShadowControl = false;
             this.grouper1.ShadowThickness = 3;
-            this.grouper1.Size = new System.Drawing.Size(408, 64);
+            this.grouper1.Size = new System.Drawing.Size(408, 66);
             this.grouper1.TabIndex = 14;
             // 
-            // flatTabControl1
+            // flexiCommandTab
             // 
-            this.flatTabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.flexiCommandTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.flatTabControl1.Controls.Add(this.tabPage1);
-            this.flatTabControl1.Controls.Add(this.tabPage2);
-            this.flatTabControl1.Controls.Add(this.tabPage3);
-            this.flatTabControl1.Location = new System.Drawing.Point(3, 3);
-            this.flatTabControl1.myBackColor = System.Drawing.Color.Gainsboro;
-            this.flatTabControl1.Name = "flatTabControl1";
-            this.flatTabControl1.SelectedIndex = 0;
-            this.flatTabControl1.Size = new System.Drawing.Size(408, 225);
-            this.flatTabControl1.TabIndex = 17;
-            this.flatTabControl1.SelectedIndexChanged += new System.EventHandler(this.flatTabControl1_SelectedIndexChanged);
+            this.flexiCommandTab.Controls.Add(this.tabPage1);
+            this.flexiCommandTab.Controls.Add(this.tabPage2);
+            this.flexiCommandTab.Controls.Add(this.tabPage3);
+            this.flexiCommandTab.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flexiCommandTab.Location = new System.Drawing.Point(3, 3);
+            this.flexiCommandTab.myBackColor = System.Drawing.Color.Gainsboro;
+            this.flexiCommandTab.Name = "flexiCommandTab";
+            this.flexiCommandTab.SelectedIndex = 0;
+            this.flexiCommandTab.Size = new System.Drawing.Size(408, 225);
+            this.flexiCommandTab.TabIndex = 17;
+            this.flexiCommandTab.SelectedIndexChanged += new System.EventHandler(this.flatTabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -141,6 +144,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.commandTree.BackColor = System.Drawing.Color.Gainsboro;
             this.commandTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.commandTree.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.commandTree.LineColor = System.Drawing.Color.Gainsboro;
             this.commandTree.Location = new System.Drawing.Point(-14, 0);
             this.commandTree.Name = "commandTree";
@@ -164,9 +168,10 @@
             // 
             this.contextTree.BackColor = System.Drawing.Color.Gainsboro;
             this.contextTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.contextTree.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.contextTree.ForeColor = System.Drawing.Color.Black;
             this.contextTree.LineColor = System.Drawing.Color.Gainsboro;
-            this.contextTree.Location = new System.Drawing.Point(-14, 3);
+            this.contextTree.Location = new System.Drawing.Point(-14, 10);
             this.contextTree.Name = "contextTree";
             this.contextTree.Size = new System.Drawing.Size(111, 188);
             this.contextTree.TabIndex = 10;
@@ -210,9 +215,10 @@
             // 
             this.timeRangeTree.BackColor = System.Drawing.Color.Gainsboro;
             this.timeRangeTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.timeRangeTree.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timeRangeTree.ForeColor = System.Drawing.Color.Black;
             this.timeRangeTree.LineColor = System.Drawing.Color.Gainsboro;
-            this.timeRangeTree.Location = new System.Drawing.Point(-14, 67);
+            this.timeRangeTree.Location = new System.Drawing.Point(-14, 82);
             this.timeRangeTree.Name = "timeRangeTree";
             this.timeRangeTree.Size = new System.Drawing.Size(111, 68);
             this.timeRangeTree.TabIndex = 18;
@@ -223,11 +229,12 @@
             // 
             this.timeRangeKeywordTree.BackColor = System.Drawing.Color.Gainsboro;
             this.timeRangeKeywordTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.timeRangeKeywordTree.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timeRangeKeywordTree.ForeColor = System.Drawing.Color.Black;
             this.timeRangeKeywordTree.LineColor = System.Drawing.Color.Gainsboro;
-            this.timeRangeKeywordTree.Location = new System.Drawing.Point(-14, 3);
+            this.timeRangeKeywordTree.Location = new System.Drawing.Point(-14, 10);
             this.timeRangeKeywordTree.Name = "timeRangeKeywordTree";
-            this.timeRangeKeywordTree.Size = new System.Drawing.Size(111, 68);
+            this.timeRangeKeywordTree.Size = new System.Drawing.Size(111, 76);
             this.timeRangeKeywordTree.TabIndex = 17;
             this.timeRangeKeywordTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.timeRangeKeywordTree_AfterSelect);
             this.timeRangeKeywordTree.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.timeRangeKeywordTree_MouseDoubleClick);
@@ -235,11 +242,11 @@
             // titleLabel
             // 
             this.titleLabel.AutoSize = true;
-            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.titleLabel.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleLabel.ForeColor = System.Drawing.Color.Black;
             this.titleLabel.Location = new System.Drawing.Point(107, 32);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(176, 25);
+            this.titleLabel.Size = new System.Drawing.Size(186, 25);
             this.titleLabel.TabIndex = 12;
             this.titleLabel.Text = "Nothing Selected";
             // 
@@ -267,7 +274,7 @@
             "DAY",
             "WEEK",
             "MONTH"});
-            this.typeComboBox.Location = new System.Drawing.Point(105, 24);
+            this.typeComboBox.Location = new System.Drawing.Point(105, 44);
             this.typeComboBox.Name = "typeComboBox";
             this.typeComboBox.Size = new System.Drawing.Size(85, 21);
             this.typeComboBox.TabIndex = 3;
@@ -303,7 +310,7 @@
             "21",
             "22",
             "23"});
-            this.timeComboBox.Location = new System.Drawing.Point(3, 24);
+            this.timeComboBox.Location = new System.Drawing.Point(3, 44);
             this.timeComboBox.Name = "timeComboBox";
             this.timeComboBox.Size = new System.Drawing.Size(96, 21);
             this.timeComboBox.TabIndex = 2;
@@ -312,51 +319,59 @@
             // schedulePostponeLabel
             // 
             this.schedulePostponeLabel.AutoSize = true;
-            this.schedulePostponeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.schedulePostponeLabel.Location = new System.Drawing.Point(0, 6);
+            this.schedulePostponeLabel.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.schedulePostponeLabel.Location = new System.Drawing.Point(0, 26);
             this.schedulePostponeLabel.Name = "schedulePostponeLabel";
-            this.schedulePostponeLabel.Size = new System.Drawing.Size(118, 15);
+            this.schedulePostponeLabel.Size = new System.Drawing.Size(123, 17);
             this.schedulePostponeLabel.TabIndex = 1;
             this.schedulePostponeLabel.Text = "Postpone Response";
-            // 
-            // removeButton
-            // 
-            this.removeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.removeButton.ButtonText = "Remove";
-            this.removeButton.Location = new System.Drawing.Point(233, 287);
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(183, 29);
-            this.removeButton.TabIndex = 16;
-            this.removeButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.removeButton_MouseDown);
-            this.removeButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.removeButton_MouseUp);
             // 
             // addButton
             // 
             this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addButton.ButtonText = "Add";
-            this.addButton.Location = new System.Drawing.Point(2, 287);
+            this.addButton.BackColor = System.Drawing.Color.DimGray;
+            this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addButton.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addButton.ForeColor = System.Drawing.Color.Gainsboro;
+            this.addButton.Location = new System.Drawing.Point(3, 290);
             this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(177, 29);
-            this.addButton.TabIndex = 15;
-            this.addButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.addButton_MouseDown);
-            this.addButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.addButton_MouseUp);
+            this.addButton.Size = new System.Drawing.Size(171, 23);
+            this.addButton.TabIndex = 18;
+            this.addButton.Text = "Add Command";
+            this.addButton.UseVisualStyleBackColor = false;
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            // 
+            // removeButton
+            // 
+            this.removeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.removeButton.BackColor = System.Drawing.Color.DimGray;
+            this.removeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.removeButton.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.removeButton.ForeColor = System.Drawing.Color.Gainsboro;
+            this.removeButton.Location = new System.Drawing.Point(235, 290);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(176, 23);
+            this.removeButton.TabIndex = 19;
+            this.removeButton.Text = "Remove Command";
+            this.removeButton.UseVisualStyleBackColor = false;
+            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
             // 
             // FlexiCommandsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.Controls.Add(this.titleLabel);
-            this.Controls.Add(this.schedPostponePanel);
-            this.Controls.Add(this.descriptionLabel);
-            this.Controls.Add(this.flatTabControl1);
             this.Controls.Add(this.removeButton);
             this.Controls.Add(this.addButton);
+            this.Controls.Add(this.schedPostponePanel);
+            this.Controls.Add(this.titleLabel);
+            this.Controls.Add(this.descriptionLabel);
+            this.Controls.Add(this.flexiCommandTab);
             this.Controls.Add(this.grouper1);
             this.Name = "FlexiCommandsControl";
             this.Size = new System.Drawing.Size(414, 317);
             this.grouper1.ResumeLayout(false);
-            this.flatTabControl1.ResumeLayout(false);
+            this.flexiCommandTab.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
@@ -374,10 +389,8 @@
         private System.Windows.Forms.Label titleLabel;
         private System.Windows.Forms.ListBox listedFlexiCommands;
         private CodeVendor.Controls.Grouper grouper1;
-        private RoundButton addButton;
-        private RoundButton removeButton;
         private System.Windows.Forms.TreeView timeRangeKeywordTree;
-        private FlatTabControl.FlatTabControl flatTabControl1;
+        private FlatTabControl.FlatTabControl flexiCommandTab;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
@@ -388,5 +401,7 @@
         private System.Windows.Forms.ComboBox typeComboBox;
         private System.Windows.Forms.ComboBox timeComboBox;
         private System.Windows.Forms.Label schedulePostponeLabel;
+        private System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.Button removeButton;
     }
 }
