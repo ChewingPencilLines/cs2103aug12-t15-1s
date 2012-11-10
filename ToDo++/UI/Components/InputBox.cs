@@ -32,6 +32,67 @@ namespace ToDo
         }
 
         /// <summary>
+        /// Move cursor back to start of previous word
+        /// </summary>
+        public void MoveBackOneWord()
+        {
+            int lastPositionOfSpace = -1;
+            if (this.SelectionStart > 2)
+            {
+                lastPositionOfSpace = this.Text.LastIndexOf(' ', this.SelectionStart - 2);
+            }
+            if (lastPositionOfSpace > -1)
+            {
+                this.SelectionStart = lastPositionOfSpace + 1;
+            }
+            else
+            {
+                this.SelectionStart = 0;
+            }
+        }
+
+        /// <summary>
+        /// Move cursor back to start of previous word
+        /// </summary>
+        public void DeleteLastWord()
+        {
+            if (this.Text.Length == 0)
+            {
+                return;
+            }
+            int lastPositionOfSpace = -1;
+            if (this.SelectionStart > 2)
+            {
+                lastPositionOfSpace = this.Text.LastIndexOf(' ', this.SelectionStart - 2);
+            }
+            if (lastPositionOfSpace > -1)
+            {
+                this.Text = this.Text.Remove(lastPositionOfSpace, this.SelectionStart-lastPositionOfSpace);
+                this.SelectionStart = this.Text.Length;
+            }
+            else
+            {
+                this.Text = string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Move cursor to end of next work
+        /// </summary>
+        public void MoveForwardOneWord()
+        {
+            int nextPositionOfSpace = this.Text.IndexOf(' ', this.SelectionStart);
+            if (nextPositionOfSpace > -1)
+            {
+                this.SelectionStart = nextPositionOfSpace + 1;
+            }
+            else
+            {
+                this.SelectionStart = this.Text.Length;
+            }
+        }
+
+        /// <summary>
         /// Goes to next command
         /// </summary>
         public void UpdateWithNextCommand()
