@@ -43,13 +43,6 @@ namespace ToDo
 
         private void GenerateNextImage()
         {
-            if (currImage == 11)
-            {
-                ui.SwitchToTaskListViewPanel();
-                customPanelControl.SelectedIndex = 1;
-            }
-
-
             currImage += 1;
             string fileName = string.Format("helpFrame{0}", currImage);
 
@@ -101,6 +94,13 @@ namespace ToDo
 
         private void transpControl_MouseDown(object sender, MouseEventArgs e)
         {
+            if (currImage == 11)
+            {
+                customPanelControl.SelectedIndex = 1;
+                ui.SwitchToTaskListViewPanel();
+                return;
+            }
+
             if(!fadeLock)
                 StartFadeInFadeOut();
         }
