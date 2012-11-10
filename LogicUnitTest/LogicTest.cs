@@ -399,5 +399,18 @@ namespace LogicUnitTest
             Assert.AreEqual("INVALID_TASK", result.Result.ToString());
             return;
         }
+
+        [TestMethod]
+        public void CheckSpacesTest()
+        {
+            Response result;
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            result = logic.ProcessCommand("add  a  3  pm to  9 PM");
+            Assert.AreEqual("Added new task \"a\" successfully.", result.FeedbackString);
+            Type type = result.TasksToBeDisplayed[0].GetType();
+            Assert.AreEqual("ToDo.TaskEvent", type.ToString());
+            return;
+        }
     }
 }

@@ -152,5 +152,28 @@ namespace TokenGeneratorTest
             Assert.IsTrue(result[6] is TokenLiteral);
             return;
         }
+
+        [TestMethod]
+        public void GenerateTokensTest10()
+        {
+            input = new List<string>();
+            input.Add("add");
+            input.Add("aaaaa");
+            input.Add("feb");
+            input.Add("13th");
+            input.Add("to");
+            input.Add("jun");
+            input.Add("22nd");
+            result = gene.GenerateTokens(input);
+            Assert.AreEqual(7, result.Count);
+            Assert.IsTrue(result[0] is TokenCommand);
+            Assert.IsTrue(result[1] is TokenLiteral);
+            Assert.IsTrue(result[2] is TokenDate);
+            Assert.IsTrue(result[3] is TokenDate);
+            Assert.IsTrue(result[4] is TokenContext);
+            Assert.IsTrue(result[5] is TokenDate);
+            Assert.IsTrue(result[6] is TokenDate);
+            return;
+        }
     }
 }
