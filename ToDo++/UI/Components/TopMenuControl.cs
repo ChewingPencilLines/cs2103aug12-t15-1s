@@ -34,6 +34,11 @@ namespace ToDo
             this.ui = ui;
         }
 
+        public void SetCollapsedStatus(bool collapsed)
+        {
+            isCollapsed = collapsed;
+        }
+
         /// <summary>
         /// Disable Button Color Change when mouse over
         /// </summary>
