@@ -45,7 +45,7 @@ namespace ToDo
                 currentListedTasks = new List<Task>(searchResults);
 
                 string[] criteria;
-                SetArgumentsForFeedbackString(out criteria, searchString, startTime, endTime, searchType);
+                SetArgumentsForSearchFeedbackString(out criteria, searchString, startTime, endTime, searchType);
                 response = new Response(Result.SUCCESS, sortType, this.GetType(), currentListedTasks, criteria);
             }
             return response;
