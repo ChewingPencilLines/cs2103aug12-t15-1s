@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.grouper1 = new CodeVendor.Controls.Grouper();
-            this.preferencesTree = new ToDo.TreeViewNoFlicker();
             this.preferencesTitle = new CodeVendor.Controls.Grouper();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.preferencesSelector = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.startingOptionsControl = new ToDo.StartingOptions();
@@ -38,8 +38,10 @@
             this.flexiCommandsControl = new ToDo.FlexiCommandsControl();
             this.fontPage = new System.Windows.Forms.TabPage();
             this.fontColorSettingsControl = new ToDo.FontColorSettings();
+            this.preferencesTree = new ToDo.TreeViewNoFlicker();
             this.grouper1.SuspendLayout();
             this.preferencesTitle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.preferencesSelector.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -55,6 +57,7 @@
             this.grouper1.BackgroundGradientMode = CodeVendor.Controls.Grouper.GroupBoxGradientMode.None;
             this.grouper1.BorderColor = System.Drawing.Color.Black;
             this.grouper1.BorderThickness = 1F;
+            this.grouper1.Controls.Add(this.pictureBox1);
             this.grouper1.Controls.Add(this.preferencesTree);
             this.grouper1.CustomGroupBoxColor = System.Drawing.Color.White;
             this.grouper1.GroupImage = null;
@@ -69,16 +72,6 @@
             this.grouper1.ShadowThickness = 3;
             this.grouper1.Size = new System.Drawing.Size(110, 315);
             this.grouper1.TabIndex = 5;
-            // 
-            // preferencesTree
-            // 
-            this.preferencesTree.BackColor = System.Drawing.Color.Gainsboro;
-            this.preferencesTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.preferencesTree.Location = new System.Drawing.Point(1, 23);
-            this.preferencesTree.Name = "preferencesTree";
-            this.preferencesTree.Size = new System.Drawing.Size(100, 259);
-            this.preferencesTree.TabIndex = 1;
-            this.preferencesTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.preferencesTree_AfterSelect);
             // 
             // preferencesTitle
             // 
@@ -104,6 +97,17 @@
             this.preferencesTitle.ShadowThickness = 3;
             this.preferencesTitle.Size = new System.Drawing.Size(419, 315);
             this.preferencesTitle.TabIndex = 6;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.pictureBox1.BackColor = System.Drawing.Color.Black;
+            this.pictureBox1.Location = new System.Drawing.Point(-9, 23);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(10, 270);
+            this.pictureBox1.TabIndex = 7;
+            this.pictureBox1.TabStop = false;
             // 
             // preferencesSelector
             // 
@@ -180,6 +184,20 @@
             this.fontColorSettingsControl.Size = new System.Drawing.Size(393, 263);
             this.fontColorSettingsControl.TabIndex = 0;
             // 
+            // preferencesTree
+            // 
+            this.preferencesTree.BackColor = System.Drawing.Color.Gainsboro;
+            this.preferencesTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.preferencesTree.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.preferencesTree.LineColor = System.Drawing.Color.Gainsboro;
+            this.preferencesTree.Location = new System.Drawing.Point(-14, 23);
+            this.preferencesTree.Name = "preferencesTree";
+            this.preferencesTree.Scrollable = false;
+            this.preferencesTree.ShowNodeToolTips = true;
+            this.preferencesTree.Size = new System.Drawing.Size(112, 260);
+            this.preferencesTree.TabIndex = 1;
+            this.preferencesTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.preferencesTree_AfterSelect);
+            // 
             // PreferencesPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -191,6 +209,7 @@
             this.Size = new System.Drawing.Size(545, 314);
             this.grouper1.ResumeLayout(false);
             this.preferencesTitle.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.preferencesSelector.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -211,5 +230,6 @@
         private CodeVendor.Controls.Grouper grouper1;
         private CodeVendor.Controls.Grouper preferencesTitle;
         private TreeViewNoFlicker preferencesTree;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
