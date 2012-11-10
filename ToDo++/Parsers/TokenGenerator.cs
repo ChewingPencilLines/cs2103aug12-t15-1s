@@ -31,19 +31,16 @@ namespace ToDo
         public List<Token> GenerateAllTokens(List<string> input)
         {
             List<Token> tokens = new List<Token>();
-            // must be done first to catch index ranges.
             List<TokenCommand> commandTokens = GenerateCommandTokens(input);
             tokens.AddRange(commandTokens);
-            // must be done after generating command tokens
             tokens.AddRange(GenerateIndexRangeTokens(input, commandTokens));
             tokens.AddRange(GenerateSortTypeTokens(input, commandTokens));
             tokens.AddRange(GenerateTimeRangeTokens(input, commandTokens));
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
             tokens.AddRange(GenerateTimeTokens(input));
-            // must be done after generating day/date/time tokens.
             tokens.AddRange(GenerateContextTokens(input, tokens));
-            // must be done last. all non-hits are taken to be literals            
+            // must be done last. all words not already in tokens are taken to be literals
             tokens.AddRange(GenerateLiteralTokens(input, tokens));
             DeconflictTokens(ref tokens);
             tokens.Sort(CompareByPosition);

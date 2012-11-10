@@ -28,39 +28,39 @@ namespace ToDo
             Logger.Info("Created a command token object", "TokenCommand::TokenCommand");
         }
 
-        internal override void UpdateAttributes(OperationGenerator attrb)
+        internal override void ConfigureGenerator(OperationGenerator attrb)
         {
             if (attrb.commandType != CommandType.INVALID)
             {
                 if (Value == CommandType.DONE)
                 {
                     attrb.searchType = SearchType.DONE;
-                    Logger.Info("Updated SearchType to DONE.", "UpdateAttributes::TokenCommand");
+                    Logger.Info("Updated SearchType to DONE.", "ConfigureGenerator::TokenCommand");
                 }
                 else if (Value == CommandType.UNDONE)
                 {
                     attrb.searchType = SearchType.UNDONE;
-                    Logger.Info("Updated SearchType to UNDONE.", "UpdateAttributes::TokenCommand");
+                    Logger.Info("Updated SearchType to UNDONE.", "ConfigureGenerator::TokenCommand");
                 }
                 else if (attrb.commandType == CommandType.SORT)
                 {
                     attrb.commandType = Value;
-                    Logger.Info("Resolved multiple commands to not use Sort as command (lower priority)", "UpdateAttributes::TokenCommand");
+                    Logger.Info("Resolved multiple commands to not use Sort as command (lower priority)", "ConfigureGenerator::TokenCommand");
                 }
                 else if (Value == CommandType.SORT)
                 {
-                    Logger.Info("Resolved multiple commands to not use Sort as command (lower priority)", "UpdateAttributes::TokenCommand");
+                    Logger.Info("Resolved multiple commands to not use Sort as command (lower priority)", "ConfigureGenerator::TokenCommand");
                 }
                 else
                 {
-                    Logger.Error("Multiple commands detected", "UpdateAttributes::TokenCommand");
+                    Logger.Error("Multiple commands detected", "ConfigureGenerator::TokenCommand");
                     throw new MultipleCommandsException();
                 }
             }
             else
             {
                 attrb.commandType = Value;
-                Logger.Info("commandType is INVALID", "UpdateAttributes::TokenCommand");
+                Logger.Info("commandType is INVALID", "ConfigureGenerator::TokenCommand");
             }
         }
 
