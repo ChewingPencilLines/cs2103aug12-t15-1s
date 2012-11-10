@@ -76,6 +76,13 @@ namespace ToDo
         {
             List<Token> indexRangeTokens = new List<Token>();
             int index = 0;
+
+            var prevToken = from token in commandTokens
+                            where token.Position == index - 1 &&
+                                  token.RequiresIndexRange()
+                            select token;
+            if (prevToken.Count() < 1) return indexRangeTokens;
+
             foreach (string word in inputWords)
             {
                 bool isAll = false;
@@ -83,14 +90,7 @@ namespace ToDo
                 TokenIndexRange indexRangeToken = null;
                 if (TryGetNumericalRange(word, out userDefinedIndex))
                 {
-                    var prevToken = from token in commandTokens
-                                    where token.Position == index - 1 &&
-                                          token.RequiresIndexRange()
-                                    select token;
-                    if (prevToken.Count() > 0)
-                    {
-                        indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
-                    }
+                    indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
                 }
                 else if (CheckIfAllKeyword(word))
                 {
@@ -110,20 +110,19 @@ namespace ToDo
             int index = 0;
 
             List<Token> sortTokens = new List<Token>();
+
+            var validTokens = from token in commandTokens
+                              where (token.Position == index - 1 &&
+                                     token.Value == CommandType.SORT)
+                              select token;
+            if (validTokens.Count() < 1) return sortTokens;
+
             foreach (string word in input)
             {
                 if (CustomDictionary.sortTypeKeywords.TryGetValue(word.ToLower(), out sortType) && index != 0)
                 {
-                    var validTokens = from token in commandTokens
-                                      where (token.Position == index - 1 &&
-                                               token.Value == CommandType.SORT)
-                                      select token;
-
-                    if (validTokens.Count() > 0)
-                    {
-                        TokenSortType sortTypeToken = new TokenSortType(index, sortType);
-                        sortTokens.Add(sortTypeToken);
-                    }
+                    TokenSortType sortTypeToken = new TokenSortType(index, sortType);
+                    sortTokens.Add(sortTypeToken);
                 }
                 index++;
             }
@@ -135,6 +134,9 @@ namespace ToDo
         {
             List<Token> timeRangeTokens = new List<Token>();
             int index = 0;
+
+            if (commandTokens.Count(e => e.RequiresTimeRange()) < 1) return timeRangeTokens;
+
             foreach (string word in inputWords)
             {
                 int timeRangeAmount = 0;
@@ -145,21 +147,18 @@ namespace ToDo
                 string wordLower = word.ToLower();
                 if (CustomDictionary.IsTimeRange(wordLower))
                 {
-                    if (commandTokens.Count(e => e.RequiresTimeRange()) > 0)
+                    Match match = CustomDictionary.isTimeRange.Match(wordLower);
+                    Int32.TryParse(match.Groups["index"].Value, out timeRangeAmount);
+                    string matchString = match.Groups["type"].Value;
+                    if (timeRangeAmount == 0 && matchString != null)
                     {
-                        Match match = CustomDictionary.isTimeRange.Match(wordLower);
-                        Int32.TryParse(match.Groups["index"].Value, out timeRangeAmount);
-                        string matchString = match.Groups["type"].Value;
-                        if (timeRangeAmount == 0 && matchString != null)
-                        {
-                            throw new InvalidTimeRangeException("Task duration type was specified without a valid amount (0 " + matchString + ").");
-                        }
-                        if (!CustomDictionary.timeRangeType.TryGetValue(matchString, out timeRangeType))
-                        {
-                            throw new Exception("Something is wrong with IsTimeRange regex etc.");
-                        }
-                        timeRangeToken = new TokenTimeRange(index, timeRangeAmount, timeRangeType);
+                        throw new InvalidTimeRangeException("Task duration type was specified without a valid amount (0 " + matchString + ").");
                     }
+                    if (!CustomDictionary.timeRangeType.TryGetValue(matchString, out timeRangeType))
+                    {
+                        throw new Exception("Something is wrong with IsTimeRange regex etc.");
+                    }
+                    timeRangeToken = new TokenTimeRange(index, timeRangeAmount, timeRangeType);
                 }
                 else if (CustomDictionary.timeRangeKeywords.TryGetValue(wordLower, out timeRangeKeyword))
                 {
