@@ -26,6 +26,7 @@ namespace ToDo
 
         private static Operation GenerateOperation(List<Token> tokens)
         {            
+            // reset factory configuration / make new factory.
             OperationGenerator factory = new OperationGenerator();
             foreach (Token token in tokens)
             {
