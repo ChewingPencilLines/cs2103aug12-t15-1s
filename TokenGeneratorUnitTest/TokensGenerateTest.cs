@@ -188,5 +188,48 @@ namespace TokenGeneratorTest
             Assert.IsTrue(result[1] is TokenSortType);
             return;
         }
+
+        [TestMethod]
+        public void GenerateAllTokensTest12()
+        {
+            input = new List<string>();
+            input.Add("add");
+            input.Add("aaa");
+            input.Add("aa");
+            input.Add("tmr");
+            input.Add("13:00");
+            input.Add("-");
+            input.Add("19:00");
+            result = gene.GenerateAllTokens(input);
+            Assert.AreEqual(6, result.Count);
+            Assert.IsTrue(result[0] is TokenCommand); 
+            Assert.IsTrue(result[1] is TokenLiteral);
+            Assert.IsTrue(result[2] is TokenDay);
+            Assert.IsTrue(result[3] is TokenTime);
+            Assert.IsTrue(result[4] is TokenContext);
+            Assert.IsTrue(result[5] is TokenTime);
+            return;
+        }
+
+        [TestMethod]
+        public void GenerateAllTokensTest13()
+        {
+            input = new List<string>();
+            input.Add("add");
+            input.Add("aaa");
+            input.Add("1/6");
+            input.Add("-");
+            input.Add("5/6");
+            input.Add("2013");
+            result = gene.GenerateAllTokens(input);
+            Assert.AreEqual(6, result.Count);
+            Assert.IsTrue(result[0] is TokenCommand); 
+            Assert.IsTrue(result[1] is TokenLiteral);
+            Assert.IsTrue(result[2] is TokenDate);
+            Assert.IsTrue(result[3] is TokenContext);
+            Assert.IsTrue(result[4] is TokenDate);
+            Assert.IsTrue(result[5] is TokenTime);
+            return;
+        }
     }
 }
