@@ -490,19 +490,9 @@ namespace ToDo
             Response response = null;
             List<Task> searchResults = new List<Task>();
 
-            searchResults = SearchForTasks(taskName);
+            searchResults = SearchForTasks(taskName, false, startTime, endTime, searchType);
+            response = DisplaySearchResults(searchResults, taskName, startTime, endTime, searchType);
 
-            if (searchResults.Count == 0)
-                response = new Response(Result.FAILURE, sortType, typeof(OperationSearch));
-            else
-            {
-                currentListedTasks = new List<Task>(searchResults);
-
-                string[] stringArgs;
-                SetArgumentsForSearchFeedbackString(out stringArgs, taskName, startTime, endTime, SearchType.NONE);
-                response =
-                    new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, stringArgs);
-            }
             return response;
         }
         
@@ -523,12 +513,19 @@ namespace ToDo
             SearchType searchType
             )
         {
-            currentListedTasks = new List<Task>(searchResults);
+            Response response;
+            if (searchResults.Count == 0)
+                response = new Response(Result.FAILURE, sortType, typeof(OperationSearch));
 
-            string[] args;
-            SetArgumentsForSearchFeedbackString(out args, searchString, startTime, endTime, searchType);
+            else
+            {
+                currentListedTasks = new List<Task>(searchResults);
 
-            return new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, args);
+                string[] criteria;
+                SetArgumentsForSearchFeedbackString(out criteria, searchString, startTime, endTime, searchType);
+                response = new Response(Result.SUCCESS, sortType, typeof(OperationSearch), currentListedTasks, criteria);
+            }
+            return response;
         }
 
         /// <summary>
@@ -649,9 +646,10 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Response Generation Methods
+        // Validation Methods
         // ******************************************************************
 
+        #region Validation Methods        
         /// <summary>
         /// Checks a string for it's validity. A string is considered valid
         /// if it is not null or empty.
@@ -674,11 +672,13 @@ namespace ToDo
         {
             return timeOne != null || timeTwo != null;
         }
+        #endregion
 
         // ******************************************************************
         // Delegate Invocation and Parameter Generation Methods
         // ******************************************************************
 
+        #region Delegate Invocation and Parameter Generation Methods        
         /// <summary>
         /// Accepts an array of objects and returns the same array of objects with
         /// a Task inserted in the first (zeroth-index) position.
@@ -716,5 +716,6 @@ namespace ToDo
             }
             return response;
         }
+        #endregion
     }
 }

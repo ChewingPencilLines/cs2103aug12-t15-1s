@@ -12,7 +12,7 @@ namespace ToDo
             = new List<CommandType> { CommandType.DELETE, CommandType.DONE, CommandType.UNDONE, CommandType.MODIFY, CommandType.POSTPONE, CommandType.SEARCH };
 
         static private List<CommandType> timeRangeableCommandTypes
-            = new List<CommandType> { CommandType.SCHEDULE, CommandType.POSTPONE };
+            = new List<CommandType> { CommandType.SCHEDULE, CommandType.POSTPONE, CommandType.ADD };
 
         CommandType commandType;
 
