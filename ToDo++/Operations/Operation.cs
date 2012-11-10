@@ -249,7 +249,7 @@ namespace ToDo
             List<Task> filteredTasks = new List<Task>(tasks);
             if (!(startTime == null && endTime == null))
                 filteredTasks = (from task in filteredTasks
-                                 where task.IsWithinTime(isSpecific, startTime, endTime)
+                                 where task.IsWithinTime(startTime, endTime)
                                  select task).ToList();
             return filteredTasks;
         }

@@ -78,7 +78,11 @@ namespace ToDo
         public string FeedbackString
         {
             get { return feedbackString; }
-        }        
+        }
+        public Result Result
+        {
+            get { return result; }
+        }
         public List<Task> TasksToBeDisplayed
         {
             get { return tasksToBeDisplayed; }

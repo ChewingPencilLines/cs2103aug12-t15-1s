@@ -36,10 +36,10 @@ namespace ToDo
             // must be done after generating command tokens
             tokens.AddRange(GenerateIndexRangeTokens(input, commandTokens));
             tokens.AddRange(GenerateSortTypeTokens(input, commandTokens));
-            tokens.AddRange(GenerateTimeRangeTokens(input));
+            tokens.AddRange(GenerateTimeRangeTokens(input, commandTokens));
             tokens.AddRange(GenerateDayTokens(input));
             tokens.AddRange(GenerateDateTokens(input));
-            tokens.AddRange(GenerateTimeTokens(input));            
+            tokens.AddRange(GenerateTimeTokens(input));
             // must be done after generating day/date/time tokens.
             tokens.AddRange(GenerateContextTokens(input, tokens));
             // must be done last. all non-hits are taken to be literals            
@@ -47,8 +47,8 @@ namespace ToDo
             DeconflictTokens(ref tokens);
             tokens.Sort(CompareByPosition);
             return tokens;
-        } 
-        
+        }
+
         /// <summary>
         /// This method searches an input list of strings against the set list of command keywords and returns
         /// a list of tokens corresponding to the matched command keywords.
@@ -63,7 +63,7 @@ namespace ToDo
             foreach (string word in inputWords)
             {
                 if (CustomDictionary.commandKeywords.TryGetValue(word.ToLower(), out commandType))
-                {                    
+                {
                     TokenCommand commandToken = new TokenCommand(index, commandType);
                     tokens.Add(commandToken);
                 }
@@ -76,29 +76,31 @@ namespace ToDo
         {
             List<Token> indexRangeTokens = new List<Token>();
             int index = 0;
+
             foreach (string word in inputWords)
             {
-                bool isAll = false;
-                int[] userDefinedIndex = null;
-                TokenIndexRange indexRangeToken = null;
-                if (TryGetNumericalRange(word, out userDefinedIndex))
+                var validTokens = from token in commandTokens
+                                  where token.Position == index - 1 &&
+                                        token.RequiresIndexRange()
+                                  select token;
+                if (validTokens.Count() > 0)
                 {
-                    var prevToken = from token in commandTokens
-                                    where token.Position == index - 1 &&
-                                          token.RequiresIndexRange()
-                                    select token;
-                    if (prevToken.Count() == 1)
+                    bool isAll = false;
+                    int[] userDefinedIndex = null;
+                    TokenIndexRange indexRangeToken = null;
+                    if (TryGetNumericalRange(word, out userDefinedIndex))
                     {
                         indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
                     }
+                    else if (CheckIfAllKeyword(word))
+                    {
+                        isAll = true;
+                        indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
+                    }
+                    if (indexRangeToken != null)
+                        indexRangeTokens.Add(indexRangeToken);
                 }
-                else if (CheckIfAllKeyword(word))
-                {
-                    isAll = true;
-                    indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
-                }
-                if (indexRangeToken != null)
-                    indexRangeTokens.Add(indexRangeToken);
+
                 index++;
             }
             return indexRangeTokens;
@@ -110,30 +112,36 @@ namespace ToDo
             int index = 0;
 
             List<Token> sortTokens = new List<Token>();
+
+
             foreach (string word in input)
             {
-                if (CustomDictionary.sortTypeKeywords.TryGetValue(word.ToLower(), out sortType) && index != 0)
+                var validTokens = from token in commandTokens
+                                  where (token.Position == index - 1 &&
+                                         token.Value == CommandType.SORT)
+                                  select token;
+                if (validTokens.Count() > 0)
                 {
-                    var validTokens = from token in commandTokens
-                                      where (token.Position == index - 1 &&
-                                               token.Value == CommandType.SORT)
-                                      select token;
-                    if (validTokens.Count() > 0)
+
+                    if (CustomDictionary.sortTypeKeywords.TryGetValue(word.ToLower(), out sortType) && index != 0)
                     {
                         TokenSortType sortTypeToken = new TokenSortType(index, sortType);
                         sortTokens.Add(sortTypeToken);
                     }
                 }
+
                 index++;
             }
             return sortTokens;
-
         }
 
-        private List<Token> GenerateTimeRangeTokens(List<string> inputWords)
+        private List<Token> GenerateTimeRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
         {
             List<Token> timeRangeTokens = new List<Token>();
             int index = 0;
+
+            if (commandTokens.Count(e => e.RequiresTimeRange()) < 1) return timeRangeTokens;
+
             foreach (string word in inputWords)
             {
                 int timeRangeAmount = 0;
@@ -155,7 +163,7 @@ namespace ToDo
                     {
                         throw new Exception("Something is wrong with IsTimeRange regex etc.");
                     }
-                        timeRangeToken = new TokenTimeRange(index, timeRangeAmount, timeRangeType);
+                    timeRangeToken = new TokenTimeRange(index, timeRangeAmount, timeRangeType);
                 }
                 else if (CustomDictionary.timeRangeKeywords.TryGetValue(wordLower, out timeRangeKeyword))
                 {
@@ -248,7 +256,7 @@ namespace ToDo
             List<TokenDate> dateTokens = new List<TokenDate>();
 
             foreach (string word in input)
-            {                
+            {
                 Specificity isSpecific = new Specificity();
                 DateTime dateTime = new DateTime();
                 TokenDate dateToken = null;
@@ -256,7 +264,7 @@ namespace ToDo
                 if (CustomDictionary.IsValidDate(wordLower)
                     || CustomDictionary.IsToday(wordLower)
                     || CustomDictionary.IsValidMonthWord(wordLower)
-                    )  
+                    )
                 {
                     string dayString = String.Empty;
                     string monthString = String.Empty;
@@ -301,13 +309,13 @@ namespace ToDo
                         year = DateTime.Today.Year;
                         dateTime = TryParsingDate(year, month, day, true);
                         if (DateTime.Compare(dateTime, DateTime.Today) < 0)
-                        {                            
+                        {
                             if (isSpecific.Month == false)
                             {
                                 month = DateTime.Today.AddMonths(1).Month;
-                                year = DateTime.Today.AddMonths(1).Year;                                                                    
+                                year = DateTime.Today.AddMonths(1).Year;
                             }
-                            else if (month != DateTime.Now.Month)                                
+                            else if (month != DateTime.Now.Month)
                             {
                                 year = DateTime.Today.AddYears(1).Year;
                             }
@@ -333,9 +341,9 @@ namespace ToDo
         {
             List<Token> timeTokens = new List<Token>();
             Match match;
-            int index = 0; 
+            int index = 0;
             bool specificity = true;
-            bool Format_12Hour = false;            
+            bool Format_12Hour = false;
             foreach (string word in input)
             {
                 int hours = 0, minutes = 0, seconds = 0;
@@ -615,16 +623,13 @@ namespace ToDo
         private Token GetHighestPriorityToken(IEnumerable<Token> matches, List<Token> tokens)
         {
             Token highestPriorityToken = null;
-            var tokensWhichRequireTimeRange = from eachToken in tokens
-                        where eachToken.RequiresTimeRange()
-                        select eachToken;
             foreach (Token token in matches)
             {
                 if (token.GetType() == typeof(TokenIndexRange))
                 {
                     highestPriorityToken = token;
                 }
-                else if (tokensWhichRequireTimeRange.Count() > 0 && token.GetType() == typeof(TokenTimeRange))
+                else if (token.GetType() == typeof(TokenTimeRange))
                 {
                     highestPriorityToken = token;
                 }
