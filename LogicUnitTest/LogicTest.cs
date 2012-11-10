@@ -168,11 +168,11 @@ namespace LogicUnitTest
             Response result;
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
-            logic.ProcessCommand("add aaa 5pm");
-            logic.ProcessCommand("add bbb 7pm");
-            result = logic.ProcessCommand("search today");
-            Assert.AreEqual("Displaying all tasks within 2012/11/9 12:00 AM to 2012/11/9 12:00 AM.", result.FeedbackString);
-           // Assert.AreEqual("aaa", result.TasksToBeDisplayed[0].TaskName);
+            logic.ProcessCommand("add aaa by 3th");
+            logic.ProcessCommand("add bbb at 3th 7pm");
+            result = logic.ProcessCommand("search 3th");
+            Assert.AreEqual("Displaying all tasks matching \"3th\".", result.FeedbackString);
+            //Assert.AreEqual("aaa", result.TasksToBeDisplayed[0].TaskName);
             //Assert.AreEqual("bbb", result.TasksToBeDisplayed[1].TaskName);
             return;
         }
@@ -183,10 +183,10 @@ namespace LogicUnitTest
             Response result;
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
-            logic.ProcessCommand("add aba 5pm");
-            result = logic.ProcessCommand("search 5pm");
-            Assert.AreEqual("Displaying all tasks within 2012/11/9 17:00.", result.FeedbackString);
-          //  Assert.AreEqual("aba", result.TasksToBeDisplayed[0].TaskName);
+            logic.ProcessCommand("add aba 8th 5pm");
+            result = logic.ProcessCommand("search 8th 5pm");
+            Assert.AreEqual("Displaying all tasks within 2012/12/8 0:00 to 2012/12/8 17:00.", result.FeedbackString);
+            Assert.AreEqual("aba", result.TasksToBeDisplayed[0].TaskName);
             return;
         }
 
