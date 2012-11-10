@@ -15,10 +15,7 @@ namespace ToDo
     // ******************************************************************
     public enum CommandType { ADD = 0, DELETE, DISPLAY, SORT, SEARCH, MODIFY, UNDO, REDO, DONE, UNDONE, POSTPONE, SCHEDULE, EXIT, INVALID };
     public enum ContextType { STARTTIME = 0, ENDTIME, DEADLINE, CURRENT, NEXT, FOLLOWING };
-    // unless otherwise stated in settings,
-    // morning: 5am to 12pm, afternoon: 12pm to 5pm, evening: 5pm to 10pm, night: 10pm to 5am
     public enum TimeRangeKeywordsType { MORNING, AFTERNOON, EVENING, NIGHT, NONE };
-    // default should be hours (1 hour), unless otherwise specified in settings
     public enum TimeRangeType { DEFAULT = 0, HOUR, DAY, WEEK, MONTH };
     public enum SortType { DEFAULT, NAME, DATE_TIME };
     public enum SearchType { NONE, DONE, UNDONE }

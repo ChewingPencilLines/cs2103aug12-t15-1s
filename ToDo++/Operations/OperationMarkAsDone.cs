@@ -39,7 +39,7 @@ namespace ToDo
         /// <param name="indexRange">The display index of the task to be marked.</param>
         /// <param name="startTime">The start date from which to mark all tasks as done.</param>
         /// <param name="endTime">The end date to which to mark all tasks as done.</param>
-        /// <param name="isSpecific"></param>
+        /// <param name="isSpecific">The specificity of the start and end ranges</param>
         /// <param name="isAll">If this boolean is true, the current displayed tasks or results of the search
         /// carried out will all be marked as done.</param>
         /// <param name="searchType">The type of search to be carried out if required.</param>
@@ -92,8 +92,7 @@ namespace ToDo
             if (response != null) return response;
 
             if (!hasIndex)
-                response = ExecuteBySearch(
-                    taskName, startTime, endTime, isAll, searchType, action, args);
+                response = ExecuteBySearch(taskName, startTime, endTime, isAll, searchType, action, args);
 
             else if (hasIndex)
                 response = ExecuteByIndex(startIndex, endIndex, action, args);

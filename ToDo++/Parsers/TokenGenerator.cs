@@ -258,7 +258,6 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of date tokens</returns>
-
         public List<TokenDate> GenerateDateTokens(List<string> input)
         {
             int day = 0;
