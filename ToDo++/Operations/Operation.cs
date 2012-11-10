@@ -42,7 +42,7 @@ namespace ToDo
             this.sortType = sortType;
             executedTasks = new Queue<Task>();
         }
-        
+
         /// <summary>
         /// Sets the currently displayed list of tasks shared by all Operations
         /// to the input list of tasks.
@@ -76,7 +76,7 @@ namespace ToDo
             undoStack.Push(this);
             redoStack.Clear();
         }
-        
+
         /// <summary>
         /// Base method to execute this Operation. Must be overriden by all derived Operations.
         /// </summary>
@@ -112,7 +112,7 @@ namespace ToDo
             Debug.Assert(false, "This operation should not be redoable!");
             return null;
         }
-        
+
         /// <summary>
         /// Indicates whether the Operation should allow a multiple-task
         /// execution to continue if one of the tasks execute unsuccessfully.
@@ -146,9 +146,9 @@ namespace ToDo
                     Logger.Warning("Attempted to add an invalid task.", "AddTask::Operation");
                     return new Response(Result.FAILURE, sortType, typeof(OperationAdd), currentListedTasks);
                 }
-                                
+
                 taskList.Add(taskToAdd);
-                AddToOperationHistory(taskToAdd);                
+                AddToOperationHistory(taskToAdd);
 
                 bool success = storageIO.AddTaskToFile(taskToAdd);
                 if (success)
@@ -163,10 +163,10 @@ namespace ToDo
             catch (Exception e)
             {
                 Logger.Error(e, "AddTask::Operation");
-                return new Response(Result.FAILURE, sortType, typeof(OperationAdd), currentListedTasks);                
+                return new Response(Result.FAILURE, sortType, typeof(OperationAdd), currentListedTasks);
             }
         }
-        
+
         /// <summary>
         /// Removes a task from the system. The deleted task is removed from file
         /// using the Storage controller specified with SetMembers.
@@ -221,7 +221,7 @@ namespace ToDo
             {
                 filteredTasks = FilterByTaskName(filteredTasks, searchString, requireExactMatch);
                 filteredTasks = FilterByTaskTime(filteredTasks, startTime, endTime);
-                filteredTasks = FilterBySearchType(filteredTasks, searchType);                 
+                filteredTasks = FilterBySearchType(filteredTasks, searchType);
             }
             catch (Exception e)
             {
@@ -262,7 +262,7 @@ namespace ToDo
         private List<Task> FilterByTaskName(List<Task> tasks, string searchString, bool exact)
         {
             List<Task> filteredTasks = new List<Task>(tasks);
-            if (!IsValidString(searchString))
+            if (IsValidString(searchString))
                 filteredTasks = (from task in filteredTasks
                                  where ((task.TaskName.IndexOf(searchString) >= 0 && exact == false) ||
                                        (String.Compare(searchString, task.TaskName, true) == 0 && exact == true))
@@ -299,7 +299,7 @@ namespace ToDo
         /// <param name="doneState">Flag indiciating whether to mark as done or undone.</param>
         /// <returns></returns>
         protected Response MarkTaskAs(Task taskToMark, bool doneState)
-        {            
+        {
             SetMembers(taskList, storageIO);
 
             if (taskToMark.DoneState == doneState)
@@ -310,7 +310,7 @@ namespace ToDo
             executedTasks.Enqueue(taskToMark);
 
             if (storageIO.MarkTaskAs(taskToMark, doneState))
-                return GenerateStandardSuccessResponse(taskToMark);            
+                return GenerateStandardSuccessResponse(taskToMark);
             else
                 return GenerateXMLFailureResponse();
         }
@@ -324,7 +324,7 @@ namespace ToDo
         {
             if (taskToCheck == null)
                 return true;
-            if (IsValidString(taskToCheck.TaskName))
+            if (!IsValidString(taskToCheck.TaskName))
                 return true;
             return false;
         }
@@ -337,7 +337,7 @@ namespace ToDo
         private void AddToOperationHistory(Task task)
         {
             executedTasks.Enqueue(task);
-        }        
+        }
         #endregion
 
         // ****************************************************************************************
@@ -353,23 +353,23 @@ namespace ToDo
         #region Search & Execute
         /// <summary>
         /// Searches for one or more tasks using the provided search paramters
-        /// and then executes the specified action on them.
+        /// and then executes the specified action on them if there is only one result,
+        /// or if the immediateExecutionFlag is set.
+        /// Returns the list of search results otherwise.
         /// </summary>
         /// <param name="searchString">The string to search the tasks' names against.</param>
         /// <param name="startTime">The start time by which the task must fall within.</param>
         /// <param name="endTime">The end time by which the task must fall within.</param>
-        /// <param name="isSpecific">The specificty</param>
-        /// <param name="isAll"></param>
-        /// <param name="searchType"></param>
-        /// <param name="action"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
+        /// <param name="immediateExecutionFlag">Flag which indicates whether the Delegate should be performed immediately if there are more than one results.</param>
+        /// <param name="searchType">The type of search to perform.</param>
+        /// <param name="action">The Delegate method to be invoked which must accept a Task as the first parameters.</param>
+        /// <param name="args">Any subsequent parameters to be passed into the Delegate method and then invoked.</param>
+        /// <returns>Response indicating the result of the operation.</returns>
         protected Response ExecuteBySearch(
                         string searchString,
                         DateTime? startTime,
                         DateTime? endTime,
-                        DateTimeSpecificity isSpecific,
-                        bool isAll,
+                        bool immediateExecutionFlag,
                         SearchType searchType,
                         Delegate action,
                         params object[] args
@@ -378,58 +378,77 @@ namespace ToDo
             List<Task> searchResults = new List<Task>();
             Response response = null;
 
+            // User specified to execute immediately without returning search results.
+            if (immediateExecutionFlag)
+            {
+                response = ExecuteAllBySearch(searchString, startTime, endTime, searchType, action, args);
+                return response;
+            }
+
             searchResults = SearchForTasks(searchString, true, startTime, endTime, searchType);
 
-            // If no results and not trying to display all, try non-exact search.
-            if (searchResults.Count == 0 && !isAll)
+            // If no results and not trying to execute on all, try non-exact search.
+            if (searchResults.Count == 0 && !immediateExecutionFlag)
                 response = TrySearchNonExact(searchString, startTime, endTime, searchType);
 
             // If only one result and is searching by name, delete immediately.
-            else if (searchResults.Count == 1 && !IsValidString(searchString))
+            else if (searchResults.Count == 1 && IsValidString(searchString))
             {
                 var parameters = AddTaskToParameters(args, searchResults[0]);
-                response = (Response)action.DynamicInvoke(parameters);
+                response = InvokeAction(action, parameters);
             }
-            
-            else if (isAll)
-            {
-                searchResults = SearchForTasks(searchString, false, startTime, endTime, searchType);
-                response = ExecuteOnAll(searchString, startTime, endTime, searchType, searchResults, isAll, action, args);
-            }
-
             // If not, display search results.
             else
             {
-                response = DisplaySearchResults(searchResults, searchString, startTime, endTime, searchType, isAll);
+                response = DisplaySearchResults(searchResults, searchString, startTime, endTime, searchType, immediateExecutionFlag);
             }
             return response;
         }
 
-        // If all keyword is used, delete all in search results,
-        // unless there were no constraining parameters.
-        // If there were, delete all currently displayed tasks if no search string was used.
-        // If not, display search results
-        private Response ExecuteOnAll(
-            string taskName,
-            DateTime? startTime,
-            DateTime? endTime,
-            SearchType searchType,
-            List<Task> searchResults,
-            bool isAll,
-            Delegate action,
-            params object[] args
-            )
+        /// <summary>
+        /// Searches for one or more tasks using the provided search paramters
+        /// and then executes the specified action on them immediately.
+        /// Does an exact search only if all times provided are null.
+        /// </summary>
+        /// <param name="searchString">The string to search the tasks' names against.</param>
+        /// <param name="startTime">The start time by which the task must fall within.</param>
+        /// <param name="endTime">The end time by which the task must fall within.</param>        
+        /// <param name="searchType">The type of search to perform.</param>
+        /// <param name="action">The Delegate method to be invoked which must accept a Task as the first parameters.</param>
+        /// <param name="args">Any subsequent parameters to be passed into the Delegate method and then invoked.</param>
+        /// <returns>Response indicating the result of the operation.</returns>
+        private Response ExecuteAllBySearch(string searchString, DateTime? startTime, DateTime? endTime, SearchType searchType, Delegate action, object[] args)
         {
+            List<Task> searchResults = new List<Task>();
             Response response = null;
-            if (startTime != null || endTime != null || searchType != SearchType.NONE)
-                response = ExecuteOnAllSearchResults(searchResults, action, args);
-            else if (taskName == "" || taskName == null)
-                response = ExecuteOnAllDisplayedTasks(action, args);
+
+            if (HasValidTime(startTime, endTime))
+                searchResults = SearchForTasks(searchString, false, startTime, endTime, searchType);
             else
-                response = DisplaySearchResults(searchResults, taskName, startTime, endTime, searchType, isAll);
+                searchResults = SearchForTasks(searchString, true, startTime, endTime, searchType);
+
+            if (searchResults.Count == 0)
+            {
+                Logger.Info("Tried to execute all with no results", "ExecuteAllBySearch::Operation");
+                return new Response(Result.FAILURE, sortType, typeof(OperationSearch));
+            }
+
+            if (HasValidTime(startTime, endTime) || IsValidString(searchString) || searchType != SearchType.NONE )
+                response = ExecuteOnAll(searchResults, action, args);
+            else
+                response = ExecuteOnAllDisplayedTasks(action, args);
+
             return response;
         }
 
+        /// <summary>
+        /// Performs a non exact search and updates the displayed list if there is a non-zero number of matches.
+        /// </summary>
+        /// <param name="searchString">The string to search the tasks' names against.</param>
+        /// <param name="startTime">The start time by which the task must fall within.</param>
+        /// <param name="endTime">The end time by which the task must fall within.</param>        
+        /// <param name="searchType">The type of search to perform.</param>
+        /// <returns></returns>
         private Response TrySearchNonExact(
             string taskName,
             DateTime? startTime,
@@ -443,7 +462,7 @@ namespace ToDo
             searchResults = SearchForTasks(taskName);
 
             if (searchResults.Count == 0)
-                response = new Response(Result.FAILURE, sortType, this.GetType());
+                response = new Response(Result.FAILURE, sortType, typeof(OperationSearch));
             else
             {
                 currentListedTasks = new List<Task>(searchResults);
@@ -456,15 +475,24 @@ namespace ToDo
             return response;
         }
 
-        private Response ExecuteOnAllSearchResults(List<Task> searchResults, Delegate action, params object[] args)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searchResults"></param>
+        /// <param name="action"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private Response ExecuteOnAll(List<Task> searchResults, Delegate action, params object[] args)
         {
             Response response = null;
             foreach (Task task in searchResults)
             {
                 var parameters = AddTaskToParameters(args, task);
-                response = (Response)action.DynamicInvoke(parameters);
+                
+                response = InvokeAction(action, parameters);
 
-                if (!response.IsSuccessful() && !AllowSkipOver(response)) return response;
+                if (!response.IsSuccessful() && !AllowSkipOver(response)) 
+                    return response;
             }
             response = new Response(Result.SUCCESS_MULTIPLE, sortType, this.GetType(), currentListedTasks);
             return response;
@@ -642,9 +670,29 @@ namespace ToDo
         }
         #endregion
 
-        private static bool IsValidString(string searchString)
+        private static bool IsValidString(string checkString)
         {
-            return (searchString == null || searchString == String.Empty);
+            return checkString != null && checkString != String.Empty;
+        }
+
+        private static bool HasValidTime(DateTime? startTime, DateTime? endTime)
+        {
+            return startTime != null || endTime != null;
+        }
+
+        private static Response InvokeAction(Delegate action, object[] parameters)
+        {
+            Response response;
+            try
+            {
+                response = (Response)action.DynamicInvoke(parameters);
+            }
+            catch (System.Exception ex)
+            {
+                response = new Response(Result.EXCEPTION_FAILURE);
+                Logger.Error(ex, "ExecuteBySearch::Operation");
+            }
+            return response;
         }
     }
 }

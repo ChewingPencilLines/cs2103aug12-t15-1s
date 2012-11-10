@@ -76,7 +76,7 @@ namespace ToDo
 
             if (!hasIndex)
                 response = ExecuteBySearch(
-                    taskName, startTime, endTime, isSpecific, isAll, searchType, action, args);
+                    taskName, startTime, endTime, isAll, searchType, action, args);
 
             else if (hasIndex)
                 response = ExecuteByIndex(startIndex, endIndex, action, args);
