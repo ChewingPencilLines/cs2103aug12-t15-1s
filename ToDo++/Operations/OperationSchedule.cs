@@ -329,7 +329,7 @@ namespace ToDo
             response = AddTask(scheduledTask);
             if (response.IsSuccessful())
             {
-                TrackOperation();
+                AddToOperationHistory();
             }
             return response;
         }
