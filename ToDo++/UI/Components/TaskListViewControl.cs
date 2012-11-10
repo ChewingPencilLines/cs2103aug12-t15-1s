@@ -157,17 +157,17 @@ namespace ToDo
             else if (task is TaskDeadline)
             {
                 // Deadline task is over time limit!
-                if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
+                if (task.IsWithinTime(null, DateTime.Now))
                     ColorSubItems(row, settings.GetTaskMissedDeadlineColor());
                 // Task is within the next 24 hrs!
-                else if (task.IsWithinTime(new DateTimeSpecificity(), DateTime.Now, DateTime.Now.AddDays(1)))
+                else if (task.IsWithinTime(DateTime.Now, DateTime.Now.AddDays(1)))
                     ColorSubItems(row, settings.GetTaskNearingDeadlineColor());
             }
 
             else if (task is TaskEvent)
             {
                 // Task has already started or is over!
-                if (task.IsWithinTime(new DateTimeSpecificity(), null, DateTime.Now))
+                if (task.IsWithinTime(null, DateTime.Now))
                     ColorSubItems(row, settings.GetTaskOverColor());
             }
         }
