@@ -42,7 +42,7 @@ namespace ToDo
             List<int[]> indexOfDelimiters = FindPositionOfDelimiters(input);
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
             TokenGenerator tokenGenerator = new TokenGenerator();
-            return tokenGenerator.GenerateTokens(words);
+            return tokenGenerator.GenerateAllTokens(words);
         }
 
         internal static string MarkWordsAsAbsolute(string absoluteSubstr)
