@@ -43,6 +43,7 @@ namespace ToDo
             LoadTimeKeywordRangeList();
             LoadTimeRangeList();
             LoadCommandList();
+            UpdateTabDescription();
             this.rangeController.Enabled = false;
             schedPostponePanel.Hide();
         }
@@ -55,7 +56,7 @@ namespace ToDo
 
         #region ConversionStringToEnum
 
-        public enum SelectedType { CommandSelected = 1, ContextSelected, TimeRangeKeywordsSelected, TimeRangeSelected };
+        public enum SelectedType { CommandSelected = 1, ContextSelected, TimeRangeKeywordsSelected, TimeRangeSelected,INVALID };
 
         private CommandType ConvertStringToCommand(string command)
         {
@@ -143,31 +144,19 @@ namespace ToDo
         // Event Handlers
         // ******************************************************************
 
-        #region EventHandlersForButtons
+        #region EventHandlers
 
         #region Add/Remove
 
-        private void addButton_MouseDown(object sender, MouseEventArgs e)
+        private void addButton_Click(object sender, EventArgs e)
         {
-            addButton.SetMouseDown();
-        }
-
-        private void addButton_MouseUp(object sender, MouseEventArgs e)
-        {
-            addButton.SetMouseUp();
             ShowUserInputBox();
         }
 
-        private void removeButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            removeButton.SetMouseDown();
-        }
-
-        private void removeButton_MouseUp(object sender, MouseEventArgs e)
+        private void removeButton_Click(object sender, EventArgs e)
         {
             try
             {
-                removeButton.SetMouseUp();
                 RemoveFlexiCommandFromSettings(this.listedFlexiCommands.SelectedItem.ToString());
                 UpdateFlexiCommandList();
             }
@@ -175,7 +164,6 @@ namespace ToDo
             {
                 AlertBox.Show("Please select a Command");
             }
-
         }
 
         #endregion
@@ -300,23 +288,30 @@ namespace ToDo
         private void flatTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             schedPostponePanel.Hide();
-            if (flatTabControl1.SelectedIndex == 0)
+            if (flexiCommandTab.SelectedIndex == 0)
             {
-                commandTree.Focus();
+                UpdateTabDescription();
+                ClearSelectedCommands();
+                //commandTree.Focus();
                 Size tempSize = descriptionLabel.Size;
-                tempSize.Height = flatTabControl1.Height - 70;
+                tempSize.Height = flexiCommandTab.Height - 70;
+                descriptionLabel.Size = tempSize;
+                
+            }
+            else if (flexiCommandTab.SelectedIndex == 1)
+            {
+                UpdateTabDescription();
+                ClearSelectedCommands();
+                //contextTree.Focus();
+                Size tempSize = descriptionLabel.Size;
+                tempSize.Height = flexiCommandTab.Height - 70;
                 descriptionLabel.Size = tempSize;
             }
-            else if (flatTabControl1.SelectedIndex == 1)
+            else if (flexiCommandTab.SelectedIndex == 2)
             {
-                contextTree.Focus();
-                Size tempSize = descriptionLabel.Size;
-                tempSize.Height = flatTabControl1.Height - 70;
-                descriptionLabel.Size = tempSize;
-            }
-            else if (flatTabControl1.SelectedIndex == 2)
-            {
-                timeRangeKeywordTree.Focus();
+                UpdateTabDescription();
+                ClearSelectedCommands();
+                //timeRangeKeywordTree.Focus();
                 Size tempSize = descriptionLabel.Size;
                 tempSize.Height = 93;
                 descriptionLabel.Size = tempSize;
@@ -395,7 +390,7 @@ namespace ToDo
 
             box.Select(start, end - start + 1);
             box.SelectionColor = color;
-            box.SelectionFont = new Font("Arial", size, FontStyle.Regular);
+            box.SelectionFont = new Font("Century Gothic", size, FontStyle.Regular);
             box.SelectionLength = 0;
         }
 
@@ -406,6 +401,15 @@ namespace ToDo
         // ******************************************************************
 
         #region UpdateUIElemets
+
+        /// <summary>
+        /// Clear Selected Commands and set to nothing selected
+        /// </summary>
+        private void ClearSelectedCommands()
+        {
+            listedFlexiCommands.Items.Clear();
+            selectedType = SelectedType.INVALID;
+        }
 
         /// <summary>
         /// Shows the User Input Box to enter new flexiCommands
@@ -532,6 +536,7 @@ namespace ToDo
             if (this.selectedType == SelectedType.CommandSelected)
             {
                 title = commandTree.SelectedNode.Text;
+                titleLabel.Text = title;
                 switch (selectedCommand)
                 {
                     case CommandType.ADD:
@@ -591,7 +596,7 @@ namespace ToDo
                         SetFormat(Color.Gray, "eg. postpone 1-2 2 hours\n", 9);
                         SetFormat(Color.Gray, "eg. postpone 1 2 days\n", 9);
                         SetFormat(Color.Gray, "eg. postpone task (default)\n", 9);
-                        SetFormat(Color.Black, "Change the default Postpone below\n", 9);
+                        SetFormat(Color.Black, "Change Postpone range below\n", 9);
                         break;
 
                     case CommandType.SCHEDULE:
@@ -599,7 +604,7 @@ namespace ToDo
                         SetFormat(Color.Gray, "eg. schedule buy milk\n", 9);
                         SetFormat(Color.Gray, "eg. schedule task tmr 2-5pm\n", 9);
                         SetFormat(Color.Gray, "eg. schedule task tmr (default)\n", 9);
-                        SetFormat(Color.Black, "Change the default Schedule range below\n", 9);
+                        SetFormat(Color.Black, "Change Schedule range below\n", 9);
                         break;
 
                     case CommandType.UNDO:
@@ -626,6 +631,7 @@ namespace ToDo
             else if (this.selectedType == SelectedType.ContextSelected)
             {
                 title = contextTree.SelectedNode.Text;
+                titleLabel.Text = title;
                 switch (selectedContext)
                 {
                     case ContextType.STARTTIME:
@@ -744,7 +750,34 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Updates description of the selected tabs
+        /// </summary>
+        private void UpdateTabDescription()
+        {
+            this.descriptionLabel.Text = "";
+
+            if (flexiCommandTab.SelectedIndex==0)
+            {
+                this.titleLabel.Text = "Command Keywords";
+                SetFormat(Color.Black, "Commands are what let you interact with ToDo++. Click on a command to find out more about it, modify it's settings and add your own custom flexiCommands :)", 9);
+            }
+            else if (flexiCommandTab.SelectedIndex == 1)
+            {
+                this.titleLabel.Text = "Context Keywords";
+                SetFormat(Color.Black, "Contextes are natural words and characters you use, to set time ranges any way you please. Click on a context to find out more about it, modify it's settings and add your own custom flexiCommands :)", 9);
+            }
+            else if (flexiCommandTab.SelectedIndex == 2)
+            {
+                this.titleLabel.Text = "Time Keywords";
+                SetFormat(Color.Black, "Time Keywords are how ToDo++ sets Time Ranges. For example, MORNING would let make ToDo++ set the \"5am to 10am\" time range. You can modify or add your own custom flexiCommands :)", 9);
+
+            }
+        }
+
         #endregion
+
+
 
 
 

@@ -12,7 +12,7 @@ namespace ToDo
         private const bool defaultStartMinimized = false;
         private const bool defaultStayOnTop = false;
         private const int defaultTextSize = 9;
-        private const string defaultFont = "Arial";
+        private const string defaultFont = "Century Gothic";
 
         private static readonly Color defaultTaskDoneColor = Color.Green;
         private static readonly Color defaultTaskMissedDeadlineColor = Color.Red;
