@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner" xmlns:dm9="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="7b7af4e0-9df6-487e-a5f5-113bc4acb375"
+  name="Hotkeys"
+  visibility="Private" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <referencesInternal>
+    <reference
+      Id="b361ecaf-2c33-4618-9331-0e7c92cfd61c"
+      handle="viewcode://./CodeSchema_Namespace?Namespace=Hotkeys"
+      tag="ViewCode" />
+  </referencesInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="19c997d6-1789-45b6-a9fc-814272ace7fe"
+        name="GlobalHotkey"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <referencesInternal>
+          <reference
+            Id="6fa3fd10-49ea-4191-ae97-5376be2f7809"
+            handle="viewcode://./CodeSchema_Class?Assembly=&quot;file:///C:/Users/RavenXce/Documents/Visual Studio 2012/Projects/ToDo++/HotkeyLib/bin/Debug/HotkeyLib.dll&quot; Namespace=Hotkeys Type=GlobalHotkey"
+            tag="ViewCode" />
+        </referencesInternal>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="4a28a63d-e807-4fc7-9711-73578de0eff2"
+            name="class"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="c7f25187-0cdd-49ba-83e2-28c1d8400c72">
+                <propertyInstance
+                  Id="34fdea2a-1f12-4269-b94c-0051e767537f"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="4b2668ec-0cf9-41af-95aa-9b4e60915259">
+                <propertyInstance
+                  Id="687e1d28-7a58-4de9-bd60-02fad15f79b3"
+                  name="IsPartial"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="cec4bba9-b15a-4424-865c-1b247fb72b3a">
+                <propertyInstance
+                  Id="7c697b03-2fa2-4e88-9339-de4560c7749c"
+                  name="IsStatic"
+                  value="False" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="ca9d52ea-c5a9-4b9e-9998-3280cd126194">
+                <propertyInstance
+                  Id="244ed2e0-f05f-4b97-b60d-2654fa1208a0"
+                  name="IsUnsafe"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="0fc67dad-e393-411a-bd64-843c04f6246f">
+                <propertyInstance
+                  Id="a9056fd9-91da-40fe-8de4-3eca079e6f7c"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+      </class>
+    </packageHasNamedElement>
+  </packagedElements>
+</package>
