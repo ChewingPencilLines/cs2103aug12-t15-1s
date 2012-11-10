@@ -388,6 +388,7 @@ namespace ToDo
         {
             if (isCollapsed == false)
             {
+                topMenuControl.SetCollapsedStatus(true);
                 this.MinimumSize = new Size(522, 60);
                 grayFadePictureBox.BringToFront();
                 isCollapsed = true;
@@ -397,6 +398,7 @@ namespace ToDo
             }
             else
             {
+                topMenuControl.SetCollapsedStatus(false);
                 setHeight = 60;
                 isCollapsed = false;  
                 timerCollapse.Enabled = false;
@@ -425,6 +427,7 @@ namespace ToDo
                 grayFadePictureBox.Show();
                 taskListViewControl.Show();
                 preferencesPanel.Show();
+                helpControl.Show();
                 timerExpand.Enabled = false;
                 grayFadeTimer.Enabled = true;
             }
@@ -442,6 +445,7 @@ namespace ToDo
                     taskListViewControl.Hide();
                     preferencesPanel.Hide();
                     grayFadePictureBox.Hide();
+                    helpControl.Hide();
 
                     setHeight = this.Height;
                     prevHeight = this.Height;
