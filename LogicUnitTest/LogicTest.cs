@@ -95,7 +95,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("add bb JAN 3");
             logic.ProcessCommand("add bA JAN 5");
             result = logic.ProcessCommand("delete jan");
-            Assert.AreEqual("Displaying all tasks within 2013/1/1 0:00 to 2013/1/1 0:00.", result.FeedbackString);
+            Assert.AreEqual("Displaying all tasks within 2013/1/1 0:00 to 2013/1/31 23:59.", result.FeedbackString);
             Assert.AreEqual("bb", result.TasksToBeDisplayed[0].TaskName);
             Assert.AreEqual("bA", result.TasksToBeDisplayed[1].TaskName);
             Assert.AreEqual("DEFAULT", result.FormatType.ToString());
@@ -207,7 +207,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("add aaa by dec 3");
             logic.ProcessCommand("add bbb dec 3 7pm");
             result = logic.ProcessCommand("search dec");
-            Assert.AreEqual("Displaying all tasks within 2012/12/1 0:00 to 2012/12/31 0:00.", result.FeedbackString);
+            Assert.AreEqual("Displaying all tasks within 2012/12/1 0:00 to 2012/12/31 23:59.", result.FeedbackString);
             Assert.AreEqual("aaa", result.TasksToBeDisplayed[0].TaskName);
             Assert.AreEqual("bbb", result.TasksToBeDisplayed[1].TaskName);
             Assert.AreEqual("DEFAULT", result.FormatType.ToString());
