@@ -31,8 +31,9 @@
             this.descriptionLabel = new System.Windows.Forms.RichTextBox();
             this.listedFlexiCommands = new System.Windows.Forms.ListBox();
             this.grouper1 = new CodeVendor.Controls.Grouper();
-            this.flatTabControl1 = new FlatTabControl.FlatTabControl();
+            this.flexiCommandTab = new FlatTabControl.FlatTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.commandTree = new System.Windows.Forms.TreeView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.contextTree = new System.Windows.Forms.TreeView();
@@ -48,7 +49,7 @@
             this.removeButton = new ToDo.RoundButton();
             this.addButton = new ToDo.RoundButton();
             this.grouper1.SuspendLayout();
-            this.flatTabControl1.SuspendLayout();
+            this.flexiCommandTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -108,25 +109,26 @@
             this.grouper1.Size = new System.Drawing.Size(408, 64);
             this.grouper1.TabIndex = 14;
             // 
-            // flatTabControl1
+            // flexiCommandTab
             // 
-            this.flatTabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.flexiCommandTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.flatTabControl1.Controls.Add(this.tabPage1);
-            this.flatTabControl1.Controls.Add(this.tabPage2);
-            this.flatTabControl1.Controls.Add(this.tabPage3);
-            this.flatTabControl1.Location = new System.Drawing.Point(3, 3);
-            this.flatTabControl1.myBackColor = System.Drawing.Color.Gainsboro;
-            this.flatTabControl1.Name = "flatTabControl1";
-            this.flatTabControl1.SelectedIndex = 0;
-            this.flatTabControl1.Size = new System.Drawing.Size(408, 225);
-            this.flatTabControl1.TabIndex = 17;
-            this.flatTabControl1.SelectedIndexChanged += new System.EventHandler(this.flatTabControl1_SelectedIndexChanged);
+            this.flexiCommandTab.Controls.Add(this.tabPage1);
+            this.flexiCommandTab.Controls.Add(this.tabPage2);
+            this.flexiCommandTab.Controls.Add(this.tabPage3);
+            this.flexiCommandTab.Location = new System.Drawing.Point(3, 3);
+            this.flexiCommandTab.myBackColor = System.Drawing.Color.Gainsboro;
+            this.flexiCommandTab.Name = "flexiCommandTab";
+            this.flexiCommandTab.SelectedIndex = 0;
+            this.flexiCommandTab.Size = new System.Drawing.Size(408, 225);
+            this.flexiCommandTab.TabIndex = 17;
+            this.flexiCommandTab.SelectedIndexChanged += new System.EventHandler(this.flatTabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabPage1.Controls.Add(this.comboBox1);
             this.tabPage1.Controls.Add(this.commandTree);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
@@ -134,6 +136,14 @@
             this.tabPage1.Size = new System.Drawing.Size(400, 196);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Commands";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(128, 70);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 1;
             // 
             // commandTree
             // 
@@ -166,7 +176,7 @@
             this.contextTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.contextTree.ForeColor = System.Drawing.Color.Black;
             this.contextTree.LineColor = System.Drawing.Color.Gainsboro;
-            this.contextTree.Location = new System.Drawing.Point(-14, 3);
+            this.contextTree.Location = new System.Drawing.Point(-14, 10);
             this.contextTree.Name = "contextTree";
             this.contextTree.Size = new System.Drawing.Size(111, 188);
             this.contextTree.TabIndex = 10;
@@ -212,7 +222,7 @@
             this.timeRangeTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.timeRangeTree.ForeColor = System.Drawing.Color.Black;
             this.timeRangeTree.LineColor = System.Drawing.Color.Gainsboro;
-            this.timeRangeTree.Location = new System.Drawing.Point(-14, 67);
+            this.timeRangeTree.Location = new System.Drawing.Point(-14, 74);
             this.timeRangeTree.Name = "timeRangeTree";
             this.timeRangeTree.Size = new System.Drawing.Size(111, 68);
             this.timeRangeTree.TabIndex = 18;
@@ -225,7 +235,7 @@
             this.timeRangeKeywordTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.timeRangeKeywordTree.ForeColor = System.Drawing.Color.Black;
             this.timeRangeKeywordTree.LineColor = System.Drawing.Color.Gainsboro;
-            this.timeRangeKeywordTree.Location = new System.Drawing.Point(-14, 3);
+            this.timeRangeKeywordTree.Location = new System.Drawing.Point(-14, 10);
             this.timeRangeKeywordTree.Name = "timeRangeKeywordTree";
             this.timeRangeKeywordTree.Size = new System.Drawing.Size(111, 68);
             this.timeRangeKeywordTree.TabIndex = 17;
@@ -346,17 +356,17 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.schedPostponePanel);
+            this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.descriptionLabel);
-            this.Controls.Add(this.flatTabControl1);
+            this.Controls.Add(this.flexiCommandTab);
             this.Controls.Add(this.removeButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.grouper1);
             this.Name = "FlexiCommandsControl";
             this.Size = new System.Drawing.Size(414, 317);
             this.grouper1.ResumeLayout(false);
-            this.flatTabControl1.ResumeLayout(false);
+            this.flexiCommandTab.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
@@ -377,7 +387,7 @@
         private RoundButton addButton;
         private RoundButton removeButton;
         private System.Windows.Forms.TreeView timeRangeKeywordTree;
-        private FlatTabControl.FlatTabControl flatTabControl1;
+        private FlatTabControl.FlatTabControl flexiCommandTab;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
@@ -388,5 +398,6 @@
         private System.Windows.Forms.ComboBox typeComboBox;
         private System.Windows.Forms.ComboBox timeComboBox;
         private System.Windows.Forms.Label schedulePostponeLabel;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
