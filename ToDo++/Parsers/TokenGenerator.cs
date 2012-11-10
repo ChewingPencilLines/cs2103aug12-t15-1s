@@ -143,8 +143,11 @@ namespace ToDo
         {
             List<Token> timeRangeTokens = new List<Token>();
             int index = 0;
+            bool requiresTimeLength = false;
 
             if (commandTokens.Count(e => e.RequiresTimeRange()) < 1) return timeRangeTokens;
+            if (commandTokens.Count(e => e.RequiresTimeRange() && e.Value != CommandType.ADD) > 0)
+                requiresTimeLength = true;
 
             foreach (string word in inputWords)
             {
@@ -154,11 +157,18 @@ namespace ToDo
                 TokenTimeRange timeRangeToken = null;
 
                 string wordLower = word.ToLower();
-                if (CustomDictionary.IsTimeRange(wordLower))
+
+                if (CustomDictionary.timeRangeKeywords.TryGetValue(wordLower, out timeRangeKeyword))
                 {
+                    timeRangeToken = new TokenTimeRange(index, timeRangeKeyword);
+                }
+
+                else if (CustomDictionary.IsTimeRange(wordLower) && requiresTimeLength)
+                {                    
                     Match match = CustomDictionary.isTimeRange.Match(wordLower);
                     Int32.TryParse(match.Groups["index"].Value, out timeRangeAmount);
                     string matchString = match.Groups["type"].Value;
+
                     if (timeRangeAmount == 0 && matchString != null)
                     {
                         throw new InvalidTimeRangeException("Task duration type was specified without a valid amount (0 " + matchString + ").");
@@ -167,12 +177,10 @@ namespace ToDo
                     {
                         throw new Exception("Something is wrong with IsTimeRange regex etc.");
                     }
+
                     timeRangeToken = new TokenTimeRange(index, timeRangeAmount, timeRangeType);
                 }
-                else if (CustomDictionary.timeRangeKeywords.TryGetValue(wordLower, out timeRangeKeyword))
-                {
-                    timeRangeToken = new TokenTimeRange(index, timeRangeKeyword);
-                }
+
                 if (timeRangeToken != null)
                 {
                     timeRangeTokens.Add(timeRangeToken);

@@ -7,11 +7,25 @@ namespace ToDo
     public class OperationAdd : Operation
     {
         private Task newTask;
-        public OperationAdd(Task setTask, SortType sortType)
+
+        /// <summary>
+        /// Derived constructor to create an Add Operation.
+        /// </summary>
+        /// <param name="addTask">The task to add when this Operation is executed.</param>
+        /// <param name="sortType">The type of sorting to use on the displayed task after executing this Operation.</param>
+        /// <returns></returns>
+        public OperationAdd(Task addTask, SortType sortType)
             : base(sortType)
         {
-            newTask = setTask;
+            newTask = addTask;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="taskList"></param>
+        /// <param name="storageIO"></param>
+        /// <returns></returns>
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
