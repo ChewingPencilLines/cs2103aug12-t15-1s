@@ -30,6 +30,7 @@
         {
             this.grouper1 = new CodeVendor.Controls.Grouper();
             this.preferencesTitle = new CodeVendor.Controls.Grouper();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.preferencesSelector = new ToDo.CustomPanelControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.startingOptionsControl = new ToDo.StartingOptions();
@@ -38,14 +39,13 @@
             this.fontPage = new System.Windows.Forms.TabPage();
             this.fontColorSettingsControl = new ToDo.FontColorSettings();
             this.preferencesTree = new ToDo.TreeViewNoFlicker();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.grouper1.SuspendLayout();
             this.preferencesTitle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.preferencesSelector.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.fontPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // grouper1
@@ -97,6 +97,17 @@
             this.preferencesTitle.ShadowThickness = 3;
             this.preferencesTitle.Size = new System.Drawing.Size(419, 315);
             this.preferencesTitle.TabIndex = 6;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.pictureBox1.BackColor = System.Drawing.Color.Black;
+            this.pictureBox1.Location = new System.Drawing.Point(-9, 23);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(10, 270);
+            this.pictureBox1.TabIndex = 7;
+            this.pictureBox1.TabStop = false;
             // 
             // preferencesSelector
             // 
@@ -178,23 +189,14 @@
             this.preferencesTree.BackColor = System.Drawing.Color.Gainsboro;
             this.preferencesTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.preferencesTree.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.preferencesTree.Location = new System.Drawing.Point(-8, 23);
+            this.preferencesTree.LineColor = System.Drawing.Color.Gainsboro;
+            this.preferencesTree.Location = new System.Drawing.Point(-14, 23);
             this.preferencesTree.Name = "preferencesTree";
             this.preferencesTree.Scrollable = false;
-            this.preferencesTree.Size = new System.Drawing.Size(104, 260);
+            this.preferencesTree.ShowNodeToolTips = true;
+            this.preferencesTree.Size = new System.Drawing.Size(112, 260);
             this.preferencesTree.TabIndex = 1;
             this.preferencesTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.preferencesTree_AfterSelect);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.pictureBox1.BackColor = System.Drawing.Color.Black;
-            this.pictureBox1.Location = new System.Drawing.Point(-9, 23);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(10, 270);
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
             // 
             // PreferencesPanel
             // 
@@ -207,11 +209,11 @@
             this.Size = new System.Drawing.Size(545, 314);
             this.grouper1.ResumeLayout(false);
             this.preferencesTitle.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.preferencesSelector.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.fontPage.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
