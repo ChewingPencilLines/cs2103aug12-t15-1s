@@ -19,11 +19,7 @@ namespace ToDo
         const int START_INDEX = 0;
         const int END_INDEX = 1;
         static char[,] delimitingCharacters = { { '\'', '\'' }, { '\"', '\"' }, { '[', ']' }, { '(', ')' }, { '{', '}' } };
-
-        static StringParser()
-        {
-        }
-
+        
         // ******************************************************************
         // Public Methods   
         // ******************************************************************

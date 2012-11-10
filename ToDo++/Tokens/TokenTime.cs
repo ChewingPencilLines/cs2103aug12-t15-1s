@@ -18,27 +18,27 @@ namespace ToDo
             Logger.Info("Created an time token object", "TokenTime::TokenTime");
         }
 
-        internal override void UpdateAttributes(OperationGenerator attrb)
+        internal override void ConfigureGenerator(OperationGenerator attrb)
         {
             switch (attrb.currentMode)
             {
                 case ContextType.STARTTIME:
                     attrb.StartTimeOnly = time;
                     attrb.isSpecific.StartTime = specific;
-                    Logger.Info("Updated StartTimeOnly and its specificity.", "UpdateAttributes::TokenTime");
+                    Logger.Info("Updated StartTimeOnly and its specificity.", "ConfigureGenerator::TokenTime");
                     break;
                 case ContextType.ENDTIME:
                     attrb.SetConditionalEndTime(time, specific);
-                    Logger.Info("Successfully set conditional end time.", "UpdateAttributes::TokenTime");
+                    Logger.Info("Successfully set conditional end time.", "ConfigureGenerator::TokenTime");
                     break;
                 case ContextType.DEADLINE:
                     attrb.EndTimeOnly = time;
                     attrb.isSpecific.EndTime = specific;
-                    Logger.Info("Updated EndTimeOnly and its specificity.", "UpdateAttributes::TokenTime");
+                    Logger.Info("Updated EndTimeOnly and its specificity.", "ConfigureGenerator::TokenTime");
                     break;
                 default:
-                    Logger.Warning("Fell through switch statement.", "UpdateAttributes::TokenTime");
-                    Debug.Assert(false, "Fell through switch statement in UpdateAttributes, TokenTime!");
+                    Logger.Warning("Fell through switch statement.", "ConfigureGenerator::TokenTime");
+                    Debug.Assert(false, "Fell through switch statement in ConfigureGenerator, TokenTime!");
                     break;
             }
         }

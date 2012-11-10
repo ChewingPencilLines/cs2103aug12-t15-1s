@@ -17,7 +17,7 @@ namespace ToDo
             Logger.Info("Created a context token object", "TokenContext::TokenContext");
         }
 
-        internal override void UpdateAttributes(OperationGenerator attrb)
+        internal override void ConfigureGenerator(OperationGenerator attrb)
         {
             if (contextType == ContextType.CURRENT ||
                 contextType == ContextType.NEXT ||
@@ -25,12 +25,12 @@ namespace ToDo
                 )
             {
                 attrb.currentSpecifier = contextType;
-                Logger.Info("Updated currentSpecifier.", "UpdateAttributes::TokenContext");
+                Logger.Info("Updated currentSpecifier.", "ConfigureGenerator::TokenContext");
             }
             else
             {
                 attrb.currentMode = contextType;
-                Logger.Info("Updated currentMode.", "UpdateAttributes::TokenContext");
+                Logger.Info("Updated currentMode.", "ConfigureGenerator::TokenContext");
             }
         }
     }
