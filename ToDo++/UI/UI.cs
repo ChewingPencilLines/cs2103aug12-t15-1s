@@ -569,6 +569,22 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Toggle between TaskListView and Console Panels
+        /// </summary>
+        public void ToggleConsolePanel()
+        {
+            if (this.customPanelControl.SelectedIndex == 0)
+            {
+                this.customPanelControl.SelectedIndex = 2;
+                this.ActiveControl = textInput;
+            }
+            else
+            {
+                this.customPanelControl.SelectedIndex = 0;
+            }
+        }
+
         #endregion
         
         // ******************************************************************
@@ -637,6 +653,10 @@ namespace ToDo
             if (keyData == (Keys.Alt | Keys.H))
             {
                 ToggleHelpToDoPanel();
+            }
+            if (keyData == (Keys.Alt | Keys.C))
+            {
+                ToggleConsolePanel();
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
@@ -760,6 +780,7 @@ namespace ToDo
         {
             string input = textInput.Text;
             Response output = logic.ProcessCommand(input);
+            outputBox.DisplayCommand(input, output.FeedbackString);
 
             if (output == null)
             {
@@ -781,7 +802,8 @@ namespace ToDo
 
             textInput.Clear();
 
-            SwitchToTaskListViewPanel();
+            if(customPanelControl.SelectedIndex!=2)
+                SwitchToTaskListViewPanel();
             logic.UpdateLastDisplayedTasksList(displayedList);
         }
 
