@@ -110,7 +110,7 @@ namespace ToDo
                 else if (startTime == null && endTime == null)
                     oldTask.CopyDateTimes(ref startTime, ref endTime, ref isSpecific);
 
-                newTask = Task.GenerateNewTask(taskName, startTime, endTime, isSpecific);
+                newTask = Task.CreateNewTask(taskName, startTime, endTime, isSpecific);
 
                 response = ModifyTask(oldTask, newTask);
             }
