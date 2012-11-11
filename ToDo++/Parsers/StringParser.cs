@@ -423,6 +423,7 @@ namespace ToDo
                 } while (true);
 
             }
+            indexOfDelimiters = indexOfDelimiters.OrderBy(e => e[0]).ToList();
             return indexOfDelimiters;
         }
 

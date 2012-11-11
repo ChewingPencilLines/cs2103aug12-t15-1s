@@ -31,7 +31,7 @@ namespace ToDo
 
         #region Constructors
         /// <summary>
-        /// This is the base constructor for the Modify operation.
+        /// This is the constructor for the Modify operation.
         /// It will modify the task indicated by the index range to the new
         /// parameters specified by the given arguments. If an arguement
         /// is left empty or null, that parameter will remain unchanged.
@@ -42,7 +42,7 @@ namespace ToDo
         /// <param name="endTime">The new end date to set for the task.</param>
         /// <param name="isSpecific">The new Specificity of the dates for the task.</param>
         /// <param name="isAll">If this boolean is true, the operation will be invalid.</param>
-        /// <param name="searchType">The type of search to be carried out if required.</param>
+        /// <param name="searchType">The type of search to be carried out (in addition to the other filters) if required.</param>
         /// <param name="sortType">The type of sort to sort the diplay list by after the operation is executed.</param>
         /// <returns>Nothing.</returns>
         public OperationModify(string taskName, int[] indexRange, DateTime? startTime,
