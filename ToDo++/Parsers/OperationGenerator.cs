@@ -18,17 +18,17 @@ namespace ToDo
         // ******************************************************************
 
         #region Operation Properties
-        public CommandType commandType = new CommandType();
-        public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
-        public TimeRangeType timeRangeType = new TimeRangeType();
-        public TimeRangeKeywordsType timeRangeOne = new TimeRangeKeywordsType();
-        public TimeRangeKeywordsType timeRangeTwo = new TimeRangeKeywordsType();
-        public SortType sortType = new SortType();
-        public SearchType searchType = new SearchType();
-        public string taskName = null;
-        public int[] taskRangeIndex = null;
-        public int timeRangeIndex = 0;
-        public bool rangeIsAll = false;
+        public CommandType commandType;
+        public DateTimeSpecificity isSpecific;
+        public TimeRangeType timeRangeType;
+        public TimeRangeKeywordsType timeRangeOne;
+        public TimeRangeKeywordsType timeRangeTwo;
+        public SortType sortType;
+        public SearchType searchType;
+        public string taskName;
+        public int[] taskRangeIndex;
+        public int timeRangeIndex;
+        public bool rangeIsAll;
         #endregion
 
         // ******************************************************************
@@ -38,9 +38,9 @@ namespace ToDo
         #region Configuration For Operation Generation
         // The following properties are only used internally once set and hence cannot be "get".
         // Set as private to prevent confusion.
-        private TimeSpan? startTimeOnly = null, endTimeOnly = null;
-        private DateTime? startDateOnly = null, endDateOnly = null;
-        private DayOfWeek? startDay = null, endDay = null;
+        private TimeSpan? startTimeOnly, endTimeOnly;
+        private DateTime? startDateOnly, endDateOnly;
+        private DayOfWeek? startDay, endDay;
 
         // Setter methods
         public TimeSpan? EndTimeOnly { set { endTimeOnly = value; } }
@@ -51,10 +51,10 @@ namespace ToDo
         public DayOfWeek? StartDay { set { startDay = value; } }
 
         // The following attributes are used during derivation of Operation type and should not be otherwised used.
-        public ContextType currentSpecifier = new ContextType();
-        public ContextType currentMode = new ContextType();
-        private DateTime? startDateTime = null, endDateTime = null;
-        private bool crossDayBoundary = false;
+        public ContextType currentSpecifier;
+        public ContextType currentMode;
+        private DateTime? startDateTime, endDateTime;
+        private bool crossDayBoundary;
         #endregion
 
         // ******************************************************************
@@ -68,14 +68,42 @@ namespace ToDo
         /// <returns>Nothing.</returns>
         public OperationGenerator()
         {
-            InitializeEnumerations();
+            InitializeNewConfiguration();
         }
 
         /// <summary>
-        /// Initializes enums to their default values.
+        /// Initializes the generator's configuration to it's default values.
+        /// </summary>
+        /// <returns></returns>
+        public void InitializeNewConfiguration()
+        {
+            commandType = new CommandType();
+            isSpecific = new DateTimeSpecificity();
+            timeRangeType = new TimeRangeType();
+            timeRangeOne = new TimeRangeKeywordsType();
+            timeRangeTwo = new TimeRangeKeywordsType();
+            sortType = new SortType();
+            searchType = new SearchType();
+            taskName = null;
+            taskRangeIndex = null;
+            timeRangeIndex = 0;
+            rangeIsAll = false;
+            startDateTime = null; endDateTime = null;            
+            startTimeOnly = null; endTimeOnly = null;
+            startDateOnly = null; endDateOnly = null;
+            startDay = null; endDay = null;
+            currentSpecifier = new ContextType();
+            currentMode = new ContextType();
+            crossDayBoundary = false;
+
+            ResetEnumerations(); 
+        }
+
+        /// <summary>
+        /// Resets enums to their default values.
         /// </summary>
         /// <returns>Nothing.</returns>
-        private void InitializeEnumerations()
+        private void ResetEnumerations()
         {
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
@@ -87,6 +115,7 @@ namespace ToDo
             timeRangeTwo = TimeRangeKeywordsType.NONE;
         }
         #endregion
+
         // ******************************************************************
         // Finalize generator for operation creation
         // ******************************************************************
@@ -134,7 +163,7 @@ namespace ToDo
         /// </summary>
         /// <returns></returns>
         private void FinalizeSearchTime()
-        { 
+        {
             // If searching only for a single time, assume it's the end time.
             if (IsOnlyStartTimeSet())
             {
@@ -181,12 +210,12 @@ namespace ToDo
         /// </summary>
         /// <returns>Nothing.</returns>
         private void ExtendEndSearchDate()
-        {     
+        {
             if (!isSpecific.EndDate.Day)
             {
                 ExtendEndMonthOrYear();
                 endDateOnly = endDateOnly.Value.AddMinutes(-1);
-            }            
+            }
             else if (isSpecific.StartDate.Day == true)
             {
                 ExtendEndDay();
@@ -513,7 +542,7 @@ namespace ToDo
             return newOperation;
         }
         #endregion
-        
+
         // ******************************************************************
         // Generator configuration methods
         // ******************************************************************
