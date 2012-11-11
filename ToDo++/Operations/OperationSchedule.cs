@@ -29,7 +29,7 @@ namespace ToDo
 
         #region Constructors
         /// <summary>
-        /// This is the base constructor for the Schedule operation.
+        /// This is the constructor for the Schedule operation.
         /// This operation accepts a time range and tries to schedule a task
         /// for the specified time period within the time range at the earliest
         /// possible point on execution.
