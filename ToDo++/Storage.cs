@@ -11,6 +11,10 @@ using System.Windows.Forms;
 
 namespace ToDo
 {
+    /// <summary>
+    /// Storage class. Controls file creation, I/O. Maintains all necessary information
+    /// on disk as XML files.
+    /// </summary>
     public class Storage
     {
         string taskStorageFile, settingsFile;
@@ -21,7 +25,6 @@ namespace ToDo
         /// </summary>
         /// <param name="taskStorageFile">String representing the filename to create the task storage XML file.</param>
         /// <param name="settingsFile">String representing the filename to create the settings XML file.</param>
-        /// <returns>Nothing</returns>
         public Storage(string taskStorageFile, string settingsFile)
         {
             this.taskStorageFile = taskStorageFile;
@@ -30,6 +33,10 @@ namespace ToDo
                 CreateNewTaskFile();
         }
 
+        /// <summary>
+        /// Checks if the task file is well-formed.
+        /// </summary>
+        /// <returns>True if task file is well-formed; False if not.</returns>
         private bool ValidateTaskFile()
         {
             //check for well-formedness
@@ -54,6 +61,10 @@ namespace ToDo
             }            
         }
 
+        /// <summary>
+        /// Creates a new task XML file.
+        /// </summary>
+        /// <returns>True if operation was successful; False if not.</returns>
         internal bool CreateNewTaskFile()
         {
             try
@@ -78,6 +89,10 @@ namespace ToDo
             return true;
         }
 
+        /// <summary>
+        /// Load all settings from the settings file.
+        /// </summary>
+        /// <returns>The settings information loaded from the file.</returns>
         internal SettingInformation LoadSettingsFromFile()
         {
             SettingInformation settingInfo = new SettingInformation();
@@ -106,16 +121,15 @@ namespace ToDo
             return settingInfo;
         }
 
+        /// <summary>
+        /// Write all settings to an XML file.
+        /// </summary>
+        /// <param name="settingInfo">The settings information to write to file.</param>
+        /// <returns>True if operation was successful; False if not.</returns>
         internal bool WriteSettingsToFile(SettingInformation settingInfo)
         {
             try
             {
-                /*
-                StreamWriter file = new StreamWriter(settingsFile);
-                XmlSerializer writer = new XmlSerializer(typeof(ToDo.SettingInformation.MiscSettings));
-                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
-                ns.Add("", "");
-                writer.Serialize(file, settingInfo.misc, ns);*/
                 StreamWriter file = new StreamWriter(settingsFile);
                 file.Write(settingInfo.ToXML());
                 file.Close();
@@ -129,6 +143,11 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Appends a task to the task file.
+        /// </summary>
+        /// <param name="taskToAdd">The task to append.</param>
+        /// <returns>True if operation was successful; False if not.</returns>
         internal bool AddTaskToFile(Task taskToAdd)
         {
             try
@@ -147,6 +166,11 @@ namespace ToDo
             return true;
         }
 
+        /// <summary>
+        /// Deletes a task from the task file.
+        /// </summary>
+        /// <param name="taskToDelete">The task to delete.</param>
+        /// <returns>True if operation was successful; False if not.</returns>
         internal bool RemoveTaskFromFile(Task taskToDelete)
         {
             XDocument doc = XDocument.Load(taskStorageFile);
@@ -172,7 +196,12 @@ namespace ToDo
 
             return true;            
         }
-        
+
+        /// <summary>
+        /// Updates a task in the task file.
+        /// </summary>
+        /// <param name="taskToUpdate">The task to update.</param>
+        /// <returns>True if operation was successful; False if not.</returns>
         internal bool UpdateTask(Task taskToUpdate)
         {
             XDocument doc = XDocument.Load(taskStorageFile);
@@ -198,7 +227,13 @@ namespace ToDo
             doc.Save(taskStorageFile);
             return true;
         }
-               
+
+        /// <summary>
+        /// Marks a task in the task file.
+        /// </summary>
+        /// <param name="taskToMarkAsDone">The task to mark.</param>
+        /// <param name="done">Task will be marked as done if true, undone if false.</param>
+        /// <returns>True if operation was successful; False if not.</returns>
         internal bool MarkTaskAs(Task taskToMarkAsDone, bool done)
         {
             XDocument doc = XDocument.Load(taskStorageFile);
@@ -227,6 +262,10 @@ namespace ToDo
             return true;
         }
 
+        /// <summary>
+        /// Loads all tasks from the task file into a list.
+        /// </summary>
+        /// <returns>The loaded list of tasks</returns>
         public List<Task> LoadTasksFromFile()
         {
             List<Task> taskList = new List<Task>();
@@ -266,6 +305,11 @@ namespace ToDo
             return taskList;
         }
   
+        /// <summary>
+        /// Regenerates a task from an XElement node
+        /// </summary>
+        /// <param name="task">The XElement node to regenerate the task from.</param>
+        /// <returns>The regenerated task.</returns>
         private Task GenerateTaskFromXElement(XElement task)
         {
             Task newTask = null;
