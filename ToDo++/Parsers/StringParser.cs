@@ -37,10 +37,17 @@ namespace ToDo
         {
             List<int[]> indexOfDelimiters = FindPositionOfDelimiters(input);
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
+            Logger.Info("Successfully split string into substrings", "ParseStringIntoTokens::StringParser");
             TokenGenerator tokenGenerator = new TokenGenerator();
             return tokenGenerator.GenerateAllTokens(words);
         }
-
+        
+        /// <summary>
+        /// This method marks each and every word within the input string (as absolute) with a
+        /// pair of inverted commas at the start and end of the word
+        /// </summary>
+        /// <param name="absoluteSubstr">The input string of words containing all of the words to be marked</param>
+        /// <returns>The marked string of words</returns>
         internal static string MarkWordsAsAbsolute(string absoluteSubstr)
         {
             string[] words = absoluteSubstr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries);
@@ -53,6 +60,12 @@ namespace ToDo
             return output;
         }
 
+        /// <summary>
+        /// This method unmarks each and every word within the input string. The words were originally marked
+        /// by a pair of inverted commas.
+        /// </summary>
+        /// <param name="absoluteSubstr">The input string of words containing all of the words to be unmarked</param>
+        /// <returns>The unmarked string of words</returns>
         internal static string UnmarkWordsAsAbsolute(string absoluteSubstr)
         {
             StringBuilder sb = new StringBuilder();
@@ -71,8 +84,8 @@ namespace ToDo
 
         #region String Splitting and Merging Methods
         /// <summary>
-        /// This method splits a string and returns a list of substrings, each containing either a word delimited by a space,
-        /// or a substring delimited by positions in the parameter indexOfDelimiters.
+        /// This method splits a string and returns a list of substrings, each containing either a word delimited by a
+        /// space, or a substring delimited by positions in the parameter indexOfDelimiters.
         /// </summary>
         /// <param name="input">The string of words to be split</param>
         /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings</param>
@@ -83,7 +96,10 @@ namespace ToDo
             int processedIndex = 0, removedCount = 0;
 
             if (indexOfDelimiters == null)
+            {
+                Logger.Info("No delimiters found", "SplitStringIntoSubstrings::StringParser");
                 return input.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList();
+            }
 
             foreach (int[] substringIndex in indexOfDelimiters)
             {
@@ -108,16 +124,19 @@ namespace ToDo
             string remainingStr = input.Substring(processedIndex);
             words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());            
             words = MergeDateAndTimeWords(words);
+            Logger.Info("Successfully merged all date and time words", "SplitStringIntoSubstrings::StringParser");
             words = MergeNumericalRangeWords(words);
+            Logger.Info("Successfully merged all numerical range words", "SplitStringIntoSubstrings::StringParser");
             words = MergeTimeRangeWords(words);
+            Logger.Info("Successfully merged all time range words", "SplitStringIntoSubstrings::StringParser");
             return words;
         }
 
         /// <summary>
-        /// 
+        /// This method merges numerical words separated by a hyphen into one word.
         /// </summary>
-        /// <param name="words"></param>
-        /// <returns></returns>
+        /// <param name="words">The list of strings to check through</param>
+        /// <returns>The list of strings with merged numerical range words</returns>
         private List<string> MergeNumericalRangeWords(List<string> words)
         {               
             int j = 1;
@@ -137,8 +156,11 @@ namespace ToDo
                     if (success)
                     {
                         if (AdjacentCharsAreNumerical(words, i, j))
+                        {
                             break;
+                        }
                         matchCheck += words[i + j];
+                        Logger.Info("Numerical range words found and merged", "MergeNumericalRangeWords::StringParser");
                     }
                     else break;
                     j++;
@@ -148,6 +170,14 @@ namespace ToDo
             return output;
         }
 
+        /// <summary>
+        /// This method checks if the end characters of the 2 specified words in a list of strings
+        /// are both numerals.
+        /// </summary>
+        /// <param name="words">The input list of strings</param>
+        /// <param name="i">The index of the base word in the list of strings</param>
+        /// <param name="j">The number of words from the base word where the second of the 2 specified words is</param>
+        /// <returns>True if positive; false if otherwise</returns>
         private bool AdjacentCharsAreNumerical(List<string> words, int i, int j)
         {            
             int temp;
@@ -160,7 +190,9 @@ namespace ToDo
                     string firstEndChar = firstWord.Substring(firstWord.Length - 1, 1);
                     string secondEndChar = secondWord.Substring(secondWord.Length - 1, 1);
                     if (Int32.TryParse(firstEndChar, out temp) && Int32.TryParse(secondEndChar, out temp))
+                    {
                         return true;
+                    }
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -170,6 +202,12 @@ namespace ToDo
             return false;
         }
 
+        /// <summary>
+        /// This method merges time range amounts with time range keywords
+        /// i.e. "3" and "days" are merged to become "3 days".
+        /// </summary>
+        /// <param name="words">The list of strings to check through</param>
+        /// <returns>The list of strings with merged time range words</returns>
         private List<string> MergeTimeRangeWords(List<string> words)
         {
             List<string> output = new List<string>();
@@ -269,7 +307,6 @@ namespace ToDo
             else return false;
         }
         #endregion
-
         #region Date merging methods
         /// <summary>
         /// This method checks all words within an input list of words for valid date and returns a list of words
@@ -358,13 +395,12 @@ namespace ToDo
             return true;
         }
         #endregion
-
         #region Delimiter searching methods
         /// <summary>
         /// This method searches the input string against the set delimiters'
         /// and return the positions of the delimiters as a list of integer pairs.
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="input">The input string to be checked</param>
         /// <returns>List containing all matching sets of delimiters as integer pairs</returns>
         private List<int[]> FindPositionOfDelimiters(string input)
         {
@@ -391,15 +427,6 @@ namespace ToDo
             return indexOfDelimiters;
         }
 
-        private List<int[]> GetPositionsOfDelimiters(string input)
-        {
-            List<int[]> positionsOfDelimiters;
-            positionsOfDelimiters = FindPositionOfDelimiters(input);
-            SortIndexes(ref positionsOfDelimiters);
-            RemoveBadIndexes(ref positionsOfDelimiters);
-            return positionsOfDelimiters;
-        }
-
         /// <summary>
         /// This method checks each pair of indexes in a List and removes those
         /// that overlaps with the previous pair.
@@ -418,15 +445,7 @@ namespace ToDo
             }
             indexOfDelimiters.RemoveAll(x => indexesToRemove.Contains(x));
         }
-
-        private void SortIndexes(ref List<int[]> indexOfDelimiters)
-        {
-            indexOfDelimiters = (from index in indexOfDelimiters
-                                 orderby index[0]
-                                 select index).ToList();
-        }
         #endregion
-
         #endregion
     }
 }
