@@ -191,7 +191,7 @@ namespace ToDo
                 }
 
                 else if (CustomDictionary.IsTimeRange(wordLower) && requiresTimeLength)
-                {                    
+                {
                     Match match = CustomDictionary.isTimeRange.Match(wordLower);
                     Int32.TryParse(match.Groups["index"].Value, out timeRangeAmount);
                     string matchString = match.Groups["type"].Value;
@@ -479,29 +479,40 @@ namespace ToDo
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of context tokens</returns>
-        public List<TokenContext> GenerateContextTokens(List<string> input, List<Token> parsedTokens)
+        public List<Token> GenerateContextTokens(List<string> input, List<Token> parsedTokens)
         {
             int index = 0;
             ContextType context;
-            List<TokenContext> tokens = new List<TokenContext>();
+            List<Token> contextTokens = new List<Token>();
             foreach (string word in input)
             {
                 if (CustomDictionary.contextKeywords.TryGetValue(word.ToLower(), out context))
                 {
                     object nextToken = GetTokenAtPosition(parsedTokens, index + 1);
-                    if (nextToken is TokenDate ||
-                        nextToken is TokenDay ||
-                        nextToken is TokenTime ||
-                        nextToken is TokenTimeRange)
-                    {
-                        Logger.Info("Context word found: " + word.ToLower(), "GenerateContextTokens::TokenGenerator");
-                        TokenContext newToken = new TokenContext(index, context);
-                        tokens.Add(newToken);
-                    }
+                    Logger.Info("Context word found: " + word.ToLower(), "GenerateContextTokens::TokenGenerator");
+                    TokenContext newToken = new TokenContext(index, context);
+                    contextTokens.Add(newToken);
                 }
                 index++;
             }
-            return tokens;
+            
+            contextTokens = (from token in contextTokens
+                             where TokenAcceptsContext(GetTokenAtPosition(parsedTokens, token.Position + 1)) ||
+                                   TokenAcceptsContext((GetTokenAtPosition(contextTokens, token.Position + 1)))
+                             select token).ToList();
+            return contextTokens;
+        }
+
+        /// <summary>
+        /// Checks if the token accepts a context token before it.
+        /// Returns true if it does; False if it is null or does not.
+        /// </summary>
+        /// <param name="token">The token to check</param>
+        /// <returns>Flag indicating if the token can use a context type.</returns>
+        private bool TokenAcceptsContext(Token token)
+        {
+            if (token == null) return false;
+            return token.AcceptsContext();
         }
 
         /// <summary>
@@ -803,7 +814,7 @@ namespace ToDo
         /// <param name="tokens">The list of input tokens</param>
         /// <param name="p">The position of the required token</param>
         /// <returns>The retrieved token</returns>
-        private object GetTokenAtPosition(List<Token> tokens, int p)
+        private Token GetTokenAtPosition(List<Token> tokens, int p)
         {
             foreach (Token token in tokens)
             {
