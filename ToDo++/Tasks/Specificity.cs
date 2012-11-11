@@ -92,7 +92,11 @@ namespace ToDo
             return (startTime && endTime && startDate.Full() && endDate.Full());
         }
 
-        public void FinalizeDT()
+        /// <summary>
+        /// Finalizes this specificity for pushing to the operation. Assigns all less specific
+        /// types to take on their parent specificity.
+        /// </summary>
+        public void FinalizeSpecificity()
         {
             if (startTime) startDate.Day = true;
             if (endTime) endDate.Day = true;
@@ -100,8 +104,6 @@ namespace ToDo
             if (endDate.Day) endDate.Month = true;
             if (startDate.Month) startDate.Year = true;
             if (endDate.Month) endDate.Year = true;
-            if (startDate.Year) startDate.Year = true;
-            if (endDate.Year) endDate.Year = true;
         }
     }
 }
