@@ -30,21 +30,19 @@ namespace ToDo
 
         internal override void ConfigureGenerator(OperationGenerator attrb)
         {
-            if (attrb.commandType != CommandType.INVALID)
+            if (attrb.CommandType != CommandType.INVALID)
             {
                 if (Value == CommandType.DONE)
                 {
-                    attrb.searchType = SearchType.DONE;
-                    Logger.Info("Updated SearchType to DONE.", "ConfigureGenerator::TokenCommand");
+                    attrb.SearchType = SearchType.DONE;
                 }
                 else if (Value == CommandType.UNDONE)
                 {
-                    attrb.searchType = SearchType.UNDONE;
-                    Logger.Info("Updated SearchType to UNDONE.", "ConfigureGenerator::TokenCommand");
+                    attrb.SearchType = SearchType.UNDONE;
                 }
-                else if (attrb.commandType == CommandType.SORT)
+                else if (attrb.CommandType == CommandType.SORT)
                 {
-                    attrb.commandType = Value;
+                    attrb.CommandType = Value;
                     Logger.Info("Resolved multiple commands to not use Sort as command (lower priority)", "ConfigureGenerator::TokenCommand");
                 }
                 else if (Value == CommandType.SORT)
@@ -53,25 +51,37 @@ namespace ToDo
                 }
                 else
                 {
-                    Logger.Error("Multiple commands detected", "ConfigureGenerator::TokenCommand");
+                    Logger.Warning("Multiple commands detected", "ConfigureGenerator::TokenCommand");
                     throw new MultipleCommandsException();
                 }
             }
             else
             {
-                attrb.commandType = Value;
-                Logger.Info("commandType is INVALID", "ConfigureGenerator::TokenCommand");
+                attrb.CommandType = Value;
+                Logger.Warning("commandType is INVALID", "ConfigureGenerator::TokenCommand");
             }
         }
 
+        /// <summary>
+        /// This method checks if the command is of a type that accepts index ranges i.e. delete
+        /// </summary>
+        /// <returns>True if positive; false if otherwise</returns>
         internal bool RequiresIndexRange()
         {
             if (indexRangeableCommandTypes.Contains(Value))
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
 
+        /// <summary>
+        /// This method checks if the command is of a type that accepts time ranges i.e. schedule
+        /// </summary>
+        /// <returns>True if positive; false if otherwise</returns>
         internal bool RequiresTimeRange()
         {
             if (timeRangeableCommandTypes.Contains(Value))

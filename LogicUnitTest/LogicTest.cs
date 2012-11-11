@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic; 
 using ToDo;
 
-namespace LogicUnitTest
+namespace IntegrationTests
 {
     [TestClass]
     public class LogicTest
@@ -95,7 +95,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("add bb JAN 3");
             logic.ProcessCommand("add bA JAN 5");
             result = logic.ProcessCommand("delete jan");
-            Assert.AreEqual("Displaying all tasks within 2013/1/1 0:00 to 2013/1/31 23:59.", result.FeedbackString);
+            Assert.AreEqual("Displaying all tasks within 1/1/2013 12:00 AM to 1/31/2013 11:59 PM.", result.FeedbackString);
             Assert.AreEqual("bb", result.TasksToBeDisplayed[0].TaskName);
             Assert.AreEqual("bA", result.TasksToBeDisplayed[1].TaskName);
             Assert.AreEqual("DEFAULT", result.FormatType.ToString());
@@ -207,7 +207,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("add aaa by dec 3");
             logic.ProcessCommand("add bbb dec 3 7pm");
             result = logic.ProcessCommand("search dec");
-            Assert.AreEqual("Displaying all tasks within 2012/12/1 0:00 to 2012/12/31 23:59.", result.FeedbackString);
+            Assert.AreEqual("Displaying all tasks within 12/1/2012 12:00 AM to 12/31/2012 11:59 PM.", result.FeedbackString);
             Assert.AreEqual("aaa", result.TasksToBeDisplayed[0].TaskName);
             Assert.AreEqual("bbb", result.TasksToBeDisplayed[1].TaskName);
             Assert.AreEqual("DEFAULT", result.FormatType.ToString());
@@ -223,7 +223,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("delete all");
             logic.ProcessCommand("add aba 8th 5pm");
             result = logic.ProcessCommand("search 8th 5pm");
-            Assert.AreEqual("Displaying all tasks within 2012/12/8 0:00 to 2012/12/8 17:00.", result.FeedbackString);
+            Assert.AreEqual("Displaying all tasks within 12/8/2012 12:00 AM to 12/8/2012 5:00 PM.", result.FeedbackString);
             Assert.AreEqual("aba", result.TasksToBeDisplayed[0].TaskName);
             Assert.AreEqual("DEFAULT", result.FormatType.ToString());
             Assert.AreEqual("SUCCESS", result.Result.ToString());
@@ -295,9 +295,9 @@ namespace LogicUnitTest
             logic.ProcessCommand("delete all");
             logic.ProcessCommand("add bbbb tmr");
             result = logic.ProcessCommand("modify -1");
-            Assert.AreEqual("Displaying all tasks matching \"-1\".", result.FeedbackString);
+            Assert.AreEqual("No matching tasks found!", result.FeedbackString);
             Assert.AreEqual("DEFAULT", result.FormatType.ToString());
-            Assert.AreEqual("SUCCESS", result.Result.ToString());
+            Assert.AreEqual("FAILURE", result.Result.ToString());
             result = logic.ProcessCommand("modify 3");
             Assert.AreEqual("Invalid task index!", result.FeedbackString);
             Assert.AreEqual("DEFAULT", result.FormatType.ToString());
@@ -468,13 +468,13 @@ namespace LogicUnitTest
             Response result;
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
-            logic.ProcessCommand("add a tmr 4am to 10am");
+            logic.ProcessCommand("add a tmr 4am to 10:01am");
             logic.ProcessCommand("add a tmr afternoon");
             result = logic.ProcessCommand("schedule aaa 2 hours tmr morning");
             Assert.AreEqual("Task could not be scheduled within specified time range (no free slot)!", result.FeedbackString);
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
-            logic.ProcessCommand("add a tmr 4am to tmr 9:59 am");
+            logic.ProcessCommand("add a tmr 4am to tmr 10 am");
             logic.ProcessCommand("add a tmr afternoon");
             result = logic.ProcessCommand("schedule aaa 2 hours tmr morning");
             Assert.AreEqual("Scheduled new task \"aaa\" successfully.", result.FeedbackString);
@@ -488,7 +488,7 @@ namespace LogicUnitTest
             logic.ProcessCommand("delete all");
             logic.ProcessCommand("add a 1/6/13  to 5/6/13");
             logic.ProcessCommand("add a 7/6/13  to 30/6/13 ");
-            result = logic.ProcessCommand("schedule aaa 1 day, june");
+            result = logic.ProcessCommand("schedule aaa 1 day june");
             Assert.AreEqual("Scheduled new task \"aaa\" successfully.", result.FeedbackString);
             return;
         }

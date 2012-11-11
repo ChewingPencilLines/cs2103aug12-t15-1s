@@ -16,19 +16,83 @@ namespace ToDo
         // ******************************************************************
         // Operation Properties
         // ******************************************************************
+        
+        #region Operation Properties       
+ 
+        // These properties control the type of operation to be generated.
+        private CommandType commandType;
+        public CommandType CommandType
+        {
+            get { return commandType; }
+            set { commandType = value; }
+        }        
 
-        #region Operation Properties
-        public CommandType commandType;
-        public DateTimeSpecificity isSpecific;
-        public TimeRangeType timeRangeType;
-        public TimeRangeKeywordsType timeRangeOne;
-        public TimeRangeKeywordsType timeRangeTwo;
-        public SortType sortType;
-        public SearchType searchType;
-        public string taskName;
-        public int[] taskRangeIndex;
-        public int timeRangeIndex;
-        public bool rangeIsAll;
+        private string taskName;
+        public string TaskName
+        {
+            get { return taskName; }
+            set { taskName = value; }
+        }
+
+        private int[] taskRangeIndex;
+        public int[] TaskRangeIndex
+        {
+            get { return taskRangeIndex; }
+            set { taskRangeIndex = value; }
+        }
+
+        private DateTimeSpecificity isSpecific;
+        public DateTimeSpecificity IsSpecific
+        {
+            get { return isSpecific; }
+            set { isSpecific = value; }
+        }
+
+        private TimeRangeType timeRangeType;
+        public TimeRangeType TimeRangeType
+        {
+            get { return timeRangeType; }
+            set { timeRangeType = value; }
+        }
+
+        private TimeRangeKeywordsType timeRangeOne;
+        public TimeRangeKeywordsType TimeRangeFirst
+        {
+            get { return timeRangeOne; }
+            set { timeRangeOne = value; }
+        }
+
+        private TimeRangeKeywordsType timeRangeTwo;
+        public TimeRangeKeywordsType TimeRangeSecond
+        {
+            get { return timeRangeTwo; }
+            set { timeRangeTwo = value; }
+        }
+
+        private int timeRangeIndex;
+        public int TimeRangeIndex
+        {
+            get { return timeRangeIndex; }
+            set { timeRangeIndex = value; }
+        }
+
+        private SortType sortType;
+        public SortType SortType
+        {
+            set { sortType = value; }
+        }
+
+        private SearchType searchType;
+        public SearchType SearchType
+        {
+            set { searchType = value; }
+        }
+
+        private bool rangeIsAll;
+        public bool RangeIsAll
+        {
+            set { rangeIsAll = value; }
+        }
         #endregion
 
         // ******************************************************************
@@ -51,8 +115,18 @@ namespace ToDo
         public bool StartDayOfWeekSet { set { startDayOfWeekSet = value; } }
 
         // The following attributes are used during derivation of Operation type and should not be otherwised used.
-        public ContextType currentSpecifier;
-        public ContextType currentMode;
+        private ContextType currentSpecifier;
+        public ContextType CurrentSpecifier
+        {
+            get { return currentSpecifier; }
+            set { currentSpecifier = value; }
+        }
+        private ContextType currentMode;
+        public ContextType CurrentMode
+        {
+            get { return currentMode; }
+            set { currentMode = value; }
+        }
         private DateTime? startDateTime, endDateTime;
         private bool crossDayBoundary;
         #endregion
@@ -66,6 +140,7 @@ namespace ToDo
         /// Constructor for the generator which initializes it's 
         /// settings to the default values.
         /// </summary>
+        /// <returns>Nothing.</returns>
         public OperationGenerator()
         {
             InitializeNewConfiguration();
@@ -88,7 +163,7 @@ namespace ToDo
             taskRangeIndex = null;
             timeRangeIndex = 0;
             rangeIsAll = false;
-            startDateTime = null; endDateTime = null;
+            startDateTime = null; endDateTime = null;            
             startTimeOnly = null; endTimeOnly = null;
             startDateOnly = null; endDateOnly = null;
             startDayOfWeekSet = false; endDayOfWeekSet = false;
@@ -96,12 +171,13 @@ namespace ToDo
             currentMode = new ContextType();
             crossDayBoundary = false;
 
-            ResetEnumerations();
+            ResetEnumerations(); 
         }
 
         /// <summary>
         /// Resets enums to their default values.
         /// </summary>
+        /// <returns>Nothing.</returns>
         private void ResetEnumerations()
         {
             commandType = CommandType.INVALID;
@@ -124,6 +200,7 @@ namespace ToDo
         /// Finalizes the generator so that it can begin generating operations
         /// with the correct time ranges.
         /// </summary>
+        /// <returns>Nothing.</returns>
         public void FinalizeGenerator()
         {
             GetTimeRangeValues();
@@ -206,6 +283,7 @@ namespace ToDo
         /// Extends the end date to the end of the day, month or year,
         /// depending on the already set Specificity of the generator.
         /// </summary>
+        /// <returns>Nothing.</returns>
         private void ExtendEndSearchDate()
         {
             if (!isSpecific.EndDate.Day)
@@ -223,6 +301,7 @@ namespace ToDo
         /// Extends the end date to the end of the month or year,
         /// depending on the already set Specificity of the generator.
         /// </summary>
+        /// <returns>Nothing.</returns>
         private void ExtendEndMonthOrYear()
         {
             if (!isSpecific.EndDate.Month)
@@ -239,6 +318,7 @@ namespace ToDo
         /// <summary>
         /// Extends the end date to the end of the day.
         /// </summary>
+        /// <returns>Nothing.</returns>
         private void ExtendEndDay()
         {
             endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, endDateOnly.Value.Day, 23, 59, 0);
@@ -253,6 +333,7 @@ namespace ToDo
         /// <summary>
         /// Finalizes the scheduling time range.
         /// </summary>
+        /// <returns>Nothing.</returns>
         private void FinalizeSchedulingTime()
         {
             FinalizeScheduleStartDate();
@@ -261,6 +342,7 @@ namespace ToDo
         /// <summary>
         /// Sets the start date to today if no starting date was given.
         /// </summary>
+        /// <returns>Nothing.</returns>
         private void FinalizeScheduleStartDate()
         {
             if (startDateOnly == null)
@@ -278,10 +360,6 @@ namespace ToDo
         // ******************************************************************
 
         #region Set Time Ranges
-        /// <summary>
-        /// This method sets the final startTimeOnly and endTimeOnly values based on the input
-        /// time (3am, 4pm...) and time range keyword(s) (morning, afternoon...).
-        /// </summary>
         private void GetTimeRangeValues()
         {
             int startTimeHour = 0, endTimeHour = 0;
@@ -308,14 +386,6 @@ namespace ToDo
             }
         }
 
-        /// <summary>
-        /// This method retrieves the start and end hours of the input time range keyword(s) (morning, afternoon...).
-        /// It also updates the crossDayBoundary boolean to true if the time ranges crosses the day boundary
-        /// i.e. 11pm to 1am.
-        /// </summary>
-        /// <param name="startTimeHour">The time range's start hour</param>
-        /// <param name="endTimeHour">The time range's end hour</param>
-        /// <returns>Returns true if there were input time range keyword(s); false if otherwise</returns>
         private bool TryGetTimeRangeValues(ref int startTimeHour, ref int endTimeHour)
         {
             if (timeRangeOne != TimeRangeKeywordsType.NONE)
@@ -343,10 +413,6 @@ namespace ToDo
             return false;
         }
 
-        /// <summary>
-        /// This method checks if a specific time was supplied.
-        /// </summary>
-        /// <returns>True if both the start time and end time were not specified; false if otherwise</returns>
         private bool IsSpecificTimeSupplied()
         {
             if (startTimeOnly == null && endTimeOnly == null)
@@ -356,62 +422,36 @@ namespace ToDo
             return true;
         }
 
-        /// <summary>
-        /// This method picks the final hours values to be used for the time range start and end hours values
-        /// from the input time (3am, 4pm...) and time range keyword(s) (morning, afternoon...).
-        /// </summary>
-        /// <param name="startTimeHour">The time range's start hour</param>
-        /// <param name="endTimeHour">The time range's end hour</param>
         private void RetrieveFinalStartAndEndTimes(int startTimeHour, int endTimeHour)
         {
-            TimeSpan startTimeRange = new TimeSpan(startTimeHour, 0, 0);
-            TimeSpan endTimeRange = new TimeSpan(endTimeHour, 0, 0);
             if (startTimeOnly != null && endTimeOnly == null)
             {
-                if (!IsStartTimeWithinTimeRange(startTimeRange, endTimeRange))
+                if (startTimeOnly.Value.Hours < endTimeHour
+                    && startTimeOnly.Value.Hours > startTimeHour)
                 {
-                    AlertBox.Show("Specified end time not within specified time range.");
+                    endTimeOnly = startTimeOnly;
+                    startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
                 }
-                endTimeOnly = startTimeOnly;
-                startTimeOnly = startTimeRange;
+                else
+                {
+                    // warn user that specified time is not within specified time range
+                }
             }
             else if (startTimeOnly != null && endTimeOnly != null)
             {
-                if (!IsStartAndEndTimeWithinTimeRange(startTimeRange, endTimeRange))
+                if (!IsSpecifiedTimeWithinTimeRange(startTimeHour, endTimeHour))
                 {
-                    AlertBox.Show("Specified start and end times are not within specified time range.");
+                    // warn user that specified time is not within specified time range
                 }
             }
         }
 
-        /// <summary>
-        /// This method checks if the startTimeOnly is within the specified start and end hours
-        /// </summary>
-        /// <param name="startTimeHour">The specified start hour</param>
-        /// <param name="endTimeHour">The specified end hour</param>
-        /// <returns>True if positive; false if otherwise</returns>
-        private bool IsStartTimeWithinTimeRange(TimeSpan startTimeRange, TimeSpan endTimeRange)
+        private bool IsSpecifiedTimeWithinTimeRange(int startTimeHour, int endTimeHour)
         {
-            if (!(startTimeRange <= startTimeOnly
-                && startTimeOnly <= endTimeRange))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// This method checks if the startTimeOnly and endTimeOnly are within the specified start and end hours
-        /// </summary>
-        /// <param name="startTimeHour">The specified start hour</param>
-        /// <param name="endTimeHour">The specified end hour</param>
-        /// <returns>True if positive; false if otherwise</returns>
-        private bool IsStartAndEndTimeWithinTimeRange(TimeSpan startTimeRange, TimeSpan endTimeRange)
-        {
-            if (!(startTimeRange <= startTimeOnly
-                && startTimeOnly <= endTimeRange
-                && startTimeRange <= endTimeOnly
-                && endTimeOnly <= endTimeRange))
+            if (!(startTimeOnly.Value.Hours < endTimeHour
+                && startTimeOnly.Value.Hours > startTimeHour
+                && endTimeOnly.Value.Hours < endTimeHour
+                && endTimeOnly.Value.Hours > startTimeHour))
             {
                 return false;
             }
@@ -631,6 +671,7 @@ namespace ToDo
         /// </summary>
         /// <param name="Value">The end daate to be set.</param>
         /// <param name="IsSpecific">The specificity of the end date.</param>
+        /// <returns></returns>
         internal void SetConditionalEndDate(DateTime Value, Specificity IsSpecific)
         {
             if (startDateOnly == null && endDateOnly != null)
