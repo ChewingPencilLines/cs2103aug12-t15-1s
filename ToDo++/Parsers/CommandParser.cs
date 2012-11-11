@@ -24,6 +24,11 @@ namespace ToDo
             return GenerateOperation(tokens);       
         }
 
+        /// <summary>
+        /// This method generates the relevant operation based on a generated list of tokens.
+        /// </summary>
+        /// <param name="tokens">The list of tokens from which all of the operation information is extracted</param>
+        /// <returns>The generated operation</returns>
         private static Operation GenerateOperation(List<Token> tokens)
         {            
             // reset factory configuration / just create new factory.
