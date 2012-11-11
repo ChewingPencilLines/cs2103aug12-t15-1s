@@ -119,6 +119,12 @@ namespace ToDo
         /// <returns>True if the task is within the time range given, false if it is not.</returns>
         public abstract bool IsWithinTime(DateTime? start, DateTime? end);
 
+        /// <summary>
+        /// Copies over the start and end date times and specificity of this task into the reference inputs.
+        /// </summary>
+        /// <param name="startTime">The start time to copy to.</param>
+        /// <param name="endTime">The end time to copy to.</param>
+        /// <param name="specific">The specificity to copy to.</param>        
         public abstract void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific);
 
         /// <summary>
