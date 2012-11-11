@@ -34,9 +34,9 @@ namespace ToDo
         {
             if (indexes != null)
             {
-                attrb.taskRangeIndex = indexes;
+                attrb.TaskRangeIndex = indexes;
             }
-            attrb.rangeIsAll = isAll;
+            attrb.RangeIsAll = isAll;
         }
     }
 }

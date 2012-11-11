@@ -19,14 +19,14 @@ namespace ToDo
 
         internal override void ConfigureGenerator(OperationGenerator attrb)
         {
-            if (attrb.taskName == null)
+            if (attrb.TaskName == null)
             {
-                attrb.taskName = literal;
+                attrb.TaskName = literal;
                 Logger.Info("Found task name", "ConfigureGenerator::TokenLiteral");
             }
             else
             {
-                attrb.taskName += " " + literal;
+                attrb.TaskName += " " + literal;
                 Logger.Warning("Task name already defined but more literals present. Appending to task name.", "ConfigureGenerator::TokenLiteral");
             }
         }

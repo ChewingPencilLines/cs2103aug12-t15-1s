@@ -18,19 +18,19 @@ namespace ToDo
 
         internal override void ConfigureGenerator(OperationGenerator attrb)
         {
-            switch (attrb.currentMode)
+            switch (attrb.CurrentMode)
             {
                 case ContextType.STARTTIME:
                     attrb.StartDayOfWeekSet = true;
-                    attrb.StartDateOnly = GetDateFromDay(attrb.currentSpecifier, dayOfWeek);
+                    attrb.StartDateOnly = GetDateFromDay(attrb.CurrentSpecifier, dayOfWeek);
                     break;
                 case ContextType.ENDTIME:
                     attrb.EndDayOfWeekSet = true;
-                    attrb.SetConditionalEndDate(GetDateFromDay(attrb.currentSpecifier, dayOfWeek), new Specificity());
+                    attrb.SetConditionalEndDate(GetDateFromDay(attrb.CurrentSpecifier, dayOfWeek), new Specificity());
                     break;
                 case ContextType.DEADLINE:
                     attrb.EndDayOfWeekSet = true;
-                    attrb.EndDateOnly = GetDateFromDay(attrb.currentSpecifier, dayOfWeek);
+                    attrb.EndDateOnly = GetDateFromDay(attrb.CurrentSpecifier, dayOfWeek);
                     break;
                 default:
                     Logger.Error("Fell through currentMode switch statement.", "ConfigureGenerator::TokenDay");

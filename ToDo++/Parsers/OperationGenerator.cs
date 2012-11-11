@@ -16,19 +16,83 @@ namespace ToDo
         // ******************************************************************
         // Operation Properties
         // ******************************************************************
+        
+        #region Operation Properties       
+ 
+        // These properties control the type of operation to be generated.
+        private CommandType commandType;
+        public CommandType CommandType
+        {
+            get { return commandType; }
+            set { commandType = value; }
+        }        
 
-        #region Operation Properties
-        public CommandType commandType;
-        public DateTimeSpecificity isSpecific;
-        public TimeRangeType timeRangeType;
-        public TimeRangeKeywordsType timeRangeOne;
-        public TimeRangeKeywordsType timeRangeTwo;
-        public SortType sortType;
-        public SearchType searchType;
-        public string taskName;
-        public int[] taskRangeIndex;
-        public int timeRangeIndex;
-        public bool rangeIsAll;
+        private string taskName;
+        public string TaskName
+        {
+            get { return taskName; }
+            set { taskName = value; }
+        }
+
+        private int[] taskRangeIndex;
+        public int[] TaskRangeIndex
+        {
+            get { return taskRangeIndex; }
+            set { taskRangeIndex = value; }
+        }
+
+        private DateTimeSpecificity isSpecific;
+        public DateTimeSpecificity IsSpecific
+        {
+            get { return isSpecific; }
+            set { isSpecific = value; }
+        }
+
+        private TimeRangeType timeRangeType;
+        public TimeRangeType TimeRangeType
+        {
+            get { return timeRangeType; }
+            set { timeRangeType = value; }
+        }
+
+        private TimeRangeKeywordsType timeRangeOne;
+        public TimeRangeKeywordsType TimeRangeFirst
+        {
+            get { return timeRangeOne; }
+            set { timeRangeOne = value; }
+        }
+
+        private TimeRangeKeywordsType timeRangeTwo;
+        public TimeRangeKeywordsType TimeRangeSecond
+        {
+            get { return timeRangeTwo; }
+            set { timeRangeTwo = value; }
+        }
+
+        private int timeRangeIndex;
+        public int TimeRangeIndex
+        {
+            get { return timeRangeIndex; }
+            set { timeRangeIndex = value; }
+        }
+
+        private SortType sortType;
+        public SortType SortType
+        {
+            set { sortType = value; }
+        }
+
+        private SearchType searchType;
+        public SearchType SearchType
+        {
+            set { searchType = value; }
+        }
+
+        private bool rangeIsAll;
+        public bool RangeIsAll
+        {
+            set { rangeIsAll = value; }
+        }
         #endregion
 
         // ******************************************************************
@@ -51,8 +115,18 @@ namespace ToDo
         public bool StartDayOfWeekSet { set { startDayOfWeekSet = value; } }
 
         // The following attributes are used during derivation of Operation type and should not be otherwised used.
-        public ContextType currentSpecifier;
-        public ContextType currentMode;
+        private ContextType currentSpecifier;
+        public ContextType CurrentSpecifier
+        {
+            get { return currentSpecifier; }
+            set { currentSpecifier = value; }
+        }
+        private ContextType currentMode;
+        public ContextType CurrentMode
+        {
+            get { return currentMode; }
+            set { currentMode = value; }
+        }
         private DateTime? startDateTime, endDateTime;
         private bool crossDayBoundary;
         #endregion

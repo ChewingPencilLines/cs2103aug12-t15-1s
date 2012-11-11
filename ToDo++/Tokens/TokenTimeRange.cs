@@ -45,9 +45,9 @@ namespace ToDo
             bool multipleTaskDurations = false;
             if (index != 0)
             {
-                if (attrb.timeRangeIndex == 0)
+                if (attrb.TimeRangeIndex == 0)
                 {
-                    attrb.timeRangeIndex = index;
+                    attrb.TimeRangeIndex = index;
                 }
                 else
                 {
@@ -57,9 +57,9 @@ namespace ToDo
             }
             if (timeRangeType != TimeRangeType.DEFAULT)
             {
-                if (attrb.timeRangeType == TimeRangeType.DEFAULT)
+                if (attrb.TimeRangeType == TimeRangeType.DEFAULT)
                 {
-                    attrb.timeRangeType = timeRangeType;
+                    attrb.TimeRangeType = timeRangeType;
                 }
                 else
                 {
@@ -69,14 +69,14 @@ namespace ToDo
             }
             if (timeRange != TimeRangeKeywordsType.NONE)
             {
-                if (attrb.timeRangeOne == TimeRangeKeywordsType.NONE)
+                if (attrb.TimeRangeFirst == TimeRangeKeywordsType.NONE)
                 {
-                    attrb.timeRangeOne = timeRange;
+                    attrb.TimeRangeFirst = timeRange;
                 }
-                else if (attrb.timeRangeTwo == TimeRangeKeywordsType.NONE
-                    || attrb.timeRangeTwo <= timeRange)
+                else if (attrb.TimeRangeSecond == TimeRangeKeywordsType.NONE
+                    || attrb.TimeRangeSecond <= timeRange)
                 {
-                    attrb.timeRangeTwo = timeRange;
+                    attrb.TimeRangeSecond = timeRange;
                 }
             }
             if (multipleTaskDurations)

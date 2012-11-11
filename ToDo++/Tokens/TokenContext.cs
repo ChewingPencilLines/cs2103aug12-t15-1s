@@ -24,11 +24,11 @@ namespace ToDo
                 contextType == ContextType.FOLLOWING
                 )
             {
-                attrb.currentSpecifier = contextType;
+                attrb.CurrentSpecifier = contextType;
             }
             else
             {
-                attrb.currentMode = contextType;
+                attrb.CurrentMode = contextType;
             }
         }
     }

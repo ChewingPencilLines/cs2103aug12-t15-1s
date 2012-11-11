@@ -30,19 +30,19 @@ namespace ToDo
 
         internal override void ConfigureGenerator(OperationGenerator attrb)
         {
-            if (attrb.commandType != CommandType.INVALID)
+            if (attrb.CommandType != CommandType.INVALID)
             {
                 if (Value == CommandType.DONE)
                 {
-                    attrb.searchType = SearchType.DONE;
+                    attrb.SearchType = SearchType.DONE;
                 }
                 else if (Value == CommandType.UNDONE)
                 {
-                    attrb.searchType = SearchType.UNDONE;
+                    attrb.SearchType = SearchType.UNDONE;
                 }
-                else if (attrb.commandType == CommandType.SORT)
+                else if (attrb.CommandType == CommandType.SORT)
                 {
-                    attrb.commandType = Value;
+                    attrb.CommandType = Value;
                     Logger.Info("Resolved multiple commands to not use Sort as command (lower priority)", "ConfigureGenerator::TokenCommand");
                 }
                 else if (Value == CommandType.SORT)
@@ -57,7 +57,7 @@ namespace ToDo
             }
             else
             {
-                attrb.commandType = Value;
+                attrb.CommandType = Value;
                 Logger.Warning("commandType is INVALID", "ConfigureGenerator::TokenCommand");
             }
         }

@@ -19,7 +19,7 @@ namespace ToDo
 
         internal override void ConfigureGenerator(OperationGenerator attrb)
         {
-            attrb.sortType = sortType;
+            attrb.SortType = sortType;
         }
 
     }
