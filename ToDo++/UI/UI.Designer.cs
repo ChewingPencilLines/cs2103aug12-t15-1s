@@ -260,7 +260,7 @@
             this.taskIndexCol.CellPadding = null;
             this.taskIndexCol.MaximumWidth = 40;
             this.taskIndexCol.MinimumWidth = 25;
-            this.taskIndexCol.Width = 32;
+            this.taskIndexCol.Width = 40;
             // 
             // taskNameCol
             // 
@@ -275,13 +275,14 @@
             taskDateTimeCol.AspectName = "GetTimeString";
             taskDateTimeCol.CellPadding = null;
             taskDateTimeCol.FillsFreeSpace = true;
-            taskDateTimeCol.Width = 199;
+            taskDateTimeCol.Width = 149;
             // 
             // taskDoneStateCol
             // 
             this.taskDoneStateCol.AspectName = "DoneState";
             this.taskDoneStateCol.CellPadding = null;
             this.taskDoneStateCol.CellVerticalAlignment = System.Drawing.StringAlignment.Far;
+            this.taskDoneStateCol.Width = 82;
             // 
             // tabPage2
             // 
@@ -332,7 +333,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(495, 315);
+            this.outputBox.Size = new System.Drawing.Size(186, 68);
             this.outputBox.TabIndex = 28;
             this.outputBox.Text = "";
             // 
