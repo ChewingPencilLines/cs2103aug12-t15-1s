@@ -5,8 +5,6 @@ using System.Text;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 
-[assembly: InternalsVisibleTo("ParsingLogicUnitTest")]
-
 namespace ToDo
 {
     class CommandParser
@@ -25,10 +23,10 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method generates the relevant operation based on a generated list of tokens.
+        /// This method uses the given list of tokens to generate a corresponding Operation.
         /// </summary>
-        /// <param name="tokens">The list of tokens from which all of the operation information is extracted</param>
-        /// <returns>The generated operation</returns>
+        /// <param name="tokens">The list of tokens from which the generated operation will be based on.</param>
+        /// <returns>The generated Operation.</returns>
         private static Operation GenerateOperation(List<Token> tokens)
         {            
             // reset factory configuration / just create new factory.
