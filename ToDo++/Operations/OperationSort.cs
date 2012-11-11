@@ -18,7 +18,7 @@ namespace ToDo
             this.storageIO = storageIO;
             Response response;
             
-                // sorting is done On-The-Fly in TaskListViewControl.
+            // sorting is done On-The-Fly in TaskListViewControl.
             if(sortType == SortType.DEFAULT)
                 response = new Response(Result.FAILURE, sortType, this.GetType(), currentListedTasks);
             else

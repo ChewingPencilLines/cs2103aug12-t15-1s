@@ -78,7 +78,16 @@ namespace ToDo
         // ******************************************************************
 
         #region ExecuteOperation
-
+        /// <summary>
+        /// Executes the operation and adds it to the operation history.
+        /// This operation tries to mark one or more tasks as done using the given parameters.
+        /// If an index exist, it will mark all tasks by index.
+        /// If not, it will perform a search, marking tasks immediately if the isAll flag
+        /// is set.
+        /// </summary>
+        /// <param name="taskList">List of task this operation will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the operation execution.</returns>
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
