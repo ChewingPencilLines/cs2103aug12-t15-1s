@@ -48,7 +48,6 @@ namespace ToDo
                 if (attrb.timeRangeIndex == 0)
                 {
                     attrb.timeRangeIndex = index;
-                    Logger.Info("Updated timeRangeIndex.", "ConfigureGenerator::TokenTimeRange");
                 }
                 else
                 {
@@ -61,7 +60,6 @@ namespace ToDo
                 if (attrb.timeRangeType == TimeRangeType.DEFAULT)
                 {
                     attrb.timeRangeType = timeRangeType;
-                    Logger.Info("Updated timeRangeType.", "ConfigureGenerator::TokenTimeRange");
                 }
                 else
                 {
@@ -74,17 +72,16 @@ namespace ToDo
                 if (attrb.timeRangeOne == TimeRangeKeywordsType.NONE)
                 {
                     attrb.timeRangeOne = timeRange;
-                    Logger.Info("Updated timeRangeOne.", "ConfigureGenerator::TokenTimeRange");
                 }
                 else if (attrb.timeRangeTwo == TimeRangeKeywordsType.NONE
                     || attrb.timeRangeTwo <= timeRange)
                 {
                     attrb.timeRangeTwo = timeRange;
-                    Logger.Info("Updated timeRangeTwo.", "ConfigureGenerator::TokenTimeRange");
                 }
             }
             if (multipleTaskDurations)
             {
+                Logger.Warning("Multiple task durations were detected.", "ConfigureGenerator::TokenTimeRange");
                 AlertBox.Show("Multiple task durations specified. Only the first is accepted.");
             }
         }

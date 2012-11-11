@@ -35,12 +35,10 @@ namespace ToDo
                 if (Value == CommandType.DONE)
                 {
                     attrb.searchType = SearchType.DONE;
-                    Logger.Info("Updated SearchType to DONE.", "ConfigureGenerator::TokenCommand");
                 }
                 else if (Value == CommandType.UNDONE)
                 {
                     attrb.searchType = SearchType.UNDONE;
-                    Logger.Info("Updated SearchType to UNDONE.", "ConfigureGenerator::TokenCommand");
                 }
                 else if (attrb.commandType == CommandType.SORT)
                 {
@@ -53,14 +51,14 @@ namespace ToDo
                 }
                 else
                 {
-                    Logger.Error("Multiple commands detected", "ConfigureGenerator::TokenCommand");
+                    Logger.Warning("Multiple commands detected", "ConfigureGenerator::TokenCommand");
                     throw new MultipleCommandsException();
                 }
             }
             else
             {
                 attrb.commandType = Value;
-                Logger.Info("commandType is INVALID", "ConfigureGenerator::TokenCommand");
+                Logger.Warning("commandType is INVALID", "ConfigureGenerator::TokenCommand");
             }
         }
 
