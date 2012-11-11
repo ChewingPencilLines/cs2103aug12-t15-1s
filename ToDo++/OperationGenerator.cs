@@ -316,8 +316,7 @@ namespace ToDo
                 combinedDT = combinedDT.Value.AddDays(1);
             }
             if (limit > combinedDT)
-                if (this.commandType == CommandType.ADD
-                    || this.commandType == CommandType.SCHEDULE)
+                if (this.commandType == CommandType.ADD)
                     AlertBox.Show("Note that date specified is past.");
             return combinedDT;
         }
