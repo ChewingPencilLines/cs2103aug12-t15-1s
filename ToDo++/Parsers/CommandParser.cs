@@ -5,8 +5,6 @@ using System.Text;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 
-[assembly: InternalsVisibleTo("ParsingLogicUnitTest")]
-
 namespace ToDo
 {
     class CommandParser

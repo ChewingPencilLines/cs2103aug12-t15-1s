@@ -6,8 +6,6 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 
-[assembly: InternalsVisibleTo("ParsingLogicUnitTest")]
-
 namespace ToDo
 {
     public class StringParser
@@ -24,7 +22,7 @@ namespace ToDo
         // Public Methods   
         // ******************************************************************
 
-        #region Internal Methods
+        #region Public Methods
 
         /// <summary>
         /// This method parses a string of words into a list of tokens, each containing a token representing the meaning of each word or substring.
@@ -33,7 +31,7 @@ namespace ToDo
         /// <param name="input">The string of words to be parsed</param>
         /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings</param>
         /// <returns>The list of tokens</returns>
-        internal List<Token> ParseStringIntoTokens(string input)
+        public List<Token> ParseStringIntoTokens(string input)
         {
             List<int[]> indexOfDelimiters = FindPositionOfDelimiters(input);
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
@@ -48,7 +46,7 @@ namespace ToDo
         /// </summary>
         /// <param name="absoluteSubstr">The input string of words containing all of the words to be marked</param>
         /// <returns>The marked string of words</returns>
-        internal static string MarkWordsAsAbsolute(string absoluteSubstr)
+        public static string MarkWordsAsAbsolute(string absoluteSubstr)
         {
             string[] words = absoluteSubstr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries);
             string output = "";
@@ -66,7 +64,7 @@ namespace ToDo
         /// </summary>
         /// <param name="absoluteSubstr">The input string of words containing all of the words to be unmarked</param>
         /// <returns>The unmarked string of words</returns>
-        internal static string UnmarkWordsAsAbsolute(string absoluteSubstr)
+        public static string UnmarkWordsAsAbsolute(string absoluteSubstr)
         {
             StringBuilder sb = new StringBuilder();
             foreach (char c in absoluteSubstr)
@@ -96,10 +94,7 @@ namespace ToDo
             int processedIndex = 0, removedCount = 0;
 
             if (indexOfDelimiters == null)
-            {
-                Logger.Info("No delimiters found", "SplitStringIntoSubstrings::StringParser");
                 return input.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList();
-            }
 
             foreach (int[] substringIndex in indexOfDelimiters)
             {
@@ -124,11 +119,8 @@ namespace ToDo
             string remainingStr = input.Substring(processedIndex);
             words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());            
             words = MergeDateAndTimeWords(words);
-            Logger.Info("Successfully merged all date and time words", "SplitStringIntoSubstrings::StringParser");
             words = MergeNumericalRangeWords(words);
-            Logger.Info("Successfully merged all numerical range words", "SplitStringIntoSubstrings::StringParser");
             words = MergeTimeRangeWords(words);
-            Logger.Info("Successfully merged all time range words", "SplitStringIntoSubstrings::StringParser");
             return words;
         }
 
@@ -160,7 +152,7 @@ namespace ToDo
                             break;
                         }
                         matchCheck += words[i + j];
-                        Logger.Info("Numerical range words found and merged", "MergeNumericalRangeWords::StringParser");
+                        Logger.Info("Numerical range words (" + matchCheck + ") and merged", "MergeNumericalRangeWords::StringParser");
                     }
                     else break;
                     j++;
@@ -251,7 +243,11 @@ namespace ToDo
             input = MergeDateWords(input);
             return input;
         }
-                
+
+        // ******************************************************************
+        // Time Merging Methods   
+        // ******************************************************************
+
         #region Time merging methods
         /// <summary>
         /// This method checks all words within an input list of words for valid times and returns a list of words
@@ -307,6 +303,11 @@ namespace ToDo
             else return false;
         }
         #endregion
+
+        // ******************************************************************
+        // Date Merging Methods   
+        // ******************************************************************
+
         #region Date merging methods
         /// <summary>
         /// This method checks all words within an input list of words for valid date and returns a list of words
@@ -395,6 +396,11 @@ namespace ToDo
             return true;
         }
         #endregion
+
+        // ******************************************************************
+        // Delimter Search Methods   
+        // ******************************************************************
+
         #region Delimiter searching methods
         /// <summary>
         /// This method searches the input string against the set delimiters'
@@ -446,6 +452,7 @@ namespace ToDo
             indexOfDelimiters.RemoveAll(x => indexesToRemove.Contains(x));
         }
         #endregion
+
         #endregion
     }
 }
