@@ -60,8 +60,10 @@ namespace ToDo
             int index = 0;
             foreach (string word in inputWords)
             {
-                if (CustomDictionary.commandKeywords.TryGetValue(word.ToLower(), out commandType))
+                string wordLower = word.ToLower();
+                if (CustomDictionary.commandKeywords.TryGetValue(wordLower, out commandType))
                 {
+                    Logger.Info("Command word found: " + wordLower, "GenerateCommandTokens::TokenGenerator");
                     TokenCommand commandToken = new TokenCommand(index, commandType);
                     tokens.Add(commandToken);
                 }
@@ -70,11 +72,17 @@ namespace ToDo
             return tokens;
         }
 
+        /// <summary>
+        /// This method checks an input list of strings for index range words and generates a list of tokens
+        /// based on the found index range words.
+        /// </summary>
+        /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="commandTokens">The list of generated command tokens based on the same list of input strings</param>
+        /// <returns>List of command tokens</returns>
         public List<Token> GenerateIndexRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
         {
             List<Token> indexRangeTokens = new List<Token>();
             int index = 0;
-
             foreach (string word in inputWords)
             {
                 var validTokens = from token in commandTokens
@@ -87,6 +95,7 @@ namespace ToDo
                     TokenIndexRange indexRangeToken = null;
                     if (CheckIfAllKeyword(word))
                     {
+                        Logger.Info("Index range word found: all", "GenerateIndexRangeTokens::TokenGenerator");
                         isAll = true;
                         indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
                     }
@@ -96,11 +105,15 @@ namespace ToDo
                                                   where token.Position == index - 1
                                                   select token;
                         if (validTokensAdjacent.Count() > 0)
+                        {
                             indexRangeToken = new TokenIndexRange(index, userDefinedIndex, isAll);
+                        }
                     }
 
                     if (indexRangeToken != null)
+                    {
                         indexRangeTokens.Add(indexRangeToken);
+                    }
                 }
 
                 index++;
@@ -108,44 +121,61 @@ namespace ToDo
             return indexRangeTokens;
         }
 
+        /// <summary>
+        /// This method checks an input list of strings for sort type keywords (name or date) and generates a list of
+        /// tokens based on the found sort type keywords.
+        /// </summary>
+        /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="commandTokens">The list of generated command tokens based on the same list of input strings</param>
+        /// <returns>List of sort type tokens</returns>
         public List<Token> GenerateSortTypeTokens(List<string> input, List<TokenCommand> commandTokens)
         {
             SortType sortType;
             int index = 0;
-
             List<Token> sortTokens = new List<Token>();
-
 
             foreach (string word in input)
             {
+                string wordLower = word.ToLower();
                 var validTokens = from token in commandTokens
                                   where (token.Position == index - 1 &&
                                          token.Value == CommandType.SORT)
                                   select token;
                 if (validTokens.Count() > 0)
                 {
-
-                    if (CustomDictionary.sortTypeKeywords.TryGetValue(word.ToLower(), out sortType) && index != 0)
+                    if (CustomDictionary.sortTypeKeywords.TryGetValue(wordLower, out sortType) && index != 0)
                     {
+                        Logger.Info("Sort type word found: " + wordLower, "GenerateSortTypeTokens::TokenGenerator");
                         TokenSortType sortTypeToken = new TokenSortType(index, sortType);
                         sortTokens.Add(sortTypeToken);
                     }
                 }
-
                 index++;
             }
             return sortTokens;
         }
 
+        /// <summary>
+        /// This method checks an input list of strings for time range words and generates a list of tokens
+        /// based on the found time range words.
+        /// </summary>
+        /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="commandTokens">The list of generated command tokens based on the same list of input strings</param>
+        /// <returns>List of time range tokens</returns>
         public List<Token> GenerateTimeRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
         {
             List<Token> timeRangeTokens = new List<Token>();
             int index = 0;
             bool requiresTimeLength = false;
 
-            if (commandTokens.Count(e => e.RequiresTimeRange()) < 1) return timeRangeTokens;
+            if (commandTokens.Count(e => e.RequiresTimeRange()) < 1)
+            {
+                return timeRangeTokens;
+            }
             if (commandTokens.Count(e => e.RequiresTimeRange() && e.Value != CommandType.ADD) > 0)
+            {
                 requiresTimeLength = true;
+            }
 
             foreach (string word in inputWords)
             {
@@ -153,11 +183,10 @@ namespace ToDo
                 TimeRangeType timeRangeType;
                 TimeRangeKeywordsType timeRangeKeyword;
                 TokenTimeRange timeRangeToken = null;
-
                 string wordLower = word.ToLower();
-
                 if (CustomDictionary.timeRangeKeywords.TryGetValue(wordLower, out timeRangeKeyword))
                 {
+                    Logger.Info("Time range word found: " + wordLower, "GenerateTimeRangeTokens::TokenGenerator");
                     timeRangeToken = new TokenTimeRange(index, timeRangeKeyword);
                 }
 
@@ -166,16 +195,17 @@ namespace ToDo
                     Match match = CustomDictionary.isTimeRange.Match(wordLower);
                     Int32.TryParse(match.Groups["index"].Value, out timeRangeAmount);
                     string matchString = match.Groups["type"].Value;
-
                     if (timeRangeAmount == 0 && matchString != null)
                     {
+                        Logger.Warning("Task duration was specified without amount" + wordLower, "GenerateTimeRangeTokens::TokenGenerator");
                         throw new InvalidTimeRangeException("Task duration type was specified without a valid amount (0 " + matchString + ").");
                     }
                     if (!CustomDictionary.timeRangeType.TryGetValue(matchString, out timeRangeType))
                     {
+                        Logger.Error("Recognized time range type (" + matchString + ") cannot be found in custom dictionary", "GenerateTimeRangeTokens::TokenGenerator");
                         throw new Exception("Something is wrong with IsTimeRange regex etc.");
                     }
-
+                    Logger.Info("Time range word found: " + timeRangeAmount + " " + matchString, "GenerateTimeRangeTokens::TokenGenerator");
                     timeRangeToken = new TokenTimeRange(index, timeRangeAmount, timeRangeType);
                 }
 
@@ -189,7 +219,7 @@ namespace ToDo
         }
 
         /// <summary>
-        /// Checks if the supplied string matchCheck represents a number of a numerical range.
+        /// Checks if the supplied string matchCheck represents a number or a numerical range.
         /// If positive, the index or pair of indexes (respectively) is added to the
         /// integer array.
         /// </summary>
@@ -210,19 +240,33 @@ namespace ToDo
                 {
                     Int32.TryParse(match.Groups["end"].Value, out endIndex);
                 }
-                else endIndex = startIndex;
+                else
+                {
+                    endIndex = startIndex;
+                }
                 userDefinedIndex[TokenIndexRange.START_INDEX] = startIndex;
                 userDefinedIndex[TokenIndexRange.END_INDEX] = endIndex;
+                Logger.Info("Index range found: " + startIndex + " to " + endIndex, "TryGetNumericalRange::TokenGenerator");
             }
             return matchSuccess;
         }
 
+        /// <summary>
+        /// This method checks if the input word is the 'all' keyword, non case-sensitively.
+        /// </summary>
+        /// <param name="word">The word to be checked</param>
+        /// <returns>True if positive; false if otherwise</returns>
         private bool CheckIfAllKeyword(string word)
         {
             bool isAll;
             if ((CustomDictionary.rangeAllKeywords.Where(e => e == word.ToLower()).Count()) >= 1)
+            {
                 isAll = true;
-            else isAll = false;
+            }
+            else
+            {
+                isAll = false;
+            }
             return isAll;
         }
 
@@ -239,9 +283,11 @@ namespace ToDo
             int index = 0;
             foreach (string word in input)
             {
-                if (CustomDictionary.dayKeywords.ContainsKey(word.ToLower()))
+                string wordLower = word.ToLower();
+                if (CustomDictionary.dayKeywords.ContainsKey(wordLower))
                 {
-                    CustomDictionary.dayKeywords.TryGetValue(word.ToLower(), out day);
+                    Logger.Info("Day word found: " + wordLower, "GenerateDayTokens::TokenGenerator");
+                    CustomDictionary.dayKeywords.TryGetValue(wordLower, out day);
                     TokenDay dayToken = new TokenDay(index, day);
                     dayTokens.Add(dayToken);
                 }
@@ -336,6 +382,7 @@ namespace ToDo
                         year += 2000;
                     }
                     dateTime = TryParsingDate(year, month, day, false);
+                    Logger.Info("Date word found: " + dateTime, "GenerateDateTokens::TokenGenerator");
                     dateToken = new TokenDate(index, dateTime, isSpecific);
                     dateTokens.Add(dateToken);
                 }
@@ -360,18 +407,19 @@ namespace ToDo
             bool Format_12Hour = false;
             foreach (string word in input)
             {
+                string wordLower = word.ToLower();
                 int hours = 0, minutes = 0, seconds = 0;
-                match = CustomDictionary.time_12HourFormat.Match(word.ToLower());
+                match = CustomDictionary.time_12HourFormat.Match(wordLower);
                 if (!match.Success)
                 {
-                    match = CustomDictionary.time_24HourFormat.Match(word.ToLower());
+                    match = CustomDictionary.time_24HourFormat.Match(wordLower);
                 }
                 else
                 {
                     Format_12Hour = true;
                 }
                 if (match.Success
-                    || CustomDictionary.timeSpecificKeywords.TryGetValue(word.ToLower(), out hours))
+                    || CustomDictionary.timeSpecificKeywords.TryGetValue(wordLower, out hours))
                 {
                     string strHours = match.Groups["hours"].Value;
                     string strMinutes = match.Groups["minutes"].Value;
@@ -388,6 +436,7 @@ namespace ToDo
                         minutes = Int32.Parse(strMinutes);
                     }
                     TimeSpan time = new TimeSpan(hours, minutes, seconds);
+                    Logger.Info("Time word found: " + time, "GenerateTimeTokens::TokenGenerator");
                     TokenTime timeToken = new TokenTime(index, time, specificity);
                     timeTokens.Add(timeToken);
                 }
@@ -396,12 +445,24 @@ namespace ToDo
             return timeTokens;
         }
 
+        /// <summary>
+        /// This method converts a time specified in hours and am/pm i.e. 4am and 5pm into its corresponding
+        /// 24 hours format in hundreds i.e. 4 (hundred) hours and 17 (hundred) hours respectively.
+        /// </summary>
+        /// <param name="format">Either 'am' or 'pm'</param>
+        /// <param name="hours">The hours in 12 hours format</param>
+        /// <returns>The hour in 24 hours format in hundreds</returns>
         private int ConvertTo24HoursFormat(string format, int hours)
         {
-            if (format.ToLower() == "pm" && hours != 12)
+            string formatLower = format.ToLower();
+            if (formatLower == "pm" && hours != 12)
+            {
                 hours += 12;
-            if (format.ToLower() == "am" && hours == 12)
+            }
+            if (formatLower == "am" && hours == 12)
+            {
                 hours = 0;
+            }
             return hours;
         }
 
@@ -421,8 +482,12 @@ namespace ToDo
                 if (CustomDictionary.contextKeywords.TryGetValue(word.ToLower(), out context))
                 {
                     object nextToken = GetTokenAtPosition(parsedTokens, index + 1);
-                    if (nextToken is TokenDate || nextToken is TokenDay || nextToken is TokenTime || nextToken is TokenTimeRange)
+                    if (nextToken is TokenDate ||
+                        nextToken is TokenDay ||
+                        nextToken is TokenTime ||
+                        nextToken is TokenTimeRange)
                     {
+                        Logger.Info("Context word found: " + word.ToLower(), "GenerateContextTokens::TokenGenerator");
                         TokenContext newToken = new TokenContext(index, context);
                         tokens.Add(newToken);
                     }
@@ -452,18 +517,30 @@ namespace ToDo
             foreach (string remainingWord in input)
             {
                 if (remainingWord != null)
+                {
                     literal = literal + StringParser.UnmarkWordsAsAbsolute(remainingWord) + " ";
+                }
                 else if (remainingWord == null && literal != String.Empty)
+                {
                     AddLiteralToken(ref literal, index, ref literalTokens);
+                }
                 index++;
             }
             if (literal != String.Empty)
             {
+                Logger.Info("Literal found: " + literal, "GenerateLiteralTokens::TokenGenerator");
                 AddLiteralToken(ref literal, index, ref literalTokens);
             }
             return literalTokens;
         }
 
+        /// <summary>
+        /// This method generates a literal token based on the supplied literal string and index. It then adds
+        /// the token to the list of literal tokens before emptying the literal string.
+        /// </summary>
+        /// <param name="literal">The supplied literal string</param>
+        /// <param name="index">The index of the literal string</param>
+        /// <param name="literalTokens">The list of literal tokens</param>
         private void AddLiteralToken(ref string literal, int index, ref List<Token> literalTokens)
         {
             literal = literal.Trim();
@@ -578,6 +655,16 @@ namespace ToDo
             return monthInt;
         }
 
+        /// <summary>
+        /// This method tries to create a datetime given the supplied year, month and day.
+        /// If the datetime specified by the arguments does not exist, a default datetime of day 1, month 1 and year
+        /// 1 will be returned if the ignoreFailure flag is true. Else, an exception if thrown.
+        /// </summary>
+        /// <param name="year">The year of the datetime to be created</param>
+        /// <param name="month">The month of the datetime to be created</param>
+        /// <param name="day">The day of the datetime to be created</param>
+        /// <param name="ignoreFailure">True if datetime creation failure is to be ignored; false if otherwise</param>
+        /// <returns>The created datetime</returns>
         private DateTime TryParsingDate(int year, int month, int day, bool ignoreFailure)
         {
             DateTime date;
@@ -587,8 +674,12 @@ namespace ToDo
             }
             catch (ArgumentOutOfRangeException)
             {
+                Logger.Warning("Unable to parse date", "TryParsingDate::TokenGenerator");
                 if (ignoreFailure)
+                {
+                    Logger.Info("Failed attempt to parse date was ignored", "TryParsingDate::TokenGenerator");
                     date = new DateTime(1, 1, 1);
+                }
                 else
                 {
                     throw new InvalidDateTimeException("Invalid date input!\n" + day + "/" + month + "/" + year);
@@ -597,6 +688,12 @@ namespace ToDo
             return date;
         }
 
+        /// <summary>
+        /// This method checks through the list of tokens for conflicting tokens that were generated based on the
+        /// same input text i.e. have the same indexes and deconflicts all conflicting tokens by selecting the
+        /// appropriate tokens to keep.
+        /// </summary>
+        /// <param name="tokens">The list of tokens</param>
         private void DeconflictTokens(ref List<Token> tokens)
         {
             if (tokens.Count == 0)
@@ -605,7 +702,6 @@ namespace ToDo
             }
             List<Token> deconflictedTokens = new List<Token>();
             bool conflictRemains = true;
-
             while (conflictRemains)
             {
                 foreach (Token token in tokens)
@@ -618,7 +714,8 @@ namespace ToDo
                                           select eachToken;
                     if (matches.Count() > 1)
                     {
-                        Token highestPriorityToken = GetHighestPriorityToken(matches, tokens);
+                        Logger.Info("Conflicting tokens found", "DeconflictTokens::TokenGenerator");
+                        Token highestPriorityToken = GetHighestPriorityToken(matches);
                         deconflictedTokens.Add(highestPriorityToken);
                         deconflictedTokens.AddRange(remainingTokens);
                         break;
@@ -634,7 +731,12 @@ namespace ToDo
             return;
         }
 
-        private Token GetHighestPriorityToken(IEnumerable<Token> matches, List<Token> tokens)
+        /// <summary>
+        /// This method picks the token to be kept amongst a collection of conflicting tokens.
+        /// </summary>
+        /// <param name="matches">The collection of conflicting tokens</param>
+        /// <returns>The highest priority token to be kept </returns>
+        private Token GetHighestPriorityToken(IEnumerable<Token> matches)
         {
             Token highestPriorityToken = null;
             foreach (Token token in matches)
@@ -672,8 +774,14 @@ namespace ToDo
         {
             int xPosition = x.Position;
             int yPosition = y.Position;
-            if (xPosition < yPosition) return -1;
-            else if (xPosition > yPosition) return 1;
+            if (xPosition < yPosition)
+            {
+                return -1;
+            }
+            else if (xPosition > yPosition)
+            {
+                return 1;
+            }
             else
             {
                 Debug.Assert(false, "Two tokens with same position!");
@@ -692,7 +800,10 @@ namespace ToDo
         {
             foreach (Token token in tokens)
             {
-                if (token.Position == p) return token;
+                if (token.Position == p)
+                {
+                    return token;
+                }
             }
             return null;
         }
