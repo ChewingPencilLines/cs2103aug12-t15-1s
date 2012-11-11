@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 namespace ToDo
 {
     // Factory class for creating Operations.
+    // This class is first configured by Tokens, and once finalized,
+    // can generate the appropriate operations using the GenerateOperation method.
     class OperationGenerator
     {
         // ******************************************************************
