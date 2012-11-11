@@ -550,19 +550,10 @@ namespace ToDo
             else
                 endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, startDateTime.Value, false);
 
-            ForceDateSpecificityBasedOnTime();
+            isSpecific.FinalizeDT();
 
             if (startDateTime > endDateTime)
                 AlertBox.Show("Warning: End date is before start date");
-        }
-
-        /// <summary>
-        /// Sets the dates to be fully specific if the user specified a time for it.
-        /// </summary>
-        private void ForceDateSpecificityBasedOnTime()
-        {
-            if (isSpecific.StartTime) isSpecific.StartDate = new Specificity();
-            if (isSpecific.EndTime) isSpecific.EndDate = new Specificity();
         }
 
         /// <summary>
@@ -654,13 +645,6 @@ namespace ToDo
                     while (limit > dateToCheck)
                         dateToCheck = dateToCheck.Value.AddYears(1);
 
-                    dateSpecificity.Year = true;
-                }
-
-                // if the day is specific, the month and year must be as well.
-                if (dateSpecificity.Day == true)
-                {
-                    dateSpecificity.Month = true;
                     dateSpecificity.Year = true;
                 }
             }
