@@ -75,6 +75,11 @@ namespace ToDo
         // ******************************************************************
 
         #region Finalize Generator
+        /// <summary>
+        /// Finalizes the generator so that it can begin generating operations
+        /// with the correct time ranges.
+        /// </summary>
+        /// <returns>Nothing.</returns>
         public void FinalizeGenerator()
         {
             GetTimeRangeValues();
@@ -89,6 +94,11 @@ namespace ToDo
             CombineDateTimes();
         }
 
+        /// <summary>
+        /// Returns true if the operation to be generated can carry out a search
+        /// on the task list, and false if not.
+        /// </summary>
+        /// <returns>Boolean indicating if the command is of a searchable type.</returns>
         private bool CommandIsSearchableType()
         {
             return !((commandType == CommandType.ADD) ||
@@ -101,6 +111,11 @@ namespace ToDo
         // ******************************************************************
 
         #region Finalize Search Times
+        /// <summary>
+        /// Finalizes the date/times of the operation to be generated
+        /// by setting it as an appropriate search range.
+        /// </summary>
+        /// <returns></returns>
         private void FinalizeSearchTime()
         { 
             // If searching only for a single time, assume it's the end time.
@@ -118,34 +133,54 @@ namespace ToDo
                 isSpecific.EndDate = isSpecific.StartDate;
             }
 
-            if (endDateOnly != null)
+            // If end time is not specific, extend search range to cover appropriate period.
+            if (endDateOnly != null && endTimeOnly == null)
                 ExtendEndSearchDate();
         }
 
+        /// <summary>
+        /// Returns a boolean indicating if only the start time for the generated
+        /// Operation is set and the end date/times are not.
+        /// </summary>
+        /// <returns>True if the start time is set, false if not.</returns>
         private bool IsOnlyStartTimeSet()
         {
             return startTimeOnly != null && endTimeOnly == null && endDateOnly == null;
         }
 
+        /// <summary>
+        /// Returns a boolean indicating if only the start date for the generated
+        /// Operation is set, and the start time, end date/times are not.
+        /// </summary>
+        /// <returns>True if the only the start date is set, false if not.</returns>
         private bool IsOnlyStartDateSet()
         {
             return startDateOnly != null && endDateOnly == null && startTimeOnly == null && endTimeOnly == null;
         }
 
+        /// <summary>
+        /// Extends the end date to the end of the day, month or year,
+        /// depending on the already set Specificity of the generator.
+        /// </summary>
+        /// <returns>Nothing.</returns>
         private void ExtendEndSearchDate()
-        {
-            // Extend compare range if task end date is not specific         
-            if (!isSpecific.EndDate.Day && endTimeOnly == null)
+        {     
+            if (!isSpecific.EndDate.Day)
             {
                 ExtendEndMonthOrYear();
                 endDateOnly = endDateOnly.Value.AddMinutes(-1);
-            }
-            else if (endTimeOnly == null && isSpecific.StartDate.Day == true)
+            }            
+            else if (isSpecific.StartDate.Day == true)
             {
-                endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, endDateOnly.Value.Day, 23, 59, 0);
+                ExtendEndDay();
             }
         }
 
+        /// <summary>
+        /// Extends the end date to the end of the month or year,
+        /// depending on the already set Specificity of the generator.
+        /// </summary>
+        /// <returns>Nothing.</returns>
         private void ExtendEndMonthOrYear()
         {
             if (!isSpecific.EndDate.Month)
@@ -158,6 +193,15 @@ namespace ToDo
                 endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, 1);
             }
         }
+
+        /// <summary>
+        /// Extends the end date to the end of the day.
+        /// </summary>
+        /// <returns>Nothing.</returns>
+        private void ExtendEndDay()
+        {
+            endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, endDateOnly.Value.Day, 23, 59, 0);
+        }
         #endregion
 
         // ******************************************************************
@@ -165,7 +209,20 @@ namespace ToDo
         // ******************************************************************
 
         #region Finalize Scheduling Time
+        /// <summary>
+        /// Finalizes the scheduling time range.
+        /// </summary>
+        /// <returns>Nothing.</returns>
         private void FinalizeSchedulingTime()
+        {
+            FinalizeScheduleStartDate();
+        }
+
+        /// <summary>
+        /// Sets the start date to today if no starting date was given.
+        /// </summary>
+        /// <returns>Nothing.</returns>
+        private void FinalizeScheduleStartDate()
         {
             if (startDateOnly == null)
             {
