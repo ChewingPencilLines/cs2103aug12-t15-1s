@@ -32,17 +32,17 @@ namespace ToDo
         /// </summary>
         /// <param name="tokens">The list of tokens from which the generated operation will be based on.</param>
         /// <returns>The generated Operation.</returns>
-        private static Operation GenerateOperation(List<Token> tokens)
+        private Operation GenerateOperation(List<Token> tokens)
         {            
-            // reset factory configuration / just create new factory.
-            OperationGenerator factory = new OperationGenerator();
+            // reset factory configuration
+            operationFactory.InitializeNewConfiguration();
             foreach (Token token in tokens)
             {
-               token.ConfigureGenerator(factory);
+                token.ConfigureGenerator(operationFactory);
             }
             // implement? ReleaseUnusedTokens();
-            factory.FinalizeGenerator();
-            Operation newOperation = factory.CreateOperation();
+            operationFactory.FinalizeGenerator();
+            Operation newOperation = operationFactory.CreateOperation();
             return newOperation;
         }
 
