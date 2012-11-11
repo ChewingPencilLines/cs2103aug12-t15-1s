@@ -208,6 +208,18 @@ namespace ToDo
         }
 
         /// <summary>
+        /// Gets a flag indicating if all times in the task are fully specific.
+        /// </summary>
+        /// <returns>True if task times are fully specific; False if not.</returns>
+        public override bool CanBeScheduledOver()
+        {
+            if (isSpecific.Full() && StartDateTime != EndDateTime)
+                return false;
+            else
+                return true;
+        }
+
+        /// <summary>
         /// Postpones time by the given TimeSpan duration.
         /// </summary>
         /// <param name="postponeDuration">Duration by which this task should be postponed by.</param>
