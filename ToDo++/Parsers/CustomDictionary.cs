@@ -413,7 +413,7 @@ namespace ToDo
             return isTimeRange.IsMatch(theWord);
         }
         
-        /// <summary> This method checks if a word is a time keyword.
+        /// <summary>Checks if a word is a time keyword and returns a boolean indicating whether it is.
         /// </summary>
         /// <param name="word">The word to be checked</param>
         /// <returns>True if the word is a time keyword, false if otherwise</returns>
@@ -427,6 +427,11 @@ namespace ToDo
             return false;
         }
 
+        /// <summary>
+        /// Checks if a time range crosses the day boundary and returns a boolean indicating whether it does.
+        /// </summary>
+        /// <param name="timeRangeKeyword"></param>
+        /// <returns></returns>
         public static bool IsTimeRangeOverDayBoundary(TimeRangeKeywordsType timeRangeKeyword)
         {
             int timeRangeStartHour, timeRangeEndHour;
@@ -445,8 +450,16 @@ namespace ToDo
         // ******************************************************************
 
         #region Update Dictionary With FlexiCommands
-        public static void UpdateDictionary(Dictionary<string, CommandType> passedCommandKeywords, Dictionary<string, ContextType> passedContextKeywords, Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords, 
-            Dictionary<string, TimeRangeType> passedTimeRangeType,Dictionary<TimeRangeKeywordsType, int> passedTimeRangeStartTime,Dictionary<TimeRangeKeywordsType, int> passedTimeRangeEndTime)
+        /// <summary>
+        /// Updates the CustomDictionary keywords with new Dictionarys.
+        /// </summary>
+        public static void UpdateDictionary(
+            Dictionary<string, CommandType> passedCommandKeywords,
+            Dictionary<string, ContextType> passedContextKeywords,
+            Dictionary<string, TimeRangeKeywordsType> passedTimeRangeKeywords, 
+            Dictionary<string, TimeRangeType> passedTimeRangeType,
+            Dictionary<TimeRangeKeywordsType, int> passedTimeRangeStartTime,
+            Dictionary<TimeRangeKeywordsType, int> passedTimeRangeEndTime)
         {
             commandKeywords = passedCommandKeywords;
             contextKeywords = passedContextKeywords;

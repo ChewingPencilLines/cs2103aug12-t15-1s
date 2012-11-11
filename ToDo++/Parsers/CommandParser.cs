@@ -13,6 +13,9 @@ namespace ToDo
         TokenGenerator tokenFactory;
         OperationGenerator operationFactory;
 
+        /// <summary>
+        /// Constructor for the CommandParser class.
+        /// </summary>
         public CommandParser()
         {
             this.stringParser = new StringParser();
@@ -20,6 +23,11 @@ namespace ToDo
             this.operationFactory = new OperationGenerator();
         }
 
+        /// <summary>
+        /// Parses a input string and returns the Operation that can be executed.
+        /// </summary>
+        /// <param name="input">The input string.</param>
+        /// <returns>An operation representing the input command.</returns>
         public Operation ParseOperation(string input)
         {
             List<string> words = stringParser.ParseStringIntoTokens(input);
