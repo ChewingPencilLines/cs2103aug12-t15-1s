@@ -40,15 +40,15 @@ namespace ToDo
         // Set as private to prevent confusion.
         private TimeSpan? startTimeOnly, endTimeOnly;
         private DateTime? startDateOnly, endDateOnly;
-        private DayOfWeek? startDay, endDay;
+        private bool startDayOfWeekSet, endDayOfWeekSet;
 
         // Setter methods
         public TimeSpan? EndTimeOnly { set { endTimeOnly = value; } }
         public TimeSpan? StartTimeOnly { set { startTimeOnly = value; } }
         public DateTime? EndDateOnly { set { endDateOnly = value; } }
         public DateTime? StartDateOnly { set { startDateOnly = value; } }
-        public DayOfWeek? EndDay { set { endDay = value; } }
-        public DayOfWeek? StartDay { set { startDay = value; } }
+        public bool EndDayOfWeekSet { set { endDayOfWeekSet = value; } }
+        public bool StartDayOfWeekSet { set { startDayOfWeekSet = value; } }
 
         // The following attributes are used during derivation of Operation type and should not be otherwised used.
         public ContextType currentSpecifier;
@@ -92,7 +92,7 @@ namespace ToDo
             startDateTime = null; endDateTime = null;            
             startTimeOnly = null; endTimeOnly = null;
             startDateOnly = null; endDateOnly = null;
-            startDay = null; endDay = null;
+            startDayOfWeekSet = false; endDayOfWeekSet = false;
             currentSpecifier = new ContextType();
             currentMode = new ContextType();
             crossDayBoundary = false;
@@ -456,8 +456,32 @@ namespace ToDo
                 combinedDT = combinedDT.Value.AddDays(1);
             }
             if (limit > combinedDT)
+            {
                 if (this.commandType == CommandType.ADD)
-                    AlertBox.Show("Note that date specified is past.");
+                {
+                    if (endDayOfWeekSet)
+                    {
+                        while (limit > combinedDT)
+                        {
+                            combinedDT = combinedDT.Value.AddDays(7);
+                        }
+                    }
+                    if (!isSpecific.EndDate.Month)
+                    {
+                        while (limit > combinedDT)
+                        {
+                            combinedDT = combinedDT.Value.AddMonths(1);
+                        }
+                    }
+                    else if (!isSpecific.EndDate.Year)
+                    {
+                        while (limit > combinedDT)
+                        {
+                            combinedDT = combinedDT.Value.AddYears(1);
+                        }
+                    }
+                }
+            }
             return combinedDT;
         }
         #endregion
