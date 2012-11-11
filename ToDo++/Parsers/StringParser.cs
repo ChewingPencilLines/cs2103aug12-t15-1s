@@ -232,10 +232,6 @@ namespace ToDo
                 if (CustomDictionary.CheckIfWordIsTimeSuffix(word))
                 {
                     isWordAdded = MergeWord_IfValidTime(ref output, input, position);
-                    if (isWordAdded)
-                    {
-                        continue;
-                    }
                 }
                 if (!isWordAdded)
                 {
