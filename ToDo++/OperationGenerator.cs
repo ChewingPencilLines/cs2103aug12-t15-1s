@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
+    // ****************************************************************************
     // Factory class for creating Operations.
     // This class is first configured by Tokens, and once finalized,
     // can generate the appropriate operations using the GenerateOperation method.
+    // ****************************************************************************
     class OperationGenerator
     {
         // ******************************************************************
@@ -68,25 +70,41 @@ namespace ToDo
             timeRangeTwo = TimeRangeKeywordsType.NONE;
         }
 
-        public void SetTimes()
+        // ******************************************************************
+        // Finalize generator for operation creation
+        // ******************************************************************
+
+        #region Finalize Generator
+        public void FinalizeGenerator()
         {
             GetTimeRangeValues();
             if (commandType == CommandType.SCHEDULE)
             {
-                SetScheduleTime();
+                FinalizeSchedulingTime();
             }
-            else if (!(
-                    (commandType == CommandType.ADD) ||
-                    (commandType == CommandType.MODIFY && taskRangeIndex != null)))
+            else if (CommandIsSearchableType())
             {
-                SetSearchTime();
+                FinalizeSearchTime();
             }
             CombineDateTimes();
         }
 
-        private void SetSearchTime()
-        { // If searching only for a single time, assume it's the end time.
-            if (startTimeOnly != null && endTimeOnly == null && endDateOnly == null)
+        private bool CommandIsSearchableType()
+        {
+            return !((commandType == CommandType.ADD) ||
+                     (commandType == CommandType.SCHEDULE) ||
+                     (commandType == CommandType.MODIFY && taskRangeIndex != null));
+        }
+
+        // ******************************************************************
+        // Finalize Search Times
+        // ******************************************************************
+
+        #region Finalize Search Times
+        private void FinalizeSearchTime()
+        { 
+            // If searching only for a single time, assume it's the end time.
+            if (IsOnlyStartTimeSet())
             {
                 endTimeOnly = startTimeOnly;
                 isSpecific.EndTime = isSpecific.StartTime;
@@ -94,56 +112,60 @@ namespace ToDo
             }
 
             // If searching for a single date, assume the whole range is that date.
-            if (startDateOnly != null && endDateOnly == null && startTimeOnly == null && endTimeOnly == null)
+            if (IsOnlyStartDateSet())
             {
                 endDateOnly = startDateOnly;
                 isSpecific.EndDate = isSpecific.StartDate;
             }
-            ExtendTimeRanges();
-        }
 
-        private void ExtendTimeRanges()
-        {
-            // Range extensions
-            if (startDateOnly != null)
-            {
-                // If comparison is not specific to Day/Month, extend search range
-                if (!isSpecific.StartDate.Day && startTimeOnly == null)
-                {
-                    if (!isSpecific.StartDate.Month)
-                    {
-                        startDateOnly = new DateTime(startDateOnly.Value.Year, 1, 1);
-                    }
-                    else
-                    {
-                        startDateOnly = new DateTime(startDateOnly.Value.Year, startDateOnly.Value.Month, 1);
-                    }
-                }
-            }
             if (endDateOnly != null)
+                ExtendEndSearchDate();
+        }
+
+        private bool IsOnlyStartTimeSet()
+        {
+            return startTimeOnly != null && endTimeOnly == null && endDateOnly == null;
+        }
+
+        private bool IsOnlyStartDateSet()
+        {
+            return startDateOnly != null && endDateOnly == null && startTimeOnly == null && endTimeOnly == null;
+        }
+
+        private void ExtendEndSearchDate()
+        {
+            // Extend compare range if task end date is not specific         
+            if (!isSpecific.EndDate.Day && endTimeOnly == null)
             {
-                // Extend compare range if task dates are not specific                
-                if (!isSpecific.EndDate.Day && endTimeOnly == null)
-                {
-                    if (!isSpecific.EndDate.Month)
-                    {
-                        endDateOnly = new DateTime(endDateOnly.Value.Year + 1, 1, 1);
-                    }
-                    else
-                    {
-                        endDateOnly = endDateOnly.Value.AddMonths(1);
-                        endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, 1);
-                    }
-                    endDateOnly = endDateOnly.Value.AddMinutes(-1);
-                }
-                else if (endTimeOnly == null && isSpecific.StartDate.Day == true)
-                {
-                    endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, endDateOnly.Value.Day, 23, 59, 0);
-                }
+                ExtendEndMonthOrYear();
+                endDateOnly = endDateOnly.Value.AddMinutes(-1);
+            }
+            else if (endTimeOnly == null && isSpecific.StartDate.Day == true)
+            {
+                endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, endDateOnly.Value.Day, 23, 59, 0);
             }
         }
 
-        private void SetScheduleTime()
+        private void ExtendEndMonthOrYear()
+        {
+            if (!isSpecific.EndDate.Month)
+            {
+                endDateOnly = new DateTime(endDateOnly.Value.Year + 1, 1, 1);
+            }
+            else
+            {
+                endDateOnly = endDateOnly.Value.AddMonths(1);
+                endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, 1);
+            }
+        }
+        #endregion
+
+        // ******************************************************************
+        // Finalize Scheduling Time
+        // ******************************************************************
+
+        #region Finalize Scheduling Time
+        private void FinalizeSchedulingTime()
         {
             if (startDateOnly == null)
             {
@@ -153,7 +175,13 @@ namespace ToDo
                 isSpecific.StartDate.Year = false;
             }
         }
+        #endregion
 
+        // ******************************************************************
+        // Set Time Ranges
+        // ******************************************************************
+
+        #region Set Time Ranges
         private void GetTimeRangeValues()
         {
             int startTimeHour = 0, endTimeHour = 0;
@@ -251,7 +279,13 @@ namespace ToDo
             }
             return true;
         }
+        #endregion
 
+        // ******************************************************************
+        // Combine Date And Times As Single Date Time
+        // ******************************************************************
+
+        #region CombineDateTimes
         private void CombineDateTimes()
         {
             // Combine Date/Times
@@ -322,8 +356,14 @@ namespace ToDo
                     AlertBox.Show("Note that date specified is past.");
             return combinedDT;
         }
+        #endregion
+        #endregion
 
-        // Create operation based on derived values, and whether they have been used.
+        // ******************************************************************
+        // Operation Generation
+        // ******************************************************************
+
+        #region Operation Generation
         public Operation CreateOperation()
         {
             Task task;
@@ -371,7 +411,7 @@ namespace ToDo
                     switch (timeRangeType)
                     {
                         case TimeRangeType.HOUR:
-                            postponeDuration = new TimeSpan(timeRangeIndex,0,0);
+                            postponeDuration = new TimeSpan(timeRangeIndex, 0, 0);
                             break;
                         case TimeRangeType.DAY:
                             postponeDuration = new TimeSpan(timeRangeIndex, 0, 0, 0);
@@ -394,7 +434,13 @@ namespace ToDo
             }
             return newOperation;
         }
+#endregion
+        
+        // ******************************************************************
+        // Generator configuration methods
+        // ******************************************************************
 
+        #region Generator configuration methods
         internal void SetConditionalEndTime(TimeSpan Value, bool IsSpecific)
         {
             if (startTimeOnly == null && endTimeOnly != null)
@@ -416,6 +462,6 @@ namespace ToDo
             this.endDateOnly = Value;
             this.isSpecific.EndDate = IsSpecific;
         }
-
+        #endregion
     }
 }
