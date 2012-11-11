@@ -6,20 +6,32 @@ using System.Windows.Forms;
 
 namespace ToDo
 {
+    /// <summary>
+    /// Logic controller to interface between a GUI and necessary parsers / other business logic.
+    /// </summary>
     public class Logic
     {
+        // ******************************************************************
+        // Attributes
+        // ******************************************************************
+
+        #region
+        UI ui;        
         CommandParser commandParser;
         Settings mainSettings;
-        UI ui;
-
+        Storage storage;
+        List<Task> taskList;
         public Settings MainSettings
         {
             get { return mainSettings; }
             set { mainSettings = value; }
         }
-        Storage storage;
-        List<Task> taskList;
+
+        #endregion
   
+        /// <summary>
+        /// Constructor for Logic class. Initializes all necessary components.
+        /// </summary>
         public Logic()
         {
             mainSettings = new Settings();
@@ -40,11 +52,22 @@ namespace ToDo
         }
 
 
+        /// <summary>
+        /// Sets up a UI with logic for two-way communication.
+        /// </summary>
+        /// <param name="ui">UI to set up with.</param>
         internal void SetUI(UI ui)
         {
             this.ui = ui;
         }
 
+        /// <summary>
+        /// Processes a input string command and returns
+        /// the processed Response which contains the result of
+        /// the operation which can be displayed to the user.
+        /// </summary>
+        /// <param name="input">Input string.</param>
+        /// <returns>Response containing the a list of Tasks which can be displayed and the Result of the operation.</returns>
         public Response ProcessCommand(string input)
         {
             Operation operation = null;
@@ -90,6 +113,12 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Parses a command using a CommandParser and returns
+        /// the resultant Operation.
+        /// </summary>
+        /// <param name="command">String to parse.</param>
+        /// <returns>Operation which represents the input string.</returns>
         private Operation ParseCommand(string command)
         {
             if (command.Equals(null))
@@ -103,6 +132,11 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Executes an Operation and the Response representing the result of the Operation.
+        /// </summary>
+        /// <param name="operation">The Operation to execute.</param>
+        /// <returns>Response representing the result of the Operation.</returns>
         private Response ExecuteCommand(Operation operation)
         {
             Response response;
@@ -110,6 +144,9 @@ namespace ToDo
             return response;
         }
 
+        /// <summary>
+        /// Prompts a user to create a new file.
+        /// </summary>
         private void PromptUser_CreateNewTaskFile()
         {
             UserInputBox.Show("Error!", "Task storage file seems corrupted. Error reading from it!\r\n Create new file?");
@@ -142,11 +179,20 @@ namespace ToDo
         }
 
 
+        /// <summary>
+        /// Executes the DisplayDefault operation so that the 
+        /// Response given by the operation can be returned.
+        /// </summary>
+        /// <returns>The default view.</returns>
         internal Response GetDefaultView()
         {
             return new OperationDisplayDefault().Execute(taskList, storage);
         }
 
+        /// <summary>
+        /// Updates the currently displayed list of tasks in Operation.
+        /// </summary>
+        /// <param name="displayedList">The new list to update to.</param>
         internal void UpdateLastDisplayedTasksList(List<Task> displayedList)
         {
             Operation.UpdateCurrentListedTasks(displayedList);

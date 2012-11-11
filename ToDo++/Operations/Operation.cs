@@ -9,6 +9,12 @@ namespace ToDo
     // ******************************************************************
     // Abstract definition for Operation
     // ******************************************************************
+    /// <summary>
+    /// This class contains the necessary information representing a user's
+    /// requested operation. It can be executed by providing a list of Tasks 
+    /// to execute the command on, as well as a Storage controller to store
+    /// necessary data.
+    /// </summary>
     public abstract class Operation
     {
 
