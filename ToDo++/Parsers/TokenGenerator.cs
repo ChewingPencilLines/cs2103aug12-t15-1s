@@ -388,6 +388,9 @@ namespace ToDo
                     {
                         year += 2000;
                     }
+                    // Month should now be specific.
+                    isSpecific.Month = true;
+
                     dateTime = TryParsingDate(year, month, day, false);
                     Logger.Info("Date word found: " + dateTime, "GenerateDateTokens::TokenGenerator");
                     dateToken = new TokenDate(index, dateTime, isSpecific);

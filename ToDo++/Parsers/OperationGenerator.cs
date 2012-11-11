@@ -629,7 +629,7 @@ namespace ToDo
                     return;
 
                 // Move by days until day is beyond limits.
-                if (!dateSpecificity.Day)
+                if (!dateSpecificity.Day && !dateSpecificity.Month)
                 {
                     while (limit > dateToCheck)
                         dateToCheck = dateToCheck.Value.AddDays(1);
@@ -654,6 +654,13 @@ namespace ToDo
                     while (limit > dateToCheck)
                         dateToCheck = dateToCheck.Value.AddYears(1);
 
+                    dateSpecificity.Year = true;
+                }
+
+                // if the day is specific, the month and year must be as well.
+                if (dateSpecificity.Day == true)
+                {
+                    dateSpecificity.Month = true;
                     dateSpecificity.Year = true;
                 }
             }
