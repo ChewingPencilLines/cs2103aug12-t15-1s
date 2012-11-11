@@ -468,13 +468,13 @@ namespace LogicUnitTest
             Response result;
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
-            logic.ProcessCommand("add a tmr 4am to 10am");
+            logic.ProcessCommand("add a tmr 4am to 10:01am");
             logic.ProcessCommand("add a tmr afternoon");
             result = logic.ProcessCommand("schedule aaa 2 hours tmr morning");
             Assert.AreEqual("Task could not be scheduled within specified time range (no free slot)!", result.FeedbackString);
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
-            logic.ProcessCommand("add a tmr 4am to tmr 9:58 am");
+            logic.ProcessCommand("add a tmr 4am to tmr 10 am");
             logic.ProcessCommand("add a tmr afternoon");
             result = logic.ProcessCommand("schedule aaa 2 hours tmr morning");
             Assert.AreEqual("Scheduled new task \"aaa\" successfully.", result.FeedbackString);
