@@ -35,10 +35,8 @@ namespace ToDo
             if (indexes != null)
             {
                 attrb.taskRangeIndex = indexes;
-                Logger.Info("Updated taskRangeIndex.", "ConfigureGenerator::TokenIndexRange");
             }
             attrb.rangeIsAll = isAll;
-            Logger.Info("Updated rangeIsAll.", "ConfigureGenerator::TokenIndexRange");
         }
     }
 }

@@ -27,7 +27,7 @@ namespace ToDo
             else
             {
                 attrb.taskName += " " + literal;
-                Logger.Info("Task name already defined but more literals present. Appending to task name.", "ConfigureGenerator::TokenLiteral");
+                Logger.Warning("Task name already defined but more literals present. Appending to task name.", "ConfigureGenerator::TokenLiteral");
             }
         }
     }

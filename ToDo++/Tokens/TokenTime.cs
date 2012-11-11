@@ -25,7 +25,6 @@ namespace ToDo
                 case ContextType.STARTTIME:
                     attrb.StartTimeOnly = time;
                     attrb.isSpecific.StartTime = specific;
-                    Logger.Info("Updated StartTimeOnly and its specificity.", "ConfigureGenerator::TokenTime");
                     break;
                 case ContextType.ENDTIME:
                     attrb.SetConditionalEndTime(time, specific);
@@ -34,10 +33,9 @@ namespace ToDo
                 case ContextType.DEADLINE:
                     attrb.EndTimeOnly = time;
                     attrb.isSpecific.EndTime = specific;
-                    Logger.Info("Updated EndTimeOnly and its specificity.", "ConfigureGenerator::TokenTime");
                     break;
                 default:
-                    Logger.Warning("Fell through switch statement.", "ConfigureGenerator::TokenTime");
+                    Logger.Error("Fell through switch statement.", "ConfigureGenerator::TokenTime");
                     Debug.Assert(false, "Fell through switch statement in ConfigureGenerator, TokenTime!");
                     break;
             }
