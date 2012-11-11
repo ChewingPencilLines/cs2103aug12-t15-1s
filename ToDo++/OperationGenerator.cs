@@ -282,7 +282,7 @@ namespace ToDo
             if (startDateTime == null)
                 endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, DateTime.Now);
             else
-                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, (DateTime)startDateTime);
+                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, startDateTime.Value);
         }
 
         private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)
@@ -311,9 +311,9 @@ namespace ToDo
             {
                 combinedDT = date;
             }
-            if (crossDayBoundary || (endDateTime < limit && isSpecific.EndDate.Day == false))
+            if (crossDayBoundary || (combinedDT < limit && isSpecific.EndDate.Day == false))
             {
-                endDateTime = endDateTime.Value.AddDays(1);
+                combinedDT = combinedDT.Value.AddDays(1);
             }
             if (limit > combinedDT)
                 if (this.commandType == CommandType.ADD
