@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ToDo
+{
+    public class TokenSortType : Token
+    {
+        SortType sortType;
+        
+        internal TokenSortType(int position, SortType val)
+            : base(position)
+        {
+            sortType = val;
+            Logger.Info("Created a sort type token", "TokenSortType::TokenSortType");
+        }
+
+        internal override void ConfigureGenerator(OperationGenerator attrb)
+        {
+            attrb.sortType = sortType;
+            Logger.Info("Updated sortType.", "ConfigureGenerator::TokenSortType");
+        }
+
+    }
+}
