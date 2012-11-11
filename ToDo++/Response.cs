@@ -12,6 +12,7 @@ namespace ToDo
         // ******************************************************************
         // Feedback Strings
         // ******************************************************************
+
         #region Feedback Strings
         const string STRING_ADD_SUCCESS = "Added new task \"{0}\" successfully.";
         const string STRING_ADD_FAILURE = "Failed to add task!";
@@ -55,7 +56,7 @@ namespace ToDo
         const string STRING_NAME = "name";
         const string STRING_DATE = "date";
         #endregion
-
+        
         #region Parameter Indices
         public const int MODIFY_PARAM_OLD_TASK = 0;
         public const int MODIFY_PARAM_NEW_TASK = 1;
@@ -65,13 +66,16 @@ namespace ToDo
         public const int SEARCH_PARAM_NUM = 2;
         #endregion
 
+        #region Parameters
         Result result;
         SortType sortType;
         bool feedbackAsWarning = false;
         string[] args;
         string feedbackString = null;
         List<Task> tasksToBeDisplayed;
+        #endregion
 
+        #region Getters
         public SortType FormatType
         {
             get { return sortType; }
@@ -88,6 +92,16 @@ namespace ToDo
         {
             get { return tasksToBeDisplayed; }
         }
+        #endregion
+
+        /// <summary>
+        /// Constructor for creating a response.
+        /// </summary>
+        /// <param name="resultType">The type of result this response should signify.</param>
+        /// <param name="sortType">The type of sort the displayed task list should be formatted in.</param>
+        /// <param name="operationType">The type of operation which created the response.</param>
+        /// <param name="tasks">The list of task to display.</param>
+        /// <param name="args">Additional arguments to format the feedback string.</param>        
         public Response(
             Result resultType,
             SortType sortType = SortType.DEFAULT,
@@ -113,11 +127,19 @@ namespace ToDo
             else return false;
         }
         
+        /// <summary>
+        /// Returns a flag signifying whether this response should signal a warning.
+        /// </summary>
+        /// <returns>True if the user should be warn; False if not.</returns>
         internal bool WarnUser()
         {
             return feedbackAsWarning;
         }
 
+        /// <summary>
+        /// Returns a flag signifiying whether the user called for an invalid task.
+        /// </summary>
+        /// <returns>True if the user tried to operate on an invalid task; False if not.</returns>
         public bool IsInvalidTask()
         {
             if (result == Result.INVALID_TASK)
@@ -125,6 +147,12 @@ namespace ToDo
             else return false;
         }
 
+        /// <summary>
+        /// Sets the feedback string based on the given result and type of operation.
+        /// </summary>
+        /// <param name="resultType">The result of the operation.</param>
+        /// <param name="operationType">The type of operation.</param>
+        /// <returns></returns>
         private void SetFeedbackString(Result resultType, Type operationType)
         {
             try
@@ -240,6 +268,10 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Gets the string representing the type of sort the user called for if any.
+        /// </summary>
+        /// <returns>The string representing the type of sort used.</returns>
         private string GetSortTypeString()
         {
             string sortTypeString = "";
