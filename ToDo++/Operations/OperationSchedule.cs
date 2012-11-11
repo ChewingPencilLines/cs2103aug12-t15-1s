@@ -350,7 +350,7 @@ namespace ToDo
                 {
                     tryEndTime = tryStartTime.AddDays(1).Add(((DateTime)endDateTime).TimeOfDay);
                 }
-                searchResults = SearchForTasks(null, false, tryStartTime, tryEndTime);
+                searchResults = SearchForTasks(null, false, tryStartTime.AddMilliseconds(1), tryEndTime.AddMilliseconds(-1));
                 if (taskDurationType == TimeRangeType.HOUR)
                 {
                     tryStartTime = tryStartTime.AddHours(1);
@@ -381,7 +381,7 @@ namespace ToDo
         private Response ScheduleTaskAtSlot(string taskName, DateTime startTime, DateTime endTime)
         {
             Response response;
-            scheduledTask = new TaskEvent(taskName, startTime, endTime.AddSeconds(-1), searchSpecificity);
+            scheduledTask = new TaskEvent(taskName, startTime, endTime, searchSpecificity);
             response = AddTask(scheduledTask);
             if (response.IsSuccessful())
             {
