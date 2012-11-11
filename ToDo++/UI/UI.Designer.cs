@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
+            BrightIdeasSoftware.OLVColumn taskDateTimeCol;
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.timerCollapse = new System.Windows.Forms.Timer(this.components);
             this.timerExpand = new System.Windows.Forms.Timer(this.components);
@@ -51,7 +51,7 @@
             this.taskDoneStateCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.preferencesPanel = new ToDo.PreferencesPanel();
-            this.taskDisplay = new System.Windows.Forms.TabPage();
+            this.consoleDisplay = new System.Windows.Forms.TabPage();
             this.outputBox = new ToDo.OutputBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.inputBox2 = new ToDo.InputBox();
@@ -73,7 +73,7 @@
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.taskListViewControl)).BeginInit();
             this.tabPage2.SuspendLayout();
-            this.taskDisplay.SuspendLayout();
+            this.consoleDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
@@ -81,13 +81,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.helpTab.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // taskDateTimeCol
-            // 
-            taskDateTimeCol.AspectName = "GetTimeString";
-            taskDateTimeCol.CellPadding = null;
-            taskDateTimeCol.FillsFreeSpace = true;
-            taskDateTimeCol.Width = 199;
             // 
             // notifyIcon_taskBar
             // 
@@ -204,7 +197,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.customPanelControl.Controls.Add(this.tabPage1);
             this.customPanelControl.Controls.Add(this.tabPage2);
-            this.customPanelControl.Controls.Add(this.taskDisplay);
+            this.customPanelControl.Controls.Add(this.consoleDisplay);
             this.customPanelControl.Controls.Add(this.helpTab);
             this.customPanelControl.Location = new System.Drawing.Point(7, 37);
             this.customPanelControl.Name = "customPanelControl";
@@ -267,7 +260,7 @@
             this.taskIndexCol.CellPadding = null;
             this.taskIndexCol.MaximumWidth = 40;
             this.taskIndexCol.MinimumWidth = 25;
-            this.taskIndexCol.Width = 32;
+            this.taskIndexCol.Width = 40;
             // 
             // taskNameCol
             // 
@@ -277,11 +270,19 @@
             this.taskNameCol.Width = 213;
             this.taskNameCol.WordWrap = true;
             // 
+            // taskDateTimeCol
+            // 
+            taskDateTimeCol.AspectName = "GetTimeString";
+            taskDateTimeCol.CellPadding = null;
+            taskDateTimeCol.FillsFreeSpace = true;
+            taskDateTimeCol.Width = 149;
+            // 
             // taskDoneStateCol
             // 
             this.taskDoneStateCol.AspectName = "DoneState";
             this.taskDoneStateCol.CellPadding = null;
             this.taskDoneStateCol.CellVerticalAlignment = System.Drawing.StringAlignment.Far;
+            this.taskDoneStateCol.Width = 82;
             // 
             // tabPage2
             // 
@@ -300,39 +301,39 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(495, 315);
+            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
             this.preferencesPanel.TabIndex = 0;
             // 
-            // taskDisplay
+            // consoleDisplay
             // 
-            this.taskDisplay.BackColor = System.Drawing.Color.White;
-            this.taskDisplay.Controls.Add(this.outputBox);
-            this.taskDisplay.Controls.Add(this.textBox3);
-            this.taskDisplay.Controls.Add(this.inputBox2);
-            this.taskDisplay.Controls.Add(this.textBox2);
-            this.taskDisplay.Controls.Add(this.textBox1);
-            this.taskDisplay.Controls.Add(this.inputBox1);
-            this.taskDisplay.Controls.Add(this.pictureBox7);
-            this.taskDisplay.Controls.Add(this.pictureBox6);
-            this.taskDisplay.Controls.Add(this.pictureBox5);
-            this.taskDisplay.Controls.Add(this.pictureBox4);
-            this.taskDisplay.Controls.Add(this.pictureBox3);
-            this.taskDisplay.Location = new System.Drawing.Point(4, 22);
-            this.taskDisplay.Name = "taskDisplay";
-            this.taskDisplay.Padding = new System.Windows.Forms.Padding(3);
-            this.taskDisplay.Size = new System.Drawing.Size(501, 321);
-            this.taskDisplay.TabIndex = 2;
-            this.taskDisplay.Text = "Task Display";
+            this.consoleDisplay.BackColor = System.Drawing.Color.Gainsboro;
+            this.consoleDisplay.Controls.Add(this.outputBox);
+            this.consoleDisplay.Controls.Add(this.textBox3);
+            this.consoleDisplay.Controls.Add(this.inputBox2);
+            this.consoleDisplay.Controls.Add(this.textBox2);
+            this.consoleDisplay.Controls.Add(this.textBox1);
+            this.consoleDisplay.Controls.Add(this.inputBox1);
+            this.consoleDisplay.Controls.Add(this.pictureBox7);
+            this.consoleDisplay.Controls.Add(this.pictureBox6);
+            this.consoleDisplay.Controls.Add(this.pictureBox5);
+            this.consoleDisplay.Controls.Add(this.pictureBox4);
+            this.consoleDisplay.Controls.Add(this.pictureBox3);
+            this.consoleDisplay.Location = new System.Drawing.Point(4, 22);
+            this.consoleDisplay.Name = "consoleDisplay";
+            this.consoleDisplay.Padding = new System.Windows.Forms.Padding(3);
+            this.consoleDisplay.Size = new System.Drawing.Size(501, 321);
+            this.consoleDisplay.TabIndex = 2;
+            this.consoleDisplay.Text = "Console";
             // 
             // outputBox
             // 
-            this.outputBox.BackColor = System.Drawing.Color.White;
+            this.outputBox.BackColor = System.Drawing.Color.Gainsboro;
             this.outputBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.outputBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.outputBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(495, 275);
+            this.outputBox.Size = new System.Drawing.Size(186, 68);
             this.outputBox.TabIndex = 28;
             this.outputBox.Text = "";
             // 
@@ -470,7 +471,7 @@
             this.helpControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.helpControl.Location = new System.Drawing.Point(3, 3);
             this.helpControl.Name = "helpControl";
-            this.helpControl.Size = new System.Drawing.Size(495, 315);
+            this.helpControl.Size = new System.Drawing.Size(186, 68);
             this.helpControl.TabIndex = 0;
             // 
             // topMenuControl
@@ -511,8 +512,8 @@
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.taskListViewControl)).EndInit();
             this.tabPage2.ResumeLayout(false);
-            this.taskDisplay.ResumeLayout(false);
-            this.taskDisplay.PerformLayout();
+            this.consoleDisplay.ResumeLayout(false);
+            this.consoleDisplay.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
@@ -532,7 +533,7 @@
         private CustomPanelControl customPanelControl;
         private PreferencesPanel preferencesPanel;
         private InputBox textInput;
-        private System.Windows.Forms.TabPage taskDisplay;
+        private System.Windows.Forms.TabPage consoleDisplay;
         private System.Windows.Forms.PictureBox pictureBox3;
         private InputBox inputBox1;
         private System.Windows.Forms.TextBox textBox1;

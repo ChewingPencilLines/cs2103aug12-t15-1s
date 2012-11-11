@@ -388,6 +388,7 @@ namespace ToDo
         {
             if (isCollapsed == false)
             {
+                topMenuControl.SetCollapsedStatus(true);
                 this.MinimumSize = new Size(522, 60);
                 grayFadePictureBox.BringToFront();
                 isCollapsed = true;
@@ -397,6 +398,7 @@ namespace ToDo
             }
             else
             {
+                topMenuControl.SetCollapsedStatus(false);
                 setHeight = 60;
                 isCollapsed = false;  
                 timerCollapse.Enabled = false;
@@ -425,6 +427,7 @@ namespace ToDo
                 grayFadePictureBox.Show();
                 taskListViewControl.Show();
                 preferencesPanel.Show();
+                helpControl.Show();
                 timerExpand.Enabled = false;
                 grayFadeTimer.Enabled = true;
             }
@@ -442,6 +445,7 @@ namespace ToDo
                     taskListViewControl.Hide();
                     preferencesPanel.Hide();
                     grayFadePictureBox.Hide();
+                    helpControl.Hide();
 
                     setHeight = this.Height;
                     prevHeight = this.Height;
@@ -511,12 +515,17 @@ namespace ToDo
 
         #region PanelSwitching
 
+        const int TASKDISPLAY_PANEL = 0;
+        const int PREFERENCES_PANEL = 1;
+        const int CONSOLE_PANEL = 2;
+        const int HELP_PANEL = 3;
+
         /// <summary>
         /// Switches to Settings Panel
         /// </summary>
         public void SwitchToSettingsPanel()
         {
-            this.customPanelControl.SelectedIndex = 1;
+            this.customPanelControl.SelectedIndex = PREFERENCES_PANEL;
         }
 
         /// <summary>
@@ -524,7 +533,7 @@ namespace ToDo
         /// </summary>
         public void SwitchToTaskListViewPanel()
         {
-            this.customPanelControl.SelectedIndex = 0;
+            this.customPanelControl.SelectedIndex = TASKDISPLAY_PANEL;
         }
 
         /// <summary>
@@ -532,7 +541,7 @@ namespace ToDo
         /// </summary>
         public void SwitchToHelpPanel()
         {
-            this.customPanelControl.SelectedIndex = 3;
+            this.customPanelControl.SelectedIndex = HELP_PANEL;
         }
 
         /// <summary>
@@ -540,13 +549,13 @@ namespace ToDo
         /// </summary>
         public void ToggleHelpToDoPanel()
         {
-            if (this.customPanelControl.SelectedIndex == 0)
+            if (this.customPanelControl.SelectedIndex == TASKDISPLAY_PANEL)
             {
-                this.customPanelControl.SelectedIndex = 3;
+                this.customPanelControl.SelectedIndex = HELP_PANEL;
             }
             else
             {
-                this.customPanelControl.SelectedIndex = 0;
+                this.customPanelControl.SelectedIndex = TASKDISPLAY_PANEL;
             }
         }
 
@@ -555,13 +564,29 @@ namespace ToDo
         /// </summary>
         public void ToggleToDoSettingsPanel()
         {
-            if (this.customPanelControl.SelectedIndex == 0)
+            if (this.customPanelControl.SelectedIndex == TASKDISPLAY_PANEL)
             {
-                this.customPanelControl.SelectedIndex = 1;
+                this.customPanelControl.SelectedIndex = PREFERENCES_PANEL;
             }
             else
             {
-                this.customPanelControl.SelectedIndex = 0;
+                this.customPanelControl.SelectedIndex = TASKDISPLAY_PANEL;
+            }
+        }
+
+        /// <summary>
+        /// Toggle between TaskListView and Console Panels
+        /// </summary>
+        public void ToggleConsolePanel()
+        {
+            if (this.customPanelControl.SelectedIndex == TASKDISPLAY_PANEL)
+            {
+                this.customPanelControl.SelectedIndex = CONSOLE_PANEL;
+                this.ActiveControl = textInput;
+            }
+            else
+            {
+                this.customPanelControl.SelectedIndex = TASKDISPLAY_PANEL;
             }
         }
 
@@ -629,6 +654,14 @@ namespace ToDo
             if (keyData == (Keys.Alt | Keys.Back))
             {
                 textInput.DeleteLastWord();
+            }
+            if (keyData == (Keys.Alt | Keys.H))
+            {
+                ToggleHelpToDoPanel();
+            }
+            if (keyData == (Keys.Alt | Keys.C))
+            {
+                ToggleConsolePanel();
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
@@ -752,6 +785,7 @@ namespace ToDo
         {
             string input = textInput.Text;
             Response output = logic.ProcessCommand(input);
+            outputBox.DisplayCommand(input, output.FeedbackString);
 
             if (output == null)
             {
@@ -773,7 +807,8 @@ namespace ToDo
 
             textInput.Clear();
 
-            SwitchToTaskListViewPanel();
+            if(customPanelControl.SelectedIndex!=CONSOLE_PANEL)
+                SwitchToTaskListViewPanel();
             logic.UpdateLastDisplayedTasksList(displayedList);
         }
 

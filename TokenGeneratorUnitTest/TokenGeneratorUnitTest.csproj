@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{398C95AD-828B-4FFC-8526-2D3B13886B3D}</ProjectGuid>
+    <ProjectGuid>{4F305FC8-F581-4914-B9EF-B0E1E7BBCB43}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ParsingLogicUnitTest</RootNamespace>
-    <AssemblyName>ParsingLogicUnitTest</AssemblyName>
+    <RootNamespace>TokenGeneratorTest</RootNamespace>
+    <AssemblyName>TokenGeneratorUnitTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -24,8 +24,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>0</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,13 +50,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CommandParserTest.cs" />
+    <Compile Include="TokensGenerateTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StringParserUnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ToDo++\ToDo++.csproj">
-      <Project>{94301a5a-fdf1-41aa-8dad-67f96d56d55f}</Project>
+      <Project>{d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5}</Project>
       <Name>ToDo++</Name>
     </ProjectReference>
   </ItemGroup>

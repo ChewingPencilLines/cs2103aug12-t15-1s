@@ -237,9 +237,9 @@ namespace LogicUnitTest
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
             result = logic.ProcessCommand("display");
-            Assert.AreEqual("Displaying all tasks.", result.FeedbackString);
+            Assert.AreEqual("No matching tasks found!", result.FeedbackString);
             Assert.AreEqual("DEFAULT", result.FormatType.ToString());
-            Assert.AreEqual("SUCCESS", result.Result.ToString());
+            Assert.AreEqual("FAILURE", result.Result.ToString());
             return;
         }
 
@@ -397,6 +397,99 @@ namespace LogicUnitTest
             result = logic.ProcessCommand("postpone \"delete\"");
             Assert.AreEqual("Trying to postpone a task by a more specific time than it allows!", result.FeedbackString);
             Assert.AreEqual("INVALID_TASK", result.Result.ToString());
+            return;
+        }
+
+        [TestMethod]
+        public void CheckSpacesTest()
+        {
+            Response result;
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            result = logic.ProcessCommand("add  a  3  pm to  9 PM");
+            Assert.AreEqual("Added new task \"a\" successfully.", result.FeedbackString);
+            Type type = result.TasksToBeDisplayed[0].GetType();
+            Assert.AreEqual("ToDo.TaskEvent", type.ToString());
+            return;
+        }
+
+        [TestMethod]
+        public void TimeRangeTest()
+        {
+            Response result;
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            result = logic.ProcessCommand("add a morning 3am to 5 am");
+            Assert.AreEqual("Added new task \"a\" successfully.", result.FeedbackString);
+            Type type = result.TasksToBeDisplayed[0].GetType();
+            Assert.AreEqual("ToDo.TaskEvent", type.ToString());
+            result = logic.ProcessCommand("add a morning 4th");
+            Assert.AreEqual("Added new task \"a\" successfully.", result.FeedbackString);
+            type = result.TasksToBeDisplayed[1].GetType();
+            Assert.AreEqual("ToDo.TaskEvent", type.ToString());
+            result = logic.ProcessCommand("add a morning evening night");
+            Assert.AreEqual("Added new task \"a\" successfully.", result.FeedbackString);
+            type = result.TasksToBeDisplayed[2].GetType();
+            Assert.AreEqual("ToDo.TaskEvent", type.ToString());
+            return;
+        }
+
+        [TestMethod]
+        public void ScheduleTest()
+        {
+            Response result;
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            logic.ProcessCommand("add a tmr 4am to 5 am");
+            logic.ProcessCommand("add a tmr afternoon");
+            result = logic.ProcessCommand("schedule aaa 1 hour tmr morning");
+            Assert.AreEqual("Scheduled new task \"aaa\" successfully.", result.FeedbackString);
+            Type type = result.TasksToBeDisplayed[2].GetType();
+            Assert.AreEqual("ToDo.TaskEvent", type.ToString());
+            return;
+        }
+
+        [TestMethod]
+        public void ScheduleFailTest()
+        {
+            Response result;
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            logic.ProcessCommand("add a tmr 4am to 10 am");
+            logic.ProcessCommand("add a tmr afternoon");
+            result = logic.ProcessCommand("schedule aaa 5 hours tmr morning");
+            Assert.AreEqual("Task could not be scheduled within specified time range (no free slot)!", result.FeedbackString);
+            return;
+        }
+
+        [TestMethod]
+        public void ScheduleStrictTest()
+        {
+            Response result;
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            logic.ProcessCommand("add a tmr 4am to 10am");
+            logic.ProcessCommand("add a tmr afternoon");
+            result = logic.ProcessCommand("schedule aaa 2 hours tmr morning");
+            Assert.AreEqual("Task could not be scheduled within specified time range (no free slot)!", result.FeedbackString);
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            logic.ProcessCommand("add a tmr 4am to tmr 9:59 am");
+            logic.ProcessCommand("add a tmr afternoon");
+            result = logic.ProcessCommand("schedule aaa 2 hours tmr morning");
+            Assert.AreEqual("Scheduled new task \"aaa\" successfully.", result.FeedbackString);
+        }
+
+        [TestMethod]
+        public void ScheduleStrictTest2()
+        {
+            Response result;
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            logic.ProcessCommand("add a 1/6/13  to 5/6/13");
+            logic.ProcessCommand("add a 7/6/13  to 30/6/13 ");
+            result = logic.ProcessCommand("schedule aaa 1 day, june");
+            Assert.AreEqual("Scheduled new task \"aaa\" successfully.", result.FeedbackString);
             return;
         }
     }
