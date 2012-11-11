@@ -634,6 +634,10 @@ namespace ToDo
             {
                 textInput.DeleteLastWord();
             }
+            if (keyData == (Keys.Alt | Keys.H))
+            {
+                ToggleHelpToDoPanel();
+            }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 

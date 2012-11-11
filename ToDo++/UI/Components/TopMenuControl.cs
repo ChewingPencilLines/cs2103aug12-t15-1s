@@ -77,6 +77,7 @@ namespace ToDo
             {
                 ui.SwitchToSettingsPanel();
                 isHelp = false;
+                isSettings = true;
                 return;
             }
 
@@ -96,6 +97,7 @@ namespace ToDo
             {
                 ui.SwitchToHelpPanel();
                 isSettings = false;
+                isHelp = true;
                 return;
             }
 

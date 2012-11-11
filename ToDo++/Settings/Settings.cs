@@ -151,6 +151,8 @@ namespace ToDo
 
         #endregion
 
+        #region TaskColorsGetterSetters
+
         /// <summary>
         /// Set task done color
         /// </summary>
@@ -168,12 +170,62 @@ namespace ToDo
         /// </summary>
         /// <returns>task done color</returns>
         public Color GetTaskDoneColor() { return settingInfo.misc.TaskDoneColor; }
-        public void SetTaskMissedDeadlineColor(Color col) { settingInfo.misc.TaskMissedDeadlineColor = col; EventHandlers.UpdateSettings(settingInfo); }
+
+        /// <summary>
+        /// Set task missed deadline color
+        /// </summary>
+        /// <param name="col">task missed deadline color</param>
+        public void SetTaskMissedDeadlineColor(Color col) 
+        { 
+            settingInfo.misc.TaskMissedDeadlineColor = col; 
+            EventHandlers.UpdateSettings(settingInfo);
+            string loggerString = string.Format("User set task missed deadline color to {0}..", col.ToString());
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get task missed deadline color
+        /// </summary>
+        /// <returns>task missed deadline color</returns>
         public Color GetTaskMissedDeadlineColor() { return settingInfo.misc.TaskMissedDeadlineColor; }
-        public void SetTaskNearingDeadlineColor(Color col) { settingInfo.misc.TaskNearingDeadlineColor = col; EventHandlers.UpdateSettings(settingInfo); }
+
+        /// <summary>
+        /// Set task nearing deadline color
+        /// </summary>
+        /// <param name="col">task nearing deadline color</param>
+        public void SetTaskNearingDeadlineColor(Color col) 
+        { 
+            settingInfo.misc.TaskNearingDeadlineColor = col; 
+            EventHandlers.UpdateSettings(settingInfo);
+            string loggerString = string.Format("User set task nearing deadline color to {0}..", col.ToString());
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get task nearing deadline color
+        /// </summary>
+        /// <returns>task nearing deadline color</returns>
         public Color GetTaskNearingDeadlineColor() { return settingInfo.misc.TaskNearingDeadlineColor; }
-        public void SetTaskOverColor(Color col) { settingInfo.misc.TaskOverColor = col; EventHandlers.UpdateSettings(settingInfo); }
+
+        /// <summary>
+        /// Set task over color
+        /// </summary>
+        /// <param name="col">task over color</param>
+        public void SetTaskOverColor(Color col) 
+        { 
+            settingInfo.misc.TaskOverColor = col; 
+            EventHandlers.UpdateSettings(settingInfo);
+            string loggerString = string.Format("User set task over color to {0}..", col.ToString());
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get task over color
+        /// </summary>
+        /// <returns>task over color</returns>
         public Color GetTaskOverColor() { return settingInfo.misc.TaskOverColor; }
+
+        #endregion
 
         public void SetDefaultScheduleTimeLength(int length) { settingInfo.misc.DefaultScheduleTimeLength = length; EventHandlers.UpdateSettings(settingInfo); UpdateDictionaryPostponeSchedule(); }
         public int GetDefaultScheduleTimeLength() { return settingInfo.misc.DefaultScheduleTimeLength; }
