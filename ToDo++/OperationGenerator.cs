@@ -18,64 +18,91 @@ namespace ToDo
         // ******************************************************************
 
         #region Operation Properties
-        public CommandType commandType = new CommandType();
-        public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
-        public TimeRangeType timeRangeType = new TimeRangeType();
-        public TimeRangeKeywordsType timeRangeOne = new TimeRangeKeywordsType();
-        public TimeRangeKeywordsType timeRangeTwo = new TimeRangeKeywordsType();
-        public SortType sortType = new SortType();
-        public SearchType searchType = new SearchType();
-        public string taskName = null;
-        public int[] taskRangeIndex = null;
-        public int timeRangeIndex = 0;
-        public bool rangeIsAll = false;
+        public CommandType commandType;
+        public DateTimeSpecificity isSpecific;
+        public TimeRangeType timeRangeType;
+        public TimeRangeKeywordsType timeRangeOne;
+        public TimeRangeKeywordsType timeRangeTwo;
+        public SortType sortType;
+        public SearchType searchType;
+        public string taskName;
+        public int[] taskRangeIndex;
+        public int timeRangeIndex;
+        public bool rangeIsAll;
         #endregion
 
         // ******************************************************************
-        // Configuration For Operation Generation
+        // Configuration Attributes For Operation Generation
         // ******************************************************************
 
-        #region Configuration For Operation Generation
+        #region Configuration Attributes For Operation Generation
         // The following properties are only used internally once set and hence cannot be "get".
         // Set as private to prevent confusion.
-        private TimeSpan? startTimeOnly = null, endTimeOnly = null;
-        private DateTime? startDateOnly = null, endDateOnly = null;
-        private DayOfWeek? startDay = null, endDay = null;
+        private TimeSpan? startTimeOnly, endTimeOnly;
+        private DateTime? startDateOnly, endDateOnly;
+        private bool startDayOfWeekSet, endDayOfWeekSet;
 
         // Setter methods
         public TimeSpan? EndTimeOnly { set { endTimeOnly = value; } }
         public TimeSpan? StartTimeOnly { set { startTimeOnly = value; } }
         public DateTime? EndDateOnly { set { endDateOnly = value; } }
         public DateTime? StartDateOnly { set { startDateOnly = value; } }
-        public DayOfWeek? EndDay { set { endDay = value; } }
-        public DayOfWeek? StartDay { set { startDay = value; } }
+        public bool EndDayOfWeekSet { set { endDayOfWeekSet = value; } }
+        public bool StartDayOfWeekSet { set { startDayOfWeekSet = value; } }
 
         // The following attributes are used during derivation of Operation type and should not be otherwised used.
-        public ContextType currentSpecifier = new ContextType();
-        public ContextType currentMode = new ContextType();
-        private DateTime? startDateTime = null, endDateTime = null;
-        private bool crossDayBoundary = false;
+        public ContextType currentSpecifier;
+        public ContextType currentMode;
+        private DateTime? startDateTime, endDateTime;
+        private bool crossDayBoundary;
         #endregion
 
         // ******************************************************************
-        // Constructors
+        // Constructors and initializers
         // ******************************************************************
-        #region Constructors
+
+        #region Constructors and initializers
         /// <summary>
         /// Constructor for the generator which initializes it's 
         /// settings to the default values.
         /// </summary>
-        /// <returns>Nothing.</returns>
         public OperationGenerator()
         {
-            InitializeEnumerations();
+            InitializeNewConfiguration();
         }
 
         /// <summary>
-        /// Initializes enums to their default values.
+        /// Initializes the generator's configuration to it's default values.
         /// </summary>
-        /// <returns>Nothing.</returns>
-        private void InitializeEnumerations()
+        /// <returns></returns>
+        public void InitializeNewConfiguration()
+        {
+            commandType = new CommandType();
+            isSpecific = new DateTimeSpecificity();
+            timeRangeType = new TimeRangeType();
+            timeRangeOne = new TimeRangeKeywordsType();
+            timeRangeTwo = new TimeRangeKeywordsType();
+            sortType = new SortType();
+            searchType = new SearchType();
+            taskName = null;
+            taskRangeIndex = null;
+            timeRangeIndex = 0;
+            rangeIsAll = false;
+            startDateTime = null; endDateTime = null;
+            startTimeOnly = null; endTimeOnly = null;
+            startDateOnly = null; endDateOnly = null;
+            startDayOfWeekSet = false; endDayOfWeekSet = false;
+            currentSpecifier = new ContextType();
+            currentMode = new ContextType();
+            crossDayBoundary = false;
+
+            ResetEnumerations();
+        }
+
+        /// <summary>
+        /// Resets enums to their default values.
+        /// </summary>
+        private void ResetEnumerations()
         {
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
@@ -87,6 +114,7 @@ namespace ToDo
             timeRangeTwo = TimeRangeKeywordsType.NONE;
         }
         #endregion
+
         // ******************************************************************
         // Finalize generator for operation creation
         // ******************************************************************
@@ -114,7 +142,7 @@ namespace ToDo
         /// Returns true if the operation to be generated can carry out a search
         /// on the task list, and false if not.
         /// </summary>
-        /// <returns>True if the command is of a searchable type; false if otherwise</returns>
+        /// <returns>Boolean indicating if the command is of a searchable type.</returns>
         private bool CommandIsSearchableType()
         {
             return !((commandType == CommandType.ADD) ||
@@ -131,8 +159,9 @@ namespace ToDo
         /// Finalizes the date/times of the operation to be generated
         /// by setting it as an appropriate search range.
         /// </summary>
+        /// <returns></returns>
         private void FinalizeSearchTime()
-        { 
+        {
             // If searching only for a single time, assume it's the end time.
             if (IsOnlyStartTimeSet())
             {
@@ -150,9 +179,7 @@ namespace ToDo
 
             // If end time is not specific, extend search range to cover appropriate period.
             if (endDateOnly != null && endTimeOnly == null)
-            {
                 ExtendEndSearchDate();
-            }
         }
 
         /// <summary>
@@ -179,14 +206,13 @@ namespace ToDo
         /// Extends the end date to the end of the day, month or year,
         /// depending on the already set Specificity of the generator.
         /// </summary>
-        /// <returns>Nothing.</returns>
         private void ExtendEndSearchDate()
-        {     
+        {
             if (!isSpecific.EndDate.Day)
             {
                 ExtendEndMonthOrYear();
                 endDateOnly = endDateOnly.Value.AddMinutes(-1);
-            }            
+            }
             else if (isSpecific.StartDate.Day == true)
             {
                 ExtendEndDay();
@@ -197,7 +223,6 @@ namespace ToDo
         /// Extends the end date to the end of the month or year,
         /// depending on the already set Specificity of the generator.
         /// </summary>
-        /// <returns>Nothing.</returns>
         private void ExtendEndMonthOrYear()
         {
             if (!isSpecific.EndDate.Month)
@@ -214,7 +239,6 @@ namespace ToDo
         /// <summary>
         /// Extends the end date to the end of the day.
         /// </summary>
-        /// <returns>Nothing.</returns>
         private void ExtendEndDay()
         {
             endDateOnly = new DateTime(endDateOnly.Value.Year, endDateOnly.Value.Month, endDateOnly.Value.Day, 23, 59, 0);
@@ -466,8 +490,32 @@ namespace ToDo
                 combinedDT = combinedDT.Value.AddDays(1);
             }
             if (limit > combinedDT)
+            {
                 if (this.commandType == CommandType.ADD)
-                    AlertBox.Show("Note that date specified is past.");
+                {
+                    if (endDayOfWeekSet)
+                    {
+                        while (limit > combinedDT)
+                        {
+                            combinedDT = combinedDT.Value.AddDays(7);
+                        }
+                    }
+                    if (!isSpecific.EndDate.Month)
+                    {
+                        while (limit > combinedDT)
+                        {
+                            combinedDT = combinedDT.Value.AddMonths(1);
+                        }
+                    }
+                    else if (!isSpecific.EndDate.Year)
+                    {
+                        while (limit > combinedDT)
+                        {
+                            combinedDT = combinedDT.Value.AddYears(1);
+                        }
+                    }
+                }
+            }
             return combinedDT;
         }
         #endregion
@@ -553,7 +601,7 @@ namespace ToDo
             return newOperation;
         }
         #endregion
-        
+
         // ******************************************************************
         // Generator configuration methods
         // ******************************************************************
@@ -565,6 +613,7 @@ namespace ToDo
         /// </summary>
         /// <param name="Value">The end time to be set.</param>
         /// <param name="IsSpecific">The specificity of the end time.</param>
+        /// <returns></returns>
         internal void SetConditionalEndTime(TimeSpan Value, bool IsSpecific)
         {
             if (startTimeOnly == null && endTimeOnly != null)
