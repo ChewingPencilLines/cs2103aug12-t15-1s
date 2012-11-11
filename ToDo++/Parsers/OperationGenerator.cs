@@ -519,16 +519,24 @@ namespace ToDo
             {
                 isSpecific.EndTime = false;
             }
+            if (startDateOnly == null)
+            {
+                isSpecific.StartDate = new Specificity(false, false, false);
+            }
+            if (endDateOnly == null)
+            {
+                isSpecific.EndDate = new Specificity(false, false, false);
+            }
             // If only one date is specified, we assume both dates is that date.
             if (isSpecific.StartTime && isSpecific.EndTime)
             {
-                // assign start date to end date
+                // assign end date to start date
                 if (startDateOnly == null && endDateOnly != null)
                 {
                     startDateOnly = endDateOnly;
                     isSpecific.StartDate = isSpecific.EndDate;
                 }
-                // assign end date to start date
+                // assign start date to end date
                 else if (startDateOnly != null && endDateOnly == null)
                 {
                     endDateOnly = startDateOnly;
@@ -588,12 +596,10 @@ namespace ToDo
             {
                 combinedDT = date;
             }
+
             if (limit > combinedDT)
-                PushDateToBeyondLimit(ref combinedDT, ref dateSpecificity, limit, allowCurrent);
-            /*if (crossDayBoundary || (combinedDT < limit && dateSpecificity.Day == false))
-            {
-                combinedDT = combinedDT.Value.AddDays(1);
-            }*/
+                PushDateToBeyondLimit(ref combinedDT, ref dateSpecificity, limit, allowCurrent && time == null);
+
             return combinedDT;
         }
 
@@ -622,8 +628,17 @@ namespace ToDo
                     allowCurrent)
                     return;
 
+                // Move by days until day is beyond limits.
+                if (!dateSpecificity.Day)
+                {
+                    while (limit > dateToCheck)
+                        dateToCheck = dateToCheck.Value.AddDays(1);
+
+                    dateSpecificity.Day = true;
+                }
+
                 // Move by months until date is beyond limits
-                if (!dateSpecificity.Month)
+                else if (!dateSpecificity.Month)
                 {
                     while (limit > dateToCheck)
                         dateToCheck = dateToCheck.Value.AddMonths(1);
@@ -653,8 +668,8 @@ namespace ToDo
         private bool DateIsAmbiguous( ref DateTime? dateToCheck, ref Specificity dateSpecificity )
         {
 	        return dateToCheck.Value.Month == DateTime.Today.Month &&
-                            dateToCheck.Value.Year == DateTime.Today.Year &&
-                            dateSpecificity.Day == false;
+                   dateToCheck.Value.Year == DateTime.Today.Year &&
+                   dateSpecificity.Day == false;
         }
 
         /// <summary>

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
+    /// <summary>
+    /// This class contains flags representing whether a date
+    /// was fully specified by the user or was left ambiguous.
+    /// </summary>
     public class Specificity
     {
         private bool day;
@@ -30,8 +34,16 @@ namespace ToDo
         public bool Day { get { return day; } set { day = value; } }
         public bool Month { get { return month; } set { month = value; } }
         public bool Year { get { return year; } set { year = value; } }
+        /// <summary>
+        /// Gets a flag indicating if the entire date was fully specified.
+        /// </summary>
+        /// <returns>True if the entire date was fully specified.</returns>
+        public bool Full() { return (day && month && year); }
     }
 
+    /// <summary>
+    /// This class contains flags representing whether a set of two dates and times
+    /// were fully specified by the user or were left ambiguous.
     public class DateTimeSpecificity
     {
         private Specificity startDate;
@@ -70,6 +82,14 @@ namespace ToDo
         {
             get { return endTime; }
             set { endTime = value; }
+        }
+        /// <summary>
+        /// Gets a flag indicating if all dates and times were fully specified.
+        /// </summary>
+        /// <returns>True if all dates and times were fully specified.</returns>
+        public bool Full()
+        {
+            return (startTime && endTime && startDate.Full() && endDate.Full());
         }
     }
 }
