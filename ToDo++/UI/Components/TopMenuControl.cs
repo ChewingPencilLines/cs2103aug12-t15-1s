@@ -34,6 +34,11 @@ namespace ToDo
             this.ui = ui;
         }
 
+        public void SetCollapsedStatus(bool collapsed)
+        {
+            isCollapsed = collapsed;
+        }
+
         /// <summary>
         /// Disable Button Color Change when mouse over
         /// </summary>
@@ -72,6 +77,7 @@ namespace ToDo
             {
                 ui.SwitchToSettingsPanel();
                 isHelp = false;
+                isSettings = true;
                 return;
             }
 
@@ -91,6 +97,7 @@ namespace ToDo
             {
                 ui.SwitchToHelpPanel();
                 isSettings = false;
+                isHelp = true;
                 return;
             }
 

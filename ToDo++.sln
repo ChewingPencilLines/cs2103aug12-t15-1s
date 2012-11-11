@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicUnitTest", "LogicUnitT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranspControl", "TranspControl\TranspControl.csproj", "{984B6860-3AE3-420A-BB8D-BCE5AB333141}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenGeneratorUnitTest", "TokenGeneratorUnitTest\TokenGeneratorUnitTest.csproj", "{4F305FC8-F581-4914-B9EF-B0E1E7BBCB43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{984B6860-3AE3-420A-BB8D-BCE5AB333141}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{984B6860-3AE3-420A-BB8D-BCE5AB333141}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{984B6860-3AE3-420A-BB8D-BCE5AB333141}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F305FC8-F581-4914-B9EF-B0E1E7BBCB43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F305FC8-F581-4914-B9EF-B0E1E7BBCB43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F305FC8-F581-4914-B9EF-B0E1E7BBCB43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F305FC8-F581-4914-B9EF-B0E1E7BBCB43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

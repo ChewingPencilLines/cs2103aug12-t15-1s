@@ -37,6 +37,7 @@
             this.transpControl = new TranspControl.TranspControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.introButton = new System.Windows.Forms.Button();
+            this.manualButton = new System.Windows.Forms.Button();
             this.customPanelControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -114,6 +115,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabPage2.Controls.Add(this.manualButton);
             this.tabPage2.Controls.Add(this.introButton);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -138,6 +140,22 @@
             this.introButton.UseVisualStyleBackColor = false;
             this.introButton.Click += new System.EventHandler(this.introButton_Click);
             // 
+            // manualButton
+            // 
+            this.manualButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.manualButton.BackColor = System.Drawing.Color.DimGray;
+            this.manualButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.manualButton.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.manualButton.ForeColor = System.Drawing.Color.Gainsboro;
+            this.manualButton.Location = new System.Drawing.Point(3, 38);
+            this.manualButton.Name = "manualButton";
+            this.manualButton.Size = new System.Drawing.Size(492, 26);
+            this.manualButton.TabIndex = 2;
+            this.manualButton.Text = "User Manual";
+            this.manualButton.UseVisualStyleBackColor = false;
+            this.manualButton.Click += new System.EventHandler(this.manualButton_Click);
+            // 
             // HelpControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -146,6 +164,7 @@
             this.Controls.Add(this.customPanelControl);
             this.Name = "HelpControl";
             this.Size = new System.Drawing.Size(512, 372);
+            this.Leave += new System.EventHandler(this.HelpControl_Leave);
             this.customPanelControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
@@ -164,5 +183,6 @@
         private System.Windows.Forms.Timer fadeInTimer;
         private System.Windows.Forms.Timer fadeOutTimer;
         private System.Windows.Forms.Button introButton;
+        private System.Windows.Forms.Button manualButton;
     }
 }
