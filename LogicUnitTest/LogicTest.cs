@@ -95,7 +95,7 @@ namespace IntegrationTests
             logic.ProcessCommand("add bb JAN 3");
             logic.ProcessCommand("add bA JAN 5");
             result = logic.ProcessCommand("delete jan");
-            Assert.AreEqual("Displaying all tasks within 1/1/2013 12:00 AM to 1/31/2013 11:59 PM.", result.FeedbackString);
+            Assert.AreEqual("Displaying all tasks within 2013/1/1 0:00 to 2013/1/31 23:59.", result.FeedbackString);
             Assert.AreEqual("bb", result.TasksToBeDisplayed[0].TaskName);
             Assert.AreEqual("bA", result.TasksToBeDisplayed[1].TaskName);
             Assert.AreEqual("DEFAULT", result.FormatType.ToString());

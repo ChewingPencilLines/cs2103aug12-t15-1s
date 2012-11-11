@@ -13,7 +13,7 @@ namespace TokenGeneratorTest
         List<Token> result;
 
         [TestMethod]
-        public void GenerateAllTokensTest1()
+        public void SimpleAddTest() 
         {
             input = new List<string>();
             input.Add("add");
@@ -30,7 +30,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest2()
+        public void SimpleDaterangeAddTest()
         {
             input = new List<string>();
             input.Add("add");
@@ -49,7 +49,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest3()
+        public void DateTimeParseTest1()
         {
             input = new List<string>();
             input.Add("delete");
@@ -62,7 +62,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest4()
+         public void DateTimeParseTest2()
         {
             input = new List<string>();
             input.Add("delete");
@@ -75,7 +75,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest5()
+        public void DateTimeParseTest3()
         {
             input = new List<string>();
             input.Add("postpone");
@@ -105,7 +105,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest7()
+        public void IndexRangeTest()
         {
             input = new List<string>();
             input.Add("delete");
@@ -117,8 +117,8 @@ namespace TokenGeneratorTest
             return;
         }
 
-        [TestMethod]
-        public void GenerateAllTokensTest8()
+        [TestMethod] 
+        public void IndexRangeFailTest()
         {
             input = new List<string>();
             input.Add("delete");
@@ -131,7 +131,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest9()
+        public void CombinedTest1()
         {
             input = new List<string>();
             input.Add("add");
@@ -154,7 +154,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest10()
+        public void CombinedTest2()
         {
             input = new List<string>();
             input.Add("add");
@@ -177,7 +177,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest11()
+        public void SortTypeTest() 
         {
             input = new List<string>();
             input.Add("sort");
@@ -190,7 +190,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest12()
+        public void TimeRangeTest()
         {
             input = new List<string>();
             input.Add("add");
@@ -212,7 +212,7 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void GenerateAllTokensTest13()
+        public void DateRangeTest() 
         {
             input = new List<string>();
             input.Add("add");
