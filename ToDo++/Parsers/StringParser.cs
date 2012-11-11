@@ -119,16 +119,12 @@ namespace ToDo
                 processedIndex = substringIndex[END_INDEX] + 1;
                 removedCount += count;
             }
-
             // Add remaining words
             string remainingStr = input.Substring(processedIndex);
             words.AddRange(remainingStr.Split(null as string[], StringSplitOptions.RemoveEmptyEntries).ToList());            
             words = MergeDateAndTimeWords(words);
-            Logger.Info("Successfully merged all date and time words", "SplitStringIntoSubstrings::StringParser");
             words = MergeNumericalRangeWords(words);
-            Logger.Info("Successfully merged all numerical range words", "SplitStringIntoSubstrings::StringParser");
             words = MergeTimeRangeWords(words);
-            Logger.Info("Successfully merged all time range words", "SplitStringIntoSubstrings::StringParser");
             return words;
         }
 
@@ -160,7 +156,7 @@ namespace ToDo
                             break;
                         }
                         matchCheck += words[i + j];
-                        Logger.Info("Numerical range words found and merged", "MergeNumericalRangeWords::StringParser");
+                        Logger.Info("Numerical range words (" + matchCheck + ") and merged", "MergeNumericalRangeWords::StringParser");
                     }
                     else break;
                     j++;
@@ -194,8 +190,9 @@ namespace ToDo
                         return true;
                     }
                 }
-                catch (ArgumentOutOfRangeException)
+                catch (ArgumentOutOfRangeException ex)
                 {
+                    Logger.Error(ex, "AdjacentCharsAreNumerical::StringParser");
                     return false;
                 }
             }
@@ -225,6 +222,7 @@ namespace ToDo
                 }
                 if (mergedWord != null)
                 {
+                    Logger.Info("Time range words  (" + mergedWord + ") found and merged", "MergeTimeRangeWords::StringParser");
                     output.RemoveAt(output.Count-1);
                     output.Add(mergedWord);
                 }
@@ -300,6 +298,7 @@ namespace ToDo
             string mergedWord = String.Concat(frontHalf, " ", backHalf);
             if (CustomDictionary.IsValidTime(mergedWord))
             {
+                Logger.Info("Valid time word (" + mergedWord + ") found and merged", "MergeWord_IfValidTime::StringParser");
                 output.RemoveAt(output.Count - 1);
                 output.Add(mergedWord);
                 return true;
@@ -390,6 +389,7 @@ namespace ToDo
             {
                 output.RemoveAt(output.Count - 1);
             }
+            Logger.Info("Valid alphabetic word (" + mergedWord + ") found and merged", "MergeWord_IfValidAlphabeticDate::StringParser");
             output.Add(mergedWord);
             numberOfWords = i - 1;
             return true;
@@ -440,7 +440,9 @@ namespace ToDo
             foreach (int[] set in indexOfDelimiters)
             {
                 if (set[START_INDEX] < previousEndIndex)
+                {
                     indexesToRemove.Add(set);
+                }
                 previousEndIndex = set[END_INDEX];
             }
             indexOfDelimiters.RemoveAll(x => indexesToRemove.Contains(x));
