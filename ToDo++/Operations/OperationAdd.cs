@@ -32,7 +32,7 @@ namespace ToDo
 
         #region ExecuteOperation
         /// <summary>
-        /// Executes the operation and adds it to the operation history.
+        /// Executes the operation and adds it to the global operation history.
         /// </summary>
         /// <param name="taskList">List of task this method will operate on.</param>
         /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>

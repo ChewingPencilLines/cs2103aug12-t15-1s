@@ -8,6 +8,11 @@ namespace ToDo
 {
     public class OperationSchedule : Operation
     {
+        // ******************************************************************
+        // Parameters
+        // ******************************************************************
+
+        #region Parameters
         string taskName;
         DateTime startDateTime;
         DateTime? endDateTime;
@@ -16,7 +21,26 @@ namespace ToDo
         TimeRangeType taskDurationType;
         Task scheduledTask;
         DateTimeSpecificity searchSpecificity = new DateTimeSpecificity();
-        
+        #endregion
+
+        // ******************************************************************
+        // Constructors
+        // ******************************************************************
+
+        #region Constructors
+        /// <summary>
+        /// This is the base constructor for the Schedule operation.
+        /// This operation accepts a time range and tries to schedule a task
+        /// for the specified time period within the time range at the earliest
+        /// possible point on execution.
+        /// <param name="taskName">The name of the task to schedule.</param>
+        /// <param name="startDateTime">The start date/time which the task should be scheduled within.</param>
+        /// <param name="endDateTime">The end date/time which the task should be scheduled within.</param>
+        /// <param name="isSpecific">The specificity of the start and end date time ranges.</param>
+        /// <param name="timeRangeAmount">The numerical value of the task length of the task to be scheduled.</param>
+        /// <param name="timeRangeType">The type of time length the task uses: hour, day, week or month.</param>
+        /// <param name="sortType">The type of sort to sort the diplay list by after the operation is executed.</param>
+        /// <returns>Nothing.</returns>
         public OperationSchedule(
             string taskName,
             DateTime startDateTime,
@@ -34,7 +58,20 @@ namespace ToDo
             this.taskDurationAmount = timeRangeAmount;
             this.taskDurationType = timeRangeType;
         }
+        #endregion
 
+        // ******************************************************************
+        // Override for Executing this operation
+        // ******************************************************************
+
+        #region ExecuteOperation
+        /// <summary>
+        /// Executes the operation and adds it to the operation history.
+        /// This operation tries to schedule a task within the given parameters.
+        /// </summary>
+        /// <param name="taskList">List of task this operation will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the operation execution.</returns>
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             Response response;
@@ -50,7 +87,19 @@ namespace ToDo
             }
             return response;
         }
+        #endregion
 
+        // ******************************************************************
+        // Overrides for Undoing and Redoing this operation
+        // ******************************************************************
+
+        #region Undo and Redo
+        /// <summary>
+        /// Undoes this operation.
+        /// </summary>
+        /// <param name="taskList">List of task this method will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the undo operation.</returns>
         public override Response Undo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
@@ -61,6 +110,12 @@ namespace ToDo
                 return new Response(Result.FAILURE, sortType, typeof(OperationUndo), currentListedTasks);
         }
 
+        /// <summary>
+        /// Redoes this operation.
+        /// </summary>
+        /// <param name="taskList">List of task this method will operate on.</param>
+        /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
+        /// <returns>Response indicating the result of the undo operation.</returns>
         public override Response Redo(List<Task> taskList, Storage storageIO)
         {
             SetMembers(taskList, storageIO);
@@ -70,6 +125,7 @@ namespace ToDo
             else
                 return new Response(Result.FAILURE, sortType, typeof(OperationRedo), currentListedTasks);
         }
+        #endregion
 
         // ******************************************************************
         // Private Methods
