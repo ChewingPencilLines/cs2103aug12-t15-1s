@@ -294,7 +294,7 @@ namespace ToDo
                 {
                     tryEndTime = tryStartTime.AddDays(1).Add(((DateTime)endDateTime).TimeOfDay);
                 }
-                searchResults = SearchForTasks(null, false, tryStartTime, tryEndTime);
+                searchResults = SearchForTasks(null, false, tryStartTime.AddMilliseconds(1), tryEndTime.AddMilliseconds(-1));
                 if (taskDurationType == TimeRangeType.HOUR)
                 {
                     tryStartTime = tryStartTime.AddHours(1);
