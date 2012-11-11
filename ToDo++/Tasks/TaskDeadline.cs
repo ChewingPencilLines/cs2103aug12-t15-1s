@@ -120,14 +120,13 @@ namespace ToDo
             if ((!isSpecific.EndTime && postponeDuration.Hours != 0) ||
                 (!isSpecific.EndDate.Day && postponeDuration.Days != 0))
             {
-                Logger.Warning("Attempted to postpone a deadline task with no start and end datetimes.", "Postpone::TaskDeadline");
+                Logger.Warning("Attempted to postpone an ambiguous deadline task.", "Postpone::TaskDeadline");
                 return false;
             }
 
             try
             {
                 endDateTime = endDateTime.Add(postponeDuration);
-                Logger.Info("Attmpted to postpone deadline task.", "Postpone::TaskDeadline");
             }
             catch
             {
@@ -142,7 +141,6 @@ namespace ToDo
             startTime = null;
             endTime = this.endDateTime;
             specific = this.isSpecific;
-            Logger.Info("Updated datetimes and their specificity.", "CopyDateTimes::TaskDeadline");
         } 
     }
 }
