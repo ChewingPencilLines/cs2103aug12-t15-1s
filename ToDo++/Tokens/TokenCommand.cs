@@ -64,14 +64,26 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// This method checks if the command is of a type that accepts index ranges i.e. delete
+        /// </summary>
+        /// <returns>True if positive; false if otherwise</returns>
         internal bool RequiresIndexRange()
         {
             if (indexRangeableCommandTypes.Contains(Value))
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
 
+        /// <summary>
+        /// This method checks if the command is of a type that accepts time ranges i.e. schedule
+        /// </summary>
+        /// <returns>True if positive; false if otherwise</returns>
         internal bool RequiresTimeRange()
         {
             if (timeRangeableCommandTypes.Contains(Value))
