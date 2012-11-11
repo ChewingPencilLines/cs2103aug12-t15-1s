@@ -66,41 +66,23 @@ namespace ToDo
             {
                 startCompare = (DateTime)start;
 
-                // If task is not specific to Day/Month, extend search range
-                if (!isSpecific.StartDate.Day && !isSpecific.StartTime)
+                if (!isSpecific.StartTime)
                 {
-                    if (!isSpecific.StartDate.Month)
-                    {
-                        startCompare = new DateTime(startCompare.Year, 1, 1);
-                    }
-                    else
-                    {
-                        startCompare = new DateTime(startCompare.Year, startCompare.Month, 1);
-                    }
+                    ExtendStartSearchRange(ref startCompare);
                 }
-
                 if (endDateTime < startCompare)
                 {
                     isWithinTime = false;
                 }
             }
+
             if (end != null)
             {
                 endCompare = (DateTime)end;
 
-                // Extend compare range if task dates are not specific                
-                if (!isSpecific.EndDate.Day && !isSpecific.EndTime)
+                if (!isSpecific.EndTime)
                 {
-                    if (!isSpecific.EndDate.Month)
-                    {
-                        endCompare = new DateTime(endCompare.Year + 1, 1, 1);
-                    }
-                    else
-                    {
-                        endCompare = endCompare.AddMonths(1);
-                        endCompare = new DateTime(endCompare.Year, endCompare.Month, 1);
-                    }
-                    endCompare = endCompare.AddMinutes(-1);
+                    ExtendEndSearchRange(ref endCompare);
                 }
 
                 if (startDateTime > endCompare)
@@ -109,6 +91,40 @@ namespace ToDo
                 }
             }
             return isWithinTime;
+        }
+
+        private void ExtendStartSearchRange(ref DateTime startCompare)
+        {
+            if (!isSpecific.StartDate.Month)
+            {
+                startCompare = new DateTime(startCompare.Year, 1, 1);
+            }
+            else if (!isSpecific.StartDate.Day)
+            {
+                startCompare = new DateTime(startCompare.Year, startCompare.Month, 1);
+            }
+            else
+            {
+                startCompare = startCompare.Date;
+            }
+        }
+
+        private void ExtendEndSearchRange(ref DateTime endCompare)
+        {
+            if (!isSpecific.EndDate.Month)
+            {
+                endCompare = new DateTime(endCompare.Year + 1, 1, 1);
+            }
+            else if (!isSpecific.EndDate.Day)
+            {
+                endCompare = endCompare.AddMonths(1);
+                endCompare = new DateTime(endCompare.Year, endCompare.Month, 1);
+            }
+            else
+            {
+                endCompare = endCompare.Date.AddDays(1);
+            }
+            endCompare = endCompare.AddMinutes(-1);
         }
 
         public override string GetTimeString()
