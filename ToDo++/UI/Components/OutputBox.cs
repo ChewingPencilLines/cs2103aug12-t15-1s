@@ -64,7 +64,7 @@ namespace ToDo
 
             box.Select(start, end - start + 1);
             box.SelectionColor = color;
-            box.SelectionFont = new Font("Tahoma", size);
+            box.SelectionFont = new Font("Courier", size);
             box.SelectionLength = 0;
         }
 

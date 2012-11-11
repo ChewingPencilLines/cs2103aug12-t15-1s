@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             BrightIdeasSoftware.OLVColumn taskDateTimeCol;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             this.notifyIcon_taskBar = new System.Windows.Forms.NotifyIcon(this.components);
             this.timerCollapse = new System.Windows.Forms.Timer(this.components);
             this.timerExpand = new System.Windows.Forms.Timer(this.components);
@@ -81,6 +81,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.helpTab.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // taskDateTimeCol
+            // 
+            taskDateTimeCol.AspectName = "GetTimeString";
+            taskDateTimeCol.CellPadding = null;
+            taskDateTimeCol.FillsFreeSpace = true;
+            taskDateTimeCol.Width = 149;
             // 
             // notifyIcon_taskBar
             // 
@@ -181,7 +188,7 @@
             this.textInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(148)))), ((int)(((byte)(148)))));
             this.textInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textInput.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.textInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textInput.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textInput.ForeColor = System.Drawing.Color.White;
             this.textInput.Location = new System.Drawing.Point(11, 394);
             this.textInput.Multiline = true;
@@ -270,13 +277,6 @@
             this.taskNameCol.Width = 213;
             this.taskNameCol.WordWrap = true;
             // 
-            // taskDateTimeCol
-            // 
-            taskDateTimeCol.AspectName = "GetTimeString";
-            taskDateTimeCol.CellPadding = null;
-            taskDateTimeCol.FillsFreeSpace = true;
-            taskDateTimeCol.Width = 149;
-            // 
             // taskDoneStateCol
             // 
             this.taskDoneStateCol.AspectName = "DoneState";
@@ -301,7 +301,7 @@
             this.preferencesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesPanel.Location = new System.Drawing.Point(3, 3);
             this.preferencesPanel.Name = "preferencesPanel";
-            this.preferencesPanel.Size = new System.Drawing.Size(186, 68);
+            this.preferencesPanel.Size = new System.Drawing.Size(495, 315);
             this.preferencesPanel.TabIndex = 0;
             // 
             // consoleDisplay
@@ -333,7 +333,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 3);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(186, 68);
+            this.outputBox.Size = new System.Drawing.Size(495, 315);
             this.outputBox.TabIndex = 28;
             this.outputBox.Text = "";
             // 
@@ -471,7 +471,7 @@
             this.helpControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.helpControl.Location = new System.Drawing.Point(3, 3);
             this.helpControl.Name = "helpControl";
-            this.helpControl.Size = new System.Drawing.Size(186, 68);
+            this.helpControl.Size = new System.Drawing.Size(495, 315);
             this.helpControl.TabIndex = 0;
             // 
             // topMenuControl
