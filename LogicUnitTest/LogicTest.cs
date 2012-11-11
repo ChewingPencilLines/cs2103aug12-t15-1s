@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic; 
 using ToDo;
 
-namespace LogicUnitTest
+namespace IntegrationTests
 {
     [TestClass]
     public class LogicTest
