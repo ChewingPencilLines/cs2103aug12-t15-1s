@@ -9,7 +9,6 @@ namespace ToDo
     public class Logic
     {
         CommandParser commandParser;
-        StringParser stringParser;
         Settings mainSettings;
         UI ui;
 
@@ -30,8 +29,7 @@ namespace ToDo
             mainSettings.UpdateSettings(storage.LoadSettingsFromFile());
             EventHandlers.UpdateSettingsHandler += UpdateSettings;
 
-            stringParser = new StringParser();
-            commandParser = new CommandParser(stringParser);
+            commandParser = new CommandParser();
 
             taskList = storage.LoadTasksFromFile();
             while (taskList == null)
@@ -56,15 +54,23 @@ namespace ToDo
             }
             catch (InvalidDateTimeException e)
             {
+                Logger.Warning("Entered invalid datetime", "ProcessCommand::Logic");
                 AlertBox.Show(e.Message);
             }
-            catch (InvalidTimeRangeException ex)
+            catch (InvalidTimeRangeException e)
             {
-                AlertBox.Show(ex.Message);
+                Logger.Warning("Entered invalid time range", "ProcessCommand::Logic");
+                AlertBox.Show(e.Message);
             }
             catch (MultipleCommandsException)
             {
                 AlertBox.Show(@"Multiple commands were entered that could not be resolved. Use delimiters.");
+            }
+            catch (Exception e)
+            {
+                Logger.Error("Unhandled Exception Occured!!!", "ProcessCommand::Logic");
+                Logger.Error(e,"ProcessCommand::Logic");
+                AlertBox.Show("Something bad happened and we could not process your command.");
             }
             if (operation == null)
             {

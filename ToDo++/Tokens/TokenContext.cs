@@ -24,13 +24,11 @@ namespace ToDo
                 contextType == ContextType.FOLLOWING
                 )
             {
-                attrb.currentSpecifier = contextType;
-                Logger.Info("Updated currentSpecifier.", "ConfigureGenerator::TokenContext");
+                attrb.CurrentSpecifier = contextType;
             }
             else
             {
-                attrb.currentMode = contextType;
-                Logger.Info("Updated currentMode.", "ConfigureGenerator::TokenContext");
+                attrb.CurrentMode = contextType;
             }
         }
     }

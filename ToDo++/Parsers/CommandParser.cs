@@ -5,35 +5,44 @@ using System.Text;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 
-[assembly: InternalsVisibleTo("ParsingLogicUnitTest")]
-
 namespace ToDo
 {
     class CommandParser
     {
         StringParser stringParser;
+        TokenGenerator tokenFactory;
+        OperationGenerator operationFactory;
 
-        public CommandParser(StringParser stringParser)
+        public CommandParser()
         {
-            this.stringParser = stringParser;
+            this.stringParser = new StringParser();
+            this.tokenFactory = new TokenGenerator();
+            this.operationFactory = new OperationGenerator();
         }
 
         public Operation ParseOperation(string input)
         {
-            List<Token> tokens = stringParser.ParseStringIntoTokens(input);
+            List<string> words = stringParser.ParseStringIntoTokens(input);
+            List<Token> tokens = tokenFactory.GenerateAllTokens(words);
             return GenerateOperation(tokens);       
         }
 
-        private static Operation GenerateOperation(List<Token> tokens)
+        /// <summary>
+        /// This method uses the given list of tokens to generate a corresponding Operation.
+        /// </summary>
+        /// <param name="tokens">The list of tokens from which the generated operation will be based on.</param>
+        /// <returns>The generated Operation.</returns>
+        private Operation GenerateOperation(List<Token> tokens)
         {            
-            OperationGenerator factory = new OperationGenerator();
+            // reset factory configuration
+            operationFactory.InitializeNewConfiguration();
             foreach (Token token in tokens)
             {
-               token.ConfigureGenerator(factory);
+                token.ConfigureGenerator(operationFactory);
             }
             // implement? ReleaseUnusedTokens();
-            factory.SetTimes();
-            Operation newOperation = factory.CreateOperation();
+            operationFactory.FinalizeGenerator();
+            Operation newOperation = operationFactory.CreateOperation();
             return newOperation;
         }
 

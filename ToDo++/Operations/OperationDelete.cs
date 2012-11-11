@@ -30,8 +30,8 @@ namespace ToDo
 
         #region Constructors
         /// <summary>
-        /// This is the base constructor for the Delete operation.
-        /// There are three ways to execute this operation.
+        /// This is the constructor for the Delete operation which accepts arguments
+        /// to define the way this operation will be executed.
         /// If a valid index range is specified or the isAll set to true, the operation will be carried out
         /// those corresponding indicies or all displayed tasks respectively.
         /// If search parameters are specified instead, a search operation will be carried out instead.
@@ -44,7 +44,7 @@ namespace ToDo
         /// <param name="isSpecific">The specificity of the start and end date ranges.</param>
         /// <param name="isAll">If this boolean is true, the current displayed tasks or results of the search
         /// carried out will all be deleted without futher confirmation.</param>
-        /// <param name="searchType">The type of search to be carried out if required.</param>
+        /// <param name="searchType">The type of search to be carried out (in addition to the other filters) if required.</param>
         /// <param name="sortType">The type of sort to sort the diplay list by after the operation is executed.</param>
         /// <returns>Nothing.</returns>
         public OperationDelete(string taskName, int[] indexRange, DateTime? startTime,
@@ -75,6 +75,10 @@ namespace ToDo
         #region ExecuteOperation
         /// <summary>
         /// Executes the operation and adds it to the operation history.
+        /// This operation tries to delete one or more tasks using the given parameters.
+        /// If an index exist, it will delete all tasks by index.
+        /// If not, it will perform a search, deleting tasks immediately if the isAll flag
+        /// is set.
         /// </summary>
         /// <param name="taskList">List of task this operation will operate on.</param>
         /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>

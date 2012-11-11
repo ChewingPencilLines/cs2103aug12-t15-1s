@@ -45,10 +45,9 @@ namespace ToDo
             bool multipleTaskDurations = false;
             if (index != 0)
             {
-                if (attrb.timeRangeIndex == 0)
+                if (attrb.TimeRangeIndex == 0)
                 {
-                    attrb.timeRangeIndex = index;
-                    Logger.Info("Updated timeRangeIndex.", "ConfigureGenerator::TokenTimeRange");
+                    attrb.TimeRangeIndex = index;
                 }
                 else
                 {
@@ -58,10 +57,9 @@ namespace ToDo
             }
             if (timeRangeType != TimeRangeType.DEFAULT)
             {
-                if (attrb.timeRangeType == TimeRangeType.DEFAULT)
+                if (attrb.TimeRangeType == TimeRangeType.DEFAULT)
                 {
-                    attrb.timeRangeType = timeRangeType;
-                    Logger.Info("Updated timeRangeType.", "ConfigureGenerator::TokenTimeRange");
+                    attrb.TimeRangeType = timeRangeType;
                 }
                 else
                 {
@@ -71,20 +69,19 @@ namespace ToDo
             }
             if (timeRange != TimeRangeKeywordsType.NONE)
             {
-                if (attrb.timeRangeOne == TimeRangeKeywordsType.NONE)
+                if (attrb.TimeRangeFirst == TimeRangeKeywordsType.NONE)
                 {
-                    attrb.timeRangeOne = timeRange;
-                    Logger.Info("Updated timeRangeOne.", "ConfigureGenerator::TokenTimeRange");
+                    attrb.TimeRangeFirst = timeRange;
                 }
-                else if (attrb.timeRangeTwo == TimeRangeKeywordsType.NONE
-                    || attrb.timeRangeTwo <= timeRange)
+                else if (attrb.TimeRangeSecond == TimeRangeKeywordsType.NONE
+                    || attrb.TimeRangeSecond <= timeRange)
                 {
-                    attrb.timeRangeTwo = timeRange;
-                    Logger.Info("Updated timeRangeTwo.", "ConfigureGenerator::TokenTimeRange");
+                    attrb.TimeRangeSecond = timeRange;
                 }
             }
             if (multipleTaskDurations)
             {
+                Logger.Warning("Multiple task durations were detected.", "ConfigureGenerator::TokenTimeRange");
                 AlertBox.Show("Multiple task durations specified. Only the first is accepted.");
             }
         }

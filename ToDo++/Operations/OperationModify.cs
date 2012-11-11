@@ -31,12 +31,10 @@ namespace ToDo
 
         #region Constructors
         /// <summary>
-        /// This is the base constructor for the Modify operation.
-        /// There are three ways to execute this operation.
-        /// If a valid index range is specified or the isAll set to true, the operation will be carried out
-        /// those corresponding indicies or all displayed tasks respectively.
-        /// If search parameters are specified instead, a search operation will be carried out instead.
-        /// The operation will be carried out on the search results if the isAll flag is true.
+        /// This is the constructor for the Modify operation.
+        /// It will modify the task indicated by the index range to the new
+        /// parameters specified by the given arguments. If an arguement
+        /// is left empty or null, that parameter will remain unchanged.
         /// </summary>
         /// <param name="taskName">The name of the task to modified. Can be a substring of it.</param>
         /// <param name="indexRange">The display index of the task to be modified.</param>
@@ -44,7 +42,7 @@ namespace ToDo
         /// <param name="endTime">The new end date to set for the task.</param>
         /// <param name="isSpecific">The new Specificity of the dates for the task.</param>
         /// <param name="isAll">If this boolean is true, the operation will be invalid.</param>
-        /// <param name="searchType">The type of search to be carried out if required.</param>
+        /// <param name="searchType">The type of search to be carried out (in addition to the other filters) if required.</param>
         /// <param name="sortType">The type of sort to sort the diplay list by after the operation is executed.</param>
         /// <returns>Nothing.</returns>
         public OperationModify(string taskName, int[] indexRange, DateTime? startTime,
@@ -75,6 +73,9 @@ namespace ToDo
         #region ExecuteOperation        
         /// <summary>
         /// Executes the operation and adds it to the operation history.
+        /// Modifies the task indicated by the index range to the new
+        /// parameters in this operation. If a parameter is left empty or null,
+        /// that parameter will remain unchanged in the new task.
         /// </summary>
         /// <param name="taskList">List of task this operation will operate on.</param>
         /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
@@ -157,7 +158,7 @@ namespace ToDo
 
         #region Undo and Redo
         /// <summary>
-        /// Undo this operation.
+        /// Undoes this operation.
         /// </summary>
         /// <param name="taskList">List of task this method will operate on.</param>
         /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
@@ -170,7 +171,7 @@ namespace ToDo
         }
 
         /// <summary>
-        /// Redo this operation.
+        /// Redoes this operation.
         /// </summary>
         /// <param name="taskList">List of task this method will operate on.</param>
         /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>

@@ -26,12 +26,12 @@ namespace ToDo
 
         internal override void ConfigureGenerator(OperationGenerator attrb)
         {
-            switch (attrb.currentMode)
+            switch (attrb.CurrentMode)
             {
                 case ContextType.STARTTIME:
                     Logger.Info("currentMode is STARTTIME", "ConfigureGenerator::TokenDate");
                     attrb.StartDateOnly = date;
-                    attrb.isSpecific.StartDate = isSpecific;
+                    attrb.IsSpecific.StartDate = isSpecific;
                     Logger.Info("Updated StartDateOnly and its specificity.", "ConfigureGenerator::TokenDate");
                     // @ivan-todo: WarnUser if already determined startDate
                     break;
@@ -43,7 +43,7 @@ namespace ToDo
                 case ContextType.DEADLINE:
                     Logger.Info("currentMode is DEADLINE", "ConfigureGenerator::TokenDate");
                     attrb.EndDateOnly = date;
-                    attrb.isSpecific.EndDate = isSpecific;
+                    attrb.IsSpecific.EndDate = isSpecific;
                     Logger.Info("Updated EndDateOnly and its specificity.", "ConfigureGenerator::TokenDate");
                     break;
                 default:

@@ -49,6 +49,7 @@ namespace ToDo
             }
             catch (Exception ex)
             {
+                Logger.Error(ex, "ValidateTaskFile::Storage");
                 return false;
             }            
         }
@@ -62,13 +63,15 @@ namespace ToDo
                             "</tasks>");              
                 doc.Save(taskStorageFile);                
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException e)
             {
+                Logger.Error(e, "CreateNewTaskFile::Storage");
                 UserInputBox.Show("Error!", "Task filename was not set!");
                 return false;
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException e)
             {
+                Logger.Error(e, "CreateNewTaskFile::Storage");
                 UserInputBox.Show("Error!", "Failed to create task file.");
                 return false;
             }
@@ -88,13 +91,15 @@ namespace ToDo
                 }
             }
             // Write default settings if file not found or invalid.
-            catch (FileNotFoundException)
+            catch (FileNotFoundException e)
             {
+                Logger.Error(e, "LoadSettingsFromFile::Storage");
                 AlertBox.Show("Settings file not found.\nNew file will be created");
                 WriteSettingsToFile(settingInfo);
             }
-            catch (System.Runtime.Serialization.SerializationException)
+            catch (System.Runtime.Serialization.SerializationException e)
             {
+                Logger.Error(e, "LoadSettingsFromFile::Storage");
                 AlertBox.Show("There was an error with the settings file, a new file will be created");
                 WriteSettingsToFile(settingInfo);
             }
@@ -116,8 +121,9 @@ namespace ToDo
                 file.Close();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                Logger.Error(e, "WriteSettingsToFile::Storage");
                 AlertBox.Show("Failed to write to settings file!");
                 return false;
             }
@@ -134,6 +140,7 @@ namespace ToDo
             }
             catch (Exception e)
             {
+                Logger.Error(e, "AddTaskToFile::Storage");
                 AlertBox.Show("A problem was encoutered saving the new task to file.");
                 return false;
             }
@@ -144,14 +151,22 @@ namespace ToDo
         {
             XDocument doc = XDocument.Load(taskStorageFile);
             
-            var task =  from node in doc.Descendants("Task")
+            var taskNode =  from node in doc.Descendants("Task")
                         let attr = node.Attribute("id")
                         where attr != null && attr.Value == taskToDelete.ID.ToString()
                         select node;
 
-            if (task == null) return false;
+            if (taskNode == null) return false;
 
-            task.ToList().ForEach(x => x.Remove());
+            try
+            {
+                taskNode.ToList().ForEach(x => x.Remove());
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "RemoveTaskFromFile::Storage");
+                return false;
+            }
 
             doc.Save(taskStorageFile);
 
@@ -176,7 +191,7 @@ namespace ToDo
             }
             catch (Exception e)
             {
-                // log: failed to find node or replace node?
+                Logger.Error(e, "UpdateTask::Storage");
                 return false;
             }
 
@@ -202,9 +217,9 @@ namespace ToDo
                 else
                     task.First().Element("Done").ReplaceNodes("False");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                // log: failed to find node.
+                Logger.Error(e, "MarkTaskAs::Storage");
                 return false;
             }
 
@@ -212,7 +227,6 @@ namespace ToDo
             return true;
         }
 
-        // To log exceptions
         public List<Task> LoadTasksFromFile()
         {
             List<Task> taskList = new List<Task>();
@@ -232,21 +246,21 @@ namespace ToDo
                         }
                         taskList.Add(addTask);
                     }
-                    catch (ArgumentNullException)
+                    catch (ArgumentNullException e)
                     {
-                        // Xelement is null?
+                        Logger.Error(e, "LoadTasksFromFile::Storage");
                         return null;
                     }
-                    catch (TaskFileCorruptedException)
+                    catch (TaskFileCorruptedException e)
                     {
-                        // File structure corrupted
+                        Logger.Error(e, "LoadTasksFromFile::Storage");
                         return null;
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                // File failed to load.
+                Logger.Error(e, "LoadTasksFromFile::Storage");
                 return null;
             }
             return taskList;

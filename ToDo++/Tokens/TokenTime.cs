@@ -20,12 +20,11 @@ namespace ToDo
 
         internal override void ConfigureGenerator(OperationGenerator attrb)
         {
-            switch (attrb.currentMode)
+            switch (attrb.CurrentMode)
             {
                 case ContextType.STARTTIME:
                     attrb.StartTimeOnly = time;
-                    attrb.isSpecific.StartTime = specific;
-                    Logger.Info("Updated StartTimeOnly and its specificity.", "ConfigureGenerator::TokenTime");
+                    attrb.IsSpecific.StartTime = specific;
                     break;
                 case ContextType.ENDTIME:
                     attrb.SetConditionalEndTime(time, specific);
@@ -33,11 +32,10 @@ namespace ToDo
                     break;
                 case ContextType.DEADLINE:
                     attrb.EndTimeOnly = time;
-                    attrb.isSpecific.EndTime = specific;
-                    Logger.Info("Updated EndTimeOnly and its specificity.", "ConfigureGenerator::TokenTime");
+                    attrb.IsSpecific.EndTime = specific;
                     break;
                 default:
-                    Logger.Warning("Fell through switch statement.", "ConfigureGenerator::TokenTime");
+                    Logger.Error("Fell through switch statement.", "ConfigureGenerator::TokenTime");
                     Debug.Assert(false, "Fell through switch statement in ConfigureGenerator, TokenTime!");
                     break;
             }
