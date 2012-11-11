@@ -589,7 +589,7 @@ namespace ToDo
         /// </summary>
         /// <param name="dateToCheck">The given date to check.</param>
         /// <param name="dateSpecificity">The given date's specificity</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The limit to check the given date against.</param>
         /// <param name="allowCurrent">Flag to indicate if the date should be unchanged or not if it falls within a range close to the limit
         /// and cannot be determined accurately due to its specificity.</param>
         /// <returns></returns>
@@ -607,6 +607,7 @@ namespace ToDo
 
                 if (dateToCheck.Value.Month == DateTime.Today.Month &&
                     dateToCheck.Value.Year == DateTime.Today.Year &&
+                    dateSpecificity.Day == false &&
                     allowCurrent)
                     return;
 
