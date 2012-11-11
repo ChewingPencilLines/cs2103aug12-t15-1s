@@ -10,15 +10,20 @@ namespace ToDo
     class CommandParser
     {
         StringParser stringParser;
+        TokenGenerator tokenFactory;
+        OperationGenerator operationFactory;
 
-        public CommandParser(StringParser stringParser)
+        public CommandParser()
         {
-            this.stringParser = stringParser;
+            this.stringParser = new StringParser();
+            this.tokenFactory = new TokenGenerator();
+            this.operationFactory = new OperationGenerator();
         }
 
         public Operation ParseOperation(string input)
         {
-            List<Token> tokens = stringParser.ParseStringIntoTokens(input);
+            List<string> words = stringParser.ParseStringIntoTokens(input);
+            List<Token> tokens = tokenFactory.GenerateAllTokens(words);
             return GenerateOperation(tokens);       
         }
 

@@ -9,7 +9,6 @@ namespace ToDo
     public class Logic
     {
         CommandParser commandParser;
-        StringParser stringParser;
         Settings mainSettings;
         UI ui;
 
@@ -30,8 +29,7 @@ namespace ToDo
             mainSettings.UpdateSettings(storage.LoadSettingsFromFile());
             EventHandlers.UpdateSettingsHandler += UpdateSettings;
 
-            stringParser = new StringParser();
-            commandParser = new CommandParser(stringParser);
+            commandParser = new CommandParser();
 
             taskList = storage.LoadTasksFromFile();
             while (taskList == null)
