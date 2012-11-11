@@ -318,6 +318,7 @@ namespace ToDo
                 string wordLower = word.ToLower();
                 if (CustomDictionary.IsValidDate(wordLower)
                     || CustomDictionary.IsToday(wordLower)
+                    || CustomDictionary.IsTomorrow(wordLower)
                     || CustomDictionary.IsValidMonthWord(wordLower)
                     )
                 {
@@ -327,6 +328,12 @@ namespace ToDo
                     if (CustomDictionary.IsToday(wordLower))
                     {
                         day = DateTime.Now.Day;
+                        month = DateTime.Now.Month;
+                        year = DateTime.Now.Year;
+                    }
+                    else if (CustomDictionary.IsTomorrow(wordLower))
+                    {
+                        day = DateTime.Now.Day + 1;
                         month = DateTime.Now.Month;
                         year = DateTime.Now.Year;
                     }

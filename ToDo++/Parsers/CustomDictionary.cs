@@ -43,6 +43,7 @@ namespace ToDo
         
         static public List<string> timeSuffixes;
         static public List<string> todayKeywords;
+        static public List<string> tomorrowKeywords;
         static public List<string> rangeAllKeywords;
 
         // ******************************************************************
@@ -214,14 +215,13 @@ namespace ToDo
             dayKeywords.Add("sun", DayOfWeek.Sunday);
             dayKeywords.Add("sunday", DayOfWeek.Sunday);
             dayKeywords.Add("weekend", DayOfWeek.Sunday);
-            dayKeywords.Add("tmr", DateTime.Today.AddDays(1).DayOfWeek);
-            dayKeywords.Add("tomorrow", DateTime.Today.AddDays(1).DayOfWeek);
             // NYI
             timeSuffixes = new List<string> { "am", "pm", "hr", "hrs", "hour", "hours" };
             timeSpecificKeywords = new Dictionary<string, int>();
             timeSpecificKeywords.Add("noon", 12);
             timeSpecificKeywords.Add("midnight", 0);
             todayKeywords = new List<string> { "today" };
+            tomorrowKeywords = new List<string> { "tmr", "tomorrow" };
             rangeAllKeywords = new List<string> { "all" };
         }
 
@@ -373,6 +373,14 @@ namespace ToDo
                 return true;
             else return false;
         }
+
+        public static bool IsTomorrow(string word)
+        {
+            if (tomorrowKeywords.Exists(e => (e == word)))
+                return true;
+            else return false;
+        }
+
         public static bool IsValidDate(string theDate)
         {
             return IsValidNumericDate(theDate) || IsValidAlphabeticDate(theDate);

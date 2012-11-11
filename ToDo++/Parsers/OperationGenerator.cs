@@ -464,6 +464,11 @@ namespace ToDo
         // ******************************************************************
 
         #region CombineDateTimes
+        /// <summary>
+        /// Combines the start and end DateOnly and TimeOnly fields of the configuration properties
+        /// into a two properly formatted start and end DateTimes for operation generation.
+        /// </summary>
+        /// <returns>Nothing</returns>
         private void CombineDateTimes()
         {
             // Combine Date/Times
@@ -492,14 +497,21 @@ namespace ToDo
                 }
             }
 
-            startDateTime = CombineDateAndTime(startTimeOnly, startDateOnly, DateTime.Now);
+            startDateTime = CombineDateAndTime(startTimeOnly, startDateOnly, isSpecific.StartDate, DateTime.Now, true);
             if (startDateTime == null)
-                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, DateTime.Now);
+                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, DateTime.Now, true);
             else
-                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, startDateTime.Value);
+                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, startDateTime.Value, false);
+
+            if (startDateTime > endDateTime)
+                AlertBox.Show("Warning: End date is before start date");
         }
 
-        private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)
+        /// <summary>
+        /// Combines the time and date fields into a single DateTime that is after the specified limit.
+        /// </summary>
+        /// <returns>Nothing</returns>
+        private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, Specificity dateSpecificity, DateTime limit, bool allowCurrent)
         {
             DateTime? combinedDT = null;
             // Time defined but not date
@@ -525,38 +537,56 @@ namespace ToDo
             {
                 combinedDT = date;
             }
-            if (crossDayBoundary || (combinedDT < limit && isSpecific.EndDate.Day == false))
+            if (crossDayBoundary || (combinedDT < limit && dateSpecificity.Day == false))
             {
                 combinedDT = combinedDT.Value.AddDays(1);
             }
             if (limit > combinedDT)
+                PushDateToBeyondLimit(ref combinedDT, ref dateSpecificity, limit, allowCurrent);
+            return combinedDT;
+        }
+
+        private void PushDateToBeyondLimit(ref DateTime? combinedDT, ref Specificity dateSpecificity, DateTime limit, bool allowCurrent)
+        {
+            if (this.commandType == CommandType.ADD)
             {
-                if (this.commandType == CommandType.ADD)
+                if (IsDayOfWeek(allowCurrent))
                 {
-                    if (endDayOfWeekSet)
+                    while (limit > combinedDT)
                     {
-                        while (limit > combinedDT)
-                        {
-                            combinedDT = combinedDT.Value.AddDays(7);
-                        }
-                    }
-                    if (!isSpecific.EndDate.Month)
-                    {
-                        while (limit > combinedDT)
-                        {
-                            combinedDT = combinedDT.Value.AddMonths(1);
-                        }
-                    }
-                    else if (!isSpecific.EndDate.Year)
-                    {
-                        while (limit > combinedDT)
-                        {
-                            combinedDT = combinedDT.Value.AddYears(1);
-                        }
+                        combinedDT = combinedDT.Value.AddDays(7);
                     }
                 }
+
+                if (combinedDT.Value.Month == DateTime.Today.Month &&
+                    combinedDT.Value.Year == DateTime.Today.Year &&
+                    allowCurrent)
+                    return;
+
+                if (!dateSpecificity.Month)
+                {
+                    while (limit > combinedDT)
+                        combinedDT = combinedDT.Value.AddMonths(1);
+
+                    dateSpecificity.Month = true;
+                }
+                else if (!dateSpecificity.Year)
+                {
+                    if (combinedDT.Value.Date == DateTime.Today.Date && allowCurrent)
+                        return;
+
+                    while (limit > combinedDT)
+                        combinedDT = combinedDT.Value.AddYears(1);
+
+                    dateSpecificity.Year = true;
+                }
             }
-            return combinedDT;
+        }
+
+        private bool IsDayOfWeek(bool allowCurrent)
+        {
+            return startDayOfWeekSet && allowCurrent ||
+                                endDayOfWeekSet && !allowCurrent;
         }
         #endregion
         #endregion
