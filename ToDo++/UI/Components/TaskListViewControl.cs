@@ -200,7 +200,7 @@ namespace ToDo
             {
                 TaskEvent checkTask = (TaskEvent)task;
 
-                if (checkTask.isSpecific.StartDate.Day == false)
+                if (checkTask.IsSpecific.StartDate.Day == false)
                     return null;
                 else
                     return checkTask.StartDateTime.Date;
@@ -209,7 +209,7 @@ namespace ToDo
             {
                 TaskDeadline checkTask = (TaskDeadline)task;
 
-                if (checkTask.isSpecific.EndDate.Day == false)
+                if (checkTask.IsSpecific.EndDate.Day == false)
                     return null;
                 return checkTask.EndDateTime.Date;
             }

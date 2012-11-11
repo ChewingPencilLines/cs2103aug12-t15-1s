@@ -8,20 +8,35 @@ namespace ToDo
 {
     public class TaskEvent : Task
     {
-        public DateTimeSpecificity isSpecific;
 
+        #region Task Attributes
+        private DateTimeSpecificity isSpecific;
+        public DateTimeSpecificity IsSpecific
+        {
+            get { return isSpecific; }
+        }
         private DateTime endDateTime;
         public DateTime EndDateTime
         {
             get { return endDateTime; }
         }
-
         private DateTime startDateTime;
         public DateTime StartDateTime
         {
             get { return startDateTime; }         
         }
+        #endregion
 
+        /// <summary>
+        /// Constructor for floating tasks.
+        /// </summary>
+        /// <param name="taskName">The task's display name.</param>
+        /// <param name="startTime">The task's start time</param>
+        /// <param name="endTime">The task's end time, if any.</param>
+        /// <param name="endDateSpecificity">The task's time specificity.</param>
+        /// <param name="isDone">The task's done state. Is set to false by default.</param>
+        /// <param name="forceID">The task's ID. Is set to -1 by default for the base constructor to generate a new ID.</param>
+        /// <returns></returns>
         public TaskEvent(
             string taskName,
             DateTime startTime,
@@ -37,6 +52,11 @@ namespace ToDo
             Logger.Info("Created an event task", "TaskEvent::TaskEvent");
         }
 
+        /// <summary>
+        /// Casts this task as a unique and reversible XElement which can be written
+        /// to a standard XML file.
+        /// </summary>
+        /// <returns>The XElement representation of this task.</returns>
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
@@ -50,7 +70,13 @@ namespace ToDo
                             );
             return task;
         }
-        
+
+        /// <summary>
+        /// Checks if this task is within the given start and end times.
+        /// </summary>
+        /// <param name="start">The start time which the task must fall within.</param>
+        /// <param name="end">The end time which the task must fall within.</param>
+        /// <returns>True if the task is within the time range given, false if it is not.</returns>
         public override bool IsWithinTime(DateTime? start, DateTime? end)
         {
             bool isWithinTime = true;
@@ -88,6 +114,11 @@ namespace ToDo
             return isWithinTime;
         }
 
+        /// <summary>
+        /// Extends the given start search time to the appropriate start of day/month/year
+        /// depending on the specificity of this task.
+        /// </summary>
+        /// <param name="startCompare">The start search time to extend.</param>
         private void ExtendStartSearchRange(ref DateTime startCompare)
         {
             if (!isSpecific.StartDate.Month)
@@ -104,6 +135,11 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// Extends the given end search time to the appropriate start of day/month/year
+        /// depending on the specificity of this task.
+        /// </summary>
+        /// <param name="startCompare">The end search time to extend.</param>
         private void ExtendEndSearchRange(ref DateTime endCompare)
         {
             if (!isSpecific.EndDate.Month)
@@ -122,6 +158,10 @@ namespace ToDo
             endCompare = endCompare.AddMinutes(-1);
         }
 
+        /// <summary>
+        /// Returns string representation of this task's times.
+        /// </summary>
+        /// <returns>The string representation of this task's times.</returns>
         public override string GetTimeString()
         {
             string timeString = "";
@@ -166,13 +206,18 @@ namespace ToDo
             }
             return timeString;
         }
-        
+
+        /// <summary>
+        /// Postpones time by the given TimeSpan duration.
+        /// </summary>
+        /// <param name="postponeDuration">Duration by which this task should be postponed by.</param>
+        /// <returns>True if the operation was successful; False if not.</returns>
         public override bool Postpone(TimeSpan postponeDuration)
         {
             bool result = true;
             try
             {
-                if (TaskDateTimeIsNotSpecificEnough(ref postponeDuration))
+                if (!IsDateTimesSpecificEnough(ref postponeDuration))
                 {
                     return false;
                 }
@@ -188,8 +233,15 @@ namespace ToDo
             }
             return result;
         }
-
-        private bool TaskDateTimeIsNotSpecificEnough(ref TimeSpan postponeDuration)
+        
+        /// <summary>
+        /// Checks for the specificity of the DateTimes and returns
+        /// a boolean indicating if they are specific enough to postpone
+        /// for the given timespan.
+        /// </summary>
+        /// <param name="postponeDuration">The timespan to postpone the task by.</param>
+        /// <returns>True if the task is specific enough; False if it is not.</returns>
+        private bool IsDateTimesSpecificEnough(ref TimeSpan postponeDuration)
         {
             if (endDateTime != null)
             {
@@ -198,19 +250,25 @@ namespace ToDo
                     if ((!isSpecific.EndTime && postponeDuration.Hours != 0) ||
                         (!isSpecific.EndDate.Day && postponeDuration.Days != 0))
                     {
-                        return true;
+                        return false;
                     }
                 }
             }
             if ((!isSpecific.StartTime && postponeDuration.Hours != 0) ||
                 (!isSpecific.StartDate.Day && postponeDuration.Days != 0))
             {
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
+        /// <summary>
+        /// Copies over the start and end date times and specificity of this task into the reference inputs.
+        /// </summary>
+        /// <param name="startTime">The start time to copy to.</param>
+        /// <param name="endTime">The end time to copy to.</param>
+        /// <param name="specific">The specificity to copy to.</param>        
         public override void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific)
         {
             startTime = this.startDateTime;
