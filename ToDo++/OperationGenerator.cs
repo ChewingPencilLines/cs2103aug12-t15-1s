@@ -283,10 +283,6 @@ namespace ToDo
                 endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, DateTime.Now);
             else
                 endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, (DateTime)startDateTime);
-            if (crossDayBoundary || endDateTime < startDateTime)
-            {
-                endDateTime = ((DateTime)endDateTime).AddDays(1);
-            }
         }
 
         private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, DateTime limit)
@@ -296,18 +292,18 @@ namespace ToDo
             if (date == null && time != null)
             {
                 TimeSpan limitTime = limit.TimeOfDay;
-                TimeSpan taskTime = (TimeSpan)time;
+                TimeSpan taskTime = time.Value;
                 combinedDT = new DateTime(limit.Year, limit.Month, limit.Day, taskTime.Hours, taskTime.Minutes, taskTime.Seconds);
                 if (limitTime > time)
                 {
-                    combinedDT = ((DateTime)combinedDT).AddDays(1);
+                    combinedDT = combinedDT.Value.AddDays(1);
                 }
             }
             // Date and Time both defined
             else if (date != null && time != null)
             {
-                DateTime setDate = (DateTime)date;
-                TimeSpan setTime = (TimeSpan)time;
+                DateTime setDate = date.Value;
+                TimeSpan setTime = time.Value;
                 combinedDT = new DateTime(setDate.Year, setDate.Month, setDate.Day, setTime.Hours, setTime.Minutes, setTime.Seconds);
             }
             // Date defined but not time
@@ -315,13 +311,14 @@ namespace ToDo
             {
                 combinedDT = date;
             }
-            /*
+            if (crossDayBoundary || (endDateTime < limit && isSpecific.EndDate.Day == false))
+            {
+                endDateTime = endDateTime.Value.AddDays(1);
+            }
             if (limit > combinedDT)
-                if (combinedDT != new DateTime(0001, 1, 1)
-                    && this.commandType == CommandType.ADD
-                    && this.commandType == CommandType.SCHEDULE)
+                if (this.commandType == CommandType.ADD
+                    || this.commandType == CommandType.SCHEDULE)
                     AlertBox.Show("Note that date specified is past.");
-            */
             return combinedDT;
         }
 

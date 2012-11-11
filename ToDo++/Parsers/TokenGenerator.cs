@@ -330,6 +330,11 @@ namespace ToDo
                             }
                         }
                     }
+                    // if year has less than 4 digit input.
+                    else if (year < 1000)
+                    {
+                        year += 2000;
+                    }
                     dateTime = TryParsingDate(year, month, day, false);
                     dateToken = new TokenDate(index, dateTime, isSpecific);
                     dateTokens.Add(dateToken);
