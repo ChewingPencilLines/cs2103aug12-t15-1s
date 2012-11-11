@@ -550,7 +550,7 @@ namespace ToDo
             else
                 endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, startDateTime.Value, false);
 
-            isSpecific.FinalizeDT();
+            isSpecific.FinalizeSpecificity();
 
             if (startDateTime > endDateTime)
                 AlertBox.Show("Warning: End date is before start date");
