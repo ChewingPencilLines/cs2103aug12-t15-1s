@@ -24,10 +24,10 @@ namespace ToDo
         #region Public Token Generation Methods
         /// <summary>
         /// This method searches an input list of strings and generates the relevant
-        /// command, day, date, time, context and literal tokens of all the relevant matching strings.
+        /// tokens representing the meaning of each string.
         /// </summary>
         /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
-        /// <returns>List of tokens</returns>
+        /// <returns>List of matched phrases as tokens.</returns>
         public List<Token> GenerateAllTokens(List<string> input)
         {
             List<Token> tokens = new List<Token>();

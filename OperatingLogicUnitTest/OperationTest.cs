@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDo;
 
-namespace OperatingLogicUnitTest
+namespace OperatingUnitTest
 {
     [TestClass]
     public class OperationTest
