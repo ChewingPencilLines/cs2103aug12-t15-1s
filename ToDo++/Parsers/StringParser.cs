@@ -25,21 +25,19 @@ namespace ToDo
         // ******************************************************************
 
         #region Public Methods
-
         /// <summary>
-        /// This method parses a string of words into a list of tokens, each containing a token representing the meaning of each word or substring.
-        /// By inputting a list of integer pairs to mark delimiting characters, multiple words can be taken as a single absolute substring (word).  
+        /// This method parses a string of words into a list of substrings determined by their meaning,
+        /// by spacing, or by delimiting characters.
         /// </summary>
         /// <param name="input">The string of words to be parsed</param>
         /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings</param>
         /// <returns>The list of tokens</returns>
-        public List<Token> ParseStringIntoTokens(string input)
+        public List<string> ParseStringIntoTokens(string input)
         {
             List<int[]> indexOfDelimiters = FindPositionOfDelimiters(input);
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);
             Logger.Info("Successfully split string into substrings", "ParseStringIntoTokens::StringParser");
-            TokenGenerator tokenGenerator = new TokenGenerator();
-            return tokenGenerator.GenerateAllTokens(words);
+            return words;
         }
         
         /// <summary>

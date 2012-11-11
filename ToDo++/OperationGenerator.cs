@@ -14,10 +14,10 @@ namespace ToDo
     class OperationGenerator
     {
         // ******************************************************************
-        // Operation Attributes
+        // Operation Properties
         // ******************************************************************
 
-        #region Operation Attributes
+        #region Operation Properties
         public CommandType commandType = new CommandType();
         public DateTimeSpecificity isSpecific = new DateTimeSpecificity();
         public TimeRangeType timeRangeType = new TimeRangeType();
@@ -32,10 +32,10 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Properties For Operation Generation
+        // Configuration For Operation Generation
         // ******************************************************************
 
-        #region Properties For Operation Generation (Hidden)
+        #region Configuration For Operation Generation
         // The following properties are only used internally once set and hence cannot be "get".
         // Set as private to prevent confusion.
         private TimeSpan? startTimeOnly = null, endTimeOnly = null;
@@ -57,9 +57,26 @@ namespace ToDo
         private bool crossDayBoundary = false;
         #endregion
 
+        // ******************************************************************
+        // Constructors
+        // ******************************************************************
+        #region Constructors
+        /// <summary>
+        /// Constructor for the generator which initializes it's 
+        /// settings to the default values.
+        /// </summary>
+        /// <returns>Nothing.</returns>
         public OperationGenerator()
         {
-            // Initialize enumerations
+            InitializeEnumerations();
+        }
+
+        /// <summary>
+        /// Initializes enums to their default values.
+        /// </summary>
+        /// <returns>Nothing.</returns>
+        private void InitializeEnumerations()
+        {
             commandType = CommandType.INVALID;
             currentMode = ContextType.STARTTIME;
             currentSpecifier = ContextType.CURRENT;
@@ -69,7 +86,7 @@ namespace ToDo
             timeRangeOne = TimeRangeKeywordsType.NONE;
             timeRangeTwo = TimeRangeKeywordsType.NONE;
         }
-
+        #endregion
         // ******************************************************************
         // Finalize generator for operation creation
         // ******************************************************************
@@ -421,6 +438,10 @@ namespace ToDo
         // ******************************************************************
 
         #region Operation Generation
+        /// <summary>
+        /// This operation generates an operation based on how this generator has been configured.
+        /// </summary>
+        /// <returns>The generated operation.</returns>
         public Operation CreateOperation()
         {
             Task task;
@@ -491,13 +512,20 @@ namespace ToDo
             }
             return newOperation;
         }
-#endregion
+        #endregion
         
         // ******************************************************************
         // Generator configuration methods
         // ******************************************************************
 
         #region Generator configuration methods
+        /// <summary>
+        /// Sets the configured end time to the specified time and specificity.
+        /// Moves the end time to the start time if necessary.
+        /// </summary>
+        /// <param name="Value">The end time to be set.</param>
+        /// <param name="IsSpecific">The specificity of the end time.</param>
+        /// <returns></returns>
         internal void SetConditionalEndTime(TimeSpan Value, bool IsSpecific)
         {
             if (startTimeOnly == null && endTimeOnly != null)
@@ -509,6 +537,13 @@ namespace ToDo
             this.isSpecific.EndTime = IsSpecific;
         }
 
+        /// <summary>
+        /// Sets the configured end date to the specified date and specificity.
+        /// Moves the end date to the start date if necessary.
+        /// </summary>
+        /// <param name="Value">The end daate to be set.</param>
+        /// <param name="IsSpecific">The specificity of the end date.</param>
+        /// <returns></returns>
         internal void SetConditionalEndDate(DateTime Value, Specificity IsSpecific)
         {
             if (startDateOnly == null && endDateOnly != null)
