@@ -32,7 +32,7 @@ namespace ToDo
         /// <param name="input">The string of words to be parsed</param>
         /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings</param>
         /// <returns>The list of tokens</returns>
-        public List<string> ParseStringIntoTokens(string input)
+        public List<string> ParseStringIntoWords(string input)
         {
             List<int[]> indexOfDelimiters = FindPositionOfDelimiters(input);
             List<string> words = SplitStringIntoSubstrings(input, indexOfDelimiters);

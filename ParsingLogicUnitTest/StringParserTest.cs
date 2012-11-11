@@ -19,7 +19,7 @@ namespace TokenGeneratorTest
         public void AddSimpleTimedTaskTest()
         {
             input = "add morning 8AM TASK";
-            output = testStrParser.ParseStringIntoTokens(input);
+            output = testStrParser.ParseStringIntoWords(input);
             List<string> outputCheck = new List<string>();
             outputCheck.Add("add");
             outputCheck.Add("morning");
@@ -37,7 +37,7 @@ namespace TokenGeneratorTest
         public void ParseSortCommandTest()
         {
             input = "sort    name";
-            output = testStrParser.ParseStringIntoTokens(input);
+            output = testStrParser.ParseStringIntoWords(input);
             result = tokenGen.GenerateAllTokens(output);
             Assert.AreEqual(2, result.Count);
             Assert.IsTrue(result[0] is TokenCommand);
@@ -49,7 +49,7 @@ namespace TokenGeneratorTest
         public void AddComplicatedDatedTaskTest1()
         {
             input = "buy milk tmr 3 am to 12/12/12 5 pm add";
-            output = testStrParser.ParseStringIntoTokens(input);
+            output = testStrParser.ParseStringIntoWords(input);
             result = tokenGen.GenerateAllTokens(output);
             Assert.AreEqual(7, result.Count);
             Assert.IsTrue(result[0] is TokenLiteral);
@@ -66,7 +66,7 @@ namespace TokenGeneratorTest
         public void AddFringeCase()
         {
             input = "add task today to sunday";
-            output = testStrParser.ParseStringIntoTokens(input);
+            output = testStrParser.ParseStringIntoWords(input);
             result = tokenGen.GenerateAllTokens(output);
             Assert.AreEqual(5, result.Count);
             Assert.IsTrue(result[0] is TokenCommand);
@@ -81,7 +81,7 @@ namespace TokenGeneratorTest
         public void AddComplicatedDatedTaskTest2()
         {
             input = "add buy - milk jan 23rd 2016 to feb 29th 2016";
-            output = testStrParser.ParseStringIntoTokens(input);
+            output = testStrParser.ParseStringIntoWords(input);
             result = tokenGen.GenerateAllTokens(output);
             Assert.AreEqual(5, result.Count);
             Assert.IsTrue(result[0] is TokenCommand);
