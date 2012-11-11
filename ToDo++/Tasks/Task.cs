@@ -90,6 +90,8 @@ namespace ToDo
             {
                 // If endTime is not specified set endTime based on startTime.
                 endTime = startTime;
+                isSpecific.EndTime = isSpecific.StartTime;
+                isSpecific.EndDate = isSpecific.StartDate;
                 if (!isSpecific.StartTime)
                 {
                     endTime = ((DateTime)endTime).AddDays(1).AddMinutes(-1);
@@ -134,6 +136,15 @@ namespace ToDo
         public virtual string GetTimeString()
         {
             return String.Empty;
+        }
+
+        /// <summary>
+        /// Gets a flag indicating if the task can be scheduled over by the scheduler.
+        /// </summary>
+        /// <returns>True if task times can be scheduled over; False if not.</returns>
+        public virtual bool CanBeScheduledOver()
+        {
+            return true;
         }
 
         /// <summary>
