@@ -515,12 +515,17 @@ namespace ToDo
 
         #region PanelSwitching
 
+        const int TASKDISPLAY_PANEL = 0;
+        const int PREFERENCES_PANEL = 1;
+        const int CONSOLE_PANEL = 2;
+        const int HELP_PANEL = 3;
+
         /// <summary>
         /// Switches to Settings Panel
         /// </summary>
         public void SwitchToSettingsPanel()
         {
-            this.customPanelControl.SelectedIndex = 1;
+            this.customPanelControl.SelectedIndex = PREFERENCES_PANEL;
         }
 
         /// <summary>
@@ -528,7 +533,7 @@ namespace ToDo
         /// </summary>
         public void SwitchToTaskListViewPanel()
         {
-            this.customPanelControl.SelectedIndex = 0;
+            this.customPanelControl.SelectedIndex = TASKDISPLAY_PANEL;
         }
 
         /// <summary>
@@ -536,7 +541,7 @@ namespace ToDo
         /// </summary>
         public void SwitchToHelpPanel()
         {
-            this.customPanelControl.SelectedIndex = 3;
+            this.customPanelControl.SelectedIndex = HELP_PANEL;
         }
 
         /// <summary>
@@ -544,13 +549,13 @@ namespace ToDo
         /// </summary>
         public void ToggleHelpToDoPanel()
         {
-            if (this.customPanelControl.SelectedIndex == 0)
+            if (this.customPanelControl.SelectedIndex == TASKDISPLAY_PANEL)
             {
-                this.customPanelControl.SelectedIndex = 3;
+                this.customPanelControl.SelectedIndex = HELP_PANEL;
             }
             else
             {
-                this.customPanelControl.SelectedIndex = 0;
+                this.customPanelControl.SelectedIndex = TASKDISPLAY_PANEL;
             }
         }
 
@@ -559,13 +564,13 @@ namespace ToDo
         /// </summary>
         public void ToggleToDoSettingsPanel()
         {
-            if (this.customPanelControl.SelectedIndex == 0)
+            if (this.customPanelControl.SelectedIndex == TASKDISPLAY_PANEL)
             {
-                this.customPanelControl.SelectedIndex = 1;
+                this.customPanelControl.SelectedIndex = PREFERENCES_PANEL;
             }
             else
             {
-                this.customPanelControl.SelectedIndex = 0;
+                this.customPanelControl.SelectedIndex = TASKDISPLAY_PANEL;
             }
         }
 
@@ -574,14 +579,14 @@ namespace ToDo
         /// </summary>
         public void ToggleConsolePanel()
         {
-            if (this.customPanelControl.SelectedIndex == 0)
+            if (this.customPanelControl.SelectedIndex == TASKDISPLAY_PANEL)
             {
-                this.customPanelControl.SelectedIndex = 2;
+                this.customPanelControl.SelectedIndex = CONSOLE_PANEL;
                 this.ActiveControl = textInput;
             }
             else
             {
-                this.customPanelControl.SelectedIndex = 0;
+                this.customPanelControl.SelectedIndex = TASKDISPLAY_PANEL;
             }
         }
 
@@ -802,7 +807,7 @@ namespace ToDo
 
             textInput.Clear();
 
-            if(customPanelControl.SelectedIndex!=2)
+            if(customPanelControl.SelectedIndex!=CONSOLE_PANEL)
                 SwitchToTaskListViewPanel();
             logic.UpdateLastDisplayedTasksList(displayedList);
         }
