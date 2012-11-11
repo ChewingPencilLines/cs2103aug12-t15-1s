@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace ToDo
 {
@@ -12,6 +13,12 @@ namespace ToDo
 
     public abstract class Task
     {
+
+        // ******************************************************************
+        // Task base attributes.
+        // ******************************************************************
+
+        #region Task attributes.
         protected string taskName;
         public string TaskName
         {
@@ -30,8 +37,34 @@ namespace ToDo
         {
             get { return id; }
         }
+        #endregion
 
-        public static Task GenerateNewTask(
+        /// <summary>
+        /// Base constructor which can be inherited by derived tasks.
+        /// </summary>
+        /// <param name="taskName">The task's display name.</param>
+        /// <param name="state">The task's done state.</param>
+        /// <param name="forceID">The task's ID. Can be set to -1 to generate a new ID.</param>
+        /// <returns></returns>
+        public Task(string taskName, Boolean state, int forceID)
+        {
+            this.taskName = taskName;
+            this.doneState = state;
+            if (forceID < 0)
+                id = this.GetHashCode();
+            else id = forceID;
+            Logger.Info("Called task base constructor", "Task::Task");
+        }
+
+        /// <summary>
+        /// Creates a new task with the given parameters.
+        /// </summary>
+        /// <param name="taskName">The task name of the new task.</param>
+        /// <param name="startTime">The start time of the new task.</param>
+        /// <param name="endTime">The end time of the new task.</param>
+        /// <param name="isSpecific">The specificity of the new task's times.</param>
+        /// <returns>The newly created task.</returns>
+        public static Task CreateNewTask(
             string taskName,
             DateTime? startTime,
             DateTime? endTime,
@@ -71,18 +104,19 @@ namespace ToDo
             }
         }
 
-        public Task(string taskName, Boolean state, int forceID)
-        {
-            this.taskName = taskName;
-            this.doneState = state;
-            if (forceID < 0)
-                id = this.GetHashCode();
-            else id = forceID;
-            Logger.Info("Created a task object", "Task::Task");
-        }
-
+        /// <summary>
+        /// Casts this task as a unique and reversible XElement which can be written
+        /// to a standard XML file.
+        /// </summary>
+        /// <returns>The XElement representation of this task.</returns>
         public abstract XElement ToXElement();
 
+        /// <summary>
+        /// Checks if this task is within the given start and end times.
+        /// </summary>
+        /// <param name="start">The start time which the task must fall within.</param>
+        /// <param name="end">The end time which the task must fall within.</param>
+        /// <returns>True if the task is within the time range given, false if it is not.</returns>
         public abstract bool IsWithinTime(DateTime? start, DateTime? end);
 
         public abstract void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific);
@@ -92,17 +126,32 @@ namespace ToDo
             throw new TaskHasNoDayException();
         }
 
+        /// <summary>
+        /// Returns string representation of this task's times.
+        /// </summary>
+        /// <returns>The string representation of this task's times.</returns>
         public virtual string GetTimeString()
         {
             return String.Empty;
         }
 
+        /// <summary>
+        /// Postpones time by the given TimeSpan duration.
+        /// </summary>
+        /// <param name="postponeDuration">Duration by which this task should be postponed by.</param>
+        /// <returns>True if the operation was successful; False if not.</returns>
         public virtual bool Postpone(TimeSpan postponeDuration)
         {
             return false;
-        }        
-        
-        // Need to handle exceptions (null?)
+        }
+
+        /// <summary>
+        /// Comparer which compares two tasks by their task name, and returns an
+        /// integer representing their compare position.
+        /// </summary>
+        /// <param name="x">First task to compare.</param>
+        /// <param name="y">Second task to compare.</param>
+        /// <returns>-1 if x is less than y, 1 if x is more than y, 0 if they are equal</returns>
         public static int CompareByDateTime(Task a, Task b)
         {
             // A [DONE] task always sorts after an undone task.
@@ -154,6 +203,13 @@ namespace ToDo
             return DateTime.Compare(aDT, bDT);
         }
 
+        /// <summary>
+        /// Comparer which compares two tasks by their task name, and returns an
+        /// integer representing their compare position.
+        /// </summary>
+        /// <param name="x">First task to compare.</param>
+        /// <param name="y">Second task to compare.</param>
+        /// <returns>-1 if x is less than y, 1 if x is more than y, 0 if they are equal</returns>
         public static int CompareByName(Task x, Task y)
         {
             int compare = x.TaskName.CompareTo(y.TaskName);

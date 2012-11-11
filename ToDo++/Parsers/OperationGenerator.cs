@@ -549,6 +549,12 @@ namespace ToDo
         /// <summary>
         /// Combines the time and date fields into a single DateTime that is after the specified limit.
         /// </summary>
+        /// <param name="time">The time to merge.</param>
+        /// <param name="date">The date to merge.</param>
+        /// <param name="dateSpecificity">The specificity of the date.</param>
+        /// <param name="limit">The limit to ensure the combined date/time is after.</param>
+        /// <param name="allowCurrent">Flag indicating whether to allow ambiguous dates matching today to pass the limit check.</param>
+        /// <returns></returns>
         private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, Specificity dateSpecificity, DateTime limit, bool allowCurrent)
         {
             DateTime? combinedDT = null;
@@ -597,7 +603,7 @@ namespace ToDo
         {
             if (this.commandType == CommandType.ADD)
             {
-                if (IsDayOfWeek(allowCurrent))
+                if (IsDayOfWeekSet(allowCurrent))
                 {
                     while (limit > dateToCheck)
                     {
@@ -605,12 +611,11 @@ namespace ToDo
                     }
                 }
 
-                if (dateToCheck.Value.Month == DateTime.Today.Month &&
-                    dateToCheck.Value.Year == DateTime.Today.Year &&
-                    dateSpecificity.Day == false &&
+                if (DateIsAmbiguous(ref dateToCheck, ref dateSpecificity) &&
                     allowCurrent)
                     return;
 
+                // Move by months until date is beyond limits
                 if (!dateSpecificity.Month)
                 {
                     while (limit > dateToCheck)
@@ -618,6 +623,7 @@ namespace ToDo
 
                     dateSpecificity.Month = true;
                 }
+                // Move by years until date is beyond limits
                 else if (!dateSpecificity.Year)
                 {
                     if (dateToCheck.Value.Date == DateTime.Today.Date && allowCurrent)
@@ -631,10 +637,29 @@ namespace ToDo
             }
         }
 
-        private bool IsDayOfWeek(bool allowCurrent)
+        /// <summary>
+        /// Returns if a date is ambiguous enough to fit today's date.
+        /// </summary>
+        /// <param name="dateToCheck">The date to check.</param>
+        /// <param name="dateSpecificity">The specificity of the date.</param>
+        /// <returns></returns>
+        private bool DateIsAmbiguous( ref DateTime? dateToCheck, ref Specificity dateSpecificity )
         {
-            return startDayOfWeekSet && allowCurrent ||
-                                endDayOfWeekSet && !allowCurrent;
+	        return dateToCheck.Value.Month == DateTime.Today.Month &&
+                            dateToCheck.Value.Year == DateTime.Today.Year &&
+                            dateSpecificity.Day == false;
+        }
+
+        /// <summary>
+        /// Returns a flag indicating if the day of week was set for the start day if the input flag is true,
+        /// or if the day of week was set for the end day if the input flag is false.
+        /// </summary>
+        /// <param name="allowCurrent">Input flag.</param>
+        /// <returns></returns>
+        private bool IsDayOfWeekSet(bool startEndFlag)
+        {
+            return (startDayOfWeekSet && startEndFlag) ||
+                   (endDayOfWeekSet && !startEndFlag);
         }
         #endregion
         #endregion
@@ -655,7 +680,7 @@ namespace ToDo
             switch (commandType)
             {
                 case CommandType.ADD:
-                    task = Task.GenerateNewTask(taskName, startDateTime, endDateTime, isSpecific);
+                    task = Task.CreateNewTask(taskName, startDateTime, endDateTime, isSpecific);
                     newOperation = new OperationAdd(task, sortType);
                     break;
                 case CommandType.DELETE:
