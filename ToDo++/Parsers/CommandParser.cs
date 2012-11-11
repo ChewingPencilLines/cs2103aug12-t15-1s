@@ -30,7 +30,7 @@ namespace ToDo
         /// <returns>An operation representing the input command.</returns>
         public Operation ParseOperation(string input)
         {
-            List<string> words = stringParser.ParseStringIntoTokens(input);
+            List<string> words = stringParser.ParseStringIntoWords(input);
             List<Token> tokens = tokenFactory.GenerateAllTokens(words);
             return GenerateOperation(tokens);       
         }
