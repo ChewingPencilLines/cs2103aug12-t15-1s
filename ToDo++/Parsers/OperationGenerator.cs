@@ -32,10 +32,10 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Configuration For Operation Generation
+        // Configuration Attributes For Operation Generation
         // ******************************************************************
 
-        #region Configuration For Operation Generation
+        #region Configuration Attributes For Operation Generation
         // The following properties are only used internally once set and hence cannot be "get".
         // Set as private to prevent confusion.
         private TimeSpan? startTimeOnly, endTimeOnly;
@@ -58,9 +58,10 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Constructors
+        // Constructors and initializers
         // ******************************************************************
-        #region Constructors
+
+        #region Constructors and initializers
         /// <summary>
         /// Constructor for the generator which initializes it's 
         /// settings to the default values.
