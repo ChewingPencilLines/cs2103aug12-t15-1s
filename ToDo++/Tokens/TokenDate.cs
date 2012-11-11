@@ -52,5 +52,15 @@ namespace ToDo
                     break;
             }
         }
+
+        /// <summary>
+        /// Gets a flag indicating if the token accepts a context token at the position
+        /// before it.
+        /// </summary>
+        /// <returns>True if it uses a context token; False if it does not.</returns>
+        internal override bool AcceptsContext()
+        {
+            return true;
+        }
     }
 }

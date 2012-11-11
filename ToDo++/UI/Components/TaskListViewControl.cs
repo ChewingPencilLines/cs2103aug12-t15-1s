@@ -24,6 +24,14 @@ namespace ToDo
             displayedTasks = null;
         }
 
+        private void InitializeComponent()
+        {
+            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
+            this.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
+            this.ResumeLayout(false);
+        }
+
         internal void InitializeWithSettings(Settings settings)
         {
             this.settings = settings;
@@ -115,14 +123,6 @@ namespace ToDo
             {
                 base.OnKeyDown(e);
             }
-        }
-
-        private void InitializeComponent()
-        {
-            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
-            this.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
-            this.ResumeLayout(false);
         }
 
         private void TaskListViewControl_FormatRow(object sender, FormatRowEventArgs e)

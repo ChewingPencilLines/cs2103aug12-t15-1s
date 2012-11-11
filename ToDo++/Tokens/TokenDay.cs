@@ -90,6 +90,16 @@ namespace ToDo
             int c = (int)current;
             int d = (int)desired;
             return (7 - c + d) % 7;
-        }        
+        }
+
+        /// <summary>
+        /// Gets a flag indicating if the token accepts a context token at the position
+        /// before it.
+        /// </summary>
+        /// <returns>True if it uses a context token; False if it does not.</returns>
+        internal override bool AcceptsContext()
+        {
+            return true;
+        }
     }
 }
