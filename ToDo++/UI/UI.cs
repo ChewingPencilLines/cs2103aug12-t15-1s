@@ -93,7 +93,7 @@ namespace ToDo
         /// </summary>
         private void InitializeTaskListView()
         {
-            taskListViewControl.InitializeWithSettings(logic.MainSettings);
+            taskListViewControl.InitializeSettings(logic.MainSettings);
             List<Task> displayedList = taskListViewControl.UpdateDisplay(logic.GetDefaultView());
             logic.UpdateLastDisplayedTasksList(displayedList);
         }
@@ -704,7 +704,7 @@ namespace ToDo
         private void UpdateUI(object sender, EventArgs args)
         {
             //taskListViewControl.RefreshListView();
-            taskListViewControl.InitializeWithSettings(logic.MainSettings);
+            taskListViewControl.InitializeSettings(logic.MainSettings);
             taskListViewControl.BuildList();
         }
 
