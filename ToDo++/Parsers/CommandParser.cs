@@ -38,7 +38,7 @@ namespace ToDo
                token.ConfigureGenerator(factory);
             }
             // implement? ReleaseUnusedTokens();
-            factory.SetTimes();
+            factory.FinalizeGenerator();
             Operation newOperation = factory.CreateOperation();
             return newOperation;
         }
