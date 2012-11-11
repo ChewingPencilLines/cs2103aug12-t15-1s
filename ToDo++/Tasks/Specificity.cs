@@ -91,5 +91,17 @@ namespace ToDo
         {
             return (startTime && endTime && startDate.Full() && endDate.Full());
         }
+
+        public void FinalizeDT()
+        {
+            if (startTime) startDate.Day = true;
+            if (endTime) endDate.Day = true;
+            if (startDate.Day) startDate.Month = true;
+            if (endDate.Day) endDate.Month = true;
+            if (startDate.Month) startDate.Year = true;
+            if (endDate.Month) endDate.Year = true;
+            if (startDate.Year) startDate.Year = true;
+            if (endDate.Year) endDate.Year = true;
+        }
     }
 }
