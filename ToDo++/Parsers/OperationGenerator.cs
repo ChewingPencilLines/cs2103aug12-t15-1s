@@ -200,7 +200,6 @@ namespace ToDo
         /// Finalizes the generator so that it can begin generating operations
         /// with the correct time ranges.
         /// </summary>
-        /// <returns>Nothing.</returns>
         public void FinalizeGenerator()
         {
             GetTimeRangeValues();
@@ -219,7 +218,7 @@ namespace ToDo
         /// Returns true if the operation to be generated can carry out a search
         /// on the task list, and false if not.
         /// </summary>
-        /// <returns>Boolean indicating if the command is of a searchable type.</returns>
+        /// <returns>True if the command is of a searchable type; false if otherwise</returns>
         private bool CommandIsSearchableType()
         {
             return !((commandType == CommandType.ADD) ||
@@ -236,7 +235,6 @@ namespace ToDo
         /// Finalizes the date/times of the operation to be generated
         /// by setting it as an appropriate search range.
         /// </summary>
-        /// <returns></returns>
         private void FinalizeSearchTime()
         {
             // If searching only for a single time, assume it's the end time.
@@ -256,7 +254,9 @@ namespace ToDo
 
             // If end time is not specific, extend search range to cover appropriate period.
             if (endDateOnly != null && endTimeOnly == null)
+            {
                 ExtendEndSearchDate();
+            }
         }
 
         /// <summary>
@@ -333,7 +333,6 @@ namespace ToDo
         /// <summary>
         /// Finalizes the scheduling time range.
         /// </summary>
-        /// <returns>Nothing.</returns>
         private void FinalizeSchedulingTime()
         {
             FinalizeScheduleStartDate();
@@ -342,7 +341,6 @@ namespace ToDo
         /// <summary>
         /// Sets the start date to today if no starting date was given.
         /// </summary>
-        /// <returns>Nothing.</returns>
         private void FinalizeScheduleStartDate()
         {
             if (startDateOnly == null)
@@ -360,6 +358,10 @@ namespace ToDo
         // ******************************************************************
 
         #region Set Time Ranges
+        /// <summary>
+        /// This method sets the final startTimeOnly and endTimeOnly values based on the input
+        /// time (3am, 4pm...) and time range keyword(s) (morning, afternoon...).
+        /// </summary>
         private void GetTimeRangeValues()
         {
             int startTimeHour = 0, endTimeHour = 0;
@@ -386,6 +388,14 @@ namespace ToDo
             }
         }
 
+        /// <summary>
+        /// This method retrieves the start and end hours of the input time range keyword(s) (morning, afternoon...).
+        /// It also updates the crossDayBoundary boolean to true if the time ranges crosses the day boundary
+        /// i.e. 11pm to 1am.
+        /// </summary>
+        /// <param name="startTimeHour">The time range's start hour</param>
+        /// <param name="endTimeHour">The time range's end hour</param>
+        /// <returns>Returns true if there were input time range keyword(s); false if otherwise</returns>
         private bool TryGetTimeRangeValues(ref int startTimeHour, ref int endTimeHour)
         {
             if (timeRangeOne != TimeRangeKeywordsType.NONE)
@@ -413,6 +423,10 @@ namespace ToDo
             return false;
         }
 
+        /// <summary>
+        /// This method checks if a specific time was supplied.
+        /// </summary>
+        /// <returns>True if both the start time and end time were not specified; false if otherwise</returns>
         private bool IsSpecificTimeSupplied()
         {
             if (startTimeOnly == null && endTimeOnly == null)
@@ -422,36 +436,62 @@ namespace ToDo
             return true;
         }
 
+        /// <summary>
+        /// This method picks the final hours values to be used for the time range start and end hours values
+        /// from the input time (3am, 4pm...) and time range keyword(s) (morning, afternoon...).
+        /// </summary>
+        /// <param name="startTimeHour">The time range's start hour</param>
+        /// <param name="endTimeHour">The time range's end hour</param>
         private void RetrieveFinalStartAndEndTimes(int startTimeHour, int endTimeHour)
         {
+            TimeSpan startTimeRange = new TimeSpan(startTimeHour, 0, 0);
+            TimeSpan endTimeRange = new TimeSpan(endTimeHour, 0, 0);
             if (startTimeOnly != null && endTimeOnly == null)
             {
-                if (startTimeOnly.Value.Hours < endTimeHour
-                    && startTimeOnly.Value.Hours > startTimeHour)
+                if (!IsStartTimeWithinTimeRange(startTimeRange, endTimeRange))
                 {
-                    endTimeOnly = startTimeOnly;
-                    startTimeOnly = new TimeSpan(startTimeHour, 0, 0);
+                    AlertBox.Show("Specified end time not within specified time range.");
                 }
-                else
-                {
-                    // warn user that specified time is not within specified time range
-                }
+                endTimeOnly = startTimeOnly;
+                startTimeOnly = startTimeRange;
             }
             else if (startTimeOnly != null && endTimeOnly != null)
             {
-                if (!IsSpecifiedTimeWithinTimeRange(startTimeHour, endTimeHour))
+                if (!IsStartAndEndTimeWithinTimeRange(startTimeRange, endTimeRange))
                 {
-                    // warn user that specified time is not within specified time range
+                    AlertBox.Show("Specified start and end times are not within specified time range.");
                 }
             }
         }
 
-        private bool IsSpecifiedTimeWithinTimeRange(int startTimeHour, int endTimeHour)
+        /// <summary>
+        /// This method checks if the startTimeOnly is within the specified start and end hours
+        /// </summary>
+        /// <param name="startTimeHour">The specified start hour</param>
+        /// <param name="endTimeHour">The specified end hour</param>
+        /// <returns>True if positive; false if otherwise</returns>
+        private bool IsStartTimeWithinTimeRange(TimeSpan startTimeRange, TimeSpan endTimeRange)
         {
-            if (!(startTimeOnly.Value.Hours < endTimeHour
-                && startTimeOnly.Value.Hours > startTimeHour
-                && endTimeOnly.Value.Hours < endTimeHour
-                && endTimeOnly.Value.Hours > startTimeHour))
+            if (!(startTimeRange <= startTimeOnly
+                && startTimeOnly <= endTimeRange))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// This method checks if the startTimeOnly and endTimeOnly are within the specified start and end hours
+        /// </summary>
+        /// <param name="startTimeHour">The specified start hour</param>
+        /// <param name="endTimeHour">The specified end hour</param>
+        /// <returns>True if positive; false if otherwise</returns>
+        private bool IsStartAndEndTimeWithinTimeRange(TimeSpan startTimeRange, TimeSpan endTimeRange)
+        {
+            if (!(startTimeRange <= startTimeOnly
+                && startTimeOnly <= endTimeRange
+                && startTimeRange <= endTimeOnly
+                && endTimeOnly <= endTimeRange))
             {
                 return false;
             }
@@ -468,7 +508,6 @@ namespace ToDo
         /// Combines the start and end DateOnly and TimeOnly fields of the configuration properties
         /// into a two properly formatted start and end DateTimes for operation generation.
         /// </summary>
-        /// <returns>Nothing</returns>
         private void CombineDateTimes()
         {
             // Combine Date/Times
@@ -510,7 +549,6 @@ namespace ToDo
         /// <summary>
         /// Combines the time and date fields into a single DateTime that is after the specified limit.
         /// </summary>
-        /// <returns>Nothing</returns>
         private DateTime? CombineDateAndTime(TimeSpan? time, DateTime? date, Specificity dateSpecificity, DateTime limit, bool allowCurrent)
         {
             DateTime? combinedDT = null;
@@ -546,37 +584,46 @@ namespace ToDo
             return combinedDT;
         }
 
-        private void PushDateToBeyondLimit(ref DateTime? combinedDT, ref Specificity dateSpecificity, DateTime limit, bool allowCurrent)
+        /// <summary>
+        /// Ensures a given unspecific date is beyond a specified limit. Moves it to the first appropriate date if not.
+        /// </summary>
+        /// <param name="dateToCheck">The given date to check.</param>
+        /// <param name="dateSpecificity">The given date's specificity</param>
+        /// <param name="limit"></param>
+        /// <param name="allowCurrent">Flag to indicate if the date should be unchanged or not if it falls within a range close to the limit
+        /// and cannot be determined accurately due to its specificity.</param>
+        /// <returns></returns>
+        private void PushDateToBeyondLimit(ref DateTime? dateToCheck, ref Specificity dateSpecificity, DateTime limit, bool allowCurrent)
         {
             if (this.commandType == CommandType.ADD)
             {
                 if (IsDayOfWeek(allowCurrent))
                 {
-                    while (limit > combinedDT)
+                    while (limit > dateToCheck)
                     {
-                        combinedDT = combinedDT.Value.AddDays(7);
+                        dateToCheck = dateToCheck.Value.AddDays(7);
                     }
                 }
 
-                if (combinedDT.Value.Month == DateTime.Today.Month &&
-                    combinedDT.Value.Year == DateTime.Today.Year &&
+                if (dateToCheck.Value.Month == DateTime.Today.Month &&
+                    dateToCheck.Value.Year == DateTime.Today.Year &&
                     allowCurrent)
                     return;
 
                 if (!dateSpecificity.Month)
                 {
-                    while (limit > combinedDT)
-                        combinedDT = combinedDT.Value.AddMonths(1);
+                    while (limit > dateToCheck)
+                        dateToCheck = dateToCheck.Value.AddMonths(1);
 
                     dateSpecificity.Month = true;
                 }
                 else if (!dateSpecificity.Year)
                 {
-                    if (combinedDT.Value.Date == DateTime.Today.Date && allowCurrent)
+                    if (dateToCheck.Value.Date == DateTime.Today.Date && allowCurrent)
                         return;
 
-                    while (limit > combinedDT)
-                        combinedDT = combinedDT.Value.AddYears(1);
+                    while (limit > dateToCheck)
+                        dateToCheck = dateToCheck.Value.AddYears(1);
 
                     dateSpecificity.Year = true;
                 }
