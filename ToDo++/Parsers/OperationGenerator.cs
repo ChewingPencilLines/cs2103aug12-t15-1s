@@ -542,8 +542,19 @@ namespace ToDo
             else
                 endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, startDateTime.Value, false);
 
+            ForceDateSpecificityBasedOnTime();
+
             if (startDateTime > endDateTime)
                 AlertBox.Show("Warning: End date is before start date");
+        }
+
+        /// <summary>
+        /// Sets the dates to be fully specific if the user specified a time for it.
+        /// </summary>
+        private void ForceDateSpecificityBasedOnTime()
+        {
+            if (isSpecific.StartTime) isSpecific.StartDate = new Specificity();
+            if (isSpecific.EndTime) isSpecific.EndDate = new Specificity();
         }
 
         /// <summary>
@@ -563,17 +574,13 @@ namespace ToDo
             {
                 TimeSpan limitTime = limit.TimeOfDay;
                 TimeSpan taskTime = time.Value;
-                combinedDT = new DateTime(limit.Year, limit.Month, limit.Day, taskTime.Hours, taskTime.Minutes, taskTime.Seconds);
-                if (limitTime > time)
-                {
-                    combinedDT = combinedDT.Value.AddDays(1);
-                }
+                combinedDT = new DateTime(limit.Year, limit.Month, limit.Day, taskTime.Hours, taskTime.Minutes, taskTime.Seconds);                
             }
             // Date and Time both defined
             else if (date != null && time != null)
             {
                 DateTime setDate = date.Value;
-                TimeSpan setTime = time.Value;
+                TimeSpan setTime = time.Value;                
                 combinedDT = new DateTime(setDate.Year, setDate.Month, setDate.Day, setTime.Hours, setTime.Minutes, setTime.Seconds);
             }
             // Date defined but not time
@@ -581,12 +588,12 @@ namespace ToDo
             {
                 combinedDT = date;
             }
-            if (crossDayBoundary || (combinedDT < limit && dateSpecificity.Day == false))
-            {
-                combinedDT = combinedDT.Value.AddDays(1);
-            }
             if (limit > combinedDT)
                 PushDateToBeyondLimit(ref combinedDT, ref dateSpecificity, limit, allowCurrent);
+            /*if (crossDayBoundary || (combinedDT < limit && dateSpecificity.Day == false))
+            {
+                combinedDT = combinedDT.Value.AddDays(1);
+            }*/
             return combinedDT;
         }
 

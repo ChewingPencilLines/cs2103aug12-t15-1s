@@ -50,12 +50,7 @@ namespace ToDo
                             );
             return task;
         }
-
-        public override DayOfWeek GetDay()
-        {
-            return startDateTime.DayOfWeek;
-        }
-
+        
         public override bool IsWithinTime(DateTime? start, DateTime? end)
         {
             bool isWithinTime = true;

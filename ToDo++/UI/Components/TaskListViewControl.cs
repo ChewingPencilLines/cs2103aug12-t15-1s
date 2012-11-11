@@ -17,7 +17,7 @@ namespace ToDo
 
         List<Task> displayedTasks;
         OLVColumn defaultCol;
-        private Settings settings;
+        Settings settings;
 
         public TaskListViewControl()
         {

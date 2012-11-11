@@ -121,11 +121,6 @@ namespace ToDo
 
         public abstract void CopyDateTimes(ref DateTime? startTime, ref DateTime? endTime, ref DateTimeSpecificity specific);
 
-        public virtual DayOfWeek GetDay()
-        {
-            throw new TaskHasNoDayException();
-        }
-
         /// <summary>
         /// Returns string representation of this task's times.
         /// </summary>

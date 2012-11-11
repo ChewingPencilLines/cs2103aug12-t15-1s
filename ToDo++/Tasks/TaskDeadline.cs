@@ -28,12 +28,7 @@ namespace ToDo
             isSpecific = endDateSpecificity;
             Logger.Info("Created a deadline task", "TaskDeadline::TaskDeadline");
         }
-
-        public override DayOfWeek GetDay()
-        {
-            return endDateTime.DayOfWeek;
-        }
-
+        
         public override XElement ToXElement()
         {
             XElement task = new XElement("Task",
