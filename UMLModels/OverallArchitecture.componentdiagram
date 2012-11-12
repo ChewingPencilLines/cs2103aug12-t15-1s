@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<componentModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" xmlns:dm9="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner" dslVersion="1.0.0.0" Id="b70f643b-f4a9-455d-82d9-d1ad7070519b" name="Architecture Diagram" linkedPackageId="9727a721-c48a-4783-b8f5-55c61cffe3ac" xmlns="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner">
+<componentModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" xmlns:dm9="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner" xmlns:dm10="http://schemas.microsoft.com/dsltools/LogicalClassDesigner" dslVersion="1.0.0.0" Id="b70f643b-f4a9-455d-82d9-d1ad7070519b" name="Architecture Diagram" linkedPackageId="9727a721-c48a-4783-b8f5-55c61cffe3ac" xmlns="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner">
   <packagedElements>
     <componentModelHasComponents>
       <component Id="38cba4a6-8a45-4a1f-b0f7-a93a2a144255" name="Logic" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="3597a6d1-4626-46df-bc26-589ab145de30" />
         <suppliersInternal>
           <dependency Id="5535fbd4-0967-4aea-bb07-42f063695082">
-            <componentMoniker Id="ff32bcca-d601-41b3-9e56-f395a9063787" LastKnownName="UI" />
+            <componentMoniker Id="ff32bcca-d601-41b3-9e56-f395a9063787" LastKnownName="User Interface" />
             <elementDefinition Id="317241c1-cd7c-4fda-a9d5-82a71f611d92" />
           </dependency>
           <dependency Id="666a69b4-7506-42b6-b2b8-fce2649fe527">
@@ -46,13 +46,13 @@
               </connector>
             </targetNamedElementsInternal>
             <type_NamedElement>
-              <componentMoniker Id="b92ec051-392e-4e58-a5d8-26413050524b" LastKnownName="Parser" />
+              <componentMoniker Id="b92ec051-392e-4e58-a5d8-26413050524b" LastKnownName="Parsers" />
             </type_NamedElement>
           </part>
           <part Id="4c268d06-2aa0-437b-bd2a-aa4feb2979d1" name="Storage" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="true">
             <elementDefinition Id="7034b021-ca93-4fb8-9c69-49629988e17e" />
             <type_NamedElement>
-              <componentMoniker Id="829d3814-2c14-4d62-8e6d-e232467733d2" LastKnownName="Handler" />
+              <componentMoniker Id="829d3814-2c14-4d62-8e6d-e232467733d2" LastKnownName="Storage" />
             </type_NamedElement>
           </part>
           <part Id="408d9820-f8c9-43f0-89ad-f6f6edb3941a" name="Operations" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="true">
@@ -76,10 +76,10 @@
               </connector>
             </targetNamedElementsInternal>
             <type_NamedElement>
-              <componentMoniker Id="171133b3-8ed5-4d6d-bcb1-ba0b9d1771a9" LastKnownName="Operation" />
+              <componentMoniker Id="171133b3-8ed5-4d6d-bcb1-ba0b9d1771a9" LastKnownName="Operations" />
             </type_NamedElement>
           </part>
-          <part Id="29c65792-c45d-4260-82c2-eba78afbbc14" name="MainSettings" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="true">
+          <part Id="29c65792-c45d-4260-82c2-eba78afbbc14" name="Settings" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="true">
             <elementDefinition Id="35af5870-cbb1-4936-8580-c1a976a98a84" />
             <targetNamedElementsInternal>
               <connector Id="05ee92f7-883c-4ce3-80ad-296ef10c14fa" isLeaf="false" isStatic="false">
@@ -107,7 +107,7 @@
       </component>
     </componentModelHasComponents>
     <componentModelHasComponents>
-      <component Id="ff32bcca-d601-41b3-9e56-f395a9063787" name="UI" isAbstract="false" isLeaf="false" isActiveClass="false">
+      <component Id="ff32bcca-d601-41b3-9e56-f395a9063787" name="User Interface" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="6313cf43-212f-40ed-b36b-2a81fc6f57d6" />
         <suppliersInternal>
           <dependency Id="a01dfca0-ede9-482d-b945-a287a5ed959e">
@@ -118,17 +118,17 @@
       </component>
     </componentModelHasComponents>
     <componentModelHasComponents>
-      <component Id="b92ec051-392e-4e58-a5d8-26413050524b" name="Parser" isAbstract="false" isLeaf="false" isActiveClass="false">
+      <component Id="b92ec051-392e-4e58-a5d8-26413050524b" name="Parsers" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="5ccdfb89-68ce-4c1c-8953-63c77750fe51" />
       </component>
     </componentModelHasComponents>
     <componentModelHasComponents>
-      <component Id="829d3814-2c14-4d62-8e6d-e232467733d2" name="Handler" isAbstract="false" isLeaf="false" isActiveClass="false">
+      <component Id="829d3814-2c14-4d62-8e6d-e232467733d2" name="Storage" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="8f16c895-a8a4-44d4-9cdb-a41099e4ff8b" />
       </component>
     </componentModelHasComponents>
     <componentModelHasComponents>
-      <component Id="171133b3-8ed5-4d6d-bcb1-ba0b9d1771a9" name="Operation" isAbstract="false" isLeaf="false" isActiveClass="false">
+      <component Id="171133b3-8ed5-4d6d-bcb1-ba0b9d1771a9" name="Operations" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="5b421b2b-b95a-4d4d-9d41-560132352b0e" />
       </component>
     </componentModelHasComponents>
