@@ -10,62 +10,42 @@ namespace CommandParserTest
     public class CommandParserTest
     {
         CommandParser testCmdParser;
-
+       
         [TestMethod]
-        public void OperationParseSearchDeadlineTest()
+        public void OperationSearchDeadlineParseTest()
         {
             testCmdParser = new CommandParser();
-            Operation op1 = testCmdParser.ParseOperation("search by oct 30th");
+            Operation op1 = testCmdParser.ParseOperation("search by 2013 oct 30th 5:49 pm");
             Assert.AreEqual("ToDo.OperationSearch", op1.GetType().ToString());
             return;
         }
 
         [TestMethod]
-        public void OperationParseTestTimedSingle()
+        public void OperationTimedParseTest()
         {
             testCmdParser = new CommandParser();
-            Operation op1 = testCmdParser.ParseOperation("task do stuff add Oct 15 5 am");
+            Operation op1 = testCmdParser.ParseOperation("task do stuff add sunday morning to wed 13:20 ");
             Assert.AreEqual("ToDo.OperationAdd", op1.GetType().ToString());
+            
             return;
         }
 
         [TestMethod]
-        public void OperationParseTestInvalid()
+        public void OperationInvalidParseTest()
         {
             testCmdParser = new CommandParser();
-            Operation op1 = testCmdParser.ParseOperation("add task do stuff  by 20");
-            Assert.AreEqual("ToDo.OperationAdd", op1.GetType().ToString());
+            Operation op1 = null;
+            op1 = testCmdParser.ParseOperation("add delete modify");
+            Assert.IsTrue(op1 == null);
             return;
         }
 
         [TestMethod]
-        public void OperationParseTestDay()
+        public void OperationScheduleParseTest()
         {
             testCmdParser = new CommandParser();
-            Operation op1 = testCmdParser.ParseOperation("add task do stuff by friday 2pm");
-            Assert.AreEqual("ToDo.OperationAdd", op1.GetType().ToString());
-            return;
-        }
-
-        [TestMethod]
-        public void OperationParseTestTimedDuo()
-        {
-            testCmdParser = new CommandParser();
-            Operation op1 = testCmdParser.ParseOperation("task do stuff add Oct 15 5 am to 6am");
-            Assert.AreEqual("ToDo.OperationAdd", op1.GetType().ToString());
-            return;
-        }
-
-        [TestMethod]
-        public void OperationParseTestDeadline()
-        {
-            testCmdParser = new CommandParser();
-            Operation op1 = testCmdParser.ParseOperation("task do stuff add by 9 pm");
-            Assert.AreEqual("ToDo.OperationAdd", op1.GetType().ToString());
-            //Assert.IsTrue(task1.TaskName == "task do stuff");
-            //Assert.IsTrue(task1 is TaskDeadline);
-            //TimeSpan deadline = ((TaskDeadline)task1).EndTime.TimeOfDay;
-            //Assert.IsTrue((deadline.Equals(new TimeSpan(21,0,0))));
+            Operation op1 = testCmdParser.ParseOperation("task  jan 15th midnight - jan 30th morning schedule 3000 hours");
+            Assert.AreEqual("ToDo.OperationSchedule", op1.GetType().ToString());
             return;
         }
 
