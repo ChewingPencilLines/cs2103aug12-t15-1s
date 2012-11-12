@@ -259,21 +259,6 @@
   <data name="ObjectListView1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\lib\ObjectListView.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="ToDo__" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\ToDo++.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ToDo___exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\ToDo++.exe.config;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="ToDo___vshost" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\ToDo++.vshost.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ToDo___vshost_exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\ToDo++.vshost.exe.config;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="ToDo___vshost_exe1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\ToDo++.vshost.exe.manifest;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="TranspControl" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\lib\TranspControl.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
