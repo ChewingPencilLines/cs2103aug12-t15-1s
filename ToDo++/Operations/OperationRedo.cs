@@ -15,7 +15,6 @@ namespace ToDo
         /// Derived constructor to create a Redo Operation.
         /// </summary>
         /// <param name="sortType">The type of sorting to use on the displayed task after executing this Operation.</param>
-        /// <returns>Nothing.</returns>
         public OperationRedo(SortType sortType)
             : base(sortType)
         { }

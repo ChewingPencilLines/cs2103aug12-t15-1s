@@ -11,7 +11,6 @@ namespace ToDo
         /// Constructor for sort operation.
         /// </summary>
         /// <param name="sortType">The SortType to sort the currently displayed list by.</param>
-        /// <returns>Nothing.</returns>
         public OperationSort(SortType sortType)
             :base (sortType)
         {
