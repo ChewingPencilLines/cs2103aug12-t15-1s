@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner"
   dslVersion="1.0.0.0"
   Id="2b53fb6f-3ce5-4516-9539-9615520b11e6"
   name="ModelingProject" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
@@ -282,6 +282,132 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <interaction
+        Id="a82a0502-5f3e-4b43-abd4-79ccc62f74b6"
+        name="ProcessCommand"
+        collapseFragmentsFlag="false"
+        isActiveClass="false"
+        isAbstract="false"
+        isLeaf="false"
+        isReentrant="false">
+        <lifelines>
+          <lifeline
+            Id="cf37032b-b19e-443c-9f40-041ffdc12256"
+            name="this : Logic"
+            isActor="false"
+            lifelineDisplayName="this : Logic"
+            referencedInstance="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=Logic ObjectInstance=&quot;Object instance 2&quot;)"
+            referencedType="ToDo‎.Logic">
+            <referencesInternal>
+              <reference
+                Id="b31512e7-8811-4e5e-9db9-d5d8c9fce980"
+                handle="+ Id.Equals(&quot;Microsoft.Solution.ClassView&quot;) /&#xD;&#xA;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Namespace=ToDo)&quot;)/&#xD;&#xA;&quot;Microsoft.Contains&quot;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Assembly=&amp;quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&amp;quot; Namespace=ToDo Type=Logic)&quot;)"
+                tag="DGQL" />
+              <reference
+                Id="231e1c04-5aa9-4f34-9c3f-c7797d0334a6"
+                handle="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=Logic)"
+                tag="DGML" />
+            </referencesInternal>
+            <represents>
+              <propertyMoniker
+                Id="2a4d6b06-4fca-46c8-831f-d01f21e2b542"
+                LastKnownLocation="ModelingProject1.uml" />
+            </represents>
+          </lifeline>
+          <lifeline
+            Id="82cb0589-c92f-404f-a051-476c7360e07a"
+            name="this.commandParser : CommandParser"
+            isActor="false"
+            lifelineDisplayName="this.commandParser : CommandParser"
+            referencedInstance="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=Logic Member=commandParser ObjectInstance=&quot;Object instance 8&quot;)"
+            referencedType="ToDo‎.CommandParser">
+            <referencesInternal>
+              <reference
+                Id="d840d0d1-899f-4e03-aab8-8b586c869e0a"
+                handle="+ Id.Equals(&quot;Microsoft.Solution.ClassView&quot;) /&#xD;&#xA;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Namespace=ToDo)&quot;)/&#xD;&#xA;&quot;Microsoft.Contains&quot;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Assembly=&amp;quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&amp;quot; Namespace=ToDo Type=CommandParser)&quot;)"
+                tag="DGQL" />
+              <reference
+                Id="0a596f74-c733-444b-8e89-c5c4a421f0dc"
+                handle="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=CommandParser)"
+                tag="DGML" />
+            </referencesInternal>
+          </lifeline>
+          <lifeline
+            Id="c73b61b7-b247-4ef4-a1fb-e03c75e28908"
+            name="this.commandParser.stringParser : StringParser"
+            isActor="false"
+            lifelineDisplayName="this.commandParser.stringParser : StringParser"
+            referencedInstance="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=CommandParser Member=stringParser ObjectInstance=&quot;Object instance 9&quot;)"
+            referencedType="ToDo‎.StringParser">
+            <referencesInternal>
+              <reference
+                Id="5d70de51-7bbb-4cfc-927d-cbba84a97f45"
+                handle="+ Id.Equals(&quot;Microsoft.Solution.ClassView&quot;) /&#xD;&#xA;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Namespace=ToDo)&quot;)/&#xD;&#xA;&quot;Microsoft.Contains&quot;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Assembly=&amp;quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&amp;quot; Namespace=ToDo Type=StringParser)&quot;)"
+                tag="DGQL" />
+              <reference
+                Id="5ad87438-1726-415f-ae79-65884f2c1e21"
+                handle="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=StringParser)"
+                tag="DGML" />
+            </referencesInternal>
+          </lifeline>
+          <lifeline
+            Id="0fe2550c-4a5b-4f55-a9fb-95d6ff086d50"
+            name="this.commandParser.tokenFactory : TokenGenerator"
+            isActor="false"
+            lifelineDisplayName="this.commandParser.tokenFactory : TokenGenerator"
+            referencedInstance="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=CommandParser Member=tokenFactory ObjectInstance=&quot;Object instance 18&quot;)"
+            referencedType="ToDo‎.TokenGenerator">
+            <referencesInternal>
+              <reference
+                Id="2036600d-21f2-4cf5-86e6-2388e1794e54"
+                handle="+ Id.Equals(&quot;Microsoft.Solution.ClassView&quot;) /&#xD;&#xA;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Namespace=ToDo)&quot;)/&#xD;&#xA;&quot;Microsoft.Contains&quot;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Assembly=&amp;quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&amp;quot; Namespace=ToDo Type=TokenGenerator)&quot;)"
+                tag="DGQL" />
+              <reference
+                Id="fdef5df0-9f99-413a-a4b9-d504a1f0d07f"
+                handle="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=TokenGenerator)"
+                tag="DGML" />
+            </referencesInternal>
+          </lifeline>
+          <lifeline
+            Id="e0eca79d-714b-4fae-96ca-86437ccec413"
+            name="newOperation : Operation"
+            isActor="false"
+            lifelineDisplayName="newOperation : Operation"
+            referencedInstance="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=OperationGenerator Member=CreateOperation ObjectInstance=&quot;Object instance 53&quot;)"
+            referencedType="ToDo‎.Operation">
+            <referencesInternal>
+              <reference
+                Id="733c50fa-9526-49d1-b0e8-00bc096993ae"
+                handle="+ Id.Equals(&quot;Microsoft.Solution.ClassView&quot;) /&#xD;&#xA;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Namespace=ToDo)&quot;)/&#xD;&#xA;&quot;Microsoft.Contains&quot;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Assembly=&amp;quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&amp;quot; Namespace=ToDo Type=Operation)&quot;)"
+                tag="DGQL" />
+              <reference
+                Id="f94eabf1-ab83-4b1a-9ea4-a42d9a923f55"
+                handle="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=Operation)"
+                tag="DGML" />
+            </referencesInternal>
+          </lifeline>
+        </lifelines>
+        <ownedAttributesInternal>
+          <property
+            Id="2a4d6b06-4fca-46c8-831f-d01f21e2b542"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false">
+            <type_NamedElement>
+              <componentMoniker
+                Id="3597a6d1-4626-46df-bc26-589ab145de30"
+                LastKnownName="Logic"
+                LastKnownLocation="ModelingProject1.uml" />
+            </type_NamedElement>
+          </property>
+        </ownedAttributesInternal>
+      </interaction>
     </packageHasNamedElement>
   </packagedElements>
   <primitiveType

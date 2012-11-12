@@ -227,14 +227,85 @@ namespace ToDo
 
         #endregion
 
-        public void SetDefaultScheduleTimeLength(int length) { settingInfo.misc.DefaultScheduleTimeLength = length; EventHandlers.UpdateSettings(settingInfo); UpdateDictionaryPostponeSchedule(); }
+        #region TimeRangeTimeTypes
+
+        /// <summary>
+        /// Set default time length for Command SCHEDULE
+        /// </summary>
+        /// <param name="length">default schedule time length</param>
+        public void SetDefaultScheduleTimeLength(int length) 
+        { 
+            settingInfo.misc.DefaultScheduleTimeLength = length; 
+            EventHandlers.UpdateSettings(settingInfo); 
+            UpdateDictionaryPostponeSchedule();
+            string loggerString = string.Format("User set default schedule time length to {0}..", length);
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get default time length for Command SCHEDULE
+        /// </summary>
+        /// <returns>Get default time length</returns>
         public int GetDefaultScheduleTimeLength() { return settingInfo.misc.DefaultScheduleTimeLength; }
-        public void SetDefaultPostponeDurationLength(int length) { settingInfo.misc.DefaultPostponeDurationLength = length; EventHandlers.UpdateSettings(settingInfo); UpdateDictionaryPostponeSchedule(); }
+
+        /// <summary>
+        /// Set default duration length for Command POSTPONE
+        /// </summary>
+        /// <param name="length">default duration length</param>
+        public void SetDefaultPostponeDurationLength(int length) 
+        { 
+            settingInfo.misc.DefaultPostponeDurationLength = length; 
+            EventHandlers.UpdateSettings(settingInfo); 
+            UpdateDictionaryPostponeSchedule();
+            string loggerString = string.Format("User set default postpone time duration to {0}..", length);
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get default duration length for Command POSTPONE
+        /// </summary>
+        /// <returns>default duration length</returns>
         public int GetDefaultPostponeDurationLength() { return settingInfo.misc.DefaultPostponeDurationLength; }
-        public void SetDefaultScheduleTimeLengthType(TimeRangeType timeRange) { settingInfo.misc.DefaultScheduleTimeLengthType = timeRange; EventHandlers.UpdateSettings(settingInfo); UpdateDictionaryPostponeSchedule(); }
+
+        /// <summary>
+        /// Set default time length type (HOUR,DAY etc.) for Command SCHEDULE
+        /// </summary>
+        /// <param name="timeRange">default time length type</param>
+        public void SetDefaultScheduleTimeLengthType(TimeRangeType timeRange) 
+        { 
+            settingInfo.misc.DefaultScheduleTimeLengthType = timeRange; 
+            EventHandlers.UpdateSettings(settingInfo); 
+            UpdateDictionaryPostponeSchedule();
+            string loggerString = string.Format("User set default schedule time length type to {0}..", timeRange.ToString());
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get default time length type (HOUR,DAY etc.) for Command SCHEDULE
+        /// </summary>
+        /// <returns>default time length type</returns>
         public TimeRangeType GetDefaultScheduleTimeLengthType() { return settingInfo.misc.DefaultScheduleTimeLengthType; }
-        public void SetDefaultPostponeDurationType(TimeRangeType timeRange) { settingInfo.misc.DefaultPostponeDurationType = timeRange; EventHandlers.UpdateSettings(settingInfo); UpdateDictionaryPostponeSchedule(); }
+
+        /// <summary>
+        /// Set default duration type (HOUR,DAY etc.) for Command POSTPONE
+        /// </summary>
+        /// <param name="timeRange">default duration type</param>
+        public void SetDefaultPostponeDurationType(TimeRangeType timeRange) 
+        { 
+            settingInfo.misc.DefaultPostponeDurationType = timeRange; 
+            EventHandlers.UpdateSettings(settingInfo); 
+            UpdateDictionaryPostponeSchedule();
+            string loggerString = string.Format("User set default postpone duration type to {0}..", timeRange.ToString());
+            Logger.Info(loggerString, "Logc::Settings");
+        }
+
+        /// <summary>
+        /// Get default duration type (HOUR,DAY etc.) for Command POSTPONE
+        /// </summary>
+        /// <returns>default duration type</returns>
         public TimeRangeType GetDefaultPostponeDurationType() { return settingInfo.misc.DefaultPostponeDurationType; }
+
+        #endregion
 
         private void UpdateDictionaryPostponeSchedule()
         {
@@ -273,7 +344,7 @@ namespace ToDo
         /// If a command repeats itself, an exception will be thrown
         /// </summary>
         /// <param name="newKeyword">New Command that is to be added</param>
-        /// <param name="commandString">Specify to which CommandType it is being added to</param>
+        /// <param name="flexiCommandType">Specify to which CommandType it is being added to</param>
         public void AddFlexiKeyword(string newKeyword, Enum flexiCommandType)
         {
             string flexiType = flexiCommandType.GetType().ToString();
@@ -335,9 +406,10 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method removes the specified command
+        /// This method removes the specified command.
         /// </summary>
-        /// <param name="commandString">Specify to which CommandType it is being added to</param>
+        /// <param name="keywordToRemove">The keyword to remove.</param>
+        /// <param name="flexiCommandType">The command type that is being removed.</param>
         public void RemoveFlexiKeyword(string keywordToRemove, Enum flexiCommandType)
         {
             string flexiType = flexiCommandType.GetType().ToString();
@@ -395,7 +467,7 @@ namespace ToDo
         /// <summary>
         /// Returns a list of all added/available user commands
         /// </summary>
-        /// <param name="commandType">Specify the type of Command you wish to see User Commands of</param>
+        /// <param name="flexiCommandType">Specify the type of Command you wish to see User Commands of</param>
         /// <returns>Returns a list of added commands</returns>
         public List<string> GetFlexiKeywordList(Enum flexiCommandType)
         {

@@ -59,7 +59,7 @@ namespace ToDo
         /// </summary>
         /// <param name="taskList">List of task this method will operate on.</param>
         /// <param name="storageIO">Storage controller that will be used to store neccessary data.</param>
-        /// <returns>Response indicating the result of the operation execution.</re
+        /// <returns>Response indicating the result of the operation execution.</returns>
         public override Response Execute(List<Task> taskList, Storage storageIO)
         {
             Response response = null;
