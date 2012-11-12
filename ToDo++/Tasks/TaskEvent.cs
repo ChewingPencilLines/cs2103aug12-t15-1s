@@ -28,7 +28,7 @@ namespace ToDo
         #endregion
 
         /// <summary>
-        /// Constructor for floating tasks.
+        /// Constructor for event tasks.
         /// </summary>
         /// <param name="taskName">The task's display name.</param>
         /// <param name="startTime">The task's start time</param>
