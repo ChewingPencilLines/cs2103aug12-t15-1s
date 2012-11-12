@@ -5,13 +5,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo++", "ToDo++\ToDo++.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotkeyLib", "HotkeyLib\HotkeyLib.csproj", "{09823DA8-C587-4363-95F1-CD99F4D0A678}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParsersUnitTest", "ParsingLogicUnitTest\ParsersUnitTest.csproj", "{398C95AD-828B-4FFC-8526-2D3B13886B3D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomControls", "CustomControls\CustomControls.csproj", "{5B85E2D7-2005-4496-B5D7-59C68A1EC91D}"
 EndProject
 Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "ProjectModel", "UMLModels\ProjectModel.modelproj", "{794D6291-8262-4A7D-BE6F-5E89F7DE1536}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperationUnitTest", "OperatingLogicUnitTest\OperationUnitTest.csproj", "{BC114E1E-A71B-4E07-B9E1-5584329D099E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectListView2010", "ObjectListView\ObjectListView2010.csproj", "{18FEDA0C-D147-4286-B39A-01204808106A}"
 EndProject
@@ -21,9 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatTabControl", "FlatTabCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZzzzRangeBar", "ZzzzRangeBar\ZzzzRangeBar.csproj", "{A47E495C-A50B-47E3-9148-D788B4E9C652}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "LogicUnitTest\IntegrationTests.csproj", "{B34BA5B3-3C07-4A74-839B-F467F943E3C3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranspControl", "TranspControl\TranspControl.csproj", "{984B6860-3AE3-420A-BB8D-BCE5AB333141}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{398C95AD-828B-4FFC-8526-2D3B13886B3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{B34BA5B3-3C07-4A74-839B-F467F943E3C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,10 +65,6 @@ Global
 		{B34BA5B3-3C07-4A74-839B-F467F943E3C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B34BA5B3-3C07-4A74-839B-F467F943E3C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B34BA5B3-3C07-4A74-839B-F467F943E3C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC114E1E-A71B-4E07-B9E1-5584329D099E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC114E1E-A71B-4E07-B9E1-5584329D099E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC114E1E-A71B-4E07-B9E1-5584329D099E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC114E1E-A71B-4E07-B9E1-5584329D099E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0EA9ACC-A4BF-49C9-AE91-52EA6E573CC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0EA9ACC-A4BF-49C9-AE91-52EA6E573CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0EA9ACC-A4BF-49C9-AE91-52EA6E573CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -41,9 +41,16 @@ namespace CommandParserTest
         public void OperationInvalidParseTest()
         {
             testCmdParser = new CommandParser();
-            Operation op1 = null;
-            op1 = testCmdParser.ParseOperation("add delete modify");
-            Assert.IsTrue(op1 == null);
+            bool flag = false;
+            try
+            {
+                testCmdParser.ParseOperation("add delete modify");
+            }
+            catch (MultipleCommandsException)
+            {
+                flag = true;
+            }
+            Assert.IsTrue(flag);
             return;
         }
 
