@@ -135,10 +135,10 @@ namespace ToDo
         #endregion
 
         // ******************************************************************
-        // Win32 Functions
+        // Internal Design Functions
         // ******************************************************************
 
-        #region Win32Functions
+        #region InternalDesignFunctions
 
         //Placing ToDo++ in System Tray
         #region SystemTray
@@ -562,7 +562,7 @@ namespace ToDo
         /// <summary>
         /// Toggle between TaskListView and Settings Panels
         /// </summary>
-        public void ToggleToDoSettingsPanel()
+        public void ToggleToDoPreferencesPanel()
         {
             if (this.customPanelControl.SelectedIndex == TASKDISPLAY_PANEL)
             {
@@ -620,12 +620,12 @@ namespace ToDo
             }
             if (keyData == (Keys.Alt | Keys.S))
             {
-                ToggleToDoSettingsPanel();
+                ToggleToDoPreferencesPanel();
                 return true;
             }
             if (keyData == (Keys.Alt | Keys.S))
             {
-                ToggleToDoSettingsPanel();
+                ToggleToDoPreferencesPanel();
                 return true;
             }
             if ((keyData == (Keys.Alt | Keys.Up)) || (keyData == (Keys.Alt | Keys.Down)))

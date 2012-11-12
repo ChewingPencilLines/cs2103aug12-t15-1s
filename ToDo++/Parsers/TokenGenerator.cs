@@ -388,9 +388,6 @@ namespace ToDo
                     {
                         year += 2000;
                     }
-                    // Month should now be specific. <- may not be need anymore, added finalize DT to handle all finalizations: ivan.
-                    isSpecific.Month = true;
-
                     dateTime = TryParsingDate(year, month, day, false);
                     Logger.Info("Date word found: " + dateTime, "GenerateDateTokens::TokenGenerator");
                     dateToken = new TokenDate(index, dateTime, isSpecific);
@@ -478,9 +475,11 @@ namespace ToDo
 
         /// <summary>
         /// This method searches an input list of strings against the set list of context keywords and returns
-        /// a list of tokens corresponding to the matched context keywords.
+        /// a list of tokens corresponding to the matched context keywords. It requires a list of already parsed
+        /// tokens as it only returns tokens which are in front of a context accepting token.
         /// </summary>
         /// <param name="input">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="parsedTokens">The list of tokens to check against for context accepting tokens.</param>
         /// <returns>List of context tokens</returns>
         public List<Token> GenerateContextTokens(List<string> input, List<Token> parsedTokens)
         {
@@ -789,7 +788,7 @@ namespace ToDo
         /// No 2 tokens should have the same positions. However, should such an error arise, a 0 is returned.
         /// </summary>
         /// <param name="x">The first token</param>
-        /// <param name="x">The second token to be compared with</param>
+        /// <param name="y">The second token to be compared with</param>
         /// <returns>-1, 1, or 0, indicating the results of the comparison</returns>
         private int CompareByPosition(Token x, Token y)
         {

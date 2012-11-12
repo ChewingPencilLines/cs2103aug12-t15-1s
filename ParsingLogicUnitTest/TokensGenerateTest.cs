@@ -3,31 +3,20 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDo;
 
-namespace TokenGeneratorTest
+namespace StringParserTest
 {
+    /// <summary>
+    /// This test is unit test for tokengenerator,
+    /// which generates corresponding tokens from given string list.
+    /// contains 9 test cases.
+    /// </summary>
+  
     [TestClass]
     public class TokensGenerateTest
     {
-        TokenGenerator gene = new TokenGenerator();
+        TokenGenerator testGenerator = new TokenGenerator();
         List<string> input;
         List<Token> result;
-
-        [TestMethod]
-        public void SimpleAddTest() 
-        {
-            input = new List<string>();
-            input.Add("add");
-            input.Add("morning");
-            input.Add("8AM");
-            input.Add("TASK");
-            result = gene.GenerateAllTokens(input);
-            Assert.AreEqual(4, result.Count);
-            Assert.IsTrue(result[0] is TokenCommand);
-            Assert.IsTrue(result[1] is TokenTimeRange);
-            Assert.IsTrue(result[2] is TokenTime);
-            Assert.IsTrue(result[3] is TokenLiteral);
-            return;
-        }
 
         [TestMethod]
         public void SimpleDaterangeAddTest()
@@ -38,7 +27,7 @@ namespace TokenGeneratorTest
             input.Add("tmr");
             input.Add("8AM");
             input.Add("TASK");
-            result = gene.GenerateAllTokens(input);
+            result = testGenerator.GenerateAllTokens(input);
             Assert.AreEqual(5, result.Count);
             Assert.IsTrue(result[0] is TokenCommand);
             Assert.IsTrue(result[1] is TokenTimeRange);
@@ -49,58 +38,21 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void DateTimeParseTest1()
+        public void AddFringeCase()
         {
             input = new List<string>();
-            input.Add("delete");
-            input.Add("3.5.2013"); 
-            result = gene.GenerateAllTokens(input);
-            Assert.AreEqual(2, result.Count);
-            Assert.IsTrue(result[0] is TokenCommand);
-            Assert.IsTrue(result[1] is TokenDate); 
-            return;
-        }
-
-        [TestMethod]
-         public void DateTimeParseTest2()
-        {
-            input = new List<string>();
-            input.Add("delete");
-            input.Add("03/05/2013");
-            result = gene.GenerateAllTokens(input);
-            Assert.AreEqual(2, result.Count);
-            Assert.IsTrue(result[0] is TokenCommand);
-            Assert.IsTrue(result[1] is TokenDate);       
-            return;
-        }
-
-        [TestMethod]
-        public void DateTimeParseTest3()
-        {
-            input = new List<string>();
-            input.Add("postpone");
-            input.Add("tmr");
+            input.Add("add");
+            input.Add("task");
+            input.Add("today");
             input.Add("to");
-            input.Add("wed");
-            result = gene.GenerateAllTokens(input);
-            Assert.AreEqual(4, result.Count);
+            input.Add("sunday");
+            result = testGenerator.GenerateAllTokens(input);
+            Assert.AreEqual(5, result.Count);
             Assert.IsTrue(result[0] is TokenCommand);
-            Assert.IsTrue(result[1] is TokenDate);
-            Assert.IsTrue(result[2] is TokenContext);
-            Assert.IsTrue(result[3] is TokenDay);
-            return;
-        }
-
-        [TestMethod]
-        public void GenerateAllTokensTest6()
-        {
-            input = new List<string>();
-            input.Add("delete");
-            input.Add("jan 13th");
-            result = gene.GenerateAllTokens(input);
-            Assert.AreEqual(2, result.Count);
-            Assert.IsTrue(result[0] is TokenCommand);
-            Assert.IsTrue(result[1] is TokenDate);
+            Assert.IsTrue(result[1] is TokenLiteral);
+            Assert.IsTrue(result[2] is TokenDate);
+            Assert.IsTrue(result[3] is TokenContext);
+            Assert.IsTrue(result[4] is TokenDay);
             return;
         }
 
@@ -110,7 +62,7 @@ namespace TokenGeneratorTest
             input = new List<string>();
             input.Add("delete");
             input.Add("1-5");
-            result = gene.GenerateAllTokens(input);
+            result = testGenerator.GenerateAllTokens(input);
             Assert.AreEqual(2, result.Count);
             Assert.IsTrue(result[0] is TokenCommand);
             Assert.IsTrue(result[1] is TokenIndexRange);
@@ -123,7 +75,7 @@ namespace TokenGeneratorTest
             input = new List<string>();
             input.Add("delete");
             input.Add("-1");
-            result = gene.GenerateAllTokens(input);
+            result = testGenerator.GenerateAllTokens(input);
             Assert.AreEqual(2, result.Count);
             Assert.IsTrue(result[0] is TokenCommand);
             Assert.IsTrue(result[1] is TokenLiteral);
@@ -131,7 +83,20 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void CombinedTest1()
+        public void DateTimeDetectTest()
+        {
+            input = new List<string>();
+            input.Add("03.08.14");
+            input.Add("03/05/2013");
+            result = testGenerator.GenerateAllTokens(input);
+            Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result[0] is TokenDate);
+            Assert.IsTrue(result[1] is TokenDate);
+            return;
+        }
+
+        [TestMethod]
+        public void CombinedTest()
         {
             input = new List<string>();
             input.Add("add");
@@ -141,7 +106,7 @@ namespace TokenGeneratorTest
             input.Add("to");
             input.Add("3/2/2013");
             input.Add("evening");
-            result = gene.GenerateAllTokens(input);
+            result = testGenerator.GenerateAllTokens(input);
             Assert.AreEqual(7, result.Count);
             Assert.IsTrue(result[0] is TokenCommand);
             Assert.IsTrue(result[1] is TokenLiteral);
@@ -154,35 +119,12 @@ namespace TokenGeneratorTest
         }
 
         [TestMethod]
-        public void CombinedTest2()
-        {
-            input = new List<string>();
-            input.Add("add");
-            input.Add("aaaaa");
-            input.Add("feb");
-            input.Add("13th");
-            input.Add("to");
-            input.Add("jun");
-            input.Add("22nd");
-            result = gene.GenerateAllTokens(input);
-            Assert.AreEqual(7, result.Count);
-            Assert.IsTrue(result[0] is TokenCommand);
-            Assert.IsTrue(result[1] is TokenLiteral);
-            Assert.IsTrue(result[2] is TokenDate);
-            Assert.IsTrue(result[3] is TokenDate);
-            Assert.IsTrue(result[4] is TokenContext);
-            Assert.IsTrue(result[5] is TokenDate);
-            Assert.IsTrue(result[6] is TokenDate);
-            return;
-        }
-
-        [TestMethod]
         public void SortTypeTest() 
         {
             input = new List<string>();
             input.Add("sort");
             input.Add("date");
-            result = gene.GenerateAllTokens(input);
+            result = testGenerator.GenerateAllTokens(input);
             Assert.AreEqual(2, result.Count);
             Assert.IsTrue(result[0] is TokenCommand);
             Assert.IsTrue(result[1] is TokenSortType);
@@ -200,7 +142,7 @@ namespace TokenGeneratorTest
             input.Add("13:00");
             input.Add("-");
             input.Add("19:00");
-            result = gene.GenerateAllTokens(input);
+            result = testGenerator.GenerateAllTokens(input);
             Assert.AreEqual(6, result.Count);
             Assert.IsTrue(result[0] is TokenCommand); 
             Assert.IsTrue(result[1] is TokenLiteral);
@@ -221,7 +163,7 @@ namespace TokenGeneratorTest
             input.Add("-");
             input.Add("5/6");
             input.Add("2013");
-            result = gene.GenerateAllTokens(input);
+            result = testGenerator.GenerateAllTokens(input);
             Assert.AreEqual(6, result.Count);
             Assert.IsTrue(result[0] is TokenCommand); 
             Assert.IsTrue(result[1] is TokenLiteral);

@@ -45,6 +45,7 @@ namespace ToDo
         /// <param name="isAll">If this boolean is true, the current displayed tasks or results of the search
         /// carried out will all be postponed without futher confirmation.</param>
         /// <param name="searchType">The type of search to be carried out (in addition to the other filters) if required.</param>
+        /// <param name="postponeDuration">The duration to postpone the task by.</param>
         /// <param name="sortType">The type of sort to sort the diplay list by after the operation is executed.</param>
         /// <returns>Nothing.</returns>
         public OperationPostpone(string taskName, int[] indexRange, DateTime? startTime,

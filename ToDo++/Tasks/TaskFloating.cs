@@ -12,7 +12,7 @@ namespace ToDo
         /// Constructor for floating tasks.
         /// </summary>
         /// <param name="taskName">The task's display name.</param>
-        /// <param name="state">The task's done state. Is set to false by default.</param>
+        /// <param name="isDone">The task's done state. Is set to false by default.</param>
         /// <param name="forceID">The task's ID. Is set to -1 by default for the base constructor to generate a new ID.</param>
         /// <returns></returns>
         public TaskFloating(string taskName, Boolean isDone = false, int forceID = -1)

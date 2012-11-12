@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ToDo
 {
-    class OperationSort : Operation
+    public class OperationSort : Operation
     {
         /// <summary>
         /// Constructor for sort operation.

@@ -467,8 +467,8 @@ namespace ToDo
         /// <summary>
         /// This method checks if the startTimeOnly is within the specified start and end hours
         /// </summary>
-        /// <param name="startTimeHour">The specified start hour</param>
-        /// <param name="endTimeHour">The specified end hour</param>
+        /// <param name="startTimeRange">The specified start hour</param>
+        /// <param name="endTimeRange">The specified end hour</param>
         /// <returns>True if positive; false if otherwise</returns>
         private bool IsStartTimeWithinTimeRange(TimeSpan startTimeRange, TimeSpan endTimeRange)
         {
@@ -483,8 +483,8 @@ namespace ToDo
         /// <summary>
         /// This method checks if the startTimeOnly and endTimeOnly are within the specified start and end hours
         /// </summary>
-        /// <param name="startTimeHour">The specified start hour</param>
-        /// <param name="endTimeHour">The specified end hour</param>
+        /// <param name="startTimeRange">The specified start hour</param>
+        /// <param name="endTimeRange">The specified end hour</param>
         /// <returns>True if positive; false if otherwise</returns>
         private bool IsStartAndEndTimeWithinTimeRange(TimeSpan startTimeRange, TimeSpan endTimeRange)
         {
@@ -510,7 +510,71 @@ namespace ToDo
         /// </summary>
         private void CombineDateTimes()
         {
-            // Combine Date/Times
+            NormalizeDeadlines();
+
+            SetSpecificities();
+
+            NormalizeDates();
+
+            startDateTime = CombineDateAndTime(startTimeOnly, startDateOnly, isSpecific.StartDate, DateTime.Now, true);
+            if (startDateTime == null)
+                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, DateTime.Now, true);
+            else
+                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, startDateTime.Value, false);
+
+            isSpecific.NormalizeSpecificity();
+
+            if (startDateTime > endDateTime)
+                AlertBox.Show("Warning: End date is before start date");
+        }
+
+        /// <summary>
+        /// Sets both dates to the same date if only one date is specified but two times are present.
+        /// </summary>
+        private void NormalizeDates()
+        {
+            // If only one date is specified, we assume both dates is that date.
+            if (isSpecific.StartTime && isSpecific.EndTime)
+            {
+                // assign end date to start date
+                if (startDateOnly == null && endDateOnly != null)
+                {
+                    startDateOnly = endDateOnly;
+                    //isSpecific.StartDate = isSpecific.EndDate;
+                }
+                // assign start date to end date
+                else if (startDateOnly != null && endDateOnly == null)
+                {
+                    endDateOnly = startDateOnly;
+                    //isSpecific.EndDate = isSpecific.StartDate;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets start date as end date to normalize deadlines if a task's start date and end time is set and not the rest, or vice versa.
+        /// </summary>
+        private void NormalizeDeadlines()
+        {
+            // Start time is set but not start date; End date is set but not end time => Deadline task.
+            if (startTimeOnly != null && startDateOnly == null && endTimeOnly == null && endDateOnly != null)                
+            {
+                endTimeOnly = startTimeOnly;
+                startTimeOnly = null;
+            }
+            // Start date is set but not start time; End time is set but not end date => Deadline task.
+            if (startTimeOnly == null && startDateOnly != null && endTimeOnly != null && endDateOnly == null)
+            {
+                endDateOnly = startDateOnly;
+                startDateOnly = null;
+            }
+        }
+
+        /// <summary>
+        /// Sets specificities based on whether start/end date/time has been set.
+        /// </summary>
+        private void SetSpecificities()
+        {
             if (startTimeOnly == null)
             {
                 isSpecific.StartTime = false;
@@ -527,35 +591,7 @@ namespace ToDo
             {
                 isSpecific.EndDate = new Specificity(false, false, false);
             }
-            // If only one date is specified, we assume both dates is that date.
-            if (isSpecific.StartTime && isSpecific.EndTime)
-            {
-                // assign end date to start date
-                if (startDateOnly == null && endDateOnly != null)
-                {
-                    startDateOnly = endDateOnly;
-                    isSpecific.StartDate = isSpecific.EndDate;
-                }
-                // assign start date to end date
-                else if (startDateOnly != null && endDateOnly == null)
-                {
-                    endDateOnly = startDateOnly;
-                    isSpecific.EndDate = isSpecific.StartDate;
-                }
-            }
-
-            startDateTime = CombineDateAndTime(startTimeOnly, startDateOnly, isSpecific.StartDate, DateTime.Now, true);
-            if (startDateTime == null)
-                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, DateTime.Now, true);
-            else
-                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, startDateTime.Value, false);
-
-            isSpecific.FinalizeSpecificity();
-
-            if (startDateTime > endDateTime)
-                AlertBox.Show("Warning: End date is before start date");
         }
-
         /// <summary>
         /// Combines the time and date fields into a single DateTime that is after the specified limit.
         /// </summary>
@@ -667,7 +703,7 @@ namespace ToDo
         /// Returns a flag indicating if the day of week was set for the start day if the input flag is true,
         /// or if the day of week was set for the end day if the input flag is false.
         /// </summary>
-        /// <param name="allowCurrent">Input flag.</param>
+        /// <param name="startEndFlag">Input flag.</param>
         /// <returns></returns>
         private bool IsDayOfWeekSet(bool startEndFlag)
         {

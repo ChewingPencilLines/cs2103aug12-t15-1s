@@ -33,7 +33,7 @@ namespace ToDo
         /// <param name="taskName">The task's display name.</param>
         /// <param name="startTime">The task's start time</param>
         /// <param name="endTime">The task's end time, if any.</param>
-        /// <param name="endDateSpecificity">The task's time specificity.</param>
+        /// <param name="isSpecific">The task's time specificity.</param>
         /// <param name="isDone">The task's done state. Is set to false by default.</param>
         /// <param name="forceID">The task's ID. Is set to -1 by default for the base constructor to generate a new ID.</param>
         /// <returns></returns>
@@ -139,7 +139,7 @@ namespace ToDo
         /// Extends the given end search time to the appropriate start of day/month/year
         /// depending on the specificity of this task.
         /// </summary>
-        /// <param name="startCompare">The end search time to extend.</param>
+        /// <param name="endCompare">The end search time to extend.</param>
         private void ExtendEndSearchRange(ref DateTime endCompare)
         {
             if (!isSpecific.EndDate.Month)
