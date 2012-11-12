@@ -15,7 +15,7 @@ namespace OperatingUnitTest
     /// </summary>
 
     [TestClass]
-    public class OperationTest
+    public class OperationUnitTest
     {
         // ******************************************************************
         // Parameters
