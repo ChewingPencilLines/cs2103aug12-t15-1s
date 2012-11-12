@@ -54,7 +54,7 @@ namespace StringParserTest
         }
 
         [TestMethod]
-        public void AddComplicatedDatedTaskTest1()
+        public void AddDatedTaskTest()
         {
             input = "buy milk tmr 3 am to 12/12/12 5 pm add";
             output = testStrParser.ParseStringIntoWords(input);
@@ -67,6 +67,25 @@ namespace StringParserTest
             outputCheck.Add("12/12/12");
             outputCheck.Add("5 pm");
             outputCheck.Add("add");
+            Assert.IsTrue(output.Count() == outputCheck.Count);
+            for (int i = 0; i < output.Count(); i++)
+            {
+                Assert.AreEqual(outputCheck[i], output[i]);
+            }
+            return;
+        }
+
+        [TestMethod]
+        public void AddComplicatedDatedTaskTest()
+        {
+            input = "add  milk jan 23rd 2016 to feb 29th 2016";
+            output = testStrParser.ParseStringIntoWords(input);
+            List<string> outputCheck = new List<string>();
+            outputCheck.Add("add");
+            outputCheck.Add("milk");
+            outputCheck.Add("jan 23rd 2016");
+            outputCheck.Add("to");
+            outputCheck.Add("feb 29th 2016");
             Assert.IsTrue(output.Count() == outputCheck.Count);
             for (int i = 0; i < output.Count(); i++)
             {
@@ -102,25 +121,6 @@ namespace StringParserTest
             outputCheck.Add("tmr");
             outputCheck.Add("to");
             outputCheck.Add("wed");
-            Assert.IsTrue(output.Count() == outputCheck.Count);
-            for (int i = 0; i < output.Count(); i++)
-            {
-                Assert.AreEqual(outputCheck[i], output[i]);
-            }
-            return;
-        }
-
-        [TestMethod]
-        public void AddComplicatedDatedTaskTest2()
-        {
-            input = "add  milk jan 23rd 2016 to feb 29th 2016";
-            output = testStrParser.ParseStringIntoWords(input);
-            List<string> outputCheck = new List<string>();
-            outputCheck.Add("add");
-            outputCheck.Add("milk");
-            outputCheck.Add("jan 23rd 2016");
-            outputCheck.Add("to");
-            outputCheck.Add("feb 29th 2016");
             Assert.IsTrue(output.Count() == outputCheck.Count);
             for (int i = 0; i < output.Count(); i++)
             {

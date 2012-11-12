@@ -7,7 +7,7 @@ namespace TokenGeneratorTest
 {
     /// <summary>
     /// This test is unit test for tokengenerator,
-    /// which generates corrsponding tokens from given string list.
+    /// which generates corresponding tokens from given string list.
     /// contains 9 test cases.
     /// </summary>
   
