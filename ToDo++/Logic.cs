@@ -1,8 +1,7 @@
-﻿using System;
+﻿//@alice
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using System;
 
 namespace ToDo
 {
@@ -50,7 +49,6 @@ namespace ToDo
                 taskList = storage.LoadTasksFromFile();
             }
         }
-
 
         /// <summary>
         /// Sets up a UI with logic for two-way communication.
