@@ -270,7 +270,7 @@ namespace ToDo
             }
             else
             {
-                Trace.Fail("TaskListViewControl failed to initialize: Object is not a task object!");
+                Debug.Assert(false,"TaskListViewControl failed to initialize: Object is not a task object!");
                 return null;
             }
         }
