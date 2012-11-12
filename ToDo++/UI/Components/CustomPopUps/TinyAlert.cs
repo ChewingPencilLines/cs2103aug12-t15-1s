@@ -58,9 +58,7 @@ namespace ToDo
             System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20)); 
         }
 
-        /// <summary>
-        /// Allows resizing of borderless form
-        /// </summary>
+        // Allows resizing of borderless form
         #region Resizing
         //public const int WM_NCLBUTTONDOWN = 0xA1;
         //public const int HT_CAPTION = 0x2;
