@@ -95,7 +95,7 @@ namespace ToDo
                     SetGroupingByDateTime();
                     break;
                 default:
-                    Trace.Fail("Some case in UpdateDisplay in TaskListViewControl was not accounted for..!");
+                    Logger.Info("No change in sorting format", "UpdateDisplay::TaskListViewControl");
                     break;
             }            
 
