@@ -22,11 +22,19 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\ArchitectureTools\Microsoft.VisualStudio.TeamArchitect.ModelingProject.targets" Condition="'$(VSToolsPath)' != ''" />
   <ItemGroup>
+    <Content Include="CommandParser_GenerateOperation.sequencediagram">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="CommandParser_GenerateOperation.sequencediagram.layout">
+      <SubType>Content</SubType>
+      <DependentUpon>CommandParser_GenerateOperation.sequencediagram</DependentUpon>
+    </Content>
     <Content Include="Logic_ProcessCommand.sequencediagram">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Logic_ProcessCommand.sequencediagram.layout">
       <SubType>Content</SubType>
+      <DependentUpon>Logic_ProcessCommand.sequencediagram</DependentUpon>
     </Content>
     <Content Include="ModelDefinition\Package10_1759.uml">
       <SubType>Content</SubType>
@@ -83,6 +91,13 @@
     <Content Include="ClassDiagram.classdiagram.layout">
       <SubType>Content</SubType>
       <DependentUpon>ClassDiagram.classdiagram</DependentUpon>
+    </Content>
+    <Content Include="UI_ProcessInput.sequencediagram">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI_ProcessInput.sequencediagram.layout">
+      <SubType>Content</SubType>
+      <DependentUpon>UI_ProcessInput.sequencediagram</DependentUpon>
     </Content>
     <Folder Include="ModelDefinition\" />
     <Content Include="ModelDefinition\ModelingProject1.uml">

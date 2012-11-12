@@ -1,21 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<componentModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" xmlns:dm9="http://schemas.microsoft.com/dsltools/LogicalClassDesigner" dslVersion="1.0.0.0" Id="b70f643b-f4a9-455d-82d9-d1ad7070519b" name="Architecture Diagram" linkedPackageId="9727a721-c48a-4783-b8f5-55c61cffe3ac" xmlns="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner">
+<componentModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" xmlns:dm9="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner" dslVersion="1.0.0.0" Id="b70f643b-f4a9-455d-82d9-d1ad7070519b" name="Architecture Diagram" linkedPackageId="9727a721-c48a-4783-b8f5-55c61cffe3ac" xmlns="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner">
   <packagedElements>
     <componentModelHasComponents>
       <component Id="38cba4a6-8a45-4a1f-b0f7-a93a2a144255" name="Logic" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="3597a6d1-4626-46df-bc26-589ab145de30" />
         <suppliersInternal>
-          <dependency Id="6ae51148-e3dd-46c6-8199-d55859d7aacd">
-            <componentMoniker Id="7707972f-794b-4f5e-bfa1-499a539036ab" LastKnownName="XML Files" />
-            <elementDefinition Id="86ad9e1b-246d-40c8-94a3-24390a910ca3" />
+          <dependency Id="5535fbd4-0967-4aea-bb07-42f063695082">
+            <componentMoniker Id="ff32bcca-d601-41b3-9e56-f395a9063787" LastKnownName="UI" />
+            <elementDefinition Id="317241c1-cd7c-4fda-a9d5-82a71f611d92" />
+          </dependency>
+          <dependency Id="666a69b4-7506-42b6-b2b8-fce2649fe527">
+            <componentMoniker Id="bf38957d-a5db-4263-8e4c-3328ce3e35d6" LastKnownName="XML Files" />
+            <elementDefinition Id="95ae47eb-6193-45eb-b46a-5a679a75930e" />
           </dependency>
         </suppliersInternal>
         <ownedAttributesInternal>
           <part Id="c6e5b53c-c8c6-4eef-a120-81e3558664d3" name="Parsers" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="true">
+            <lowerValueInternal>
+              <literalString Id="69e7417c-1ef1-4d75-8b44-4eb47236d14e" name="Lower" value="1">
+                <elementDefinition Id="826036f2-63ab-46fb-b434-7d0e9a7ae54f" />
+              </literalString>
+            </lowerValueInternal>
+            <upperValueInternal>
+              <literalString Id="36a3b455-498d-4410-8a10-ba5fbf558d8e" name="Upper" value="1">
+                <elementDefinition Id="e85f4bb4-50ce-4a18-9a55-3b1648d43541" />
+              </literalString>
+            </upperValueInternal>
             <elementDefinition Id="463b05fc-fe04-440b-988d-cf18eed0986b" />
             <targetNamedElementsInternal>
               <connector Id="3afedee4-39bd-4ebc-aacc-8d46e849d33e" isLeaf="false" isStatic="false">
-                <partMoniker Id="408d9820-f8c9-43f0-89ad-f6f6edb3941a" LastKnownName="OperationDriver" />
+                <partMoniker Id="408d9820-f8c9-43f0-89ad-f6f6edb3941a" LastKnownName="Operations" />
                 <relationshipOwnedElementsInternal>
                   <connectorHasConnectorEnds>
                     <connectorEnd Id="f5f6decb-7f07-46c8-9477-50bb3081c36f">
@@ -41,25 +55,9 @@
               <componentMoniker Id="829d3814-2c14-4d62-8e6d-e232467733d2" LastKnownName="Handler" />
             </type_NamedElement>
           </part>
-          <part Id="408d9820-f8c9-43f0-89ad-f6f6edb3941a" name="OperationDriver" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="true">
+          <part Id="408d9820-f8c9-43f0-89ad-f6f6edb3941a" name="Operations" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="true">
             <elementDefinition Id="fdad5d55-457c-4c48-b1d7-ceca3df76df9" />
             <targetNamedElementsInternal>
-              <connector Id="1d2d2459-c556-4121-b187-2c1c8b087708" isLeaf="false" isStatic="false">
-                <partMoniker Id="c6e5b53c-c8c6-4eef-a120-81e3558664d3" LastKnownName="Parsers" />
-                <relationshipOwnedElementsInternal>
-                  <connectorHasConnectorEnds>
-                    <connectorEnd Id="c0b64920-d400-4454-a383-61810590ce45">
-                      <elementDefinition Id="7d182478-3f69-4b9c-81f5-40823ce8fdb4" />
-                    </connectorEnd>
-                  </connectorHasConnectorEnds>
-                  <connectorHasConnectorEnds>
-                    <connectorEnd Id="e60bc65f-c83b-467c-b284-b80630602562">
-                      <elementDefinition Id="3e540751-6354-4429-90b2-fa6d06e32d8f" />
-                    </connectorEnd>
-                  </connectorHasConnectorEnds>
-                </relationshipOwnedElementsInternal>
-                <elementDefinition Id="07ac69d2-f45b-4850-a7aa-b93863e48af4" />
-              </connector>
               <connector Id="1aac073f-c562-46d6-8f5c-e2cdbcace81c" isLeaf="false" isStatic="false">
                 <partMoniker Id="4c268d06-2aa0-437b-bd2a-aa4feb2979d1" LastKnownName="Storage" />
                 <relationshipOwnedElementsInternal>
@@ -78,7 +76,31 @@
               </connector>
             </targetNamedElementsInternal>
             <type_NamedElement>
-              <componentMoniker Id="171133b3-8ed5-4d6d-bcb1-ba0b9d1771a9" LastKnownName="Handler" />
+              <componentMoniker Id="171133b3-8ed5-4d6d-bcb1-ba0b9d1771a9" LastKnownName="Operation" />
+            </type_NamedElement>
+          </part>
+          <part Id="29c65792-c45d-4260-82c2-eba78afbbc14" name="MainSettings" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="true">
+            <elementDefinition Id="35af5870-cbb1-4936-8580-c1a976a98a84" />
+            <targetNamedElementsInternal>
+              <connector Id="05ee92f7-883c-4ce3-80ad-296ef10c14fa" isLeaf="false" isStatic="false">
+                <partMoniker Id="c6e5b53c-c8c6-4eef-a120-81e3558664d3" LastKnownName="Parsers" />
+                <relationshipOwnedElementsInternal>
+                  <connectorHasConnectorEnds>
+                    <connectorEnd Id="12c60f8b-7e5a-475a-a30a-f6f990509599">
+                      <elementDefinition Id="4795418b-d2ab-48b7-99b9-207f3037a462" />
+                    </connectorEnd>
+                  </connectorHasConnectorEnds>
+                  <connectorHasConnectorEnds>
+                    <connectorEnd Id="c5983452-0d99-41da-b066-4de5d27f91ff">
+                      <elementDefinition Id="bc3dc06d-2ba1-47e3-b9b8-27657e218f1e" />
+                    </connectorEnd>
+                  </connectorHasConnectorEnds>
+                </relationshipOwnedElementsInternal>
+                <elementDefinition Id="ae009a8a-c664-4627-97db-cce755de24ef" />
+              </connector>
+            </targetNamedElementsInternal>
+            <type_NamedElement>
+              <componentMoniker Id="6a076547-0398-462a-b9bb-386c0b0919de" LastKnownName="Settings" />
             </type_NamedElement>
           </part>
         </ownedAttributesInternal>
@@ -88,40 +110,11 @@
       <component Id="ff32bcca-d601-41b3-9e56-f395a9063787" name="UI" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="6313cf43-212f-40ed-b36b-2a81fc6f57d6" />
         <suppliersInternal>
-          <dependency Id="c4cfafc6-060e-49ef-a307-b9e90987a79e">
+          <dependency Id="a01dfca0-ede9-482d-b945-a287a5ed959e">
             <componentMoniker Id="38cba4a6-8a45-4a1f-b0f7-a93a2a144255" LastKnownName="Logic" />
-            <elementDefinition Id="75ac7052-f9ba-48f5-9069-973890f36271" />
+            <elementDefinition Id="c76d3c55-4584-4a08-814d-d1f3bed61b1c" />
           </dependency>
         </suppliersInternal>
-      </component>
-    </componentModelHasComponents>
-    <componentModelHasComponents>
-      <component Id="7707972f-794b-4f5e-bfa1-499a539036ab" name="XML Files" isAbstract="false" isLeaf="false" isActiveClass="false">
-        <elementDefinition Id="71088a6f-1b2d-4c03-b4af-6bc7527336e7" />
-        <ownedAttributesInternal>
-          <part Id="03159002-cec6-474c-b042-9caf17f7bf28" name="TaskFile" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="true">
-            <elementDefinition Id="ea34c8db-11f4-4c1a-8f01-e9cf49005231" />
-            <type_NamedElement>
-              <componentMoniker Id="b7279d27-0e1c-4ed1-861f-105227f948ce" LastKnownName="XML" />
-            </type_NamedElement>
-          </part>
-          <part Id="fe6b366b-8558-4407-9baf-1e32b5e5561c" name="SettingsFile" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="true">
-            <elementDefinition Id="04ce5023-464f-4326-ae18-9587ec12dc7d" />
-            <type_NamedElement>
-              <componentMoniker Id="4c289828-12f4-44e6-a45e-a9d2c283fe40" LastKnownName="XML" />
-            </type_NamedElement>
-          </part>
-        </ownedAttributesInternal>
-      </component>
-    </componentModelHasComponents>
-    <componentModelHasComponents>
-      <component Id="b7279d27-0e1c-4ed1-861f-105227f948ce" name="XML" isAbstract="false" isLeaf="false" isActiveClass="false">
-        <elementDefinition Id="ab0732eb-a036-4bfc-83a8-3302de17febe" />
-      </component>
-    </componentModelHasComponents>
-    <componentModelHasComponents>
-      <component Id="4c289828-12f4-44e6-a45e-a9d2c283fe40" name="XML" isAbstract="false" isLeaf="false" isActiveClass="false">
-        <elementDefinition Id="81051f0e-fc1d-43df-a4a5-a92505c83bb3" />
       </component>
     </componentModelHasComponents>
     <componentModelHasComponents>
@@ -135,8 +128,18 @@
       </component>
     </componentModelHasComponents>
     <componentModelHasComponents>
-      <component Id="171133b3-8ed5-4d6d-bcb1-ba0b9d1771a9" name="Handler" isAbstract="false" isLeaf="false" isActiveClass="false">
+      <component Id="171133b3-8ed5-4d6d-bcb1-ba0b9d1771a9" name="Operation" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="5b421b2b-b95a-4d4d-9d41-560132352b0e" />
+      </component>
+    </componentModelHasComponents>
+    <componentModelHasComponents>
+      <component Id="6a076547-0398-462a-b9bb-386c0b0919de" name="Settings" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="00e3b3d3-353e-40fd-ba23-f650d5e23809" />
+      </component>
+    </componentModelHasComponents>
+    <componentModelHasComponents>
+      <component Id="bf38957d-a5db-4263-8e4c-3328ce3e35d6" name="XML Files" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="50eea618-58a1-47bb-be63-3acee7465469" />
       </component>
     </componentModelHasComponents>
   </packagedElements>
