@@ -540,13 +540,13 @@ namespace ToDo
                 if (startDateOnly == null && endDateOnly != null)
                 {
                     startDateOnly = endDateOnly;
-                    isSpecific.StartDate = isSpecific.EndDate;
+                    //isSpecific.StartDate = isSpecific.EndDate;
                 }
                 // assign start date to end date
                 else if (startDateOnly != null && endDateOnly == null)
                 {
                     endDateOnly = startDateOnly;
-                    isSpecific.EndDate = isSpecific.StartDate;
+                    //isSpecific.EndDate = isSpecific.StartDate;
                 }
             }
         }
