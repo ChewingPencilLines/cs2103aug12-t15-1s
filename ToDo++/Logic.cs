@@ -15,7 +15,7 @@ namespace ToDo
         // Attributes
         // ******************************************************************
 
-        #region
+        #region Attributes
         UI ui;        
         CommandParser commandParser;
         Settings mainSettings;
