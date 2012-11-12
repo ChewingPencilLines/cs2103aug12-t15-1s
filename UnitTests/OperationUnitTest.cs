@@ -95,11 +95,16 @@ namespace OperatingUnitTest
             testTaskList = testStorage.LoadTasksFromFile();
 
             int[] index = new int[2] { 1, 4 };
+            OperationDelete Op1;
             OperationAdd Op = new OperationAdd(testTask, sortType);
-            Op.Execute(testTaskList, testStorage);
-            OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE, sortType);
+            result = Op.Execute(testTaskList, testStorage);
+            Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE, sortType);
             result = Op1.Execute(testTaskList, testStorage);
             Assert.AreEqual("Invalid task index!", result.FeedbackString);
+            index = new int[2] { 1, 1 };
+            Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE, sortType);
+            result = Op1.Execute(testTaskList, testStorage);
+            Assert.AreEqual("Deleted task \"test\" successfully.", result.FeedbackString);
             return;
         }
 
@@ -130,10 +135,16 @@ namespace OperatingUnitTest
                                                 new CultureInfo("en-US"),
                                                 DateTimeStyles.None);
             DateTimeSpecificity specific = new DateTimeSpecificity();
-
-            OperationSearch Op = new OperationSearch("SearchConditionCannotBeMatching", timeTest, timeTest, specific, SearchType.NONE, SortType.DEFAULT);
-            result = Op.Execute(testTaskList, testStorage);
-            Assert.AreEqual("No matching tasks found!", result.FeedbackString);
+          
+            TaskDeadline testDeadline = new TaskDeadline("test", timeTest, specific);
+           OperationAdd Op1 = new OperationAdd(testDeadline, sortType);
+            OperationSearch Op2 = new OperationSearch("SearchConditionCannotBeMatching",DateTime.Now,timeTest.AddDays(1),specific,SearchType.NONE,SortType.DEFAULT);
+            result = Op2.Execute(testTaskList, testStorage);
+             Assert.AreEqual("No matching tasks found!", result.FeedbackString);
+            result = Op1.Execute(testTaskList, testStorage);
+            result = Op2.Execute(testTaskList, testStorage);
+         Assert.AreEqual("No matching tasks found!", result.FeedbackString);
+           
             return;
         }
 
