@@ -161,23 +161,27 @@ namespace ToDo
                 Application.Exit();
             }
         }
-
+        
         /// <summary>
-        /// This method writes current settings to file
+        /// The event handler which will write settings to storage whenever it is changed.
         /// </summary>
-        /// <param name="settings"></param>
-        /// <returns></returns>
-        public bool UpdateSettingsFile(SettingInformation settings)
-        {
-            return storage.WriteSettingsToFile(settings);
-        }
-
+        /// <param name="sender">The object which sent this event.</param>
+        /// <param name="args">Event arguments for this event.</param>
         private void UpdateSettings(object sender, EventArgs args)
         {
             Logger.Info("Updated Settings File", "UI::Logic");
             UpdateSettingsFile((SettingInformation)sender);
         }
 
+        /// <summary>
+        /// This method writes current settings to file
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        private bool UpdateSettingsFile(SettingInformation settings)
+        {
+            return storage.WriteSettingsToFile(settings);
+        }
 
         /// <summary>
         /// Executes the DisplayDefault operation so that the 
@@ -197,6 +201,5 @@ namespace ToDo
         {
             Operation.UpdateCurrentListedTasks(displayedList);
         }
-
     } 
 }
