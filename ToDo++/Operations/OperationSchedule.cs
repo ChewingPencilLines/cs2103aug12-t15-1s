@@ -1,8 +1,7 @@
-﻿using System;
+﻿//@jenna A0083536B
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ToDo
 {
@@ -40,6 +39,7 @@ namespace ToDo
         /// <param name="timeRangeAmount">The numerical value of the task length of the task to be scheduled.</param>
         /// <param name="timeRangeType">The type of time length the task uses: hour, day, week or month.</param>
         /// <param name="sortType">The type of sort to sort the diplay list by after the operation is executed.</param>
+        /// <returns>Nothing.</returns>
         public OperationSchedule(
             string taskName,
             DateTime startDateTime,

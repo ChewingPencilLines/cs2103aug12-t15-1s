@@ -1,6 +1,6 @@
-﻿using System;
+﻿//@alice A0103985Y
+using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ToDo
 {
@@ -15,6 +15,7 @@ namespace ToDo
         /// Derived constructor to create a Redo Operation.
         /// </summary>
         /// <param name="sortType">The type of sorting to use on the displayed task after executing this Operation.</param>
+        /// <returns>Nothing.</returns>
         public OperationRedo(SortType sortType)
             : base(sortType)
         { }

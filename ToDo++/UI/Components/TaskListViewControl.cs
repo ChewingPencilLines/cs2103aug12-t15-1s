@@ -1,9 +1,10 @@
-﻿using System;
+﻿//@ivan A0086401M
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Diagnostics;
-using BrightIdeasSoftware;
 using System.Drawing;
+using System.Windows.Forms;
+using BrightIdeasSoftware;
 
 namespace ToDo
 {
@@ -269,7 +270,7 @@ namespace ToDo
             }
             else
             {
-                Trace.Fail("TaskListViewControl failed to initialize: Object is not a task object!");
+                Debug.Assert(false,"TaskListViewControl failed to initialize: Object is not a task object!");
                 return null;
             }
         }

@@ -1,12 +1,9 @@
-﻿using System;
+﻿//@ivan A0086401M
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using System.Diagnostics;
-
-[assembly: InternalsVisibleTo("ParsingLogicUnitTest")]
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ToDo
 {
@@ -155,6 +152,7 @@ namespace ToDo
             return sortTokens;
         }
 
+        //@jenna A0083536B
         /// <summary>
         /// This method checks an input list of strings for time range words and generates a list of tokens
         /// based on the found time range words.
@@ -218,6 +216,7 @@ namespace ToDo
             return timeRangeTokens;
         }
 
+        //@ivan A0086401M
         /// <summary>
         /// Checks if the supplied string matchCheck represents a number or a numerical range.
         /// If positive, the index or pair of indexes (respectively) is added to the
@@ -296,6 +295,7 @@ namespace ToDo
             return dayTokens;
         }
 
+        //@jenna A0083536B
         /// <summary>
         /// This method searches an input list of strings for all valid dates and generates a list of date tokens
         /// corresponding to all the found matched date strings using regexes.
@@ -398,6 +398,7 @@ namespace ToDo
             return dateTokens;
         }
 
+        //@ivan A0086401M
         /// <summary>
         /// This method searches an input list of strings for all valid times and generates a list of time tokens
         /// corresponding to all the found matched time strings using regexes.
@@ -570,6 +571,7 @@ namespace ToDo
         }
         #endregion
 
+        //@jenna A0083536B
         // ******************************************************************
         // Private Methods
         // ******************************************************************
