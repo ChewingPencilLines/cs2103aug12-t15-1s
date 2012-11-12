@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner"
+<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner" xmlns:dm9="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner"
   dslVersion="1.0.0.0"
   Id="2b53fb6f-3ce5-4516-9539-9615520b11e6"
   name="ModelingProject" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
@@ -33,9 +33,30 @@
         isActiveClass="false">
         <suppliersInternal>
           <dependency
-            Id="86ad9e1b-246d-40c8-94a3-24390a910ca3">
+            Id="4483e99a-d469-4fa5-ad4a-b4a62f8088aa">
             <componentMoniker
               Id="71088a6f-1b2d-4c03-b4af-6bc7527336e7"
+              LastKnownName="XML Files"
+              LastKnownLocation="ModelingProject1.uml" />
+          </dependency>
+          <dependency
+            Id="317241c1-cd7c-4fda-a9d5-82a71f611d92">
+            <componentMoniker
+              Id="6313cf43-212f-40ed-b36b-2a81fc6f57d6"
+              LastKnownName="UI"
+              LastKnownLocation="ModelingProject1.uml" />
+          </dependency>
+          <dependency
+            Id="13e4b5e3-8028-41a4-8516-5f72e6ea5062">
+            <componentMoniker
+              Id="fa658f29-4c3d-4ddf-bc54-0ba1c9588b80"
+              LastKnownName="CustomDictionary"
+              LastKnownLocation="ModelingProject1.uml" />
+          </dependency>
+          <dependency
+            Id="95ae47eb-6193-45eb-b46a-5a679a75930e">
+            <componentMoniker
+              Id="50eea618-58a1-47bb-be63-3acee7465469"
               LastKnownName="XML Files"
               LastKnownLocation="ModelingProject1.uml" />
           </dependency>
@@ -51,6 +72,18 @@
             isDerivedUnion="false"
             aggregation="Composite"
             isComposite="true">
+            <lowerValueInternal>
+              <literalString
+                Id="826036f2-63ab-46fb-b434-7d0e9a7ae54f"
+                name="Lower"
+                value="1" />
+            </lowerValueInternal>
+            <upperValueInternal>
+              <literalString
+                Id="e85f4bb4-50ce-4a18-9a55-3b1648d43541"
+                name="Upper"
+                value="1" />
+            </upperValueInternal>
             <targetNamedElementsInternal>
               <connector
                 Id="925eb71b-8db3-428f-b406-c28518cec0eb"
@@ -58,7 +91,7 @@
                 isStatic="false">
                 <partMoniker
                   Id="fdad5d55-457c-4c48-b1d7-ceca3df76df9"
-                  LastKnownName="OperationDriver"
+                  LastKnownName="Operations"
                   LastKnownLocation="ModelingProject1.uml" />
                 <relationshipOwnedElementsInternal>
                   <connectorHasConnectorEnds>
@@ -98,7 +131,7 @@
           </part>
           <part
             Id="fdad5d55-457c-4c48-b1d7-ceca3df76df9"
-            name="OperationDriver"
+            name="Operations"
             isLeaf="false"
             isStatic="false"
             isReadOnly="false"
@@ -107,25 +140,6 @@
             aggregation="Composite"
             isComposite="true">
             <targetNamedElementsInternal>
-              <connector
-                Id="07ac69d2-f45b-4850-a7aa-b93863e48af4"
-                isLeaf="false"
-                isStatic="false">
-                <partMoniker
-                  Id="463b05fc-fe04-440b-988d-cf18eed0986b"
-                  LastKnownName="Parsers"
-                  LastKnownLocation="ModelingProject1.uml" />
-                <relationshipOwnedElementsInternal>
-                  <connectorHasConnectorEnds>
-                    <connectorEnd
-                      Id="7d182478-3f69-4b9c-81f5-40823ce8fdb4" />
-                  </connectorHasConnectorEnds>
-                  <connectorHasConnectorEnds>
-                    <connectorEnd
-                      Id="3e540751-6354-4429-90b2-fa6d06e32d8f" />
-                  </connectorHasConnectorEnds>
-                </relationshipOwnedElementsInternal>
-              </connector>
               <connector
                 Id="8f7ba7ba-31c8-4813-be54-1eb9c7f43b45"
                 isLeaf="false"
@@ -149,7 +163,45 @@
             <type_NamedElement>
               <componentMoniker
                 Id="5b421b2b-b95a-4d4d-9d41-560132352b0e"
-                LastKnownName="Handler"
+                LastKnownName="Operation"
+                LastKnownLocation="ModelingProject1.uml" />
+            </type_NamedElement>
+          </part>
+          <part
+            Id="35af5870-cbb1-4936-8580-c1a976a98a84"
+            name="MainSettings"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="Composite"
+            isComposite="true">
+            <targetNamedElementsInternal>
+              <connector
+                Id="ae009a8a-c664-4627-97db-cce755de24ef"
+                isLeaf="false"
+                isStatic="false">
+                <partMoniker
+                  Id="463b05fc-fe04-440b-988d-cf18eed0986b"
+                  LastKnownName="Parsers"
+                  LastKnownLocation="ModelingProject1.uml" />
+                <relationshipOwnedElementsInternal>
+                  <connectorHasConnectorEnds>
+                    <connectorEnd
+                      Id="4795418b-d2ab-48b7-99b9-207f3037a462" />
+                  </connectorHasConnectorEnds>
+                  <connectorHasConnectorEnds>
+                    <connectorEnd
+                      Id="bc3dc06d-2ba1-47e3-b9b8-27657e218f1e" />
+                  </connectorHasConnectorEnds>
+                </relationshipOwnedElementsInternal>
+              </connector>
+            </targetNamedElementsInternal>
+            <type_NamedElement>
+              <componentMoniker
+                Id="00e3b3d3-353e-40fd-ba23-f650d5e23809"
+                LastKnownName="Settings"
                 LastKnownLocation="ModelingProject1.uml" />
             </type_NamedElement>
           </part>
@@ -189,7 +241,7 @@
         isActiveClass="false">
         <suppliersInternal>
           <dependency
-            Id="75ac7052-f9ba-48f5-9069-973890f36271">
+            Id="c76d3c55-4584-4a08-814d-d1f3bed61b1c">
             <componentMoniker
               Id="3597a6d1-4626-46df-bc26-589ab145de30"
               LastKnownName="Logic"
@@ -204,44 +256,7 @@
         name="XML Files"
         isAbstract="false"
         isLeaf="false"
-        isActiveClass="false">
-        <ownedAttributesInternal>
-          <part
-            Id="ea34c8db-11f4-4c1a-8f01-e9cf49005231"
-            name="TaskFile"
-            isLeaf="false"
-            isStatic="false"
-            isReadOnly="false"
-            isDerived="false"
-            isDerivedUnion="false"
-            aggregation="Composite"
-            isComposite="true">
-            <type_NamedElement>
-              <componentMoniker
-                Id="ab0732eb-a036-4bfc-83a8-3302de17febe"
-                LastKnownName="XML"
-                LastKnownLocation="ModelingProject1.uml" />
-            </type_NamedElement>
-          </part>
-          <part
-            Id="04ce5023-464f-4326-ae18-9587ec12dc7d"
-            name="SettingsFile"
-            isLeaf="false"
-            isStatic="false"
-            isReadOnly="false"
-            isDerived="false"
-            isDerivedUnion="false"
-            aggregation="Composite"
-            isComposite="true">
-            <type_NamedElement>
-              <componentMoniker
-                Id="81051f0e-fc1d-43df-a4a5-a92505c83bb3"
-                LastKnownName="XML"
-                LastKnownLocation="ModelingProject1.uml" />
-            </type_NamedElement>
-          </part>
-        </ownedAttributesInternal>
-      </component>
+        isActiveClass="false" />
     </packageHasNamedElement>
     <packageHasNamedElement>
       <component
@@ -278,7 +293,7 @@
     <packageHasNamedElement>
       <component
         Id="5b421b2b-b95a-4d4d-9d41-560132352b0e"
-        name="Handler"
+        name="Operation"
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false" />
@@ -408,6 +423,135 @@
           </property>
         </ownedAttributesInternal>
       </interaction>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <interaction
+        Id="c56d92e4-5a98-49a7-abda-13b55240c56f"
+        name="InitializeNewConfiguration"
+        collapseFragmentsFlag="false"
+        isActiveClass="false"
+        isAbstract="false"
+        isLeaf="false"
+        isReentrant="false">
+        <fragments>
+          <messageOccurrenceSpecification
+            Id="fc34f1f1-0818-4acc-9009-4640ce28e228"
+            name="MessageOccurrenceSpecification">
+            <covered>
+              <lifelineMoniker
+                Id="ec956e9b-2dc2-4212-bf51-239faec5ff4f"
+                LastKnownName="this.commandParser : CommandParser"
+                LastKnownLocation="ModelingProject1.uml" />
+            </covered>
+          </messageOccurrenceSpecification>
+          <lostFoundTarget
+            Id="a8121b36-df21-4c9f-8b88-44dbd6bc9e20"
+            name="LostFoundTarget" />
+        </fragments>
+        <lifelines>
+          <lifeline
+            Id="ec956e9b-2dc2-4212-bf51-239faec5ff4f"
+            name="this.commandParser : CommandParser"
+            isActor="false"
+            lifelineDisplayName="this.commandParser : CommandParser"
+            referencedInstance="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=Logic Member=commandParser ObjectInstance=&quot;Object instance 8&quot;)"
+            referencedType="ToDo‎.CommandParser">
+            <referencesInternal>
+              <reference
+                Id="f477b254-9142-4a9e-b09b-db55459b1579"
+                handle="+ Id.Equals(&quot;Microsoft.Solution.ClassView&quot;) /&#xD;&#xA;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Namespace=ToDo)&quot;)/&#xD;&#xA;&quot;Microsoft.Contains&quot;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Assembly=&amp;quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&amp;quot; Namespace=ToDo Type=CommandParser)&quot;)"
+                tag="DGQL" />
+              <reference
+                Id="9bf43ac3-413d-4ca5-a55c-ef2a6f1712f9"
+                handle="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=CommandParser)"
+                tag="DGML" />
+            </referencesInternal>
+            <topLevelOccurrences>
+              <messageOccurrenceSpecificationMoniker
+                Id="fc34f1f1-0818-4acc-9009-4640ce28e228"
+                LastKnownName="MessageOccurrenceSpecification"
+                LastKnownLocation="ModelingProject1.uml" />
+            </topLevelOccurrences>
+          </lifeline>
+        </lifelines>
+        <messages>
+          <message
+            Id="3923a696-e10a-43a4-b71f-c75a55f952b1"
+            name="InitializeNewConfiguration"
+            messageKind="Lost"
+            messageSort="AsynchCall"
+            createSelfMessage="false">
+            <referencesInternal>
+              <reference
+                Id="3c9a26e6-0b29-4ca5-99fa-ae25fbf436ae"
+                handle="+ Id.Equals(&quot;Microsoft.Solution.ClassView&quot;) /&#xD;&#xA;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Namespace=ToDo)&quot;)/&#xD;&#xA;&quot;Microsoft.Contains&quot;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Assembly=&amp;quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&amp;quot; Namespace=ToDo Type=OperationGenerator)&quot;)/&#xD;&#xA;&quot;Microsoft.Contains&quot;/&#xD;&#xA;+ Id.EqualsIgnoreCase(&quot;(Assembly=&amp;quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&amp;quot; Namespace=ToDo Type=OperationGenerator Member=InitializeNewConfiguration)&quot;)"
+                tag="DGQL" />
+              <reference
+                Id="84bde349-55ea-46ac-a620-001ce8aeb61c"
+                handle="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=OperationGenerator Member=InitializeNewConfiguration)"
+                tag="DGML" />
+            </referencesInternal>
+            <generationState>H4sIAAAAAAAEAO2WW0vDQBCFz08JfRBFaFR8ELWCRLyAN2wV32Rtq1XSpjaJWH+9306TWiNSH0XK0mTmZM7M7NkM6a6a6mqkJznFXN/xOorMi3XIE6c+2J521VKPiFRXSliZAp0Q21BNy9oHT4nr6x7eGHRJL8otbkcP8GKebiu0FZl1bYwR15CcTq94A92qzT3UAdw2GfqGZhZ1Y/Vz6y6g8wy7A5bgbWhN61xDXZIz0TO8dsFr4ft8q6yqdw9/YPW62LkeKxF18Dd+s/sJdF7okmqI5TtuTFkB1hjcYxF+n+Wo0aEzZ/v1uw50VujlvQZxQ7McFfyOBqjvbAcJ6Fgr6PyZ+Ry0w31xAvNO4OKbrke2nxLz6n7VNjK8Sx8T5UuNo0LzJtV6prTTHWjM3Wvvc5xi+xONjZEVE1OH8dN7UJ978jWbtJQTHtjTMXkSlEitxqGdhc9Vsyk9ISKF6yt5VRZTupjSv38C/2NKL8ha6lmdw7K/TW0V+/C9DY3tLMPXrmbnejL/x9gOxmwVH9mCnU/nv/w6p7BCQ8JvvUzQ6vd8gv72/8AHPY7SPjoIAAA=
+(Assembly="$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)" Namespace=ToDo Type=CommandParser Member=operationFactory ObjectInstance="Object instance 48")
+this.commandParser.operationFactory : OperationGenerator
+operationFactory.InitializeNewConfiguration()</generationState>
+            <sendEvent>
+              <messageOccurrenceSpecificationMoniker
+                Id="fc34f1f1-0818-4acc-9009-4640ce28e228"
+                LastKnownName="MessageOccurrenceSpecification"
+                LastKnownLocation="ModelingProject1.uml" />
+            </sendEvent>
+            <receiveEvent>
+              <lostFoundTargetMoniker
+                Id="a8121b36-df21-4c9f-8b88-44dbd6bc9e20"
+                LastKnownName="LostFoundTarget"
+                LastKnownLocation="ModelingProject1.uml" />
+            </receiveEvent>
+          </message>
+        </messages>
+      </interaction>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="fa658f29-4c3d-4ddf-bc54-0ba1c9588b80"
+        name="CustomDictionary"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <dependency
+            Id="b897bba1-6e31-47c8-8fa9-bc0c46e6a567">
+            <componentMoniker
+              Id="3597a6d1-4626-46df-bc26-589ab145de30"
+              LastKnownName="Logic"
+              LastKnownLocation="ModelingProject1.uml" />
+          </dependency>
+        </suppliersInternal>
+      </component>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="cc3d9fd2-bef9-4014-beed-63e05bb8c032"
+        name="Component1"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="00e3b3d3-353e-40fd-ba23-f650d5e23809"
+        name="Settings"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <component
+        Id="50eea618-58a1-47bb-be63-3acee7465469"
+        name="XML Files"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
     </packageHasNamedElement>
   </packagedElements>
   <primitiveType
