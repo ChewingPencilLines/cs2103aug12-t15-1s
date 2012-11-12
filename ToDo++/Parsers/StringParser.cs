@@ -30,7 +30,6 @@ namespace ToDo
         /// by spacing, or by delimiting characters.
         /// </summary>
         /// <param name="input">The string of words to be parsed</param>
-        /// <param name="indexOfDelimiters">The position in the string where delimiting characters mark the absolute substrings</param>
         /// <returns>The list of tokens</returns>
         public List<string> ParseStringIntoWords(string input)
         {

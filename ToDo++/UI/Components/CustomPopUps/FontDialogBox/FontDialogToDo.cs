@@ -143,6 +143,7 @@ namespace ToDo
             }
             catch (Exception e)
             {
+                Logger.Error(e, "SetFormattingForPreview::FontDialogToDo");
                 AlertBox.Show("This font can't be used");
             }
         }

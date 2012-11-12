@@ -467,8 +467,8 @@ namespace ToDo
         /// <summary>
         /// This method checks if the startTimeOnly is within the specified start and end hours
         /// </summary>
-        /// <param name="startTimeHour">The specified start hour</param>
-        /// <param name="endTimeHour">The specified end hour</param>
+        /// <param name="startTimeRange">The specified start hour</param>
+        /// <param name="endTimeRange">The specified end hour</param>
         /// <returns>True if positive; false if otherwise</returns>
         private bool IsStartTimeWithinTimeRange(TimeSpan startTimeRange, TimeSpan endTimeRange)
         {
@@ -483,8 +483,8 @@ namespace ToDo
         /// <summary>
         /// This method checks if the startTimeOnly and endTimeOnly are within the specified start and end hours
         /// </summary>
-        /// <param name="startTimeHour">The specified start hour</param>
-        /// <param name="endTimeHour">The specified end hour</param>
+        /// <param name="startTimeRange">The specified start hour</param>
+        /// <param name="endTimeRange">The specified end hour</param>
         /// <returns>True if positive; false if otherwise</returns>
         private bool IsStartAndEndTimeWithinTimeRange(TimeSpan startTimeRange, TimeSpan endTimeRange)
         {
@@ -667,7 +667,7 @@ namespace ToDo
         /// Returns a flag indicating if the day of week was set for the start day if the input flag is true,
         /// or if the day of week was set for the end day if the input flag is false.
         /// </summary>
-        /// <param name="allowCurrent">Input flag.</param>
+        /// <param name="startEndFlag">Input flag.</param>
         /// <returns></returns>
         private bool IsDayOfWeekSet(bool startEndFlag)
         {

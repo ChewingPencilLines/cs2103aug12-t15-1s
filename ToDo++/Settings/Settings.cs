@@ -273,7 +273,7 @@ namespace ToDo
         /// If a command repeats itself, an exception will be thrown
         /// </summary>
         /// <param name="newKeyword">New Command that is to be added</param>
-        /// <param name="commandString">Specify to which CommandType it is being added to</param>
+        /// <param name="flexiCommandType">Specify to which CommandType it is being added to</param>
         public void AddFlexiKeyword(string newKeyword, Enum flexiCommandType)
         {
             string flexiType = flexiCommandType.GetType().ToString();
@@ -335,9 +335,10 @@ namespace ToDo
         }
 
         /// <summary>
-        /// This method removes the specified command
+        /// This method removes the specified command.
         /// </summary>
-        /// <param name="commandString">Specify to which CommandType it is being added to</param>
+        /// <param name="keywordToRemove">The keyword to remove.</param>
+        /// <param name="flexiCommandType">The command type that is being removed.</param>
         public void RemoveFlexiKeyword(string keywordToRemove, Enum flexiCommandType)
         {
             string flexiType = flexiCommandType.GetType().ToString();
@@ -395,7 +396,7 @@ namespace ToDo
         /// <summary>
         /// Returns a list of all added/available user commands
         /// </summary>
-        /// <param name="commandType">Specify the type of Command you wish to see User Commands of</param>
+        /// <param name="flexiCommandType">Specify the type of Command you wish to see User Commands of</param>
         /// <returns>Returns a list of added commands</returns>
         public List<string> GetFlexiKeywordList(Enum flexiCommandType)
         {

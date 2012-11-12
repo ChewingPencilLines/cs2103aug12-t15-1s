@@ -43,7 +43,7 @@ namespace ToDo
 
     /// <summary>
     /// This class contains flags representing whether a set of two dates and times
-    /// were fully specified by the user or were left ambiguous.
+    /// were fully specified by the user or were left ambiguous.</summary>
     public class DateTimeSpecificity
     {
         private Specificity startDate;

@@ -85,6 +85,13 @@
       <SubType>Content</SubType>
       <DependentUpon>ClassDiagram.classdiagram</DependentUpon>
     </Content>
+    <Content Include="ProcessCommand.sequencediagram">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ProcessCommand.sequencediagram.layout">
+      <SubType>Content</SubType>
+      <DependentUpon>ProcessCommand.sequencediagram</DependentUpon>
+    </Content>
     <Folder Include="ModelDefinition\" />
     <Content Include="ModelDefinition\ModelingProject1.uml">
       <SubType>Content</SubType>
