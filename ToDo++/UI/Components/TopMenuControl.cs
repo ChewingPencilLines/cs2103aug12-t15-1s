@@ -84,7 +84,7 @@ namespace ToDo
             isSettings = true;
             isHelp = false;
 
-            ui.ToggleToDoSettingsPanel();
+            ui.ToggleToDoPreferencesPanel();
             if (isCollapsed == true)
                 ui.ToggleCollapsedState();
             isCollapsed = false;
