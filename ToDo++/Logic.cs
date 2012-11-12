@@ -1,4 +1,4 @@
-﻿//@alice
+﻿//@alice A0103985Y
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System;
@@ -35,7 +35,7 @@ namespace ToDo
         {
             mainSettings = new Settings();
 
-            storage = new Storage("testfile.xml", "testsettings.xml");
+            storage = new Storage("ToDo++.xml", "ToDoSettings.xml");
 
             mainSettings.UpdateSettings(storage.LoadSettingsFromFile());
             EventHandlers.UpdateSettingsHandler += UpdateSettings;
