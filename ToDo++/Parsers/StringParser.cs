@@ -8,8 +8,10 @@ using System.Diagnostics;
 
 namespace ToDo
 {
-    // Parser class which breaks / merges the strings into tokenable substrings
-    // so that a TokenGenerator can process them.
+    /// <summary>
+    /// Parser class which breaks / merges the strings into tokenable substrings
+    /// so that a TokenGenerator can process them.     
+    /// </summary>
     public class StringParser
     {
         // ******************************************************************
