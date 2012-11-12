@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner" xmlns:dm9="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner"
+<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner" xmlns:dm9="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner" xmlns:dm10="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
   dslVersion="1.0.0.0"
   Id="2b53fb6f-3ce5-4516-9539-9615520b11e6"
   name="ModelingProject" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
@@ -44,13 +44,6 @@
             <componentMoniker
               Id="6313cf43-212f-40ed-b36b-2a81fc6f57d6"
               LastKnownName="UI"
-              LastKnownLocation="ModelingProject1.uml" />
-          </dependency>
-          <dependency
-            Id="13e4b5e3-8028-41a4-8516-5f72e6ea5062">
-            <componentMoniker
-              Id="fa658f29-4c3d-4ddf-bc54-0ba1c9588b80"
-              LastKnownName="CustomDictionary"
               LastKnownLocation="ModelingProject1.uml" />
           </dependency>
           <dependency
@@ -210,27 +203,9 @@
     </packageHasNamedElement>
     <packageHasNamedElement>
       <packageMoniker
-        Id="cb37ca45-f00a-4bf5-9956-4c841111ccf4"
-        LastKnownName="ToDo"
-        LastKnownLocation="Package_1759.uml" />
-    </packageHasNamedElement>
-    <packageHasNamedElement>
-      <packageMoniker
         Id="424b75ed-236f-456e-9201-994e1232fb06"
         LastKnownName="System"
         LastKnownLocation="Package1_1759.uml" />
-    </packageHasNamedElement>
-    <packageHasNamedElement>
-      <packageMoniker
-        Id="577921f7-1aca-448a-9ec4-b20a34a7378e"
-        LastKnownName="CustomControls"
-        LastKnownLocation="Package5_1759.uml" />
-    </packageHasNamedElement>
-    <packageHasNamedElement>
-      <packageMoniker
-        Id="7b7af4e0-9df6-487e-a5f5-113bc4acb375"
-        LastKnownName="Hotkeys"
-        LastKnownLocation="Package6_1759.uml" />
     </packageHasNamedElement>
     <packageHasNamedElement>
       <component
@@ -297,24 +272,6 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false" />
-    </packageHasNamedElement>
-    <packageHasNamedElement>
-      <component
-        Id="fa658f29-4c3d-4ddf-bc54-0ba1c9588b80"
-        name="CustomDictionary"
-        isAbstract="false"
-        isLeaf="false"
-        isActiveClass="false">
-        <suppliersInternal>
-          <dependency
-            Id="b897bba1-6e31-47c8-8fa9-bc0c46e6a567">
-            <componentMoniker
-              Id="3597a6d1-4626-46df-bc26-589ab145de30"
-              LastKnownName="Logic"
-              LastKnownLocation="ModelingProject1.uml" />
-          </dependency>
-        </suppliersInternal>
-      </component>
     </packageHasNamedElement>
     <packageHasNamedElement>
       <component
@@ -2656,6 +2613,60 @@
       <executionEvent
         Id="8c1910a1-9ef9-4d01-8f63-b915373ffeeb"
         name="ExecutionEvent" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="4003052d-74ad-4123-8b89-0de390c75406"
+        LastKnownName="ToDo"
+        LastKnownLocation="Package_1507.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="6722beeb-57f7-47db-af25-41b1086ec7d0"
+        LastKnownName="BrightIdeasSoftware"
+        LastKnownLocation="Package1_1507.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="e032c231-9431-4812-91de-c4cb3fd506ce"
+        LastKnownName="Hotkeys"
+        LastKnownLocation="Package2_1507.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="ba604223-d1a4-4dca-aaaf-ce3fa8d9cb17"
+        LastKnownName="TranspControl"
+        LastKnownLocation="Package3_1507.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="2e8ba625-257c-4fa8-b917-9e9240414b74"
+        LastKnownName="CodeVendor"
+        LastKnownLocation="Package4_1507.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="c300abcd-0b54-468c-b5a4-3f55c3c059f9"
+        LastKnownName="FlatTabControl"
+        LastKnownLocation="Package6_1507.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="c8eaa3f5-9871-4470-993c-8a1db2ab3178"
+        LastKnownName="Zzzz"
+        LastKnownLocation="Package7_1507.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="1e7b7574-237d-42d8-b151-5d5f2c7ce339"
+        LastKnownName="ColorComboTestApp"
+        LastKnownLocation="Package8_1507.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="13534804-03d6-438f-a248-215ae756176c"
+        LastKnownName="FontControl"
+        LastKnownLocation="Package9_1507.uml" />
     </packageHasNamedElement>
   </packagedElements>
   <primitiveType
