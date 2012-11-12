@@ -43,7 +43,7 @@
             Id="317241c1-cd7c-4fda-a9d5-82a71f611d92">
             <componentMoniker
               Id="6313cf43-212f-40ed-b36b-2a81fc6f57d6"
-              LastKnownName="UI"
+              LastKnownName="User Interface"
               LastKnownLocation="ModelingProject1.uml" />
           </dependency>
           <dependency
@@ -101,7 +101,7 @@
             <type_NamedElement>
               <componentMoniker
                 Id="5ccdfb89-68ce-4c1c-8953-63c77750fe51"
-                LastKnownName="Parser"
+                LastKnownName="Parsers"
                 LastKnownLocation="ModelingProject1.uml" />
             </type_NamedElement>
           </part>
@@ -118,7 +118,7 @@
             <type_NamedElement>
               <componentMoniker
                 Id="8f16c895-a8a4-44d4-9cdb-a41099e4ff8b"
-                LastKnownName="Handler"
+                LastKnownName="Storage"
                 LastKnownLocation="ModelingProject1.uml" />
             </type_NamedElement>
           </part>
@@ -156,13 +156,13 @@
             <type_NamedElement>
               <componentMoniker
                 Id="5b421b2b-b95a-4d4d-9d41-560132352b0e"
-                LastKnownName="Operation"
+                LastKnownName="Operations"
                 LastKnownLocation="ModelingProject1.uml" />
             </type_NamedElement>
           </part>
           <part
             Id="35af5870-cbb1-4936-8580-c1a976a98a84"
-            name="MainSettings"
+            name="Settings"
             isLeaf="false"
             isStatic="false"
             isReadOnly="false"
@@ -210,7 +210,7 @@
     <packageHasNamedElement>
       <component
         Id="6313cf43-212f-40ed-b36b-2a81fc6f57d6"
-        name="UI"
+        name="User Interface"
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
@@ -252,7 +252,7 @@
     <packageHasNamedElement>
       <component
         Id="5ccdfb89-68ce-4c1c-8953-63c77750fe51"
-        name="Parser"
+        name="Parsers"
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false" />
@@ -260,7 +260,7 @@
     <packageHasNamedElement>
       <component
         Id="8f16c895-a8a4-44d4-9cdb-a41099e4ff8b"
-        name="Handler"
+        name="Storage"
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false" />
@@ -268,7 +268,7 @@
     <packageHasNamedElement>
       <component
         Id="5b421b2b-b95a-4d4d-9d41-560132352b0e"
-        name="Operation"
+        name="Operations"
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false" />
@@ -298,6 +298,12 @@
         isAbstract="false"
         isLeaf="false"
         isReentrant="false">
+        <ownedCommentsInternal>
+          <comment
+            Id="8cec27c0-c518-43a6-980a-c0c7108af39a">
+            <body>Fragment described in Logic class.</body>
+          </comment>
+        </ownedCommentsInternal>
         <fragments>
           <behaviorExecutionSpecification
             Id="d411b241-53c1-4d8c-953f-5f4129fa897d"
@@ -1735,7 +1741,7 @@
             <coveredLifelines>
               <lifelineMoniker
                 Id="55af9cb4-456b-4327-9d3e-2a77a981df7b"
-                LastKnownName="Operation"
+                LastKnownName="Operations"
                 LastKnownLocation="ModelingProject1.uml" />
             </coveredLifelines>
             <finish>
@@ -1775,7 +1781,7 @@
             <covered>
               <lifelineMoniker
                 Id="55af9cb4-456b-4327-9d3e-2a77a981df7b"
-                LastKnownName="Operation"
+                LastKnownName="Operations"
                 LastKnownLocation="ModelingProject1.uml" />
             </covered>
           </executionOccurrenceSpecification>
@@ -1785,7 +1791,7 @@
             <covered>
               <lifelineMoniker
                 Id="55af9cb4-456b-4327-9d3e-2a77a981df7b"
-                LastKnownName="Operation"
+                LastKnownName="Operations"
                 LastKnownLocation="ModelingProject1.uml" />
             </covered>
           </messageOccurrenceSpecification>
@@ -1815,7 +1821,7 @@
             <covered>
               <lifelineMoniker
                 Id="55af9cb4-456b-4327-9d3e-2a77a981df7b"
-                LastKnownName="Operation"
+                LastKnownName="Operations"
                 LastKnownLocation="ModelingProject1.uml" />
             </covered>
           </messageOccurrenceSpecification>
@@ -1833,7 +1839,7 @@
             <covered>
               <lifelineMoniker
                 Id="55af9cb4-456b-4327-9d3e-2a77a981df7b"
-                LastKnownName="Operation"
+                LastKnownName="Operations"
                 LastKnownLocation="ModelingProject1.uml" />
             </covered>
           </executionOccurrenceSpecification>
@@ -1902,11 +1908,6 @@
             lifelineDisplayName="this : UI"
             referencedInstance="(Assembly=&quot;$(d0ea9acc-a4bf-49c9-ae91-52ea6e573cc5.OutputPathUri)&quot; Namespace=ToDo Type=UI ObjectInstance=&quot;Object instance 1&quot;)"
             referencedType="ToDo‎.UI">
-            <represents>
-              <propertyMoniker
-                Id="a0083e99-04aa-4360-9b83-4fe364e96ccb"
-                LastKnownLocation="ModelingProject1.uml" />
-            </represents>
             <topLevelOccurrences>
               <executionOccurrenceSpecificationMoniker
                 Id="36c577fa-a826-48ff-bb7a-771c971bc64b"
@@ -2048,9 +2049,9 @@
           </lifeline>
           <lifeline
             Id="55af9cb4-456b-4327-9d3e-2a77a981df7b"
-            name="Operation"
+            name="Operations"
             isActor="false"
-            lifelineDisplayName="Operation"
+            lifelineDisplayName="Operations"
             referencedType="ToDo‎.Operation">
             <represents>
               <propertyMoniker
@@ -2444,22 +2445,6 @@
         </messages>
         <ownedAttributesInternal>
           <property
-            Id="a0083e99-04aa-4360-9b83-4fe364e96ccb"
-            isLeaf="false"
-            isStatic="false"
-            isReadOnly="false"
-            isDerived="false"
-            isDerivedUnion="false"
-            aggregation="None"
-            isComposite="false">
-            <type_NamedElement>
-              <componentMoniker
-                Id="6313cf43-212f-40ed-b36b-2a81fc6f57d6"
-                LastKnownName="UI"
-                LastKnownLocation="ModelingProject1.uml" />
-            </type_NamedElement>
-          </property>
-          <property
             Id="079cd443-e0b7-497e-93bf-7f2b7d56beea"
             isLeaf="false"
             isStatic="false"
@@ -2487,7 +2472,7 @@
             <type_NamedElement>
               <componentMoniker
                 Id="5b421b2b-b95a-4d4d-9d41-560132352b0e"
-                LastKnownName="Operation"
+                LastKnownName="Operations"
                 LastKnownLocation="ModelingProject1.uml" />
             </type_NamedElement>
           </property>
