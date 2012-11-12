@@ -20,6 +20,5 @@ namespace ToDo
             Application.Run(new UI(logic));
             Logger.Info("Application terminated!\r\n", "Main");         
         }
-
     }
 }
