@@ -102,10 +102,10 @@ namespace ToDo
         /// </summary>
         /// <param name="title">Specify the title</param>
         /// <param name="subtitle">Specify the subtitle</param>
-        public void SetTitle(string title,string subTitle)
+        public void SetTitle(string title,string subtitle)
         {
             titleLabel.Text = title;
-            subtitleLabel.Text = subTitle;
+            subtitleLabel.Text = subtitle;
         }
 
         /// <summary>

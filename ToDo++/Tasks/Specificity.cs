@@ -43,7 +43,7 @@ namespace ToDo
 
     /// <summary>
     /// This class contains flags representing whether a set of two dates and times
-    /// were fully specified by the user or were left ambiguous.
+    /// were fully specified by the user or were left ambiguous.</summary>
     public class DateTimeSpecificity
     {
         private Specificity startDate;
@@ -96,7 +96,7 @@ namespace ToDo
         /// Finalizes this specificity for pushing to the operation. Assigns all less specific
         /// types to take on their parent specificity.
         /// </summary>
-        public void FinalizeSpecificity()
+        public void NormalizeSpecificity()
         {
             if (startTime) startDate.Day = true;
             if (endTime) endDate.Day = true;

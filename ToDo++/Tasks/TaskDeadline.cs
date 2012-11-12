@@ -128,7 +128,7 @@ namespace ToDo
         /// Extends the given end search time to the appropriate start of day/month/year
         /// depending on the specificity of this task.
         /// </summary>
-        /// <param name="startCompare">The end search time to extend.</param>
+        /// <param name="endCompare">The end search time to extend.</param>
         private void ExtendEndSearchRange(ref DateTime endCompare)
         {
             if (!isSpecific.EndDate.Month)

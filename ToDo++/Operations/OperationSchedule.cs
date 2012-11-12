@@ -32,7 +32,7 @@ namespace ToDo
         /// This is the constructor for the Schedule operation.
         /// This operation accepts a time range and tries to schedule a task
         /// for the specified time period within the time range at the earliest
-        /// possible point on execution.
+        /// possible point on execution.</summary>
         /// <param name="taskName">The name of the task to schedule.</param>
         /// <param name="startDateTime">The start date/time which the task should be scheduled within.</param>
         /// <param name="endDateTime">The end date/time which the task should be scheduled within.</param>

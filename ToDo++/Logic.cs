@@ -15,7 +15,7 @@ namespace ToDo
         // Attributes
         // ******************************************************************
 
-        #region
+        #region Attributes
         UI ui;        
         CommandParser commandParser;
         Settings mainSettings;
@@ -165,7 +165,7 @@ namespace ToDo
         /// <summary>
         /// This method writes current settings to file
         /// </summary>
-        /// <param name="settingsList"></param>
+        /// <param name="settings"></param>
         /// <returns></returns>
         public bool UpdateSettingsFile(SettingInformation settings)
         {
