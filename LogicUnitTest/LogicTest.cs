@@ -42,6 +42,20 @@ namespace IntegrationTests
         }
 
         [TestMethod]
+        public void AddReverseTimeTest()
+        {
+            Response result;
+            logic.ProcessCommand("display");
+            logic.ProcessCommand("delete all");
+            result = logic.ProcessCommand("add test feb 2 2013 to jan 9 2013");
+            Type type = result.TasksToBeDisplayed[0].GetType();
+            Assert.AreEqual("ToDo.TaskEvent", type.ToString());
+            Assert.AreEqual("Added new task \"test\" successfully.", result.FeedbackString);
+            Assert.AreEqual("SUCCESS", result.Result.ToString());
+            return;
+        }
+
+        [TestMethod]
         public void AddTimedFailTest()
         {
             Response result;
@@ -481,15 +495,16 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void ScheduleStrictTest2()
+        public void SpecificityTest()
         {
             Response result;
             logic.ProcessCommand("display");
             logic.ProcessCommand("delete all");
-            logic.ProcessCommand("add a 1/6/13  to 5/6/13");
-            logic.ProcessCommand("add a 7/6/13  to 30/6/13 ");
-            result = logic.ProcessCommand("schedule aaa 1 day june");
-            Assert.AreEqual("Scheduled new task \"aaa\" successfully.", result.FeedbackString);
+            result = logic.ProcessCommand("add task1 tmr by 2am");
+            Assert.AreEqual("Added new task \"task1\" successfully.", result.FeedbackString);
+            logic.ProcessCommand("add aaa tmr 5am to 9am");
+            result = logic.ProcessCommand("schedule aaaa tmr 6 hours ");
+            Assert.AreEqual("Scheduled new task \"aaaa\" successfully.", result.FeedbackString);
             return;
         }
     }
