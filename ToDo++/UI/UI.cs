@@ -8,18 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Hotkeys;
 using Microsoft.Win32;
 using System.Windows.Forms.VisualStyles;
 using System.Runtime.InteropServices;
-using System.Reflection;
-
-using CodeVendor;
-using Hotkeys;
-using CustomControls;
-using FlatTabControl;
-using BrightIdeasSoftware;
-using TranspControl;
-using Zzzz;
 
 namespace ToDo
 {
@@ -40,7 +32,6 @@ namespace ToDo
         /// </summary>
         public UI(Logic logic)
         {
-            InitializeDLLFiles();                 //Load all DLL files prior to opening ToDo++               
             IntializeTinyAlert();                 //Load UI into TinyAlert to register Form Movements   
             InitializeComponent();                //Create Components         
             InitializeLogic(logic);               //Sets logic            
@@ -148,27 +139,6 @@ namespace ToDo
         // ******************************************************************
 
         #region InternalDesignFunctions
-
-        //Initializes all DLL Files
-        #region InitializeDLLFiles
-
-        private void InitializeDLLFiles()
-        {
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-            {
-                string resourceName = new AssemblyName(args.Name).Name + ".dll";
-                string resource = Array.Find(this.GetType().Assembly.GetManifestResourceNames(), element => element.EndsWith(resourceName));
-
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource))
-                {
-                    Byte[] assemblyData = new Byte[stream.Length];
-                    stream.Read(assemblyData, 0, assemblyData.Length);
-                    return Assembly.Load(assemblyData);
-                }
-            };
-        }
-
-        #endregion
 
         //Placing ToDo++ in System Tray
         #region SystemTray

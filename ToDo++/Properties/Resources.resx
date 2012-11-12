@@ -235,37 +235,4 @@
   <data name="completeUserManual" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\completeUserManual.pdf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="CodeVendor_Controls" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\CodeVendor.Controls.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="CustomControls" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\CustomControls.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="CustomControls1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\CustomControls.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="FlatTabControl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\FlatTabControl.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="HotkeyLib" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\HotkeyLib.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="HotkeyLib1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\HotkeyLib.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ObjectListView" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\ObjectListView.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ObjectListView1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\ObjectListView.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="TranspControl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\TranspControl.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="TranspControl1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\TranspControl.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ZzzzRangeBar" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\ZzzzRangeBar.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
 </root>

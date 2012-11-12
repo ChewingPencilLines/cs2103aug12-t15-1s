@@ -133,16 +133,6 @@ namespace ToDo.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] CodeVendor_Controls {
-            get {
-                object obj = ResourceManager.GetObject("CodeVendor_Controls", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] completeUserManual {
             get {
                 object obj = ResourceManager.GetObject("completeUserManual", resourceCulture);
@@ -191,42 +181,12 @@ namespace ToDo.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] CustomControls {
-            get {
-                object obj = ResourceManager.GetObject("CustomControls", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] CustomControls1 {
-            get {
-                object obj = ResourceManager.GetObject("CustomControls1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap downButton {
             get {
                 object obj = ResourceManager.GetObject("downButton", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] FlatTabControl {
-            get {
-                object obj = ResourceManager.GetObject("FlatTabControl", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
@@ -391,26 +351,6 @@ namespace ToDo.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] HotkeyLib {
-            get {
-                object obj = ResourceManager.GetObject("HotkeyLib", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] HotkeyLib1 {
-            get {
-                object obj = ResourceManager.GetObject("HotkeyLib1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Logo {
@@ -461,26 +401,6 @@ namespace ToDo.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] ObjectListView {
-            get {
-                object obj = ResourceManager.GetObject("ObjectListView", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] ObjectListView1 {
-            get {
-                object obj = ResourceManager.GetObject("ObjectListView1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap questionButton {
@@ -521,42 +441,12 @@ namespace ToDo.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] TranspControl {
-            get {
-                object obj = ResourceManager.GetObject("TranspControl", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] TranspControl1 {
-            get {
-                object obj = ResourceManager.GetObject("TranspControl1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap upButton {
             get {
                 object obj = ResourceManager.GetObject("upButton", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] ZzzzRangeBar {
-            get {
-                object obj = ResourceManager.GetObject("ZzzzRangeBar", resourceCulture);
-                return ((byte[])(obj));
             }
         }
     }
