@@ -6,6 +6,13 @@ using ToDo;
 
 namespace CommandParserTest
 {
+    /// <summary>
+    /// This test is commandparser unit test,
+    /// using "testCmdParser.ParseOperation" to check the process of
+    /// user input being tranlated into operation.
+    /// contains 4 test cases.
+    /// </summary>
+
     [TestClass]
     public class CommandParserTest
     {

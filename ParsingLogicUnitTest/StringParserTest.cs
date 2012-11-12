@@ -4,16 +4,20 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDo;
 
-namespace TokenGeneratorTest
+namespace StringParserTest
 {
+    /// <summary>
+    /// This test is unit test for stringparser,
+    /// which parses string into separate string and return list of string.
+    /// contains 9 test cases.
+    /// </summary>
+
     [TestClass]
-    public class TokenGeneratorTest
+    public class StringParserTest
     {
         StringParser testStrParser = new StringParser();
-        TokenGenerator tokenGen = new TokenGenerator();
         string input;
         List<string> output;
-        List<Token> result;
 
         [TestMethod]
         public void AddSimpleTimedTaskTest()
