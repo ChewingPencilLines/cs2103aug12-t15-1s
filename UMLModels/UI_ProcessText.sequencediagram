@@ -314,7 +314,7 @@
                   <lifelineMoniker Id="4c2cee13-836d-404f-b30f-64a77044bd85" LastKnownName="response.tasksToBeDisplayed : List&lt;Task&gt;" />
                 </coveredLifelines>
                 <guard>
-                  <interactionConstraint Id="57450a4d-ac37-40b9-b652-fb0df9906966" guardText="case 1:" />
+                  <interactionConstraint Id="57450a4d-ac37-40b9-b652-fb0df9906966" guardText="case SortType.NAME:" />
                 </guard>
                 <operandOccurrenceSpecifications>
                   <operandOccurrenceSpecificationMoniker Id="42cb5404-edab-4c53-96c7-8852b49c9c52" LastKnownName="OperandOccurrenceSpecification" />
@@ -329,7 +329,7 @@
                   <lifelineMoniker Id="4c2cee13-836d-404f-b30f-64a77044bd85" LastKnownName="response.tasksToBeDisplayed : List&lt;Task&gt;" />
                 </coveredLifelines>
                 <guard>
-                  <interactionConstraint Id="1f4145d2-147a-40e3-ba98-61130a63529d" guardText="case 2:" />
+                  <interactionConstraint Id="1f4145d2-147a-40e3-ba98-61130a63529d" guardText="case SortType.DATE_TIME:" />
                 </guard>
                 <operandOccurrenceSpecifications>
                   <operandOccurrenceSpecificationMoniker Id="d8c447b6-8f00-4b46-aa4b-b96aab4adde8" LastKnownName="OperandOccurrenceSpecification" />
