@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDo;
 
-namespace StringParserTest
+namespace TokenGeneratorTest
 {
     /// <summary>
     /// This test is unit test for tokengenerator,
@@ -12,7 +12,7 @@ namespace StringParserTest
     /// </summary>
   
     [TestClass]
-    public class TokensGenerateTest
+    public class TokenGeneratorTest
     {
         TokenGenerator testGenerator = new TokenGenerator();
         List<string> input;
