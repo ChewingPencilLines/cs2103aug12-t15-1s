@@ -9,7 +9,7 @@ namespace CommandParserTest
     /// <summary>
     /// This test is commandparser unit test,
     /// using "testCmdParser.ParseOperation" to check the process of
-    /// user input being tranlated into operation.
+    /// user input being translated into operation.
     /// contains 4 test cases.
     /// </summary>
 
