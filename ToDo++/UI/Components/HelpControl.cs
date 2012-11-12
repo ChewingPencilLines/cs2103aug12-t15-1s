@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//@raaj A0081202Y
+using System;
 using System.Windows.Forms;
-using System.IO;
-using Microsoft.Win32;
-using System.Windows.Forms.VisualStyles;
-using System.Runtime.InteropServices;
 
 namespace ToDo
 {
@@ -185,7 +175,7 @@ namespace ToDo
         {
             string local=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string openPDFFile = string.Format("{0}\\fullManual.pdf", local);
-            System.IO.File.WriteAllBytes(openPDFFile, Properties.Resources.completeUserManual);
+            System.IO.File.WriteAllBytes(openPDFFile, Properties.Resources.UserGuideToDo);
             System.Diagnostics.Process.Start(openPDFFile);        
         }
     }
