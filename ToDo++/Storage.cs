@@ -1,13 +1,10 @@
-﻿using System;
+﻿//@ivan A0086401M
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using System.Windows.Forms;
 
 namespace ToDo
 {
