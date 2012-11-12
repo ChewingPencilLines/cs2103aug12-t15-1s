@@ -26,7 +26,7 @@ namespace ToDo
         /// This method searches an input list of strings and generates the relevant
         /// tokens representing the meaning of each string.
         /// </summary>
-        /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="input">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of matched phrases as tokens.</returns>
         public List<Token> GenerateAllTokens(List<string> input)
         {
@@ -51,14 +51,14 @@ namespace ToDo
         /// This method searches an input list of strings against the set list of command keywords and returns
         /// a list of tokens corresponding to the matched command keywords.
         /// </summary>
-        /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="input">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of command tokens</returns>
-        public List<TokenCommand> GenerateCommandTokens(List<string> inputWords)
+        public List<TokenCommand> GenerateCommandTokens(List<string> input)
         {
             CommandType commandType;
             List<TokenCommand> tokens = new List<TokenCommand>();
             int index = 0;
-            foreach (string word in inputWords)
+            foreach (string word in input)
             {
                 string wordLower = word.ToLower();
                 if (CustomDictionary.commandKeywords.TryGetValue(wordLower, out commandType))
@@ -76,14 +76,14 @@ namespace ToDo
         /// This method checks an input list of strings for index range words and generates a list of tokens
         /// based on the found index range words.
         /// </summary>
-        /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="input">The list of command phrases, separated words and/or time/date phrases</param>
         /// <param name="commandTokens">The list of generated command tokens based on the same list of input strings</param>
-        /// <returns>List of command tokens</returns>
-        public List<Token> GenerateIndexRangeTokens(List<string> inputWords, List<TokenCommand> commandTokens)
+        /// <returns>List of index range tokens</returns>
+        public List<Token> GenerateIndexRangeTokens(List<string> input, List<TokenCommand> commandTokens)
         {
             List<Token> indexRangeTokens = new List<Token>();
             int index = 0;
-            foreach (string word in inputWords)
+            foreach (string word in input)
             {
                 var validTokens = from token in commandTokens
                                   where token.RequiresIndexRange()
@@ -125,7 +125,7 @@ namespace ToDo
         /// This method checks an input list of strings for sort type keywords (name or date) and generates a list of
         /// tokens based on the found sort type keywords.
         /// </summary>
-        /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="input">The list of command phrases, separated words and/or time/date phrases</param>
         /// <param name="commandTokens">The list of generated command tokens based on the same list of input strings</param>
         /// <returns>List of sort type tokens</returns>
         public List<Token> GenerateSortTypeTokens(List<string> input, List<TokenCommand> commandTokens)
@@ -274,7 +274,7 @@ namespace ToDo
         /// This method searches an input list of strings against the set list of day keywords and returns
         /// a list of tokens corresponding to the matched day keywords.
         /// </summary>
-        /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="input">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of day tokens</returns>
         public List<Token> GenerateDayTokens(List<string> input)
         {
@@ -300,7 +300,7 @@ namespace ToDo
         /// This method searches an input list of strings for all valid dates and generates a list of date tokens
         /// corresponding to all the found matched date strings using regexes.
         /// </summary>
-        /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="input">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of date tokens</returns>
         public List<TokenDate> GenerateDateTokens(List<string> input)
         {
@@ -405,7 +405,7 @@ namespace ToDo
         /// This method searches an input list of strings for all valid times and generates a list of time tokens
         /// corresponding to all the found matched time strings using regexes.
         /// </summary>
-        /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="input">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of time tokens</returns>
         // uses a combined regex to get hour, minute, second via tags and return a TimeSpan.
         public List<Token> GenerateTimeTokens(List<string> input)
@@ -480,7 +480,7 @@ namespace ToDo
         /// This method searches an input list of strings against the set list of context keywords and returns
         /// a list of tokens corresponding to the matched context keywords.
         /// </summary>
-        /// <param name="inputWords">The list of command phrases, separated words and/or time/date phrases</param>
+        /// <param name="input">The list of command phrases, separated words and/or time/date phrases</param>
         /// <returns>List of context tokens</returns>
         public List<Token> GenerateContextTokens(List<string> input, List<Token> parsedTokens)
         {
