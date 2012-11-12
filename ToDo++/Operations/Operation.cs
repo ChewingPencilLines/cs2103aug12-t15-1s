@@ -31,7 +31,6 @@ namespace ToDo
         /// <summary>
         /// Initializes the static variables used by all Operations.
         /// </summary>
-        /// <returns>Nothing.</returns>
         static Operation()
         {
             currentListedTasks = new List<Task>();
@@ -42,7 +41,6 @@ namespace ToDo
         /// <summary>
         /// Initializes the neccesary variables for all Operation.
         /// </summary>
-        /// <returns>Nothing.</returns>
         protected Operation(SortType sortType)
         {
             this.sortType = sortType;
@@ -54,7 +52,6 @@ namespace ToDo
         /// to the input list of tasks.
         /// </summary>
         /// <param name="tasks">The list of tasks to be displayed.</param>
-        /// <returns></returns>
         public static void UpdateCurrentListedTasks(List<Task> tasks)
         {
             currentListedTasks = tasks;
@@ -98,7 +95,6 @@ namespace ToDo
         /// </summary>
         /// <param name="taskList">Current task list for task updates to be applied on.</param>
         /// <param name="storageIO">Storage controller to be used to write task changes.</param>
-        /// <returns>Null</returns>
         public virtual Response Undo(List<Task> taskList, Storage storageIO)
         {
             Debug.Assert(false, "This operation should not be undoable!");
