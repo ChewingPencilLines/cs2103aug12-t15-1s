@@ -22,7 +22,7 @@ namespace ToDo
         #endregion
 
         /// <summary>
-        /// Constructor for floating tasks.
+        /// Constructor for deadline tasks.
         /// </summary>
         /// <param name="taskName">The task's display name.</param>
         /// <param name="endTime">The task's deadline.</param>
