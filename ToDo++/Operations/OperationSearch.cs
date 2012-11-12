@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ToDo
 {
-    class OperationSearch : Operation
+    public class OperationSearch : Operation
     {
         // ******************************************************************
         // Search Parameters
