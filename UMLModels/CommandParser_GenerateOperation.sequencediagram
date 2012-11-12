@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SequenceDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" dslVersion="1.0.0.0" Id="7b6e6fb5-e4cd-4fc5-951b-393238746fc4" name="Generate Operation" mode="DotNet" xmlns="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner">
+<SequenceDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="7b6e6fb5-e4cd-4fc5-951b-393238746fc4" name="Generate Operation" mode="DotNet" xmlns="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner">
   <packagedElements>
     <packageHasNamedElement>
       <interaction Id="887f0271-bfe2-4b2c-b353-f75cebd5d0ac" name="Generate Operation" collapseFragmentsFlag="false" isActiveClass="false" isAbstract="false" isLeaf="false" isReentrant="false">
@@ -222,14 +222,14 @@
               <lifelineMoniker Id="75787a76-ebdf-4e49-a8e3-50dbf1836673" LastKnownName="this : CommandParser" />
             </covered>
           </messageOccurrenceSpecification>
-          <messageOccurrenceSpecification Id="2b759436-7469-4947-bad8-0325198a7597" name="MessageOccurrenceSpecification">
-            <covered>
-              <lifelineMoniker Id="f4096bcf-9c47-4bea-8605-f99fd14f5d9b" LastKnownName="token : Token" />
-            </covered>
-          </messageOccurrenceSpecification>
           <messageOccurrenceSpecification Id="2a0cfc03-c51c-4fe9-bb80-78b70141e9d7" name="MessageOccurrenceSpecification">
             <covered>
               <lifelineMoniker Id="75787a76-ebdf-4e49-a8e3-50dbf1836673" LastKnownName="this : CommandParser" />
+            </covered>
+          </messageOccurrenceSpecification>
+          <messageOccurrenceSpecification Id="2b759436-7469-4947-bad8-0325198a7597" name="MessageOccurrenceSpecification">
+            <covered>
+              <lifelineMoniker Id="f4096bcf-9c47-4bea-8605-f99fd14f5d9b" LastKnownName="token : Token" />
             </covered>
           </messageOccurrenceSpecification>
           <executionOccurrenceSpecification Id="04e2ec53-b452-4286-b216-2612cf749919" name="ExecutionOccurrenceSpecification">
