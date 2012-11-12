@@ -160,7 +160,7 @@ namespace ToDo
                 RemoveFlexiCommandFromSettings(this.listedFlexiCommands.SelectedItem.ToString());
                 UpdateFlexiCommandList();
             }
-            catch (NullReferenceException x)
+            catch (NullReferenceException)
             {
                 AlertBox.Show("Please select a Command");
             }

@@ -269,7 +269,6 @@ namespace ToDo
         /// <param name="tasks">The list of task to apply the filter on.</param>
         /// <param name="startTime">The start time by which the filtered tasks should be within.</param>
         /// <param name="endTime">The end time by which the filtered tasks should be within.</param>
-        /// <param name="isSpecific">The Specificity of the time constraints</param>
         /// <returns></returns>
         private List<Task> FilterByTaskTime(List<Task> tasks, DateTime? startTime, DateTime? endTime)
         {
@@ -481,7 +480,7 @@ namespace ToDo
         /// <summary>
         /// Performs a non exact search and updates the displayed list if there is a non-zero number of matches.
         /// </summary>
-        /// <param name="searchString">The string to search the tasks' names against.</param>
+        /// <param name="taskName">The string to search the tasks' names against.</param>
         /// <param name="startTime">The start time by which the task must fall within.</param>
         /// <param name="endTime">The end time by which the task must fall within.</param>        
         /// <param name="searchType">The type of search to perform.</param>

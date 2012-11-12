@@ -22,6 +22,13 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\ArchitectureTools\Microsoft.VisualStudio.TeamArchitect.ModelingProject.targets" Condition="'$(VSToolsPath)' != ''" />
   <ItemGroup>
+    <Content Include="CommandParser_GenerateOperation.sequencediagram">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="CommandParser_GenerateOperation.sequencediagram.layout">
+      <SubType>Content</SubType>
+      <DependentUpon>CommandParser_GenerateOperation.sequencediagram</DependentUpon>
+    </Content>
     <Content Include="Logic_ProcessCommand.sequencediagram">
       <SubType>Content</SubType>
     </Content>
@@ -41,34 +48,55 @@
     <Content Include="ModelDefinition\Package13_1759.uml">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="ModelDefinition\Package1_1507.uml">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="ModelDefinition\Package1_1759.uml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ModelDefinition\Package2_1507.uml">
       <SubType>Content</SubType>
     </Content>
     <Content Include="ModelDefinition\Package2_1759.uml">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="ModelDefinition\Package3_1507.uml">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="ModelDefinition\Package3_1759.uml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ModelDefinition\Package4_1507.uml">
       <SubType>Content</SubType>
     </Content>
     <Content Include="ModelDefinition\Package4_1759.uml">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ModelDefinition\Package5_1759.uml">
+    <Content Include="ModelDefinition\Package5_1507.uml">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ModelDefinition\Package6_1759.uml">
+    <Content Include="ModelDefinition\Package6_1507.uml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ModelDefinition\Package7_1507.uml">
       <SubType>Content</SubType>
     </Content>
     <Content Include="ModelDefinition\Package7_1759.uml">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="ModelDefinition\Package8_1507.uml">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="ModelDefinition\Package8_1759.uml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ModelDefinition\Package9_1507.uml">
       <SubType>Content</SubType>
     </Content>
     <Content Include="ModelDefinition\Package9_1759.uml">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ModelDefinition\Package_1759.uml">
+    <Content Include="ModelDefinition\Package_1507.uml">
       <SubType>Content</SubType>
     </Content>
     <Content Include="OverallArchitecture.componentdiagram">
@@ -78,12 +106,19 @@
       <SubType>Content</SubType>
       <DependentUpon>OverallArchitecture.componentdiagram</DependentUpon>
     </Content>
-    <Content Include="ClassDiagram.classdiagram">
+    <Content Include="UI_ProcessInput.sequencediagram">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ClassDiagram.classdiagram.layout">
+    <Content Include="UI_ProcessInput.sequencediagram.layout">
       <SubType>Content</SubType>
-      <DependentUpon>ClassDiagram.classdiagram</DependentUpon>
+      <DependentUpon>UI_ProcessInput.sequencediagram</DependentUpon>
+    </Content>
+    <Content Include="UpdatedClassDiagram.classdiagram">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UpdatedClassDiagram.classdiagram.layout">
+      <SubType>Content</SubType>
+      <DependentUpon>UpdatedClassDiagram.classdiagram</DependentUpon>
     </Content>
     <Folder Include="ModelDefinition\" />
     <Content Include="ModelDefinition\ModelingProject1.uml">

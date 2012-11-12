@@ -161,8 +161,8 @@ namespace ToDo
         /// Comparer which compares two tasks by their task name, and returns an
         /// integer representing their compare position.
         /// </summary>
-        /// <param name="x">First task to compare.</param>
-        /// <param name="y">Second task to compare.</param>
+        /// <param name="a">First task to compare.</param>
+        /// <param name="b">Second task to compare.</param>
         /// <returns>-1 if x is less than y, 1 if x is more than y, 0 if they are equal</returns>
         public static int CompareByDateTime(Task a, Task b)
         {

@@ -11,32 +11,61 @@ using System.IO;
 using Microsoft.Win32;
 using System.Windows.Forms.VisualStyles;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace ToDo
 {
     public partial class TinyAlert : Form
     {
-        UI ui;
+        private UI ui;
         int timing=3;
+        string tinyAlertText="";
 
+        public TinyAlert()
+        {
+            InitializeComponent();
+            this.Opacity = 100;
+            System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+        }
+
+        /// <summary>
+        /// Pass in an instance of UI so that TinyAlert is aware of it's position
+        /// </summary>
+        /// <param name="ui">instance of UI</param>
         public void SetUI(UI ui)
         {
             this.ui = ui;
         }
 
+        /// <summary>
+        /// Set time period before fade out
+        /// </summary>
+        /// <param name="time">time period before fade out</param>
         public void SetTiming(int time)
         {
             this.timing = time;
         }
 
+        /// <summary>
+        /// Fade out TinyAlert even before time period ends
+        /// </summary>
         public void Dismiss()
         {
             timerFadeIn.Enabled = false;//start the Fade In Effect
             timerFadeOut.Enabled = true;
         }
         
+        /// <summary>
+        /// Show TinyAlert
+        /// </summary>
         public void ShowDisplay()
         {
+            if (tinyAlertText == "")
+                Debug.Assert(false, "You have failed to set Text for TinyAlert");
+
+            this.tinyAlertLabel.Text = this.tinyAlertText;
+            this.tinyAlertText = "";
+
             int size=System.Windows.Forms.TextRenderer.MeasureText(tinyAlertLabel.Text, new Font(tinyAlertLabel.Font.FontFamily, tinyAlertLabel.Font.Size, tinyAlertLabel.Font.Style)).Width;
             this.Width = size+20;
             this.Show();
@@ -44,23 +73,22 @@ namespace ToDo
             //StartDrop();
         }
 
+        /// <summary>
+        /// Set the BackColor,TextColor and text. Automatically resizes based on text length
+        /// </summary>
+        /// <param name="backColor"></param>
+        /// <param name="textColor"></param>
+        /// <param name="text"></param>
         public void SetColorText (Color backColor,Color textColor, string text)
         {
             this.BackColor = backColor;
-            this.tinyAlertLabel.Text = text;
             this.tinyAlertLabel.ForeColor = textColor;
+            this.tinyAlertText = text;
         }
 
-        public TinyAlert()
-        {
-            InitializeComponent();
-            this.Opacity = 100;
-            System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20)); 
-        }
+        #region Win32Functions
 
-        /// <summary>
-        /// Allows resizing of borderless form
-        /// </summary>
+        // Allows resizing of borderless form
         #region Resizing
         //public const int WM_NCLBUTTONDOWN = 0xA1;
         //public const int HT_CAPTION = 0x2;
@@ -77,10 +105,7 @@ namespace ToDo
 
         #endregion
 
-        /// <summary>
         /// Creates rounded edge
-        /// </summary>
-        /// 
         #region Rounded Edge
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
@@ -92,11 +117,16 @@ namespace ToDo
             int nWidthEllipse, // height of ellipse
             int nHeightEllipse // width of ellipse
         );
+
+        //event handler for rounded edge
+        private void displayForm_Resize(object sender, EventArgs e)
+        {
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+        }
+
         #endregion
 
-        /// <summary>
         /// Creates Shadow (DISABLED)
-        /// </summary>
         #region Shadow
 
         /*
@@ -114,6 +144,7 @@ namespace ToDo
 
         #endregion
 
+        //Allows for any width for form
         #region Sizing
 
         private const int WM_WINDOWPOSCHANGING = 0x0046;
@@ -172,18 +203,15 @@ namespace ToDo
 
         #endregion
 
+        #endregion
 
-
-        private void displayForm_Resize(object sender, EventArgs e)
-        {
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
-        }
+        #region FadeInOutAnimation
 
         double i = 0.1;
         private void StartFader()
         {
-            this.Opacity = i;//set the opacity of the form to 0.1 when form load
-            timerFadeIn.Enabled = true;//start the Fade In Effect
+            this.Opacity = i;
+            timerFadeIn.Enabled = true;
             timerFadeOut.Enabled = false;
         }
 
@@ -191,10 +219,10 @@ namespace ToDo
         {
             i += 0.05;
             if (i >= timing)
-            {//if form is full visible we execute the Fade Out Effect
+            {
                 this.Opacity = 1;
-                timerFadeIn.Enabled = false;//stop the Fade In Effect
-                timerFadeOut.Enabled = true;//start the Fade Out Effect
+                timerFadeIn.Enabled = false;
+                timerFadeOut.Enabled = true;
                 return;
             }
             this.Opacity = i;
@@ -205,23 +233,20 @@ namespace ToDo
         {
             i -= 0.05;
             if (i <= 0.01)
-            {//if form is invisible we execute the Fade In Effect again
+            {
                 this.Opacity = 0.0;
-                //timerFadeIn.Enabled = true;//start the Fade In Effect
-                timerFadeOut.Enabled = false;//stop the Fade Out Effect
+                timerFadeOut.Enabled = false;
                 this.Hide();
                 return;
-
-                //NOTE: THIS CODE BLOCK HERE MIGHT BE USEFUL IF YOU WANT TO
-                //      USE SPLASHSCREEN FORM FOR YOUR APPLICATION AFTER THE 
-                //      SPLASHSCREEN FORM INVISIBLE YOU CAN CLOSE IT AND OPEN
-                //      THE MAIN FORM OF YOUR APPLICATION HERE...
             }
             this.Opacity = i;
         }
 
-        /*
-        #region DropCode
+        #endregion
+
+        #region DropAnimation
+
+        /* depreciated
 
         int m;
         private void StartDrop()
@@ -253,7 +278,8 @@ namespace ToDo
             this.Location = new Point(ui.Right, ui.Bottom + m);
         }
 
-        #endregion
          * */
+
+        #endregion
     }
 }
