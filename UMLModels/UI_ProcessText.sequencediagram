@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SequenceDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" dslVersion="1.0.0.0" Id="6565cf38-c6c5-4980-ac49-c61afc9922d4" name="UI_ProcessText" mode="DotNet" xmlns="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner">
+<SequenceDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" xmlns:dm9="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner" dslVersion="1.0.0.0" Id="6565cf38-c6c5-4980-ac49-c61afc9922d4" name="UI receives input" mode="DotNet" xmlns="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner">
   <packagedElements>
     <packageHasNamedElement>
-      <interaction Id="5e56e7f5-05c6-4284-8a10-688fdb8ee1b9" name="UI_ProcessText" collapseFragmentsFlag="false" isActiveClass="false" isAbstract="false" isLeaf="false" isReentrant="false">
+      <interaction Id="5e56e7f5-05c6-4284-8a10-688fdb8ee1b9" name="UI receives input" collapseFragmentsFlag="false" isActiveClass="false" isAbstract="false" isLeaf="false" isReentrant="false">
         <fragments>
           <behaviorExecutionSpecification Id="325762bf-497d-4377-bed5-3e4d08ef0a01" name="BehaviorExecutionSpecification">
             <coveredLifelines>
@@ -78,7 +78,7 @@
               <lifelineMoniker Id="9cbc9d23-9a8b-49e9-ae97-9540cb4b5da0" LastKnownName="this.logic : Logic" />
             </covered>
           </messageOccurrenceSpecification>
-          <interactionUse Id="a1563d39-302b-447e-900f-f3986972772c" name="sd GenerateOperation">
+          <interactionUse Id="a1563d39-302b-447e-900f-f3986972772c" name="sd ProcessCommand">
             <coveredLifelines>
               <lifelineMoniker Id="9cbc9d23-9a8b-49e9-ae97-9540cb4b5da0" LastKnownName="this.logic : Logic" />
             </coveredLifelines>
@@ -218,14 +218,14 @@
               </interactionOperand>
             </operands>
           </combinedFragment>
-          <operandOccurrenceSpecification Id="42cb5404-edab-4c53-96c7-8852b49c9c52" name="OperandOccurrenceSpecification">
-            <covered>
-              <lifelineMoniker Id="12c2145c-ff8a-4cd1-9349-a3eecdc7850a" LastKnownName="this.taskListViewControl : TaskListViewControl" />
-            </covered>
-          </operandOccurrenceSpecification>
           <operandOccurrenceSpecification Id="5b633076-5837-4c7f-8549-f0d38f006a58" name="OperandOccurrenceSpecification">
             <covered>
               <lifelineMoniker Id="4c2cee13-836d-404f-b30f-64a77044bd85" LastKnownName="response.tasksToBeDisplayed : List&lt;Task&gt;" />
+            </covered>
+          </operandOccurrenceSpecification>
+          <operandOccurrenceSpecification Id="42cb5404-edab-4c53-96c7-8852b49c9c52" name="OperandOccurrenceSpecification">
+            <covered>
+              <lifelineMoniker Id="12c2145c-ff8a-4cd1-9349-a3eecdc7850a" LastKnownName="this.taskListViewControl : TaskListViewControl" />
             </covered>
           </operandOccurrenceSpecification>
           <behaviorExecutionSpecification Id="2e582ca1-2896-41af-be81-72520a72b156" name="BehaviorExecutionSpecification">
@@ -382,14 +382,14 @@
               <lifelineMoniker Id="12c2145c-ff8a-4cd1-9349-a3eecdc7850a" LastKnownName="this.taskListViewControl : TaskListViewControl" />
             </covered>
           </messageOccurrenceSpecification>
-          <messageOccurrenceSpecification Id="489e56eb-5120-441c-8ab5-f8ab00fc71ad" name="MessageOccurrenceSpecification">
-            <covered>
-              <lifelineMoniker Id="12c2145c-ff8a-4cd1-9349-a3eecdc7850a" LastKnownName="this.taskListViewControl : TaskListViewControl" />
-            </covered>
-          </messageOccurrenceSpecification>
           <messageOccurrenceSpecification Id="c7e68525-cf5d-4c93-bd4d-276e3e9107ae" name="MessageOccurrenceSpecification">
             <covered>
               <lifelineMoniker Id="4c2cee13-836d-404f-b30f-64a77044bd85" LastKnownName="response.tasksToBeDisplayed : List&lt;Task&gt;" />
+            </covered>
+          </messageOccurrenceSpecification>
+          <messageOccurrenceSpecification Id="489e56eb-5120-441c-8ab5-f8ab00fc71ad" name="MessageOccurrenceSpecification">
+            <covered>
+              <lifelineMoniker Id="12c2145c-ff8a-4cd1-9349-a3eecdc7850a" LastKnownName="this.taskListViewControl : TaskListViewControl" />
             </covered>
           </messageOccurrenceSpecification>
           <executionOccurrenceSpecification Id="f646c0a0-6273-4e2f-812a-e8620c5004ea" name="ExecutionOccurrenceSpecification">
@@ -456,14 +456,14 @@
               <lifelineMoniker Id="12c2145c-ff8a-4cd1-9349-a3eecdc7850a" LastKnownName="this.taskListViewControl : TaskListViewControl" />
             </covered>
           </operandOccurrenceSpecification>
-          <operandOccurrenceSpecification Id="6253c2c3-b655-44c7-ac54-be0236d786f7" name="OperandOccurrenceSpecification">
-            <covered>
-              <lifelineMoniker Id="12c2145c-ff8a-4cd1-9349-a3eecdc7850a" LastKnownName="this.taskListViewControl : TaskListViewControl" />
-            </covered>
-          </operandOccurrenceSpecification>
           <operandOccurrenceSpecification Id="4d08e9ad-05b8-4130-8c23-a6801ed7767e" name="OperandOccurrenceSpecification">
             <covered>
               <lifelineMoniker Id="4c2cee13-836d-404f-b30f-64a77044bd85" LastKnownName="response.tasksToBeDisplayed : List&lt;Task&gt;" />
+            </covered>
+          </operandOccurrenceSpecification>
+          <operandOccurrenceSpecification Id="6253c2c3-b655-44c7-ac54-be0236d786f7" name="OperandOccurrenceSpecification">
+            <covered>
+              <lifelineMoniker Id="12c2145c-ff8a-4cd1-9349-a3eecdc7850a" LastKnownName="this.taskListViewControl : TaskListViewControl" />
             </covered>
           </operandOccurrenceSpecification>
           <operandOccurrenceSpecification Id="aa26ddd4-d7e9-41b5-b2b8-69e261f04719" name="OperandOccurrenceSpecification">
@@ -520,14 +520,14 @@
               <lifelineMoniker Id="12c2145c-ff8a-4cd1-9349-a3eecdc7850a" LastKnownName="this.taskListViewControl : TaskListViewControl" />
             </covered>
           </executionOccurrenceSpecification>
-          <messageOccurrenceSpecification Id="e60a2c15-751d-4a6d-8798-54815f16dbd9" name="MessageOccurrenceSpecification">
-            <covered>
-              <lifelineMoniker Id="12c2145c-ff8a-4cd1-9349-a3eecdc7850a" LastKnownName="this.taskListViewControl : TaskListViewControl" />
-            </covered>
-          </messageOccurrenceSpecification>
           <messageOccurrenceSpecification Id="1a5945c3-c506-4b0e-80e9-f225f4c5c250" name="MessageOccurrenceSpecification">
             <covered>
               <lifelineMoniker Id="68e9b15f-fff7-445d-8902-1c1f1b9fd986" LastKnownName="this : UI" />
+            </covered>
+          </messageOccurrenceSpecification>
+          <messageOccurrenceSpecification Id="e60a2c15-751d-4a6d-8798-54815f16dbd9" name="MessageOccurrenceSpecification">
+            <covered>
+              <lifelineMoniker Id="12c2145c-ff8a-4cd1-9349-a3eecdc7850a" LastKnownName="this.taskListViewControl : TaskListViewControl" />
             </covered>
           </messageOccurrenceSpecification>
           <executionOccurrenceSpecification Id="b880e012-ab08-45d2-b99c-ec7e55817797" name="ExecutionOccurrenceSpecification">
@@ -622,14 +622,14 @@
               <lifelineMoniker Id="9cbc9d23-9a8b-49e9-ae97-9540cb4b5da0" LastKnownName="this.logic : Logic" />
             </covered>
           </executionOccurrenceSpecification>
-          <messageOccurrenceSpecification Id="44df83b3-3c4b-4fa2-b7c9-ba3cd22b9ee4" name="MessageOccurrenceSpecification">
-            <covered>
-              <lifelineMoniker Id="9cbc9d23-9a8b-49e9-ae97-9540cb4b5da0" LastKnownName="this.logic : Logic" />
-            </covered>
-          </messageOccurrenceSpecification>
           <messageOccurrenceSpecification Id="edc62c79-f3c6-40cc-9d7e-56d02d4029a5" name="MessageOccurrenceSpecification">
             <covered>
               <lifelineMoniker Id="68e9b15f-fff7-445d-8902-1c1f1b9fd986" LastKnownName="this : UI" />
+            </covered>
+          </messageOccurrenceSpecification>
+          <messageOccurrenceSpecification Id="44df83b3-3c4b-4fa2-b7c9-ba3cd22b9ee4" name="MessageOccurrenceSpecification">
+            <covered>
+              <lifelineMoniker Id="9cbc9d23-9a8b-49e9-ae97-9540cb4b5da0" LastKnownName="this.logic : Logic" />
             </covered>
           </messageOccurrenceSpecification>
           <behaviorExecutionSpecification Id="ac518d5c-a315-4d31-8632-d158b2de4cb9" name="BehaviorExecutionSpecification">

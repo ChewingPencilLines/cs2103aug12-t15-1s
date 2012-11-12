@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SequenceDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" dslVersion="1.0.0.0" Id="082e5a9c-3355-4138-aad2-4acde9b8aa9c" name="ProcessCommand:Logic" mode="DotNet" xmlns="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner">
+<SequenceDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" xmlns:dm9="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner" dslVersion="1.0.0.0" Id="082e5a9c-3355-4138-aad2-4acde9b8aa9c" name="Process Command" mode="DotNet" xmlns="http://schemas.microsoft.com/VisualStudio/TeamArchitect/SequenceDesigner">
   <packagedElements>
     <packageHasNamedElement>
-      <interaction Id="b8da4f79-9dba-4d72-83c2-b5ed0e4831db" name="ProcessCommand:Logic" collapseFragmentsFlag="false" isActiveClass="false" isAbstract="false" isLeaf="false" isReentrant="false">
+      <interaction Id="b8da4f79-9dba-4d72-83c2-b5ed0e4831db" name="Process Command" collapseFragmentsFlag="false" isActiveClass="false" isAbstract="false" isLeaf="false" isReentrant="false">
         <fragments>
           <behaviorExecutionSpecification Id="1655e52d-703a-411f-8e7e-b9443824312f" name="BehaviorExecutionSpecification">
             <coveredLifelines>
@@ -144,14 +144,14 @@
               <lifelineMoniker Id="8d8c4b06-58b4-466f-9245-ffad2c708e3f" LastKnownName="this.commandParser.stringParser : StringParser" />
             </covered>
           </executionOccurrenceSpecification>
-          <messageOccurrenceSpecification Id="5ab1f286-0cca-4623-8a8c-3783233b0277" name="MessageOccurrenceSpecification">
-            <covered>
-              <lifelineMoniker Id="58db6abd-ce90-41f4-9b40-356aa5401a6d" LastKnownName="this.commandParser : CommandParser" />
-            </covered>
-          </messageOccurrenceSpecification>
           <messageOccurrenceSpecification Id="083c4aa0-569b-4c5e-8bf9-fe6d5905c188" name="MessageOccurrenceSpecification">
             <covered>
               <lifelineMoniker Id="8d8c4b06-58b4-466f-9245-ffad2c708e3f" LastKnownName="this.commandParser.stringParser : StringParser" />
+            </covered>
+          </messageOccurrenceSpecification>
+          <messageOccurrenceSpecification Id="5ab1f286-0cca-4623-8a8c-3783233b0277" name="MessageOccurrenceSpecification">
+            <covered>
+              <lifelineMoniker Id="58db6abd-ce90-41f4-9b40-356aa5401a6d" LastKnownName="this.commandParser : CommandParser" />
             </covered>
           </messageOccurrenceSpecification>
           <messageOccurrenceSpecification Id="42471a09-4d8e-4e21-aba4-c505adb605e9" name="MessageOccurrenceSpecification">
@@ -302,7 +302,7 @@
               <lifelineMoniker Id="58db6abd-ce90-41f4-9b40-356aa5401a6d" LastKnownName="this.commandParser : CommandParser" />
             </covered>
           </messageOccurrenceSpecification>
-          <interactionUse Id="26c0ba38-e711-4c36-b6c8-0354ce76c8aa" name="sd GenerateOperation:CommandParser">
+          <interactionUse Id="26c0ba38-e711-4c36-b6c8-0354ce76c8aa" name="sd Generate Operation">
             <coveredLifelines>
               <lifelineMoniker Id="58db6abd-ce90-41f4-9b40-356aa5401a6d" LastKnownName="this.commandParser : CommandParser" />
               <lifelineMoniker Id="8d8c4b06-58b4-466f-9245-ffad2c708e3f" LastKnownName="this.commandParser.stringParser : StringParser" />
