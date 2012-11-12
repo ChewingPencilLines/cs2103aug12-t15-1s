@@ -692,7 +692,7 @@ namespace ToDo
         /// <param name="dateToCheck">The date to check.</param>
         /// <param name="dateSpecificity">The specificity of the date.</param>
         /// <returns></returns>
-        private bool DateIsAmbiguous( ref DateTime? dateToCheck, ref Specificity dateSpecificity )
+        private bool DateIsAmbiguous(ref DateTime? dateToCheck, ref Specificity dateSpecificity )
         {
 	        return dateToCheck.Value.Month == DateTime.Today.Month &&
                    dateToCheck.Value.Year == DateTime.Today.Year &&
@@ -805,7 +805,6 @@ namespace ToDo
         /// </summary>
         /// <param name="Value">The end time to be set.</param>
         /// <param name="IsSpecific">The specificity of the end time.</param>
-        /// <returns></returns>
         internal void SetConditionalEndTime(TimeSpan Value, bool IsSpecific)
         {
             if (startTimeOnly == null && endTimeOnly != null)
@@ -821,9 +820,8 @@ namespace ToDo
         /// Sets the configured end date to the specified date and specificity.
         /// Moves the end date to the start date if necessary.
         /// </summary>
-        /// <param name="Value">The end daate to be set.</param>
+        /// <param name="Value">The end date to be set.</param>
         /// <param name="IsSpecific">The specificity of the end date.</param>
-        /// <returns></returns>
         internal void SetConditionalEndDate(DateTime Value, Specificity IsSpecific)
         {
             if (startDateOnly == null && endDateOnly != null)
