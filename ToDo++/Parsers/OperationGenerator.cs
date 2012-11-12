@@ -510,23 +510,29 @@ namespace ToDo
         /// </summary>
         private void CombineDateTimes()
         {
-            // Combine Date/Times
-            if (startTimeOnly == null)
-            {
-                isSpecific.StartTime = false;
-            }
-            if (endTimeOnly == null)
-            {
-                isSpecific.EndTime = false;
-            }
-            if (startDateOnly == null)
-            {
-                isSpecific.StartDate = new Specificity(false, false, false);
-            }
-            if (endDateOnly == null)
-            {
-                isSpecific.EndDate = new Specificity(false, false, false);
-            }
+            NormalizeDeadlines();
+
+            SetSpecificities();
+
+            NormalizeDates();
+
+            startDateTime = CombineDateAndTime(startTimeOnly, startDateOnly, isSpecific.StartDate, DateTime.Now, true);
+            if (startDateTime == null)
+                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, DateTime.Now, true);
+            else
+                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, startDateTime.Value, false);
+
+            isSpecific.NormalizeSpecificity();
+
+            if (startDateTime > endDateTime)
+                AlertBox.Show("Warning: End date is before start date");
+        }
+
+        /// <summary>
+        /// Sets both dates to the same date if only one date is specified but two times are present.
+        /// </summary>
+        private void NormalizeDates()
+        {
             // If only one date is specified, we assume both dates is that date.
             if (isSpecific.StartTime && isSpecific.EndTime)
             {
@@ -543,19 +549,49 @@ namespace ToDo
                     isSpecific.EndDate = isSpecific.StartDate;
                 }
             }
-
-            startDateTime = CombineDateAndTime(startTimeOnly, startDateOnly, isSpecific.StartDate, DateTime.Now, true);
-            if (startDateTime == null)
-                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, DateTime.Now, true);
-            else
-                endDateTime = CombineDateAndTime(endTimeOnly, endDateOnly, isSpecific.EndDate, startDateTime.Value, false);
-
-            isSpecific.FinalizeSpecificity();
-
-            if (startDateTime > endDateTime)
-                AlertBox.Show("Warning: End date is before start date");
         }
 
+        /// <summary>
+        /// Sets start date as end date to normalize deadlines if a task's start date and end time is set and not the rest, or vice versa.
+        /// </summary>
+        private void NormalizeDeadlines()
+        {
+            // Start time is set but not start date; End date is set but not end time => Deadline task.
+            if (startTimeOnly != null && startDateOnly == null && endTimeOnly == null && endDateOnly != null)                
+            {
+                endTimeOnly = startTimeOnly;
+                startTimeOnly = null;
+            }
+            // Start date is set but not start time; End time is set but not end date => Deadline task.
+            if (startTimeOnly == null && startDateOnly != null && endTimeOnly != null && endDateOnly == null)
+            {
+                endDateOnly = startDateOnly;
+                startDateOnly = null;
+            }
+        }
+
+        /// <summary>
+        /// Sets specificities based on whether start/end date/time has been set.
+        /// </summary>
+        private void SetSpecificities()
+        {
+            if (startTimeOnly == null)
+            {
+                isSpecific.StartTime = false;
+            }
+            if (endTimeOnly == null)
+            {
+                isSpecific.EndTime = false;
+            }
+            if (startDateOnly == null)
+            {
+                isSpecific.StartDate = new Specificity(false, false, false);
+            }
+            if (endDateOnly == null)
+            {
+                isSpecific.EndDate = new Specificity(false, false, false);
+            }
+        }
         /// <summary>
         /// Combines the time and date fields into a single DateTime that is after the specified limit.
         /// </summary>

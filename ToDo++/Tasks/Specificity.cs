@@ -96,7 +96,7 @@ namespace ToDo
         /// Finalizes this specificity for pushing to the operation. Assigns all less specific
         /// types to take on their parent specificity.
         /// </summary>
-        public void FinalizeSpecificity()
+        public void NormalizeSpecificity()
         {
             if (startTime) startDate.Day = true;
             if (endTime) endDate.Day = true;
