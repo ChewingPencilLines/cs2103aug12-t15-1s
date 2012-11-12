@@ -14,7 +14,7 @@ namespace OperatingUnitTest
     /// </summary>
   
     [TestClass]
-    public class OperationTest
+    public class OperationUnitTest
     {
         TaskFloating testTask = new TaskFloating("test", false, -1);
         TaskFloating testTaskNew = new TaskFloating("testa", false, -1);
