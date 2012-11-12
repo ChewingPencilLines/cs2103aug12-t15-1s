@@ -117,16 +117,16 @@
       </relativeChildShapes>
     </lifelineShape>
     <lifelineShape Id="0b2c1184-0910-499d-81e9-f1de2185063b" absoluteBounds="10.915561853178858, 1, 0.15, 13.035786416321855" visible="true" visualStyleMode="Custom">
-      <lifelineMoniker Id="f677961c-49df-4f2d-a5ce-a043248db59c" LastKnownName="Operation" />
+      <lifelineMoniker Id="f677961c-49df-4f2d-a5ce-a043248db59c" LastKnownName="Operations" />
       <relativeChildShapes>
         <lifelineHoverShape Id="8ed27740-4886-4b71-9a0e-ae8304dcba5d" absoluteBounds="10.915561853178858, 1, 0, 13">
-          <lifelineMoniker Id="f677961c-49df-4f2d-a5ce-a043248db59c" LastKnownName="Operation" />
+          <lifelineMoniker Id="f677961c-49df-4f2d-a5ce-a043248db59c" LastKnownName="Operations" />
         </lifelineHoverShape>
         <umlExecutionSpecificationShape Id="3d84b578-e2fa-4817-bf9e-6c90e8f3533e" absoluteBounds="10.915561853178858, 13.122416625488043, 0.15, 0.55000000000000071" customColor="184, 204, 215" visualStyleMode="Modified">
           <behaviorExecutionSpecificationMoniker Id="dcde1015-1da7-49d6-98b6-5760df4e92ac" LastKnownName="BehaviorExecutionSpecification" />
         </umlExecutionSpecificationShape>
         <umlLifelineHeadShape Id="f56d95a4-f008-4a2d-ac6e-46c8363b2087" absoluteBounds="10.490561853178857, 0.6, 1, 0.4" customColor="184, 204, 215" visualStyleMode="Custom">
-          <lifelineMoniker Id="f677961c-49df-4f2d-a5ce-a043248db59c" LastKnownName="Operation" />
+          <lifelineMoniker Id="f677961c-49df-4f2d-a5ce-a043248db59c" LastKnownName="Operations" />
           <relativeChildShapes />
         </umlLifelineHeadShape>
       </relativeChildShapes>
@@ -279,5 +279,9 @@
         <umlExecutionSpecificationShapeMoniker Id="438315ba-3aea-42c9-8f2d-5479f9067d21" />
       </nodes>
     </syncSelfMessageConnector>
+    <commentShape Id="c41080f6-9076-4867-9aab-9f7caa58b380" absoluteBounds="3.625, 1.625, 1.25, 0.375" customColor="251, 247, 200">
+      <commentMoniker Id="3e07f087-ed48-47f1-8fd3-0b8ac917872b" />
+      <relativeChildShapes />
+    </commentShape>
   </nestedChildShapes>
 </sequenceDesignerDiagram>
