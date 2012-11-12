@@ -6,25 +6,32 @@ using ToDo;
 
 namespace OperatingUnitTest
 {
+    /// <summary>
+    /// This test is operation unit test,
+    /// using "operation.execute" to to check the process of
+    /// operation being executed and return response.
+    /// contains 6 test cases.
+    /// </summary>
+  
     [TestClass]
     public class OperationTest
     {
-        TaskFloating task = new TaskFloating("test", false, -1);
-        TaskFloating task1 = new TaskFloating("testa", false, -1);
+        TaskFloating testTask = new TaskFloating("test", false, -1);
+        TaskFloating testTaskNew = new TaskFloating("testa", false, -1);
 
-        Storage storagetest;
-        List<Task> taskList;
+        Storage testStorage;
+        List<Task> testTaskList;
         Response result;
         SortType sortType = SortType.DEFAULT;
 
         [TestMethod]
         public void OperationAddTest()
         {
-            storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
-            taskList = storagetest.LoadTasksFromFile();
+            testStorage = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
+            testTaskList = testStorage.LoadTasksFromFile();
 
-            OperationAdd Op = new OperationAdd(task, sortType);
-            result = Op.Execute(taskList, storagetest);
+            OperationAdd Op = new OperationAdd(testTask, sortType);
+            result = Op.Execute(testTaskList, testStorage);
             Assert.AreEqual("Added new task \"test\" successfully.", result.FeedbackString);
             return;
         }
@@ -32,11 +39,11 @@ namespace OperatingUnitTest
         [TestMethod]
         public void OperationAddFailTest()
         {
-            storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
-            taskList = storagetest.LoadTasksFromFile();
+            testStorage = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
+            testTaskList = testStorage.LoadTasksFromFile();
 
             OperationAdd Op = new OperationAdd(null, sortType);
-            result = Op.Execute(taskList, storagetest);
+            result = Op.Execute(testTaskList, testStorage);
             Assert.AreEqual(result.FeedbackString, "Failed to add task!");
             return;
         }
@@ -44,28 +51,27 @@ namespace OperatingUnitTest
         [TestMethod]
         public void OperationUndoAddTest()
         {
-            storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
-            taskList = storagetest.LoadTasksFromFile();
+            testStorage = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
+            testTaskList = testStorage.LoadTasksFromFile();
 
-            OperationAdd Op = new OperationAdd(task, sortType);
-            Op.Execute(taskList, storagetest); 
-            result = Op.Undo(taskList, storagetest);
+            OperationAdd Op = new OperationAdd(testTask, sortType);
+            Op.Execute(testTaskList, testStorage); 
+            result = Op.Undo(testTaskList, testStorage);
             Assert.AreEqual(result.FormatType.ToString(),"DEFAULT");
-          //  Assert.AreEqual(result.FeedbackString, "Undid last operation.");
             return;
         }
 
         [TestMethod]
         public void OperationDeleteTest()
         {        
-            storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
-            taskList = storagetest.LoadTasksFromFile();
+            testStorage = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
+            testTaskList = testStorage.LoadTasksFromFile();
 
             int[] index= new int[2]{1,1};
-            OperationAdd Op = new OperationAdd(task, sortType);
-            Op.Execute(taskList, storagetest);
+            OperationAdd Op = new OperationAdd(testTask, sortType);
+            Op.Execute(testTaskList, testStorage);
             OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE, sortType);
-            result = Op1.Execute(taskList, storagetest);
+            result = Op1.Execute(testTaskList, testStorage);
             Assert.AreEqual( "Deleted task \"test\" successfully.", result.FeedbackString);
             return;
         }
@@ -73,14 +79,14 @@ namespace OperatingUnitTest
         [TestMethod]
         public void OperationDeleteRangeFailTest()
         {
-            storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
-            taskList = storagetest.LoadTasksFromFile();
+            testStorage = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
+            testTaskList = testStorage.LoadTasksFromFile();
 
             int[] index = new int[2] { 1, 4 };
-            OperationAdd Op = new OperationAdd(task, sortType);
-            Op.Execute(taskList, storagetest);
+            OperationAdd Op = new OperationAdd(testTask, sortType);
+            Op.Execute(testTaskList, testStorage);
             OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE, sortType);
-            result = Op1.Execute(taskList, storagetest);
+            result = Op1.Execute(testTaskList, testStorage);
             Assert.AreEqual ("Invalid task index!",result.FeedbackString);
             return;
         }
@@ -88,16 +94,16 @@ namespace OperatingUnitTest
         [TestMethod]
         public void OperationDeleteMultipleTest()
         {
-            storagetest = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
-            taskList = storagetest.LoadTasksFromFile();
+            testStorage = new Storage("OpUnittest.xml", "OpUnittestsettings.xml");
+            testTaskList = testStorage.LoadTasksFromFile();
 
             int[] index = new int[2] { 1, 2 };
-            OperationAdd Op = new OperationAdd(task, sortType);
-            Op.Execute(taskList, storagetest);
-            Op = new OperationAdd(task1, sortType);
-            Op.Execute(taskList, storagetest);
+            OperationAdd Op = new OperationAdd(testTask, sortType);
+            Op.Execute(testTaskList, testStorage);
+            Op = new OperationAdd(testTaskNew, sortType);
+            Op.Execute(testTaskList, testStorage);
             OperationDelete Op1 = new OperationDelete("", index, null, null, null, false, SearchType.NONE, sortType);
-            result = Op1.Execute(taskList, storagetest);
+            result = Op1.Execute(testTaskList, testStorage);
             Assert.AreEqual("Deleted all indicated tasks successfully.", result.FeedbackString);
             return;
         }

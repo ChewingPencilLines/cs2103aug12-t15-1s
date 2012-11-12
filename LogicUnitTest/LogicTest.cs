@@ -6,6 +6,12 @@ using ToDo;
 
 namespace IntegrationTests
 {
+    /// <summary>
+    /// This test is to check work in logic level(logic unit test),
+    /// being similar with using command line to use todo++.
+    /// contains 31 test cases.
+    /// </summary>
+   
     [TestClass]
     public class LogicTest
     {
@@ -140,7 +146,6 @@ namespace IntegrationTests
             logic.ProcessCommand("add xx fri 5pm");
             logic.ProcessCommand("add yy fri 9pm");
             result = logic.ProcessCommand("delete friday all");
-          //  Assert.AreEqual(0, result.TasksToBeDisplayed.Count);
             Assert.AreEqual("Deleted all indicated tasks successfully.", result.FeedbackString);
             Assert.AreEqual("DEFAULT", result.FormatType.ToString());
             Assert.AreEqual("SUCCESS_MULTIPLE", result.Result.ToString());
