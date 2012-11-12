@@ -46,7 +46,6 @@ namespace ToDo
         /// carried out will all be deleted without futher confirmation.</param>
         /// <param name="searchType">The type of search to be carried out (in addition to the other filters) if required.</param>
         /// <param name="sortType">The type of sort to sort the diplay list by after the operation is executed.</param>
-        /// <returns>Nothing.</returns>
         public OperationDelete(string taskName, int[] indexRange, DateTime? startTime,
             DateTime? endTime, DateTimeSpecificity isSpecific, bool isAll, SearchType searchType, SortType sortType)
             : base(sortType)
