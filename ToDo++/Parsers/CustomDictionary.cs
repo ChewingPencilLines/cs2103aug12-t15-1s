@@ -26,6 +26,7 @@ namespace ToDo
         public const int HOURS_IN_DAY = 24;
         public const int DAYS_IN_WEEK = 7;
         public const int DAYS_IN_MONTH = 30;
+
         static public int defaultScheduleTimeLength = 1;
         static public TimeRangeType defaultScheduleTimeLengthType = TimeRangeType.HOUR;
         static public int defaultPostponeDurationLength = 1;
@@ -40,7 +41,6 @@ namespace ToDo
         static public Dictionary<string, Month> monthKeywords;
         static public Dictionary<string, DayOfWeek> dayKeywords;
         static public Dictionary<string, SortType> sortTypeKeywords;
-        
         static public List<string> timeSuffixes;
         static public List<string> todayKeywords;
         static public List<string> tomorrowKeywords;
@@ -308,58 +308,6 @@ namespace ToDo
         {
             return timeRangeKeywordsEndTime;
         }
-
-        /*
-        public static Dictionary<string, Month> GetMonthKeywords()
-        {
-            return monthKeywords;
-        }
-
-        public static Dictionary<string, DayOfWeek> GetDayKeywords()
-        {
-            return dayKeywords;
-        }
-
-        public static List<string> GetTimeSpecificKeywords()
-        {
-            return timeSpecificKeywords;
-        }
-
-        public static List<string> GetTimeSuffixes()
-        {
-            return timeSuffixes;
-        }
-
-        public static Regex GetRegexTime24HourFormat()
-        {
-            return time_24HourFormat;
-        }
-
-        public static Regex GetRegexTime12HourFormat()
-        {
-            return isNumericalRange;
-        }
-
-        public static Regex GetRegexDateNumericFormat()
-        {
-            return date_numericFormat;
-        }
-
-        public static Regex GetRegexDateAlphabeticFormat()
-        {
-            return date_alphabeticFormat;
-        }
-
-        public static Regex GetRegexDateDaysWithSuffixes()
-        {
-            return date_daysWithSuffixes;
-        }
-
-        public static Regex GetRegexIsNumericalRange()
-        {
-            return isNumericalRange;
-        }
-         */
         #endregion
 
         // ******************************************************************
@@ -370,15 +318,25 @@ namespace ToDo
         public static bool IsToday(string word)
         {
             if (todayKeywords.Exists(e => (e == word)))
+            {
                 return true;
-            else return false;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public static bool IsTomorrow(string word)
         {
             if (tomorrowKeywords.Exists(e => (e == word)))
+            {
                 return true;
-            else return false;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public static bool IsValidDate(string theDate)
@@ -417,12 +375,14 @@ namespace ToDo
         /// </summary>
         /// <param name="word">The word to be checked</param>
         /// <returns>True if the word is a time keyword, false if otherwise</returns>
-        public static bool CheckIfWordIsTimeSuffix(string word)
+        public static bool IsWordTimeSuffix(string word)
         {
             foreach (string keyword in timeSuffixes)
             {
                 if (word.ToLower() == keyword)
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -431,7 +391,7 @@ namespace ToDo
         /// Checks if a time range crosses the day boundary and returns a boolean indicating whether it does.
         /// </summary>
         /// <param name="timeRangeKeyword"></param>
-        /// <returns></returns>
+        /// <returns>True if positive; false if otherwise</returns>
         public static bool IsTimeRangeOverDayBoundary(TimeRangeKeywordsType timeRangeKeyword)
         {
             int timeRangeStartHour, timeRangeEndHour;
@@ -451,7 +411,7 @@ namespace ToDo
 
         #region Update Dictionary With FlexiCommands
         /// <summary>
-        /// Updates the CustomDictionary keywords with new Dictionarys.
+        /// Updates the CustomDictionary keywords with new Dictionaries.
         /// </summary>
         public static void UpdateDictionary(
             Dictionary<string, CommandType> passedCommandKeywords,

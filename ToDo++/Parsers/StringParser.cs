@@ -265,7 +265,7 @@ namespace ToDo
             foreach (string word in input)
             {
                 bool isWordAdded = false;
-                if (CustomDictionary.CheckIfWordIsTimeSuffix(word))
+                if (CustomDictionary.IsWordTimeSuffix(word))
                 {
                     isWordAdded = MergeWord_IfValidTime(ref output, input, position);
                 }
