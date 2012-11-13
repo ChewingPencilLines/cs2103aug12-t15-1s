@@ -13,13 +13,13 @@ namespace ToDo
 
         static void Main()
         {
+            try
+            {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Logger.Info("Starting Application...", "Main");
             Logic logic = new Logic();
-            try
-            {
-                Application.Run(new UI(logic));
+            Application.Run(new UI(logic));
             }
             catch (System.IO.FileNotFoundException e)
             {
