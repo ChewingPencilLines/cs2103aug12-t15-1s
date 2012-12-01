@@ -333,9 +333,11 @@ namespace ToDo
                     }
                     else if (CustomDictionary.IsTomorrow(wordLower))
                     {
-                        day = DateTime.Now.Day + 1;
-                        month = DateTime.Now.Month;
-                        year = DateTime.Now.Year;
+                        DateTime tmr = DateTime.Now;
+                        tmr = tmr.AddDays(1);
+                        day = tmr.Day;
+                        month = tmr.Month;
+                        year = tmr.Year;
                     }
                     else if (CustomDictionary.IsValidMonthWord(wordLower))
                     {
